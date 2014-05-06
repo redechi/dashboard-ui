@@ -1,0 +1,24 @@
+
+.trip {
+  background: #fefefe;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 20px;
+  color: #555;
+  font-size: 10px;
+
+  #tripwrap {
+    height: 300px;
+    position: relative;
+  }
+
+  [id*=tripmap] {
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #eee;
+    position: absolute;
+  }
+}
+
