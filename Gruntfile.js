@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                 next();
               },
 
-              connect.static(__dirname+yeoman.dist)
+              connect.static(__dirname+'/'+yeoman.dist)
             ];
           }
         }
@@ -121,20 +121,6 @@ module.exports = function (grunt) {
         network: '*'
         //  fallback: '/ /offline.html' // the fallback page if the index is unavailable.
       },
-    },
-
-    // linting
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
-      },
-      all: [
-        'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/{,*/}*.js',
-        '!<%= yeoman.app %>/scripts/vendor/*',
-        'test/spec/{,*/}*.js'
-      ]
     },
 
     // require
@@ -288,9 +274,13 @@ module.exports = function (grunt) {
     'imagemin',
     'htmlmin',
     'appcache',
-    'copy',
-    //'connect:testserver',
-    //'exec:mocha'
+    'copy'
+
+// tests have been commented out.
+// they fail because none have been written.
+//
+//    'connect:devserver',
+//    'exec:mocha'
   ]);
 
 };

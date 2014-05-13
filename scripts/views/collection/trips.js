@@ -14,6 +14,7 @@ function( Backbone, Empty, Trip, TripsCollection) {
       this.render();
       this.collection.fetch();
       this.listenTo(this.collection, "reset", this.render);
+      this.listenTo(this.collection, "sort", this.render);
       console.log("initialize a Trips CollectionView");
     },
 
