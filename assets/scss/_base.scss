@@ -7,12 +7,13 @@
   color: #555;
   font-size: 10px;
 
-  #tripwrap {
-    height: 300px;
-    position: relative;
-  }
+}
 
-  [id*=tripmap] {
+#map {
+  height: 300px;
+  position: relative;
+
+  &>div {
     top: 0;
     bottom: 0;
     width: 100%;
@@ -21,4 +22,3 @@
     position: absolute;
   }
 }
-

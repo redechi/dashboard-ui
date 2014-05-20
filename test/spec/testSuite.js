@@ -1,13 +1,16 @@
 define(function() {
-  'use strict';
+	'use strict';
 
-  /* return an array of specs to be run */
-  return { specs: [
-    'spec/collections/trips.js',
-    'spec/models/trip.js',
-    'spec/views/collection/trips.js',
-    'spec/views/item/empty.js',
-    'spec/views/item/trip.js',
-    ]
-  };
+	/* return an array of specs to be run */
+	return {
+		specs: ['spec/collections/trips.js',
+		'spec/models/trip.js',
+		'spec/views/collection/trips.js',
+		'spec/views/item/empty.js',
+		'spec/views/item/graph.js',
+		'spec/views/item/map.js',
+		'spec/views/item/trip.js',
+		'spec/views/layout/summary.js'
+		]
+	};
 });

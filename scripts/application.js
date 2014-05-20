@@ -2,10 +2,10 @@ define([
   'backbone',
   'communicator',
   'jquery',
-  'views/collection/trips'
+  'views/layout/summary'
 ],
 
-function( Backbone, Communicator, $, Trips ) {
+function( Backbone, Communicator, $, Summary ) {
   'use strict';
 
   $.ajaxSetup({headers: {'Authorization': 'token e1f23342e6eb4bbc766692c0da0af23fdc39536b'}})
@@ -14,11 +14,15 @@ function( Backbone, Communicator, $, Trips ) {
   var App = new Backbone.Marionette.Application();
 
   /* Add application regions here */
-  App.addRegions({});
+  App.addRegions({
+    contentRegion: "#content"
+  });
 
   /* Add initializers here */
   App.addInitializer( function () {
-    var trips = new Trips({el: '#content'});
+    // render summary on load
+    var summary = new Summary();
+    this.contentRegion.show(summary);
   });
 
   return App;

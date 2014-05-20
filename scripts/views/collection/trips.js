@@ -4,7 +4,7 @@ define([
   'views/item/trip',
   '../../collections/trips'
 ],
-function( Backbone, Empty, Trip, TripsCollection) {
+function( Backbone, Empty, Trip, trips) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -18,7 +18,7 @@ function( Backbone, Empty, Trip, TripsCollection) {
       console.log("initialize a Trips CollectionView");
     },
 
-    collection: new TripsCollection(),
+    collection: trips, // trips singleton
 
     emptyView: Empty,
 

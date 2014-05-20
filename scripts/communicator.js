@@ -20,5 +20,6 @@ function( Backbone ) {
     }
   });
 
+  // singleton
   return new Communicator();
 });
