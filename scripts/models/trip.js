@@ -21,5 +21,5 @@ function( Backbone ) {
     defaults: {
     },
 
-    });
+  });
 });

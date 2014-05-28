@@ -32,8 +32,7 @@ function( Backbone, MapTmpl, trips ) {
       var mapbox = L.mapbox.map(this.el, 'sammery.i5bn5bmp');
 
       this.collection.each(_.bind(function (model) {
-        var polyline = undefined, 
-        id = model.get('id'),
+        var id = model.get('id'),
         startLoc = model.get('start_location'),
         endLoc = model.get('end_location'),
         path = model.get('path');
@@ -42,7 +41,7 @@ function( Backbone, MapTmpl, trips ) {
         var e = [endLoc.lon,endLoc.lat];
 
         if (path) {
-          polyline = L.Polyline.fromEncoded(path, {
+          var polyline = L.Polyline.fromEncoded(path, {
             color: '#08b1d5',
             opacity: 0.9
           }).addTo(mapbox);
@@ -72,8 +71,6 @@ function( Backbone, MapTmpl, trips ) {
         })
 
         .on('click', function() {
-          console.log('on ready triggered')
-
           if (polyline) {
             mapbox.fitBounds(polyline.getBounds());
           } else {
