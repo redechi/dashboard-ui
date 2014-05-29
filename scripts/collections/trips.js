@@ -1,7 +1,7 @@
 define([
   'backbone',
   'models/trip',
-  '../controllers/aggregate', 
+  '../controllers/aggregate',
   '../controllers/sort',
   '../controllers/filter'
 ],
@@ -18,7 +18,7 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       window.trips = this;
     },
 
-    url: "http://localhost:8080/v1/trips",
+    url: "https://api.automatic.com/v1/trips",
 
     // filter strategies
     filterStrategies: filterStrat,

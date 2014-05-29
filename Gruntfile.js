@@ -55,7 +55,7 @@ module.exports = function (grunt) {
 
             return [
               function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+                res.setHeader('Access-Control-Allow-Origin', 'https://api.automatic.com');
                 res.setHeader('Access-Control-Allow-Credentials', true);
                 next();
               },

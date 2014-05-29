@@ -27,7 +27,7 @@ function( Backbone, moment ) {
     },
 
     url: function () {
-      return 'http://localhost:8080/v1/trips/' + this.get('id');
+      return 'https://api.automatic.com/v1/trips/' + this.get('id');
     },
 
     defaults: {
