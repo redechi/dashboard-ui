@@ -13,10 +13,8 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     initialize: function() {
       console.log("initialize a Map ItemView");
-      this.collection.on('sync', _.bind(this.updateMap, this));
-      window.map = this;
       coms.on('focus', _.bind(this.focusMap, this))
-      // this.collection.on('filter', _.bind(this.updateMap, this));
+      this.collection.on('filter', _.bind(this.updateMap, this));
     },
 
     collection: trips,
@@ -30,7 +28,13 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
     events: {},
 
     /* on render callback */
-    onRender: function () {},
+    onRender: function () {
+      if (this.collection.length && !this.mapbox) {
+        this.updateMap();
+      } else {
+        this.collection.once('sync', _.bind(this.updateMap, this));
+      }
+    },
 
     focusMap: function (model) {
       var path = model.get('path');
@@ -40,6 +44,10 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     updateMap: function () {
       var mapbox = this.mapbox = L.mapbox.map(this.el, 'sammery.i5bn5bmp');
+      var geoJson = {
+        type: "FeatureCollection",
+        features: []
+      };
 
       this.collection.each(_.bind(function (model) {
         var id = model.get('id'),
@@ -57,39 +65,40 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
           }).addTo(mapbox);
         }
 
-        var featureLayer = L.mapbox.featureLayer({
-          type: "FeatureCollection",
-          features: [{
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: s
-            },
-            properties:{
-              title:"Start"
-            },
-          },{
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: e
-            },
-            properties:{
-              title:"Finish"
-            },
-          }]
-        })
+        geoJson.features.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: s
+          },
+          properties:{
+            title:"Start"
+          },
+        });
 
-        .on('click', function() {
-          if (polyline) {
-            mapbox.fitBounds(polyline.getBounds());
-          } else {
-            mapbox.fitBounds(featureLayer.getBounds());
-          }
+        geoJson.features.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: e
+          },
+          properties:{
+            title:"Finish"
+          },
+        });
 
-        }).addTo(mapbox);
       }), this);
 
+      console.log(geoJson)
+      var featureLayer = L.mapbox.featureLayer(geoJson)
+        .on('click', function(e) {
+          mapbox.fitBounds(e.target.getBounds());
+        }).addTo(mapbox);
+
+      // wierd timeout hack for mapbox
+      setTimeout(function () {
+        mapbox.fitBounds(featureLayer.getBounds());
+      }, 0)
     }
 
   });

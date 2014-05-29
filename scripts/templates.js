@@ -11,6 +11,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div class=\"trip\">\n  Loading...\n</div>\n\n";
   });
 
+this["JST"]["templates/item/filters_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"filters\">\n  <h3 class=\"filterLabel\">Show Me</h3>\n  <div class=\"appliedFilters\">\n\n    <div title=\"\" data-filter=\"date\" class=\"dateFilter btn btn-filter btn-popover applied\" data-original-title=\"Select Time Range\">\n      <span class=\"btn-text\">All time</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <select class=\"dateFilterValue\">\n          <option value=\"today\">Today</option>\n          <option value=\"thisWeek\">This week</option>\n          <option value=\"thisMonth\">This month</option>\n          <option value=\"lastMonth\">Last month</option>\n          <option value=\"all\" selected=\"selected\">All time</option>\n        </select>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"duration\" class=\"durationFilter btn btn-filter btn-popover\" data-original-title=\"Select Trip Duration\">\n      <span class=\"btn-text\">All Durations</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <input class=\"durationFilterValue slider\">\n        <div class=\"durationFilterNotes\">\n        <div class=\"min\">Your shortest trip: <span>1</span> minutes</div>\n        <div class=\"max\">Your longest trip: <span>20</span> minutes</div>\n        </div>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"cost\" class=\"costFilter btn btn-filter btn-popover\" data-original-title=\"Select Fuel Cost\">\n      <span class=\"btn-text\">All Costs</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <input class=\"costFilterValue slider\">\n        <div class=\"costFilterNotes\">\n          <div>Your trips have ranged between <span class=\"min\">$0.02</span> and <span class=\"max\">$0.82</span>.</div>\n        </div>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"location\" class=\"locationFilter btn btn-filter btn-popover\" data-original-title=\"Set Location Filter\">\n      <span class=\"btn-text\">Everywhere</span><span class=\"caret\"></span>\n      <span class=\"popover-text\"><span>All</span></span>\n    </div>\n\n  </div>\n  <div title=\"\" class=\"addFilter btn btn-default btn-popover\" data-original-title=\"Add Filter\">\n    <i class=\"glyphicon glyphicon-plus\"></i>\n  </div>\n</div>\n\n\n";
+  });
+
 this["JST"]["templates/item/graph_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
