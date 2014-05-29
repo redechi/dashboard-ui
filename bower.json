@@ -11,7 +11,7 @@
       "js": "handlebars.js"
     },
     "sinon": {
-      "js":"lib/sinon.js"
+      "js": "lib/sinon.js"
     }
   },
   "version": "0.0.0",
@@ -28,7 +28,9 @@
     "require-handlebars-plugin": "~0.4.0",
     "mocha": "~1.18.2",
     "chai": "~1.9.1",
-    "sinon": "~1.7.3"
+    "sinon": "~1.7.3",
+    "momentjs": "~2.6.0",
+    "d3": "~3.4.8"
   },
   "devDependencies": {},
   "directory": "n"

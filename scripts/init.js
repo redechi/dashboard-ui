@@ -3,7 +3,7 @@ require.config({
     
 
     /* starting point for application */
-    deps: ['amlCollection', 'polyline', 'mapbox', 'backbone.marionette', 'bootstrap', 'main'],
+    deps: ['amlCollection', 'mapbox', 'backbone.marionette', 'bootstrap', 'main'],
 
 
     shim: {
@@ -14,14 +14,23 @@ require.config({
             ],
             exports: 'Backbone'
         },
+
         bootstrap: {
             deps: ['jquery'],
             exports: 'jquery'
+        },
+
+        polyline: {
+          deps: ['mapbox'],
+          exports: 'mapbox'
         }
     },
 
     paths: {
         amlCollection: 'base/collection',
+
+        moment: '../bower_components/momentjs/moment',
+        d3: '../bower_components/d3/d3',
 
         jquery: '../bower_components/jquery/jquery',
         backbone: '../bower_components/backbone-amd/backbone',

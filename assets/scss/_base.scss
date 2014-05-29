@@ -1,24 +1,680 @@
+body {
+  font-family: 'Avenir LT W01 55 Roman',Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialised;
+}
+
+body.summary {
+  overflow: hidden;
+}
+
+strong {
+  font-family: 'Avenir LT W01 85 Heavy', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+}
+
+em {
+  font-family: 'AvenirLTW01-55Oblique', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-style: normal !important;
+}
+
+h3 em, strong em {
+  font-family: 'AvenirLTW01-85HeavyObli', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-style: normal !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit;
+  font-family: 'Avenir LT W01 85 Heavy', Helvetica, Arial, sans-serif;
+  color: inherit;
+  text-rendering: optimizelegibility;
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 40px;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 36px;
+}
+
+
+h3 {
+  font-size: 24px;
+  line-height: 30px;
+  margin-bottom: 8px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+header {
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+#wrapper {
+  width: 100%;
+  min-width: 850px;
+  background: #FFF;
+  padding: 10px 20px;
+  position: relative;
+  border: 1px solid #ccc;
+  min-height: 420px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#topMenu {
+  width: 600px;
+  float: right;
+  text-align: right;
+}
+
+#topMenu a {
+  float: right;
+  color: #777;
+  padding: 10px 20px;
+}
+
+#logo {
+  background: url('../images/logo.png') 0 0 no-repeat;
+  width: 203px;
+  height: 44px;
+  float: left;
+}
+
+#left-column {
+  margin: 0;
+  overflow: hidden;
+  width: 300px;
+  float: left;
+}
+
+#right-column {
+  margin-left: 300px
+}
+
+#graphs .panel-body {
+  padding: 5px 10px;
+}
+
+#graphs {
+  position: relative;
+  height: 200px;
+  width: 100%;
+
+  .graph {
+    position: absolute;
+    height: inherit;
+  }
+}
+
+.summaryStats {
+  text-align: center;
+}
+
+.summaryStats .stat {
+  width: 16%;
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid transparent;
+  margin: 0 2% 5px;
+  padding: 5px 0;
+  box-sizing: border-box;
+	position: relative;
+	background: #ffffff;
+}
+
+.summaryStats .stat.active {
+  border-color: #777;
+}
+
+.summaryStats .stat.active:after, .summaryStats .stat.active:before {
+	top: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.summaryStats .stat.active:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-top-color: #ffffff;
+	border-width: 8px;
+	margin-left: -8px;
+}
+.summaryStats .stat.active:before {
+	border-color: rgba(119, 119, 119, 0);
+	border-top-color: #777;
+	border-width: 9px;
+	margin-left: -9px;
+}
+
+.summaryStats .stat .value {
+  color: #333;
+  font-size: 24px;
+}
+
+.summaryStats .stat .label {
+  text-transform: uppercase;
+  color: #777;
+  font-size: 12px;
+}
+
+#filters {
+  height: 100px;
+
+  h3.filterLabel {
+    font-size: 16px;
+    display: inline-block;
+  }
+
+  .appliedFilters {
+    display: inline-block;
+  }
+
+  .appliedFilters .btn-filter .caret {
+    margin-left: 4px;
+  }
+
+  .appliedFilters .btn-filter .popover-text {
+    display: none;
+  }
+
+  .appliedFilters .btn-filter.applied {
+    display: inline-block;
+  }
+
+  .appliedFilters .btn-filter {
+    display: none;
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    border-radius: 15px;
+    margin-left: 10px;
+  }
+
+  .addFilter {
+    display: inline-block;
+    margin-left: 10px;
+  }
+
+}
+
+.popover-content ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filterList {
+  width: 150px;
+}
+
+.filterList li {
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.filterList li:hover {
+  color: #428bca;
+}
+
+.filterList li[data-filter="location"] {
+  display: none;
+}
+
+#tripsHeader {
+  padding: 10px 15px;
+  border-bottom: 1px solid rgb(221, 221, 221);
+  overflow: hidden;
+}
+
+#tripsHeader .tripCount {
+  text-transform: uppercase;
+  font-weight: bold;
+  float: left;
+  display: inline-block;
+  line-height: 24px;
+}
+
+#tripsHeader .export {
+  float: right;
+  display: inline-block;
+}
+
+#tripsHeader .export label {
+  padding-right: 10px;
+  color: #777;
+  font-size: 12px;
+}
+
+#trips {
+  height: 652px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: #777;
+}
+
+#trips a {
+  color: #777;
+}
+
+#trips.highlighted .trip {
+  opacity: 0.5;
+}
+
+#trips.highlighted .trip.highlighted {
+  opacity: 1;
+  background-color: rgba(6, 216, 68, 0.1);
+}
 
 .trip {
-  background: #fefefe;
-  border: 1px solid #ddd;
-  margin: 10px;
-  padding: 20px;
-  color: #555;
-  font-size: 10px;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid rgb(221, 221, 221);
+}
 
+.trip:hover {
+  background: #f9f9f9;
+}
+
+.trip .tripCheck {
+  display: inline-block;
+  margin-left: 8px;
+  margin-top: 63px;
+  width: 12px;
+}
+
+.trip .tripLine {
+  position: absolute;
+  width: 3px;
+  height: 108px;
+  background-color: #08b1d5;
+  left: 25px;
+  top: 16px;
+}
+
+.trip .tripLine div {
+  width: 20px;
+  height: 20px;
+  background-color: #08b1d5;
+  border: 5px solid #08b1d5;
+  border-radius: 10px;
+  margin-left: -9px;
+  line-height: 9px;
+  text-align: center;
+  color: #333;
+}
+
+.trip .tripLine div:first-child {
+  margin-top: -3px;
+}
+
+.trip .tripLine div:last-child {
+  position: absolute;
+  bottom: 0;
+}
+
+.trip .tripDetails {
+  display: block;
+  width: 255px;
+  float: right;
+}
+
+.trip .topBox {
+  font-size: 12px;
+  padding: 10px 10px 0 15px;
+  overflow: hidden;
+}
+
+.trip .topBox .endTime {
+  float: left;
+  width: 40%;
+}
+
+.trip .topBox .endLocation {
+  float: right;
+  width: 60%;
+  text-align: right;
+}
+
+.trip .middleBox {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.trip .middleBox .stat {
+  width: 25%;
+  float: left;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.trip .stat::after {
+  font-size: 14px;
+  font-weight: normal;
+  display: block;
+  color: #aaa;
+}
+
+.trip .distance::after {
+  content: ' MILES';
+}
+
+.trip .duration::after {
+  content: ' MIN';
+}
+
+.trip .speed::after {
+  content: ' MPH';
+}
+
+.trip .mpg::after {
+  content: ' MPG';
+}
+
+.trip .fuelCost::after {
+  content: ' FUEL';
+}
+
+.trip .bottomBox {
+  font-size: 12px;
+  padding: 10px 10px 10px 15px;
+  overflow: hidden;
+}
+
+.trip .bottomBox .startTime {
+  float: left;
+  width: 26%;
+}
+
+.trip .bottomBox .startLocation {
+  float: right;
+  width: 74%;
+  text-align: right;
+}
+
+.shareList {
+  width: 150px;
+}
+
+.shareList li {
+  padding: 5px 0;
+}
+
+.shareList li:hover {
+  color: #428bca;
+  cursor: pointer;
+}
+
+.alertBox {
+  text-align: center;
+  font-size: 20px;
+  height: 130px;
+  height: 130px;
+  position: absolute;
+  right: 50%;
+  top: 225px;
+  width: 200px;
+  margin-right: -100px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  display: none;
+  background-color: #fff;
+  padding-top: 20px;
+}
+
+.loading {
+  background: #FFF url(/images/loading.gif) center bottom no-repeat;
+}
+
+.noTrips a {
+  display: block;
+}
+
+.btn.back {
+  top: 0px;
+  position: absolute;
+}
+
+.btn.share {
+  top: 0px;
+  right: 0px;
+  position: absolute;
+}
+
+.dayHeader .btn {
+  margin: 0 10px;
+  vertical-align: 10px;
+  visibility: hidden;
+}
+
+#trip {
+  width: 650px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+#trip:hover {
+  background: inherit;
+}
+
+#trip h1 {
+  text-align: center;
+  font-size: 30px;
+}
+
+#trip .map {
+  width: 650px;
+  height: 400px;
+}
+
+#trip.trip .tripLine {
+  height: 453px;
+  left: -19px;
+  top: 61px;
+}
+
+#trip.trip .topBox,
+#trip.trip .bottomBox {
+  padding: 10px 0;
+}
+
+#trip.trip .topBox .endTime,
+#trip.trip .bottomBox .startTime {
+  display: inline-block;
+  width: auto;
+  padding-right: 20px;
+}
+
+#trip.trip .topBox .endLocation,
+#trip.trip .bottomBox .startLocation {
+  display: inline-block;
+  float: none;
+  text-align: left;
+}
+
+#trip .summaryStats {
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+  padding: 10px 0;
+  overflow: hidden;
+}
+
+#trip .summaryStats .stat {
+  width: 20%;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
 }
 
 #map {
-  height: 300px;
+  width: 100%;
+  height: 400px;
   position: relative;
 
-  &>div {
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    background: #eee;
-    position: absolute;
+  .leaflet-container {
+    height: inherit;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
   }
 }
+
+/* Charts */
+
+.graph rect {
+  fill: rgb(70, 130, 180);
+}
+
+.graph rect[data-date] {
+  cursor: pointer;
+}
+
+.graph rect.highlighted {
+  fill: rgba(6, 216, 68, 0.8);
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path,
+.y.axis path {
+  display: none;
+}
+
+.x.axis text,
+.y.axis text {
+  fill: #777;
+}
+
+.chart-tooltip {
+  font-weight: bold;
+  color: #FFF;
+  background: rgba(50, 50, 50, 0.7);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  border: rgba(255, 255, 255, 0.9) 2px solid;
+  text-shadow: 0.1em 0.1em 0.05em #333;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+text.key {
+  fill: #666;
+  font-size: 11px;
+}
+
+
+/* Vehicles page */
+
+#vehicles {
+  clear: both;
+}
+
+#vehicles .vehicle {
+  padding: 15px 20px;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+}
+
+#vehicles .vehicle:first-child {
+  border-top: 1px solid #ccc;
+}
+
+#vehicles .vehicle .vehicleDetails {
+  width: 250px;
+  display: inline-block;
+  vertical-align: top;
+  height: 53px;
+}
+
+#vehicles .vehicle .vehicleDetails .display_name {
+  font-size: 22px;
+  font-weight: bold;
+  display: block;
+}
+
+#vehicles .vehicle .color {
+  width: 175px;
+  height: 52px;
+  background-image: url('../images/vehicle.png');
+  background-repeat: no-repeat;
+  background-size: 175px 52px;
+  display: inline-block;
+}
+
+#vehicles .vehicle .vehicleDetails div {
+  font-size: 16px;
+  display: inline-block;
+  padding-right: 8px;
+}
+
+#vehicles .vehicle .vehicleStats {
+  display: inline-block;
+  width: 490px;
+  vertical-align: top;
+}
+
+#vehicles .vehicle .vehicleStats>div {
+  width: 219px;
+  float: left;
+  padding-left: 30px;
+  font-size: 15px;
+  padding-bottom: 7px;
+}
+
+#vehicles .vehicle .vehicleStats:nth-child(2) {
+  clear: left;
+}
+
+#vehicles .vehicle .vehicleStats .trip_count {
+  position: absolute;
+  top: 30px;
+  left: 300px;
+  font-weight: bold;
+}
+
+#vehicles .vehicle .vehicleStats span.badge {
+  float: right;
+}
+

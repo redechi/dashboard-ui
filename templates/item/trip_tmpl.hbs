@@ -1,4 +1,25 @@
-<div class="trip">
-  <div>Cost: ${{ fuel_cost_usd }}</div>
-  <div>Average MPG: {{ average_mpg }}</div>
+<div class="trip" data-trip_id="{{ id }}">
+  <a href="#/trip/{{ id }}">
+    <div class="tripLine">
+      <div>B</div>
+      <div>A</div>
+    </div>
+    <input type="checkbox" class="tripCheck">
+    <div class="tripDetails">
+      <div class="topBox">
+        <div class="endTime">{{ formatted_end_time }}</div>
+        <div class="endLocation">{{ end_location.display_name }}</div>
+      </div>
+      <div class="middleBox">
+        <div class="distance stat">{{ distance_miles }}</div>
+        <div class="mpg stat">{{ average_mpg }}</div>
+        <div class="fuelCost stat">${{ fuel_cost_usd }}</div>
+        <div class="duration stat">{{ duration }}</div>
+      </div>
+      <div class="bottomBox">
+        <div class="startTime">{{ formatted_start_time }}</div>
+        <div class="startLocation">{{ start_location.display_name }}</div>
+      </div>
+    </div>
+  </a>
 </div>

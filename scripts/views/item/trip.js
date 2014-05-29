@@ -1,8 +1,9 @@
 define([
   'backbone',
+  '../../communicator',
   'hbs!tmpl/item/trip_tmpl'
 ],
-function( Backbone, TripTmpl  ) {
+function( Backbone, coms, TripTmpl  ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -10,6 +11,16 @@ function( Backbone, TripTmpl  ) {
 
     initialize: function() {
       console.log("initialize a Trip ItemView");
+      coms.on('focus', _.bind(this.highlight, this))
+    },
+
+    triggerFocus: function () {
+      coms.trigger('focus', this.model);
+    },
+
+    highlight: function () {
+      this.$el.find('.trip')
+          .addClass('highlighted');
     },
 
     /* on render callback */
@@ -21,7 +32,9 @@ function( Backbone, TripTmpl  ) {
     ui: {},
 
     /* Ui events hash */
-    events: {},
+    events: {
+      'mouseenter': 'triggerFocus'
+    }
 
   });
 

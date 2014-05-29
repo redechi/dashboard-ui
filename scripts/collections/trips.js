@@ -21,7 +21,7 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
     url: "http://localhost:8080/v1/trips",
 
     // filter strategies
-    filters: filterStrat,
+    filterStrategies: filterStrat,
 
     // sorting strategies
     sortStrategies: sortStrat,
@@ -30,6 +30,7 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
     aggStragegies: aggStrat,
 
     model: Trip
+
   });
 
   // make this a singleton

@@ -1,9 +1,11 @@
 define([
   'backbone',
+  '../../communicator',
   'hbs!tmpl/item/map_tmpl',
-  '../../collections/trips'
+  '../../collections/trips',
+  'polyline'
 ],
-function( Backbone, MapTmpl, trips ) {
+function( Backbone, coms, MapTmpl, trips, P/* not used */) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -12,7 +14,9 @@ function( Backbone, MapTmpl, trips ) {
     initialize: function() {
       console.log("initialize a Map ItemView");
       this.collection.on('sync', _.bind(this.updateMap, this));
-      this.collection.on('filter', _.bind(this.updateMap, this));
+      window.map = this;
+      coms.on('focus', _.bind(this.focusMap, this))
+      // this.collection.on('filter', _.bind(this.updateMap, this));
     },
 
     collection: trips,
@@ -28,15 +32,21 @@ function( Backbone, MapTmpl, trips ) {
     /* on render callback */
     onRender: function () {},
 
+    focusMap: function (model) {
+      var path = model.get('path');
+      var polyline = L.Polyline.fromEncoded(path);
+      this.mapbox.fitBounds(polyline.getBounds());
+    },
+
     updateMap: function () {
-      var mapbox = L.mapbox.map(this.el, 'sammery.i5bn5bmp');
+      var mapbox = this.mapbox = L.mapbox.map(this.el, 'sammery.i5bn5bmp');
 
       this.collection.each(_.bind(function (model) {
         var id = model.get('id'),
         startLoc = model.get('start_location'),
         endLoc = model.get('end_location'),
         path = model.get('path');
-        
+
         var s = [startLoc.lon,startLoc.lat];
         var e = [endLoc.lon,endLoc.lat];
 

@@ -205,6 +205,7 @@
 
   // Inject functionality into Leaflet
   if (typeof L === 'object') {
+    console.log(L.polyline)
     if (!(L.Polyline.prototype.fromEncoded)) {
       L.Polyline.fromEncoded = function (encoded, options) {
         return new L.Polyline(PolylineUtil.decode(encoded), options);

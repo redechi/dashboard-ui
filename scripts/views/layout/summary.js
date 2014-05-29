@@ -3,12 +3,13 @@ define([
   'hbs!tmpl/layout/summary_tmpl',
   '../collection/trips', // view
   '../item/graph', // view
-  '../item/map' // view
+  '../item/map', // view
+  '../item/trips_header' // view
 ],
 
 // this should probably be a composit view rather than a layout
 
-function( Backbone, SummaryTmpl, Trips, Graph, Map) {
+function( Backbone, SummaryTmpl, Trips, Graph, Map, TripsHeader) {
     'use strict';
 
   /* Return a Layout class definition */
@@ -23,7 +24,8 @@ function( Backbone, SummaryTmpl, Trips, Graph, Map) {
     /* Layout sub regions */
     regions: {
       map: '#map',
-      graph: '#graph',
+      trips_header: '#tripsHeader',
+      graph: '#graphs',
       trips: '#trips'
     },
 
@@ -38,10 +40,12 @@ function( Backbone, SummaryTmpl, Trips, Graph, Map) {
       var m = new Map();
       var g = new Graph();
       var t = new Trips();
+      var th = new TripsHeader();
 
       this.trips.show(t);
       this.graph.show(g);
       this.map.show(m);
+      this.trips_header.show(th);
     }
   });
 

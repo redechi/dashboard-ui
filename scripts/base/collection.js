@@ -10,6 +10,16 @@ function( Backbone, Communicator) {
 
     name: 'default_collection',
 
+    getGraphSet: function (name) {
+      var set = [];
+
+      this.each(function (model) {
+        set.push({value: model.get(name), key: model.get('end_time')});
+      });
+
+      return set
+    },
+
     //
     //
     // filter tools
@@ -18,10 +28,19 @@ function( Backbone, Communicator) {
 
     filterStrategies: {}, // override me
 
-    filter: function (filterName) {
-      var filtered = this.filterStrategies[filterName];
+    percolator: function (model) {
+      return function () {};
+    },
+
+    setFilter: function (name) {
+      this.percolator = this.filterStrategies[name];
+      return this;
+    },
+
+    doFilter: function (value) {
+      var filtered = this.filter(this.percolator);
       var fc = new this.constructor(filtered);
-      Communicator.trigger('trips:filter', fc);
+      Communicator.trigger('collection:'+this.name+':filter', fc);
       this.trigger('filter', fc);
       return fc; 
     },
@@ -64,6 +83,7 @@ function( Backbone, Communicator) {
     // return the aggregated value.
     aggregate: function () {
       var value = this.reduce(this.sumator);
+      Communicator.trigger('collection:'+this.name+':aggregate', value);
       this.trigger('aggregate', value);
       return value;
     },

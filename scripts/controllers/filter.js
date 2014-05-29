@@ -1,26 +1,26 @@
+// All filters should return an array. This array should be dependancy injected
+// in to the appropriate collection from within the collection its self.
+
 define([
 ],
 function() {
   'use strict';
 
-  // should return an array
   return {
-    less_distance_m: function (distance) {
-      'use strict';
-      var filtered = this.filter(function(trip) {
-        return trip.get("distance_m") < distance;
-      });
-
-      return filtered;
+    gt_cost: function (cost) {
+      return function(trip) { return trip.get("fuel_cost_usd") > cost; };
     },
 
-    greater_distance_m: function (distance) {
-      'use strict';
-      var filtered = this.filter(function(trip) {
-        return trip.get("distance_m") > distance;
-      });
+    lt_cost: function (cost) {
+      return function(trip) { return trip.get("fuel_cost_usd") < cost; };
+    },
 
-      return filtered;
+    lt_distance_m: function (distance) {
+      return function(trip) { return trip.get("distance_m") < distance; };
+    },
+
+    gt_distance_m: function (distance) {
+      return function(trip) { return trip.get("distance_m") > distance; };
     }
   }
 });
