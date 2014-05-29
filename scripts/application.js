@@ -9,7 +9,27 @@ define([
 function( Backbone, Communicator, $, Summary, router ) {
   'use strict';
 
-  $.ajaxSetup({headers: {'Authorization': 'token e1f23342e6eb4bbc766692c0da0af23fdc39536b'}})
+  // simple session storage
+  $.ajaxSetup({
+    headers: {'Authorization': 'token e1f23342e6eb4bbc766692c0da0af23fdc39536b'},
+    beforeSend: function (xhr, req) {
+      try {
+        var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
+        this.success(obj);
+        xhr.abort();
+      } catch (e) {
+        console.warn('Request Not Cached: ' + req.url);
+      }
+    },
+    complete: function(xhr, status) {
+      try {
+        console.log('Caching Request: ' + this.url);
+        sessionStorage.setItem(this.url, xhr.responseText);
+      } catch (e) {
+        console.warn('Could Not Cache: ' + req.url);
+      }
+    }
+  })
 
 
   var App = new Backbone.Marionette.Application();
