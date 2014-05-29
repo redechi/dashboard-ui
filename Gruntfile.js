@@ -39,51 +39,22 @@ module.exports = function (grunt) {
           '*.{ico,txt}',
           '.htaccess',
           'index.html',
+          'error.html',
           'assets/img/**'
         ],
         tasks: ["copy"] // copy files and invalidate app cache
       }
     },
 
-    // testing server
-    connect: {
-      devserver: {
+    express: {
+      dev: {
         options: {
-          port: 1234,
-          base: '<%= yeoman.app%>',
-          middleware: function (connect) {
-
-            return [
-              function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'https://api.automatic.com');
-                res.setHeader('Access-Control-Allow-Credentials', true);
-                next();
-              },
-
-              connect.static(__dirname)
-            ];
-          }
+          args: [grunt.option('token') || ''],
+          script: 'index.js',
+          delay: 100,
+          port: 3000
         }
-      },
-
-      testserver: {
-        options: {
-          port: 1234,
-          base: '<%= yeoman.dist%>',
-          middleware: function (connect) {
-
-            return [
-              function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-                res.setHeader('Access-Control-Allow-Credentials', true);
-                next();
-              },
-
-              connect.static(__dirname+'/'+yeoman.dist)
-            ];
-          }
-        }
-      },
+      }
     },
 
     // mocha command
@@ -97,7 +68,7 @@ module.exports = function (grunt) {
     // open app and test page
     open: {
       server: {
-        path: 'http://localhost:<%= connect.testserver.options.port %>'
+        path: 'http://localhost:<%= express.dev.options.port %>'
       }
     },
 
@@ -255,7 +226,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'handlebars',
     'appcache',
-    'connect:devserver',
+    'express:dev',
     'open',
     'watch'
   ]);
