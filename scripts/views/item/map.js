@@ -228,7 +228,8 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
       // weird timeout hack for mapbox
       setTimeout(function () {
-        this.fitBoundsMap(featureLayer.getBounds());
+        mapbox.invalidateSize();
+        mapbox.fitBounds(featureLayer.getBounds(), {padding: [50, 50]});
       }, 0);
     }
 
