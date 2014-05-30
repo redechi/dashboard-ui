@@ -108,7 +108,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " TRIPS</div>\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"all\">All</option>\n      <option value=\"selected\">Selected</option>\n    </select>\n  </div>\n</div>\n<ul></ul>\n\n";
+    + " TRIPS</div>\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"all\">All</option>\n      <option value=\"selected\">Selected</option>\n    </select>\n  </div>\n</div>\n<ul class=\"trips\"></ul>\n";
   return buffer;
   });
 

@@ -15,6 +15,8 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     initialize: function() {
       console.log("initialize a Trips CollectionView");
       coms.on('filter', _.bind(this.resetCollection, this));
+
+      $(window).on("resize", this.resize);
     },
 
     model: new Backbone.Model({}),
@@ -61,6 +63,13 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     /* on render callback */
     onRender: function() {
       console.log(arguments)
+      this.resize();
+    },
+
+    resize: function() {
+      var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
+      console.log(this.el)
+      $('ul.trips', this.el).height(height - $('#tripsHeader', this.el).outerHeight(true) - 25);
     }
   });
 
