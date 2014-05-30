@@ -24,7 +24,7 @@ function( Backbone, coms, strategies ) {
       var func = this.filterStrategies[funcName];
       var percolator = func.call(this, args);
       var filtered = collection.filter(percolator);
-      var fc = new collection.constructor(filtered);
+      var fc = collection.reset(filtered);
       return fc;
     },
 

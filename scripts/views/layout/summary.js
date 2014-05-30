@@ -44,7 +44,7 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
 
     /* on render callback */
     onRender: function () {
-      tripsCollection.fetch();
+      tripsCollection.fetchAll();
 
       var m = new Map();
       var g = new Graph();

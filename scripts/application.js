@@ -17,7 +17,7 @@ function( Backbone, Communicator, $, Summary, router ) {
         // TODO: invalidate cache at 15 min.
         var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
         this.success(obj);
-        xhr.abort();
+        xhr.abort(obj);
       } catch (e) {
         console.warn('Request Not Cached: ' + req.url);
       }

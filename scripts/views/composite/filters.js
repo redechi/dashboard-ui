@@ -34,19 +34,17 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     data: trips,
 
     applyFilters: function () {
+      var c = this.data
       if (!this.collection.models[0]) {
-        return this.data.fetch();
+        return c.fetchAll();
       }
 
-      var c = this.collection,
-          out = this.data.clone();
-
-      c.each(function (model) {
-        out = model.applyTo(out);
+      this.collection.each(function (model) {
+        model.applyTo(c);
       });
 
-      coms.trigger('filter', out);
-      return out;
+      coms.trigger('filter', c);
+      return c;
     },
 
     addFilter: function () {
