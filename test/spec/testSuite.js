@@ -6,6 +6,7 @@ define(function() {
 		specs: ['spec/collections/trips.js',
 		'spec/models/trip.js',
 		'spec/views/collection/trips.js',
+		'spec/views/composite/peopleview.js',
 		'spec/views/item/empty.js',
 		'spec/views/item/filters.js',
 		'spec/views/item/graph.js',

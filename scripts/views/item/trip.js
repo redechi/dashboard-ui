@@ -18,10 +18,20 @@ function( Backbone, coms, TripTmpl  ) {
       coms.trigger('focus', this.model);
     },
 
-    highlight: function () {
-      this.$el.find('.trip')
-          .addClass('highlighted');
+    selectModel: function (e) {
+      if(!!e.target.checked) {
+        this.model.set('selected', true);
+      } else {
+        this.model.set('selected', false);
+      }
+      this.triggerFocus();
     },
+
+    highlight: function () {
+      this.$el.find('.trip').addClass('highlighted');
+    },
+
+    tagName: "li",
 
     /* on render callback */
     onRender: function () {},
@@ -33,9 +43,11 @@ function( Backbone, coms, TripTmpl  ) {
 
     /* Ui events hash */
     events: {
-      'mouseenter': 'triggerFocus'
+      'mouseenter': 'triggerFocus',
+      'change [type="checkbox"]': 'selectModel'
     }
 
   });
 
 });
+

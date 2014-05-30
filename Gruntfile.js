@@ -46,6 +46,15 @@ module.exports = function (grunt) {
       }
     },
 
+    inline: {
+      dist: {
+        options:{
+          uglify: true
+        },
+        src: [ 'dist/index.html' ]
+      }
+    },
+
     express: {
       dev: {
         options: {
@@ -202,6 +211,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'index.html',
             'assets/img/**',
+            'assets/css/inline.css',
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js'
           ]
@@ -245,7 +255,8 @@ module.exports = function (grunt) {
     'imagemin',
     'htmlmin',
     'appcache',
-    'copy'
+    'copy',
+    'inline'
 
 // tests have been commented out.
 // they fail because none have been written.

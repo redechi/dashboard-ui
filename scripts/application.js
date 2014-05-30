@@ -14,6 +14,7 @@ function( Backbone, Communicator, $, Summary, router ) {
     headers: {'Authorization': 'token e1f23342e6eb4bbc766692c0da0af23fdc39536b'},
     beforeSend: function (xhr, req) {
       try {
+        // TODO: invalidate cache at 15 min.
         var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
         this.success(obj);
         xhr.abort();
