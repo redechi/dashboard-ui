@@ -8,6 +8,8 @@ define([
 function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
   'use strict';
 
+  var lastFetch = undefined;
+
   /* trips singleton */
   var Trips = Backbone.AML.Collection.extend({
 
@@ -22,6 +24,11 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
 
     url: "https://api.automatic.com/v1/trips",
 
+    getLastFetch: function () {
+      if (!lastFetch) return;
+      return lastFetch;
+    },
+
     fetchAll: function () {
       this.nextSet().always(_.bind(
         function(data, status, jqXHR) {
@@ -31,6 +38,11 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
           if (status instanceof Array && !!status[0]) {
             this.nextSet();
           }
+          if ( data[0] && status[0] ){
+            this.page = 0;
+          }
+
+          lastFetch = this.clone();
         }
       , this));
     },

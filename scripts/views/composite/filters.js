@@ -36,12 +36,12 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     applyFilters: function () {
       var c = this.data
       if (!this.collection.models[0]) {
-        return c.fetchAll();
+        return this.data.reset(this.data.getLastFetch().toArray())
       }
 
-      this.collection.each(function (model) {
+      this.collection.each(_.bind(function (model) {
         model.applyTo(c);
-      });
+      },this));
 
       coms.trigger('filter', c);
       return c;
