@@ -20,19 +20,24 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 
-// Don't serve cache in development
 if(app.get('env') === 'development') {
+  // Don't serve cache in development
   app.get('/manifest.appcache', function(req, res) {
     res.send(404);
+  });
+
+  app.use(serveStatic(__dirname));
+
+  //Allow specifying token in development
+  app.all('*', function(req, res, next) {
+    setAccessToken(req, res, process.argv[2]);
+    next();
   });
 }
 
 
-app.use(serveStatic('dist'));
-
-
-//force https in production
 if(app.get('env') === 'production') {
+  //force https in production
   app.all('*', function(req, res, next) {
     if(req.headers['x-forwarded-proto'] != 'https') {
       res.redirect('https://' + req.headers.host + req.path);
@@ -40,15 +45,8 @@ if(app.get('env') === 'production') {
       next();
     }
   });
-}
 
-
-//Allow specifying token in development
-if(app.get('env') === 'development') {
-  app.all('*', function(req, res, next) {
-    setAccessToken(req, res, process.argv[2]);
-    next();
-  });
+  app.use(serveStatic('dist'));
 }
 
 

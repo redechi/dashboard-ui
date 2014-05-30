@@ -4,7 +4,7 @@ define([
   '../controllers/aggregate',
   '../controllers/sort',
   '../controllers/filter',
-  '../base/collection.js'
+  'amlCollection'
 ],
 function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
   'use strict';
