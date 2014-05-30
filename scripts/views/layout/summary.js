@@ -18,6 +18,11 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
 
     initialize: function() {
       console.log("initialize a Summary Layout");
+
+      $(window).on("resize", this.resize);
+
+      //resize right away
+      setTimeout(this.resize, 0);
     },
 
     template: SummaryTmpl,
@@ -50,6 +55,13 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
+
+    },
+
+    resize: function () {
+      var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
+      $('#trips ul').height(height - $('#tripsHeader').outerHeight(true) - 25);
+      $('#map').height(height - $('#graphs').outerHeight(true) - 25);
     }
   });
 
