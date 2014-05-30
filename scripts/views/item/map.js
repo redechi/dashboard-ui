@@ -171,7 +171,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
       function attachEvents(feature, layer) {
         layer.on('mouseover', function (e) {
           // get model from id
-          var newModel = trips.where({id: e.options.id }).pop();
+          var newModel = trips.where({id: e.target.options.id }).pop();
           coms.trigger('map:focus', newModel);
         });
         return layer;
