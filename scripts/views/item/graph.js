@@ -1,11 +1,12 @@
 define([
   'backbone',
   'd3',
+  'communicator',
   'underscore',
   '../../collections/trips',
   'hbs!tmpl/item/graph_tmpl'
 ],
-function( Backbone, d3, _, trips, GraphTmpl) {
+function( Backbone, d3, comms, _, trips, GraphTmpl) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -20,8 +21,6 @@ function( Backbone, d3, _, trips, GraphTmpl) {
 
     initialize: function() {
       console.log("initialize a Graph ItemView");
-      this.$el.addClass('graph');
-      this.listenTo(this.collection, "sync", this.syncModel, this);
     },
 
     syncModel: function () {
@@ -50,7 +49,14 @@ function( Backbone, d3, _, trips, GraphTmpl) {
     events: {},
 
     /* on render callback */
-    onRender: function() {},
+    onRender: function() {
+      this.$el.addClass('graph');
+      this.collection.once("sync", _.bind(this.syncModel, this));
+
+      setTimeout(_.bind(function () {
+        this.syncModel();
+      }, this), 1000)
+    },
 
     unitFomatter: function () {},
 
@@ -60,6 +66,22 @@ function( Backbone, d3, _, trips, GraphTmpl) {
       // TODO: replace with one from controllers file
     },
 
+    getEndTs: function (time, binSize) {
+      if(binSize == 'day') {
+        return moment(time).endOf('day').valueOf();
+      } else if(binSize === 'hour') {
+        return moment(time).endOf('hour').valueOf();
+      }
+    },
+
+    getStartTs: function getStartTs(time, binSize) {
+      if(binSize == 'day') {
+        return moment(time).startOf('day').valueOf();
+      } else if(binSize === 'hour') {
+        return moment(time).startOf('hour').valueOf();
+      }
+    },
+
     drawGraph: function (graphData) {
       graphData = graphData || [];
 
@@ -67,14 +89,14 @@ function( Backbone, d3, _, trips, GraphTmpl) {
           xAxisTicks,
           xAxisTickFormat,
           popupTimeFormat,
-          graphWidth = this.$el.width(),
-          graphHeight = this.$el.height();
+          graphWidth = this.$el.parent().width(),
+          graphHeight = this.$el.parent().height();
 
       this.$el.empty();
 
       var margin = {top: 20, right: 40, bottom: 30, left: 50},
           width = graphWidth,
-          height = graphHeight - 50,
+          height = graphHeight,
           bisectDate = d3.bisector(function(d) { return d.key; }).left;
 
       var parseDate = d3.time.format("%Y-%m").parse;
@@ -112,8 +134,8 @@ function( Backbone, d3, _, trips, GraphTmpl) {
           .ticks(8);
 
       var svg = d3.select(this.el).append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
+          .attr("width", width )
+          .attr("height", height )
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -139,26 +161,25 @@ function( Backbone, d3, _, trips, GraphTmpl) {
         .attr("x", function(d) { return x(d.key); })
         .attr("width", '200px')
         .attr("fill-opacity", 0.6)
-        // .attr("data-start", function(d) { return getStartTs(d.key, binSize); })
-        // .attr("data-end", function(d) { return getEndTs(d.key, binSize); })
+        .attr("data-start", _.bind(
+          function(d) { return this.getStartTs(d.key, binSize); },
+        this))
+        .attr("data-end", _.bind(
+          function(d) { return this.getEndTs(d.key, binSize); },
+        this))
         .attr("data-bin-size", binSize)
         .attr("y", function(d) { return y(d.value); })
         .attr("height", function(d) { return height - y(d.value); })
 
-        .on("mouseover", function(d){
-          d3.select(this).attr('class', 'highlighted');
-          tooltip.style("visibility", "visible").html(graphData.unitFomatter(d) + '<br>' + moment(d.key).format(popupTimeFormat));
-          highlightTrips(filterTripsByDateRange(filterTrips(), [getStartTs(d.key, binSize), getEndTs(d.key, binSize)]));
-        })
 
-        .on("mousemove", function(){
-          tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
-        })
+        .on("mouseover", _.bind(function(d){
+          d3.select(this).attr('class', 'highlighted');
+          comms.trigger('focus', []) // trigger focus on some collection of trips
+        },
+        this))
 
         .on("mouseout", function(){
           tooltip.style("visibility", "hidden");
-          d3.select(this).attr('class', '');
-          clearHighlightedTrips();
         });
     }
   });

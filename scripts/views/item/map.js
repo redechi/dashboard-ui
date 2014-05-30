@@ -61,8 +61,14 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
         if (path) {
           var polyline = L.Polyline.fromEncoded(path, {
             color: '#08b1d5',
+            id: model.get('id'),
             opacity: 0.9
-          }).addTo(mapbox);
+          }).addTo(mapbox)
+          .on('mouseover', function (e) {
+            // get model from id
+            var newModel = trips.where({id: e.target.options.id }).pop();
+            coms.trigger('map:focus', newModel);
+          });
         }
 
         geoJson.features.push({
@@ -72,7 +78,8 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             coordinates: s
           },
           properties:{
-            title:"Start"
+            title:"Start",
+            id: model.get('id')
           },
         });
 
@@ -83,13 +90,13 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             coordinates: e
           },
           properties:{
-            title:"Finish"
+            title:"Finish",
+            id: model.get('id')
           },
         });
 
       }), this);
 
-      console.log(geoJson)
       var featureLayer = L.mapbox.featureLayer(geoJson)
         .on('click', function(e) {
           mapbox.fitBounds(e.target.getBounds());

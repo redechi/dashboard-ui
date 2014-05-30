@@ -269,7 +269,7 @@ header {
   font-size: 12px;
 }
 
-#trips {
+#trips ul {
   height: 652px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -280,17 +280,18 @@ header {
   color: #777;
 }
 
-#trips.highlighted .trip {
+.highlighted .trip {
   opacity: 0.5;
 }
 
-#trips.highlighted .trip.highlighted {
+.trip.highlighted {
   opacity: 1;
   background-color: rgba(6, 216, 68, 0.1);
 }
 
 .trip {
   overflow: hidden;
+  display: block;
   position: relative;
   border-bottom: 1px solid rgb(221, 221, 221);
 }
