@@ -15,6 +15,11 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     initialize: function() {
       console.log("initialize a Trips CollectionView");
       coms.on('filter', _.bind(this.resetCollection, this));
+
+      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
+
+      $(window).on("resize", this.resize);
     },
 
     model: new Backbone.Model({}),
@@ -33,7 +38,7 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
       if (e.target.value === 'selected'){
         var selected = this.collection.where({selected: true});
         ids = new Backbone.Collection(selected).pluck("id");
-        if (!ids[0]) return alert('Please Select a Trip Or Five');
+        if (!ids[0]) return alert('Please Select at least one trip');
       }
 
       window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
@@ -45,6 +50,24 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
 
     logit: function () {
       console.log(arguments);
+    },
+
+    highlightTrip: function(trip) {
+      if(!trip) { return; }
+      this.highlightTrips([trip]);
+    },
+
+    highlightTrips: function (trips) {
+      $('.trips').addClass('highlighted');
+      $('.trips .trip').removeClass('highlighted');
+      trips.forEach(function(trip) {
+        $('.trip[data-trip_id="' + trip.id + '"]').addClass('highlighted');
+      });
+    },
+
+    unhighlightTrips: function() {
+      $('.trips').removeClass('highlighted');
+      $('.trip').removeClass('highlighted');
     },
 
 
@@ -60,9 +83,13 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
 
     /* on render callback */
     onRender: function() {
-      console.log(arguments)
+      this.resize();
+    },
+
+    resize: function() {
+      var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
+      $('ul.trips', this.el).height(height - $('#tripsHeader', this.el).outerHeight(true) - 25);
     }
   });
 
 });
-

@@ -88,7 +88,7 @@ app.get('/logout/', function(req, res) {
 });
 
 
-app.get('/trips.csv', dataExport);
+app.get('/download/trips.csv', dataExport);
 
 
 //require user to login for all routes below

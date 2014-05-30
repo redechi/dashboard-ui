@@ -12,8 +12,10 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     initialize: function() {
       console.log("initialize a Map ItemView");
-      coms.on('focus', _.bind(this.focusMap, this));
-      coms.on('removeFocus', _.bind(this.removeFocusMap, this));
+      coms.on('trips:highlight', _.bind(this.highlightMap, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightMap, this));
+      coms.on('trips:zoom', _.bind(this.zoomMap, this));
+      coms.on('trips:unzoom', _.bind(this.unzoomMap, this));
       this.collection.on('filter', _.bind(this.updateMap, this));
     },
 
@@ -36,9 +38,9 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
       }
     },
 
-    focusMap: function (model) {
-      var id = model.get('id'),
-          bounds;
+
+    highlightMap: function (model) {
+      var id = model.get('id');
 
       this.featureLayer.eachLayer(function(layer) {
         if(layer.options.id == id) {
@@ -47,11 +49,6 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
               layer.setOpacity(1);
             } else if(layer instanceof L.Polyline) {
               layer.setStyle({opacity: 1, color: '#68e68d'});
-              if(!bounds) {
-                bounds = L.latLngBounds(layer.getBounds());
-              } else {
-                bounds.extend(layer.getBounds());
-              }
             }
           });
         } else {
@@ -64,11 +61,10 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
           });
         }
       });
-
-      this.fitBoundsMap(bounds);
     },
 
-    removeFocusMap: function (model) {
+
+    unhighlightMap: function (model) {
       var mapbox = this.mapbox,
           featureLayer = this.featureLayer;
 
@@ -81,9 +77,35 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
           }
         });
       });
-
-      this.fitBoundsMap(featureLayer.getBounds());
     },
+
+
+    zoomMap: function (model) {
+      var id = model.get('id'),
+          bounds;
+
+      this.featureLayer.eachLayer(function(layer) {
+        if(layer.options.id == id) {
+          layer.eachLayer(function(layer) {
+            if(layer instanceof L.Polyline) {
+              if(!bounds) {
+                bounds = L.latLngBounds(layer.getBounds());
+              } else {
+                bounds.extend(layer.getBounds());
+              }
+            }
+          });
+        }
+      });
+
+      this.fitBoundsMap(bounds);
+    },
+
+
+    unzoomMap: function (model) {
+      this.fitBoundsMap(this.featureLayer.getBounds());
+    },
+
 
     fitBoundsMap: function(bounds) {
       this.mapbox.fitBounds(bounds, {padding: [50, 50]});
@@ -155,7 +177,19 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
       function createMarker(feature, latlng) {
         var icon = (feature.properties.type == 'start') ? aIcon : bIcon;
-        return L.marker(latlng, {icon: icon});
+        var marker = L.marker(latlng, {icon: icon});
+
+        marker
+          .on('mouseover', function (e) {
+            // get model from id
+            var newModel = trips.where({id: e.target.feature.properties.id }).pop();
+            coms.trigger('trips:highlight', newModel);
+          })
+          .on('mouseout', function () {
+            coms.trigger('trips:unhighlight');
+          });
+
+        return marker
       }
 
 
@@ -169,11 +203,15 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
 
       function attachEvents(feature, layer) {
-        layer.on('mouseover', function (e) {
-          // get model from id
-          var newModel = trips.where({id: e.target.options.id }).pop();
-          coms.trigger('map:focus', newModel);
-        });
+        layer
+          .on('mouseover', function (e) {
+            // get model from id
+            var newModel = trips.where({id: e.target.feature.properties.id }).pop();
+            coms.trigger('trips:highlight', newModel);
+          })
+          .on('mouseout', function () {
+            coms.trigger('trips:unhighlight');
+          });
         return layer;
       }
 
@@ -191,6 +229,9 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             geometry: {
               type: 'LineString',
               coordinates: L.GeoJSON.decodeLine(path)
+            },
+            properties: {
+              id: id
             }
           });
         }
@@ -201,7 +242,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             type: 'Point',
             coordinates: [startLoc.lon, startLoc.lat],
           },
-          properties:{
+          properties: {
             title: 'Start',
             type: 'start',
             id: id
@@ -214,7 +255,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             type: 'Point',
             coordinates: [endLoc.lon, endLoc.lat]
           },
-          properties:{
+          properties: {
             title: 'End',
             type: 'end',
             id: id

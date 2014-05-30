@@ -14,7 +14,8 @@
     "ejs": "~1.0.0",
     "async": "~0.9.0",
     "moment": "~2.6.0",
-    "express-csv": "~0.6.0"
+    "express-csv": "~0.6.0",
+    "underscore": "~1.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
