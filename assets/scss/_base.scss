@@ -193,38 +193,29 @@ header {
     margin: 0;
   }
 
-  .applied-filter {
-    padding: 5px;
-    border: 1px solid #ddd;
-  }
-
-  ul, li, .appliedFilters {
+  .appliedFilters {
+    margin: 0;
     display: inline-block;
+
+    li {
+      display: inline-block;
+    }
   }
 
-  li {
-    padding: 10px;
-  }
-
-  .appliedFilters .btn-filter .caret {
-    margin-left: 4px;
-  }
-
-  .appliedFilters .btn-filter .popover-text {
-    display: none;
-  }
-
-  .appliedFilters .btn-filter.applied {
-    display: inline-block;
-  }
-
-  .appliedFilters .btn-filter {
-    display: none;
+  .btn-filter {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
     border-radius: 15px;
     margin-left: 10px;
+
+    .caret {
+      margin-left: 4px;
+    }
+
+    .popover-text {
+      display: none;
+    }
   }
 
   .addFilter {
@@ -247,6 +238,7 @@ header {
 .filterList li {
   padding: 5px 0;
   cursor: pointer;
+  display: block;
 }
 
 .filterList li:hover {

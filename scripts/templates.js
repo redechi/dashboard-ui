@@ -8,7 +8,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"filters\">\n  <h3 class=\"filterLabel\">Show Me</h3>\n  <div class=\"appliedFilters\">\n\n    <div title=\"\" data-filter=\"date\" class=\"dateFilter btn btn-filter btn-popover applied\" data-original-title=\"Select Time Range\">\n      <span class=\"btn-text\">All time</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <select class=\"dateFilterValue\">\n          <option value=\"today\">Today</option>\n          <option value=\"thisWeek\">This week</option>\n          <option value=\"thisMonth\">This month</option>\n          <option value=\"lastMonth\">Last month</option>\n          <option value=\"all\" selected=\"selected\">All time</option>\n        </select>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"duration\" class=\"durationFilter btn btn-filter btn-popover\" data-original-title=\"Select Trip Duration\">\n      <span class=\"btn-text\">All Durations</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <input class=\"durationFilterValue slider\">\n        <div class=\"durationFilterNotes\">\n        <div class=\"min\">Your shortest trip: <span>1</span> minutes</div>\n        <div class=\"max\">Your longest trip: <span>20</span> minutes</div>\n        </div>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"cost\" class=\"costFilter btn btn-filter btn-popover\" data-original-title=\"Select Fuel Cost\">\n      <span class=\"btn-text\">All Costs</span><span class=\"caret\"></span>\n      <span class=\"popover-text\">\n        <input class=\"costFilterValue slider\">\n        <div class=\"costFilterNotes\">\n          <div>Your trips have ranged between <span class=\"min\">$0.02</span> and <span class=\"max\">$0.82</span>.</div>\n        </div>\n      </span>\n    </div>\n\n    <div title=\"\" data-filter=\"location\" class=\"locationFilter btn btn-filter btn-popover\" data-original-title=\"Set Location Filter\">\n      <span class=\"btn-text\">Everywhere</span><span class=\"caret\"></span>\n      <span class=\"popover-text\"><span>All</span></span>\n    </div>\n\n  </div>\n\n  <ul></ul>\n\n  <div title=\"\" class=\"addFilter btn btn-default btn-popover\" data-original-title=\"Add Filter\">\n    <i class=\"glyphicon glyphicon-plus\"></i>\n  </div>\n</div>\n\n\n";
+  return "<div id=\"filters\">\n  <h3 class=\"filterLabel\">Show Me</h3>\n  <ul class=\"appliedFilters\"></ul>\n\n  <div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\" data-content='<ul class=\"filterList\"><li data-filter=\"vehicle\">By Vehicle</li><li data-filter=\"distance\">By Distance</li><li data-filter=\"duration\">By Duration</li><li data-filter=\"cost\">By Cost</li><li data-filter=\"location\">By Location</li></ul>'>\n    <i class=\"glyphicon glyphicon-plus\"></i>\n  </div>\n</div>\n";
   });
 
 this["JST"]["templates/item/empty_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -26,11 +26,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"applied-filter\">";
+  buffer += "<div class=\"btn btn-filter btn-popover\">\n  <span class=\"btn-text\">";
   if (stack1 = helpers.name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " | <span class=\"remove-filter\">x</span></div>\n";
+    + "</span><span class=\"caret\"></span>\n</div>\n";
   return buffer;
   });
 

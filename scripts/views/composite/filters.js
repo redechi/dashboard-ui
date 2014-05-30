@@ -18,11 +18,20 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     },
 
     events: {
-      'click .addFilter': 'addFilter'
+      'click .btn-popover': 'closePopovers',
+      'click .filterList li': 'addFilter'
     },
 
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
+
+      // initialize popover
+      setTimeout(function() {
+        $('.addFilter').popover({
+          html: true,
+          placement: 'bottom'
+        });
+      }, 0);
     },
 
     model: new Filter(),
@@ -47,16 +56,24 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
       return c;
     },
 
-    addFilter: function () {
+    addFilter: function (e) {
+      console.log($(e.target).data('filter'));
       this.collection.push(new Filter({
         name: 'blah',
         func: 'lt_distance_m',
         args: 2000
       }));
+
+      this.closePopovers({});
+    },
+
+    closePopovers: function(e) {
+      $('.btn-popover').not(e.currentTarget).popover('hide');
     },
 
     /* on render callback */
-    onRender: function() {}
+    onRender: function() {
+    }
   });
 
 });
