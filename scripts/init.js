@@ -1,6 +1,6 @@
 require.config({
 
-    
+
 
     /* starting point for application */
     deps: ['amlCollection', 'mapbox', 'backbone.marionette', 'bootstrap', 'main'],
@@ -19,11 +19,6 @@ require.config({
             deps: ['jquery'],
             exports: 'jquery'
         },
-
-        polyline: {
-          deps: ['mapbox'],
-          exports: 'mapbox'
-        }
     },
 
     paths: {
@@ -45,7 +40,6 @@ require.config({
 
         /* alias the bootstrap js lib */
         bootstrap: 'vendor/bootstrap',
-        polyline: 'vendor/polyline',
 
         /* Alias text.js for template loading and shortcut the templates dir to tmpl */
         text: '../bower_components/requirejs-text/text',

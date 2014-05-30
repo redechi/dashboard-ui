@@ -18,6 +18,10 @@ function( Backbone, coms, TripTmpl  ) {
       coms.trigger('focus', this.model);
     },
 
+    removeFocus: function () {
+      coms.trigger('removeFocus', this.model);
+    },
+
     selectModel: function (e) {
       if(!!e.target.checked) {
         this.model.set('selected', true);
@@ -44,10 +48,10 @@ function( Backbone, coms, TripTmpl  ) {
     /* Ui events hash */
     events: {
       'mouseenter': 'triggerFocus',
+      'mouseleave': 'removeFocus',
       'change [type="checkbox"]': 'selectModel'
     }
 
   });
 
 });
-
