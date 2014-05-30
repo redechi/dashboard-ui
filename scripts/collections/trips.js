@@ -3,7 +3,8 @@ define([
   'models/trip',
   '../controllers/aggregate',
   '../controllers/sort',
-  '../controllers/filter'
+  '../controllers/filter',
+  '../base/collection.js'
 ],
 function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
   'use strict';

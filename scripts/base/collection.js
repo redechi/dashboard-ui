@@ -42,7 +42,7 @@ function( Backbone, Communicator) {
       var fc = new this.constructor(filtered);
       Communicator.trigger('collection:'+this.name+':filter', fc);
       this.trigger('filter', fc);
-      return fc; 
+      return fc;
     },
 
     //
