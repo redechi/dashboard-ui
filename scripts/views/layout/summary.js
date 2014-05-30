@@ -2,14 +2,15 @@ define([
   'backbone',
   'hbs!tmpl/layout/summary_tmpl',
   '../composite/trips', // view
+  '../composite/filters', // view
   '../item/graph', // view
   '../item/map', // view
-  '../item/filters' // view
+  '../../collections/trips'
 ],
 
 // this should probably be a composit view rather than a layout
 
-function( Backbone, SummaryTmpl, Trips, Graph, Map, Filters) {
+function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
     'use strict';
 
   /* Return a Layout class definition */
@@ -38,6 +39,8 @@ function( Backbone, SummaryTmpl, Trips, Graph, Map, Filters) {
 
     /* on render callback */
     onRender: function () {
+      tripsCollection.fetch();
+
       var m = new Map();
       var g = new Graph();
       var t = new Trips();

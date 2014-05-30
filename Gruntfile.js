@@ -51,7 +51,7 @@ module.exports = function (grunt) {
         options:{
           uglify: true
         },
-        src: [ 'dist/index.html' ]
+        src: [ 'dist/app.html' ]
       }
     },
 
@@ -106,12 +106,22 @@ module.exports = function (grunt) {
     // require
     requirejs: {
 
-      distcss: {
+      distMainCss: {
         options: {
           appDir: "<%= yeoman.app %>",
           optimizeCss: "standard",
           cssIn: "assets/css/main.css",
           out: "<%= yeoman.dist %>/assets/css/main.css",
+          cssPrefix: ""
+        }
+      },
+
+      distInlineCss: {
+        options: {
+          appDir: "<%= yeoman.app %>",
+          optimizeCss: "standard",
+          cssIn: "assets/css/inline.css",
+          out: "<%= yeoman.dist %>/assets/css/inline.css",
           cssPrefix: ""
         }
       },
@@ -211,7 +221,6 @@ module.exports = function (grunt) {
             '.htaccess',
             'index.html',
             'assets/img/**',
-            'assets/css/inline.css',
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js'
           ]

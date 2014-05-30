@@ -11,7 +11,7 @@ function( Backbone, Communicator, $, Summary, router ) {
 
   // simple session storage
   $.ajaxSetup({
-    headers: {'Authorization': 'token e1f23342e6eb4bbc766692c0da0af23fdc39536b'},
+    headers: {'Authorization': 'token 31b5d336c4c4166606d91c4533c8da763996a02b'},
     beforeSend: function (xhr, req) {
       try {
         // TODO: invalidate cache at 15 min.

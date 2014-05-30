@@ -22,31 +22,6 @@ function( Backbone, Communicator) {
 
     //
     //
-    // filter tools
-    //
-    //
-
-    filterStrategies: {}, // override me
-
-    percolator: function (model) {
-      return function () {};
-    },
-
-    setFilter: function (name) {
-      this.percolator = this.filterStrategies[name];
-      return this;
-    },
-
-    doFilter: function (value) {
-      var filtered = this.filter(this.percolator);
-      var fc = new this.constructor(filtered);
-      Communicator.trigger('collection:'+this.name+':filter', fc);
-      this.trigger('filter', fc);
-      return fc;
-    },
-
-    //
-    //
     // sorting tools
     //
     //

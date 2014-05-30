@@ -26,13 +26,6 @@ function( Backbone, d3, comms, _, trips, GraphTmpl) {
     syncModel: function () {
       var collection = this.collection;
       this.model.set('data', this.collection.getGraphSet('distance_m'));
-
-      var changed = {
-        distance: parseInt(100 * collection.setAgg('distance').aggregate()) / 100,
-        someOtherAgg: 0
-      };
-
-      this.model.set(changed);
       this.drawGraph(this.model.get('data'));
     },
 
