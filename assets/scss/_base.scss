@@ -297,7 +297,8 @@ header {
   opacity: 0.5;
 }
 
-.trip.highlighted {
+.trip.highlighted,
+.trip.highlighted:hover {
   opacity: 1;
   background-color: rgba(6, 216, 68, 0.1);
 }

@@ -16,6 +16,9 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
       console.log("initialize a Trips CollectionView");
       coms.on('filter', _.bind(this.resetCollection, this));
 
+      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
+
       $(window).on("resize", this.resize);
     },
 
@@ -49,6 +52,24 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
       console.log(arguments);
     },
 
+    highlightTrip: function(trip) {
+      if(!trip) { return; }
+      this.highlightTrips([trip]);
+    },
+
+    highlightTrips: function (trips) {
+      $('.trips').addClass('highlighted');
+      $('.trips .trip').removeClass('highlighted');
+      trips.forEach(function(trip) {
+        $('.trip[data-trip_id="' + trip.id + '"]').addClass('highlighted');
+      });
+    },
+
+    unhighlightTrips: function() {
+      $('.trips').removeClass('highlighted');
+      $('.trip').removeClass('highlighted');
+    },
+
 
     events: {
       'change #exporter': 'export'
@@ -62,13 +83,11 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
 
     /* on render callback */
     onRender: function() {
-      console.log(arguments)
       this.resize();
     },
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      console.log(this.el)
       $('ul.trips', this.el).height(height - $('#tripsHeader', this.el).outerHeight(true) - 25);
     }
   });

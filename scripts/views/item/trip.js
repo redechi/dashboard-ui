@@ -1,6 +1,6 @@
 define([
   'backbone',
-  '../../communicator',
+  'communicator',
   'hbs!tmpl/item/trip_tmpl'
 ],
 function( Backbone, coms, TripTmpl  ) {
@@ -11,15 +11,16 @@ function( Backbone, coms, TripTmpl  ) {
 
     initialize: function() {
       console.log("initialize a Trip ItemView");
-      coms.on('focus', _.bind(this.addHighlight, this))
     },
 
-    triggerFocus: function () {
-      coms.trigger('focus', this.model);
+    triggerHighlight: function () {
+      coms.trigger('trips:highlight', this.model);
+      coms.trigger('trips:zoom', this.model);
     },
 
-    removeFocus: function () {
-      coms.trigger('removeFocus', this.model);
+    removeHighlight: function () {
+      coms.trigger('trips:unhighlight');
+      coms.trigger('trips:unzoom');
     },
 
     selectModel: function (e) {
@@ -28,20 +29,6 @@ function( Backbone, coms, TripTmpl  ) {
       } else {
         this.model.set('selected', false);
       }
-      this.triggerFocus();
-      this.addHighlight();
-    },
-
-    addHighlight: function (model) {
-      model = model || this.model;
-      var id = model.get('id');
-      this.$el.find('[data-trip_id='+id+']').addClass('highlighted');
-    },
-
-    removeHighlight: function (e) {
-      if(!!e.target.checked) return;
-      var id = this.model.get('id');
-      this.$el.find('[data-trip_id='+id+']').removeClass('highlighted');
     },
 
     tagName: "li",
@@ -56,9 +43,8 @@ function( Backbone, coms, TripTmpl  ) {
 
     /* Ui events hash */
     events: {
-      'mouseenter': 'triggerFocus',
-      'mouseout': 'removeHighlight',
-      'mouseleave': 'removeFocus',
+      'mouseenter': 'triggerHighlight',
+      'mouseleave': 'removeHighlight',
       'change [type="checkbox"]': 'selectModel'
     }
 
