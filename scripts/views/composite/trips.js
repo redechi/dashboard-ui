@@ -33,7 +33,7 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
       if (e.target.value === 'selected'){
         var selected = this.collection.where({selected: true});
         ids = new Backbone.Collection(selected).pluck("id");
-        if (!ids[0]) return alert('Please Select a Trip Or Five');
+        if (!ids[0]) return alert('Please Select at least one trip');
       }
 
       window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
@@ -65,4 +65,3 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
   });
 
 });
-

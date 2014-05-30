@@ -2,6 +2,7 @@ var async = require('async');
 var request = require('request');
 var moment = require('moment');
 var csv = require('express-csv');
+var _ = require('underscore');
 
 function downloadAllTrips(req, cb) {
   var finished = false
@@ -130,7 +131,10 @@ module.exports = function(req, res) {
     downloadAllTrips(req, function(e, trips) {
       if(req.query.trip_ids) {
         var trip_ids = req.query.trip_ids.split(',');
-        var trips = filterTrips(trips, trip_ids);
+
+        trips = _.filter(trips, function(trip) {
+          return trip_ids.indexOf(trip.id) != -1;
+        });
       }
       var tripsAsArray = trips.map(tripToArray);
       tripsAsArray.unshift(fieldNames());
