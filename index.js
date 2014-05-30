@@ -1,7 +1,9 @@
 var express = require('express');
 var session = require('cookie-session');
 var serveStatic = require('serve-static');
+var request = require('request');
 var nconf = require('nconf');
+var dataExport = require('./dataexport.js');
 var debug = require('debug')('AutomaticWebApp');
 
 
@@ -86,6 +88,9 @@ app.get('/logout/', function(req, res) {
   res.clearCookie('access_token');
   res.redirect('/');
 });
+
+
+app.get('/trips.csv', dataExport);
 
 
 //require user to login for all routes below

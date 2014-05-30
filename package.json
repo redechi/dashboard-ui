@@ -11,7 +11,10 @@
     "nconf": "~0.6.9",
     "cookie-session": "~1.0.2",
     "serve-static": "~1.2.0",
-    "ejs": "~1.0.0"
+    "ejs": "~1.0.0",
+    "async": "~0.9.0",
+    "moment": "~2.6.0",
+    "express-csv": "~0.6.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
