@@ -15,6 +15,5 @@ define([
     });
 
     var r = new Router();
-    console.log(r);
     return r;
 });

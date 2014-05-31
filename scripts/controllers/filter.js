@@ -9,10 +9,16 @@ function(formatters) {
 
   return {
     date: {
+      name: 'date',
       title: 'By Date Range',
-      value: 'thisMonth'
+      value: 'thisMonth',
+      dateRange: [0,0],
+      func: function(trip) {
+        return moment(trip.get('start_time')) >= moment(this.get('dateRange')[0]) && moment(trip.get('start_time')) <= moment(this.get('dateRange')[1]);
+      }
     },
     vehicle: {
+      name: 'vehicle',
       title: 'By Vehicle',
       vehicle_ids: [],
       func: function(trip) {
@@ -20,6 +26,7 @@ function(formatters) {
       }
     },
     distance: {
+      name: 'distance',
       title: 'By Distance',
       min: 0,
       max: Infinity,
@@ -28,6 +35,7 @@ function(formatters) {
       }
     },
     duration: {
+      name: 'duration',
       title: 'By Duration',
       min: 0,
       max: Infinity,
@@ -36,6 +44,7 @@ function(formatters) {
       }
     },
     cost: {
+      name: 'cost',
       title: 'By Cost',
       min: 0,
       max: Infinity,
@@ -44,6 +53,7 @@ function(formatters) {
       }
     },
     location: {
+      name: 'location',
       title: 'By Location',
       latlng: [0,0],
       type: undefined,

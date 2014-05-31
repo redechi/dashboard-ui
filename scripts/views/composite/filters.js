@@ -26,13 +26,14 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
 
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
-
+      var filterLi = this.makeFilterList();
 
       // initialize popover
       setTimeout(function() {
         $('.addFilter').popover({
           html: true,
-          placement: 'bottom'
+          placement: 'bottom',
+          content: filterLi
         });
       }, 0);
     },
@@ -62,14 +63,33 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
     addFilter: function (e) {
       var filter = $(e.target).data('filter');
 
-      //filterList[filter].max = 1;
-      //filterList[filter].vehicle_ids = ['529e5772e4b00a2ddb562f1f'];
-      // filterList[filter].latlng = [37.76537594388962, -122.4123740663029];
-      // filterList[filter].type = 'from'
+      //sample filter data
+      filterList[filter].max = 1;
+      filterList[filter].vehicle_ids = ['529e5772e4b00a2ddb562f1f'];
+      filterList[filter].latlng = [37.76537594388962, -122.4123740663029];
+      filterList[filter].type = 'from'
+      filterList[filter].dateRange = [1393729385431, 1401501801822];
 
       this.collection.push(new Filter(filterList[filter]));
 
+      $('.addFilter')
+        .popover('destroy')
+        .popover({
+          html: true,
+          placement: 'bottom',
+          content: this.makeFilterList()
+        });
+
       this.closePopovers({});
+    },
+
+    makeFilterList: function () {
+      var remainingFilters = _.omit(filterList, this.collection.pluck('name'));
+      return $('<div>').append($('<ul>')
+        .addClass('filterList')
+        .append(_.map(remainingFilters, function(name, key) {
+          return '<li data-filter="' + key + '">' + name.title + '</li>';
+        }))).html();
     },
 
     closePopovers: function(e) {
