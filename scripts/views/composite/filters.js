@@ -3,10 +3,12 @@ define([
   'communicator',
   'views/item/filter',
   '../../collections/trips',
+  '../../collections/filters',
   '../../models/filter',
-  'hbs!tmpl/composite/filters_tmpl'
+  'hbs!tmpl/composite/filters_tmpl',
+  '../../controllers/filter'
 ],
-function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
+function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
@@ -25,6 +27,7 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
 
+
       // initialize popover
       setTimeout(function() {
         $('.addFilter').popover({
@@ -35,7 +38,7 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     },
 
     model: new Filter(),
-    collection: new Backbone.Collection([]),
+    collection: filters,
     itemView: FilterView,
     itemViewContainer: 'ul',
     template: FiltersTmpl,
@@ -57,12 +60,10 @@ function( Backbone, coms, FilterView, trips, Filter, FiltersTmpl  ) {
     },
 
     addFilter: function (e) {
-      console.log($(e.target).data('filter'));
-      this.collection.push(new Filter({
-        name: 'blah',
-        func: 'lt_distance_m',
-        args: 2000
-      }));
+      var filter = $(e.target).data('filter');
+
+      filterList[filter].max = 1000;
+      this.collection.push(new Filter(filterList[filter]));
 
       this.closePopovers({});
     },

@@ -7,20 +7,40 @@ function() {
   'use strict';
 
   return {
-    gt_cost: function (cost) {
-      return function(trip) { return trip.get("fuel_cost_usd") > cost; };
+    date: {
+      title: 'By Date Range',
+      value: 'thisMonth'
     },
-
-    lt_cost: function (cost) {
-      return function(trip) { return trip.get("fuel_cost_usd") < cost; };
+    vehicle: {
+      title: 'By Vehicle'
     },
-
-    lt_distance_m: function (distance) {
-      return function(trip) { return trip.get("distance_m") < distance; };
+    distance: {
+      title: 'By Distance',
+      max: Infinity,
+      min: 0,
+      func: function(trip) {
+        return trip.get("distance_m") >= this.get('min') && trip.get("distance_m") <= this.get('max');
+      }
     },
-
-    gt_distance_m: function (distance) {
-      return function(trip) { return trip.get("distance_m") > distance; };
+    duration: {
+      title: 'By Duration',
+      max: 0,
+      min: 0,
+      func: function(trip) {
+        return trip.get("duration") >= this.min && trip.get("duration") <= this.max;
+      }
+    },
+    cost: {
+      title: 'By Cost',
+      max: 0,
+      min: 0,
+      func: function(trip) {
+        return trip.get("fuel_cost_usd") >= this.min && trip.get("fuel_cost_usd") <= this.max;
+      }
+    },
+    location: {
+      title: 'By Location'
     }
-  }
+  };
+
 });

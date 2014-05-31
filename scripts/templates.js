@@ -8,7 +8,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"filters\">\n  <h3 class=\"filterLabel\">Show Me</h3>\n  <ul class=\"appliedFilters\"></ul>\n\n  <div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\" data-content='<ul class=\"filterList\"><li data-filter=\"vehicle\">By Vehicle</li><li data-filter=\"distance\">By Distance</li><li data-filter=\"duration\">By Duration</li><li data-filter=\"cost\">By Cost</li><li data-filter=\"location\">By Location</li></ul>'>\n    <i class=\"glyphicon glyphicon-plus\"></i>\n  </div>\n</div>\n";
+  return "<h3 class=\"filterLabel\">Show Me</h3>\n<ul class=\"appliedFilters\"></ul>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\" data-content='<ul class=\"filterList\"><li data-filter=\"vehicle\">By Vehicle</li><li data-filter=\"distance\">By Distance</li><li data-filter=\"duration\">By Duration</li><li data-filter=\"cost\">By Cost</li><li data-filter=\"location\">By Location</li></ul>'>\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"distance popoverContent\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n";
   });
 
 this["JST"]["templates/item/empty_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

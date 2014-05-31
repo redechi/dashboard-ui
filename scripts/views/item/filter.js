@@ -28,6 +28,16 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
     },
 
     onRender: function() {
+      var title = this.model.get('title');
+      $('.btn-text', this.el).text(title);
+
+      $('.btn-popover', this.el).popover({
+        html: true,
+        content: function() { return $('.distance.popoverContent').html(); },
+        placement: 'bottom'
+      }).popover('show');
+
+      console.log($('.btn-popover').length);
       // TODO: trigger add filter analytics event
     }
   });
