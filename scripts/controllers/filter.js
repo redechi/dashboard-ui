@@ -32,7 +32,8 @@ function(formatters) {
       max: Infinity,
       func: function(trip) {
         return trip.get("distance_m") >= this.get('min') && trip.get("distance_m") <= this.get('max');
-      }
+      },
+      formatter: function(d) { return d + ' mi'; }
     },
     duration: {
       name: 'duration',
@@ -41,7 +42,8 @@ function(formatters) {
       max: Infinity,
       func: function(trip) {
         return trip.get("duration") >= this.get('min') && trip.get("duration") <= this.get('max');
-      }
+      },
+      formatter: function(d) { return d + ' min'; }
     },
     cost: {
       name: 'cost',
@@ -50,7 +52,8 @@ function(formatters) {
       max: Infinity,
       func: function(trip) {
         return trip.get("fuel_cost_usd") >= this.get('min') && trip.get("fuel_cost_usd") <= this.get('max');
-      }
+      },
+      formatter: function(d) { return '$' + d; }
     },
     location: {
       name: 'location',
