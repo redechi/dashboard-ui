@@ -18,6 +18,7 @@
   "dependencies": {
     "jquery": "~1.9.0",
     "bootstrap": "~3.1.1",
+    "seiyria-bootstrap-slider": "~3.1.0",
     "requirejs": "~2.1.5",
     "requirejs-text": "~2.0.5",
     "backbone-amd": "~1.0.0",

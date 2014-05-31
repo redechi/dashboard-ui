@@ -15,8 +15,13 @@ require.config({
             exports: 'Backbone'
         },
 
-        bootstrap: {
+        bootstrapSlider: {
             deps: ['jquery'],
+            exports: 'jquery'
+        },
+
+        bootstrap: {
+            deps: ['jquery', 'bootstrapSlider'],
             exports: 'jquery'
         },
     },
@@ -40,6 +45,7 @@ require.config({
 
         /* alias the bootstrap js lib */
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+        bootstrapSlider: '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
 
         /* Alias text.js for template loading and shortcut the templates dir to tmpl */
         text: '../bower_components/requirejs-text/text',
