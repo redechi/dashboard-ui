@@ -83,7 +83,6 @@ app.get('/authorize/', function(req, res) {
 
 app.get('/logout/', function(req, res) {
   req.session.destroy();
-  res.clearCookie('access_token');
   res.redirect('/');
 });
 
@@ -102,7 +101,7 @@ app.get('*', function(req, res, next) {
 
 
 app.get('/', function(req, res) {
-  res.render('app.html');
+  res.render('app.html', {access_token: req.session.access_token});
 });
 
 
@@ -143,7 +142,6 @@ app.all('*', function(req, res, next){
 function setAccessToken(req, res, access_token) {
   if(access_token) {
     req.session.access_token = access_token;
-    res.cookie('access_token', access_token);
   }
 }
 
