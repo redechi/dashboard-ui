@@ -62,7 +62,11 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
     addFilter: function (e) {
       var filter = $(e.target).data('filter');
 
-      filterList[filter].max = 1000;
+      //filterList[filter].max = 1;
+      //filterList[filter].vehicle_ids = ['529e5772e4b00a2ddb562f1f'];
+      // filterList[filter].latlng = [37.76537594388962, -122.4123740663029];
+      // filterList[filter].type = 'from'
+
       this.collection.push(new Filter(filterList[filter]));
 
       this.closePopovers({});

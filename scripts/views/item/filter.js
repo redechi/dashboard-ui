@@ -37,7 +37,6 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
         placement: 'bottom'
       }).popover('show');
 
-      console.log($('.btn-popover').length);
       // TODO: trigger add filter analytics event
     }
   });
