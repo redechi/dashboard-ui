@@ -28,15 +28,18 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
     },
 
     onRender: function() {
-      var title = this.model.get('title');
-      $('.btn-text', this.el).text(title);
+      var filter = this.model.get('name');
+      setTimeout(function() {
 
-      $('.btn-popover', this.el).popover({
-        html: true,
-        content: function() { return $('.distance.popoverContent').html(); },
-        placement: 'bottom'
-      }).popover('show');
-
+        $('.btn-popover[data-filter="' + filter + '"]')
+          .popover({
+            html: true,
+            content: function() { return $('.popoverContent[data-filter="' + filter + '"]').html(); },
+            placement: 'bottom'
+          })
+          .popover('show');
+      }, 0);
+      
       // TODO: trigger add filter analytics event
     }
   });

@@ -28,7 +28,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       console.log('Initialize a Filters CompositeView');
       var filterLi = this.makeFilterList();
 
-      // initialize popover
+      // initialize addFilter popover
       setTimeout(function() {
         $('.addFilter').popover({
           html: true,
@@ -80,7 +80,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
           content: this.makeFilterList()
         });
 
-      this.closePopovers({});
+      //this.closePopovers({});
     },
 
     makeFilterList: function () {
