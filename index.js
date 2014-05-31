@@ -101,6 +101,11 @@ app.get('*', function(req, res, next) {
 
 
 app.get('/', function(req, res) {
+  res.json('thanks');
+});
+
+
+app.get('/app', function(req, res) {
   res.render('app.html', {access_token: req.session.access_token});
 });
 
