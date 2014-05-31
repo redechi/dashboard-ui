@@ -87,8 +87,8 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       var remainingFilters = _.omit(filterList, this.collection.pluck('name'));
       return $('<div>').append($('<ul>')
         .addClass('filterList')
-        .append(_.map(remainingFilters, function(name, key) {
-          return '<li data-filter="' + key + '">' + name.title + '</li>';
+        .append(_.map(remainingFilters, function(filter) {
+          return $('<li>').attr('data-filter', filter.name).text(filter.title);
         }))).html();
     },
 

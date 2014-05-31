@@ -16,7 +16,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
       coms.on('trips:unhighlight', _.bind(this.unhighlightMap, this));
       coms.on('trips:zoom', _.bind(this.zoomMap, this));
       coms.on('trips:unzoom', _.bind(this.unzoomMap, this));
-      this.collection.on('filter', _.bind(this.updateMap, this));
+      coms.on('filter', _.bind(this.updateMap, this));
     },
 
     collection: trips,
@@ -31,11 +31,8 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     /* on render callback */
     onRender: function () {
-      if (this.collection.length && !this.mapbox) {
-        this.updateMap();
-      } else {
-        this.collection.once('sync', _.bind(this.updateMap, this));
-      }
+      this.createMap();
+      this.updateMap();
     },
 
 
@@ -111,9 +108,18 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
       this.mapbox.fitBounds(bounds, {padding: [50, 50]});
     },
 
-    updateMap: function () {
+
+    createMap: function() {
       var mapbox = this.mapbox = L.mapbox.map(this.el, 'automatic.i86oppa4'),
           featureLayer = this.featureLayer = L.mapbox.featureLayer();
+    },
+
+
+    updateMap: function () {
+      var mapbox = this.mapbox,
+          featureLayer = this.featureLayer;
+
+      featureLayer.clearLayers();
 
       L.extend(L.GeoJSON, {
         // This function is from Google's polyline utility.
@@ -189,7 +195,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             coms.trigger('trips:unhighlight');
           });
 
-        return marker
+        return marker;
       }
 
 
@@ -261,7 +267,6 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             id: id
           },
         });
-
         geoJson.addTo(featureLayer);
       }), this);
 
