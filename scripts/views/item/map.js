@@ -27,10 +27,13 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
     ui: {},
 
     /* Ui events hash */
-    events: {},
+    events: {
+      'change .noMove': 'setNoMoveStatus'
+    },
 
     /* on render callback */
     onRender: function () {
+      this.noMove = false;
       this.createMap();
       this.updateMap();
     },
@@ -79,28 +82,34 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     zoomMap: function (model) {
       var id = model.get('id'),
+          noMove = this.noMove,
           bounds;
 
-      this.featureLayer.eachLayer(function(layer) {
-        if(layer.options.id == id) {
-          layer.eachLayer(function(layer) {
-            if(layer instanceof L.Polyline) {
-              if(!bounds) {
-                bounds = L.latLngBounds(layer.getBounds());
-              } else {
-                bounds.extend(layer.getBounds());
+      if(!noMove) {
+        this.featureLayer.eachLayer(function(layer) {
+          if(layer.options.id == id) {
+            layer.eachLayer(function(layer) {
+              if(layer instanceof L.Polyline) {
+                if(!bounds) {
+                  bounds = L.latLngBounds(layer.getBounds());
+                } else {
+                  bounds.extend(layer.getBounds());
+                }
               }
-            }
-          });
-        }
-      });
+            });
+          }
+        });
 
-      this.fitBoundsMap(bounds);
+        this.fitBoundsMap(bounds);
+      }
     },
 
 
     unzoomMap: function (model) {
-      this.fitBoundsMap(this.featureLayer.getBounds());
+      var noMove = this.noMove;
+      if(!noMove) {
+        this.fitBoundsMap(this.featureLayer.getBounds());
+      }
     },
 
 
@@ -111,8 +120,13 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
     },
 
 
+    setNoMoveStatus: function() {
+      this.noMove = $('.noMove').is(':checked');
+    },
+
+
     createMap: function() {
-      var mapbox = this.mapbox = L.mapbox.map(this.el, 'automatic.i86oppa4'),
+      var mapbox = this.mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
           featureLayer = this.featureLayer = L.mapbox.featureLayer();
     },
 

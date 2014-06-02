@@ -74,7 +74,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<!-- empty map template -->\n";
+  return "<div class=\"map\"></div>\n<div class=\"noMoveContainer\">\n  <label>\n    <input type=\"checkbox\" class=\"noMove\">\n    Don't move map\n  </label>\n</div>\n";
   });
 
 this["JST"]["templates/item/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

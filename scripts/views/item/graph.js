@@ -41,7 +41,9 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
     ui: {},
 
     /* Ui events hash */
-    events: {},
+    events: {
+      'click .stat': 'changeGraph'
+    },
 
     addGraph: function() {
       var chart = nv.models.multiBarChart()
@@ -70,6 +72,15 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
         .call(chart);
 
       return chart;
+    },
+
+
+    changeGraph: function (e) {
+      var graphType = $(e.currentTarget).data('graph-type');
+      $(e.currentTarget)
+        .addClass('active')
+        .siblings()
+          .removeClass('active');
     },
 
     onRender: function() {

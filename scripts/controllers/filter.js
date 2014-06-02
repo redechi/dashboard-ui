@@ -21,9 +21,13 @@ function(moment, formatters) {
     vehicle: {
       name: 'vehicle',
       title: 'By Vehicle',
-      vehicle_ids: [],
+      vehicle_ids: ['all'],
       func: function(trip) {
-        return _.contains(this.get('vehicle_ids'), trip.get("vehicle").id);
+        if(_.contains(this.get('vehicle_ids'), 'all')) {
+          return true;
+        } else {
+          return _.contains(this.get('vehicle_ids'), trip.get("vehicle").id);
+        }
       }
     },
     distance: {
@@ -68,8 +72,10 @@ function(moment, formatters) {
         var radius_mi = 0.1;
         if(this.get('type') == 'from') {
           return formatters.distance_mi(trip.get('start_location').lat, trip.get('start_location').lon, this.get('latlng')[0], this.get('latlng')[1]) <= radius_mi;
-        } else {
+        } else if(this.get('type') == 'to') {
           return formatters.distance_mi(trip.get('end_location').lat, trip.get('end_location').lon, this.get('latlng')[0], this.get('latlng')[1]) <= radius_mi;
+        } else {
+          return true;
         }
       }
     }
