@@ -105,7 +105,9 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
 
     fitBoundsMap: function(bounds) {
-      this.mapbox.fitBounds(bounds, {padding: [50, 50]});
+      if(bounds && bounds.isValid()) {
+        this.mapbox.fitBounds(bounds, {padding: [50, 50]});
+      }
     },
 
 
@@ -242,31 +244,36 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
           });
         }
 
-        geoJson.addData({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [startLoc.lon, startLoc.lat],
-          },
-          properties: {
-            title: 'Start',
-            type: 'start',
-            id: id
-          },
-        });
+        if (startLoc) {
+          geoJson.addData({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [startLoc.lon, startLoc.lat],
+            },
+            properties: {
+              title: 'Start',
+              type: 'start',
+              id: id
+            },
+          });
+        }
 
-        geoJson.addData({
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [endLoc.lon, endLoc.lat]
-          },
-          properties: {
-            title: 'End',
-            type: 'end',
-            id: id
-          },
-        });
+        if (endLoc) {
+          geoJson.addData({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [endLoc.lon, endLoc.lat]
+            },
+            properties: {
+              title: 'End',
+              type: 'end',
+              id: id
+            },
+          });
+        }
+
         geoJson.addTo(featureLayer);
       }), this);
 
@@ -274,8 +281,11 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
       // weird timeout hack for mapbox
       setTimeout(function () {
+        var bounds = featureLayer.getBounds();
         mapbox.invalidateSize();
-        mapbox.fitBounds(featureLayer.getBounds(), {padding: [50, 50]});
+        if(bounds.isValid()) {
+          mapbox.fitBounds(bounds, {padding: [50, 50]});
+        }
       }, 0);
     }
 
