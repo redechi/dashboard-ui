@@ -54,7 +54,9 @@ function( Backbone, d3, comms, _, trips, GraphTmpl, formatters) {
     ui: {},
 
     /* Ui events hash */
-    events: {},
+    events: {
+      'click .stat': 'changeGraph'
+    },
 
     /* on render callback */
     onRender: function() {
@@ -188,6 +190,14 @@ function( Backbone, d3, comms, _, trips, GraphTmpl, formatters) {
         .on("mouseout", function(){
           tooltip.style("visibility", "hidden");
         });
+    },
+
+    changeGraph: function (e) {
+      var graphType = $(e.currentTarget).data('graph-type');
+      $(e.currentTarget)
+        .addClass('active')
+        .siblings()
+          .removeClass('active');
     }
   });
 
