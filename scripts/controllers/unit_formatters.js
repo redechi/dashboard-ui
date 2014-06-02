@@ -12,6 +12,7 @@ function() {
     gallons: function(d) { return d.value + ' gallons'; },
     fuel_cost: function(d) { return '$' + d.value; },
     mi_to_m: function(mi) { return mi * 1609.34; },
+    m_to_mi: function(m) { return m / 1609.34; },
     distance_mi: function(lat1, lon1, lat2, lon2) {
       function ToRadians(degree) {
         return (degree * (Math.PI / 180));
