@@ -1,13 +1,13 @@
 define([
   'backbone',
   'communicator',
-  '../../base/charts/bar',
+  'underscore',
   '../../collections/trips',
-  'hbs!tmpl/item/graph_tmpl'
+  'hbs!tmpl/item/graph_tmpl',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, BarChartBase, trips, GraphTmpl) {
-  'use strict';
-  console.log(arguments)
+function( Backbone, comms, _, trips, GraphTmpl, formatters) {
+    'use strict';
 
   /* Return a ItemView class definition */
   var BarChart = Backbone.Marionette.ItemView.extend({
@@ -16,20 +16,28 @@ function( Backbone, coms, BarChartBase, trips, GraphTmpl) {
 
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
+      this.collection.on('reset', this.render);
     },
-
-    collectioin: trips,
 
     collection: trips, // trips singleton
 
     template: GraphTmpl,
 
+    templateHelpers: function() {
+      var helpers =  {
+        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_m'); }, 0)),
+        duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
+        score: formatters.score(this.collection.getAverageScore()),
+        cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
+      };
+
+      helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0))
+
+      return helpers;
+    },
+
     /* ui selector cache */
     ui: {},
-
-    collectionEvents: {
-      'reset': 'render'
-    },
 
     /* Ui events hash */
     events: {},
@@ -63,11 +71,9 @@ function( Backbone, coms, BarChartBase, trips, GraphTmpl) {
       return chart;
     },
 
-    /* on render callback */
     onRender: function() {
       nv.addGraph(_.bind(this.addGraph, this));
     }
-
   });
 
   return BarChart;

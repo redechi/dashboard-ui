@@ -34,7 +34,7 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
       var filter = this.model;
 
       setTimeout(function() {
-        var name = filter.get('name')
+        var name = filter.get('name');
         $('.btn-popover[data-filter="' + name + '"]')
           .popover({
             html: true,
@@ -43,15 +43,6 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
           })
           .popover('show');
 
-        if(name == 'distance' || name == 'duration' || name == 'cost') {
-          $('.popover .' + name + 'FilterValue').slider({
-            min: 0,
-            max: Math.ceil(filter.get('max')),
-            formater: filter.get('formatter'),
-            value: filter.get('value') || [0, filter.get('max')],
-            tooltip_split: true
-          });
-        }
       }, 0);
 
 
