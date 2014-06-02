@@ -26,7 +26,8 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       'change .dateFilterValue': 'updateDateFilter',
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
-      'slideStop .costFilterValue': 'updateCostFilter'
+      'slideStop .costFilterValue': 'updateCostFilter',
+      'shown.bs.popover .btn-filter': 'initializePopover'
     },
 
     initialize: function() {
@@ -142,6 +143,21 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
 
     closePopovers: function(e) {
       $('.btn-popover').not(e.currentTarget).popover('hide');
+    },
+
+    initializePopover: function(e) {
+      var name = $(e.target).data('filter'),
+          filter = this.collection.findWhere({name: name});
+
+      if(name == 'distance' || name == 'duration' || name == 'cost') {
+        $('.popover .' + name + 'FilterValue').slider({
+          min: 0,
+          max: Math.ceil(filter.get('max')),
+          formater: filter.get('formatter'),
+          value: filter.get('value') || [0, filter.get('max')],
+          tooltip_split: true
+        });
+      }
     },
 
     /* on render callback */
