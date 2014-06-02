@@ -112,7 +112,7 @@ header {
 
 #graphs {
   position: relative;
-  height: 200px;
+  height: 290px;
   width: 100%;
   margin-bottom: 20px;
   background-color: #fff;
@@ -122,18 +122,18 @@ header {
   box-shadow: 0 1px 1px rgba(0,0,0,.05);
   border-color: #ddd;
 
-  .graph {
-    position: absolute;
-    height: inherit;
+  .graphContainer {
+    width: 100%;
   }
 }
 
 .summaryStats {
   text-align: center;
+  margin-top: 10px;
 }
 
 .summaryStats .stat {
-  width: 16%;
+  width: 15%;
   display: inline-block;
   cursor: pointer;
   border: 1px solid transparent;

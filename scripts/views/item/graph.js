@@ -82,14 +82,13 @@ function( Backbone, d3, comms, _, trips, GraphTmpl) {
           xAxisTicks,
           xAxisTickFormat,
           popupTimeFormat,
-          graphWidth = this.$el.parent().width(),
-          graphHeight = this.$el.parent().height();
+          graphContainer = this.$el.find('.graphContainer');
 
-      this.$el.empty();
+      graphContainer.empty();
 
       var margin = {top: 20, right: 40, bottom: 30, left: 50},
-          width = graphWidth,
-          height = graphHeight,
+          width = graphContainer.width(),
+          height = 190,
           bisectDate = d3.bisector(function(d) { return d.key; }).left;
 
       var parseDate = d3.time.format("%Y-%m").parse;
@@ -126,7 +125,7 @@ function( Backbone, d3, comms, _, trips, GraphTmpl) {
           .orient("left")
           .ticks(8);
 
-      var svg = d3.select(this.el).append("svg")
+      var svg = d3.select(graphContainer.get(0)).append("svg")
           .attr("width", width )
           .attr("height", height )
           .append("g")
@@ -137,7 +136,7 @@ function( Backbone, d3, comms, _, trips, GraphTmpl) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
         .selectAll("text");
- 
+
       svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
