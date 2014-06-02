@@ -70,8 +70,6 @@ function( Backbone, Communicator) {
     }
   });
 
-  console.log(AMLCollection);
-
   Backbone.AML = Backbone.AML || {};
   return Backbone.AML.Collection = AMLCollection;
 });

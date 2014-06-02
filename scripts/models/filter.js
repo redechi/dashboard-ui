@@ -17,13 +17,7 @@ function( Backbone, coms, strategies ) {
     filterStrategies: strategies, // override me
 
     applyTo: function (collection) {
-      // TODO: applys its self to a supplied collection
-      var funcName = this.get('func');
-      var args = this.get('args');
-
-      var func = this.filterStrategies[funcName];
-      var percolator = func.call(this, args);
-      var filtered = collection.filter(percolator);
+      var filtered = collection.filter(this.get('func'), this);
       var fc = collection.reset(filtered);
       return fc;
     },
