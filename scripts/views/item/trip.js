@@ -1,9 +1,10 @@
 define([
   'backbone',
   'communicator',
-  'hbs!tmpl/item/trip_tmpl'
+  'hbs!tmpl/item/trip_tmpl',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, TripTmpl  ) {
+function( Backbone, coms, TripTmpl, formatters  ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -37,6 +38,13 @@ function( Backbone, coms, TripTmpl  ) {
     onRender: function () {},
 
     template: TripTmpl,
+
+    templateHelpers: function() {
+      return {
+        distance: formatters.distance(this.model.get('distance_m')),
+        duration: formatters.durationMin(this.model.get('duration'))
+      }
+    },
 
     /* ui selector cache */
     ui: {},

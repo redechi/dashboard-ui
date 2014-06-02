@@ -8,9 +8,32 @@ function() {
     miles: function(d) { return d.value + ' miles'; },
     hours: function(d) { return d.value + ' hours'; },
     trips: function(d) { return d.value + ' trips'; },
-    score: function(d) { return d.value + ' trips'; },
     gallons: function(d) { return d.value + ' gallons'; },
     fuel_cost: function(d) { return '$' + d.value; },
+    distance: function(distance_m) {
+      var distance_mi = this.m_to_mi(distance_m);
+      if(Math.round(distance_mi) >= 100) {
+        return distance_mi.toFixed(0);
+      } else {
+        return distance_mi.toFixed(1);
+      }
+    },
+    duration: function(min) {
+      var duration = moment.duration(min, "minutes");
+      return Math.floor(duration.asHours()) + ':' + moment(duration.minutes(), 'm').format('mm');
+    },
+    durationMin: function(min) {
+      return Math.round(min);
+    },
+    cost: function(fuelCost) {
+      return '$' + fuelCost.toFixed(2);
+    },
+    averageMPG: function(mpg) {
+      return mpg.toFixed(1);
+    },
+    score: function(score) {
+      return Math.round(score);
+    },
     mi_to_m: function(mi) { return mi * 1609.34; },
     m_to_mi: function(m) { return m / 1609.34; },
     distance_mi: function(lat1, lon1, lat2, lon2) {

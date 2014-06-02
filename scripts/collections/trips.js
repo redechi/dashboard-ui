@@ -47,14 +47,25 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       , this));
     },
 
-    nextSet: function(){
-      this.page++
+    nextSet: function() {
+      this.page++;
       return this.fetch({add : true, remove: false,
         data: {
           page: this.page,
           per_page: 30
         }
-      })
+      });
+    },
+
+    getAverageScore: function() {
+      var weightedSum = this.reduce(function(memo, trip) {
+
+        memo.score += trip.get('score') * trip.get('duration');
+        memo.time += trip.get('duration');
+        return memo;
+      }, {time: 0, score: 0});
+
+      return weightedSum.score / weightedSum.time;
     },
 
     // filter strategies
