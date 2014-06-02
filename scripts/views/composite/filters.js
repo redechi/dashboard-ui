@@ -24,9 +24,17 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       'click .filterList li': 'addFilter'
     },
 
+    handleUpdate: function () {
+      // TODO: update filter and trigger filter event.
+      console.log(arguments, this.model);
+    },
+
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
       var filterLi = this.makeFilterList();
+      window.filter = this;
+
+      coms.on('all', this.handleUpdate)
 
       // initialize addFilter popover
       setTimeout(function() {
@@ -70,7 +78,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       filterList[filter].type = 'from'
       filterList[filter].dateRange = [1393729385431, 1401501801822];
 
-      this.collection.push(new Filter(filterList[filter]));
+      this.collection.add(new Filter(filterList[filter]));
 
       $('.addFilter')
         .popover('destroy')
@@ -80,7 +88,6 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
           content: this.makeFilterList()
         });
 
-      //this.closePopovers({});
     },
 
     makeFilterList: function () {
