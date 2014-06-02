@@ -36,5 +36,8 @@
     "nvd3": "~1.1.15-beta"
   },
   "devDependencies": {},
-  "directory": "n"
+  "directory": "n",
+  "resolutions": {
+    "d3": "~2.10"
+  }
 }
