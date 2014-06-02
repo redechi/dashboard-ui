@@ -17,6 +17,7 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
       this.collection.on('reset', this.render);
+      this.collection.on('sync', this.render);
     },
 
     collection: trips, // trips singleton
