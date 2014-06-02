@@ -1,8 +1,8 @@
 define([
   'backbone',
   'models/trip',
-  '../controllers/aggregate',
-  '../controllers/sort',
+  'amlAggregate',
+  'amlSort',
   'amlCollection'
 ],
 function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
@@ -19,7 +19,6 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
 
     initialize: function() {
       console.log("initialize a Trips collection");
-      window.tripss = this
     },
 
     url: "https://api.automatic.com/v1/trips",

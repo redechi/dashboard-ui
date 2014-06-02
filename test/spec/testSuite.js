@@ -14,7 +14,8 @@ define(function() {
 		'spec/views/item/map.js',
 		'spec/views/item/trip.js',
 		'spec/views/item/trips_header.js',
-		'spec/views/layout/summary.js'
+		'spec/views/layout/summary.js',
+		'spec/views/layout/trip.js'
 		]
 	};
 });

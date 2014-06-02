@@ -14,7 +14,10 @@ function( Backbone, Communicator) {
       var set = [];
 
       this.each(function (model) {
-        set.push({value: model.get(name), key: model.get('end_time')});
+        var val = model.get(name);
+        if (val) {
+          set.push({y: val, x: model.get('end_time')});
+        }
       });
 
       return set

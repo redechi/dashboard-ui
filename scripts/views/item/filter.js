@@ -11,7 +11,9 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
   return Backbone.Marionette.ItemView.extend({
 
     events: {
-      'click .remove-filter': 'deleteFilter'
+      'click .remove-filter': 'deleteFilter',
+      'change input': 'handleUpdate',
+      'change select': 'handleUpdate'
     },
 
     initialize: function() {
@@ -19,6 +21,7 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
     },
 
     tagName: 'li',
+
     template: FiltersTmpl,
 
     deleteFilter: function () {
