@@ -17,7 +17,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div class=\"trip\">\n  Loading...\n</div>\n\n";
+  return "<div class=\"trip\">\n  No Trips found.  Try <a href=\"#\" class=\"clearFilters\">clearing filters</a>.\n</div>\n";
   });
 
 this["JST"]["templates/item/filters_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
