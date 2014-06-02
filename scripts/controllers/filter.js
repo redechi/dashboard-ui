@@ -2,9 +2,10 @@
 // in to the appropriate collection from within the collection its self.
 
 define([
+  'moment',
   './unit_formatters',
 ],
-function(formatters) {
+function(moment, formatters) {
   'use strict';
 
   return {
@@ -12,7 +13,7 @@ function(formatters) {
       name: 'date',
       title: 'By Date Range',
       value: 'thisMonth',
-      dateRange: [0,0],
+      dateRange: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
       func: function(trip) {
         return moment(trip.get('start_time')) >= moment(this.get('dateRange')[0]) && moment(trip.get('start_time')) <= moment(this.get('dateRange')[1]);
       }
@@ -29,9 +30,10 @@ function(formatters) {
       name: 'distance',
       title: 'By Distance',
       min: 0,
-      max: Infinity,
+      max: 100,
+      value: [0, Infinity],
       func: function(trip) {
-        return trip.get("distance_m") >= this.get('min') && trip.get("distance_m") <= this.get('max');
+        return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
       },
       formatter: function(d) { return d + ' mi'; }
     },
@@ -39,9 +41,10 @@ function(formatters) {
       name: 'duration',
       title: 'By Duration',
       min: 0,
-      max: Infinity,
+      max: 100,
+      value: [0, Infinity],
       func: function(trip) {
-        return trip.get("duration") >= this.get('min') && trip.get("duration") <= this.get('max');
+        return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
       },
       formatter: function(d) { return d + ' min'; }
     },
@@ -49,9 +52,10 @@ function(formatters) {
       name: 'cost',
       title: 'By Cost',
       min: 0,
-      max: Infinity,
+      max: 100,
+      value: [0, Infinity],
       func: function(trip) {
-        return trip.get("fuel_cost_usd") >= this.get('min') && trip.get("fuel_cost_usd") <= this.get('max');
+        return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
       },
       formatter: function(d) { return '$' + d; }
     },
