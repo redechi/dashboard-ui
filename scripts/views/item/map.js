@@ -21,6 +21,11 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     collection: trips,
 
+    collectionEvents: {
+      'reset': 'updateMap',
+      'sync': 'updateMap'
+    },
+
     template: MapTmpl,
 
     /* ui selector cache */
