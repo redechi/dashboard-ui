@@ -20,7 +20,7 @@ function( Backbone, Communicator) {
         }
       });
 
-      return set
+      return set.reverse();
     },
 
     //
