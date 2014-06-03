@@ -44,7 +44,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"summaryStats\">\n  <div class=\"stat distance active\" data-graph-type=\"distance\">\n    <div class=\"value\">";
+  buffer += "<div class=\"summaryStats\">\n  <div class=\"stat distance active\" data-graph-type=\"distance_miles\">\n    <div class=\"value\">";
   if (stack1 = helpers.distance) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.distance; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -56,11 +56,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.score) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.score; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Score</div>\n  </div>\n  <div class=\"stat cost\" data-graph-type=\"cost\">\n    <div class=\"value\">";
+    + "</div>\n    <div class=\"label\">Score</div>\n  </div>\n  <div class=\"stat cost\" data-graph-type=\"fuel_cost_usd\">\n    <div class=\"value\">";
   if (stack1 = helpers.cost) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.cost; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Fuel</div>\n  </div>\n  <div class=\"stat mpg\" data-graph-type=\"mpg\">\n    <div class=\"value\">";
+    + "</div>\n    <div class=\"label\">Fuel</div>\n  </div>\n  <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n    <div class=\"value\">";
   if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)

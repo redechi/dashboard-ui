@@ -2,11 +2,13 @@ define([
   'backbone',
   'communicator',
   'underscore',
+  'nvd3',
+  'd3',
   '../../collections/trips',
   'hbs!tmpl/item/graph_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, comms, _, trips, GraphTmpl, formatters) {
+function( Backbone, comms, _, nv, d3, trips, GraphTmpl, formatters) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -16,11 +18,15 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
-      this.collection.on('reset', this.render);
-      this.collection.on('sync', this.render);
+      this.collection.graphType = 'distance_miles';
     },
 
     collection: trips, // trips singleton
+
+    collectionEvents: {
+      'reset': 'render',
+      'sync': 'render'
+    },
 
     template: GraphTmpl,
 
@@ -46,14 +52,15 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
     },
 
     addGraph: function() {
-      var chart = nv.models.multiBarChart()
-        .transitionDuration(350)
+      var graphType = this.collection.graphType;
+      var chart = this.chart = nv.models.multiBarChart()
+        .transitionDuration(150)
         .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
         .rotateLabels(0)      //Angle to rotate x-axis labels.
-        .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+        .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
         .groupSpacing(0.1);   //Distance between each group of bars.
 
-      var values = this.collection.getGraphSet('distance_m');
+      var values = this.collection.getGraphSet(graphType);
       var datum = {
         key: 'trips',
         values: values
@@ -67,21 +74,24 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
       nv.utils.windowResize(chart.update);
 
-      d3.select(this.$el.find('svg')[0])
+      d3.select(this.$el.find('svg').get(0))
         .datum([datum])
         .call(chart);
+
+      $('.summaryStats .stat[data-graph-type="' + graphType + '"]')
+        .addClass('active')
+        .siblings()
+          .removeClass('active');
 
       return chart;
     },
 
 
     changeGraph: function (e) {
-      var graphType = $(e.currentTarget).data('graph-type');
-      $(e.currentTarget)
-        .addClass('active')
-        .siblings()
-          .removeClass('active');
+      this.collection.graphType = $(e.currentTarget).data('graph-type');
+      this.render();
     },
+
 
     onRender: function() {
       nv.addGraph(_.bind(this.addGraph, this));

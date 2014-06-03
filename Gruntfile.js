@@ -221,6 +221,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'index.html',
             'assets/img/**',
+            'assets/js/**',
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js'
           ]
