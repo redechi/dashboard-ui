@@ -228,6 +228,20 @@ module.exports = function (grunt) {
       }
     },
 
+    cdnify: {
+      someTarget: {
+        options: {
+          base: '//d2dyje6jz36wpr.cloudfront.net/'
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.dist %>',
+          src: '**/*.{css,html}',
+          dest: '<%= yeoman.dist %>'
+        }]
+      }
+    },
+
     // handlebars
     handlebars: {
       compile: {
@@ -265,7 +279,8 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
-    'inline'
+    'inline',
+    'cdnify'
 
 // tests have been commented out.
 // they fail because none have been written.
