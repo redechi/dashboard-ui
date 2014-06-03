@@ -16,7 +16,6 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
-
       this.collection.graphType = 'distance_m';
     },
 
@@ -24,7 +23,7 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     collectionEvents: {
       'reset': 'render',
-      'sync': 'updateGraph'
+      'sync': 'render'
     },
 
     template: GraphTmpl,

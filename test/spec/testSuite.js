@@ -3,7 +3,8 @@ define(function() {
 
 	/* return an array of specs to be run */
 	return {
-		specs: ['spec/collections/trips.js',
+		specs: [
+    'spec/collections/trips.js',
 		'spec/models/filter.js',
 		'spec/models/trip.js',
 		'spec/views/collection/trips.js',
