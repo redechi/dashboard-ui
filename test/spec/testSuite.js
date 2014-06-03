@@ -7,7 +7,6 @@ define(function() {
       'spec/collections/trips.js',
       'spec/models/filter.js',
       'spec/models/trip.js',
-      'spec/views/collection/trips.js',
       'spec/views/composite/filters.js',
       'spec/views/item/empty.js',
       'spec/views/item/filters.js',

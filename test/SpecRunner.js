@@ -7,7 +7,7 @@ require.config({
     paths: {
         spec: 'spec', // lives in the test directory
 
-        jquery: 'base/../..bower_components/jquery/jquery',
+        jquery: 'base/../../bower_components/jquery/jquery',
         backbone: 'base/../../bower_components/backbone-amd/backbone',
         underscore: 'base/../../bower_components/underscore-amd/underscore',
 
@@ -45,25 +45,22 @@ require.config({
 /* require test suite */
 require([
     'jquery',
-    'spec/testSuite'
+    'base/../../test/spec/testSuite'
 ],
 function( $, testSuite ) {
+  'use strict';
 
-    'use strict';
-
-    /* on dom ready require all specs and run */
-    $( function() {
-        require(testSuite.specs, function() {
-
-            if (window.mochaPhantomJS) {
-                mochaPhantomJS.run();
-            }
-            else {
-                mocha.run();
-            }
-            
-        });
+  /* on dom ready require all specs and run */
+  $( function() {
+    require(testSuite.specs, function() {
+      if (window.mochaPhantomJS) {
+        mochaPhantomJS.run();
+      }
+      else {
+        mocha.run();
+      }
     });
+  });
 });
-  
+
 
