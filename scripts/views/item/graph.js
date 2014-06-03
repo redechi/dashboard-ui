@@ -16,7 +16,7 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
-      this.collection.graphType = 'distance_m';
+      this.collection.graphType = 'distance_miles';
     },
 
     collection: trips, // trips singleton
