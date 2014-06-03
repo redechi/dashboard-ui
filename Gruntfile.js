@@ -276,7 +276,7 @@ module.exports = function (grunt) {
     'handlebars',
     'compass:dist',
     'requirejs',
-    'imagemin',
+    // 'imagemin',
     'htmlmin',
     'appcache',
     'copy',
