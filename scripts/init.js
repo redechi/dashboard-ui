@@ -40,8 +40,8 @@ require.config({
     underscore: '../bower_components/underscore-amd/underscore',
 
     moment: '../bower_components/momentjs/moment',
-    d3: '../bower_components/d3/d3.v2',
-    nvd3: '../bower_components/nvd3/nv.d3',
+    d3: '../bower_components/d3/d3',
+    nvd3: '../assets/js/nv.d3.min',
 
     mapbox: 'http://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
 

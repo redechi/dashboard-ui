@@ -2,11 +2,13 @@ define([
   'backbone',
   'communicator',
   'underscore',
+  'nvd3',
+  'd3',
   '../../collections/trips',
   'hbs!tmpl/item/graph_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, comms, _, trips, GraphTmpl, formatters) {
+function( Backbone, comms, _, nv, d3, trips, GraphTmpl, formatters) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -76,36 +78,20 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
         .datum([datum])
         .call(chart);
 
+      $('.summaryStats .stat[data-graph-type="' + graphType + '"]')
+        .addClass('active')
+        .siblings()
+          .removeClass('active');
+
       return chart;
     },
 
 
     changeGraph: function (e) {
       this.collection.graphType = $(e.currentTarget).data('graph-type');
-
-      $(e.currentTarget)
-        .addClass('active')
-        .siblings()
-          .removeClass('active');
-
-      this.updateGraph();
+      this.render();
     },
 
-
-    updateGraph: function () {
-      var graphType = this.collection.graphType,
-          chart = this.chart;
-
-      var values = this.collection.getGraphSet(graphType);
-      var datum = {
-        key: 'trips',
-        values: values
-      }
-
-      d3.select(this.$el.find('svg').get(0))
-        .datum([datum])
-        .call(chart);
-    },
 
     onRender: function() {
       nv.addGraph(_.bind(this.addGraph, this));
