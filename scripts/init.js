@@ -43,7 +43,7 @@ require.config({
     d3: '../bower_components/d3/d3',
     nvd3: '../assets/js/nv.d3.min',
 
-    mapbox: 'http://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
+    mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
 
     /* alias all marionette libs */
     'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',

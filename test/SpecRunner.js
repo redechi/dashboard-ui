@@ -1,40 +1,40 @@
 require.config({
-    baseUrl: '/scripts',
+    baseUrl: 'spec/../../scripts',
     urlArgs: 'cb=' + Math.random(),
 
     deps: ['backbone.marionette'],
 
     paths: {
-        spec: '../../test/spec', // lives in the test directory
+        spec: 'spec', // lives in the test directory
 
-        jquery: '../bower_components/jquery/jquery',
-        backbone: '../bower_components/backbone-amd/backbone',
-        underscore: '../bower_components/underscore-amd/underscore',
+        jquery: 'base/../..bower_components/jquery/jquery',
+        backbone: 'base/../../bower_components/backbone-amd/backbone',
+        underscore: 'base/../../bower_components/underscore-amd/underscore',
 
         /* backbone plugins */
-        'backbone.syphon': '../bower_components/backbone.syphon/lib/amd/backbone.syphon',
-        'backbone.iobind': '../bower_components/backbone.iobind/dist/backbone.iobind',
+        'backbone.syphon': 'base/../../bower_components/backbone.syphon/lib/amd/backbone.syphon',
+        'backbone.iobind': 'base/../../bower_components/backbone.iobind/dist/backbone.iobind',
 
         /* alias all marionette libs */
-        'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
-        'backbone.wreqr': '../bower_components/backbone.wreqr/lib/amd/backbone.wreqr', 
-        'backbone.babysitter': '../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
+        'backbone.marionette': 'base/../../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
+        'backbone.wreqr': 'base/../../bower_components/backbone.wreqr/lib/amd/backbone.wreqr', 
+        'backbone.babysitter': 'base/../../bower_components/backbone.babysitter/lib/amd/backbone.babysitter',
 
         /* alias the bootstrap js lib */
         bootstrap: 'vendor/bootstrap',
         'bootstrap-button': 'vendor/bootstrap-button',
 
         /* Alias text.js for template loading and shortcut the templates dir to tmpl */
-        text: '../bower_components/requirejs-text/text',
-        tmpl: "../templates",
+        text: 'base/../../bower_components/requirejs-text/text',
+        tmpl: 'templates',
 
         /* handlebars from the require handlerbars plugin below */
-        handlebars: '../bower_components/require-handlebars-plugin/Handlebars',
+        handlebars: 'base/../../bower_components/require-handlebars-plugin/Handlebars',
 
         /* require handlebars plugin - Alex Sexton */
-        i18nprecompile: '../bower_components/require-handlebars-plugin/hbs/i18nprecompile',
-        json2: '../bower_components/require-handlebars-plugin/hbs/json2',
-        hbs: '../bower_components/require-handlebars-plugin/hbs'
+        i18nprecompile: 'base/../../bower_components/require-handlebars-plugin/hbs/i18nprecompile',
+        json2: 'base/../../bower_components/require-handlebars-plugin/hbs/json2',
+        hbs: 'base/../../bower_components/require-handlebars-plugin/hbs'
     },
 
     hbs: {
