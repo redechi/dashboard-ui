@@ -82,16 +82,11 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       //filterList[filter].dateRange = [1393729385431, 1401501801822];
 
 
+      $('.addFilter').popover('hide');
+
       this.collection.add(new Filter(filterList[filter]));
 
-
-      $('.addFilter')
-        .popover('destroy')
-        .popover({
-          html: true,
-          placement: 'bottom',
-          content: this.makeFilterList()
-        });
+      $('.addFilter').data('bs.popover').options.content = this.makeFilterList()
 
       //this.closePopovers({});
     },
