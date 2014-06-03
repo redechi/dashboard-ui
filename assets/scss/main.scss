@@ -4,5 +4,8 @@
 @import "bootstrap_min";
 
 @import "base";
-@import "nvd3";
 
+#graphs {
+  /* Don't let nvd3 fight mapbox */
+  @import "nvd3";
+}
