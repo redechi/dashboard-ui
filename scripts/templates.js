@@ -133,7 +133,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " TRIPS</div>\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"all\">All</option>\n      <option value=\"selected\">Selected</option>\n    </select>\n  </div>\n</div>\n<ul class=\"trips\"></ul>\n";
+    + " TRIPS</div>\n</div>\n<ul class=\"trips\"></ul>\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
   return buffer;
   });
 
@@ -143,7 +143,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"left-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"right-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
+  return "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
   });
 
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

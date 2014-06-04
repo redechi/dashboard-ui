@@ -102,12 +102,12 @@ header {
 #left-column {
   margin: 0;
   overflow: hidden;
-  width: 300px;
-  float: left;
+  margin-right: 320px;
 }
 
 #right-column {
-  margin-left: 320px
+  width: 300px;
+  float: right;
 }
 
 #graphs {
