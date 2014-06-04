@@ -2,9 +2,10 @@ define([
   'backbone',
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
-  '../../collections/trips'
+  '../../collections/trips',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, MapTmpl, trips, P/* not used */) {
+function( Backbone, coms, MapTmpl, trips, formatters) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -138,7 +139,16 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
 
     updateMap: function () {
       var mapbox = this.mapbox,
-          featureLayer = this.featureLayer;
+          featureLayer = this.featureLayer,
+          markers = new L.MarkerClusterGroup();
+
+      _.templateSettings = {
+        interpolate : /\{\{(.+?)\}\}/g
+      };
+
+      var popupTemplate = _.template('{{name}}<br>{{time}}<br>' +
+        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-location_name="{{name}}" data-type="to" class="showTripsToHere">Trips to here</a><br>' +
+        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-location_name="{{name}}" data-type="from" class="showTripsFromHere">Trips from here</a>');
 
       featureLayer.clearLayers();
 
@@ -202,14 +212,34 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
       });
 
 
-      function createMarker(feature, latlng) {
-        var icon = (feature.properties.type == 'start') ? aIcon : bIcon;
-        var marker = L.marker(latlng, {icon: icon});
+      function createMarker(type, model) {
+        var id = model.get('id'),
+            location,
+            time,
+            icon;
 
-        marker
+        if(type == 'start') {
+          location = model.get('start_location'),
+          time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A'),
+          icon = aIcon
+        } else {
+          location = model.get('end_location'),
+          time = formatters.formatTime(model.get('end_time'), model.get('end_time_zone'), 'MMM D, YYYY h:mm A'),
+          icon = bIcon
+        }
+
+        var popupText = popupTemplate({
+          name: location.name,
+          time: time,
+          lat: location.lat,
+          lon: location.lon
+        });
+
+        var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id})
+          .bindPopup(popupText)
           .on('mouseover', function (e) {
             // get model from id
-            var newModel = trips.where({id: e.target.feature.properties.id }).pop();
+            var newModel = trips.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
           .on('mouseout', function () {
@@ -248,7 +278,7 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
             startLoc = model.get('start_location'),
             endLoc = model.get('end_location'),
             path = model.get('path'),
-            geoJson = L.geoJson([], { pointToLayer: createMarker, style: styleLine, onEachFeature: attachEvents, id: id});
+            geoJson = L.geoJson([], { style: styleLine, onEachFeature: attachEvents, id: id});
 
         if (path) {
           geoJson.addData({
@@ -264,38 +294,18 @@ function( Backbone, coms, MapTmpl, trips, P/* not used */) {
         }
 
         if (startLoc) {
-          geoJson.addData({
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [startLoc.lon, startLoc.lat],
-            },
-            properties: {
-              title: 'Start',
-              type: 'start',
-              id: id
-            },
-          });
+          markers.addLayer(createMarker('start', model));
         }
 
         if (endLoc) {
-          geoJson.addData({
-            type: 'Feature',
-            geometry: {
-              type: 'Point',
-              coordinates: [endLoc.lon, endLoc.lat]
-            },
-            properties: {
-              title: 'End',
-              type: 'end',
-              id: id
-            },
-          });
+          markers.addLayer(createMarker('end', model));
         }
 
         geoJson.addTo(featureLayer);
+        
       }), this);
 
+      markers.addTo(featureLayer);
       mapbox.addLayer(featureLayer);
 
       // weird timeout hack for mapbox
