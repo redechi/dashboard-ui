@@ -38,6 +38,6 @@
   "devDependencies": {},
   "directory": "n",
   "resolutions": {
-    "d3": "~3.4.8"
+    "d3": "~3.3.13"
   }
 }
