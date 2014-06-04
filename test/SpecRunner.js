@@ -1,5 +1,6 @@
 require.config({
-    baseUrl: '/job/DeLorean-Dashboard/Mocha_Tests/test/spec',
+    baseUrl: '/job/DeLorean-Dashboard/Mocha_Tests/test/spec',//
+    'test/../../scripts',
     urlArgs: 'cb=' + Math.random(),
 
     deps: ['backbone.marionette'],

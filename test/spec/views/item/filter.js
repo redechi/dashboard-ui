@@ -1,25 +1,24 @@
 (function() {
-	'use strict';
+  'use strict';
 
-	var root = this;
+  var root = this;
 
-	root.define([
-		'views/item/filter'
-		],
-		function( Filters ) {
+  root.define([
+    'views/item/filter'
+    ],
+    function( Filters ) {
 
-			describe('Filters Itemview', function () {
+      describe('Filters Itemview', function () {
 
-				it('should be an instance of Filters Itemview', function () {
-					var filters = new Filters();
-					expect( filters ).to.be.an.instanceof( Filters );
-				});
+        it('should be an instance of Filters Itemview', function () {
+          var filters = new Filters();
+          expect( filters ).to.be.an.instanceof( Filters );
+        });
 
-				it('should have more test written', function(){
-					expect( false ).to.be.ok;
-				});
-			});
+        it('should have more test written', function(){
+          expect( false ).to.be.ok;
+        });
+      });
 
-		});
-
+    });
 }).call( this );

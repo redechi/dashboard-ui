@@ -10,6 +10,8 @@ function( Backbone, Communicator, $, Summary, router ) {
   'use strict';
 
   // simple session storage
+  var access_token = /token=([^;]+)/.exec(document.cookie).pop();
+
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + access_token},
     beforeSend: function (xhr, req) {
