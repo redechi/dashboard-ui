@@ -22,7 +22,6 @@ function( Backbone, UserViewTmpl, user  ) {
 
 		/* Ui events hash */
 		events: {
-			'click .btn-user': 'userPopover'
 		},
 
 		/* on render callback */
@@ -36,11 +35,7 @@ function( Backbone, UserViewTmpl, user  ) {
 			}, 0);
 		},
 
-		model: user,
-
-		userPopover: function (e) {
-			$('.btn-user').popover('show');
-		}
+		model: user
 	});
 
 });
