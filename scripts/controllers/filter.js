@@ -13,6 +13,7 @@ function(moment, formatters) {
       name: 'date',
       title: 'By Date Range',
       value: 'thisMonth',
+      valueText: 'This Month',
       dateRange: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
       func: function(trip) {
         return moment(trip.get('start_time')) >= moment(this.get('dateRange')[0]) && moment(trip.get('start_time')) <= moment(this.get('dateRange')[1]);
@@ -22,6 +23,8 @@ function(moment, formatters) {
       name: 'vehicle',
       title: 'By Vehicle',
       vehicle_ids: ['all'],
+      value: 'all',
+      valueText: 'All Vehicles',
       func: function(trip) {
         if(_.contains(this.get('vehicle_ids'), 'all')) {
           return true;
@@ -36,6 +39,7 @@ function(moment, formatters) {
       min: 0,
       max: 100,
       value: [0, Infinity],
+      valueText: 'All Distances',
       func: function(trip) {
         return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
       },
@@ -47,6 +51,7 @@ function(moment, formatters) {
       min: 0,
       max: 100,
       value: [0, Infinity],
+      valueText: 'All Durations',
       func: function(trip) {
         return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
       },
@@ -58,6 +63,7 @@ function(moment, formatters) {
       min: 0,
       max: 100,
       value: [0, Infinity],
+      valueText: 'All Costs',
       func: function(trip) {
         return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
       },
@@ -68,6 +74,7 @@ function(moment, formatters) {
       title: 'By Location',
       latlng: [0,0],
       type: undefined,
+      valueText: 'Everywhere',
       func: function(trip) {
         var radius_mi = 0.1;
         if(this.get('type') == 'from') {

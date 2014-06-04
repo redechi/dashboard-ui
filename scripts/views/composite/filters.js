@@ -6,9 +6,10 @@ define([
   '../../collections/filters',
   '../../models/filter',
   'hbs!tmpl/composite/filters_tmpl',
-  '../../controllers/filter'
+  '../../controllers/filter',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList  ) {
+function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList, formatters  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
@@ -97,6 +98,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
 
     updateDateFilter: function (e) {
       var dateValue = $(e.target).val(),
+          dateText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
           dateRange;
 
@@ -115,27 +117,43 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       }
 
       dateFilter.set('dateRange', dateRange);
+      $('.btn-filter[data-filter="date"] .btn-text').text(dateText);
+    },
+
+    updateVehicleFilter: function (e) {
+      var vehicleValue = $(e.target).val(),
+          vehicleText = $('option:selected', e.target).text(),
+          vehilceFilter = this.collection.findWhere({name: 'vehicle'});
+
+      vehicleFilter.set('value', vehicleValue);
+      $('.btn-filter[data-filter="vehicle"] .btn-text').text(vehicleText);
     },
 
     updateDurationFilter: function (e) {
       var durationValue = $(e.target).slider('getValue'),
+          durationText = durationValue.join(' - ') + ' minutes',
           durationFilter = this.collection.findWhere({name: 'duration'});
 
       durationFilter.set('value', durationValue);
+      $('.btn-filter[data-filter="duration"] .btn-text').text(durationText);
     },
 
     updateDistanceFilter: function (e) {
       var distanceValue = $(e.target).slider('getValue'),
+          distanceText = distanceValue.join(' - ') + ' miles',
           distanceFilter = this.collection.findWhere({name: 'distance'});
 
       distanceFilter.set('value', distanceValue);
+      $('.btn-filter[data-filter="distance"] .btn-text').text(distanceText);
     },
 
     updateCostFilter: function (e) {
       var costValue = $(e.target).slider('getValue'),
+          costText = costValue.map(formatters.cost).join(' - '),
           costFilter = this.collection.findWhere({name: 'cost'});
 
       costFilter.set('value', costValue);
+      $('.btn-filter[data-filter="cost"] .btn-text').text(costText);
     },
 
     makeFilterList: function () {
