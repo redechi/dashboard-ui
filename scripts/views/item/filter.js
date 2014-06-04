@@ -18,6 +18,15 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
 
     initialize: function() {
       console.log('initialize a Filters ItemView');
+
+      //extend popover to allow callback
+      var tmp = $.fn.popover.Constructor.prototype.show;
+      $.fn.popover.Constructor.prototype.show = function () {
+        tmp.call(this);
+        if (this.options.callback) {
+          this.options.callback();
+        }
+      };
     },
 
     tagName: 'li',
@@ -31,13 +40,21 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
     },
 
     onRender: function() {
-      var name = this.model.get('name');
+      var name = this.model.get('name'),
+          filter = this.model;
+
+      function initializePopover() {
+        if(name == 'date') {
+          $('.dateFilterValue').val(filter.get('value'));
+        }
+      }
 
       setTimeout(function() {
         $('.btn-popover[data-filter="' + name + '"]').popover({
           html: true,
           content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
-          placement: 'bottom'
+          placement: 'bottom',
+          callback: initializePopover
         });
 
         //don't show popover for date filter
@@ -51,6 +68,7 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
 
       // TODO: trigger add filter analytics event
     }
+
   });
 
 });

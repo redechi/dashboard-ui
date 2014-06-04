@@ -27,7 +27,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
-      'shown.bs.popover .btn-filter': 'initializePopover'
+      'shown.bs.popover .btn-filter': 'initializeSliders'
     },
 
     handleUpdate: function () {
@@ -151,7 +151,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       $('.btn-popover').not(e.currentTarget).popover('hide');
     },
 
-    initializePopover: function(e) {
+    initializeSliders: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
 
