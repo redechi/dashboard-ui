@@ -115,22 +115,22 @@ app.get('/app', function(req, res) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-	app.use(function(err, req, res, next) {
-		res.render('error.html', {
-			message: err.message,
-			error: err
-		});
-	});
+  app.use(function(err, req, res, next) {
+    res.render('error.html', {
+      message: err.message,
+      error: err
+    });
+  });
 }
 
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-	res.render('error.html', {
-		message: err.message,
-		error: {}
-	});
+  res.render('error.html', {
+    message: err.message,
+    error: {}
+  });
 });
 
 
