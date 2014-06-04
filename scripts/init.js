@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['amlCollection', 'd3', 'nvd3', 'mapbox', 'backbone.marionette', 'bootstrap', 'main'],
+  deps: ['amlCollection', 'd3', 'nvd3', 'mapbox', 'markercluster', 'backbone.marionette', 'bootstrap', 'main'],
 
 
   shim: {
@@ -26,6 +26,11 @@ require.config({
     nvd3: {
       deps: ['d3'],
       exports: 'nvd3'
+    },
+
+    markercluster: {
+      deps: ['mapbox'],
+      exports: 'mapbox'
     }
   },
 
@@ -40,10 +45,11 @@ require.config({
     underscore: '../bower_components/underscore-amd/underscore',
 
     moment: '../bower_components/momentjs/moment',
-    d3: '../bower_components/d3/d3',
-    nvd3: '../assets/js/nv.d3.min',
+    d3: '../bower_components/d3/d3.v2',
+    nvd3: '../bower_components/nvd3/nv.d3',
 
-    mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
+    mapbox: 'http://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
+    markercluster: 'http://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster',
 
     /* alias all marionette libs */
     'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',

@@ -39,6 +39,10 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
         var selected = this.collection.where({selected: true});
         ids = new Backbone.Collection(selected).pluck("id");
         if (!ids[0]) return alert('Please Select at least one trip');
+      } else if (e.target.value === 'filtered'){
+        var filtered = this.collection.models
+        ids = new Backbone.Collection(filtered).pluck("id");
+        if (!ids[0]) return alert('Please Select at least one trip');
       }
 
       window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
@@ -83,13 +87,15 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
 
     /* on render callback */
     onRender: function() {
-      this.resize();
+      var resize = this.resize;
+      setTimeout(resize, 0);
     },
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('ul.trips', this.el).height(height - $('#tripsHeader', this.el).outerHeight(true) - 25);
+      $('#trips ul.trips').height(height - $('#tripsHeader').outerHeight(true) - $('#tripsFooter').outerHeight(true) - 25);
     }
+
   });
 
 });

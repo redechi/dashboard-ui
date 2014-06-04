@@ -6,9 +6,10 @@ define([
   '../../collections/filters',
   '../../models/filter',
   'hbs!tmpl/composite/filters_tmpl',
-  '../../controllers/filter'
+  '../../controllers/filter',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList  ) {
+function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList, formatters  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
@@ -27,20 +28,23 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
-      'shown.bs.popover .btn-filter': 'initializePopover'
+      'shown.bs.popover .btn-filter': 'initializeSliders',
+      'click .updateLocationFilter': 'updateLocationFilterMap',
+      'submit .locationFilterValue': 'updateLocationFilterForm',
+      'change .locationFilterValueType': 'updateLocationFilterForm'
     },
 
     handleUpdate: function () {
       // TODO: update filter and trigger filter event.
-      console.log(arguments, this.model);
     },
 
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
-      var filterLi = this.makeFilterList();
       window.filter = this;
 
-      coms.on('all', this.handleUpdate)
+      var filterLi = this.makeFilterList();
+
+      coms.on('all', this.handleUpdate);
 
       // initialize addFilter popover
       setTimeout(function() {
@@ -50,6 +54,8 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
           content: filterLi
         });
       }, 0);
+
+      this.geocoder = L.mapbox.geocoder('automatic.i86oppa4');
     },
 
     model: new Filter(),
@@ -82,22 +88,18 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       //filterList[filter].dateRange = [1393729385431, 1401501801822];
 
 
+      $('.addFilter').popover('hide');
+
       this.collection.add(new Filter(filterList[filter]));
 
-
-      $('.addFilter')
-        .popover('destroy')
-        .popover({
-          html: true,
-          placement: 'bottom',
-          content: this.makeFilterList()
-        });
+      $('.addFilter').data('bs.popover').options.content = this.makeFilterList()
 
       //this.closePopovers({});
     },
 
     updateDateFilter: function (e) {
       var dateValue = $(e.target).val(),
+          dateText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
           dateRange;
 
@@ -116,27 +118,88 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       }
 
       dateFilter.set('dateRange', dateRange);
+      $('.btn-filter[data-filter="date"] .btn-text').text(dateText);
+    },
+
+    updateVehicleFilter: function (e) {
+      var vehicleValue = $(e.target).val(),
+          vehicleText = $('option:selected', e.target).text(),
+          vehilceFilter = this.collection.findWhere({name: 'vehicle'});
+
+      vehicleFilter.set('value', vehicleValue);
+      $('.btn-filter[data-filter="vehicle"] .btn-text').text(vehicleText);
     },
 
     updateDurationFilter: function (e) {
       var durationValue = $(e.target).slider('getValue'),
+          durationText = durationValue.join(' - ') + ' minutes',
           durationFilter = this.collection.findWhere({name: 'duration'});
 
       durationFilter.set('value', durationValue);
+      $('.btn-filter[data-filter="duration"] .btn-text').text(durationText);
     },
 
     updateDistanceFilter: function (e) {
       var distanceValue = $(e.target).slider('getValue'),
+          distanceText = distanceValue.join(' - ') + ' miles',
           distanceFilter = this.collection.findWhere({name: 'distance'});
 
       distanceFilter.set('value', distanceValue);
+      $('.btn-filter[data-filter="distance"] .btn-text').text(distanceText);
     },
 
     updateCostFilter: function (e) {
       var costValue = $(e.target).slider('getValue'),
+          costText = costValue.map(formatters.cost).join(' - '),
           costFilter = this.collection.findWhere({name: 'cost'});
 
       costFilter.set('value', costValue);
+      $('.btn-filter[data-filter="cost"] .btn-text').text(costText);
+    },
+
+    updateLocationFilterMap: function (e) {
+      var locationType = $(e.target).data('type'),
+          locationLatlng = [$(e.target).data('lat'), $(e.target).data('lng')],
+          locationName = $(e.target).data('name'),
+          locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName,
+          locationFilter = this.collection.findWhere({name: 'location'});
+
+      locationFilter.set('latlng', locationLatlng);
+      locationFilter.set('type', locationType);
+      $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
+
+      return false;
+    },
+
+    updateLocationFilterForm: function () {
+      var locationFilter = this.collection.findWhere({name: 'location'}),
+          locationName = $('.popover .locationFilterValueAddress').val(),
+          locationType = $('.popover .locationFilterValueType').val();
+
+      if(locationName === '') { return false; }
+
+      this.geocoder.query(locationName, function(err, data) {
+        if(err) {
+          $('.popover .locationFilterResults').text('Address Not Found');
+          return false;
+        }
+        $('.popover .locationFilterResults').empty();
+
+        locationName = _.pluck(data.results[0], 'name').join(', ');
+        var locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName;
+
+        locationFilter.set({
+          type: locationType,
+          latlng: data.latlng,
+          address: locationName
+        });
+
+        console.log(locationFilter)
+
+        $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
+      });
+
+      return false;
     },
 
     makeFilterList: function () {
@@ -152,7 +215,7 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       $('.btn-popover').not(e.currentTarget).popover('hide');
     },
 
-    initializePopover: function(e) {
+    initializeSliders: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
 
@@ -167,7 +230,6 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       }
     },
 
-    /* on render callback */
     onRender: function() {
     }
   });

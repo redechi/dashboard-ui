@@ -10,6 +10,13 @@ function() {
     trips: function(d) { return d.value + ' trips'; },
     gallons: function(d) { return d.value + ' gallons'; },
     fuel_cost: function(d) { return '$' + d.value; },
+    formatTime: function(time, timezone, format) {
+      try {
+        return moment(time).tz(timezone).format(format);
+      } catch(e) {
+        return moment(time).format(format);
+      }
+    },
     distance: function(distance_m) {
       var distance_mi = this.m_to_mi(distance_m);
       if(Math.round(distance_mi) >= 100) {

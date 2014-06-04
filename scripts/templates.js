@@ -8,7 +8,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h3 class=\"filterLabel\">Show Me</h3>\n\n<ul class=\"appliedFilters\"></ul>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\">\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"date\">\n  <select class=\"dateFilterValue\">\n    <option value=\"today\">Today</option>\n    <option value=\"thisWeek\">This Week</option>\n    <option value=\"thisMonth\">This Month</option>\n    <option value=\"lastMonth\">Last Month</option>\n    <option value=\"all\">All Time</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"vehicle\">\n  <select class=\"vehicleFilterValue\">\n    <option value=\"all\">All Vehicles</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"distance\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"duration\">\n  <input class=\"durationFilterValue slider\">\n  <div class=\"durationFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> minutes</div>\n    <div class=\"max\">Your longest trip: <span></span> minutes</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"cost\">\n  <input class=\"costFilterValue slider\">\n  <div class=\"costFilterNotes\">\n    <div>Your trips have ranged between <span class=\"min\"></span> and <span class=\"max\"></span></div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"location\">\n  <form class=\"locationFilterValue\">\n    <select class=\"locationFilterValueType\">\n      <option value=\"from\">From</option>\n      <option value=\"to\">To</option>\n    </select>\n    <input class=\"locationFilterValueAddress\" placeholder=\"Enter Address\">\n  </form>\n</div>\n";
+  return "<h3 class=\"filterLabel\">Show Me</h3>\n\n<ul class=\"appliedFilters\"></ul>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\">\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"date\">\n  <select class=\"dateFilterValue\">\n    <option value=\"today\">Today</option>\n    <option value=\"thisWeek\">This Week</option>\n    <option value=\"thisMonth\">This Month</option>\n    <option value=\"lastMonth\">Last Month</option>\n    <option value=\"all\">All Time</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"vehicle\">\n  <select class=\"vehicleFilterValue\">\n    <option value=\"all\">All Vehicles</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"distance\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"duration\">\n  <input class=\"durationFilterValue slider\">\n  <div class=\"durationFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> minutes</div>\n    <div class=\"max\">Your longest trip: <span></span> minutes</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"cost\">\n  <input class=\"costFilterValue slider\">\n  <div class=\"costFilterNotes\">\n    <div>Your trips have ranged between <span class=\"min\"></span> and <span class=\"max\"></span></div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"location\">\n  <form class=\"locationFilterValue\">\n    <select class=\"locationFilterValueType\">\n      <option value=\"start\">From</option>\n      <option value=\"end\">To</option>\n    </select>\n    <input class=\"locationFilterValueAddress\" placeholder=\"Enter Address\">\n  </form>\n  <div class=\"locationFilterResults\"></div>\n</div>\n";
   });
 
 this["JST"]["templates/item/empty_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -31,8 +31,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { stack1 = depth0.name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
     + "\">\n  <span class=\"btn-text\">";
-  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  if (stack1 = helpers.valueText) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.valueText; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
     + "</span><span class=\"caret\"></span>\n</div>\n";
   return buffer;
@@ -133,7 +133,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " TRIPS</div>\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"all\">All</option>\n      <option value=\"selected\">Selected</option>\n    </select>\n  </div>\n</div>\n<ul class=\"trips\"></ul>\n";
+    + " TRIPS</div>\n</div>\n<ul class=\"trips\"></ul>\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
   return buffer;
   });
 
@@ -143,7 +143,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"left-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"right-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
+  return "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
   });
 
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
