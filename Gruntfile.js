@@ -46,23 +46,32 @@ module.exports = function (grunt) {
       }
     },
 
+    connect: {
+      devserver: {
+        options: {
+          port: 1234,
+          base: '<%= yeoman.app%>',
+          middleware: function (connect) {
+            return [
+              function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', 'https://api.automatic.com');
+                res.setHeader('Access-Control-Allow-Credentials', true);
+                next();
+              },
+
+              connect.static(__dirname)
+            ];
+          }
+        }
+      }
+    },
+
     inline: {
       dist: {
         options:{
           uglify: true
         },
         src: [ 'dist/app.html' ]
-      }
-    },
-
-    express: {
-      dev: {
-        options: {
-          args: [grunt.option('token') || ''],
-          script: 'index.js',
-          delay: 100,
-          port: 3000
-        }
       }
     },
 
@@ -77,7 +86,7 @@ module.exports = function (grunt) {
     // open app and test page
     open: {
       server: {
-        path: 'http://localhost:<%= express.dev.options.port %>'
+        path: 'http://localhost:<%= connect.devserver.options.port %>'
       }
     },
 
@@ -259,7 +268,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'handlebars',
     'appcache',
-    'express:dev',
+    'connect:devserver',
     'open',
     'watch'
   ]);
