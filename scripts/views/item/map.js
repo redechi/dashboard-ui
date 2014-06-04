@@ -147,8 +147,8 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
       };
 
       var popupTemplate = _.template('{{name}}<br>{{time}}<br>' +
-        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-location_name="{{name}}" data-type="to" class="showTripsToHere">Trips to here</a><br>' +
-        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-location_name="{{name}}" data-type="from" class="showTripsFromHere">Trips from here</a>');
+        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="end" class="mapLocationFilter">Trips to here</a><br>' +
+        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="start" class="mapLocationFilter">Trips from here</a>');
 
       featureLayer.clearLayers();
 

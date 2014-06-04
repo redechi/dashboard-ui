@@ -28,7 +28,8 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
-      'shown.bs.popover .btn-filter': 'initializeSliders'
+      'shown.bs.popover .btn-filter': 'initializeSliders',
+      'click .updateLocationFilter': 'updateLocationFilter'
     },
 
     handleUpdate: function () {
@@ -151,6 +152,20 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
 
       costFilter.set('value', costValue);
       $('.btn-filter[data-filter="cost"] .btn-text').text(costText);
+    },
+
+    updateLocationFilter: function (e) {
+      var locationType = $(e.target).data('type'),
+          locationLatlng = [$(e.target).data('lat'), $(e.target).data('lng')],
+          locationName = $(e.target).data('name'),
+          locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName,
+          locationFilter = this.collection.findWhere({name: 'location'});
+
+      locationFilter.set('latlng', locationLatlng);
+      locationFilter.set('type', locationType);
+      $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
+
+      return false;
     },
 
     makeFilterList: function () {
