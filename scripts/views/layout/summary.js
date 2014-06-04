@@ -5,12 +5,13 @@ define([
   '../composite/filters', // view
   '../item/graph', // view
   '../item/map', // view
+  '../item/user_view',
   '../../collections/trips'
 ],
 
 // this should probably be a composit view rather than a layout
 
-function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
+function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, UserView, tripsCollection ) {
     'use strict';
 
   /* Return a Layout class definition */
@@ -33,7 +34,8 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
       filters: '#filters',
       trips_header: '#tripsHeader',
       graph: '#graphs',
-      trips: '#trips'
+      trips: '#trips',
+      user: '#user'
     },
 
     /* ui selector cache */
@@ -50,11 +52,13 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, tripsCollection ) {
       var g = new Graph();
       var t = new Trips();
       var f = new Filters();
+      var u = new UserView();
 
       this.trips.show(t);
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
+      this.user.show(u);
 
     },
 

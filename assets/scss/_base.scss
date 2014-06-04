@@ -81,7 +81,7 @@ header {
 }
 
 #topMenu {
-  width: 600px;
+  width: 150px;
   float: right;
   text-align: right;
 }
@@ -90,6 +90,56 @@ header {
   float: right;
   color: #777;
   padding: 10px 20px;
+}
+
+#user {
+  display: inline-block;
+  float: right;
+  padding: 0 20px;
+
+  .scoreOverall {
+    font-size: 28px;
+    padding: 0 10px;
+    vertical-align: middle;
+  }
+
+  .btn-text {
+    padding: 5px;
+    font-size: 20px;
+    vertical-align: middle;
+  }
+
+  .userPopoverContent {
+    display: none;
+  }
+
+  .userStats {
+    text-align: center;
+    width: 271px;
+
+    .stat {
+      width: 18.5%;
+      display: inline-block;
+      padding: 5px 0;
+      box-sizing: border-box;
+
+      .label {
+        text-transform: uppercase;
+        color: #777;
+        font-size: 12px;
+        padding: 0;
+      }
+
+      .value {
+        font-weight: bold;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .popover-content {
+    padding: 0;
+  }
 }
 
 #logo {
