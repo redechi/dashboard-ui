@@ -52,14 +52,34 @@ module.exports = function (grunt) {
           port: 1234,
           base: '<%= yeoman.app%>',
           middleware: function (connect) {
+
             return [
               function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'https://api.automatic.com');
+                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
                 res.setHeader('Access-Control-Allow-Credentials', true);
                 next();
               },
 
               connect.static(__dirname)
+            ];
+          }
+        }
+      },
+
+      testserver: {
+        options: {
+          port: 1234,
+          base: '<%= yeoman.dist%>',
+          middleware: function (connect) {
+
+            return [
+              function(req, res, next) {
+                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+                res.setHeader('Access-Control-Allow-Credentials', true);
+                next();
+              },
+
+              connect.static(__dirname+'/'+ yeomanConfig.dist)
             ];
           }
         }
@@ -268,7 +288,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'handlebars',
     'appcache',
-    'connect:devserver',
+    'connect:testserver',
     'open',
     'watch'
   ]);

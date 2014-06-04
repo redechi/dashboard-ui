@@ -16,13 +16,15 @@
 
         <link type="text/css" rel="stylesheet" href="assets/css/inline.css?__inline=true"/>
         <link type="text/css" rel="stylesheet" href="assets/css/main.css"/>
-        <link type="text/css" rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css"/>
+
+        <script type="application/javascript" src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+        <link type="text/css" rel="stylesheet" href="//api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css"/>
         <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
         <link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:js scripts/vendor/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script type="application/javascript" src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
     </head>
 
@@ -35,7 +37,7 @@
         </div>
 
         <!-- build:js scripts/main.js -->
-        <script data-main="scripts/init" src="bower_components/requirejs/require.js"></script>
+        <script data-main="scripts/init" type="application/javascript"  src="bower_components/requirejs/require.js"></script>
         <script type="application/javascript" src="assets/js/main.js"></script>
         <!-- endbuild -->
 

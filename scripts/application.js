@@ -11,6 +11,7 @@ function( Backbone, Communicator, $, Summary, router ) {
 
   // simple session storage
   var access_token = /token=([^;]+)/.exec(document.cookie).pop();
+  access_token = access_token || 'NO_TOKEN';
 
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + access_token},
