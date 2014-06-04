@@ -37,8 +37,12 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
 
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
-      var filterLi = this.makeFilterList();
       window.filter = this;
+
+      //Show date range filter by default
+      this.collection.add(new Filter(filterList['date']));
+
+      var filterLi = this.makeFilterList();
 
       coms.on('all', this.handleUpdate)
 

@@ -31,17 +31,19 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
     },
 
     onRender: function() {
-      var filter = this.model;
+      var name = this.model.get('name');
 
       setTimeout(function() {
-        var name = filter.get('name');
-        $('.btn-popover[data-filter="' + name + '"]')
-          .popover({
-            html: true,
-            content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
-            placement: 'bottom'
-          })
-          .popover('show');
+        $('.btn-popover[data-filter="' + name + '"]').popover({
+          html: true,
+          content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
+          placement: 'bottom'
+        });
+
+        //don't show popover for date filter
+        if(name !== 'date') {
+          $('.btn-popover[data-filter="' + name + '"]').popover('show');
+        }
 
       }, 0);
 
