@@ -45,26 +45,40 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
     },
 
 
-    highlightMap: function (model) {
-      var id = model.get('id');
+    createMap: function() {
+      var mapbox = this.mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
+          pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
+          markersLayer = this.markersLayer = new L.MarkerClusterGroup(),
+          markers = this.markers = [];
 
-      this.featureLayer.eachLayer(function(layer) {
+      mapbox.addLayer(markersLayer);
+    },
+
+
+
+    highlightMap: function (model) {
+      var id = model.get('id'),
+          markersLayer = this.markersLayer;
+
+      this.pathsLayer.eachLayer(function(layer) {
         if(layer.options.id == id) {
           layer.eachLayer(function(layer) {
-            if(layer instanceof L.Marker) {
-              layer.setOpacity(1);
-            } else if(layer instanceof L.Polyline) {
+            if(layer instanceof L.Polyline) {
               layer.setStyle({opacity: 1, color: '#68e68d'});
             }
           });
         } else {
           layer.eachLayer(function(layer) {
-            if(layer instanceof L.Marker) {
-              layer.setOpacity(0.2);
-            } else if(layer instanceof L.Polyline) {
+            if(layer instanceof L.Polyline) {
               layer.setStyle({opacity: 0.2});
             }
           });
+        }
+      });
+
+      this.markersLayer.eachLayer(function(marker) {
+        if(marker.options.id !== id) {
+          markersLayer.removeLayer(marker);
         }
       });
     },
@@ -72,16 +86,19 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
 
     unhighlightMap: function (model) {
       var mapbox = this.mapbox,
-          featureLayer = this.featureLayer;
+          markersLayer = this.markersLayer;
 
-      featureLayer.eachLayer(function(layer) {
+      this.pathsLayer.eachLayer(function(layer) {
         layer.eachLayer(function(layer) {
-          if(layer instanceof L.Marker) {
-            layer.setOpacity(0.8);
-          } else if(layer instanceof L.Polyline) {
+          if(layer instanceof L.Polyline) {
             layer.setStyle({opacity: 1, color: '#08b1d5'});
           }
         });
+      });
+
+      markersLayer.clearLayers();
+      this.markers.forEach(function(marker) {
+        markersLayer.addLayer(marker);
       });
     },
 
@@ -92,7 +109,7 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
           bounds;
 
       if(!noMove) {
-        this.featureLayer.eachLayer(function(layer) {
+        this.pathsLayer.eachLayer(function(layer) {
           if(layer.options.id == id) {
             layer.eachLayer(function(layer) {
               if(layer instanceof L.Polyline) {
@@ -114,7 +131,7 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
     unzoomMap: function (model) {
       var noMove = this.noMove;
       if(!noMove) {
-        this.fitBoundsMap(this.featureLayer.getBounds());
+        this.fitBoundsMap(this.pathsLayer.getBounds());
       }
     },
 
@@ -131,16 +148,11 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
     },
 
 
-    createMap: function() {
-      var mapbox = this.mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
-          featureLayer = this.featureLayer = L.mapbox.featureLayer();
-    },
-
-
     updateMap: function () {
       var mapbox = this.mapbox,
-          featureLayer = this.featureLayer,
-          markers = new L.MarkerClusterGroup();
+          pathsLayer = this.pathsLayer,
+          markersLayer = this.markersLayer,
+          markers = this.markers;
 
       _.templateSettings = {
         interpolate : /\{\{(.+?)\}\}/g
@@ -150,7 +162,7 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="end" class="mapLocationFilter">Trips to here</a><br>' +
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="start" class="mapLocationFilter">Trips from here</a>');
 
-      featureLayer.clearLayers();
+      pathsLayer.clearLayers();
 
       L.extend(L.GeoJSON, {
         // This function is from Google's polyline utility.
@@ -237,12 +249,11 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
 
         var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id})
           .bindPopup(popupText)
-          .on('mouseover', function (e) {
-            // get model from id
+          .on('click', function (e) {
             var newModel = trips.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
-          .on('mouseout', function () {
+          .on('popupclose', function () {
             coms.trigger('trips:unhighlight');
           });
 
@@ -294,23 +305,26 @@ function( Backbone, coms, MapTmpl, trips, formatters) {
         }
 
         if (startLoc) {
-          markers.addLayer(createMarker('start', model));
+          var marker = createMarker('start', model);
+          markers.push(marker);
+          markersLayer.addLayer(marker);
         }
 
         if (endLoc) {
-          markers.addLayer(createMarker('end', model));
+          var marker = createMarker('end', model);
+          markers.push(marker);
+          markersLayer.addLayer(marker);
         }
 
-        geoJson.addTo(featureLayer);
-        
+        geoJson.addTo(pathsLayer);
+
       }), this);
 
-      markers.addTo(featureLayer);
-      mapbox.addLayer(featureLayer);
+      mapbox.addLayer(pathsLayer);
 
       // weird timeout hack for mapbox
       setTimeout(function () {
-        var bounds = featureLayer.getBounds();
+        var bounds = pathsLayer.getBounds();
         mapbox.invalidateSize();
         if(bounds.isValid()) {
           mapbox.fitBounds(bounds, {padding: [50, 50]});
