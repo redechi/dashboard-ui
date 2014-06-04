@@ -40,12 +40,9 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       console.log('Initialize a Filters CompositeView');
       window.filter = this;
 
-      //Show date range filter by default
-      this.collection.add(new Filter(filterList['date']));
-
       var filterLi = this.makeFilterList();
 
-      coms.on('all', this.handleUpdate)
+      coms.on('all', this.handleUpdate);
 
       // initialize addFilter popover
       setTimeout(function() {
@@ -184,7 +181,6 @@ function( Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filte
       }
     },
 
-    /* on render callback */
     onRender: function() {
     }
   });
