@@ -308,8 +308,8 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
-    'inline',
-    'cdnify'
+    'inline'
+    //'cdnify'
 
 // tests have been commented out.
 // they fail because none have been written.

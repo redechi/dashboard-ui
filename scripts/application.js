@@ -10,15 +10,16 @@ function( Backbone, Communicator, $, Summary, router ) {
   'use strict';
 
   // simple session storage
-  var access_token = /token=([^;]+)/.exec(document.cookie).pop();
-  access_token = access_token || 'NO_TOKEN';
+  var cookieRegEx = new RegExp("token=([^;]+)")
+  var accessMatch = cookieRegEx.exec(document.cookie) || [];
+  var accessToken = accessMatch.pop() || 'ba56eee32df6be1437768699247b406fc7d9992f';
 
   $.ajaxSetup({
-    headers: {'Authorization': 'token ' + access_token},
+    headers: {'Authorization': 'token ' + accessToken},
     beforeSend: function (xhr, req) {
       try {
         // TODO: invalidate cache at 15 min.
-        var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
+        var obj = JSON.parse(sessionStorage.getItem(req.url) | '');
         this.success(obj);
         xhr.abort(obj);
       } catch (e) {
