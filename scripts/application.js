@@ -13,22 +13,24 @@ function( Backbone, Communicator, router, regionManager ) {
   }
 
   // simple session storage
-  var accessToken = getCookie('token') || 'ba56eee32df6be1437768699247b406fc7d9992f';
-
-  console.log(accessToken)
+  var cookieRegEx = new RegExp("[;\s]+?token=([^;]+)")
+  var accessMatch = cookieRegEx.exec(document.cookie) || [];
+  var accessToken = accessMatch.pop() || 'ba56eee32df6be1437768699247b406fc7d9992f';
 
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + accessToken},
+
     beforeSend: function (xhr, req) {
       try {
         // TODO: invalidate cache at 15 min.
-        var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
+        var obj = JSON.parse(sessionStorage.getItem(req.url) || undefined);
         this.success(obj);
         xhr.abort(obj);
       } catch (e) {
         console.warn('Request Not Cached: ' + req.url);
       }
     },
+
     complete: function(xhr, status) {
       try {
         console.log('Caching Request: ' + this.url);
