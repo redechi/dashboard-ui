@@ -1,13 +1,18 @@
 define([
+  'regionManager',
+  '../views/layout/trip'
 ],
-function() {
+function(regionManager, TripView) {
   'use strict';
 
+  console.log('app')
   return {
-    test: function () {
+    showTripView: function (tripid) {
       'use strict';
-
-      console.log(arguments);
+      var t = new TripView();
+      var contentRegion = regionManager.getRegion('main_content');
+      contentRegion.close();
+      contentRegion.show(t);
     }
   }
 });

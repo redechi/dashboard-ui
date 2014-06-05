@@ -1,31 +1,36 @@
 define([
-	'backbone',
-	'hbs!tmpl/layout/trip_tmpl'
+  'backbone',
+  'hbs!tmpl/layout/trip_tmpl'
 ],
 function( Backbone, TripTmpl  ) {
     'use strict';
 
-	/* Return a Layout class definition */
-	return Backbone.Marionette.Layout.extend({
+  /* Return a Layout class definition */
+  return Backbone.Marionette.Layout.extend({
 
-		initialize: function() {
-			console.log("initialize a Trip Layout");
-		},
-		
-    	template: TripTmpl,
-    	
+    initialize: function() {
+      console.log("initialize a Trip Layout");
+    },
+    
+    el: '#content',
 
-    	/* Layout sub regions */
-    	regions: {},
+    template: TripTmpl,
 
-    	/* ui selector cache */
-    	ui: {},
+    /* Layout sub regions */
+    regions: {
+      map: '#map',
+    },
 
-		/* Ui events hash */
-		events: {},
+    /* ui selector cache */
+    ui: {},
 
-		/* on render callback */
-		onRender: function() {}
-	});
+    /* Ui events hash */
+    events: {},
+
+    /* on render callback */
+    onRender: function() {
+      
+    }
+  });
 
 });

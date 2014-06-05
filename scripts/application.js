@@ -3,10 +3,11 @@ define([
   'communicator',
   'jquery',
   'views/layout/summary',
-  'router'
+  'router',
+  'regionManager'
 ],
 
-function( Backbone, Communicator, $, Summary, router ) {
+function( Backbone, Communicator, $, Summary, router, regionManager ) {
   'use strict';
 
   // simple session storage
@@ -41,6 +42,7 @@ function( Backbone, Communicator, $, Summary, router ) {
 
   /* Add application regions here */
   App.addRegions({
+    headerRegion: "#header",
     contentRegion: "#content"
   });
 
@@ -53,9 +55,13 @@ function( Backbone, Communicator, $, Summary, router ) {
 
   // contextual startup
   App.on("initialize:after", function(){
-    console.log('Start History')
+    console.log('Start History');
     Backbone.history.start();
   });
+
+  // save regions
+  regionManager.addRegion('main_content', App.contentRegion);
+  regionManager.addRegion('main_header', App.headerRegion);
 
   return App;
 });
