@@ -34,7 +34,7 @@ function( Backbone, MapView, TripTmpl, UserView ) {
 
     /* on render callback */
     onRender: function() {
-      var m = new MapView();
+      var m = new MapView({collection: this.collection});
 			var u = new UserView();
 
       this.map.show(m);

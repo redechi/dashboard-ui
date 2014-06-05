@@ -5,7 +5,7 @@ define([
   '../views/layout/summary',
   '../views/layout/trip'
 ],
-function( Backbone, regionManager, trips, SummaryLayout, TripLayout) {
+function( Backbone, regionManager, tripsCollection, SummaryLayout, TripLayout) {
   'use strict';
 
   var contentRegion = regionManager.getRegion('main_content');
@@ -24,11 +24,12 @@ function( Backbone, regionManager, trips, SummaryLayout, TripLayout) {
 
 
     showTripLayout: function (tripid) {
-      var tripModel = trips.where({id:tripid});
+      var tripArray = tripsCollection.where({id: tripid}),
+          tripCollection = new Backbone.Collection(tripArray);
 
     //  if(!tripModel[0]) return // protection clause
 
-      var trip = new TripLayout();
+      var trip = new TripLayout({collection: tripCollection});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(trip);
     }

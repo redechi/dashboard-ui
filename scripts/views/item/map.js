@@ -237,7 +237,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         var id = model.get('id'),
             location,
             time,
-            icon;
+            icon,
+            self = this;
 
         if(type == 'start') {
           location = model.get('start_location'),
@@ -259,7 +260,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id})
           .bindPopup(popupText)
           .on('click', function (e) {
-            var newModel = trips.where({id: e.target.options.id }).pop();
+            var newModel = self.collection.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
           .on('popupclose', function () {
@@ -283,7 +284,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         layer
           .on('mouseover', function (e) {
             // get model from id
-            var newModel = trips.where({id: e.target.feature.properties.id }).pop();
+            var newModel = self.collection.where({id: e.target.feature.properties.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
           .on('mouseout', function () {
