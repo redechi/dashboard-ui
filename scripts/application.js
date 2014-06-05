@@ -1,13 +1,11 @@
 define([
   'backbone',
   'communicator',
-  'jquery',
-  'views/layout/summary',
   'router',
   'regionManager'
 ],
 
-function( Backbone, Communicator, $, Summary, router, regionManager ) {
+function( Backbone, Communicator, router, regionManager ) {
   'use strict';
 
   // simple session storage
@@ -48,9 +46,7 @@ function( Backbone, Communicator, $, Summary, router, regionManager ) {
 
   /* Add initializers here */
   App.addInitializer( function () {
-    // render summary on load
-    var summary = new Summary();
-    this.contentRegion.show(summary);
+
   });
 
   // contextual startup

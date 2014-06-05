@@ -183,10 +183,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "";
+  
 
 
-  return buffer;
+  return "<div>\n  <div id=\"map\">alkjsfd</div>\n</div>\n";
   });
 
 return this["JST"];
