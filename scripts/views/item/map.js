@@ -150,7 +150,16 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
     },
 
 
+    clearMap: function() {
+      this.pathsLayer.clearLayers();
+      this.markersLayer.clearLayers();
+      this.markers = [];
+    },
+
+
     updateMap: function () {
+      this.clearMap();
+
       var mapbox = this.mapbox,
           pathsLayer = this.pathsLayer,
           markersLayer = this.markersLayer,
@@ -163,8 +172,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
       var popupTemplate = _.template('{{name}}<br>{{time}}<br>' +
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="end" class="mapLocationFilter">Trips to here</a><br>' +
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="start" class="mapLocationFilter">Trips from here</a>');
-
-      pathsLayer.clearLayers();
 
       L.extend(L.GeoJSON, {
         // This function is from Google's polyline utility.
