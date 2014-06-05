@@ -1,9 +1,10 @@
 define([
   'backbone',
-  '../item/map', 
-  'hbs!tmpl/layout/trip_tmpl'
+  '../item/map',
+  'hbs!tmpl/layout/trip_tmpl',
+	'../item/user_view'
 ],
-function( Backbone, MapView, TripTmpl ) {
+function( Backbone, MapView, TripTmpl, UserView ) {
     'use strict';
 
     console.log( Backbone );
@@ -22,6 +23,7 @@ function( Backbone, MapView, TripTmpl ) {
     /* Layout sub regions */
     regions: {
       map: '#map',
+			user: '#user'
     },
 
     /* ui selector cache */
@@ -33,8 +35,10 @@ function( Backbone, MapView, TripTmpl ) {
     /* on render callback */
     onRender: function() {
       var m = new MapView();
-      console.log(this.map);
+			var u = new UserView();
+
       this.map.show(m);
+			this.user.show(u);
     }
   });
 

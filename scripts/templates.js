@@ -183,10 +183,31 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  return "<div>\n  <div id=\"map\">alkjsfd</div>\n</div>\n";
+  buffer += "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"trip\">\n  <div class=\"tripHeader\">\n    <a href=\"/\" class=\"back btn btn-default\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back\n    </a>\n    <a class=\"btn btn-default previousTrip\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span>\n    </a>\n    <span class=\"title\"></span>\n    <a class=\"btn btn-default nextTrip\">\n      <span class=\"glyphicon glyphicon-chevron-right\"></span>\n    </a>\n    <a href=\"#\" class=\"share btn btn-default\" data-toggle=\"popover\">\n      <span class=\"glyphicon glyphicon-share\"></span> Share\n    </a>\n  </div>\n  <div class=\"summaryStats\">\n    <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n      <div class=\"value\">";
+  if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n      <div class=\"label\">MPG</div>\n    </div>\n    <div class=\"stat cost\" data-graph-type=\"fuel_cost_usd\">\n      <div class=\"value\">";
+  if (stack1 = helpers.cost) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.cost; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n      <div class=\"label\">Fuel</div>\n    </div>\n    <div class=\"stat score\" data-graph-type=\"score\">\n      <div class=\"value\">";
+  if (stack1 = helpers.score) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.score; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n      <div class=\"label\">Score</div>\n    </div>\n    <div class=\"stat distance\" data-graph-type=\"distance_miles\">\n      <div class=\"value\">";
+  if (stack1 = helpers.distance) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.distance; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n      <div class=\"label\">Miles</div>\n    </div>\n    <div class=\"stat duration\" data-graph-type=\"duration\">\n      <div class=\"value\">";
+  if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n      <div class=\"label\">Time</div>\n    </div>\n  </div>\n  <div id=\"map\"></div>\n\n</div>\n";
+  return buffer;
   });
 
 return this["JST"];

@@ -512,83 +512,61 @@ header {
   display: block;
 }
 
-.btn.back {
-  top: 0px;
-  position: absolute;
-}
 
-.btn.share {
-  top: 0px;
-  right: 0px;
-  position: absolute;
-}
-
-.dayHeader .btn {
-  margin: 0 10px;
-  vertical-align: 10px;
-  visibility: hidden;
-}
 
 #trip {
-  width: 650px;
+  width: 750px;
   margin: 0 auto;
   overflow: visible;
+
+  .tripHeader {
+    text-align: center;
+    font-size: 30px;
+    position: relative;
+
+    .btn {
+      margin: 0 10px;
+      position: relative;
+    }
+
+    .btn.back {
+      top: 0;
+      left: 0;
+      position: absolute;
+      margin-left: 0;
+    }
+
+    .btn.share {
+      top: 0;
+      right: 0;
+      position: absolute;
+      margin-right: 0;
+    }
+  }
+
+  .map {
+    width: 650px;
+    height: 400px;
+  }
+
+  .summaryStats {
+    border: 1px solid #ddd;
+    border-bottom: none;
+    margin-top: 10px;
+    padding: 10px 0;
+    overflow: hidden;
+
+    .stat {
+      width: 20%;
+      float: left;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin: 0;
+    }
+  }
 }
 
-#trip:hover {
-  background: inherit;
-}
-
-#trip h1 {
-  text-align: center;
-  font-size: 30px;
-}
-
-#trip .map {
-  width: 650px;
-  height: 400px;
-}
-
-#trip.trip .tripLine {
-  height: 453px;
-  left: -19px;
-  top: 61px;
-}
-
-#trip.trip .topBox,
-#trip.trip .bottomBox {
-  padding: 10px 0;
-}
-
-#trip.trip .topBox .endTime,
-#trip.trip .bottomBox .startTime {
-  display: inline-block;
-  width: auto;
-  padding-right: 20px;
-}
-
-#trip.trip .topBox .endLocation,
-#trip.trip .bottomBox .startLocation {
-  display: inline-block;
-  float: none;
-  text-align: left;
-}
-
-#trip .summaryStats {
-  border-top: 1px solid #ddd;
-  margin-top: 10px;
-  padding: 10px 0;
-  overflow: hidden;
-}
-
-#trip .summaryStats .stat {
-  width: 20%;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin: 0;
-}
 
 /* Charts */
 
@@ -645,78 +623,4 @@ header {
 text.key {
   fill: #666;
   font-size: 11px;
-}
-
-
-/* Vehicles page */
-
-#vehicles {
-  clear: both;
-}
-
-#vehicles .vehicle {
-  padding: 15px 20px;
-  border-bottom: 1px solid #ccc;
-  position: relative;
-}
-
-#vehicles .vehicle:first-child {
-  border-top: 1px solid #ccc;
-}
-
-#vehicles .vehicle .vehicleDetails {
-  width: 250px;
-  display: inline-block;
-  vertical-align: top;
-  height: 53px;
-}
-
-#vehicles .vehicle .vehicleDetails .display_name {
-  font-size: 22px;
-  font-weight: bold;
-  display: block;
-}
-
-#vehicles .vehicle .color {
-  width: 175px;
-  height: 52px;
-  background-image: url('../images/vehicle.png');
-  background-repeat: no-repeat;
-  background-size: 175px 52px;
-  display: inline-block;
-}
-
-#vehicles .vehicle .vehicleDetails div {
-  font-size: 16px;
-  display: inline-block;
-  padding-right: 8px;
-}
-
-#vehicles .vehicle .vehicleStats {
-  display: inline-block;
-  width: 490px;
-  vertical-align: top;
-}
-
-#vehicles .vehicle .vehicleStats>div {
-  width: 219px;
-  float: left;
-  padding-left: 30px;
-  font-size: 15px;
-  padding-bottom: 7px;
-}
-
-#vehicles .vehicle .vehicleStats:nth-child(2) {
-  clear: left;
-}
-
-#vehicles .vehicle .vehicleStats .trip_count {
-  position: absolute;
-  top: 30px;
-  left: 300px;
-  font-weight: bold;
-}
-
-#vehicles .vehicle .vehicleStats span.badge {
-  float: right;
 }

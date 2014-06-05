@@ -15,8 +15,6 @@ function( Backbone, Communicator, router, regionManager ) {
   // simple session storage
   var accessToken = getCookie('token') || 'ba56eee32df6be1437768699247b406fc7d9992f';
 
-  console.log(accessToken)
-
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + accessToken},
     beforeSend: function (xhr, req) {
