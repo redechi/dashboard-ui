@@ -40,14 +40,14 @@ function( Backbone, Communicator, router, regionManager ) {
 
   /* Add application regions here */
   App.addRegions({
-    headerRegion: "#header",
-    contentRegion: "#content"
+    headerRegion: "header",
+    contentRegion: "main",
+    footerRegion: "footer",
+    overlayRegion: "#popover",
   });
 
   /* Add initializers here */
-  App.addInitializer( function () {
-
-  });
+  App.addInitializer( function () {});
 
   // contextual startup
   App.on("initialize:after", function(){
@@ -58,6 +58,8 @@ function( Backbone, Communicator, router, regionManager ) {
   // save regions
   regionManager.addRegion('main_content', App.contentRegion);
   regionManager.addRegion('main_header', App.headerRegion);
+  regionManager.addRegion('main_footer', App.footerRegion);
+  regionManager.addRegion('main_overlay', App.overlayRegion);
 
   return App;
 });

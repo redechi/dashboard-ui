@@ -15,7 +15,7 @@ function( Backbone, regionManager, trips, SummaryLayout, TripLayout) {
   return {
 
 
-    showSummaryView: function () {
+    showSummaryLayout: function () {
       // render summary on load
       var summary = new SummaryLayout();
       var contentRegion = regionManager.getRegion('main_content');
@@ -23,7 +23,7 @@ function( Backbone, regionManager, trips, SummaryLayout, TripLayout) {
     },
 
 
-    showTripView: function (tripid) {
+    showTripLayout: function (tripid) {
       var tripModel = trips.where({id:tripid});
 
     //  if(!tripModel[0]) return // protection clause

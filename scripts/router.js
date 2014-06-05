@@ -7,8 +7,8 @@ define([
   var Router = backbone.Marionette.AppRouter.extend({
 
     appRoutes: {
-      '(/)': 'showSummaryView',
-      'trip/:tripid'      : 'showTripView'
+      '(/)'               : 'showSummaryLayout',
+      'trip/:tripid'      : 'showTripLayout'
     },
 
     controller: controller
