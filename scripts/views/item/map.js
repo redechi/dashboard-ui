@@ -1,11 +1,13 @@
 define([
   'backbone',
+  'mapbox',
+  'markercluster',
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
   '../../collections/trips',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, MapTmpl, trips, formatters) {
+function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
     'use strict';
 
   /* Return a ItemView class definition */

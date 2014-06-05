@@ -18,6 +18,8 @@ module.exports = function (grunt) {
     app: '',
     dist: 'dist'
   };
+  
+  var CDN = process.env.CDN || '';
 
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -260,7 +262,7 @@ module.exports = function (grunt) {
     cdnify: {
       someTarget: {
         options: {
-          base: '//d2dyje6jz36wpr.cloudfront.net/'
+          base: CDN
         },
         files: [{
           expand: true,
@@ -288,7 +290,7 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'handlebars',
     'appcache',
-    'connect:testserver',
+    'connect:devserver',
     'open',
     'watch'
   ]);
