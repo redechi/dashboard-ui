@@ -29,6 +29,7 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
+      'slideStop .timeFilterValue': 'updateTimeFilter',
       'shown.bs.popover .btn-filter': 'initializeSliders',
       'click .updateLocationFilter': 'updateLocationFilterMap',
       'submit .locationFilterValue': 'updateLocationFilterForm',
@@ -157,6 +158,18 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       costFilter.set('value', costValue);
       $('.btn-filter[data-filter="cost"] .btn-text').text(costText);
     },
+
+    updateTimeFilter: function (e) {
+      var timeValue = $(e.target).slider('getValue'),
+          timeText = timeValue.map(function(time) {
+            return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
+          }).join(' - '),
+          timeFilter = this.collection.findWhere({name: 'time'});
+
+      timeFilter.set('value', timeValue);
+      $('.btn-filter[data-filter="time"] .btn-text').text(timeText);
+    },
+
 
     updateLocationFilterMap: function (e) {
       var locationType = $(e.target).data('type'),
