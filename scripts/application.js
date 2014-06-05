@@ -2,10 +2,11 @@ define([
   'backbone',
   'communicator',
   'router',
-  'regionManager'
+  'regionManager',
+  './collections/trips',
 ],
 
-function( Backbone, Communicator, router, regionManager ) {
+function( Backbone, Communicator, router, regionManager, tripsCollection ) {
   'use strict';
 
   // simple session storage
@@ -50,7 +51,9 @@ function( Backbone, Communicator, router, regionManager ) {
   });
 
   /* Add initializers here */
-  App.addInitializer( function () {});
+  App.addInitializer( function () {
+    tripsCollection.fetchAll();
+  });
 
   // contextual startup
   App.on("initialize:after", function(){
