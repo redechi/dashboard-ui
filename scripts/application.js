@@ -8,17 +8,21 @@ define([
 function( Backbone, Communicator, router, regionManager ) {
   'use strict';
 
+  function getCookie(key) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  }
+
   // simple session storage
-  var cookieRegEx = new RegExp("token=([^;]+)")
-  var accessMatch = cookieRegEx.exec(document.cookie) || [];
-  var accessToken = accessMatch.pop() || 'ba56eee32df6be1437768699247b406fc7d9992f';
+  var accessToken = getCookie('token') || 'ba56eee32df6be1437768699247b406fc7d9992f';
+
+  console.log(accessToken)
 
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + accessToken},
     beforeSend: function (xhr, req) {
       try {
         // TODO: invalidate cache at 15 min.
-        var obj = JSON.parse(sessionStorage.getItem(req.url) | '');
+        var obj = JSON.parse(sessionStorage.getItem(req.url) || '');
         this.success(obj);
         xhr.abort(obj);
       } catch (e) {
