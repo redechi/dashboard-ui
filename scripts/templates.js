@@ -183,10 +183,33 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
+function program1(depth0,data) {
+  
+  
+  return "noTrip";
+  }
 
-  buffer += "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"trip\">\n  <div class=\"tripHeader\">\n    <a href=\"/\" class=\"back btn btn-default\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back\n    </a>\n    <a class=\"btn btn-default previousTrip\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span>\n    </a>\n    <span class=\"title\"></span>\n    <a class=\"btn btn-default nextTrip\">\n      <span class=\"glyphicon glyphicon-chevron-right\"></span>\n    </a>\n    <a href=\"#\" class=\"share btn btn-default\" data-toggle=\"popover\">\n      <span class=\"glyphicon glyphicon-share\"></span> Share\n    </a>\n  </div>\n  <div class=\"summaryStats\">\n    <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n      <div class=\"value\">";
+  buffer += "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"trip\">\n  <div class=\"tripHeader\">\n    <a href=\"#/\" class=\"back btn btn-default\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back\n    </a>\n    <a href=\"#/trips/";
+  if (stack1 = helpers.prevTrip) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.prevTrip; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"btn btn-default previousTrip ";
+  stack1 = helpers.unless.call(depth0, depth0.prevTrip, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span>\n    </a>\n    <span class=\"title\">";
+  if (stack1 = helpers.title) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.title; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n    <a href=\"#/trips/";
+  if (stack1 = helpers.nextTrip) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.nextTrip; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"btn btn-default nextTrip ";
+  stack1 = helpers.unless.call(depth0, depth0.nextTrip, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\n      <span class=\"glyphicon glyphicon-chevron-right\"></span>\n    </a>\n    <a href=\"#\" class=\"share btn btn-default\" data-toggle=\"popover\">\n      <span class=\"glyphicon glyphicon-share\"></span> Share\n    </a>\n  </div>\n  <div class=\"summaryStats\">\n    <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n      <div class=\"value\">";
   if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
@@ -206,7 +229,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n      <div class=\"label\">Time</div>\n    </div>\n  </div>\n  <div id=\"map\"></div>\n\n</div>\n";
+    + "</div>\n      <div class=\"label\">Time</div>\n    </div>\n  </div>\n  <div class=\"mapContainer\">\n    <div id=\"map\"></div>\n    <div class=\"tripEvents\">\n      <div class=\"hardBrakes event\">\n        <span>";
+  if (stack1 = helpers.hard_brakes) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.hard_brakes; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n        <label>Hard Brakes</label>\n      </div>\n      <div class=\"hardAccels event\">\n        <span>";
+  if (stack1 = helpers.hard_accels) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.hard_accels; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n        <label>Hard Accels</label>\n      </div>\n      <div class=\"speeding event\">\n        <span>";
+  if (stack1 = helpers.duration_over_70_min) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.duration_over_70_min; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n        <label>Min over 70</label>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
   return buffer;
   });
 

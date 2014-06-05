@@ -542,11 +542,44 @@ header {
       position: absolute;
       margin-right: 0;
     }
+  .mapContainer {
+    position: relative;
+
+    .tripEvents {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 4px 4px;
+      border: #ccc 1px solid;
+
+      .event {
+        display: inline-block;
+        padding-right: 10px;
+
+        label {
+          text-transform: uppercase;
+          color: #777;
+          font-size: 12px;
+          width: 52px;
+          line-height: 13px;
+        }
+
+        span {
+          font-size: 20px;
+          line-height: 24px;
+          vertical-align: top;
+        }
+      }
   }
 
   .map {
     width: 650px;
     height: 400px;
+  }
+
+  .noMoveContainer {
+    display: none;
   }
 
   .summaryStats {
