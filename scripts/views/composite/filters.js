@@ -220,7 +220,7 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
 
-      if(name == 'distance' || name == 'duration' || name == 'cost') {
+      if(name == 'distance' || name == 'duration' || name == 'cost' || name == 'time') {
         $('.popover .' + name + 'FilterValue').slider({
           min: 0,
           max: Math.ceil(filter.get('max')),

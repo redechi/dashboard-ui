@@ -86,6 +86,20 @@ function(moment, formatters) {
           return true;
         }
       }
+    },
+    time: {
+      name: 'time',
+      title: 'By Time of Day',
+      min: 0,
+      max: 24,
+      value: [0, Infinity],
+      valueText: 'All Times',
+      func: function(trip) {
+        return moment(trip.get("start_time")).hour() >= this.get('value')[0] && moment(trip.get("end_time")).hour() <= this.get('value')[1];
+      },
+      formatter: function(d) {
+        return moment.utc(d * 60 * 60 * 1000).format('h A');
+      }
     }
   };
 
