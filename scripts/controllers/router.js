@@ -1,31 +1,38 @@
 define([
+  'backbone',
   'regionManager',
+  '../collections/trips',
   '../views/layout/summary',
   '../views/layout/trip'
 ],
-function(regionManager, SummaryView, TripView) {
+function( Backbone, regionManager, trips, SummaryLayout, TripLayout) {
   'use strict';
+
+  var contentRegion = regionManager.getRegion('main_content');
+  window.TripView = TripLayout;
+  window.region = contentRegion;
 
   return {
 
 
     showSummaryView: function () {
       // render summary on load
-      var summary = new SummaryView();
+      var summary = new SummaryLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(summary);
     },
 
 
     showTripView: function (tripid) {
-      'use strict';
-      var t = new TripView();
+      var tripModel = trips.where({id:tripid});
+
+    //  if(!tripModel[0]) return // protection clause
+
+      var trip = new TripLayout();
       var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.close();
-      contentRegion.show(t);
-      console.log(contentRegion)
-      window.TripView = TripView
-      window.region = contentRegion
+      contentRegion.show(trip);
     }
-  }
+
+
+  };
 });

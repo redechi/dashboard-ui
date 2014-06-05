@@ -16,8 +16,6 @@ function( Backbone, MapView, TripTmpl ) {
     initialize: function() {
       console.log("initialize a Trip Layout");
     },
-    
-    el: '#content',
 
     template: TripTmpl,
 
