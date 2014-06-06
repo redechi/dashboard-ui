@@ -17,12 +17,11 @@ function() {
         return moment(time).format(format);
       }
     },
-    distance: function(distance_m) {
-      var distance_mi = this.m_to_mi(distance_m);
-      if(Math.round(distance_mi) >= 100) {
-        return distance_mi.toFixed(0);
+    distance: function(distance_miles) {
+      if(Math.round(distance_miles) >= 100) {
+        return distance_miles.toFixed(0);
       } else {
-        return distance_mi.toFixed(1);
+        return distance_miles.toFixed(1);
       }
     },
     duration: function(min) {

@@ -41,7 +41,7 @@ function( Backbone, coms, TripTmpl, formatters  ) {
 
     templateHelpers: function() {
       var helpers = {
-        distance: formatters.distance(this.model.get('distance_m')),
+        distance: formatters.distance(this.model.get('distance_miles')),
         duration: formatters.durationMin(this.model.get('duration')),
         duration_over_70_min: Math.ceil(this.model.get('duration_over_70_s') / 60),
       };

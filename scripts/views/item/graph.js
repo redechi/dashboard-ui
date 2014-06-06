@@ -30,7 +30,7 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     templateHelpers: function() {
       var helpers =  {
-        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_m'); }, 0)),
+        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
         duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
         score: formatters.score(this.collection.getAverageScore()),
         cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))

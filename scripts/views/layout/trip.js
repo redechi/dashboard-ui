@@ -41,7 +41,7 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
       if(trip) {
         helpers =  {
           title: formatters.formatTime(trip.get('start_time'), trip.get('start_time_zone'), 'MMM DD, YYYY h:mm A - ') + formatters.formatTime(trip.get('end_time'), trip.get('end_time_zone'), 'h:mm A'),
-          distance: formatters.distance(trip.get('distance_m')),
+          distance: formatters.distance(trip.get('distance_miles')),
           duration: formatters.duration(trip.get('duration')),
           score: formatters.score(trip.get('score')),
           cost: formatters.cost(trip.get('fuel_cost_usd')),
