@@ -269,7 +269,7 @@ function program1(depth0,data) {
     + "\" class=\"btn btn-default nextTrip ";
   stack1 = helpers.unless.call(depth0, depth0.nextTrip, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\">\n      <span class=\"glyphicon glyphicon-chevron-right\"></span>\n    </a>\n    <a href=\"#\" class=\"share btn btn-default\" data-toggle=\"popover\">\n      <span class=\"glyphicon glyphicon-share\"></span> Share\n    </a>\n  </div>\n  <div class=\"summaryStats\">\n    <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n      <div class=\"value\">";
+  buffer += "\">\n      <span class=\"glyphicon glyphicon-chevron-right\"></span>\n    </a>\n    <!--<a href=\"#\" class=\"share btn btn-default\" data-toggle=\"popover\">\n      <span class=\"glyphicon glyphicon-share\"></span> Share\n    </a>-->\n  </div>\n  <div class=\"summaryStats\">\n    <div class=\"stat mpg\" data-graph-type=\"average_mpg\">\n      <div class=\"value\">";
   if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
