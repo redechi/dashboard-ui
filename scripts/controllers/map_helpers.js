@@ -1,7 +1,6 @@
 define([
   'mapbox',
-  'polyline',
-  './unit_formatters',
+  './unit_formatters'
 ],
 function(mapbox, polyline, formatters) {
   'use strict';
