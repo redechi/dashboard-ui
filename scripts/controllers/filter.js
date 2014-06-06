@@ -90,6 +90,14 @@ function(moment, formatters) {
         };
       }
     },
+
+
+    /*
+     * TODO: describe this filter better
+     *
+     * Filter by total cost.
+     *
+     */
     cost: {
       name: 'cost',
       title: 'By Cost',
@@ -108,6 +116,16 @@ function(moment, formatters) {
         };
       }
     },
+
+
+
+
+    /*
+     * TODO: describe this filter better
+     *
+     * Filter by distance from location.
+     *
+     */
     location: {
       name: 'location',
       title: 'By Location',
@@ -132,6 +150,16 @@ function(moment, formatters) {
         };
       }
     },
+
+
+
+
+    /*
+     * TODO: describe this filter better
+     *
+     * Filter between two time values.
+     *
+     */
     time: {
       name: 'time',
       title: 'By Time of Day',

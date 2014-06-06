@@ -1,7 +1,9 @@
 define([
+  'mapbox',
+  'polyline',
   './unit_formatters',
 ],
-function(formatters) {
+function(mapbox, polyline, formatters) {
   'use strict';
 
   return {
@@ -10,7 +12,7 @@ function(formatters) {
       iconSize: [25, 41],
       iconAnchor: [12, 40],
       popupAnchor: [0,-41],
-      shadowUrl: 'https://api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
+      shadowUrl: '//api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
       shadowSize: [41, 41],
       shadowAnchor: [12, 40]
     }),
@@ -19,7 +21,7 @@ function(formatters) {
       iconSize: [25, 41],
       iconAnchor: [12, 40],
       popupAnchor: [0,-41],
-      shadowUrl: 'https://api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
+      shadowUrl: '//api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
       shadowSize: [41, 41],
       shadowAnchor: [12, 40]
     }),
