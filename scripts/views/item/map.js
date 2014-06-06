@@ -36,7 +36,13 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
 
     /* Ui events hash */
     events: {
-      'change .noMove': 'setNoMoveStatus'
+      'change .noMove': 'setNoMoveStatus',
+      'click .mapLocationFilter': 'updateLocationFilter'
+    },
+
+    updateLocationFilter: function (e) {
+      $(e.target).data('latlng');
+      coms.trigger('filters:updateLocationFilter', e);
     },
 
     /* on render callback */
@@ -98,7 +104,10 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         });
       });
 
-      markersLayer.clearLayers();
+      try {
+        //sometimes this is triggered along with a filter, so layers are gone
+        markersLayer.clearLayers();
+      } catch(e) { }
       this.markers.forEach(function(marker) {
         markersLayer.addLayer(marker);
       });
@@ -163,7 +172,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
       var mapbox = this.mapbox,
           pathsLayer = this.pathsLayer,
           markersLayer = this.markersLayer,
-          markers = this.markers;
+          markers = this.markers,
+          self = this;
 
       _.templateSettings = {
         interpolate : /\{\{(.+?)\}\}/g
@@ -237,8 +247,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         var id = model.get('id'),
             location,
             time,
-            icon,
-            self = this;
+            icon;
 
         if(type == 'start') {
           location = model.get('start_location'),

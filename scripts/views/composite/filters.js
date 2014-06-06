@@ -24,14 +24,13 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
 
     events: {
       'click .btn-popover': 'closePopovers',
-      'click .filterList li': 'addFilter',
+      'click .filterList li': 'addFilterFromMenu',
       'change .dateFilterValue': 'updateDateFilter',
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
       'slideStop .timeFilterValue': 'updateTimeFilter',
       'shown.bs.popover .btn-filter': 'initializeSliders',
-      'click .updateLocationFilter': 'updateLocationFilterMap',
       'submit .locationFilterValue': 'updateLocationFilterForm',
       'change .locationFilterValueType': 'updateLocationFilterForm'
     },
@@ -47,6 +46,8 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       var filterLi = this.makeFilterList();
 
       coms.on('all', this.handleUpdate);
+
+      coms.on('filters:updateLocationFilter', _.bind(this.updateLocationFilterMap, this));
 
       // initialize addFilter popover
       setTimeout(function() {
@@ -79,24 +80,15 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       return c;
     },
 
-    addFilter: function (e) {
-      var filter = $(e.target).data('filter');
+    addFilterFromMenu: function(e) {
+      var filterName = $(e.target).data('filter');
+      this.addFilter(filterName);
+    },
 
-      //sample filter data
-      // filterList[filter].max = 1;
-      // filterList[filter].vehicle_ids = ['529e5772e4b00a2ddb562f1f'];
-      // filterList[filter].latlng = [37.76537594388962, -122.4123740663029];
-      // filterList[filter].type = 'from'
-      //filterList[filter].dateRange = [1393729385431, 1401501801822];
-
-
+    addFilter: function (filterName) {
       $('.addFilter').popover('hide');
-
-      this.collection.add(new Filter(filterList[filter]));
-
-      $('.addFilter').data('bs.popover').options.content = this.makeFilterList()
-
-      //this.closePopovers({});
+      this.collection.add(new Filter(filterList[filterName]));
+      $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
     },
 
     updateDateFilter: function (e) {
@@ -173,13 +165,20 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
 
     updateLocationFilterMap: function (e) {
       var locationType = $(e.target).data('type'),
-          locationLatlng = [$(e.target).data('lat'), $(e.target).data('lng')],
+          locationLatlng = [$(e.target).data('lat'), $(e.target).data('lon')],
           locationName = $(e.target).data('name'),
           locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName,
           locationFilter = this.collection.findWhere({name: 'location'});
 
-      locationFilter.set('latlng', locationLatlng);
-      locationFilter.set('type', locationType);
+      if(locationFilter) {
+        locationFilter.set('latlng', locationLatlng);
+        locationFilter.set('type', locationType);
+      } else {
+        filterList.location.latlng = locationLatlng;
+        filterList.location.type = locationType;
+        this.addFilter('location');
+      }
+
       $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
 
       return false;
@@ -207,8 +206,6 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
           latlng: data.latlng,
           address: locationName
         });
-
-        console.log(locationFilter)
 
         $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
       });
