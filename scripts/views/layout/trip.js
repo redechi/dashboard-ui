@@ -34,21 +34,25 @@ function( Backbone, MapView, TripTmpl, UserView, formatters ) {
     events: {},
 
     templateHelpers: function() {
-      var trip = this.collection.models[0];
+      var trip = this.collection.models[0],
+          helpers = {};
       console.log(trip)
-      var helpers =  {
-        title: formatters.formatTime(trip.get('start_time'), trip.get('start_time_zone'), 'MMM DD, YYYY h:mm A - ') + formatters.formatTime(trip.get('end_time'), trip.get('end_time_zone'), 'h:mm A'),
-        hard_brakes: trip.get('hard_brakes'),
-        hard_accels: trip.get('hard_accels'),
-        duration_over_70_min: Math.ceil(trip.get('duration_over_70_s') / 60),
-        distance: formatters.distance(trip.get('distance_m')),
-        duration: formatters.duration(trip.get('duration')),
-        score: formatters.score(trip.get('score')),
-        cost: formatters.cost(trip.get('fuel_cost_usd')),
-        mpg: formatters.averageMPG(formatters.m_to_mi(trip.get('distance_m')) / trip.get('fuel_volume_gal')),
-        nextTrip: trip.get('nextTrip'),
-        prevTrip: trip.get('prevTrip')
-      };
+
+      if(trip) {
+        helpers =  {
+          title: formatters.formatTime(trip.get('start_time'), trip.get('start_time_zone'), 'MMM DD, YYYY h:mm A - ') + formatters.formatTime(trip.get('end_time'), trip.get('end_time_zone'), 'h:mm A'),
+          hard_brakes: trip.get('hard_brakes'),
+          hard_accels: trip.get('hard_accels'),
+          duration_over_70_min: Math.ceil(trip.get('duration_over_70_s') / 60),
+          distance: formatters.distance(trip.get('distance_m')),
+          duration: formatters.duration(trip.get('duration')),
+          score: formatters.score(trip.get('score')),
+          cost: formatters.cost(trip.get('fuel_cost_usd')),
+          mpg: formatters.averageMPG(formatters.m_to_mi(trip.get('distance_m')) / trip.get('fuel_volume_gal')),
+          nextTrip: trip.get('nextTrip'),
+          prevTrip: trip.get('prevTrip')
+        };
+      }
 
       return helpers;
     },

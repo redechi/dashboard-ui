@@ -5,10 +5,10 @@
 </header>
 <div id="trip">
   <div class="tripHeader">
-    <a href="/" class="back btn btn-default">
+    <a href="#/" class="back btn btn-default">
       <span class="glyphicon glyphicon-chevron-left"></span> Back
     </a>
-    <a class="btn btn-default previousTrip">
+    <a href="#/trips/{{ prevTrip }}" class="btn btn-default previousTrip {{#unless prevTrip }}noTrip{{/unless}}">
       <span class="glyphicon glyphicon-chevron-left"></span>
     </a>
     <span class="title">{{ title }}</span>

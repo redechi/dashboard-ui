@@ -42,6 +42,8 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
           }
 
           lastFetch = this.clone();
+
+          this.postProcess();
         }
       , this));
     },
@@ -76,8 +78,18 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
     // aggregation strategies
     aggStragegies: aggStrat,
 
-    model: Trip
+    model: Trip,
 
+    postProcess: function() {
+      lastFetch.forEach(function(model, idx, list) {
+        if(idx < (list.length - 1)) {
+          model.set('prevTrip', list[idx + 1].get('id'));
+        }
+        if(idx > 0) {
+          model.set('nextTrip', list[idx - 1].get('id'));
+        }
+      });
+    }
   });
 
   // make this a singleton
