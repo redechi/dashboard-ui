@@ -32,6 +32,10 @@ function( Backbone, regionManager, tripsCollection, SummaryLayout, TripLayout) {
       var trip = new TripLayout({collection: tripCollection});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(trip);
+    },
+
+
+    applyFilters: function (filtersString) {
     }
 
 

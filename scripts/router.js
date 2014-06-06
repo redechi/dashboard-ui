@@ -8,7 +8,8 @@ define([
 
     appRoutes: {
       '(/)'               : 'showSummaryLayout',
-      'trip/:tripid'      : 'showTripLayout'
+      'trip/:tripid'      : 'showTripLayout',
+      'filter(/):filters' : 'applyFilters'
     },
 
     controller: controller
