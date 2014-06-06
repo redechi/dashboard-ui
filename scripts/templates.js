@@ -80,8 +80,25 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["templates/item/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
+function program1(depth0,data) {
+  
+  
+  return "noHardBrakes";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "noHardAccels";
+  }
+
+function program5(depth0,data) {
+  
+  
+  return "noSpeeding";
+  }
 
   buffer += "<a href=\"#/trip/";
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
@@ -112,6 +129,27 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + "</div>\n      <div class=\"duration stat\">";
   if (stack2 = helpers.duration) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.duration; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</div>\n    </div>\n    <div class=\"tripEventsBox\">\n      <div class=\"hardBrakes event ";
+  stack2 = helpers['if'].call(depth0, depth0.noHardBrakes, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\">";
+  if (stack2 = helpers.hard_brakes) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.hard_brakes; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "<i class=\"glyphicon glyphicon-ok\"></i></div>\n      <div class=\"hardAccels event ";
+  stack2 = helpers['if'].call(depth0, depth0.noHardAccels, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\">";
+  if (stack2 = helpers.hard_accels) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.hard_accels; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "<i class=\"glyphicon glyphicon-ok\"></i></div>\n      <div class=\"speeding event ";
+  stack2 = helpers['if'].call(depth0, depth0.noSpeeding, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\">";
+  if (stack2 = helpers.duration_over_70_min) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.duration_over_70_min; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
     + "</div>\n    </div>\n    <div class=\"bottomBox\">\n      <div class=\"startTime\">";
   if (stack2 = helpers.formatted_start_time) { stack2 = stack2.call(depth0, {hash:{},data:data}); }

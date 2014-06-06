@@ -15,6 +15,11 @@
       <div class="fuelCost stat">${{ fuel_cost_usd }}</div>
       <div class="duration stat">{{ duration }}</div>
     </div>
+    <div class="tripEventsBox">
+      <div class="hardBrakes event {{#if noHardBrakes}}noHardBrakes{{/if}}">{{hard_brakes}}<i class="glyphicon glyphicon-ok"></i></div>
+      <div class="hardAccels event {{#if noHardAccels}}noHardAccels{{/if}}">{{hard_accels}}<i class="glyphicon glyphicon-ok"></i></div>
+      <div class="speeding event {{#if noSpeeding}}noSpeeding{{/if}}">{{duration_over_70_min}}</div>
+    </div>
     <div class="bottomBox">
       <div class="startTime">{{ formatted_start_time }}</div>
       <div class="startLocation">{{ start_location.display_name }}</div>

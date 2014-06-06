@@ -40,10 +40,25 @@ function( Backbone, coms, TripTmpl, formatters  ) {
     template: TripTmpl,
 
     templateHelpers: function() {
-      return {
+      var helpers = {
         distance: formatters.distance(this.model.get('distance_m')),
-        duration: formatters.durationMin(this.model.get('duration'))
+        duration: formatters.durationMin(this.model.get('duration')),
+        duration_over_70_min: Math.ceil(this.model.get('duration_over_70_s') / 60),
+      };
+
+      if(this.model.get('duration_over_70_s') === 0) {
+        helpers.noSpeeding = true;
       }
+
+      if(this.model.get('hard_brakes') === 0) {
+        helpers.noHardBrakes = true;
+      }
+
+      if(this.model.get('hard_accels') === 0) {
+        helpers.noHardAccels = true;
+      }
+
+      return helpers;
     },
 
     /* ui selector cache */
