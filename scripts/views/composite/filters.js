@@ -77,7 +77,16 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       }, this));
 
       coms.trigger('filter', c);
+
+      this.updateURL();
       return c;
+    },
+
+    updateURL: function() {
+      var filters = this.collection.map(function(filter) {
+        return _.bind(filter.get('stringify'), filter)();
+      });
+      window.location.hash = '?' + $.param(_.extend.apply(this, filters));
     },
 
     addFilterFromMenu: function(e) {
