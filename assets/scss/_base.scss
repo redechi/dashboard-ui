@@ -679,8 +679,12 @@ header {
     }
   }
 
-  .mapContainer {
+  #map {
     position: relative;
+
+    .map {
+      height: 400px;
+    }
 
     .tripEvents {
       position: absolute;
@@ -709,15 +713,6 @@ header {
         }
       }
     }
-  }
-
-  .map {
-    width: 650px;
-    height: 400px;
-  }
-
-  .noMoveContainer {
-    display: none;
   }
 
   .summaryStats {

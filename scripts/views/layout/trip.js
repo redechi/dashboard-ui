@@ -1,15 +1,15 @@
 define([
   'backbone',
-  '../item/map',
+  '../item/map_single',
   'hbs!tmpl/layout/trip_tmpl',
 	'../item/user_view',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, MapView, TripTmpl, UserView, formatters ) {
+function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     'use strict';
 
     console.log( Backbone );
-    console.log( MapView );
+    console.log( MapSingleView );
 
 
   /* Return a Layout class definition */
@@ -41,9 +41,6 @@ function( Backbone, MapView, TripTmpl, UserView, formatters ) {
       if(trip) {
         helpers =  {
           title: formatters.formatTime(trip.get('start_time'), trip.get('start_time_zone'), 'MMM DD, YYYY h:mm A - ') + formatters.formatTime(trip.get('end_time'), trip.get('end_time_zone'), 'h:mm A'),
-          hard_brakes: trip.get('hard_brakes'),
-          hard_accels: trip.get('hard_accels'),
-          duration_over_70_min: Math.ceil(trip.get('duration_over_70_s') / 60),
           distance: formatters.distance(trip.get('distance_m')),
           duration: formatters.duration(trip.get('duration')),
           score: formatters.score(trip.get('score')),
@@ -59,7 +56,7 @@ function( Backbone, MapView, TripTmpl, UserView, formatters ) {
 
     /* on render callback */
     onRender: function() {
-      var m = new MapView({collection: this.collection});
+      var m = new MapSingleView({collection: this.collection});
 			var u = new UserView();
 
       this.map.show(m);

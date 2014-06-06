@@ -68,6 +68,28 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["JST"]["templates/item/map_single_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"map\"></div>\n<div class=\"tripEvents\">\n  <div class=\"hardBrakes event\">\n    <span>";
+  if (stack1 = helpers.hard_brakes) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.hard_brakes; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n    <label>Hard Brakes</label>\n  </div>\n  <div class=\"hardAccels event\">\n    <span>";
+  if (stack1 = helpers.hard_accels) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.hard_accels; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n    <label>Hard Accels</label>\n  </div>\n  <div class=\"speeding event\">\n    <span>";
+  if (stack1 = helpers.duration_over_70_min) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.duration_over_70_min; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n    <label>Min over 70</label>\n  </div>\n</div>\n";
+  return buffer;
+  });
+
 this["JST"]["templates/item/map_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -267,19 +289,7 @@ function program1(depth0,data) {
   if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n      <div class=\"label\">Time</div>\n    </div>\n  </div>\n  <div class=\"mapContainer\">\n    <div id=\"map\"></div>\n    <div class=\"tripEvents\">\n      <div class=\"hardBrakes event\">\n        <span>";
-  if (stack1 = helpers.hard_brakes) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.hard_brakes; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n        <label>Hard Brakes</label>\n      </div>\n      <div class=\"hardAccels event\">\n        <span>";
-  if (stack1 = helpers.hard_accels) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.hard_accels; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n        <label>Hard Accels</label>\n      </div>\n      <div class=\"speeding event\">\n        <span>";
-  if (stack1 = helpers.duration_over_70_min) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.duration_over_70_min; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</span>\n        <label>Min over 70</label>\n      </div>\n    </div>\n  </div>\n\n</div>\n";
+    + "</div>\n      <div class=\"label\">Time</div>\n    </div>\n  </div>\n  <div id=\"map\"></div>\n\n</div>\n";
   return buffer;
   });
 

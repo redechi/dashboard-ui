@@ -5,9 +5,10 @@ define([
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
   '../../collections/trips',
-  '../../controllers/unit_formatters'
+  '../../controllers/unit_formatters',
+  '../../controllers/map_helpers'
 ],
-function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
+function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters, mapHelpers) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -58,6 +59,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
           pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
           markersLayer = this.markersLayer = new L.MarkerClusterGroup(),
           markers = this.markers = [];
+
+      mapHelpers.enablePolyline();
 
       mapbox.addLayer(markersLayer);
     },
@@ -183,112 +186,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="end" class="mapLocationFilter">Trips to here</a><br>' +
         '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="start" class="mapLocationFilter">Trips from here</a>');
 
-      L.extend(L.GeoJSON, {
-        // This function is from Google's polyline utility.
-        // Borrowed from: http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/decode.js
-        // Changed to return lng/lats instead of lat/lngs
-        decodeLine: function (encoded) {
-          var len = encoded.length;
-          var index = 0;
-          var array = [];
-          var lat = 0;
-          var lng = 0;
-
-          while (index < len) {
-            var b;
-            var shift = 0;
-            var result = 0;
-            do {
-              b = encoded.charCodeAt(index++) - 63;
-              result |= (b & 0x1f) << shift;
-              shift += 5;
-            } while (b >= 0x20);
-            var dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
-
-            shift = 0;
-            result = 0;
-            do {
-              b = encoded.charCodeAt(index++) - 63;
-              result |= (b & 0x1f) << shift;
-              shift += 5;
-            } while (b >= 0x20);
-            var dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
-            lng += dlng;
-
-            array.push([lng * 1e-5, lat * 1e-5]);
-          }
-          return array;
-        }
-      });
-
-      var aIcon = L.icon({
-        iconUrl: '/assets/img/a.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 40],
-        popupAnchor: [0,-41],
-        shadowUrl: 'https://api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 40]
-      });
-
-      var bIcon = L.icon({
-        iconUrl: '/assets/img/b.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 40],
-        popupAnchor: [0,-41],
-        shadowUrl: 'https://api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 40]
-      });
-
-
-      function createMarker(type, model) {
-        var id = model.get('id'),
-            location,
-            time,
-            icon;
-
-        if(type == 'start') {
-          location = model.get('start_location'),
-          time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A'),
-          icon = aIcon
-        } else {
-          location = model.get('end_location'),
-          time = formatters.formatTime(model.get('end_time'), model.get('end_time_zone'), 'MMM D, YYYY h:mm A'),
-          icon = bIcon
-        }
-
-        var popupText = popupTemplate({
-          name: location.name,
-          time: time,
-          lat: location.lat,
-          lon: location.lon
-        });
-
-        var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id})
-          .bindPopup(popupText)
-          .on('click', function (e) {
-            var newModel = self.collection.where({id: e.target.options.id }).pop();
-            coms.trigger('trips:highlight', newModel);
-          })
-          .on('popupclose', function () {
-            coms.trigger('trips:unhighlight');
-          });
-
-        return marker;
-      }
-
-
-      function styleLine(feature) {
-        return {
-          color: '#08b1d5',
-          opacity: 0.8,
-          weight: 3
-        };
-      }
-
-
       function attachEvents(feature, layer) {
         layer
           .on('mouseover', function (e) {
@@ -308,7 +205,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
             startLoc = model.get('start_location'),
             endLoc = model.get('end_location'),
             path = model.get('path'),
-            geoJson = L.geoJson([], { style: styleLine, onEachFeature: attachEvents, id: id});
+            geoJson = L.geoJson([], { style: mapHelpers.styleLine, onEachFeature: attachEvents, id: id});
 
         if (path) {
           geoJson.addData({
@@ -324,13 +221,29 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters) {
         }
 
         if (startLoc) {
-          var marker = createMarker('start', model);
+          var marker = mapHelpers.createMarker('start', model, popupTemplate);
+          marker.on('click', function (e) {
+            var newModel = self.collection.where({id: e.target.options.id }).pop();
+            coms.trigger('trips:highlight', newModel);
+          })
+          .on('popupclose', function () {
+            coms.trigger('trips:unhighlight');
+          });
+
           markers.push(marker);
           markersLayer.addLayer(marker);
         }
 
         if (endLoc) {
-          var marker = createMarker('end', model);
+          var marker = mapHelpers.createMarker('end', model, popupTemplate);
+          marker.on('click', function (e) {
+            var newModel = self.collection.where({id: e.target.options.id }).pop();
+            coms.trigger('trips:highlight', newModel);
+          })
+          .on('popupclose', function () {
+            coms.trigger('trips:unhighlight');
+          });
+
           markers.push(marker);
           markersLayer.addLayer(marker);
         }
