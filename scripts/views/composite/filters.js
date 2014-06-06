@@ -171,11 +171,15 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
           locationFilter = this.collection.findWhere({name: 'location'});
 
       if(locationFilter) {
-        locationFilter.set('latlng', locationLatlng);
-        locationFilter.set('type', locationType);
+        locationFilter.set({
+          type: locationType,
+          latlng: locationLatlng,
+          valueText: locationName
+        });
       } else {
         filterList.location.latlng = locationLatlng;
         filterList.location.type = locationType;
+        filterList.location.valueText = locationName;
         this.addFilter('location');
       }
 
@@ -204,7 +208,7 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
         locationFilter.set({
           type: locationType,
           latlng: data.latlng,
-          address: locationName
+          valueText: locationName
         });
 
         $('.btn-filter[data-filter="location"] .btn-text').text(locationText);

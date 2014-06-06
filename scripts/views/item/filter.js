@@ -46,6 +46,9 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
       function initializePopover() {
         if(name == 'date') {
           $('.dateFilterValue').val(filter.get('value'));
+        } else if(name == 'location') {
+          $('.locationFilterValueAddress').val(filter.get('valueText'));
+          $('.locationFilterValueType').val(filter.get('type'));
         }
       }
 
