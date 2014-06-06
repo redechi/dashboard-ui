@@ -49,6 +49,8 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
 
       coms.on('filters:updateLocationFilter', _.bind(this.updateLocationFilterMap, this));
 
+      coms.on('filters:updateDateFilterLabel', _.bind(this.updateDateFilterLabel, this));
+
       // initialize addFilter popover
       setTimeout(function() {
         $('.addFilter').popover({
@@ -169,6 +171,12 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
 
       timeFilter.set('value', timeValue);
       $('.btn-filter[data-filter="time"] .btn-text').text(timeText);
+    },
+
+
+    updateDateFilterLabel: function() {
+      var dateFilter = this.collection.findWhere({name: 'date'});
+      $('.btn-filter[data-filter="date"] .btn-text').text(formatters.dateRange(dateFilter.get('dateRange')));
     },
 
 

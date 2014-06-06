@@ -64,7 +64,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Time</div>\n  </div>\n</div>\n\n<svg height=\"225\"></svg>\n";
+    + "</div>\n    <div class=\"label\">Time</div>\n  </div>\n</div>\n\n<svg height=\"225\"></svg>\n\n<div class=\"prevDates\" title=\"Prev Dates\"><i class=\"glyphicon glyphicon-chevron-left\"></i></div>\n\n<div class=\"nextDates\" title=\"Next Dates\"><i class=\"glyphicon glyphicon-chevron-right\"></i></div>\n";
   return buffer;
   });
 

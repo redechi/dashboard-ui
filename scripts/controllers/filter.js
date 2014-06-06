@@ -18,6 +18,16 @@ function(moment, formatters) {
       func: function(trip) {
         return moment(trip.get('start_time')) >= moment(this.get('dateRange')[0]) && moment(trip.get('start_time')) <= moment(this.get('dateRange')[1]);
       },
+      setPrevRange: function() {
+        var range = this.get('dateRange'),
+            rangeLength = range[1] - range[0];
+        this.set('dateRange', [range[0] - rangeLength, range[0]]);
+      },
+      setNextRange: function() {
+        var range = this.get('dateRange'),
+            rangeLength = range[1] - range[0];
+        this.set('dateRange', [range[1], range[1] + rangeLength]);
+      },
       stringify: function() {
         return {
           startDate: this.get('dateRange')[0],

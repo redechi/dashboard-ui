@@ -3,10 +3,11 @@ define([
   'communicator',
   'underscore',
   '../../collections/trips',
+  '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, comms, _, trips, GraphTmpl, formatters) {
+function( Backbone, coms, _, trips, filters, GraphTmpl, formatters) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -46,7 +47,9 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     /* Ui events hash */
     events: {
-      'click .stat': 'changeGraph'
+      'click .stat': 'changeGraph',
+      'click .prevDates': 'prevDateRange',
+      'click .nextDates': 'nextDateRange'
     },
 
     addGraph: function() {
@@ -94,17 +97,29 @@ function( Backbone, comms, _, trips, GraphTmpl, formatters) {
 
     updateGraph: function () {
       var graphType = this.collection.graphType,
-          chart = this.chart;
-
-      var values = this.collection.getGraphSet(graphType);
-      var datum = {
-        key: 'trips',
-        values: values
-      }
+          chart = this.chart,
+          values = this.collection.getGraphSet(graphType),
+          datum = {
+            key: 'trips',
+            values: values
+          };
 
       d3.select(this.$el.find('svg').get(0))
         .datum([datum])
         .call(chart);
+    },
+
+
+    prevDateRange: function () {
+      var dateFilter = filters.findWhere({name: 'date'});
+      _.bind(dateFilter.get('setPrevRange'), dateFilter)();
+      coms.trigger('filters:updateDateFilterLabel');
+    },
+
+    nextDateRange: function () {
+      var dateFilter = filters.findWhere({name: 'date'});
+      _.bind(dateFilter.get('setNextRange'), dateFilter)();
+      coms.trigger('filters:updateDateFilterLabel');
     },
 
     onRender: function() {

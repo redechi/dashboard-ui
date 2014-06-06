@@ -175,6 +175,36 @@ header {
   svg {
     width: 100%;
   }
+
+  .prevDates {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .nextDates {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+  }
+
+  .prevDates,
+  .nextDates {
+    cursor: pointer;
+    height: 290px;
+    width: 34px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    i {
+      position: absolute;
+      top: 48%;
+      margin: 0 10px;
+    }
+  }
 }
 
 .summaryStats {

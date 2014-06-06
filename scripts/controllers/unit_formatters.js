@@ -58,6 +58,9 @@ function() {
       var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLon, 2.0);
       var d = radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
       return d;
+    },
+    dateRange: function(dateRange) {
+      return moment(dateRange[0]).format('MMM D - ') + moment(dateRange[1]).format('MMM D, YYYY');
     }
   };
 });
