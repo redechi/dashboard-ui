@@ -237,7 +237,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
+  return "<header class=\"mainHeader\">\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
   });
 
 this["JST"]["templates/layout/trip_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -251,7 +251,7 @@ function program1(depth0,data) {
   return "noTrip";
   }
 
-  buffer += "<header>\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"trip\">\n  <div class=\"tripHeader\">\n    <a href=\"#/\" class=\"back btn btn-default\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back\n    </a>\n    <a href=\"#/trips/";
+  buffer += "<header class=\"mainHeader\">\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"trip\">\n  <div class=\"tripHeader\">\n    <a href=\"#/\" class=\"back btn btn-default\">\n      <span class=\"glyphicon glyphicon-chevron-left\"></span> Back\n    </a>\n    <a href=\"#/trips/";
   if (stack1 = helpers.prevTrip) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.prevTrip; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)

@@ -63,7 +63,7 @@ function( Backbone, SummaryTmpl, Trips, Filters, Graph, Map, UserView, tripsColl
 
     resize: function () {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#map .map').height(height - $('#graphs').outerHeight(true) - $('.noMoveContainer').outerHeight(true) - 25);
+      $('#map .map').height(height - $('#graphs').outerHeight(true) - $('.noMoveContainer').outerHeight(true) - 75);
     }
   });
 

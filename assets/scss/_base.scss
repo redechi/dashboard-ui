@@ -62,10 +62,9 @@ h5 {
   font-size: 16px;
 }
 
-header {
+header.mainHeader {
   overflow: hidden;
   border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
@@ -147,12 +146,14 @@ header {
   width: 203px;
   height: 44px;
   float: left;
+  margin: 5px;
 }
 
 #left-column {
   margin: 0;
   overflow: hidden;
   margin-right: 320px;
+  padding-left: 10px;
 }
 
 #right-column {
@@ -264,6 +265,7 @@ header {
 }
 
 #filters {
+  padding-left: 10px;
   height: 40px;
 
   h3.filterLabel {
