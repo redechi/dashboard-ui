@@ -1,10 +1,12 @@
 define([
   'backbone',
   'communicator',
+  '../../collections/filters',
   '../../collections/trips',
-  'hbs!tmpl/item/filters_tmpl'
+  'hbs!tmpl/item/filters_tmpl',
+  '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, trips, FiltersTmpl  ) {
+function( Backbone, coms, filters, trips, FiltersTmpl, formatters ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -41,15 +43,28 @@ function( Backbone, coms, trips, FiltersTmpl  ) {
 
     onRender: function() {
       var name = this.model.get('name'),
-          filter = this.model;
+          self = this;
 
       function initializePopover() {
         if(name == 'date') {
-          $('.dateFilterValue').val(filter.get('value'));
+          $('.dateFilterValue').val(self.model.get('value'));
         } else if(name == 'location') {
-          $('.locationFilterValueAddress').val(filter.get('valueText'));
-          $('.locationFilterValueType').val(filter.get('type'));
+          $('.locationFilterValueAddress').val(self.model.get('valueText'));
+          $('.locationFilterValueType').val(self.model.get('type'));
+        } else if (name == 'distance') {
+          $('.distanceFilterNotes').toggle(self.model.get('max') !== 0);
+          $('.distanceFilterNotes .min span').text(formatters.distance(self.model.get('min')));
+          $('.distanceFilterNotes .max span').text(formatters.distance(self.model.get('max')));
+        } else if (name == 'duration') {
+          $('.durationFilterNotes').toggle(self.model.get('max') !== 0);
+          $('.durationFilterNotes .min span').text(formatters.duration(self.model.get('min')));
+          $('.durationFilterNotes .max span').text(formatters.duration(self.model.get('max')));
+        } else if (name == 'cost') {
+          $('.costFilterNotes').toggle(self.model.get('max') !== 0);
+          $('.costFilterNotes .min').text(formatters.cost(self.model.get('min')));
+          $('.costFilterNotes .max').text(formatters.cost(self.model.get('max')));
         }
+
       }
 
       setTimeout(function() {

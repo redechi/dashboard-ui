@@ -173,22 +173,18 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
 
 
     updateLocationFilterMap: function (e) {
-      var locationType = $(e.target).data('type'),
-          locationLatlng = [$(e.target).data('lat'), $(e.target).data('lon')],
-          locationName = $(e.target).data('name'),
-          locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName,
+      var location = {
+            type: $(e.target).data('type'),
+            latlng: [$(e.target).data('lat'), $(e.target).data('lon')],
+            valueText: $(e.target).data('name')
+          },
+          locationText = ((location.type === 'start') ? 'Starts' : 'Ends') + ' at ' + location.valueText,
           locationFilter = this.collection.findWhere({name: 'location'});
 
       if(locationFilter) {
-        locationFilter.set({
-          type: locationType,
-          latlng: locationLatlng,
-          valueText: locationName
-        });
+        locationFilter.set(location);
       } else {
-        filterList.location.latlng = locationLatlng;
-        filterList.location.type = locationType;
-        filterList.location.valueText = locationName;
+        _.extend(filterList.location, location);
         this.addFilter('location');
       }
 
@@ -198,29 +194,28 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
     },
 
     updateLocationFilterForm: function () {
-      var locationFilter = this.collection.findWhere({name: 'location'}),
-          locationName = $('.popover .locationFilterValueAddress').val(),
-          locationType = $('.popover .locationFilterValueType').val();
+      var location = {
+            type: $('.popover .locationFilterValueType').val(),
+            valueText: $('.popover .locationFilterValueAddress').val()
+          },
+          locationFilter = this.collection.findWhere({name: 'location'});
 
-      if(locationName === '') { return false; }
+      if(location.valueText === '') { return false; }
 
-      this.geocoder.query(locationName, function(err, data) {
+      this.geocoder.query(location.valueText, function(err, data) {
         if(err) {
           $('.popover .locationFilterResults').text('Address Not Found');
           return false;
+        } else {
+          $('.popover .locationFilterResults').empty();
+
+          location.latlng = data.latlng;
+          location.valueText = _.pluck(data.results[0], 'name').join(', ');
+          var locationText = ((location.type === 'start') ? 'Starts' : 'Ends') + ' at ' + location.valueText;
+
+          locationFilter.set(location);
+          $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
         }
-        $('.popover .locationFilterResults').empty();
-
-        locationName = _.pluck(data.results[0], 'name').join(', ');
-        var locationText = ((locationType == 'start') ? 'Starts' : 'Ends') + ' at ' + locationName;
-
-        locationFilter.set({
-          type: locationType,
-          latlng: data.latlng,
-          valueText: locationName
-        });
-
-        $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
       });
 
       return false;

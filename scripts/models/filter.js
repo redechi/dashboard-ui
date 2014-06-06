@@ -1,9 +1,8 @@
 define([
   'backbone',
-  'communicator',
-  '../controllers/filter'
+  'communicator'
 ],
-function( Backbone, coms, strategies ) {
+function( Backbone, coms ) {
     'use strict';
 
   /* Return a model class definition */
@@ -14,11 +13,15 @@ function( Backbone, coms, strategies ) {
 
     defaults: {},
 
-    filterStrategies: strategies, // override me
-
     applyTo: function (collection) {
+      var name = this.get('name');
       var filtered = collection.filter(this.get('func'), this);
       var fc = collection.reset(filtered);
+
+      if(name == 'date') {
+        coms.trigger('filters:updateDateFilter');
+      }
+
       return fc;
     },
 

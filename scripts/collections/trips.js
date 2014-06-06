@@ -89,6 +89,30 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
           model.set('nextTrip', list[idx - 1].get('id'));
         }
       });
+    },
+
+    calculateRanges: function() {
+      var memo = {
+        distance: {min: Infinity, max: 0},
+        duration: {min: Infinity, max: 0},
+        cost: {min: Infinity, max: 0}
+      };
+      return this.reduce(function(memo, trip) {
+        return {
+          distance: {
+            min: Math.min(trip.get('distance_miles'), memo.distance.min),
+            max: Math.max(trip.get('distance_miles'), memo.distance.max)
+          },
+          duration: {
+            min: Math.min(trip.get('duration'), memo.duration.min),
+            max: Math.max(trip.get('duration'), memo.duration.max)
+          },
+          cost: {
+            min: Math.min(trip.get('fuel_cost_usd'), memo.cost.min),
+            max: Math.max(trip.get('fuel_cost_usd'), memo.cost.max)
+          },
+        };
+      }, memo);
     }
   });
 
