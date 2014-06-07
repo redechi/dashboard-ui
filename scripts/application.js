@@ -11,9 +11,11 @@ function( Backbone, Communicator, router, regionManager, tripsCollection ) {
 
   // simple session storage
 
-  var cookieRegEx = new RegExp("[;\s]+?token=([^;]+)");
-  var accessMatch = cookieRegEx.exec(document.cookie) || [];
-  var accessToken = accessMatch.pop() || 'ba56eee32df6be1437768699247b406fc7d9992f';
+  function getCookie(key) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  }
+
+  var accessToken = getCookie('token') || 'ba56eee32df6be1437768699247b406fc7d9992f';
 
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + accessToken},
