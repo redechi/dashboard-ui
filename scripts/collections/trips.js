@@ -66,7 +66,7 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
         return memo;
       }, {time: 0, score: 0});
 
-      return weightedSum.score / weightedSum.time;
+      return (weightedSum.score / weightedSum.time) || 0;
     },
 
     // filter strategies
