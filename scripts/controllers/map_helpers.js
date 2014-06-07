@@ -24,6 +24,14 @@ function(mapbox, formatters) {
       shadowSize: [41, 41],
       shadowAnchor: [12, 40]
     }),
+    hardBrakeIcon: L.divIcon({
+      className: 'hardBrakeIcon',
+      iconSize: [12, 12]
+    }),
+    hardAccelIcon: L.divIcon({
+      className: 'hardAccelIcon',
+      iconSize: [12, 12]
+    }),
     styleLine: function(feature) {
       return {
         color: '#08b1d5',
