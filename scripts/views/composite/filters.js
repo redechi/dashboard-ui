@@ -32,7 +32,8 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       'slideStop .timeFilterValue': 'updateTimeFilter',
       'shown.bs.popover .btn-filter': 'initializeSliders',
       'submit .locationFilterValue': 'updateLocationFilterForm',
-      'change .locationFilterValueType': 'updateLocationFilterForm'
+      'change .locationFilterValueType': 'updateLocationFilterForm',
+      'click .btn-undo': 'undoFilter'
     },
 
     handleUpdate: function () {
@@ -79,6 +80,8 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       }, this));
 
       coms.trigger('filter', c);
+
+      $('.btn-undo').show();
 
       this.updateURL();
       return c;
@@ -255,6 +258,10 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
           tooltip_split: true
         });
       }
+    },
+
+    undoFilter: function() {
+      window.history.back();
     },
 
     onRender: function() {
