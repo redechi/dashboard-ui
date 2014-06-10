@@ -1,33 +1,59 @@
 define([
   'backbone',
+  'communicator',
   'models/trip',
   'amlAggregate',
   'amlSort',
-  'amlCollection'
+  './filters'
 ],
-function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
+function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
   'use strict';
-
-  var lastFetch = undefined;
 
   /* trips singleton */
   var Trips = Backbone.AML.Collection.extend({
 
-    name: 'default_collection',
-
     page: 0,
+    model: Trip,
+    aggStragegies: aggStrat,
+    sortStrategies: sortStrat,
+    name: 'default_collection',
+    url: "https://api.automatic.com/v1/trips",
 
     initialize: function() {
       console.log("initialize a Trips collection");
+      this.on('add', this.convertToLinkedList, this);
+      this.on('add', this.applyFilters, this);
     },
 
-    url: "https://api.automatic.com/v1/trips",
+    applyFilters: function (tripModel) {
+      var shouldExclude = false;
 
+      filterCollection.each(_.bind(function (filterModel) {
+        var inclusiveFilter = filterModel.applyTo(tripModel);
+        if (inclusiveFilter) shouldExclude = true;
+      }, this));
+
+      if (shouldExclude) this.remove(tripModel);
+    },
+
+    /*
+     *
+     * creates a new collection of trips type with freshly fetched data.
+     * should return the cached information if present.
+     *
+     */
     getLastFetch: function () {
-      if (!lastFetch) return;
-      return lastFetch;
+      // is caught by session storage or re-fetches/caches entire collection.
+      var newMe = new this.constructor();
+      newMe.fetchAll()
+      return newMe;
     },
 
+    /*
+     *
+     * recursively fetches pages of trips until one returns empty.
+     *
+     */
     fetchAll: function () {
       this.nextSet().always(_.bind(
         function(data, status, jqXHR) {
@@ -40,14 +66,15 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
           if ( data[0] && status[0] ){
             this.page = 0;
           }
-
-          lastFetch = this.clone();
-
-          this.postProcess();
         }
       , this));
     },
 
+    /*
+     *
+     * fetches the next page of data and appends it to the collection
+     *
+     */
     nextSet: function() {
       this.page++;
       return this.fetch({add : true, remove: false,
@@ -58,6 +85,11 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       });
     },
 
+    /*
+     *
+     * builds users average score from elements in current collection.
+     *
+     */
     getAverageScore: function() {
       var weightedSum = this.reduce(function(memo, trip) {
 
@@ -69,26 +101,17 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       return weightedSum.score / weightedSum.time;
     },
 
-    // filter strategies
-    filterStrategies: filterStrat,
-
-    // sorting strategies
-    sortStrategies: sortStrat,
-
-    // aggregation strategies
-    aggStragegies: aggStrat,
-
-    model: Trip,
-
-    postProcess: function() {
-      lastFetch.forEach(function(model, idx, list) {
-        if(idx < (list.length - 1)) {
-          model.set('prevTrip', list[idx + 1].get('id'));
-        }
-        if(idx > 0) {
-          model.set('nextTrip', list[idx - 1].get('id'));
-        }
-      });
+    /*
+     *
+     * on 'add' event link trip model with its previous and next models
+     *
+     */
+    convertToLinkedList: function(model) {
+      var idx = this.indexOf(model);
+      var prev = this.at(idx - 1);
+      var next = this.at(idx + 1);
+      if(next) model.set('prevTrip', next.get('id'));
+      if(prev) model.set('nextTrip', prev.get('id'));
     },
 
     calculateRanges: function() {
