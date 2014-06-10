@@ -17,9 +17,9 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
   return Backbone.Marionette.CompositeView.extend({
 
     collectionEvents: {
-      'add': 'applyFilters',
-      'remove': 'applyFilters',
-      'change': 'applyFilters'
+      'add': 'updateURL',
+      'remove': 'updateURL',
+      'change': 'updateURL'
     },
 
     events: {
@@ -70,19 +70,6 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
     template: FiltersTmpl,
 
     data: trips,
-
-    applyFilters: function () {
-      var c = this.data.reset(this.data.getLastFetch().toArray());
-
-      this.collection.each(_.bind(function (model) {
-        model.applyTo(c);
-      }, this));
-
-      coms.trigger('filter', c);
-
-      this.updateURL();
-      return c;
-    },
 
     updateURL: function() {
       var filters = this.collection.map(function(filter) {

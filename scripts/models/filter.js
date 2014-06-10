@@ -13,16 +13,15 @@ function( Backbone, coms ) {
 
     defaults: {},
 
-    applyTo: function (collection) {
+    applyTo: function (model) {
       var name = this.get('name');
-      var filtered = collection.filter(this.get('func'), this);
-      var fc = collection.reset(filtered);
+      var filtered = this.get('func').call(this, model);
 
-      if(name == 'date') {
+      if(name === 'date') {
         coms.trigger('filters:updateDateFilter');
       }
 
-      return fc;
+      return filtered;
     },
 
   });
