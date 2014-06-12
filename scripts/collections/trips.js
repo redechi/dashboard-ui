@@ -22,31 +22,43 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
     initialize: function() {
       console.log("initialize a Trips collection");
       this.on('add', this.convertToLinkedList, this);
-      this.on('add', this.applyFilters, this);
-    },
-
-    applyFilters: function (tripModel) {
-      var shouldExclude = false;
-
-      filterCollection.each(_.bind(function (filterModel) {
-        var inclusiveFilter = filterModel.applyTo(tripModel);
-        if (inclusiveFilter) shouldExclude = true;
-      }, this));
-
-      if (shouldExclude) this.remove(tripModel);
+      this.on('sync', this.applyAllFilters, this);
+      this.on('reset', this.applyAllFilters, this);
     },
 
     /*
      *
-     * creates a new collection of trips type with freshly fetched data.
-     * should return the cached information if present.
+     * creates an array of trips to update and triggers a reset.
      *
      */
-    getLastFetch: function () {
-      // is caught by session storage or re-fetches/caches entire collection.
-      var newMe = new this.constructor();
-      newMe.fetchAll()
-      return newMe;
+    applyAllFilters: function () {
+      var tripsCollection = this;
+      var tripsToInclude = [];
+
+      this.each(function (tripModel) {
+        if (tripsCollection.shouldApplyFilter(tripModel)) {
+          tripsToInclude.push(tripModel);
+        }
+      });
+
+      var newCollection = new this.constructor(tripsToInclude)
+      coms.trigger('filter', newCollection);
+    },
+
+    /*
+     *
+     * boolean: determines if any filters apply to model.
+     *
+     */
+    shouldApplyFilter: function (tripModel) {
+      var shouldExclude = true;
+
+      filterCollection.each(function (filterModel) {
+        var inclusiveFilter = filterModel.applyTo(tripModel);
+        if (!inclusiveFilter) shouldExclude = false;
+      });
+
+      return shouldExclude;
     },
 
     /*
@@ -55,19 +67,17 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
      *
      */
     fetchAll: function () {
-      this.nextSet().always(_.bind(
+      return this.nextSet().always(_.bind(
         function(data, status, jqXHR) {
-          if (!!data[0]) return this.nextSet();
 
           // hackaround jquery request abort (caching)
-          if (status instanceof Array && !!status[0]) {
+          if ( !!data[0] || status instanceof Array && !!status[0] ) {
             this.nextSet();
           }
-          if ( data[0] && status[0] ){
-            this.page = 0;
-          }
+
+          this.trigger('fetchComplete');
         }
-      , this));
+        , this));
     },
 
     /*

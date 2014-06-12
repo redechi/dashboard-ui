@@ -2,10 +2,11 @@ define([
   'backbone',
   'regionManager',
   '../collections/trips',
+  '../collections/filters',
   '../views/layout/summary',
   '../views/layout/trip'
 ],
-function( Backbone, regionManager, tripsCollection, SummaryLayout, TripLayout) {
+function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout) {
   'use strict';
 
   var contentRegion = regionManager.getRegion('main_content');
@@ -17,9 +18,19 @@ function( Backbone, regionManager, tripsCollection, SummaryLayout, TripLayout) {
 
     showSummaryLayout: function () {
       // render summary on load
-      var summary = new SummaryLayout();
-      var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(summary);
+      if (!tripsCollection.models[0]) {
+        tripsCollection.once('fetchComplete', function () {
+          var summary = new SummaryLayout();
+          var contentRegion = regionManager.getRegion('main_content');
+          contentRegion.show(summary);
+          tripsCollection.applyAllFilters();
+        });
+      } else {
+        var summary = new SummaryLayout();
+        var contentRegion = regionManager.getRegion('main_content');
+        contentRegion.show(summary);
+        tripsCollection.applyAllFilters();
+      }
     },
 
 
@@ -27,15 +38,15 @@ function( Backbone, regionManager, tripsCollection, SummaryLayout, TripLayout) {
       var tripArray = tripsCollection.where({id: tripid}),
           tripCollection = new Backbone.Collection(tripArray);
 
-    //  if(!tripModel[0]) return // protection clause
-
       var trip = new TripLayout({collection: tripCollection});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(trip);
     },
 
 
-    applyFilters: function (filtersString) {
+    applyFilters: function () {
+      filtersCollection.fromUrl();
+      this.showSummaryLayout();
     }
 
 

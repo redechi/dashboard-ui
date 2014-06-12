@@ -2,10 +2,9 @@ define([
   'backbone',
   'communicator',
   'models/filter',
-  '../controllers/filter',
-  '../collections/trips'
+  '../controllers/filter'
 ],
-function( Backbone, coms, FilterModel, filterList, trips) {
+function( Backbone, coms, FilterModel, filterList) {
   'use strict';
 
   /* filters singleton */
@@ -15,35 +14,67 @@ function( Backbone, coms, FilterModel, filterList, trips) {
 
     initialize: function() {
       //Show date range filter by default
-      this.add(new FilterModel(filterList.date));
-
-      coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
+      this.on('add', this.toUrl, this);
+      this.on('remove', this.toUrl, this);
+      // this.add(new FilterModel(filterList.date));
+      window.filters = this
     },
 
-    updateFilterRanges: function() {
-      var ranges = trips.calculateRanges(),
-          distanceFilter = this.findWhere({name: 'distance'}),
-          durationFilter = this.findWhere({name: 'duration'}),
-          costFilter = this.findWhere({name: 'cost'});
+    parseHash: function () {
+      var hash = decodeURIComponent(document.location.hash);
+      var filterStrings = hash.substring(1)
 
-      if(distanceFilter) {
-        distanceFilter.set(ranges.distance);
-      } else {
-        _.extend(filterList.distance, ranges.distance);
-      }
+        // chromes decodeURIComponent is broken, decode the important things
+        // if they are still present
+        .split('%3A').join(':').split('%2C').join(',')
 
-      if(durationFilter) {
-        durationFilter.set(ranges.duration);
-      } else {
-        _.extend(filterList.duration, ranges.duration);
-      }
+        .split('?')
+        .pop()
+        .split('&');
 
-      if(costFilter) {
-        costFilter.set(ranges.cost);
-      } else {
-        _.extend(filterList.cost, ranges.cost);
+      filterStrings = filterStrings.filter(function(n){ return !!n});
+
+      // split on =
+      filterStrings = _.map(filterStrings, function (fs) {
+        return fs.split('=');
+      }, this);
+
+      return filterStrings;
+    },
+
+    toUrl: function (filterModel) {
+      filterModel.updateHash();
+    },
+
+    fromUrl: function (string) {
+      var modelData = {};
+      var filterStrings = this.parseHash();
+
+      // ensure all models share the same data.
+      filterStrings.map(function (filterKeyValue) {
+        var obj = {};
+        var name = filterKeyValue.shift();
+        var argsString = filterKeyValue.shift();
+        var argsArray = argsString.split(',');
+        modelData[name] = argsArray;
+      });
+
+      // make models if query parameter exists.
+      for (var filterName in modelData) {
+        if (!filterList.hasOwnProperty(filterName)) return
+        var preExistingModel = this.findWhere({name: filterName});
+
+        if (!!preExistingModel) {
+          preExistingModel.set({value: modelData[filterName]});
+        } else {
+          var filter = new FilterModel(filterList[filterName])
+          filter.set({value: modelData[filterName]});
+          this.add(filter);
+        }
       }
     }
+
+
 
   });
 

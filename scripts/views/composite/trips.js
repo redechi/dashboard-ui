@@ -14,8 +14,8 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
 
     initialize: function() {
       console.log("initialize a Trips CollectionView");
-      coms.on('filter', _.bind(this.resetCollection, this));
 
+      coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
 
@@ -23,7 +23,7 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     },
 
     model: new Backbone.Model({}),
-    collection: trips,
+    collection: new Backbone.Collection([]),
     emptyView: Empty,
     itemView: Trip,
     itemViewContainer: "ul",
@@ -64,7 +64,7 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     highlightTrips: function (trips) {
       $('.trips').addClass('highlighted');
       $('.trips .trip').removeClass('highlighted');
-      trips.forEach(function(trip) {
+      this.collection.forEach(function(trip) {
         $('.trip[data-trip_id="' + trip.id + '"]').addClass('highlighted');
       });
     },

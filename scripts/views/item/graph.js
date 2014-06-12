@@ -2,12 +2,12 @@ define([
   'backbone',
   'communicator',
   'underscore',
-  '../../collections/trips',
   '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
-  '../../controllers/unit_formatters'
+  '../../controllers/unit_formatters',
+  'amlCollection'
 ],
-function( Backbone, coms, _, trips, filters, GraphTmpl, formatters) {
+function( Backbone, coms, _, filters, GraphTmpl, formatters, AMLCollection) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -18,13 +18,17 @@ function( Backbone, coms, _, trips, filters, GraphTmpl, formatters) {
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
       this.collection.graphType = 'average_mpg';
+      coms.on('filter', _.bind(this.resetCollection, this));
     },
 
-    collection: trips, // trips singleton
+    collection: new AMLCollection([]), // trips singleton
+
+    resetCollection: function (collection) {
+      this.collection.reset(collection.toArray());
+    },
 
     collectionEvents: {
-      'reset': 'render',
-      'sync': 'render'
+      'reset': 'render'
     },
 
     template: GraphTmpl,
@@ -33,7 +37,7 @@ function( Backbone, coms, _, trips, filters, GraphTmpl, formatters) {
       var helpers =  {
         distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
         duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
-        score: formatters.score(this.collection.getAverageScore()),
+        // score: formatters.score(this.collection.getAverageScore()),
         cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
       };
 
@@ -46,6 +50,7 @@ function( Backbone, coms, _, trips, filters, GraphTmpl, formatters) {
     ui: {},
 
     /* Ui events hash */
+    
     events: {
       'click .stat': 'changeGraph',
       'click .prevDates': 'prevDateRange',
