@@ -1,0 +1,39 @@
+
+#filters {
+  height: 70px;
+
+  .btn-filter {
+    background: #ddd;
+
+    .caret {
+      margin-left: 4px;
+    }
+
+    .popover-text {
+      display: none;
+    }
+  }
+
+  .filterNav {
+    display: inline-block;
+    margin: 0px 40px;
+
+    li {
+      width: 40px;
+      height: 30px;
+      background: #ddd;
+      overflow: hidden;
+      text-indent: -9999;
+    }
+
+    .prev {
+    }
+
+    .next {
+    }
+  }
+
+  li {
+    display: inline-block;
+  }
+}

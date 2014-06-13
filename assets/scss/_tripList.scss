@@ -1,0 +1,26 @@
+
+#trips {
+  border: 1px solid #ddd;
+  border-top: 1px solid $green;
+  background: #fbfaf9;
+
+  .sortType {
+    float: right;
+  }
+
+  .summaryStats {
+    border-bottom: 1px solid #ddd;
+    margin-top: 10px;
+    padding: 10px 0;
+    overflow: hidden;
+    color: #ddd;
+
+    .stat {
+      display: inline-block;
+    }
+
+    .label {
+      color: #ddd;
+    }
+  }
+}

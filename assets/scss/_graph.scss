@@ -1,0 +1,58 @@
+
+#graphs {
+  @import "nvd3";
+  position: relative;
+  height: 200px;
+  width: 100%;
+  margin-bottom: 60px;
+  background-color: #ddd;
+  @include lightGradient;
+
+  .nv-axisMaxMin, .nv-axisMaxMax, .nv-y text, .nv-y .domain {
+    display: none;
+  }
+  
+  svg {
+    width: 100%;
+    position: relative;
+    bottom: -20px;
+  }
+
+  .prevDates {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .nextDates {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+  }
+
+  .grapModifiers {
+    margin: 10px 0;
+    & > * {
+      display: inline-block;
+    }
+  }
+
+  .prevDates,
+  .nextDates {
+    cursor: pointer;
+    height: 100%;
+    width: 34px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    i {
+      position: absolute;
+      top: 48%;
+      margin: 0 10px;
+    }
+  }
+
+}
