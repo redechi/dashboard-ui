@@ -4,16 +4,28 @@ define([
   'underscore',
   '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
-  '../../controllers/unit_formatters',
   'amlCollection'
 ],
-function( Backbone, coms, _, filters, GraphTmpl, formatters, AMLCollection) {
+function( Backbone, coms, _, filters, GraphTmpl, AMLCollection) {
     'use strict';
 
   /* Return a ItemView class definition */
   var BarChart = Backbone.Marionette.ItemView.extend({
 
     tagName: "div",
+    model: new Backbone.Model({}),
+    collection: new AMLCollection([]), // trips singleton
+    template: GraphTmpl,
+
+    collectionEvents: {
+      'reset': 'updateGraph'
+    },
+
+    events: {
+      'click .prevDates': 'prevDateRange',
+      'click .nextDates': 'nextDateRange',
+      'change .graphType': 'selectGraph'
+    },
 
     initialize: function(model) {
       console.log("initialize a Graph ItemView");
@@ -21,42 +33,86 @@ function( Backbone, coms, _, filters, GraphTmpl, formatters, AMLCollection) {
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
-    collection: new AMLCollection([]), // trips singleton
-
     resetCollection: function (collection) {
       this.collection.reset(collection.toArray());
+
+      var graphType = this.collection.graphType,
+      values = this.collection.getGraphSet(graphType);
+
+      this.model.set('key', graphType);
+      this.model.set('values', values)
     },
 
-    collectionEvents: {
-      'reset': 'render'
+
+    /*
+     *
+     * creates an svg gradient variable
+     *
+     */
+    appendSVGGradient: function (defs) {
+      var gradient = defs.append("svg:linearGradient")
+        .attr("id", "gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%")
+        .attr("spreadMethod", "pad");
+
+      gradient.append("svg:stop")
+        .attr("offset", "0%")
+        .attr("stop-color", "#fff")
+        .attr("stop-opacity", 1);
+
+      gradient.append("svg:stop")
+        .attr("offset", "100%")
+        .attr("stop-color", "#fefefe")
+        .attr("stop-opacity", 1);
+
+      return defs;
     },
 
-    template: GraphTmpl,
 
-    templateHelpers: function() {
-      var helpers =  {
-        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
-        duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
-        // score: formatters.score(this.collection.getAverageScore()),
-        cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
-      };
+    /*
+     *
+     * Crops the bottom of of each bar.
+     *
+     */
+    appendSVGBarMask: function (defs) {
+      var offset = 7
 
-      helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0))
+      d3.selectAll('.nv-group[class*="nv-series"]')
+        .attr("transform", "translate(0,"+offset+")");
 
-      return helpers;
+      defs.append("clipPath")
+        .attr("id","clipper")
+        .append('rect')
+        .attr('y', -offset-2)
+        .attr('width','346')
+        .attr('height','118');
+
+      return defs;
     },
 
-    /* ui selector cache */
-    ui: {},
+    /*
+     *
+     * updates bar style
+     *
+     */
+     updateBarStyle: function () {
+       d3.selectAll("rect.nv-bar")
+         .attr("rx", '9')
+         .attr('ry', '9')
+         .attr('clip-path',"url(#clipper)")
+         .attr('stroke', '#d9d8d4')
+         .attr('stroke-opacity', 9)
+         .style('fill', 'url(#gradient)');
+     },
 
-    /* Ui events hash */
-    
-    events: {
-      'click .stat': 'changeGraph',
-      'click .prevDates': 'prevDateRange',
-      'click .nextDates': 'nextDateRange'
-    },
-
+    /*
+     *
+     * initializes graph.
+     *
+     */
     addGraph: function() {
       var graphType = this.collection.graphType;
       var chart = this.chart = nv.models.multiBarChart()
@@ -72,46 +128,56 @@ function( Backbone, coms, _, filters, GraphTmpl, formatters, AMLCollection) {
         values: values
       }
 
-      chart.xAxis.tickFormat(d3.format(',f'));
-      chart.xAxis.tickFormat(function(d) {
-        // Will Return the date, as "%m/%d/%Y"(08/06/13)
-        return d3.time.format('%x')(new Date(d))
-      });
-
       nv.utils.windowResize(chart.update);
 
-      d3.select(this.$el.find('svg').get(0))
-        .datum([datum])
-        .call(chart);
+      chart.margin({top: 0, right: 0, bottom: 20, left: 0})
+      chart.showYAxis(false);
+      chart.reduceXTicks(false);
+      chart.xAxis.tickFormat(d3.format(',f'));
+      chart.xAxis.tickFormat(function(d) {
+        return d3.time.format('%e')(new Date(d))
+      });
+
+
+      var svg = d3.select(this.$el.find('svg').get(0))
+         .attr("height", "150")
+         .datum([this.model.toJSON()])
+         .call(chart);
+
+      var defs = svg.append("svg:defs");
+
+      this.appendSVGGradient(defs);
+      this.appendSVGBarMask(defs);
+      this.updateBarStyle();
 
       return chart;
     },
 
-
-    changeGraph: function (e) {
-      this.collection.graphType = $(e.currentTarget).data('graph-type');
-
-      $(e.currentTarget)
-        .addClass('active')
-        .siblings()
-          .removeClass('active');
-
+    /*
+     *
+     * changes graph from select element.
+     *
+     */
+    selectGraph: function (e) {
+      var select = e.currentTarget;
+      var value  = $(select).find(":selected").val();
+      this.collection.graphType = value;
+      var values = this.collection.getGraphSet(value);
+      this.model.set('values', values)
       this.updateGraph();
     },
 
-
+    /*
+     *
+     * updates graph values.
+     *
+     */
     updateGraph: function () {
-      var graphType = this.collection.graphType,
-          chart = this.chart,
-          values = this.collection.getGraphSet(graphType),
-          datum = {
-            key: 'trips',
-            values: values
-          };
-
       d3.select(this.$el.find('svg').get(0))
-        .datum([datum])
-        .call(chart);
+        .datum([this.model.toJSON()])
+        .call(this.chart);
+
+      this.updateBarStyle();
     },
 
 
