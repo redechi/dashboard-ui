@@ -4,9 +4,10 @@ define([
   'views/item/trip',
   '../../collections/trips',
   'communicator',
+  '../../controllers/unit_formatters',
   'hbs!tmpl/item/trips_list_tmpl'
 ],
-function( Backbone, Empty, Trip, trips, coms, tripList) {
+function( Backbone, Empty, Trip, trips, coms, formatters, tripList) {
   'use strict';
 
   /* Return a ItemView class definition */
@@ -49,7 +50,17 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
     },
 
     templateHelpers: function() {
-      return {total: this.collection.length};
+      var helpers =  {
+        total: this.collection.length,
+        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
+        duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
+        // score: formatters.score(this.collection.getAverageScore()),
+        cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
+      };
+
+      helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0))
+
+      return helpers;
     },
 
     logit: function () {
@@ -74,9 +85,13 @@ function( Backbone, Empty, Trip, trips, coms, tripList) {
       $('.trip').removeClass('highlighted');
     },
 
+    changeSort: function () {
+      // TODO: implement sort
+    },
 
     events: {
-      'change #exporter': 'export'
+      'change #exporter': 'export',
+      'change .sortType': 'changeSort'
     },
 
     collectionEvents: {
