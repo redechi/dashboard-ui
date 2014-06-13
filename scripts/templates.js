@@ -8,7 +8,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h3 class=\"filterLabel\">Show Me</h3>\n\n<ul class=\"appliedFilters\"></ul>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\">\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"date\">\n  <select class=\"dateFilterValue\">\n    <option value=\"today\">Today</option>\n    <option value=\"thisWeek\">This Week</option>\n    <option value=\"thisMonth\">This Month</option>\n    <option value=\"lastMonth\">Last Month</option>\n    <option value=\"all\">All Time</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"vehicle\">\n  <select class=\"vehicleFilterValue\">\n    <option value=\"all\">All Vehicles</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"distance\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"duration\">\n  <input class=\"durationFilterValue slider\">\n  <div class=\"durationFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> minutes</div>\n    <div class=\"max\">Your longest trip: <span></span> minutes</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"cost\">\n  <input class=\"costFilterValue slider\">\n  <div class=\"costFilterNotes\">\n    <div>Your trips have ranged between <span class=\"min\"></span> and <span class=\"max\"></span></div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"location\">\n  <form class=\"locationFilterValue\">\n    <select class=\"locationFilterValueType\">\n      <option value=\"start\">From</option>\n      <option value=\"end\">To</option>\n    </select>\n    <input class=\"locationFilterValueAddress\" placeholder=\"Enter Address\">\n  </form>\n  <div class=\"locationFilterResults\"></div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"time\">\n  <input class=timeFilterValue slider\">\n</div>\n";
+  return "\n<ol class=\"filterNav\">\n  <li class=\"prev\">back</li>\n  <li class=\"next\">forward</li>\n</ol>\n\n<h3 class=\"filterLabel\">Show trips from</h3>\n<ul class=\"appliedFilters\"></ul>\n<h3 class=\"filterLabel\">driven</h3>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\">\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"date\">\n  <select class=\"dateFilterValue\">\n    <option value=\"today\">Today</option>\n    <option value=\"thisWeek\">This Week</option>\n    <option value=\"thisMonth\">This Month</option>\n    <option value=\"lastMonth\">Last Month</option>\n    <option value=\"all\">All Time</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"vehicle\">\n  <select class=\"vehicleFilterValue\">\n    <option value=\"all\">All Vehicles</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"distance\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"duration\">\n  <input class=\"durationFilterValue slider\">\n  <div class=\"durationFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> minutes</div>\n    <div class=\"max\">Your longest trip: <span></span> minutes</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"cost\">\n  <input class=\"costFilterValue slider\">\n  <div class=\"costFilterNotes\">\n    <div>Your trips have ranged between <span class=\"min\"></span> and <span class=\"max\"></span></div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"location\">\n  <form class=\"locationFilterValue\">\n    <select class=\"locationFilterValueType\">\n      <option value=\"start\">From</option>\n      <option value=\"end\">To</option>\n    </select>\n    <input class=\"locationFilterValueAddress\" placeholder=\"Enter Address\">\n  </form>\n  <div class=\"locationFilterResults\"></div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"time\">\n  <input class=timeFilterValue slider\">\n</div>\n";
   });
 
 this["JST"]["templates/item/empty_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -41,31 +41,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["templates/item/graph_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+  
 
 
-  buffer += "<div class=\"summaryStats\">\n  <div class=\"stat mpg active\" data-graph-type=\"average_mpg\">\n    <div class=\"value\">";
-  if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">MPG</div>\n  </div>\n  <div class=\"stat cost\" data-graph-type=\"fuel_cost_usd\">\n    <div class=\"value\">";
-  if (stack1 = helpers.cost) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.cost; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Fuel</div>\n  </div>\n  <div class=\"stat score\" data-graph-type=\"score\">\n    <div class=\"value\">";
-  if (stack1 = helpers.score) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.score; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Score</div>\n  </div>\n  <div class=\"stat distance\" data-graph-type=\"distance_miles\">\n    <div class=\"value\">";
-  if (stack1 = helpers.distance) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.distance; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Miles</div>\n  </div>\n  <div class=\"stat duration\" data-graph-type=\"duration\">\n    <div class=\"value\">";
-  if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"label\">Time</div>\n  </div>\n</div>\n\n<svg height=\"225\"></svg>\n\n<div class=\"prevDates\" title=\"Prev Dates\"><i class=\"glyphicon glyphicon-chevron-left\"></i></div>\n\n<div class=\"nextDates\" title=\"Next Dates\"><i class=\"glyphicon glyphicon-chevron-right\"></i></div>\n";
-  return buffer;
+  return "<!-- \n\n-->\n<div class=\"grapModifiers\">\n  <div class=\"dateRange\">Date Range</div>\n\n  <select class=\"durationType\">\n    <option value=\"average_mpg\">By Day</option>\n    <option value=\"fuel_cost_usd\">By Week</option>\n    <option value=\"score\">By Month</option>\n  </select>\n\n  <div>\n    <input id=\"otherDrivers\" type=\"checkbox\">\n    <label for=\"otherDrivers\">Other Automatic Drivers</label>\n  </div>\n\n  <select class=\"graphType\">\n    <option value=\"average_mpg\">By MPG</option>\n    <option value=\"fuel_cost_usd\">By Cost</option>\n    <option value=\"score\">By Score</option>\n    <option value=\"distance_miles\">By Distance</option>\n    <option value=\"duration\">By Duration</option>\n  </select>\n</div>\n\n<svg height=\"225\"></svg>\n\n<div class=\"prevDates\" title=\"Prev Dates\"><i class=\"glyphicon glyphicon-chevron-left\"></i></div>\n\n<div class=\"nextDates\" title=\"Next Dates\"><i class=\"glyphicon glyphicon-chevron-right\"></i></div>\n";
   });
 
 this["JST"]["templates/item/map_single_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -189,11 +168,31 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div id=\"tripsHeader\">\n  <div class=\"tripCount\">";
+  buffer += "<div class=\"summaryStats\">\n  <div class=\"stat score\" data-graph-type=\"score\">\n    <div class=\"value\">";
+  if (stack1 = helpers.score) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.score; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n    <div class=\"label\">Score</div>\n  </div>\n  <div class=\"stat mpg active\" data-graph-type=\"average_mpg\">\n    <div class=\"value\">";
+  if (stack1 = helpers.mpg) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.mpg; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n    <div class=\"label\">MPG</div>\n  </div>\n  <div class=\"stat cost\" data-graph-type=\"fuel_cost_usd\">\n    <div class=\"value\">";
+  if (stack1 = helpers.cost) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.cost; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n    <div class=\"label\">Fuel</div>\n  </div>\n  <div class=\"stat distance\" data-graph-type=\"distance_miles\">\n    <div class=\"value\">";
+  if (stack1 = helpers.distance) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.distance; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n    <div class=\"label\">Miles</div>\n  </div>\n  <div class=\"stat duration\" data-graph-type=\"duration\">\n    <div class=\"value\">";
+  if (stack1 = helpers.duration) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.duration; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n    <div class=\"label\">Time</div>\n  </div>\n</div>\n\n<div id=\"tripsHeader\">\n  <div class=\"tripCount\">";
   if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " TRIPS</div>\n</div>\n<ul class=\"trips\"></ul>\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
+    + " TRIPS</div>\n\n  <select class=\"sortType\">\n    <option value=\"start_date\">Most Recent</option>\n  </select> \n</div>\n\n<ul class=\"trips\"></ul>\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
   return buffer;
   });
 
