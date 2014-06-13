@@ -18,19 +18,10 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
 
     showSummaryLayout: function () {
       // render summary on load
-      if (!tripsCollection.models[0]) {
-        tripsCollection.once('fetchComplete', function () {
-          var summary = new SummaryLayout();
-          var contentRegion = regionManager.getRegion('main_content');
-          contentRegion.show(summary);
-          tripsCollection.applyAllFilters();
-        });
-      } else {
-        var summary = new SummaryLayout();
-        var contentRegion = regionManager.getRegion('main_content');
-        contentRegion.show(summary);
-        tripsCollection.applyAllFilters();
-      }
+      var summary = new SummaryLayout();
+      var contentRegion = regionManager.getRegion('main_content');
+      contentRegion.show(summary);
+      tripsCollection.applyAllFilters();
     },
 
 
