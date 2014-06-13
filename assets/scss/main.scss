@@ -3,11 +3,11 @@
 
 @import "bootstrap_min";
 
+$green  :  #b7e2a1;
+$header :  #f1efeb;
+
 @import "base";
-
-#graphs {
-  /* Don't let nvd3 fight mapbox */
-  @import "nvd3";
-}
-
 @import "map";
+@import "graph";
+@import "tripList";
+@import "filters";
