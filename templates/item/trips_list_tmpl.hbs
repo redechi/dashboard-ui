@@ -1,31 +1,9 @@
-<div class="summaryStats">
-  <div class="stat score" data-graph-type="score">
-    <div class="value">{{ score }}</div>
-    <div class="label">Score</div>
-  </div>
-  <div class="stat mpg active" data-graph-type="average_mpg">
-    <div class="value">{{ mpg }}</div>
-    <div class="label">MPG</div>
-  </div>
-  <div class="stat cost" data-graph-type="fuel_cost_usd">
-    <div class="value">{{ cost }}</div>
-    <div class="label">Fuel</div>
-  </div>
-  <div class="stat distance" data-graph-type="distance_miles">
-    <div class="value">{{ distance }}</div>
-    <div class="label">Miles</div>
-  </div>
-  <div class="stat duration" data-graph-type="duration">
-    <div class="value">{{ duration }}</div>
-    <div class="label">Time</div>
-  </div>
-</div>
-
 <div id="tripsHeader">
-  <div class="tripCount">{{ total }} TRIPS</div>
+  <div class="tripCount">{{ total }} Trips</div>
 
   <select class="sortType">
     <option value="start_date">Most Recent</option>
+    <option value="start_date">Less Recent</option>
   </select> 
 </div>
 

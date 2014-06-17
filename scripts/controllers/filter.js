@@ -14,23 +14,27 @@ function(moment, formatters) {
       title: 'By Date Range',
       dateType: 'thisMonth',
       valueText: 'This Month',
+      offset: 0,
       value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
       setRange: function (dateType) {
-        if(dateType == 'all') {
-          return [0, 8640000000000000];
-        } else if(dateType == 'today') {
-          return [moment().startOf('day').valueOf(), moment().endOf("day").valueOf()];
-        } else if(dateType == 'thisWeek') {
-          return [moment().startOf('week').valueOf(), moment().endOf("week").valueOf()];
-        } else if(dateType == 'thisMonth') {
-          return [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()];
-        } else if(dateType == 'lastMonth') {
-          return [moment().subtract('months', 1).startOf('month').valueOf(), moment().subtract('months', 1).endOf('month').valueOf()];
+        var offset = this.get('offset');
+        // default to weekly
+        var range = [
+          moment().startOf('week').add('week', offset).valueOf(),
+          moment().endOf("week").add('week', offset).valueOf()
+        ];
+
+        if(dateType == 'month') {
+          range = [
+            moment().startOf('month').add('month', offset).valueOf(),
+            moment().endOf("month").add('month', offset).valueOf()
+          ];
         }
+
+        return range;
       },
       func: function(trip) {
-        return moment(trip.get('start_time')) >= moment(parseInt(this.get('value')[0]))
-            && moment(trip.get('end_time')) <= moment(parseInt(this.get('value')[1]));
+        return this.get('setRange').call(this, 'month');
       },
       setPrevRange: function() {
         var range = this.get('value'),
@@ -49,6 +53,9 @@ function(moment, formatters) {
         };
       }
     },
+
+
+
 
     vehicle: {
       name: 'vehicle',
@@ -72,6 +79,9 @@ function(moment, formatters) {
         };
       }
     },
+
+
+
     distance: {
       name: 'distance',
       title: 'By Distance',

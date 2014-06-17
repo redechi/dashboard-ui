@@ -4,10 +4,9 @@ define([
   'views/item/trip',
   '../../collections/trips',
   'communicator',
-  '../../controllers/unit_formatters',
   'hbs!tmpl/item/trips_list_tmpl'
 ],
-function( Backbone, Empty, Trip, trips, coms, formatters, tripList) {
+function( Backbone, Empty, Trip, tripsCollection, coms, tripList) {
   'use strict';
 
   /* Return a ItemView class definition */
@@ -17,8 +16,6 @@ function( Backbone, Empty, Trip, trips, coms, formatters, tripList) {
       console.log("initialize a Trips CollectionView");
 
       coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
 
       $(window).on("resize", this.resize);
     },
@@ -32,6 +29,12 @@ function( Backbone, Empty, Trip, trips, coms, formatters, tripList) {
 
     resetCollection: function (collection) {
       this.collection.reset(collection.toArray());
+    },
+
+    templateHelpers: function () {
+      return {
+        total: this.collection.length
+      }
     },
 
     export: function (e) {
@@ -49,40 +52,8 @@ function( Backbone, Empty, Trip, trips, coms, formatters, tripList) {
       window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
     },
 
-    templateHelpers: function() {
-      var helpers =  {
-        total: this.collection.length,
-        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
-        duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
-        // score: formatters.score(this.collection.getAverageScore()),
-        cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
-      };
-
-      helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0))
-
-      return helpers;
-    },
-
     logit: function () {
       console.log(arguments);
-    },
-
-    highlightTrip: function(trip) {
-      if(!trip) { return; }
-      this.highlightTrips([trip]);
-    },
-
-    highlightTrips: function (trips) {
-      $('.trips').addClass('highlighted');
-      $('.trips .trip').removeClass('highlighted');
-      this.collection.forEach(function(trip) {
-        $('.trip[data-trip_id="' + trip.id + '"]').addClass('highlighted');
-      });
-    },
-
-    unhighlightTrips: function() {
-      $('.trips').removeClass('highlighted');
-      $('.trip').removeClass('highlighted');
     },
 
     changeSort: function () {

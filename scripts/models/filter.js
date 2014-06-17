@@ -16,22 +16,25 @@ function( Backbone, coms ) {
 
     defaults: {},
 
-    updateHash: function () {
+    /*
+     *
+     * converts to hash query parameter
+     *
+     */
+    toHash: function () {
       var hash = document.location.hash;
       var name = this.get('name');
       var regex = new RegExp('('+name+'=)[^&]+');
+      var valueString = this.filterToString();
 
-      if (regex.test(hash)) {
-        // update hash
-        hash = hash.replace(regex, '$1' + this.filterToString());
-      } else {
-        // add hash
-        hash += '&'+name+'='+this.filterToString();
-      }
-
-      document.location.hash = hash;
+      return name + '=' + valueString;
     },
 
+    /*
+     *
+     * converts values to string.
+     *
+     */
     filterToString: function () {
       var values = this.get('value').join(',');
       return encodeURIComponent(values);

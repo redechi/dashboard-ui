@@ -18,6 +18,26 @@ function( Backbone, coms, FilterModel, filterList) {
       this.on('remove', this.toUrl, this);
       // this.add(new FilterModel(filterList.date));
       window.filters = this
+
+      // add all filters in filter controller
+      for (var i in filterList) {
+        var name = i.charAt(0).toUpperCase() + i.substring(1);
+        this['add'+name+'Filter'] = function () {
+          this.setNewFilter(new FilterModel(filterList[i]));
+        }
+      }
+    },
+
+    /*
+     *
+     * safely adds new filter prefferably from add<filter name>Filter
+     * EX: this.addDateFilter()
+     *
+     */
+    setNewFilter: function (filterModel) {
+      var dateFilter = this.findWhere({name: filterModel.name});
+      if (!dateFilter) {this.push(filterModel)}
+      else { dateFilter.set(intermFilter.toJSON())}
     },
 
     parseHash: function () {
@@ -42,8 +62,21 @@ function( Backbone, coms, FilterModel, filterList) {
       return filterStrings;
     },
 
-    toUrl: function (filterModel) {
-      filterModel.updateHash();
+    /*
+     *
+     * handles deduplication and hash generation.
+     *
+     */
+    toUrl: function () {
+      var hashString = '#/filter/?';
+      var dedupeStrings = {};
+      this.each(function (filterModel) {
+        var name = filterModel.get('name');
+        dedupeStrings[name] = filterModel.toHash();
+      });
+      var filterStrings = _.values(dedupeStrings);
+      var hash = hashString + filterStrings.join('&');
+      document.location.hash = hash;
     },
 
     fromUrl: function (string) {

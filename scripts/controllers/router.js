@@ -21,6 +21,8 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       var summary = new SummaryLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(summary);
+      var dateFilter = filtersCollection.findWhere({name: 'date'});
+     // if (!dateFilter) filtersCollection.addDateFilter();
       tripsCollection.applyAllFilters();
     },
 
