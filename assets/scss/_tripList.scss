@@ -4,23 +4,350 @@
   border-top: 1px solid $green;
   background: #fbfaf9;
 
+  a {
+    color: #777;
+  }
+
+  // trip count header
   .sortType {
     float: right;
   }
 
+  #tripsHeader {
+    .tripCount {
+      float: left;
+      display: inline-block;
+      line-height: 30px;
+      height: 30px;
+      font-size: 20px;
+      font-weight: lighter;
+    }
+  }
+
+  // sumary statistics
   .summaryStats {
+    @include lightGreenGradient;
+    background-color: #fff;
     border-bottom: 1px solid #ddd;
-    margin-top: 10px;
-    padding: 10px 0;
+    padding: 20px 0 10px;
     overflow: hidden;
-    color: #ddd;
 
     .stat {
       display: inline-block;
     }
 
+    .score {
+      @include border-radius( 40px );
+      width: 40px;
+      height: 40px;
+      margin-left: 20px;
+      color: $green;
+      border: 3px solid $green;
+      padding: 5px;
+      font-size: 20px;
+      line-height: 30px;
+      vertical-align: middle;
+      position: relative;
+      top: -12px;
+    }
+
+    .value {
+      color: $font_dark;
+      text-align: center;
+    }
+
     .label {
-      color: #ddd;
+      color: $font_light;
+      font-size: 15px;
+      font-weight: 100;
+    }
+  }
+
+  .trips {
+    background: #fff;
+  }
+
+  // the trip
+  .trip {
+    overflow: hidden;
+    display: block;
+    position: relative;
+    border-bottom: 1px solid rgb(221, 221, 221);
+
+    .tripLine {
+      background: #ddd;
+
+      & > div {
+        color: #ddd;
+        background: #ddd;
+        border: 5px solid #ddd;
+      }
+    }
+
+    .highlighted,
+    .highlighted:hover {
+      opacity: 1;
+      background-color: rgba(6, 216, 68, 0.1);
+    }
+
+    .tripCheck {
+      display: inline-block;
+      margin-left: 8px;
+      margin-top: 63px;
+      width: 12px;
+    }
+
+    .tripLine {
+      position: absolute;
+      width: 3px;
+      height: 108px;
+      background-color: $trip_line_gray;
+      left: 25px;
+      top: 16px;
+
+      div {
+        width: 20px;
+        height: 20px;
+        background-color: $trip_line_gray;
+        border: 7px solid $trip_line_gray;
+        border-radius: 10px;
+        margin-left: -9px;
+        line-height: 9px;
+        text-align: center;
+        color: #333;
+
+        &:hover {
+          background-color: $trip_line_blue;
+          border: 7px solid $trip_line_blue;
+        }
+      }
+
+      &:hover {
+        background-color: $trip_line_blue;
+      }
+
+      div:first-child {
+        margin-top: -3px;
+      }
+
+      div:last-child {
+        position: absolute;
+        bottom: 0;
+      }
+    }
+
+    .tripDetails {
+      display: block;
+      width: 255px;
+      float: right;
+    }
+
+    .topBox {
+      font-size: 12px;
+      padding: 10px 10px 0 15px;
+      overflow: hidden;
+
+      .endTime {
+        float: left;
+        width: 40%;
+      }
+
+      .endLocation {
+        float: right;
+        width: 60%;
+        text-align: right;
+      }
+    }
+
+    .middleBox {
+      text-align: center;
+      padding: 10px 0;
+      overflow: hidden;
+
+      .stat {
+        width: 25%;
+        float: left;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .stat::after {
+        font-size: 14px;
+        font-weight: normal;
+        display: block;
+        color: #aaa;
+      }
+    }
+
+    .distance::after {
+      content: ' MILES';
+    }
+
+    .duration::after {
+      content: ' MIN';
+    }
+
+    .speed::after {
+      content: ' MPH';
+    }
+
+    .mpg::after {
+      content: ' MPG';
+    }
+
+    .fuelCost::after {
+      content: ' FUEL';
+    }
+
+    &:hover{
+      background: #f9f9f9;
+    }
+
+    &:hover .tripEventsBox {
+      max-height: 40px;
+    }
+
+
+    .tripEventsBox {
+      overflow: hidden;
+      overflow-y: hidden;
+      max-height: 0px;
+
+      transition-property: all;
+      transition-duration: .5s;
+      transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+
+      .event {
+        display: inline-block;
+        text-align: center;
+
+        i {
+          display: none;
+        }
+      }
+
+      .hardBrakes {
+        clear: both;
+        float: left;
+        width: 21px;
+        height: 21px;
+        border-radius: 11px;
+        font-weight: bold;
+        box-sizing: border-box;
+        text-align: center;
+        margin-right: 57px;
+        margin-left: 10px;
+        position: relative;
+        background: #ffc701;
+      }
+
+      .hardBrakes.noHardBrakes {
+        color: transparent;
+        background: #7fb75c;
+
+        i {
+          display: inline;
+          color: #FFF;
+          position: absolute;
+          top: 3px;
+          left: 4px;
+        }
+      }
+
+      .hardBrakes:after {
+        content: 'Rough Brakes';
+        font-size: 10px;
+        line-height: 11px;
+        font-weight: normal;
+        position: absolute;
+        text-align: left;
+        margin-left: 13px;
+        color: #777;
+      }
+
+      .hardAccels {
+        float: left;
+        width: 21px;
+        height: 21px;
+        border-radius: 11px;
+        font-weight: bold;
+        box-sizing: border-box;
+        text-align: center;
+        margin-right: 57px;
+        position: relative;
+        background: #ffc701;
+      }
+
+      .hardAccels.noHardAccels {
+        color: transparent;
+        background: #7fb75c;
+
+        i {
+          display: inline;
+          color: #FFF;
+          position: absolute;
+          top: 3px;
+          left: 4px;
+        }
+      }
+
+      .hardAccels:after {
+        content: 'Hard Accels';
+        font-size: 10px;
+        line-height: 11px;
+        font-weight: normal;
+        position: absolute;
+        text-align: left;
+        margin-left: 13px;
+        color: #777;
+      }
+
+      .speeding {
+        float: left;
+        width: 21px;
+        height: 21px;
+        font-weight: normal;
+        box-sizing: border-box;
+        text-align: center;
+        position: relative;
+        border-radius: 3px;
+        color: #FFF;
+        background: #fe8c0a;
+      }
+
+      .speeding.noSpeeding {
+        background: #7fb75c;
+        color: #FFF;
+      }
+
+      .speeding::after {
+        content: 'Under 70 MPH';
+        font-size: 10px;
+        line-height: 11px;
+        font-weight: normal;
+        position: absolute;
+        text-align: left;
+        margin-left: 13px;
+        width: 40px;
+        color: #777;
+      }
+    }
+
+    .bottomBox {
+      font-size: 12px;
+      padding: 10px 10px 10px 15px;
+      overflow: hidden;
+
+      .startTime {
+        float: left;
+        width: 26%;
+      }
+
+      .startLocation {
+        float: right;
+        width: 74%;
+        text-align: right;
+      }
     }
   }
 }

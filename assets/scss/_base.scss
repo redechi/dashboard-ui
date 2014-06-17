@@ -9,6 +9,16 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#1a000000',GradientType=0 ); /* IE6-9 */
 }
 
+@mixin lightGreenGradient {
+  background: -moz-linear-gradient(top,  rgba(121,239,98,0.15) 0%, rgba(83,165,68,0) 10%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(121,239,98,0.15)), color-stop(10%,rgba(83,165,68,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a679ef62', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+
 body {
   font-family: 'Avenir LT W01 55 Roman',Helvetica,Arial,sans-serif;
   -webkit-font-smoothing: antialised;
@@ -73,6 +83,18 @@ h5 {
   font-size: 16px;
 }
 
+select {
+  @include appearance(none);
+  @include box-sizing(border-box);
+  color: $font_dark;
+  padding: 5px;
+  padding-right: 20px;
+  border: 0;
+  min-width: 0;
+  font-weight: 400;
+  background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat right center;
+  background-color: #efefef;
+}
 
 
 #content {
@@ -232,14 +254,6 @@ h5 {
   overflow: hidden;
 }
 
-#tripsHeader .tripCount {
-  text-transform: uppercase;
-  font-weight: bold;
-  float: left;
-  display: inline-block;
-  line-height: 24px;
-}
-
 #tripsHeader .export {
   float: right;
   display: inline-block;
@@ -258,277 +272,7 @@ h5 {
   color: #777;
 }
 
-#trips a {
-  color: #777;
-}
 
-.highlighted .trip {
-  opacity: 0.5;
-}
-
-.trip.highlighted,
-.trip.highlighted:hover {
-  opacity: 1;
-  background-color: rgba(6, 216, 68, 0.1);
-}
-
-.trip {
-  overflow: hidden;
-  display: block;
-  position: relative;
-  border-bottom: 1px solid rgb(221, 221, 221);
-
-  .tripCheck {
-    display: inline-block;
-    margin-left: 8px;
-    margin-top: 63px;
-    width: 12px;
-  }
-
-  .tripLine {
-    position: absolute;
-    width: 3px;
-    height: 108px;
-    background-color: #08b1d5;
-    left: 25px;
-    top: 16px;
-
-    div {
-      width: 20px;
-      height: 20px;
-      background-color: #08b1d5;
-      border: 5px solid #08b1d5;
-      border-radius: 10px;
-      margin-left: -9px;
-      line-height: 9px;
-      text-align: center;
-      color: #333;
-    }
-
-    div:first-child {
-      margin-top: -3px;
-    }
-
-    div:last-child {
-      position: absolute;
-      bottom: 0;
-    }
-  }
-
-  .tripDetails {
-    display: block;
-    width: 255px;
-    float: right;
-  }
-
-  .topBox {
-    font-size: 12px;
-    padding: 10px 10px 0 15px;
-    overflow: hidden;
-
-    .endTime {
-      float: left;
-      width: 40%;
-    }
-
-    .endLocation {
-      float: right;
-      width: 60%;
-      text-align: right;
-    }
-  }
-
-  .middleBox {
-    text-align: center;
-    padding: 10px 0;
-    overflow: hidden;
-
-    .stat {
-      width: 25%;
-      float: left;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .stat::after {
-      font-size: 14px;
-      font-weight: normal;
-      display: block;
-      color: #aaa;
-    }
-  }
-
-  .distance::after {
-    content: ' MILES';
-  }
-
-  .duration::after {
-    content: ' MIN';
-  }
-
-  .speed::after {
-    content: ' MPH';
-  }
-
-  .mpg::after {
-    content: ' MPG';
-  }
-
-  .fuelCost::after {
-    content: ' FUEL';
-  }
-
-  &:hover .tripEventsBox {
-    max-height: 40px;
-  }
-
-  .tripEventsBox {
-    overflow: hidden;
-    overflow-y: hidden;
-  	max-height: 0px;
-
-  	transition-property: all;
-  	transition-duration: .5s;
-  	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-
-    .event {
-      display: inline-block;
-      text-align: center;
-
-      i {
-        display: none;
-      }
-    }
-
-    .hardBrakes {
-      clear: both;
-      float: left;
-      width: 21px;
-      height: 21px;
-      border-radius: 11px;
-      font-weight: bold;
-      box-sizing: border-box;
-      text-align: center;
-      margin-right: 57px;
-      margin-left: 10px;
-      position: relative;
-      background: #ffc701;
-    }
-
-    .hardBrakes.noHardBrakes {
-      color: transparent;
-      background: #7fb75c;
-
-      i {
-        display: inline;
-        color: #FFF;
-        position: absolute;
-        top: 3px;
-        left: 4px;
-      }
-    }
-
-    .hardBrakes:after {
-      content: 'Rough Brakes';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      color: #777;
-    }
-
-    .hardAccels {
-      float: left;
-      width: 21px;
-      height: 21px;
-      border-radius: 11px;
-      font-weight: bold;
-      box-sizing: border-box;
-      text-align: center;
-      margin-right: 57px;
-      position: relative;
-      background: #ffc701;
-    }
-
-    .hardAccels.noHardAccels {
-      color: transparent;
-      background: #7fb75c;
-
-      i {
-        display: inline;
-        color: #FFF;
-        position: absolute;
-        top: 3px;
-        left: 4px;
-      }
-    }
-
-    .hardAccels:after {
-      content: 'Hard Accels';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      color: #777;
-    }
-
-    .speeding {
-      float: left;
-      width: 21px;
-      height: 21px;
-      font-weight: normal;
-      box-sizing: border-box;
-      text-align: center;
-      position: relative;
-      border-radius: 3px;
-      color: #FFF;
-      background: #fe8c0a;
-    }
-
-    .speeding.noSpeeding {
-      background: #7fb75c;
-      color: #FFF;
-    }
-
-    .speeding::after {
-      content: 'Under 70 MPH';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      width: 40px;
-      color: #777;
-    }
-  }
-
-  .bottomBox {
-    font-size: 12px;
-    padding: 10px 10px 10px 15px;
-    overflow: hidden;
-
-    .startTime {
-      float: left;
-      width: 26%;
-    }
-
-    .startLocation {
-      float: right;
-      width: 74%;
-      text-align: right;
-    }
-  }
-
-}
-
-.trip:hover {
-  background: #f9f9f9;
-}
 
 .shareList {
   width: 150px;
