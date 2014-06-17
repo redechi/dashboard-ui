@@ -32,7 +32,7 @@ function() {
       return Math.round(min);
     },
     cost: function(fuelCost) {
-      return '$' + fuelCost.toFixed(2);
+      return fuelCost.toFixed(2);
     },
     averageMPG: function(mpg) {
       return mpg.toFixed(1);

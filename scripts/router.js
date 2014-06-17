@@ -9,7 +9,7 @@ define([
     appRoutes: {
       '(/)'               : 'showSummaryLayout',
       'trip/:tripid'      : 'showTripLayout',
-      'filter(/):filters' : 'applyFilters'
+      'filter(/)?:filters' : 'applyFilters'
     },
 
     controller: controller

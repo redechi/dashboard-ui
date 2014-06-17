@@ -2,7 +2,7 @@
   "name": "AutomaticWebApp",
   "version": "0.0.1",
   "scripts": {
-    "start": "node index.js"
+    "start": "grunt"
   },
   "dependencies": {
     "express": "~4.3.2",

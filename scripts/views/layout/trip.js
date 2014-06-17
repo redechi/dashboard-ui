@@ -2,7 +2,7 @@ define([
   'backbone',
   '../item/map_single',
   'hbs!tmpl/layout/trip_tmpl',
-	'../item/user_view',
+  '../item/user_view',
   '../../controllers/unit_formatters'
 ],
 function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
@@ -24,7 +24,7 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     /* Layout sub regions */
     regions: {
       map: '#map',
-			user: '#user'
+      user: '#user'
     },
 
     /* ui selector cache */
@@ -57,10 +57,10 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     /* on render callback */
     onRender: function() {
       var m = new MapSingleView({collection: this.collection});
-			var u = new UserView();
+      var u = new UserView();
 
       this.map.show(m);
-			this.user.show(u);
+      this.user.show(u);
     }
   });
 

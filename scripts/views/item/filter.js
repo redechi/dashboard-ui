@@ -32,7 +32,6 @@ function( Backbone, coms, filters, trips, FiltersTmpl, formatters ) {
     },
 
     tagName: 'li',
-
     template: FiltersTmpl,
 
     deleteFilter: function () {
@@ -41,38 +40,37 @@ function( Backbone, coms, filters, trips, FiltersTmpl, formatters ) {
       // TODO: trigger remove filter analytics event
     },
 
+    initializePopover: function () {
+      if(name == 'date') {
+        $('.dateFilterValue').val(self.model.get('dateType'));
+      } else if(name == 'location') {
+        $('.locationFilterValueAddress').val(self.model.get('valueText'));
+        $('.locationFilterValueType').val(self.model.get('type'));
+      } else if (name == 'distance') {
+        $('.distanceFilterNotes').toggle(self.model.get('max') !== 0);
+        $('.distanceFilterNotes .min span').text(formatters.distance(self.model.get('min')));
+        $('.distanceFilterNotes .max span').text(formatters.distance(self.model.get('max')));
+      } else if (name == 'duration') {
+        $('.durationFilterNotes').toggle(self.model.get('max') !== 0);
+        $('.durationFilterNotes .min span').text(formatters.duration(self.model.get('min')));
+        $('.durationFilterNotes .max span').text(formatters.duration(self.model.get('max')));
+      } else if (name == 'cost') {
+        $('.costFilterNotes').toggle(self.model.get('max') !== 0);
+        $('.costFilterNotes .min').text(formatters.cost(self.model.get('min')));
+        $('.costFilterNotes .max').text(formatters.cost(self.model.get('max')));
+      }
+    },
+
     onRender: function() {
       var name = this.model.get('name'),
           self = this;
-
-      function initializePopover() {
-        if(name == 'date') {
-          $('.dateFilterValue').val(self.model.get('value'));
-        } else if(name == 'location') {
-          $('.locationFilterValueAddress').val(self.model.get('valueText'));
-          $('.locationFilterValueType').val(self.model.get('type'));
-        } else if (name == 'distance') {
-          $('.distanceFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.distanceFilterNotes .min span').text(formatters.distance(self.model.get('min')));
-          $('.distanceFilterNotes .max span').text(formatters.distance(self.model.get('max')));
-        } else if (name == 'duration') {
-          $('.durationFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.durationFilterNotes .min span').text(formatters.duration(self.model.get('min')));
-          $('.durationFilterNotes .max span').text(formatters.duration(self.model.get('max')));
-        } else if (name == 'cost') {
-          $('.costFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.costFilterNotes .min').text(formatters.cost(self.model.get('min')));
-          $('.costFilterNotes .max').text(formatters.cost(self.model.get('max')));
-        }
-
-      }
 
       setTimeout(function() {
         $('.btn-popover[data-filter="' + name + '"]').popover({
           html: true,
           content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
           placement: 'bottom',
-          callback: initializePopover
+          callback: self.initializePopover
         });
 
         //don't show popover for date filter

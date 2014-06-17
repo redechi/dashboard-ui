@@ -13,9 +13,11 @@ define(function() {
 		'spec/views/item/graph.js',
 		'spec/views/item/map.js',
 		'spec/views/item/trip.js',
+		'spec/views/item/userScore.js',
 		'spec/views/item/user_view.js',
 		'spec/views/layout/summary.js',
-		'spec/views/layout/trip.js'
+		'spec/views/layout/trip.js',
+		'spec/views/layout/trip_list_layout.js'
 		]
 	};
 });

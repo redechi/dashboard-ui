@@ -3,31 +3,23 @@ define([
   'backbone',
   'communicator',
   'views/item/filter',
-  '../../collections/trips',
   '../../collections/filters',
   '../../models/filter',
   'hbs!tmpl/composite/filters_tmpl',
   '../../controllers/filter',
   '../../controllers/unit_formatters'
 ],
-function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, filterList, formatters  ) {
+function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList, formatters  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
   return Backbone.Marionette.CompositeView.extend({
-
-    collectionEvents: {
-      'add': 'applyFilters',
-      'remove': 'applyFilters',
-      'change': 'applyFilters'
-    },
 
     events: {
       'click .btn-popover': 'closePopovers',
       'click .filterList li': 'addFilterFromMenu',
       'change .dateFilterValue': 'updateDateFilter',
       'slideStop .durationFilterValue': 'updateDurationFilter',
-      'slideStop .distanceFilterValue': 'updateDistanceFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
       'slideStop .timeFilterValue': 'updateTimeFilter',
       'shown.bs.popover .btn-filter': 'initializeSliders',
@@ -36,20 +28,13 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       'click .btn-undo': 'undoFilter'
     },
 
-    handleUpdate: function () {
-      // TODO: update filter and trigger filter event.
-    },
-
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
       window.filter = this;
 
       var filterLi = this.makeFilterList();
 
-      coms.on('all', this.handleUpdate);
-
       coms.on('filters:updateLocationFilter', _.bind(this.updateLocationFilterMap, this));
-
       coms.on('filters:updateDateFilterLabel', _.bind(this.updateDateFilterLabel, this));
 
       // initialize addFilter popover
@@ -70,30 +55,6 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
     itemViewContainer: 'ul',
     template: FiltersTmpl,
 
-    data: trips,
-
-    applyFilters: function () {
-      var c = this.data.reset(this.data.getLastFetch().toArray());
-
-      this.collection.each(_.bind(function (model) {
-        model.applyTo(c);
-      }, this));
-
-      coms.trigger('filter', c);
-
-      $('.btn-undo').show();
-
-      this.updateURL();
-      return c;
-    },
-
-    updateURL: function() {
-      var filters = this.collection.map(function(filter) {
-        return _.bind(filter.get('stringify'), filter)();
-      });
-      window.location.hash = '?' + $.param(_.extend.apply(this, filters));
-    },
-
     addFilterFromMenu: function(e) {
       var filterName = $(e.target).data('filter');
       this.addFilter(filterName);
@@ -109,24 +70,13 @@ function(_, Backbone, coms, FilterView, trips, filters, Filter, FiltersTmpl, fil
       var dateValue = $(e.target).val(),
           dateText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
-          dateRange;
+          dateRange = dateFilter.get('setRange')(dateValue);
 
-      dateFilter.set('value', dateValue);
-
-      if(dateValue == 'all') {
-        dateRange = [0, 8640000000000000];
-      } else if(dateValue == 'today') {
-        dateRange = [moment().startOf('day').valueOf(), moment().endOf("day").valueOf()];
-      } else if(dateValue == 'thisWeek') {
-        dateRange = [moment().startOf('week').valueOf(), moment().endOf("week").valueOf()];
-      } else if(dateValue == 'thisMonth') {
-        dateRange = [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()];
-      } else if(dateValue == 'lastMonth') {
-        dateRange = [moment().subtract('months', 1).startOf('month').valueOf(), moment().subtract('months', 1).endOf('month').valueOf()];
-      }
-
-      dateFilter.set('dateRange', dateRange);
-      $('.btn-filter[data-filter="date"] .btn-text').text(dateText);
+      dateFilter.set({
+        value:dateRange,
+        dateType:dateValue,
+        valueText:dateText
+      });
     },
 
     updateVehicleFilter: function (e) {

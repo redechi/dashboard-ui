@@ -1,53 +1,90 @@
 define([
   'backbone',
+  'communicator',
   'models/trip',
   'amlAggregate',
   'amlSort',
-  'amlCollection'
+  './filters'
 ],
-function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
+function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
   'use strict';
-
-  var lastFetch = undefined;
 
   /* trips singleton */
   var Trips = Backbone.AML.Collection.extend({
 
-    name: 'default_collection',
-
     page: 0,
+    model: Trip,
+    aggStragegies: aggStrat,
+    sortStrategies: sortStrat,
+    name: 'default_collection',
+    url: "https://api.automatic.com/v1/trips",
 
     initialize: function() {
       console.log("initialize a Trips collection");
+      this.on('add', this.convertToLinkedList, this);
+      this.on('sync', this.applyAllFilters, this);
+      this.on('reset', this.applyAllFilters, this);
     },
 
-    url: "https://api.automatic.com/v1/trips",
+    /*
+     *
+     * creates an array of trips to update and triggers a reset.
+     *
+     */
+    applyAllFilters: function () {
+      var tripsCollection = this;
+      var tripsToInclude = [];
 
-    getLastFetch: function () {
-      if (!lastFetch) return;
-      return lastFetch;
+      this.each(function (tripModel) {
+        if (tripsCollection.shouldApplyFilter(tripModel)) {
+          tripsToInclude.push(tripModel);
+        }
+      });
+
+      var newCollection = new this.constructor(tripsToInclude)
+      coms.trigger('filter', newCollection);
     },
 
+    /*
+     *
+     * boolean: determines if any filters apply to model.
+     *
+     */
+    shouldApplyFilter: function (tripModel) {
+      var shouldExclude = true;
+
+      filterCollection.each(function (filterModel) {
+        var inclusiveFilter = filterModel.applyTo(tripModel);
+        if (!inclusiveFilter) shouldExclude = false;
+      });
+
+      return shouldExclude;
+    },
+
+    /*
+     *
+     * recursively fetches pages of trips until one returns empty.
+     *
+     */
     fetchAll: function () {
-      this.nextSet().always(_.bind(
+      return this.nextSet().always(_.bind(
         function(data, status, jqXHR) {
-          if (!!data[0]) return this.nextSet();
 
           // hackaround jquery request abort (caching)
-          if (status instanceof Array && !!status[0]) {
+          if ( !!data[0] || status instanceof Array && !!status[0] ) {
             this.nextSet();
           }
-          if ( data[0] && status[0] ){
-            this.page = 0;
-          }
 
-          lastFetch = this.clone();
-
-          this.postProcess();
+          this.trigger('fetchComplete');
         }
-      , this));
+        , this));
     },
 
+    /*
+     *
+     * fetches the next page of data and appends it to the collection
+     *
+     */
     nextSet: function() {
       this.page++;
       return this.fetch({add : true, remove: false,
@@ -58,6 +95,11 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       });
     },
 
+    /*
+     *
+     * builds users average score from elements in current collection.
+     *
+     */
     getAverageScore: function() {
       var weightedSum = this.reduce(function(memo, trip) {
 
@@ -69,26 +111,17 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       return (weightedSum.score / weightedSum.time) || 0;
     },
 
-    // filter strategies
-    filterStrategies: filterStrat,
-
-    // sorting strategies
-    sortStrategies: sortStrat,
-
-    // aggregation strategies
-    aggStragegies: aggStrat,
-
-    model: Trip,
-
-    postProcess: function() {
-      lastFetch.forEach(function(model, idx, list) {
-        if(idx < (list.length - 1)) {
-          model.set('prevTrip', list[idx + 1].get('id'));
-        }
-        if(idx > 0) {
-          model.set('nextTrip', list[idx - 1].get('id'));
-        }
-      });
+    /*
+     *
+     * on 'add' event link trip model with its previous and next models
+     *
+     */
+    convertToLinkedList: function(model) {
+      var idx = this.indexOf(model);
+      var prev = this.at(idx - 1);
+      var next = this.at(idx + 1);
+      if(next) model.set('prevTrip', next.get('id'));
+      if(prev) model.set('nextTrip', prev.get('id'));
     },
 
     calculateRanges: function() {

@@ -12,29 +12,51 @@ function(moment, formatters) {
     date: {
       name: 'date',
       title: 'By Date Range',
-      value: 'thisMonth',
+      dateType: 'thisMonth',
       valueText: 'This Month',
-      dateRange: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
+      offset: 0,
+      value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
+      setRange: function (dateType) {
+        var offset = this.get('offset');
+        // default to weekly
+        var range = [
+          moment().startOf('week').add('week', offset).valueOf(),
+          moment().endOf("week").add('week', offset).valueOf()
+        ];
+
+        if(dateType == 'month') {
+          range = [
+            moment().startOf('month').add('month', offset).valueOf(),
+            moment().endOf("month").add('month', offset).valueOf()
+          ];
+        }
+
+        return range;
+      },
       func: function(trip) {
-        return moment(trip.get('start_time')) >= moment(this.get('dateRange')[0]) && moment(trip.get('start_time')) <= moment(this.get('dateRange')[1]);
+        return this.get('setRange').call(this, 'month');
       },
       setPrevRange: function() {
-        var range = this.get('dateRange'),
+        var range = this.get('value'),
             rangeLength = range[1] - range[0];
-        this.set('dateRange', [range[0] - rangeLength, range[0]]);
+        this.set('value', [range[0] - rangeLength, range[0]]);
       },
       setNextRange: function() {
-        var range = this.get('dateRange'),
+        var range = this.get('value'),
             rangeLength = range[1] - range[0];
-        this.set('dateRange', [range[1], range[1] + rangeLength]);
+        this.set('value', [range[1], range[1] + rangeLength]);
       },
       stringify: function() {
         return {
-          startDate: this.get('dateRange')[0],
-          endDate: this.get('dateRange')[1]
+          startDate: this.get('value')[0],
+          endDate: this.get('value')[1]
         };
       }
     },
+
+
+
+
     vehicle: {
       name: 'vehicle',
       title: 'By Vehicle',
@@ -48,12 +70,18 @@ function(moment, formatters) {
           return _.contains(this.get('vehicle_ids'), trip.get("vehicle").id);
         }
       },
+      queryify: function () {
+        return this.get('value');
+      },
       stringify: function() {
         return {
           vehicle: this.get('value')
         };
       }
     },
+
+
+
     distance: {
       name: 'distance',
       title: 'By Distance',

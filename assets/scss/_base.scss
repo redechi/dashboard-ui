@@ -1,3 +1,24 @@
+
+@mixin lightGradient {
+  background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 6%, rgba(0,0,0,0.1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(6%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 6%,rgba(0,0,0,0.1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#1a000000',GradientType=0 ); /* IE6-9 */
+}
+
+@mixin lightGreenGradient {
+  background: -moz-linear-gradient(top,  rgba(121,239,98,0.15) 0%, rgba(83,165,68,0) 10%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(121,239,98,0.15)), color-stop(10%,rgba(83,165,68,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(121,239,98,0.15) 0%,rgba(83,165,68,0) 10%,rgba(0,0,0,0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a679ef62', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+
 body {
   font-family: 'Avenir LT W01 55 Roman',Helvetica,Arial,sans-serif;
   -webkit-font-smoothing: antialised;
@@ -62,11 +83,19 @@ h5 {
   font-size: 16px;
 }
 
-header.mainHeader {
-  overflow: hidden;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+select {
+  @include appearance(none);
+  @include box-sizing(border-box);
+  color: $font_dark;
+  padding: 5px;
+  padding-right: 20px;
+  border: 0;
+  min-width: 0;
+  font-weight: 400;
+  background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat right center;
+  background-color: #efefef;
 }
+
 
 #content {
   width: 100%;
@@ -143,125 +172,29 @@ header.mainHeader {
 
 #logo {
   background: url('../img/logo.png') 0 0 no-repeat;
-  width: 203px;
-  height: 44px;
+  width: 180px;
+  height: 40px;
   float: left;
-  margin: 5px;
+  margin: 15px 30px;
+  display: inline;
+  line-height: 50px;
+  vertical-align: middle;
+  background-size: 100% 100%;
 }
 
 #left-column {
+  border-top: 1px solid #ddd;
   margin: 0;
   overflow: hidden;
-  margin-right: 320px;
-  padding-left: 10px;
+  margin-right: 311px;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
 }
 
 #right-column {
-  width: 300px;
+  width: 311px;
   float: right;
-}
-
-#graphs {
-  position: relative;
-  height: 290px;
-  width: 100%;
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  box-shadow: 0 1px 1px rgba(0,0,0,.05);
-  border-color: #ddd;
-
-  svg {
-    width: 100%;
-  }
-
-  .prevDates {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .nextDates {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-  }
-
-  .prevDates,
-  .nextDates {
-    cursor: pointer;
-    height: 290px;
-    width: 34px;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.1);
-    }
-
-    i {
-      position: absolute;
-      top: 48%;
-      margin: 0 10px;
-    }
-  }
-}
-
-.summaryStats {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.summaryStats .stat {
-  width: 15%;
-  display: inline-block;
-  cursor: pointer;
-  border: 1px solid transparent;
-  margin: 0 2% 5px;
-  padding: 5px 0;
-  box-sizing: border-box;
-	position: relative;
-	background: #ffffff;
-}
-
-.summaryStats .stat.active {
-  border-color: #777;
-}
-
-.summaryStats .stat.active:after, .summaryStats .stat.active:before {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-
-.summaryStats .stat.active:after {
-	border-color: rgba(255, 255, 255, 0);
-	border-top-color: #ffffff;
-	border-width: 8px;
-	margin-left: -8px;
-}
-.summaryStats .stat.active:before {
-	border-color: rgba(119, 119, 119, 0);
-	border-top-color: #777;
-	border-width: 9px;
-	margin-left: -9px;
-}
-
-.summaryStats .stat .value {
-  color: #333;
-  font-size: 24px;
-}
-
-.summaryStats .stat .label {
-  text-transform: uppercase;
-  color: #777;
-  font-size: 12px;
 }
 
 #filters {
@@ -285,22 +218,6 @@ header.mainHeader {
 
     li {
       display: inline-block;
-    }
-  }
-
-  .btn-filter {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-    border-radius: 15px;
-    margin-left: 10px;
-
-    .caret {
-      margin-left: 4px;
-    }
-
-    .popover-text {
-      display: none;
     }
   }
 
@@ -341,14 +258,6 @@ header.mainHeader {
   overflow: hidden;
 }
 
-#tripsHeader .tripCount {
-  text-transform: uppercase;
-  font-weight: bold;
-  float: left;
-  display: inline-block;
-  line-height: 24px;
-}
-
 #tripsHeader .export {
   float: right;
   display: inline-block;
@@ -365,278 +274,6 @@ header.mainHeader {
   overflow-y: auto;
   overflow-x: hidden;
   color: #777;
-}
-
-#trips a {
-  color: #777;
-}
-
-.highlighted .trip {
-  opacity: 0.5;
-}
-
-.trip.highlighted,
-.trip.highlighted:hover {
-  opacity: 1;
-  background-color: rgba(6, 216, 68, 0.1);
-}
-
-.trip {
-  overflow: hidden;
-  display: block;
-  position: relative;
-  border-bottom: 1px solid rgb(221, 221, 221);
-
-  .tripCheck {
-    display: inline-block;
-    margin-left: 8px;
-    margin-top: 63px;
-    width: 12px;
-  }
-
-  .tripLine {
-    position: absolute;
-    width: 3px;
-    height: 108px;
-    background-color: #08b1d5;
-    left: 25px;
-    top: 16px;
-
-    div {
-      width: 20px;
-      height: 20px;
-      background-color: #08b1d5;
-      border: 5px solid #08b1d5;
-      border-radius: 10px;
-      margin-left: -9px;
-      line-height: 9px;
-      text-align: center;
-      color: #333;
-    }
-
-    div:first-child {
-      margin-top: -3px;
-    }
-
-    div:last-child {
-      position: absolute;
-      bottom: 0;
-    }
-  }
-
-  .tripDetails {
-    display: block;
-    width: 255px;
-    float: right;
-  }
-
-  .topBox {
-    font-size: 12px;
-    padding: 10px 10px 0 15px;
-    overflow: hidden;
-
-    .endTime {
-      float: left;
-      width: 40%;
-    }
-
-    .endLocation {
-      float: right;
-      width: 60%;
-      text-align: right;
-    }
-  }
-
-  .middleBox {
-    text-align: center;
-    padding: 10px 0;
-    overflow: hidden;
-
-    .stat {
-      width: 25%;
-      float: left;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .stat::after {
-      font-size: 14px;
-      font-weight: normal;
-      display: block;
-      color: #aaa;
-    }
-  }
-
-  .distance::after {
-    content: ' MILES';
-  }
-
-  .duration::after {
-    content: ' MIN';
-  }
-
-  .speed::after {
-    content: ' MPH';
-  }
-
-  .mpg::after {
-    content: ' MPG';
-  }
-
-  .fuelCost::after {
-    content: ' FUEL';
-  }
-
-  &:hover .tripEventsBox {
-    max-height: 40px;
-  }
-
-  .tripEventsBox {
-    overflow: hidden;
-    overflow-y: hidden;
-  	max-height: 0px;
-
-  	transition-property: all;
-  	transition-duration: .5s;
-  	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-
-    .event {
-      display: inline-block;
-      text-align: center;
-
-      i {
-        display: none;
-      }
-    }
-
-    .hardBrakes {
-      clear: both;
-      float: left;
-      width: 21px;
-      height: 21px;
-      border-radius: 11px;
-      font-weight: bold;
-      box-sizing: border-box;
-      text-align: center;
-      margin-right: 57px;
-      margin-left: 10px;
-      position: relative;
-      background: #ffc701;
-    }
-
-    .hardBrakes.noHardBrakes {
-      color: transparent;
-      background: #7fb75c;
-
-      i {
-        display: inline;
-        color: #FFF;
-        position: absolute;
-        top: 3px;
-        left: 4px;
-      }
-    }
-
-    .hardBrakes:after {
-      content: 'Rough Brakes';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      color: #777;
-    }
-
-    .hardAccels {
-      float: left;
-      width: 21px;
-      height: 21px;
-      border-radius: 11px;
-      font-weight: bold;
-      box-sizing: border-box;
-      text-align: center;
-      margin-right: 57px;
-      position: relative;
-      background: #ffc701;
-    }
-
-    .hardAccels.noHardAccels {
-      color: transparent;
-      background: #7fb75c;
-
-      i {
-        display: inline;
-        color: #FFF;
-        position: absolute;
-        top: 3px;
-        left: 4px;
-      }
-    }
-
-    .hardAccels:after {
-      content: 'Hard Accels';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      color: #777;
-    }
-
-    .speeding {
-      float: left;
-      width: 21px;
-      height: 21px;
-      font-weight: normal;
-      box-sizing: border-box;
-      text-align: center;
-      position: relative;
-      border-radius: 3px;
-      color: #FFF;
-      background: #fe8c0a;
-    }
-
-    .speeding.noSpeeding {
-      background: #7fb75c;
-      color: #FFF;
-    }
-
-    .speeding::after {
-      content: 'Over 70 MPH';
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      text-align: left;
-      margin-left: 13px;
-      width: 40px;
-      color: #777;
-    }
-  }
-
-  .bottomBox {
-    font-size: 12px;
-    padding: 10px 10px 10px 15px;
-    overflow: hidden;
-
-    .startTime {
-      float: left;
-      width: 26%;
-    }
-
-    .startLocation {
-      float: right;
-      width: 74%;
-      text-align: right;
-    }
-  }
-
-}
-
-.trip:hover {
-  background: #f9f9f9;
 }
 
 .shareList {
@@ -823,78 +460,11 @@ header.mainHeader {
     }
   }
 
-  .summaryStats {
-    border: 1px solid #ddd;
-    border-bottom: none;
-    margin-top: 10px;
-    padding: 10px 0;
-    overflow: hidden;
-
-    .stat {
-      width: 20%;
-      float: left;
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      margin: 0;
-    }
-  }
 }
 
-
-/* Charts */
-
-.graph rect {
-  fill: rgb(70, 130, 180);
-}
-
-.graph rect[data-date] {
-  cursor: pointer;
-}
-
-.graph rect.highlighted {
-  fill: rgba(6, 216, 68, 0.8);
-}
-
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.x.axis path,
-.y.axis path {
-  display: none;
-}
-
-.x.axis text,
-.y.axis text {
-  fill: #777;
-}
-
-.chart-tooltip {
-  font-weight: bold;
-  color: #FFF;
-  background: rgba(50, 50, 50, 0.7);
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-size: 11px;
-  border: rgba(255, 255, 255, 0.9) 2px solid;
-  text-shadow: 0.1em 0.1em 0.05em #333;
-}
-
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
-
-.focus circle {
-  fill: none;
-  stroke: steelblue;
-}
-
-text.key {
-  fill: #666;
-  font-size: 11px;
+header.mainHeader {
+  overflow: hidden;
+  border-bottom: 1px solid #ddd;
+  height: 70px;
+  background: $header;
 }

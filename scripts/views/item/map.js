@@ -20,10 +20,14 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters, map
       coms.on('trips:unhighlight', _.bind(this.unhighlightMap, this));
       coms.on('trips:zoom', _.bind(this.zoomMap, this));
       coms.on('trips:unzoom', _.bind(this.unzoomMap, this));
-      coms.on('filter', _.bind(this.updateMap, this));
+      coms.on('filter', _.bind(this.resetCollection, this));
     },
 
-    collection: trips,
+    collection: new Backbone.Collection([]),
+
+    resetCollection: function (newCollection) {
+      this.collection.reset(newCollection.toArray());
+    },
 
     collectionEvents: {
       'reset': 'updateMap',
@@ -200,7 +204,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters, map
       }
 
 
-      this.collection.each(_.bind(function (model) {
+      this.collection.each(function (model) {
         var id = model.get('id'),
             startLoc = model.get('start_location'),
             endLoc = model.get('end_location'),
@@ -250,7 +254,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters, map
 
         geoJson.addTo(pathsLayer);
 
-      }), this);
+      });
 
       mapbox.addLayer(pathsLayer);
 

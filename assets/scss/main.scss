@@ -3,11 +3,17 @@
 
 @import "bootstrap_min";
 
+$green  :  #b7e2a1;
+$header :  #f1efeb;
+
+$font_light: #c0ccd4;
+$font_dark: #838c93;
+
+$trip_line_blue: #08b1d5;
+$trip_line_gray: #ddd;
+
 @import "base";
-
-#graphs {
-  /* Don't let nvd3 fight mapbox */
-  @import "nvd3";
-}
-
 @import "map";
+@import "graph";
+@import "tripList";
+@import "filters";

@@ -17,23 +17,23 @@ function( Backbone, coms, TripTmpl, formatters  ) {
     triggerHighlight: function () {
       coms.trigger('trips:highlight', this.model);
       coms.trigger('trips:zoom', this.model);
+      this.$el.addClass('highlighted');
     },
 
     removeHighlight: function () {
+      var selected = this.model.get('selected');
       coms.trigger('trips:unhighlight');
       coms.trigger('trips:unzoom');
+      if (selected) return;
+      this.$el.removeClass('highlighted');
     },
 
     selectModel: function (e) {
-      if(!!e.target.checked) {
-        this.model.set('selected', true);
-      } else {
-        this.model.set('selected', false);
-      }
+      var selected = e.target.checked;
+      this.model.set('selected', selected);
     },
 
     tagName: "li",
-
     /* on render callback */
     onRender: function () {},
 
