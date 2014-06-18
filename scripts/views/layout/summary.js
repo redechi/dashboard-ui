@@ -5,13 +5,12 @@ define([
   '../item/graph', // view
   '../item/map', // view
   '../item/user_view',
-  './trip_list_layout',
-  '../../collections/trips'
+  './trip_list_layout'
 ],
 
 // this should probably be a composit view rather than a layout
 
-function( Backbone, SummaryTmpl, Filters, Graph, Map, UserView, TripListLayout, tripsCollection ) {
+function( Backbone, SummaryTmpl, Filters, Graph, Map, UserView, TripListLayout) {
     'use strict';
 
   /* Return a Layout class definition */

@@ -2,11 +2,10 @@ define([
   'backbone',
   'views/item/empty',
   'views/item/trip',
-  '../../collections/trips',
   'communicator',
   'hbs!tmpl/composite/trips_list_tmpl'
 ],
-function( Backbone, Empty, Trip, tripsCollection, coms, tripList) {
+function( Backbone, Empty, Trip, coms, tripList) {
   'use strict';
 
   /* Return a ItemView class definition */

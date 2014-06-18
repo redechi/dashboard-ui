@@ -2,11 +2,10 @@ define([
   'backbone',
   'communicator',
   '../../collections/filters',
-  '../../collections/trips',
   'hbs!tmpl/item/filters_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, filters, trips, FiltersTmpl, formatters ) {
+function( Backbone, coms, filters, FiltersTmpl, formatters ) {
     'use strict';
 
   /* Return a ItemView class definition */

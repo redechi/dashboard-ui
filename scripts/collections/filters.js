@@ -2,6 +2,7 @@ define([
   'backbone',
   'communicator',
   'models/filter',
+  'amlCollection',
   '../controllers/filter'
 ],
 function( Backbone, coms, FilterModel, filterList) {

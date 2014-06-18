@@ -4,11 +4,10 @@ define([
   'markercluster',
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
-  '../../collections/trips',
   '../../controllers/unit_formatters',
   '../../controllers/map_helpers'
 ],
-function( Backbone, mapbox, markercluster, coms, MapTmpl, trips, formatters, mapHelpers) {
+function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers) {
     'use strict';
 
   /* Return a ItemView class definition */

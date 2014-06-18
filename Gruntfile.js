@@ -361,7 +361,9 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
-    'inline'
+    'inline',
+    'connect:testserver',
+    'watch'
   ]);
 
   grunt.registerTask('build-prod', [
