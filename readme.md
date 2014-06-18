@@ -43,3 +43,13 @@ Start your node api. Then start the asset server.
 ```
 grunt
 ```
+
+### releasing to production
+
+We will be versioning the project through git tags. You can list your tags with `git tag -l`.
+
+1. Tag your branch locally with the command git tag <your_version>
+2. Push your tag with git push origin --tags
+3. Build in jenkins to update s3
+
+The entire project is hosted in Amazon s3 and provided through cloud front.

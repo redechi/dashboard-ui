@@ -166,7 +166,34 @@ module.exports = function (grunt) {
         }
       },
 
-      distjs: {
+      localjs: {
+        options: {
+          appDir: "<%= yeoman.app %>",
+          include: ["./main"],
+          out: '<%= yeoman.dist %>/assets/js/main.js',
+          name: 'init',
+          baseUrl: 'scripts',
+          optimize: 'none',
+          mainConfigFile: 'scripts/init.js',
+          paths: {
+              'templates': 'templates'
+          },
+          preserveLicenseComments: false,
+          useStrict: true,
+          wrap: true,
+          pragmasOnSave: {
+            //removes Handlebars.Parser code (used to compile template strings) set
+            //it to `false` if you need to parse template strings even after build
+            excludeHbsParser : true,
+            // kills the entire plugin set once it's built.
+            excludeHbs: true,
+            // removes i18n precompiler, handlebars and json2
+            excludeAfterBuild: true
+          }
+        }
+      },
+
+      prodjs: {
         options: {
           appDir: "<%= yeoman.app %>",
           include: ["./main"],
@@ -272,12 +299,19 @@ module.exports = function (grunt) {
       someTarget: {
         options: {
           rewriter: function (url) {
-              tagName = tagName || "no tag provided"
-              throw new Error('Tag your git history!');
-              if (url.indexOf('data:') === 0)
-                return url; // leave data URIs untouched
-              else
-                return url + '?' + tagName; // add query string to all other URLs
+            tagName = tagName || "no_tag_provided";
+            if (url.indexOf('data:') === 0) {
+              return url; // leave data URIs untouched
+            }
+
+            var hash = 'aumatic_version=' + tagName;
+            if (url.indexOf('?')>-1) {
+              url = url.replace(/\?/, '?'+hash+'&');
+            } else {
+              url+='?'+hash;
+            }
+
+            return url; // add query string to all other URLs
           }
         },
         files: [{
@@ -318,16 +352,30 @@ module.exports = function (grunt) {
     'exec:mocha'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build-local', [
     'handlebars',
     'compass:dist',
-    'requirejs',
-    // 'imagemin',
+    'requirejs:distMainCss',
+    'requirejs:distInlineCss',
+    'requirejs:localjs',
     'htmlmin',
     'appcache',
     'copy',
     'inline'
-    //'cdnify'
+  ]);
+
+  grunt.registerTask('build-prod', [
+    'handlebars',
+    'compass:dist',
+    'requirejs:distMainCss',
+    'requirejs:distInlineCss',
+    'requirejs:prodjs',
+    // 'imagemin',
+    'htmlmin',
+    'appcache',
+    'copy',
+    'inline',
+    'cdnify'
 
 // tests have been commented out.
 // they fail because none have been written.
