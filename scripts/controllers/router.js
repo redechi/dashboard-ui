@@ -18,6 +18,7 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
 
     showSummaryLayout: function () {
       // render summary on load
+      filtersCollection.fromUrl();
       var summary = new SummaryLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(summary);
@@ -38,7 +39,6 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
 
 
     applyFilters: function () {
-      filtersCollection.fromUrl();
       this.showSummaryLayout();
     }
 

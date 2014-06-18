@@ -114,6 +114,12 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
           this.remove(filter);
         }
       }, this));
+
+      // if no model data than create a date filter.
+      if (!Object.keys(modelData)[0]) {
+        var filter = new FilterModel(filterList.date);
+        this.add(filter);
+      }
     }
 
 
