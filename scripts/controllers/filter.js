@@ -31,6 +31,19 @@ function(moment, formatters) {
           ];
         }
 
+        // update text offset
+        if (offset === -1 && dateType === 'month') {
+          this.set('valueText', 'Last Month');
+          this.set('dateType', 'lastMonth');
+        }
+
+        // update text offset
+        if (offset === -1 && dateType === 'week') {
+          this.set('valueText', 'Last Week');
+          this.set('dateType', 'lastWeek');
+        }
+
+
         return range;
       },
       func: function(trip) {

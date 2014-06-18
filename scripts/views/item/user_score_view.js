@@ -18,6 +18,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
       coms.on('filter', _.bind(this.resetCollection, this));
       this.resetCollection(tripsCollection);
       this.on('render', this.paintGraph, this);
+      tripsCollection.on('sync', this.render, this);
     },
 
     duration: 2000,

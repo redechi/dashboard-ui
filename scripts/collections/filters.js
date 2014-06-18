@@ -5,7 +5,7 @@ define([
   'amlCollection',
   '../controllers/filter'
 ],
-function( Backbone, coms, FilterModel, filterList) {
+function( Backbone, coms, FilterModel, amlCollection, filterList) {
   'use strict';
 
   /* filters singleton */
@@ -106,6 +106,14 @@ function( Backbone, coms, FilterModel, filterList) {
           this.add(filter);
         }
       }
+
+      // remove any extra models
+      this.each(_.bind(function (filter) {
+        var name = filter.get('name');
+        if (!modelData.hasOwnProperty(name)) {
+          this.remove(filter);
+        }
+      }, this));
     }
 
 

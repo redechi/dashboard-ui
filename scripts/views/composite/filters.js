@@ -25,7 +25,9 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
       'shown.bs.popover .btn-filter': 'initializeSliders',
       'submit .locationFilterValue': 'updateLocationFilterForm',
       'change .locationFilterValueType': 'updateLocationFilterForm',
-      'click .btn-undo': 'undoFilter'
+      'click .btn-undo': 'undoFilter',
+      'click .filterNav .prev': 'browserBack',
+      'click .filterNav .next': 'browserForward'
     },
 
     initialize: function() {
@@ -55,6 +57,14 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
     itemViewContainer: 'ul',
     template: FiltersTmpl,
 
+    browserBack: function () {
+      window.history.back()
+    },
+
+    browserForward: function () {
+      window.history.forward()
+    },
+
     addFilterFromMenu: function(e) {
       var filterName = $(e.target).data('filter');
       this.addFilter(filterName);
@@ -70,7 +80,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
       var dateValue = $(e.target).val(),
           dateText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
-          dateRange = dateFilter.get('setRange')(dateValue);
+          dateRange = dateFilter.get('setRange').call(dateFilter, dateValue);
 
       dateFilter.set({
         value:dateRange,
