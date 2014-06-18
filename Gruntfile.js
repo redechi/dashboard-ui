@@ -1,5 +1,14 @@
 'use strict';
 
+var git = require('git-rev')
+
+
+var tagName = undefined;
+git.tag(function (tag) {
+  tagName = tag;
+  console.log(arguments);
+});
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -262,7 +271,14 @@ module.exports = function (grunt) {
     cdnify: {
       someTarget: {
         options: {
-          base: CDN
+          rewriter: function (url) {
+              tagName = tagName || "no tag provided"
+              throw new Error('Tag your git history!');
+              if (url.indexOf('data:') === 0)
+                return url; // leave data URIs untouched
+              else
+                return url + '?' + tagName; // add query string to all other URLs
+          }
         },
         files: [{
           expand: true,

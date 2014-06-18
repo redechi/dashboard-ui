@@ -3,10 +3,11 @@ define([
   'communicator',
   'router',
   'regionManager',
-  './collections/trips',
+  './views/item/user_view',
+  './collections/trips'
 ],
 
-function( Backbone, Communicator, router, regionManager, tripsCollection ) {
+function( Backbone, Communicator, router, regionManager, UserView, tripsCollection ) {
   'use strict';
 
   // simple session storage
@@ -42,7 +43,7 @@ function( Backbone, Communicator, router, regionManager, tripsCollection ) {
 
   /* Add application regions here */
   App.addRegions({
-    headerRegion: "header",
+    headerRegion: "#user",
     contentRegion: "main",
     footerRegion: "footer",
     overlayRegion: "#popover",
@@ -51,6 +52,10 @@ function( Backbone, Communicator, router, regionManager, tripsCollection ) {
   /* Add initializers here */
   App.addInitializer( function () {
     tripsCollection.fetchAll();
+
+    var headerRegion = regionManager.getRegion('main_header');
+    var u = new UserView();
+    headerRegion.show(u);
   });
 
   // contextual startup

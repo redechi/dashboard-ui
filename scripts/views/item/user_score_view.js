@@ -17,6 +17,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
       this.collection.graphType = 'average_mpg';
       coms.on('filter', _.bind(this.resetCollection, this));
       this.resetCollection(tripsCollection);
+      this.on('render', this.paintGraph, this);
     },
 
     duration: 2000,
@@ -52,7 +53,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
       return weightedSum.score / weightedSum.time;
     },
 
-    onRender: function() {
+    paintGraph: function() {
       var self = this;
       var score = parseInt(this.getAverageScore());
       var trans = 100 - score;
@@ -68,7 +69,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
             .donutRatio(0.9)      //Configure how big you want the donut hole size to be.
             .margin({top:0, right:0, bottom:0, left:0})
             .showLegend(false)
-            .color(['green', '#ddd']);
+            .color([formatters.scoreColor(score), '#ddd']);
 
         var svg = d3.select(self.$el.find('svg').get(0));
 
@@ -116,6 +117,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
           .attr("x", 20)
           .attr("y", 25)
           .attr("text-anchor", "middle")
+          .attr('fill', formatters.scoreColor(score))
           .text(parseInt(datum[0].value));
 
         // rotate the chart 180
@@ -124,7 +126,9 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
 
           return chart;
       });
-    }
+    },
+
+    onRender: function () {}
   });
 
 });

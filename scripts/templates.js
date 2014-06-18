@@ -11,6 +11,34 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<ol class=\"filterNav\">\n  <li class=\"prev\">back</li>\n  <li class=\"next\">forward</li>\n</ol>\n\n<h3 class=\"filterLabel\">Show trips from</h3>\n<ul class=\"appliedFilters\"></ul>\n<h3 class=\"filterLabel\">driven</h3>\n\n<div title=\"\" class=\"addFilter btn btn-filter btn-popover\" data-original-title=\"Add Filter\">\n  <i class=\"glyphicon glyphicon-plus\"></i>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"date\">\n  <select class=\"dateFilterValue\">\n    <option value=\"today\">Today</option>\n    <option value=\"thisWeek\">This Week</option>\n    <option value=\"thisMonth\">This Month</option>\n    <option value=\"lastMonth\">Last Month</option>\n    <option value=\"all\">All Time</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"vehicle\">\n  <select class=\"vehicleFilterValue\">\n    <option value=\"all\">All Vehicles</option>\n  </select>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"distance\">\n  <input class=\"distanceFilterValue slider\">\n  <div class=\"distanceFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> miles</div>\n    <div class=\"max\">Your longest trip: <span></span> miles</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"duration\">\n  <input class=\"durationFilterValue slider\">\n  <div class=\"durationFilterNotes\">\n    <div class=\"min\">Your shortest trip: <span></span> minutes</div>\n    <div class=\"max\">Your longest trip: <span></span> minutes</div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"cost\">\n  <input class=\"costFilterValue slider\">\n  <div class=\"costFilterNotes\">\n    <div>Your trips have ranged between <span class=\"min\"></span> and <span class=\"max\"></span></div>\n  </div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"location\">\n  <form class=\"locationFilterValue\">\n    <select class=\"locationFilterValueType\">\n      <option value=\"start\">From</option>\n      <option value=\"end\">To</option>\n    </select>\n    <input class=\"locationFilterValueAddress\" placeholder=\"Enter Address\">\n  </form>\n  <div class=\"locationFilterResults\"></div>\n</div>\n\n<div class=\"popoverContent\" data-filter=\"time\">\n  <input class=timeFilterValue slider\">\n</div>\n";
   });
 
+this["JST"]["templates/composite/main_header_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "\n<svg></svg> ";
+  if (stack1 = helpers.userName) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.userName; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\n\n";
+  return buffer;
+  });
+
+this["JST"]["templates/composite/trips_list_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div id=\"tripsHeader\">\n  <div class=\"tripCount\">";
+  if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + " Trips</div>\n\n  <select class=\"sortType\">\n    <option value=\"start_date\">Most Recent</option>\n    <option value=\"start_date\">Less Recent</option>\n  </select> \n</div>\n\n<ul class=\"trips\"></ul>\n\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
+  return buffer;
+  });
+
 this["JST"]["templates/item/empty_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -135,13 +163,21 @@ function program5(depth0,data) {
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n  <div class=\"tripLine\">\n    <div>B</div>\n    <div>A</div>\n  </div>\n  <input type=\"checkbox\" class=\"tripCheck\">\n  <div class=\"tripDetails\">\n    <div class=\"topBox\">\n      <div class=\"endTime\">";
+    + "\">\n  \n  <div class=\"timeTopBox\">\n    <div class=\"endTime\">";
   if (stack1 = helpers.formatted_end_time) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.formatted_end_time; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n      <div class=\"endLocation\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.end_location),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\n    </div>\n    <div class=\"middleBox\">\n      <div class=\"distance stat\">";
+    + "</div>\n    <div class=\"endTime\">";
+  if (stack1 = helpers.formatted_calendar_date) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.formatted_calendar_date; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n  </div>\n\n\n  <div class=\"timeBottomBox\">\n    <div class=\"startTime\">";
+  if (stack1 = helpers.formatted_start_time) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.formatted_start_time; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</div>\n  </div>\n\n\n\n  <div class=\"tripLine\">\n    <div>B</div>\n    <div>A</div>\n  </div>\n\n\n\n  <div class=\"tripDetails\">\n\n    <div class=\"bottomBox\">\n      <div class=\"startLocation\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.start_location),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n    </div>\n\n    <div class=\"middleBox\">\n      <div class=\"distance stat\">";
   if (stack2 = helpers.distance) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.distance; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
@@ -149,7 +185,7 @@ function program5(depth0,data) {
   if (stack2 = helpers.average_mpg) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.average_mpg; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "</div>\n      <div class=\"fuelCost stat\">$";
+    + "</div>\n      <div class=\"fuelCost stat\">";
   if (stack2 = helpers.fuel_cost_usd) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.fuel_cost_usd; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
@@ -178,27 +214,9 @@ function program5(depth0,data) {
   if (stack2 = helpers.duration_over_70_min) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.duration_over_70_min; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "</div>\n    </div>\n    <div class=\"bottomBox\">\n      <div class=\"startTime\">";
-  if (stack2 = helpers.formatted_start_time) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.formatted_start_time; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "</div>\n      <div class=\"startLocation\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.start_location),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\n    </div>\n  </div>\n</a>\n";
-  return buffer;
-  });
-
-this["JST"]["templates/item/trips_list_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div id=\"tripsHeader\">\n  <div class=\"tripCount\">";
-  if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + " Trips</div>\n\n  <select class=\"sortType\">\n    <option value=\"start_date\">Most Recent</option>\n    <option value=\"start_date\">Less Recent</option>\n  </select> \n</div>\n\n<ul class=\"trips\"></ul>\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
+    + "</div>\n    </div>\n\n    <div class=\"topBox\">\n      <div class=\"endLocation\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.end_location),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\n    </div>\n\n  </div>\n</a>\n";
   return buffer;
   });
 
@@ -268,7 +286,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<header class=\"mainHeader\">\n  <div id=\"logo\"></div>\n  <div id=\"topMenu\"><a id=\"logout\" href=\"/logout/\">Log Out</a></div>\n  <div id=\"user\"></div>\n</header>\n<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
+  return "<div id=\"filters\"></div>\n<div id=\"right-column\">\n  <div id=\"trips\"></div>\n</div>\n<div id=\"left-column\">\n  <div id=\"graphs\"></div>\n  <div id=\"map\"></div>\n</div>\n";
   });
 
 this["JST"]["templates/layout/trip_list_layout_tmpl.hbs"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

@@ -1,9 +1,10 @@
 define([
   'backbone',
   'hbs!tmpl/item/user_view_tmpl',
+  './user_score_view',
   '../../models/user'
 ],
-function( Backbone, UserViewTmpl, user  ) {
+function( Backbone, UserViewTmpl, UserScoreView, user  ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -11,8 +12,7 @@ function( Backbone, UserViewTmpl, user  ) {
 
     initialize: function() {
       console.log("initialize a UserView ItemView");
-
-      this.model.fetch();
+      _.extend(this, new UserScoreView());
     },
 
     template: UserViewTmpl,
@@ -37,5 +37,4 @@ function( Backbone, UserViewTmpl, user  ) {
 
     model: user
   });
-
 });

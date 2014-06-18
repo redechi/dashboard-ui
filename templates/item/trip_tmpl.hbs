@@ -1,18 +1,34 @@
 <a href="#/trip/{{ id }}" class="trip" data-trip_id="{{ id }}">
+  
+  <div class="timeTopBox">
+    <div class="endTime">{{ formatted_end_time }}</div>
+    <div class="endTime">{{ formatted_calendar_date }}</div>
+  </div>
+
+
+  <div class="timeBottomBox">
+    <div class="startTime">{{ formatted_start_time }}</div>
+  </div>
+
+
+
   <div class="tripLine">
     <div>B</div>
     <div>A</div>
   </div>
-  <input type="checkbox" class="tripCheck">
+
+
+
   <div class="tripDetails">
-    <div class="topBox">
-      <div class="endTime">{{ formatted_end_time }}</div>
-      <div class="endLocation">{{ end_location.display_name }}</div>
+
+    <div class="bottomBox">
+      <div class="startLocation">{{ start_location.display_name }}</div>
     </div>
+
     <div class="middleBox">
       <div class="distance stat">{{ distance }}</div>
       <div class="mpg stat">{{ average_mpg }}</div>
-      <div class="fuelCost stat">${{ fuel_cost_usd }}</div>
+      <div class="fuelCost stat">{{ fuel_cost_usd }}</div>
       <div class="duration stat">{{ duration }}</div>
     </div>
     <div class="tripEventsBox">
@@ -20,9 +36,10 @@
       <div class="hardAccels event {{#if noHardAccels}}noHardAccels{{/if}}">{{hard_accels}}<i class="glyphicon glyphicon-ok"></i></div>
       <div class="speeding event {{#if noSpeeding}}noSpeeding{{/if}}">{{duration_over_70_min}}</div>
     </div>
-    <div class="bottomBox">
-      <div class="startTime">{{ formatted_start_time }}</div>
-      <div class="startLocation">{{ start_location.display_name }}</div>
+
+    <div class="topBox">
+      <div class="endLocation">{{ end_location.display_name }}</div>
     </div>
+
   </div>
 </a>

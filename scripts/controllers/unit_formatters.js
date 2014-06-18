@@ -17,6 +17,15 @@ function() {
         return moment(time).format(format);
       }
     },
+    scoreColor: function (score) {
+      if (score < 20) return "#FC3B2F";
+      if (score < 40) return "#FD682B";
+      if (score < 60) return "#FD9426";
+      if (score < 80) return "#FECC2F";
+      if (score < 90) return "#B7CD37";
+      if (score < 100) return "#94CE3B";
+      if (score == 100) return "#70CE3F";
+    },
     distance: function(distance_miles) {
       if(Math.round(distance_miles) >= 100) {
         return distance_miles.toFixed(0);

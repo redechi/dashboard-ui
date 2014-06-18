@@ -4,7 +4,7 @@ define([
   'views/item/trip',
   '../../collections/trips',
   'communicator',
-  'hbs!tmpl/item/trips_list_tmpl'
+  'hbs!tmpl/composite/trips_list_tmpl'
 ],
 function( Backbone, Empty, Trip, tripsCollection, coms, tripList) {
   'use strict';

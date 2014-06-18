@@ -11,6 +11,18 @@ function( Backbone, moment, formatters ) {
     initialize: function(trip) {
       console.log('initialize a Trip model');
 
+      moment.lang('en', {
+        calendar : {
+          lastDay : '[Yesterday]',
+          sameDay : '[Today]',
+          nextDay : '[Tomorrow]',
+          lastWeek : 'MMM DD',
+          nextWeek : 'MMM DD',
+          sameElse : 'MMM DD'
+        }
+      });
+
+
       // format values
       var duration = ((this.get('end_time') - this.get('start_time')) / (1000 * 60)),
           miles = formatters.m_to_mi(this.get('distance_m'));
@@ -19,8 +31,9 @@ function( Backbone, moment, formatters ) {
       this.set('distance_miles', miles);
       this.set('average_mpg', parseInt(this.get('average_mpg') * 100) /100);
       this.set('fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) /100);
-      this.set('formatted_end_time', moment(this.get('end_time')).format('MMMM Do YYYY, h:mm:ss a'));
-      this.set('formatted_start_time', moment(this.get('start_time')).format('h:mm a'));
+      this.set('formatted_end_time', moment(this.get('end_time')).format('h:mm a').toUpperCase());
+      this.set('formatted_start_time', moment(this.get('start_time')).format('h:mm a').toUpperCase());
+      this.set('formatted_calendar_date', moment(this.get('start_time')).calendar());
 
       var score = this.calculateScore();
       this.set('score', score);

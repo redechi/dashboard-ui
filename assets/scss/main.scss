@@ -3,10 +3,22 @@
 
 @import "bootstrap_min";
 
-$green  :  #b7e2a1;
-$header :  #f1efeb;
+$main_back   :  #F9F8F6;
+$header_back :  #F1EFEB;
+
+$green  :  #77CB49;
+$red    :  #F63C39;
+$blue   :  #4AB4F0;
+
+$base_type: #8D989F;
+$inactive_type: #c0ccd4;
+$link_thype: #596064;
+
+// TODO: replace these variables with names
+// above thisline
 
 $font_light: #c0ccd4;
+$font_medium: #7f7b79;
 $font_dark: #838c93;
 
 $trip_line_blue: #08b1d5;
