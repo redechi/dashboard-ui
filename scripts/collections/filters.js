@@ -3,9 +3,10 @@ define([
   'communicator',
   'models/filter',
   'amlCollection',
-  '../controllers/filter'
+  '../controllers/filter',
+  '../collections/trips'
 ],
-function( Backbone, coms, FilterModel, amlCollection, filterList) {
+function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
   'use strict';
 
   /* filters singleton */
@@ -27,7 +28,36 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
           this.setNewFilter(new FilterModel(filterList[i]));
         };
       }
+
+      coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
     },
+
+
+    updateFilterRanges: function() {
+      var ranges = trips.calculateRanges(),
+          distanceFilter = this.findWhere({name: 'distance'}),
+          durationFilter = this.findWhere({name: 'duration'}),
+          costFilter = this.findWhere({name: 'cost'});
+
+      if(distanceFilter) {
+        distanceFilter.set(ranges.distance);
+      } else {
+        _.extend(filterList.distance, ranges.distance);
+      }
+
+      if(durationFilter) {
+        durationFilter.set(ranges.duration);
+      } else {
+        _.extend(filterList.duration, ranges.duration);
+      }
+
+      if(costFilter) {
+        costFilter.set(ranges.cost);
+      } else {
+        _.extend(filterList.cost, ranges.cost);
+      }
+    },
+
 
     /*
      *
