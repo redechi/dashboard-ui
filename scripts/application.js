@@ -16,7 +16,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
 
   // get access token from cookie
   var accessToken = getCookie('token') || 'ba56eee32df6be1437768699247b406fc7d9992f';
-  
+
   $.ajaxSetup({
     headers: {'Authorization': 'token ' + accessToken},
 
@@ -49,7 +49,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
     headerRegion: "#user",
     contentRegion: "main",
     footerRegion: "footer",
-    overlayRegion: "#popover",
+    overlayRegion: "#popover"
   });
 
   /* Add initializers here */

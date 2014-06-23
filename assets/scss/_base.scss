@@ -140,37 +140,61 @@ select {
   top: 0px;
   margin: 10px 20px;
 
-  .scoreOverall {
-    font-size: 28px;
-    padding: 0 10px;
-    vertical-align: middle;
-  }
+  .btn-user {
+    cursor: pointer;
 
-  svg {
-    position: relative;
-    margin-left: 15px;
-    top: 3px;
-    width: 40px;
-    height: 40px;
-  }
+    .scoreOverall {
+      font-size: 28px;
+      padding: 0 10px;
+      vertical-align: middle;
+    }
 
-  .btn-text {
-    padding: 5px;
-    font-size: 20px;
-    vertical-align: 10px;
-  }
+    svg {
+      position: relative;
+      margin-left: 15px;
+      top: 3px;
+      width: 40px;
+      height: 40px;
+    }
 
-  .caret {
-    vertical-align: 14px;
+    .btn-text {
+      padding: 5px;
+      font-size: 20px;
+      vertical-align: 10px;
+    }
+
+    .caret {
+      vertical-align: 14px;
+    }
   }
 
   .userPopoverContent {
     display: none;
   }
 
+  .popover {
+    left: -84px !important;
+  }
+
   .userStats {
     text-align: center;
-    width: 271px;
+    width: 233px;
+
+    .stat {
+      display: inline-block;
+      padding: 8px 0;
+    }
+
+    .value {
+      color: $font_dark;
+      text-align: center;
+    }
+
+    .label {
+      color: $font_light;
+      font-size: 15px;
+      font-weight: 100;
+    }
   }
 
   .popover-content {
