@@ -59,7 +59,7 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
 
     resize: function () {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#map .map').height(height - $('#graphs').outerHeight(true) - $('.noMoveContainer').outerHeight(true) - 75);
+      $('#map .map').height(height - $('#graphs').outerHeight(true) - $('.noMoveContainer').outerHeight(true) - 10);
     }
   });
 

@@ -1,11 +1,20 @@
 
 #trips {
-  border: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
   border-top: 1px solid $green;
   background: #fbfaf9;
 
   a {
     color: #777;
+  }
+
+  ul {
+    height: 652px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: #777;
+    margin: 0;
   }
 
   // trip count header
@@ -26,15 +35,18 @@
       font-size: 20px;
       font-weight: lighter;
     }
+  }
+
+  #tripsFooter {
+    border-top: 1px solid #ddd;
 
     .export {
-      float: right;
       display: inline-block;
+      padding: 5px 10px;
 
       label {
         padding-right: 10px;
         color: #777;
-        font-size: 12px;
       }
     }
   }
@@ -44,7 +56,7 @@
     @include lightGreenGradient;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
-    padding: 20px 0 10px;
+    padding: 10px 0;
     overflow: hidden;
 
     svg {
