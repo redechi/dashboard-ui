@@ -140,9 +140,10 @@ header.mainHeader {
     position: absolute;
     right: 0;
     top: 0px;
-    margin: 10px 20px;
 
     #topMenu {
+      padding: 0 20px;
+      
       li {
         display: inline-block;
 
