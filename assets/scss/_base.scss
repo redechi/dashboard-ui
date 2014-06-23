@@ -135,15 +135,15 @@ header.mainHeader {
   border-bottom: 1px solid #ddd;
   height: 70px;
   background: $header_back;
+  padding: 0 30px;
 
   #user {
     position: absolute;
     right: 0;
     top: 0px;
+    padding-right: 30px;
 
     #topMenu {
-      padding: 0 20px;
-      
       li {
         display: inline-block;
 
@@ -159,6 +159,10 @@ header.mainHeader {
             color: #0fa0bb;
           }
         }
+
+        &:last-child a {
+          padding-right: 0;
+        }
       }
     }
   }
@@ -168,7 +172,7 @@ header.mainHeader {
     width: 180px;
     height: 40px;
     float: left;
-    margin: 15px 30px;
+    margin: 15px 0;
     display: inline;
     line-height: 50px;
     vertical-align: middle;
