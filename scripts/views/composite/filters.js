@@ -5,11 +5,12 @@ define([
   'views/item/filter',
   '../../collections/filters',
   '../../models/filter',
+  '../../collections/vehicles',
   'hbs!tmpl/composite/filters_tmpl',
   '../../controllers/filter',
   '../../controllers/unit_formatters'
 ],
-function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList, formatters  ) {
+function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, filterList, formatters  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
@@ -49,6 +50,10 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
       }, 0);
 
       this.geocoder = L.mapbox.geocoder('automatic.i86oppa4');
+
+      //get a list of all vehicles and update filter
+      vehicles.fetch();
+      this.updateVehicleList();
     },
 
     model: new Filter(),
@@ -193,6 +198,15 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
       });
 
       return false;
+    },
+
+    updateVehicleList: function() {
+      var self = this;
+      setTimeout(function() {
+        self.$el.find('.vehicleFilterValue').html(vehicles.map(function(vehicle) {
+          return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
+        }));
+      }, 0);
     },
 
     makeFilterList: function () {

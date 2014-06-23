@@ -67,14 +67,14 @@ function(moment, formatters) {
     vehicle: {
       name: 'vehicle',
       title: 'By Vehicle',
-      vehicle_ids: ['all'],
+      options: [['all', 'All Vehicles']],
       value: 'all',
       valueText: 'All Vehicles',
       func: function(trip) {
-        if(_.contains(this.get('vehicle_ids'), 'all')) {
+        if(this.get('value') === 'all') {
           return true;
         } else {
-          return _.contains(this.get('vehicle_ids'), trip.get("vehicle").id);
+          return (this.get('value') === trip.get("vehicle").id);
         }
       },
       queryify: function () {
