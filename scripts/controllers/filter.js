@@ -58,12 +58,6 @@ function(moment, formatters) {
         var range = this.get('value'),
             rangeLength = range[1] - range[0];
         this.set('value', [parseInt(range[1], 10), range[1] + rangeLength]);
-      },
-      stringify: function() {
-        return {
-          startDate: this.get('value')[0],
-          endDate: this.get('value')[1]
-        };
       }
     },
 
@@ -85,11 +79,6 @@ function(moment, formatters) {
       },
       queryify: function () {
         return this.get('value');
-      },
-      stringify: function() {
-        return {
-          vehicle: this.get('value')
-        };
       }
     },
 
@@ -105,13 +94,7 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
       },
-      formatter: function(d) { return d + ' mi'; },
-      stringify: function() {
-        return {
-          distanceMin: this.get('value')[0],
-          distanceMax: this.get('value')[1]
-        };
-      }
+      formatter: function(d) { return d + ' mi'; }
     },
     duration: {
       name: 'duration',
@@ -123,13 +106,7 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
       },
-      formatter: function(d) { return d + ' min'; },
-      stringify: function() {
-        return {
-          durationMin: this.get('value')[0],
-          durationMax: this.get('value')[1]
-        };
-      }
+      formatter: function(d) { return d + ' min'; }
     },
 
 
@@ -149,13 +126,7 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
       },
-      formatter: function(d) { return '$' + d; },
-      stringify: function() {
-        return {
-          costMin: this.get('value')[0],
-          costMax: this.get('value')[1]
-        };
-      }
+      formatter: function(d) { return '$' + d; }
     },
 
 
@@ -182,13 +153,6 @@ function(moment, formatters) {
         } else {
           return true;
         }
-      },
-      stringify: function() {
-        return {
-          locationLatLng: this.get('latlng'),
-          locationType: this.get('type'),
-          locationName: this.get('valueText')
-        };
       }
     },
 
@@ -213,12 +177,6 @@ function(moment, formatters) {
       },
       formatter: function(d) {
         return moment.utc(d * 60 * 60 * 1000).format('h A');
-      },
-      stringify: function() {
-        return {
-          timeMin: this.get('value')[0],
-          timeMax: this.get('value')[1]
-        };
       }
     }
   };

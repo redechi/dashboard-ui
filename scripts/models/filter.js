@@ -27,7 +27,7 @@ function( Backbone, coms ) {
       var regex = new RegExp('('+name+'=)[^&]+');
       var valueString = this.filterToString();
 
-      return name + '=' + valueString;
+      return name + '=' + encodeURIComponent(valueString);
     },
 
     /*
@@ -36,8 +36,16 @@ function( Backbone, coms ) {
      *
      */
     filterToString: function () {
-      var values = this.get('value').join(',');
-      return encodeURIComponent(values);
+      var filterName = this.get('name');
+
+      if(filterName === 'vehicle') {
+        return this.get('value');
+      } else if(filterName === 'location') {
+        return [this.get('latlng'), this.get('type'), this.get('valueText')].join(',');
+      } else {
+        return this.get('value').join(',');
+      }
+
     },
 
     /*
