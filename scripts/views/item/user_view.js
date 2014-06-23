@@ -1,10 +1,9 @@
 define([
   'backbone',
   'hbs!tmpl/item/user_view_tmpl',
-  './user_score_view',
   '../../models/user'
 ],
-function( Backbone, UserViewTmpl, UserScoreView, user  ) {
+function( Backbone, UserViewTmpl,user  ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -13,15 +12,7 @@ function( Backbone, UserViewTmpl, UserScoreView, user  ) {
     initialize: function() {
       console.log("initialize a UserView ItemView");
 
-      var userScoreView = new UserScoreView();
-
-      this.on('render', userScoreView.paintGraph, this);
-
       this.model.fetch();
-
-      //replace this when API is ready
-      this.model.set({score: 89, mpg: 28.3, cost: '$137.17', distance: 1047, duration: '25:24'});
-
       this.render();
     },
 
@@ -31,19 +22,10 @@ function( Backbone, UserViewTmpl, UserScoreView, user  ) {
     ui: {},
 
     /* Ui events hash */
-    events: {
-    },
+    events: {},
 
     /* on render callback */
-    onRender: function() {
-      setTimeout(function() {
-        $('.btn-user').popover({
-          html: true,
-          content: function() { return $('.userPopoverContent').html(); },
-          placement: 'bottom'
-        });
-      }, 0);
-    },
+    onRender: function() {},
 
     model: user
   });

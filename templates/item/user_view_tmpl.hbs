@@ -1,25 +1,12 @@
-<div class="btn-user">
-  <svg data-score="{{ score }}"></svg>
-  <span class="btn-text">{{ first_name }}</span><span class="caret"></span>
-</div>
-
-<div class="userPopoverContent">
-  <div class="userStats">
-    <div class="stat distance">
-      <div class="value">{{ distance }}</div>
-      <div class="label">Miles</div>
-    </div>
-    <div class="stat mpg active">
-      <div class="value">{{ mpg }}</div>
-      <div class="label">MPG</div>
-    </div>
-    <div class="stat cost">
-      <div class="value">{{ cost }}</div>
-      <div class="label">Fuel</div>
-    </div>
-    <div class="stat duration">
-      <div class="value">{{ duration }}</div>
-      <div class="label">Hours</div>
-    </div>
-  </div>
-</div>
+<ol id="topMenu">
+  <li>
+    <a href="http://blog.automatic.com">Blog</a>
+  </li>
+  <li>
+    <a href="https://www.automatic.com/support/">Support</a>
+  </li>
+  <li>
+    Logged in as {{ first_name }}
+    <a href="/#/logout">Log Out</a>
+  </li>
+</ol>
