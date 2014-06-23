@@ -59,21 +59,6 @@ function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
     },
 
 
-    /*
-     *
-     * safely adds new filter prefferably from add<filter name>Filter
-     * EX: this.addDateFilter()
-     *
-     */
-    setNewFilter: function (filterModel) {
-      var dateFilter = this.findWhere({name: filterModel.name});
-      if (!dateFilter) {
-        this.push(filterModel);
-      } else {
-        dateFilter.set(intermFilter.toJSON());
-      }
-    },
-
     parseHash: function () {
       var hash = decodeURIComponent(document.location.hash);
       var filterStrings = hash.substring(1)
