@@ -57,7 +57,11 @@ function( Backbone, Empty, Trip, coms, tripList) {
     },
 
     changeSort: function () {
-      // TODO: implement sort
+      var sortType = this.$el.find('.sortType').val();
+      this.collection.sortType = sortType;
+
+      this.collection.comparator = function(trip) { return -trip.get(sortType); };
+      this.collection.sort();
     },
 
     events: {
@@ -73,6 +77,9 @@ function( Backbone, Empty, Trip, coms, tripList) {
 
     /* on render callback */
     onRender: function() {
+      //set sortType dropdown
+      this.$el.find('.sortType').val(this.collection.sortType);
+
       var resize = this.resize;
       setTimeout(resize, 0);
     },

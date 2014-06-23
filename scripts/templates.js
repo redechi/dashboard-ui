@@ -21,7 +21,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (stack1 = helpers.total) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.total; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + " Trips</div>\n\n  <select class=\"sortType\">\n    <option value=\"date\">Time/Date</option>\n    <option value=\"distance\">Distance</option>\n    <option value=\"duration\">Duration</option>\n    <option value=\"mpg\">MPG</option>\n    <option value=\"score\">Score</option>\n  </select>\n</div>\n\n<ul class=\"trips\"></ul>\n\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
+    + " Trips</div>\n\n  <select class=\"sortType\">\n    <option value=\"start_time\">Time/Date</option>\n    <option value=\"distance_m\">Distance</option>\n    <option value=\"average_mpg\">MPG</option>\n    <option value=\"fuel_cost_usd\">Cost</option>\n    <option value=\"duration\">Duration</option>\n    <option value=\"score\">Score</option>\n  </select>\n</div>\n\n<ul class=\"trips\"></ul>\n\n<div id=\"tripsFooter\">\n  <div class=\"export\">\n    <label>Export</label>\n    <select id=\"exporter\">\n      <option></option>\n      <option value=\"selected\">Selected</option>\n      <option value=\"filtered\">Filtered</option>\n      <option value=\"all\">All</option>\n    </select>\n  </div>\n</div>\n";
   return buffer;
   });
 
