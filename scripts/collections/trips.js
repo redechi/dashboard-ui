@@ -17,10 +17,10 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
     aggStragegies: aggStrat,
     sortStrategies: sortStrat,
     name: 'default_collection',
-    url: "https://api.automatic.com/v1/trips",
+    url: 'https://api.automatic.com/v1/trips',
 
     initialize: function() {
-      console.log("initialize a Trips collection");
+      console.log('initialize a Trips collection');
       this.on('add', this.convertToLinkedList, this);
       this.on('sync', this.applyAllFilters, this);
       this.on('reset', this.applyAllFilters, this);
@@ -41,7 +41,7 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
         }
       });
 
-      var newCollection = new this.constructor(tripsToInclude)
+      var newCollection = new this.constructor(tripsToInclude);
       coms.trigger('filter', newCollection);
     },
 
@@ -55,7 +55,9 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
 
       filterCollection.each(function (filterModel) {
         var inclusiveFilter = filterModel.applyTo(tripModel);
-        if (!inclusiveFilter) shouldExclude = false;
+        if (!inclusiveFilter) {
+          shouldExclude = false;
+        }
       });
 
       return shouldExclude;
@@ -68,7 +70,7 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
      */
     fetchAll: function () {
       return this.nextSet().always(_.bind(
-        function(data, status, jqXHR) {
+        function(data, status) {
 
           // hackaround jquery request abort (caching)
           if ( !!data[0] || status instanceof Array && !!status[0] ) {
@@ -120,8 +122,12 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
       var idx = this.indexOf(model);
       var prev = this.at(idx - 1);
       var next = this.at(idx + 1);
-      if(next) model.set('prevTrip', next.get('id'));
-      if(prev) model.set('nextTrip', prev.get('id'));
+      if(next) {
+        model.set('prevTrip', next.get('id'));
+      }
+      if(prev) {
+        model.set('nextTrip', prev.get('id'));
+      }
     },
 
     calculateRanges: function() {

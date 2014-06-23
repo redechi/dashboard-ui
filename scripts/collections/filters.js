@@ -18,14 +18,14 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
       this.on('add', this.toUrl, this);
       this.on('remove', this.toUrl, this);
       // this.add(new FilterModel(filterList.date));
-      window.filters = this
+      window.filters = this;
 
       // add all filters in filter controller
       for (var i in filterList) {
         var name = i.charAt(0).toUpperCase() + i.substring(1);
         this['add'+name+'Filter'] = function () {
           this.setNewFilter(new FilterModel(filterList[i]));
-        }
+        };
       }
     },
 
@@ -37,8 +37,11 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
      */
     setNewFilter: function (filterModel) {
       var dateFilter = this.findWhere({name: filterModel.name});
-      if (!dateFilter) {this.push(filterModel)}
-      else { dateFilter.set(intermFilter.toJSON())}
+      if (!dateFilter) {
+        this.push(filterModel);
+      } else {
+        dateFilter.set(intermFilter.toJSON());
+      }
     },
 
     parseHash: function () {
@@ -53,7 +56,7 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
         .pop()
         .split('&');
 
-      filterStrings = filterStrings.filter(function(n){ return !!n});
+      filterStrings = filterStrings.filter(function(n){ return !!n; });
 
       // split on =
       filterStrings = _.map(filterStrings, function (fs) {

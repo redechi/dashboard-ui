@@ -9,7 +9,7 @@ function( Backbone, coms ) {
   return Backbone.Model.extend({
 
     initialize: function() {
-      console.log("initialize a Filter model");
+      console.log('initialize a Filter model');
       coms.trigger('filters:newFilter', this);
       this.on('change', this.updateHash, this);
     },
@@ -22,9 +22,7 @@ function( Backbone, coms ) {
      *
      */
     toHash: function () {
-      var hash = document.location.hash;
       var name = this.get('name');
-      var regex = new RegExp('('+name+'=)[^&]+');
       var valueString = this.filterToString();
 
       return name + '=' + encodeURIComponent(valueString);
@@ -55,7 +53,6 @@ function( Backbone, coms ) {
      *
      */
     applyTo: function (model) {
-      var name = this.get('name');
       var filtered = this
         .get('func')
         .call(this, model);
