@@ -92,7 +92,9 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
         var obj = {};
         var name = filterKeyValue.shift();
         var argsString = filterKeyValue.shift();
-        var argsArray = argsString.split(',');
+        var argsArray = argsString.split(',').map(function(value) {
+          return parseFloat(value) || value;
+        });
         modelData[name] = argsArray;
       });
 
@@ -104,7 +106,7 @@ function( Backbone, coms, FilterModel, amlCollection, filterList) {
         if (!!preExistingModel) {
           preExistingModel.set({value: modelData[filterName]});
         } else {
-          var filter = new FilterModel(filterList[filterName])
+          var filter = new FilterModel(filterList[filterName]);
           filter.set({value: modelData[filterName]});
           this.add(filter);
         }
