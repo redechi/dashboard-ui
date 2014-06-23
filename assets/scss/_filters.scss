@@ -1,9 +1,40 @@
 
 #filters {
   height: 70px;
+  box-sizing: border-box;
+  padding: 16px 0;
+
+  h3.filterLabel {
+    font-size: 16px;
+    display: inline-block;
+    line-height: 24px;
+    margin: 0;
+  }
+
+  .appliedFilters {
+    margin: 0 0 0 10px;
+    display: inline-block;
+
+    li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+
+  .addFilter {
+    display: inline-block;
+    margin-left: 10px;
+    width: 40px;
+  }
+
+  .popoverContent {
+    display: none;
+  }
 
   .btn-filter {
     background: #ddd;
+    height: 30px;
+    line-height: 17px;
 
     .caret {
       margin-left: 4px;
@@ -19,11 +50,9 @@
     margin: 0px 40px;
 
     li {
-      width: 40px;
-      height: 30px;
-      background: #ddd;
       overflow: hidden;
       text-indent: -9999;
+      width: 40px;
     }
 
     .prev {
@@ -35,5 +64,25 @@
 
   li {
     display: inline-block;
+  }
+
+  .popover-content ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .filterList {
+    width: 150px;
+  }
+
+  .filterList li {
+    padding: 5px 0;
+    cursor: pointer;
+    display: block;
+  }
+
+  .filterList li:hover {
+    color: #428bca;
   }
 }
