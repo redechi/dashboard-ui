@@ -10,7 +10,7 @@ define([
 function( Backbone, Communicator, router, regionManager, UserView, tripsCollection ) {
   'use strict';
 
-  var loginURL = 'https://www.automatic.com/oauth/authorize/?client_id=385be37e93925c8fa7c7&response_type=code&scope=scope:notification:speeding%20scope:location%20scope:ignition:off%20scope:parking:changed%20scope:mil:off%20scope:notification:hard_brake%20scope:vehicle%20scope:notification:hard_accel%20scope:mil:on%20scope:region:changed%20scope:ignition:on%20scope:trip:summary%20scope:user:details',
+  var loginURL = 'https://auth.automatic.com/oauth/login',
       dummyToken =  'ba56eee32df6be1437768699247b406fc7d9992f';
 
   function getCookie(key) {
