@@ -26,6 +26,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       'shown.bs.popover .btn-filter': 'initializeSliders',
       'submit .locationFilterValue': 'updateLocationFilterForm',
       'change .locationFilterValueType': 'updateLocationFilterForm',
+      'change .vehicleFilterValue': 'updateVehicleFilter',
       'click .btn-undo': 'undoFilter',
       'click .filterNav .prev': 'browserBack',
       'click .filterNav .next': 'browserForward'
@@ -100,7 +101,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     updateVehicleFilter: function (e) {
       var vehicleValue = $(e.target).val(),
           vehicleText = $('option:selected', e.target).text(),
-          vehilceFilter = this.collection.findWhere({name: 'vehicle'});
+          vehicleFilter = this.collection.findWhere({name: 'vehicle'});
 
       vehicleFilter.set('value', vehicleValue);
       $('.btn-filter[data-filter="vehicle"] .btn-text').text(vehicleText);
@@ -203,7 +204,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     updateVehicleList: function() {
       var self = this;
       setTimeout(function() {
-        self.$el.find('.vehicleFilterValue').html(vehicles.map(function(vehicle) {
+        self.$el.find('.vehicleFilterValue').append(vehicles.map(function(vehicle) {
           return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
         }));
       }, 0);
