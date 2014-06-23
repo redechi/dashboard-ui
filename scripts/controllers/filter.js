@@ -52,12 +52,12 @@ function(moment, formatters) {
       setPrevRange: function() {
         var range = this.get('value'),
             rangeLength = range[1] - range[0];
-        this.set('value', [range[0] - rangeLength, range[0]]);
+        this.set('value', [range[0] - rangeLength, parseInt(range[0], 10)]);
       },
       setNextRange: function() {
         var range = this.get('value'),
             rangeLength = range[1] - range[0];
-        this.set('value', [range[1], range[1] + rangeLength]);
+        this.set('value', [parseInt(range[1], 10), range[1] + rangeLength]);
       },
       stringify: function() {
         return {

@@ -142,7 +142,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
 
     updateDateFilterLabel: function() {
       var dateFilter = this.collection.findWhere({name: 'date'});
-      $('.btn-filter[data-filter="date"] .btn-text').text(formatters.dateRange(dateFilter.get('dateRange')));
+      $('.btn-filter[data-filter="date"] .btn-text').text(formatters.dateRange(dateFilter.get('value')));
     },
 
 
