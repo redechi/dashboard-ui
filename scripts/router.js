@@ -7,9 +7,10 @@ define([
   var Router = backbone.Marionette.AppRouter.extend({
 
     appRoutes: {
-      '(/)'               : 'showSummaryLayout',
-      'trip/:tripid'      : 'showTripLayout',
-      'filter(/)?:filters' : 'applyFilters'
+      '(/)': 'showSummaryLayout',
+      'trip/:tripid': 'showTripLayout',
+      'filter(/)?:filters': 'applyFilters',
+      'logout': 'logOut'
     },
 
     controller: controller

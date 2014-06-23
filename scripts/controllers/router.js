@@ -40,6 +40,13 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
 
     applyFilters: function () {
       this.showSummaryLayout();
+    },
+
+
+    logOut: function () {
+      sessionStorage.clear();
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      window.location = '/';
     }
 
 
