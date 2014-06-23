@@ -135,10 +135,10 @@ function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
         }
       }, this));
 
-      // if no model data than create a date filter.
+      // if no model data than create a vehicle and date filter.
       if (!Object.keys(modelData)[0]) {
-        var filter = new FilterModel(filterList.date);
-        this.add(filter);
+        this.add(new FilterModel(filterList.vehicle));
+        this.add(new FilterModel(filterList.date));
       }
     }
 
