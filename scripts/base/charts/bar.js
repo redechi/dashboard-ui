@@ -1,11 +1,9 @@
 define([
   'backbone',
   'models/trip',
-  'amlAggregate',
-  'amlSort',
   'amlCollection'
 ],
-function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
+function( Backbone, Trip, filterStrat) {
   'use strict';
 
   return {
@@ -18,7 +16,7 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
       return this;
     },
     markers: function(arg){
-      this.chart = this.chart.markers(arg); 
+      this.chart = this.chart.markers(arg);
       return this;
     },
     measures: function(arg){
@@ -32,4 +30,3 @@ function( Backbone, Trip, aggStrat, sortStrat, filterStrat) {
   };
 
 });
-

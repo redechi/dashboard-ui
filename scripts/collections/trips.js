@@ -2,11 +2,9 @@ define([
   'backbone',
   'communicator',
   'models/trip',
-  'amlAggregate',
-  'amlSort',
   './filters'
 ],
-function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
+function( Backbone, coms, Trip, filterCollection) {
   'use strict';
 
   /* trips singleton */
@@ -14,8 +12,6 @@ function( Backbone, coms, Trip, aggStrat, sortStrat, filterCollection) {
 
     page: 0,
     model: Trip,
-    aggStragegies: aggStrat,
-    sortStrategies: sortStrat,
     name: 'default_collection',
     url: 'https://api.automatic.com/v1/trips',
 

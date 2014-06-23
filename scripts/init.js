@@ -36,9 +36,6 @@ require.config({
 
   paths: {
     amlCollection: 'base/collection',
-    amlAggregate: 'controllers/aggregate',
-    amlSort: 'controllers/sort',
-
 
     jquery: '../bower_components/jquery/jquery',
     backbone: '../bower_components/backbone-amd/backbone',
