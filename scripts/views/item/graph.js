@@ -244,6 +244,12 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
     onRender: function() {
       nv.addGraph(_.bind(this.addGraph, this));
+
+      //show/hide nextDates button
+      var dateFilter = filters.findWhere({name: 'date'});
+      console.log(dateFilter)
+      var dateRange = dateFilter.get('value');
+      this.$el.find('.nextDates').toggle(dateRange[1] < Date.now());
     }
   });
 
