@@ -56,7 +56,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
 
     paintGraph: function() {
       var self = this;
-      var score = parseInt(this.getAverageScore());
+      var score = self.$el.find('svg').data('score');
       var trans = 100 - score;
 
       nv.addGraph(function() {
@@ -75,14 +75,14 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
         var svg = d3.select(self.$el.find('svg').get(0));
 
         var datum = [
-          { 
+          {
             "label": "score",
             "value" : 0
-          } , 
-          { 
+          } ,
+          {
             "label": "Transparency",
             "value" : 100
-          } 
+          }
         ];
 
         svg.attr("width", 40)
@@ -100,14 +100,14 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
 
         // duplicate set for animation.
         var datum = [
-          { 
+          {
             "label": "score",
             "value" : score
-          } , 
-          { 
+          } ,
+          {
             "label": "Transparency",
             "value" : trans
-          } 
+          }
         ];
 
         svg.datum(datum)
