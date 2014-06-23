@@ -72,7 +72,10 @@ function(_, Backbone, coms, FilterView, filters, Filter, FiltersTmpl, filterList
 
     addFilter: function (filterName) {
       $('.addFilter').popover('hide');
-      this.collection.add(new Filter(filterList[filterName]));
+      var filter = new Filter(filterList[filterName]);
+      filter.set('showPopover', true);
+      console.log(filter)
+      this.collection.add(filter);
       $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
     },
 

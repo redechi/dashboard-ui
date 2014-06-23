@@ -73,7 +73,7 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
         });
 
         //don't show popover for date filter
-        if(name !== 'date') {
+        if(name !== 'date' && self.model.get('showPopover') === true) {
           $('.btn-popover[data-filter="' + name + '"]').popover('show');
         }
 
