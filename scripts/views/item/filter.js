@@ -68,6 +68,7 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
         $('.btn-popover[data-filter="' + name + '"]').popover({
           html: true,
           content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
+          title:  function() { return $('.popoverContent[data-filter="' + name + '"]').attr('title'); },
           placement: 'bottom',
           callback: initializePopover
         });

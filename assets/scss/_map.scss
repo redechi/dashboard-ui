@@ -51,20 +51,21 @@
 .marker-cluster {
 	background-clip: padding-box;
 	border-radius: 20px;
-	}
-.marker-cluster div {
-	width: 30px;
-	height: 30px;
-	margin-left: 5px;
-	margin-top: 5px;
 
-	text-align: center;
-	border-radius: 15px;
-	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+	div {
+		width: 30px;
+		height: 30px;
+		margin-left: 5px;
+		margin-top: 5px;
+		text-align: center;
+		border-radius: 15px;
+		font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
-.marker-cluster span {
-	line-height: 30px;
+
+	span {
+		line-height: 30px;
 	}
+}
 
 
 #map {
@@ -73,12 +74,15 @@
     height: 400px;
     position: relative;
 
-    .leaflet-container {
-      height: inherit;
-      left:0;
-      right:0;
-      top:0;
-      bottom:0;
-    }
+		/* Popup Styles */
+		.leaflet-popup-tip {
+			border-top-color: $blue;
+		}
+
+		.leaflet-popup-content-wrapper {
+			border-bottom: 2px solid $blue;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+		}
   }
 }

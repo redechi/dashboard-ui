@@ -96,6 +96,27 @@ select {
   background-color: #f1efeb;
 }
 
+/* Global Popover Styles */
+
+.popover {
+  border-top: 2px solid $blue;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+
+  &.bottom > .arrow:after {
+    border-bottom-color: $blue;
+  }
+
+  .popover-title {
+    background: none;
+    border-bottom: none;
+    text-transform: uppercase;
+    color: $font_light;
+    font-weight: bold;
+    padding-bottom: 0;
+  }
+}
+
 
 #content {
   width: 100%;
