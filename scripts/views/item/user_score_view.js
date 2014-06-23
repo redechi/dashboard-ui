@@ -86,16 +86,10 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
         ];
 
         svg.attr("width", 40)
-           .attr("height", 40)
-           .style({
-              position: 'relative',
-              'margin-left': '15px',
-              top: '3px'
-           });
-
+           .attr("height", 40);
 
         svg.datum(datum)
-          .transition().duration(self.duration)
+          .transition().duration(self.duration || 2000)
           .call(chart);
 
         // duplicate set for animation.
@@ -111,7 +105,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
         ];
 
         svg.datum(datum)
-          .transition().duration(self.duration)
+          .transition().duration(self.duration || 2000)
           .call(chart);
 
         svg.append('text')

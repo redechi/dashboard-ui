@@ -4,13 +4,12 @@ define([
   '../composite/filters', // view
   '../item/graph', // view
   '../item/map', // view
-  '../item/user_view',
   './trip_list_layout'
 ],
 
 // this should probably be a composit view rather than a layout
 
-function( Backbone, SummaryTmpl, Filters, Graph, Map, UserView, TripListLayout) {
+function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
     'use strict';
 
   /* Return a Layout class definition */
@@ -50,13 +49,11 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, UserView, TripListLayout) 
       var m = new Map();
       var g = new Graph();
       var f = new Filters();
-      var u = new UserView();
 
       this.trips.show(tl);
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
-      this.user.show(u);
 
     },
 

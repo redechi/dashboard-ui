@@ -137,8 +137,8 @@ select {
 #user {
   position: absolute;
   right: 0;
-  padding: 10px;
   top: 0px;
+  margin: 10px 20px;
 
   .scoreOverall {
     font-size: 28px;
@@ -146,10 +146,22 @@ select {
     vertical-align: middle;
   }
 
+  svg {
+    position: relative;
+    margin-left: 15px;
+    top: 3px;
+    width: 40px;
+    height: 40px;
+  }
+
   .btn-text {
     padding: 5px;
     font-size: 20px;
-    vertical-align: middle;
+    vertical-align: 10px;
+  }
+
+  .caret {
+    vertical-align: 14px;
   }
 
   .userPopoverContent {
@@ -159,25 +171,6 @@ select {
   .userStats {
     text-align: center;
     width: 271px;
-
-    .stat {
-      width: 18.5%;
-      display: inline-block;
-      padding: 5px 0;
-      box-sizing: border-box;
-
-      .label {
-        text-transform: uppercase;
-        color: #777;
-        font-size: 12px;
-        padding: 0;
-      }
-
-      .value {
-        font-weight: bold;
-        font-size: 15px;
-      }
-    }
   }
 
   .popover-content {
@@ -479,7 +472,6 @@ select {
 
 header.mainHeader {
   position: relative;
-  overflow: hidden;
   border-bottom: 1px solid #ddd;
   height: 70px;
   background: $header_back;

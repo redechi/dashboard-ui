@@ -12,7 +12,17 @@ function( Backbone, UserViewTmpl, UserScoreView, user  ) {
 
     initialize: function() {
       console.log("initialize a UserView ItemView");
-      _.extend(this, new UserScoreView());
+
+      var userScoreView = new UserScoreView();
+
+      this.on('render', userScoreView.paintGraph, this);
+
+      this.model.fetch();
+
+      //replace this when API is ready
+      this.model.set({score: 89, mpg: 28.3, cost: '$137.17', distance: 1047, duration: '25:24'});
+
+      this.render();
     },
 
     template: UserViewTmpl,
