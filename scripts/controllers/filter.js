@@ -12,6 +12,7 @@ function(moment, formatters) {
     date: {
       name: 'date',
       title: 'By Date Range',
+      label: 'during',
       dateType: 'thisMonth',
       valueText: 'This Month',
       offset: 0,
@@ -67,6 +68,7 @@ function(moment, formatters) {
     vehicle: {
       name: 'vehicle',
       title: 'By Vehicle',
+      label: 'Show trips from',
       value: 'all',
       valueText: 'All Vehicles',
       func: function(trip) {
@@ -86,6 +88,7 @@ function(moment, formatters) {
     distance: {
       name: 'distance',
       title: 'By Distance',
+      label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
@@ -95,9 +98,13 @@ function(moment, formatters) {
       },
       formatter: function(d) { return d + ' mi'; }
     },
+
+
+
     duration: {
       name: 'duration',
       title: 'By Duration',
+      label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
@@ -118,6 +125,7 @@ function(moment, formatters) {
     cost: {
       name: 'cost',
       title: 'By Cost',
+      label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
@@ -140,6 +148,7 @@ function(moment, formatters) {
     location: {
       name: 'location',
       title: 'By Location',
+      label: 'and',
       latlng: [0,0],
       type: undefined,
       valueText: 'Everywhere',
@@ -167,6 +176,7 @@ function(moment, formatters) {
     time: {
       name: 'time',
       title: 'By Time of Day',
+      label: 'and',
       min: 0,
       max: 24,
       value: [0, Infinity],

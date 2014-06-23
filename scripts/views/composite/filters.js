@@ -237,10 +237,6 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       }
     },
 
-    undoFilter: function() {
-      window.history.back();
-    },
-
     onRender: function() {
     }
   });
