@@ -80,7 +80,6 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       $('.addFilter').popover('hide');
       var filter = new Filter(filterList[filterName]);
       filter.set('showPopover', true);
-      console.log(filter)
       this.collection.add(filter);
       $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
     },
