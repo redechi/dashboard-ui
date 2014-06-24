@@ -28,7 +28,7 @@ function(moment, formatters) {
       }
     },
 
-    
+
     date: {
       name: 'date',
       title: 'By Date Range',
@@ -83,9 +83,7 @@ function(moment, formatters) {
         return range;
       },
       func: function(trip) {
-        return moment(
-          trip.get('start_time')) >= moment(this.get('value')[0])
-          && moment(trip.get('start_time')) <= moment(this.get('value')[1]);
+        return this.get('setRange').call(this, 'month');
       },
       setPrevRange: function() {
         var range = this.get('value'),
