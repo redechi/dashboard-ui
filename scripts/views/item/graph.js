@@ -13,10 +13,18 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
   /* Return a ItemView class definition */
   var BarChart = Backbone.Marionette.ItemView.extend({
 
-    tagName: "div",
+    tagName: 'div',
     model: new Backbone.Model({values:[],key:'No Data'}),
     collection: new AMLCollection([]), // trips singleton
     template: GraphTmpl,
+
+    averages: {
+      duration: 64,
+      fuel_cost_usd: 5.12,
+      distance_miles: 31.49,
+      average_mpg: 23.10,
+      score: 91.87
+    },
 
     collectionEvents: {
     //  'reset': 'updateGraph'
@@ -26,11 +34,12 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       'click .prevDates': 'prevDateRange',
       'click .nextDates': 'nextDateRange',
       'change .graphType': 'selectGraph',
-      'change .durationType': 'changeFilter'
+      'change .durationType': 'changeFilter',
+      'change #otherDrivers': 'updateGraph'
     },
 
     initialize: function(model) {
-      console.log("initialize a Graph ItemView");
+      console.log('initialize a Graph ItemView');
       this.collection.graphType = 'average_mpg';
       coms.on('filter', _.bind(this.resetCollection, this));
     },
@@ -156,13 +165,15 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
         return d3.time.format('%e')(new Date(d))
       });
 
+      chart.height = 160;
+
       nv.utils.windowResize(chart.update);
       chart.tooltipContent(function(key, y, e, graph) {
         return '<p>' + key + ': ' + e + '</p>'
       });
 
       var svg = d3.select(this.$el.find('svg').get(0))
-         .attr("height", "150")
+         .attr("height", chart.height);
 
       var defs = svg.append("svg:defs");
 
@@ -221,12 +232,42 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       min.isMin = true;
       max.isMax = true;
 
+      this.chart.max = max.y;
+
+      this.addAverages();
+
       d3.select(this.$el.find('svg').get(0))
         .datum([datum])
         .call(this.chart);
 
       this.updateBarStyle();
       this.updateMinMax();
+
+    },
+
+
+    addAverages: function () {
+      var average = this.averages[this.collection.graphType],
+          svg = d3.select(this.$el.find('svg').get(0)),
+          width = svg.style('width').replace('px', ''),
+          height = 104,
+          y = parseInt((this.chart.max - average) / this.chart.max * height, 10) + 31;
+
+      svg
+        .selectAll('line.average')
+        .remove();
+
+      if($('#otherDrivers').is(':checked')) {
+        svg
+          .append('svg:line')
+          .attr('x1', 5)
+          .attr('y1', y)
+          .attr('x2', width - 5)
+          .attr('y2', y)
+          .style('stroke', 'rgb(6,120,155)')
+          .attr('class', 'average')
+          .attr('title', average + ' across all Automatic drivers');
+      }
     },
 
 
