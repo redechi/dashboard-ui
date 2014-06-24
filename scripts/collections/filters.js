@@ -104,11 +104,14 @@ function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
 
       // ensure all models share the same data.
       filterStrings.map(function (filterKeyValue) {
-        var obj = {};
         var name = filterKeyValue.shift();
         var argsString = filterKeyValue.shift();
         var argsArray = argsString.split(',').map(function(value) {
-          return parseFloat(value) || value;
+          if(name == 'vehicle') {
+            return value;
+          } else {
+            return parseFloat(value) || value;
+          }
         });
         modelData[name] = argsArray;
       });
