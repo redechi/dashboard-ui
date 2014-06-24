@@ -1,7 +1,7 @@
 
 #trips {
-  border-right: 1px solid $trip_line_gray;
-  border-left: 1px solid $trip_line_gray;
+  border-right: 1px solid $line_gray;
+  border-left: 1px solid $line_gray;
   border-top: 1px solid $green;
   background: #fbfaf9;
 
@@ -38,7 +38,7 @@
   }
 
   #tripsFooter {
-    border-top: 1px solid $trip_line_gray;
+    border-top: 1px solid $line_gray;
 
     .export {
       display: inline-block;
@@ -55,7 +55,7 @@
   .summaryStats {
     @include lightGreenGradient;
     background-color: #fff;
-    border-bottom: 1px solid $trip_line_gray;
+    border-bottom: 1px solid $line_gray;
     padding: 10px 0;
     overflow: hidden;
 
@@ -110,7 +110,7 @@
       position: absolute;
       width: 3px;
       height: 90%;
-      background-color: $trip_line_gray;
+      background-color: $line_gray;
       left: 65px;
       top: 7%;
       height: 86%;
@@ -118,13 +118,13 @@
       & > div {
         width: 20px;
         height: 20px;
-        background-color: $trip_line_gray;
-        border: 7px solid $trip_line_gray;
+        background-color: $line_gray;
+        border: 7px solid $line_gray;
         border-radius: 10px;
         margin-left: -9px;
         line-height: 9px;
         text-align: center;
-        color: $trip_line_gray;
+        color: $line_gray;
       }
 
       & div:first-child {

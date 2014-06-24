@@ -1,13 +1,14 @@
-<ol class="filterNav">
-  <li class="prev btn" title="undo"><i class="glyphicon glyphicon-arrow-left"></i></li>
-  <li class="next btn" title="redo"><i class="glyphicon glyphicon-arrow-right"></i></li>
-</ol>
+<ul class="filterNav">
+  <li class="undo btn-filter"><a href="#" title="Undo">Undo</a></li><li class="redo btn-filter"><a href="#" title="Redo">Redo</a></li>
+</ul>
 
 <ul class="appliedFilters"></ul>
 
-<div title="Add Filter" class="addFilter btn btn-filter btn-popover" data-original-title="Add Filter">
-  <i class="glyphicon glyphicon-plus"></i>
-</div>
+<div class="filterLabel">and</div>
+<div title="Add Filter" class="addFilter btn-filter btn-popover" data-original-title="Add Filter"></div>
+
+<a href="#" class="resetFilters">Reset Filters</a>
+
 
 <div class="popoverContent" data-filter="date" title="Select Time Range">
   <select class="dateFilterValue">

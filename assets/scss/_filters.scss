@@ -1,13 +1,13 @@
 
 #filters {
-  height: 70px;
+  height: 78px;
   box-sizing: border-box;
-  padding: 19px 30px;
+  padding: 25px 30px;
+  border-bottom: 1px solid $line_light_gray;
 
   .filterLabel {
     font-size: 16px;
     display: inline-block;
-    line-height: 24px;
     margin: 0;
   }
 
@@ -22,8 +22,14 @@
 
   .addFilter {
     display: inline-block;
-    margin-left: 10px;
-    width: 40px;
+    width: 28px;
+    @include hr-image('../img/icon_plus.png', '../img/icon_plus@2x.png');
+    background-position: 50% center;
+  }
+
+  .resetFilters {
+    float: right;
+    line-height: 25px;
   }
 
   .popoverContent {
@@ -31,36 +37,59 @@
   }
 
   .btn-filter {
-    background: #f1efeb;
-    height: 30px;
-    line-height: 17px;
+    background-color: $header_back;
+    background-repeat: no-repeat;
+    height: 28px;
+    line-height: 15px;
     margin: 0 10px;
+    font-size: 16px;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 5px;
+    color: $link_type;
 
-    .caret {
-      margin-left: 4px;
+    &:hover {
+      background-color: #FFF;
+      color: $highlight;
+      -moz-box-shadow: 0px 1px 0px 0px #E3E2DE;
+      box-shadow: 0px 1px 0px 0px #E3E2DE;
     }
+  }
 
-    .popover-text {
-      display: none;
-    }
+  .btn-dropdown {
+    padding-right: 25px;
+    background-position: right 5px center;
+    @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
   }
 
   .filterNav {
     display: inline-block;
 
     li {
-      overflow: hidden;
-      text-indent: -9999;
-      width: 40px;
-      background: #f1efeb;
-      height: 30px;
-      line-height: 17px;
-    }
+      margin: 0;
+      background-position: 50% center;
 
-    .prev {
-    }
+      a {
+        overflow: hidden;
+        text-indent: -9999px;
+        width: 35px;
+        display: block;
+      }
 
-    .next {
+      &.undo {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-radius: 1px;
+        border-right: 1px solid rgba(0,0,0,0.10);
+        @include hr-image('../img/icon_back_active.png', '../img/icon_back_active@2x.png');
+      }
+
+      &.redo {
+        @include hr-image('../img/icon_forward_active.png', '../img/icon_forward_active@2x.png');
+      }
     }
   }
 
@@ -76,15 +105,15 @@
 
   .filterList {
     width: 150px;
-  }
 
-  .filterList li {
-    padding: 5px 0;
-    cursor: pointer;
-    display: block;
-  }
+    li {
+      padding: 5px 0;
+      cursor: pointer;
+      display: block;
 
-  .filterList li:hover {
-    color: #428bca;
+      &:hover {
+        color: #428bca;
+      }
+    }
   }
 }

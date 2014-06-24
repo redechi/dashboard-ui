@@ -29,8 +29,8 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       'change .locationFilterValueType': 'updateLocationFilterForm',
       'change .vehicleFilterValue': 'updateVehicleFilter',
       'click .btn-undo': 'undoFilter',
-      'click .filterNav .prev': 'browserBack',
-      'click .filterNav .next': 'browserForward'
+      'click .filterNav .undo': 'browserBack',
+      'click .filterNav .redo': 'browserForward'
     },
 
     initialize: function() {
@@ -61,7 +61,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     model: new Filter(),
     collection: filters,
     itemView: FilterView,
-    itemViewContainer: 'ul',
+    itemViewContainer: 'ul.appliedFilters',
     template: FiltersTmpl,
 
     browserBack: function () {
