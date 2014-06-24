@@ -9,6 +9,26 @@ function(moment, formatters) {
   'use strict';
 
   return {
+
+    vehicle: {
+      name: 'vehicle',
+      title: 'By Vehicle',
+      label: 'Show trips from',
+      value: 'all',
+      valueText: 'All Vehicles',
+      func: function(trip) {
+        if(_.contains(this.get('value'), 'all')) {
+          return true;
+        } else {
+          return (_.contains(this.get('value'), trip.get("vehicle").id));
+        }
+      },
+      queryify: function () {
+        return this.get('value');
+      }
+    },
+
+    
     date: {
       name: 'date',
       title: 'By Date Range',
@@ -32,7 +52,7 @@ function(moment, formatters) {
           ];
         }
 
-        
+
         if(dateType == 'day') {
           range = [
             moment().startOf('day').add('day', offset).valueOf(),
@@ -64,7 +84,7 @@ function(moment, formatters) {
       },
       func: function(trip) {
         return moment(
-          trip.get('start_time')) >= moment(this.get('value')[0]) 
+          trip.get('start_time')) >= moment(this.get('value')[0])
           && moment(trip.get('start_time')) <= moment(this.get('value')[1]);
       },
       setPrevRange: function() {
@@ -76,27 +96,6 @@ function(moment, formatters) {
         var range = this.get('value'),
             rangeLength = range[1] - range[0];
         this.set('value', [parseInt(range[1], 10), range[1] + rangeLength]);
-      }
-    },
-
-
-
-
-    vehicle: {
-      name: 'vehicle',
-      title: 'By Vehicle',
-      label: 'Show trips from',
-      value: 'all',
-      valueText: 'All Vehicles',
-      func: function(trip) {
-        if(_.contains(this.get('value'), 'all')) {
-          return true;
-        } else {
-          return (_.contains(this.get('value'), trip.get("vehicle").id));
-        }
-      },
-      queryify: function () {
-        return this.get('value');
       }
     },
 

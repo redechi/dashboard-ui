@@ -1,4 +1,5 @@
 define([
+  'underscore',
   'backbone',
   'communicator',
   'models/filter',
@@ -6,7 +7,7 @@ define([
   '../controllers/filter',
   '../collections/trips'
 ],
-function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
+function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
   'use strict';
 
   /* filters singleton */
@@ -138,8 +139,9 @@ function( Backbone, coms, FilterModel, amlCollection, filterList, trips) {
         }
       }, this));
 
-      // if no model data than create a vehicle and date filter.
-      if (!Object.keys(modelData)[0]) {
+      // if no fewer than two models, clear and create a vehicle and date filter.
+      if (_.size(modelData) < 2) {
+        this.reset();
         this.add(new FilterModel(filterList.vehicle));
         this.add(new FilterModel(filterList.date));
       }
