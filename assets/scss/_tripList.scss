@@ -1,7 +1,7 @@
 
 #trips {
-  border-right: 1px solid #ddd;
-  border-left: 1px solid #ddd;
+  border-right: 1px solid $trip_line_gray;
+  border-left: 1px solid $trip_line_gray;
   border-top: 1px solid $green;
   background: #fbfaf9;
 
@@ -38,7 +38,7 @@
   }
 
   #tripsFooter {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid $trip_line_gray;
 
     .export {
       display: inline-block;
@@ -55,7 +55,7 @@
   .summaryStats {
     @include lightGreenGradient;
     background-color: #fff;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $trip_line_gray;
     padding: 10px 0;
     overflow: hidden;
 

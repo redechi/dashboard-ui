@@ -3,6 +3,17 @@
 
 @import "bootstrap_min";
 
+@mixin hr-image($lr-image, $hr-image) {
+  background-image: url($lr-image);
+  @media print,
+         (-webkit-min-device-pixel-ratio: 1.25),
+         (-o-min-device-pixel-ratio: 5/4),
+         (min-resolution: 120dpi) {
+    background-image: url($hr-image);
+    background-size: image-width($lr-image) image-height($lr-image);
+  }
+}
+
 $main_back   :  #F9F8F6;
 $header_back :  #F1EFEB;
 
@@ -11,18 +22,16 @@ $red    :  #F63C39;
 $blue   :  #5db2ef;
 
 $base_type: #8D989F;
-$inactive_type: #c0ccd4;
-$link_thype: #596064;
-
-// TODO: replace these variables with names
-// above thisline
+$inactive_type: #BBC8CF;
+$link_type: #596064;
+$highlight: #4AB4F0;
 
 $font_light: #a6a6a2;
 $font_medium: #7f7b79;
 $font_dark: #838c93;
 
 $trip_line_blue: #08b1d5;
-$trip_line_gray: #ddd;
+$trip_line_gray: #D8D8D8;
 
 @import "base";
 @import "map";

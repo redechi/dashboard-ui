@@ -246,11 +246,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<ol id=\"topMenu\">\n  <li>\n    <a href=\"http://blog.automatic.com\">Blog</a>\n  </li>\n  <li>\n    <a href=\"https://www.automatic.com/support/\">Support</a>\n  </li>\n  <li>\n    Logged in as ";
+  buffer += "<ul>\n  <li>\n    <a href=\"http://blog.automatic.com\">Blog</a>\n  </li>\n  <li>\n    <a href=\"https://www.automatic.com/support/\">Support</a>\n  </li>\n  <li>\n    <span class=\"firstName\">";
   if (stack1 = helpers.first_name) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.first_name; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\n    <a href=\"/#/logout\">Log Out</a>\n  </li>\n</ol>\n";
+    + "</span>\n    <a href=\"/#/logout\">Log Out</a>\n  </li>\n</ul>\n";
   return buffer;
   });
 
