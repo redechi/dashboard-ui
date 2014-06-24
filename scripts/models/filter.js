@@ -16,6 +16,14 @@ function( Backbone, coms ) {
 
     defaults: {},
 
+    updateHash: function () {
+      var hashString = this.toHash();
+      var hash = document.location.hash;
+      var name = this.get('name');
+      var regex = new RegExp('('+name+'=[^&]+)');
+      document.location.hash = hash.replace(regex, hashString);
+    },
+
     /*
      *
      * converts to hash query parameter
@@ -24,7 +32,6 @@ function( Backbone, coms ) {
     toHash: function () {
       var name = this.get('name');
       var valueString = this.filterToString();
-
       return name + '=' + encodeURIComponent(valueString);
     },
 

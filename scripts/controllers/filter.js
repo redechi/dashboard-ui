@@ -32,6 +32,21 @@ function(moment, formatters) {
           ];
         }
 
+        
+        if(dateType == 'day') {
+          range = [
+            moment().startOf('day').add('day', offset).valueOf(),
+            moment().endOf("day").add('day', offset).valueOf()
+          ];
+        }
+
+        // update text offset
+        if (offset === -1 && dateType === 'day') {
+          this.set('valueText', 'Yesterday');
+          this.set('dateType', 'yesterday');
+        }
+
+
         // update text offset
         if (offset === -1 && dateType === 'month') {
           this.set('valueText', 'Last Month');
@@ -48,7 +63,9 @@ function(moment, formatters) {
         return range;
       },
       func: function(trip) {
-        return this.get('setRange').call(this, 'month');
+        return moment(
+          trip.get('start_time')) >= moment(this.get('value')[0]) 
+          && moment(trip.get('start_time')) <= moment(this.get('value')[1]);
       },
       setPrevRange: function() {
         var range = this.get('value'),

@@ -1,0 +1,6 @@
+{
+  "project_id"  : "Web-Dashboard",
+  "conduit_uri" : "https://phabricator.automatic.co",
+  "lint.jshint.bin": "jshint",
+  "lint.jshint.config": ".jshintrc"
+}

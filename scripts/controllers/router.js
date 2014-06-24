@@ -9,6 +9,8 @@ define([
 function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout) {
   'use strict';
 
+  var currentView = undefined;
+
   var contentRegion = regionManager.getRegion('main_content');
   window.TripView = TripLayout;
   window.region = contentRegion;
@@ -17,14 +19,19 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
 
 
     showSummaryLayout: function () {
-      // render summary on load
+
       filtersCollection.fromUrl();
-      var summary = new SummaryLayout();
-      var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(summary);
       var dateFilter = filtersCollection.findWhere({name: 'date'});
-     // if (!dateFilter) filtersCollection.addDateFilter();
+      if (!dateFilter) filtersCollection.addDateFilter();
       tripsCollection.applyAllFilters();
+
+      var contentRegion = regionManager.getRegion('main_content');
+      if (currentView !== 'summary') {
+        var summary = new SummaryLayout();
+        contentRegion.show(summary);
+      }
+
+      currentView = 'summary';
     },
 
 
@@ -35,6 +42,7 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       var trip = new TripLayout({collection: tripCollection});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(trip);
+      currentView = 'trip_layout';
     },
 
 

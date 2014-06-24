@@ -88,9 +88,11 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       var dateValue = $(e.target).val(),
           dateText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
-          dateRange = dateFilter.get('setRange').call(dateFilter, dateValue);
+          dateRange = dateFilter.get('setRange').call(dateFilter, dateValue),
+          offset = $(e.target.options[e.target.selectedIndex]).data('offset');
 
       dateFilter.set({
+        offset: offset,
         value:dateRange,
         dateType:dateValue,
         valueText:dateText
