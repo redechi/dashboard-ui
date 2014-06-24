@@ -92,28 +92,8 @@
       }
     }
   }
-
-  li {
-    display: inline-block;
-  }
-
-  .popover-content ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
+  
   .filterList {
     width: 150px;
-
-    li {
-      padding: 5px 0;
-      cursor: pointer;
-      display: block;
-
-      &:hover {
-        color: #428bca;
-      }
-    }
   }
 }

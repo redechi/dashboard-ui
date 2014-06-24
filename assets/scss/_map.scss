@@ -80,9 +80,15 @@
 		}
 
 		.leaflet-popup-content-wrapper {
+			border: none;
 			border-bottom: 2px solid $blue;
+			border-top-right-radius: 3px;
+			border-top-left-radius: 3px;
 			border-bottom-right-radius: 0;
 			border-bottom-left-radius: 0;
+			background: #FFFFFF;
+			-moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+			box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
 		}
   }
 }
