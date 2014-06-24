@@ -14,7 +14,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
     initialize: function() {
       console.log("initialize a Trips CollectionView");
 
-      coms.once('filter', _.bind(this.resetCollection, this));
+      coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('all', function () {console.log(arguments)});
 
       $(window).on("resize", this.resize);
