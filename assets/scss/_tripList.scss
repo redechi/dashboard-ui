@@ -3,13 +3,9 @@
   border-right: 1px solid $line_gray;
   border-left: 1px solid $line_gray;
   border-top: 1px solid $green;
-  background: #fbfaf9;
+  background: $trip_list_back;
 
-  a {
-    color: #777;
-  }
-
-  ul {
+  ul.trips {
     height: 652px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -39,14 +35,20 @@
 
   #tripsFooter {
     border-top: 1px solid $line_gray;
+    height: 40px;
 
-    .export {
+    .btn-export {
+      cursor: pointer;
+      font-size: 12px;
+      background-repeat: no-repeat;
+      background-position: left 10px center;
       display: inline-block;
-      padding: 5px 10px;
+      padding: 0 10px 0 36px;
+      line-height: 40px;
+      @include hr-image('../img/icon_export.png', '../img/icon_export@2x.png');
 
-      label {
-        padding-right: 10px;
-        color: #777;
+      &:hover {
+        @include hr-image('../img/icon_export_hover.png', '../img/icon_export_hover@2x.png');
       }
     }
   }

@@ -65,7 +65,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
     },
 
     events: {
-      'change #exporter': 'export',
+      'click #export li': 'export',
       'change .sortType': 'changeSort'
     },
 
@@ -82,6 +82,15 @@ function( Backbone, Empty, Trip, coms, tripList) {
 
       var resize = this.resize;
       setTimeout(resize, 0);
+
+      // initialize export popover
+      setTimeout(function() {
+        $('.btn-export').popover({
+          html: true,
+          placement: 'top',
+          content: '<ul id="export"><li data-type="all">All</li><li data-type="selected">Selected</li></ul>'
+        });
+      }, 0);
     },
 
     resize: function() {
