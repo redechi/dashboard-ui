@@ -107,14 +107,13 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
       filterStrings.map(function (filterKeyValue) {
         var name = filterKeyValue.shift();
         var argsString = filterKeyValue.shift();
-        var argsArray = argsString.split(',').map(function(value) {
-          if(name == 'vehicle') {
-            return value;
-          } else {
+        if(name === 'vehicle') {
+          modelData[name] = argsString;
+        } else {
+          modelData[name] = argsString.split(',').map(function(value) {
             return parseFloat(value) || value;
-          }
-        });
-        modelData[name] = argsArray;
+          });
+        }
       });
 
       // make models if query parameter exists.

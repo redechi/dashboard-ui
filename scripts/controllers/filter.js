@@ -17,10 +17,10 @@ function(moment, formatters) {
       value: 'all',
       valueText: 'All Vehicles',
       func: function(trip) {
-        if(_.contains(this.get('value'), 'all')) {
+        if(this.get('value') === 'all') {
           return true;
         } else {
-          return (_.contains(this.get('value'), trip.get("vehicle").id));
+          return (this.get('value') === trip.get("vehicle").id);
         }
       },
       queryify: function () {
