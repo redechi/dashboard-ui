@@ -22,6 +22,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
+    noMove: false,
+
     collection: new Backbone.Collection([]),
 
     resetCollection: function (newCollection) {
@@ -40,7 +42,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
     /* Ui events hash */
     events: {
-      'change .noMove': 'setNoMoveStatus',
       'click .mapLocationFilter': 'updateLocationFilter'
     },
 
@@ -51,7 +52,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
     /* on render callback */
     onRender: function () {
-      this.noMove = false;
       this.createMap();
       this.updateMap();
     },
@@ -66,6 +66,33 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       mapHelpers.enablePolyline();
 
       mapbox.addLayer(markersLayer);
+
+      this.addLockControl().addTo(mapbox);
+    },
+
+
+
+    addLockControl: function() {
+      var self = this;
+
+      L.Control.Lock = L.Control.extend({
+          options: {
+              position: 'topleft',
+          },
+
+          onAdd: function (map) {
+            var controlDiv = L.DomUtil.create('div', 'leaflet-control-lock');
+            L.DomEvent
+              .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
+              .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
+              .addListener(controlDiv, 'click', function() { self.changeNoMoveStatus(); });
+
+            controlDiv.title = 'Don\'t move map';
+            return controlDiv;
+          }
+      });
+
+      return new L.Control.Lock();
     },
 
 
@@ -160,8 +187,9 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
     },
 
 
-    setNoMoveStatus: function() {
-      this.noMove = $('.noMove').is(':checked');
+    changeNoMoveStatus: function() {
+      this.noMove = !this.noMove;
+      $('.leaflet-control-lock').toggleClass('locked', this.noMove);
     },
 
 
