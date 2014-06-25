@@ -288,8 +288,10 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
       //show/hide nextDates button
       var dateFilter = filters.findWhere({name: 'date'});
-      var dateRange = dateFilter.get('value');
-      this.$el.find('.nextDates').toggle(dateRange[1] < Date.now());
+      if(dateFilter) {
+        var dateRange = dateFilter.get('value');
+        this.$el.find('.nextDates').toggle(dateRange[1] < Date.now());
+      }
     }
   });
 
