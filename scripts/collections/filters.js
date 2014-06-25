@@ -52,25 +52,14 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
 
 
     parseHash: function () {
-      var hash = decodeURIComponent(document.location.hash);
-      var filterStrings = hash.substring(1)
+      var hash = document.location.hash.substring(1),
+          search = hash.replace('/filter/?', ''),
+          hashObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+                 function(key, value) {
+                   return key === "" ? value : decodeURIComponent(value);
+                 }) : {};
 
-        // chromes decodeURIComponent is broken, decode the important things
-        // if they are still present
-        .split('%3A').join(':').split('%2C').join(',')
-
-        .split('?')
-        .pop()
-        .split('&');
-
-      filterStrings = filterStrings.filter(function(n){ return !!n; });
-
-      // split on =
-      filterStrings = _.map(filterStrings, function (fs) {
-        return fs.split('=');
-      }, this);
-
-      return filterStrings;
+      return hashObj;
     },
 
     /*
@@ -87,46 +76,41 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
     },
 
     fromUrl: function (string) {
-      var modelData = {};
-      var filterStrings = this.parseHash();
+      var hashObj = this.parseHash(),
+          self = this;
 
-      // ensure all models share the same data.
-      filterStrings.map(function (filterKeyValue) {
-        var name = filterKeyValue.shift();
-        var argsString = filterKeyValue.shift();
-        if(name === 'vehicle') {
-          modelData[name] = argsString;
-        } else {
-          modelData[name] = argsString.split(',').map(function(value) {
-            return parseFloat(value) || value;
+      _.each(hashObj, function (value, name) {
+        if (!filterList.hasOwnProperty(name)) {
+          return;
+        }
+
+        var preExistingModel = self.findWhere({name: name});
+
+        if(name !== 'vehicle') {
+          value = value.split(',').map(function(item) {
+            return parseFloat(item) || item;
           });
         }
-      });
-
-      // make models if query parameter exists.
-      for (var filterName in modelData) {
-        if (!filterList.hasOwnProperty(filterName)) return
-        var preExistingModel = this.findWhere({name: filterName});
 
         if (!!preExistingModel) {
-          preExistingModel.set({value: modelData[filterName]});
+          preExistingModel.set({value: value});
         } else {
-          var filter = new FilterModel(filterList[filterName]);
-          filter.set({value: modelData[filterName]});
-          this.add(filter);
+          var filter = new FilterModel(filterList[name]);
+          filter.set({value: value});
+          self.add(filter);
         }
-      }
+      });
 
       // remove any extra models
       this.each(_.bind(function (filter) {
         var name = filter.get('name');
-        if (!modelData.hasOwnProperty(name)) {
+        if (!hashObj.hasOwnProperty(name)) {
           this.remove(filter);
         }
       }, this));
 
       // if no fewer than two models, clear and create a vehicle and date filter.
-      if (_.size(modelData) < 2) {
+      if (_.size(hashObj) < 2) {
         this.reset();
         this.add(new FilterModel(filterList.vehicle));
         this.add(new FilterModel(filterList.date));
