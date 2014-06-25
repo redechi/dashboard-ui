@@ -254,13 +254,14 @@ header.mainHeader {
   margin: 0;
   overflow: hidden;
   margin-right: 311px;
-  padding-left: 15px;
-  padding-right: 15px;
+  margin-left: 30px;
 }
 
 #right-column {
-  width: 311px;
+  width: 310px;
   float: right;
+  margin-right: 30px;
+  margin-left: 30px;
 }
 
 .shareList {
