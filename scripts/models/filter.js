@@ -10,7 +10,6 @@ function( Backbone, coms ) {
 
     initialize: function() {
       console.log('initialize a Filter model');
-      coms.trigger('filters:newFilter', this);
       this.on('change', this.updateHash, this);
     },
 

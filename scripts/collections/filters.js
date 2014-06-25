@@ -19,16 +19,7 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
       //Show date range filter by default
       this.on('add', this.toUrl, this);
       this.on('remove', this.toUrl, this);
-      // this.add(new FilterModel(filterList.date));
       window.filters = this;
-
-      // add all filters in filter controller
-      for (var i in filterList) {
-        var name = i.charAt(0).toUpperCase() + i.substring(1);
-        this['add'+name+'Filter'] = function () {
-          this.setNewFilter(new FilterModel(filterList[i]));
-        };
-      }
 
       coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
     },
