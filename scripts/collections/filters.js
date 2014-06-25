@@ -80,14 +80,10 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
      */
     toUrl: function () {
       var hashString = '#/filter/?';
-      var dedupeStrings = {};
-      this.each(function (filterModel) {
-        var name = filterModel.get('name');
-        dedupeStrings[name] = filterModel.toHash();
-      });
-      var filterStrings = _.values(dedupeStrings);
-      var hash = hashString + filterStrings.join('&');
-      document.location.hash = hash;
+      var filterObj = _.object(this.map(function (filterModel) {
+        return [filterModel.get('name'), filterModel.filterToString()];
+      }));
+      document.location.hash = hashString + $.param(filterObj);
     },
 
     fromUrl: function (string) {
