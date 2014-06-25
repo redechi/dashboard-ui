@@ -50,6 +50,7 @@
 
       &:hover {
         @include hr-image('../img/icon_export_hover.png', '../img/icon_export_hover@2x.png');
+        color: $highlight;
       }
     }
   }
