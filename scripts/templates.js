@@ -153,11 +153,11 @@ function program5(depth0,data) {
   if (stack1 = helpers.id) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.id; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "\">\n  \n  <div class=\"timeTopBox\">\n    <div class=\"endTime\">";
+    + "\">\n\n  <div class=\"timeTopBox\">\n    <div class=\"endTime\">";
   if (stack1 = helpers.formatted_end_time) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.formatted_end_time; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + "</div>\n    <div class=\"endTime\">";
+    + "</div>\n    <div class=\"endDate\">";
   if (stack1 = helpers.formatted_calendar_date) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.formatted_calendar_date; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)

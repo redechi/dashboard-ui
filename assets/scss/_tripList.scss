@@ -12,6 +12,10 @@
     overflow-x: hidden;
     color: #777;
     margin: 0;
+
+    a {
+      color: $base_type;
+    }
   }
 
   // trip count header
@@ -27,10 +31,10 @@
     .tripCount {
       float: left;
       display: inline-block;
-      line-height: 30px;
-      height: 30px;
-      font-size: 20px;
-      font-weight: lighter;
+      line-height: 25px;
+      height: 25px;
+      font-size: 14px;
+      color: $link_type;
     }
   }
 
@@ -96,13 +100,17 @@
 
     .timeTopBox, .timeBottomBox {
       position: absolute;
-      font-size: 10px;
+      font-size: 11px;
       left: 0;
       padding: 10px;
     }
 
     .timeTopBox {
       top: 0;
+
+      .endDate {
+        font-size: 10px;
+      }
     }
 
     .timeBottomBox {
@@ -112,23 +120,22 @@
     .tripLine {
       @include box-sizing(border-box);
       position: absolute;
-      width: 3px;
+      width: 2px;
       height: 90%;
       background-color: $line_gray;
       left: 65px;
-      top: 7%;
-      height: 86%;
+      top: 12%;
+      height: 76%;
 
       & > div {
-        width: 20px;
-        height: 20px;
+        width: 10px;
+        height: 10px;
         background-color: $line_gray;
-        border: 7px solid $line_gray;
-        border-radius: 10px;
-        margin-left: -9px;
-        line-height: 9px;
+        border-radius: 5px;
+        margin-left: -4px;
+        line-height: 0;
         text-align: center;
-        color: $line_gray;
+        color: transparent;
       }
 
       & div:first-child {
@@ -171,13 +178,12 @@
       float: left;
       font-size: 14px;
       font-weight: 400;
-      color: $font_medium;
+      color: $base_type;
 
       &::after, &::before {
         font-size: 9px;
         font-weight: normal;
         display: inline;
-        color: $font_light;
       }
     }
 
@@ -200,6 +206,10 @@
     &:hover{
       background: #fff;
 
+      .stat {
+        color: $link_type;
+      }
+
       .startLocation {
         color: $trip_line_blue;
       }
@@ -214,7 +224,11 @@
         & > * {
           color: #fff;
           background: $trip_line_blue;
-          border: 5px solid $trip_line_blue;
+          width: 16px;
+          height: 16px;
+          border-radius: 8px;
+          margin-left: -6px;
+          line-height: 15px;
         }
       }
     }
