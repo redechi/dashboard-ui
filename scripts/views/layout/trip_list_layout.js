@@ -9,7 +9,7 @@ function( Backbone, coms, TripsCompositView, UserScoreView, TripListLayoutTmpl  
     'use strict';
 
   /* Return a Layout class definition */
-  return Backbone.Marionette.Layout.extend({
+  return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
       console.log("initialize a TripListLayout Layout");

@@ -60,9 +60,9 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
 
     model: new Filter(),
     collection: filters,
-    itemView: FilterView,
-    appendHtml: function(collectionView, itemView, index) {
-      collectionView.$('ul.appliedFilters .addFilterContainer').before(itemView.el);
+    childView: FilterView,
+    attachHtml: function(collectionView, childView, index) {
+      collectionView.$('ul.appliedFilters .addFilterContainer').before(childView.el);
     },
 
     template: FiltersTmpl,

@@ -23,7 +23,7 @@ require.config({
         'backbone.iobind': '../bower_components/backbone.iobind/dist/backbone.iobind',
 
         /* alias all marionette libs */
-        'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
+        'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',
         'backbone.wreqr': '../bower_components/backbone.wreqr/lib/backbone.wreqr',
         'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 

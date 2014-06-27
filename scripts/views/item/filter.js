@@ -35,7 +35,7 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
 
     deleteFilter: function () {
       this.model.destroy();
-      this.close();
+      this.destroy();
       // TODO: trigger remove filter analytics event
     },
 

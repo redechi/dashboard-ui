@@ -49,7 +49,7 @@ require.config({
     markercluster: '//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster',
 
     /* alias all marionette libs */
-    'backbone.marionette': '../bower_components/backbone.marionette/lib/core/amd/backbone.marionette',
+    'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',
     'backbone.wreqr': '../bower_components/backbone.wreqr/lib/backbone.wreqr',
     'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 

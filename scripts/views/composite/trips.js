@@ -23,8 +23,8 @@ function( Backbone, Empty, Trip, coms, tripList) {
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
     emptyView: Empty,
-    itemView: Trip,
-    itemViewContainer: "ul",
+    childView: Trip,
+    childViewContainer: "ul",
     template: tripList,
 
     resetCollection: function (collection) {
