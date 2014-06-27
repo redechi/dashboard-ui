@@ -61,7 +61,10 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     model: new Filter(),
     collection: filters,
     itemView: FilterView,
-    itemViewContainer: 'ul.appliedFilters',
+    appendHtml: function(collectionView, itemView, index) {
+      collectionView.$('ul.appliedFilters .addFilterContainer').before(itemView.el);
+    },
+
     template: FiltersTmpl,
 
     browserBack: function () {

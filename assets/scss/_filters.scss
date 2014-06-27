@@ -1,9 +1,10 @@
 
 #filters {
-  height: 78px;
+  min-height: 78px;
   box-sizing: border-box;
   padding: 25px 30px;
   border-bottom: 1px solid $line_light_gray;
+  overflow: hidden;
 
   .filterLabel {
     font-size: 16px;
@@ -12,11 +13,11 @@
   }
 
   .appliedFilters {
-    margin: 0 0 0 10px;
-    display: inline-block;
-
-    li {
+    margin: 0 100px 0 110px;
+    
+    >li {
       display: inline-block;
+      margin-bottom: 5px;
     }
   }
 
@@ -66,7 +67,7 @@
   }
 
   .filterNav {
-    display: inline-block;
+    float: left;
 
     li {
       margin: 0;
@@ -92,7 +93,7 @@
       }
     }
   }
-  
+
   .filterList {
     width: 150px;
   }
