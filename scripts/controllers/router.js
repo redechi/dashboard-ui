@@ -9,17 +9,14 @@ define([
 function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout) {
   'use strict';
 
-  var contentRegion = regionManager.getRegion('main_content');
   window.TripView = TripLayout;
-  window.region = contentRegion;
 
   return {
 
     showSummaryLayout: function () {
-      filtersCollection.fromUrl();
-
-      var contentRegion = regionManager.getRegion('main_content');
       var summary = new SummaryLayout();
+      var contentRegion = regionManager.getRegion('main_content');
+      filtersCollection.fromUrl();
       contentRegion.show(summary);
       tripsCollection.applyAllFilters();
     },
