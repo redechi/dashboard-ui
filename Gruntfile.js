@@ -27,7 +27,7 @@ module.exports = function (grunt) {
     app: '',
     dist: 'dist'
   };
-  
+
   var CDN = process.env.CDN || '';
 
   grunt.initConfig({
@@ -348,7 +348,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', [
     'handlebars',
     'compass',
-    'connect:testserver',
+    'connect:devserver',
     'exec:mocha'
   ]);
 
