@@ -57,7 +57,13 @@ function( Backbone, moment, formatters ) {
       var score2 = 50 - percentSpeeding70 * speeding70Coefficient - percentSpeeding75 * speeding75Coefficient - percentSpeeding80 * speeding80Coefficient;
 
       var score = Math.max(0, score1) + Math.max(0, score2);
-      return Math.max(1, score);
+
+      if(this.get('duration') === 0) {
+        //if trip doesn't have a length, give it 100
+        return 100;
+      } else {
+        return Math.max(1, score);
+      }
     },
 
 
