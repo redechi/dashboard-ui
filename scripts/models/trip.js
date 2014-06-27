@@ -29,8 +29,8 @@ function( Backbone, moment, formatters ) {
 
       this.set('duration', duration);
       this.set('distance_miles', miles);
-      this.set('average_mpg', parseInt(this.get('average_mpg') * 100) /100);
-      this.set('fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) /100);
+      this.set('average_mpg', parseInt(this.get('average_mpg') * 10) / 10);
+      this.set('fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) / 100);
       this.set('formatted_end_time', moment(this.get('end_time')).format('h:mm a').toUpperCase());
       this.set('formatted_start_time', moment(this.get('start_time')).format('h:mm a').toUpperCase());
       this.set('formatted_calendar_date', moment(this.get('start_time')).calendar());

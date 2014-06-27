@@ -64,7 +64,7 @@
     @include lightGreenGradient;
     background-color: #fff;
     border-bottom: 1px solid $line_gray;
-    padding: 10px 0;
+    padding: 5px 0;
     overflow: hidden;
 
     svg {
@@ -77,17 +77,23 @@
 
     .stat {
       display: inline-block;
+      width: 59px;
+      vertical-align: 4px;
     }
 
     .value {
-      color: $font_dark;
+      color: $link_type;
       text-align: center;
+      font-size: 14px;
     }
 
     .label {
-      color: $font_light;
-      font-size: 15px;
-      font-weight: 100;
+      font-size: 10px;
+      color: $base_type;
+      text-transform: uppercase;
+      font-weight: normal;
+      text-align: center;
+      display: block;
     }
   }
 
@@ -123,9 +129,9 @@
       width: 2px;
       height: 90%;
       background-color: $line_gray;
-      left: 65px;
-      top: 12%;
-      height: 76%;
+      left: 61px;
+      top: 16px;
+      height: 60px;
 
       & > div {
         width: 10px;
@@ -164,7 +170,7 @@
 
     .tripDetails {
       display: block;
-      width: 240px;
+      width: 234px;
       float: right;
     }
 
@@ -220,6 +226,8 @@
 
       .tripLine {
         background: $trip_line_blue;
+        top: 14px;
+        height: 84px;
 
         & > * {
           color: #fff;
@@ -227,7 +235,7 @@
           width: 16px;
           height: 16px;
           border-radius: 8px;
-          margin-left: -6px;
+          margin-left: -7px;
           line-height: 15px;
         }
       }

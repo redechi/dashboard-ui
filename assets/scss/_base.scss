@@ -88,7 +88,7 @@ h5 {
 select {
   @include appearance(none);
   @include box-sizing(border-box);
-  color: $font_dark;
+  color: $link_type;
   padding: 5px;
   padding-right: 24px;
   border: 0;
