@@ -168,20 +168,20 @@ function program5(depth0,data) {
     + "</div>\n  </div>\n\n\n\n  <div class=\"tripLine\">\n    <div>B</div>\n    <div>A</div>\n  </div>\n\n\n\n  <div class=\"tripDetails\">\n\n    <div class=\"bottomBox\">\n      <div class=\"startLocation\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.start_location),stack1 == null || stack1 === false ? stack1 : stack1.display_name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</div>\n    </div>\n\n    <div class=\"middleBox\">\n      <div class=\"distance stat\">";
-  if (stack2 = helpers.distance) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.distance; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  if (stack2 = helpers.formatted_distance_miles) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.formatted_distance_miles; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
     + "</div>\n      <div class=\"mpg stat\">";
-  if (stack2 = helpers.average_mpg) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.average_mpg; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  if (stack2 = helpers.formatted_average_mpg) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.formatted_average_mpg; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
     + "</div>\n      <div class=\"fuelCost stat\">";
-  if (stack2 = helpers.fuel_cost_usd) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.fuel_cost_usd; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  if (stack2 = helpers.formatted_fuel_cost_usd) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.formatted_fuel_cost_usd; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
     + "</div>\n      <div class=\"duration stat\">";
-  if (stack2 = helpers.duration) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.duration; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  if (stack2 = helpers.formatted_duration) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.formatted_duration; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
     + "</div>\n    </div>\n    <div class=\"tripEventsBox\">\n      <div class=\"hardBrakes event octagon ";
   stack2 = helpers['if'].call(depth0, depth0.noHardBrakes, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});

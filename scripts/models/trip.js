@@ -28,12 +28,15 @@ function( Backbone, moment, formatters ) {
           miles = formatters.m_to_mi(this.get('distance_m'));
 
       this.set('duration', duration);
+      this.set('formatted_duration', formatters.durationMin(duration));
       this.set('distance_miles', miles);
-      this.set('average_mpg', parseInt(this.get('average_mpg') * 10) / 10);
-      this.set('fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) / 100);
+      this.set('formatted_distance_miles', formatters.distance(miles));
+      this.set('formatted_average_mpg', parseInt(this.get('average_mpg') * 10) / 10);
+      this.set('formatted_fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) / 100);
       this.set('formatted_end_time', moment(this.get('end_time')).format('h:mm a').toUpperCase());
       this.set('formatted_start_time', moment(this.get('start_time')).format('h:mm a').toUpperCase());
       this.set('formatted_calendar_date', moment(this.get('start_time')).calendar());
+      this.set('duration_over_70_min', Math.ceil(this.get('duration_over_70_s') / 60));
 
       var score = this.calculateScore();
       this.set('score', score);

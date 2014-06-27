@@ -26,10 +26,10 @@
     </div>
 
     <div class="middleBox">
-      <div class="distance stat">{{ distance }}</div>
-      <div class="mpg stat">{{ average_mpg }}</div>
-      <div class="fuelCost stat">{{ fuel_cost_usd }}</div>
-      <div class="duration stat">{{ duration }}</div>
+      <div class="distance stat">{{ formatted_distance_miles }}</div>
+      <div class="mpg stat">{{ formatted_average_mpg }}</div>
+      <div class="fuelCost stat">{{ formatted_fuel_cost_usd }}</div>
+      <div class="duration stat">{{ formatted_duration }}</div>
     </div>
     <div class="tripEventsBox">
       <div class="hardBrakes event octagon {{#if noHardBrakes}}noHardBrakes{{/if}}">{{hard_brakes}}<i class="glyphicon glyphicon-ok"></i></div>
