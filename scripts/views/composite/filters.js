@@ -89,7 +89,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     },
 
     removeFilters: function () {
-      document.location.hash = '#';
+      Backbone.history.navigate('/', {trigger: true});
       this.collection.reset();
     },
 
