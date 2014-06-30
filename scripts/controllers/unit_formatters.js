@@ -44,7 +44,7 @@ function() {
       return fuelCost.toFixed(2);
     },
     averageMPG: function(mpg) {
-      return mpg.toFixed(1);
+      return mpg ? mpg.toFixed(1) : 0;
     },
     score: function(score) {
       return Math.round(score);
