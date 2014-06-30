@@ -1,9 +1,10 @@
 'use strict';
 
-var git = require('git-rev')
+var git = require('git-rev');
 
 
-var tagName = undefined;
+var tagName;
+
 git.tag(function (tag) {
   tagName = tag;
   console.log(arguments);
@@ -334,6 +335,12 @@ module.exports = function (grunt) {
           'scripts/templates.js': 'templates/**/*.hbs'
         }
       }
+    },
+
+    jshint: {
+      all: ['scripts/**/*.js'],
+      reporter: 'checkstyle',
+      jshintrc: './.jshintrc'
     }
   });
 
@@ -385,5 +392,8 @@ module.exports = function (grunt) {
 //    'connect:devserver',
 //    'exec:mocha'
   ]);
+
+
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
 };
