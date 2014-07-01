@@ -51,15 +51,14 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
     },
 
 
-    parseHash: function () {
-      var hash = document.location.hash.substring(1),
-          search = hash.replace('/filter/?', ''),
-          hashObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+    getFiltersFromUrl: function () {
+      var search = Backbone.history.fragment.replace('filter/?', ''),
+          filterObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
                  function(key, value) {
                    return key === "" ? value : decodeURIComponent(value);
                  }) : {};
 
-      return hashObj;
+      return filterObj;
     },
 
     /*
@@ -68,18 +67,19 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
      *
      */
     toUrl: function () {
-      var hashString = '#/filter/?';
+      console.log('Write Filters to URL');
       var filterObj = _.object(this.map(function (filterModel) {
         return [filterModel.get('name'), filterModel.filterToString()];
       }));
-      document.location.hash = hashString + $.param(filterObj);
+      Backbone.history.navigate('/filter/?' + $.param(filterObj));
     },
 
     fromUrl: function (string) {
-      var hashObj = this.parseHash(),
+      console.log('Get Filters From URL');
+      var filterObj = this.getFiltersFromUrl(),
           self = this;
 
-      _.each(hashObj, function (value, name) {
+      _.each(filterObj, function (value, name) {
         if (!filterList.hasOwnProperty(name)) {
           return;
         }
@@ -104,13 +104,13 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
       // remove any extra models
       this.each(_.bind(function (filter) {
         var name = filter.get('name');
-        if (!hashObj.hasOwnProperty(name)) {
+        if (!filterObj.hasOwnProperty(name)) {
           this.remove(filter);
         }
       }, this));
 
       // if no fewer than two models, clear and create a vehicle and date filter.
-      if (_.size(hashObj) < 2) {
+      if (_.size(filterObj) < 2) {
         this.reset();
         this.add(new FilterModel(filterList.vehicle));
         this.add(new FilterModel(filterList.date));

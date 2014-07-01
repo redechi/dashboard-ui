@@ -17,11 +17,10 @@ function( Backbone, coms ) {
 
     updateHash: function () {
       var name = this.get('name'),
-          hashObj = {},
-          hash = document.location.hash,
-          regex = new RegExp('('+name+'=[^&]+)');
-      hashObj[name] = this.filterToString();
-      document.location.hash = hash.replace(regex, $.param(hashObj));
+          regex = new RegExp('('+name+'=[^&]+)'),
+          filterObj = _.object([[name, this.filterToString()]]);
+      var newUrl = Backbone.history.fragment.replace(regex, $.param(filterObj));
+      Backbone.history.navigate(newUrl);
     },
 
     /*
