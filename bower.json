@@ -36,5 +36,8 @@
     "nvd3": "~1.1.15-beta"
   },
   "devDependencies": {},
-  "directory": "n"
+  "directory": "n",
+  "resolutions": {
+    "jquery": "~2.1.1"
+  }
 }
