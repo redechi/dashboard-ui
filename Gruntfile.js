@@ -296,34 +296,6 @@ module.exports = function (grunt) {
       }
     },
 
-    cdnify: {
-      someTarget: {
-        options: {
-          rewriter: function (url) {
-            tagName = tagName || "no_tag_provided";
-            if (url.indexOf('data:') === 0) {
-              return url; // leave data URIs untouched
-            }
-
-            var hash = 'aumatic_version=' + tagName;
-            if (url.indexOf('?')>-1) {
-              url = url.replace(/\?/, '?'+hash+'&');
-            } else {
-              url+='?'+hash;
-            }
-
-            return url; // add query string to all other URLs
-          }
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.dist %>',
-          src: '**/*.{css,html}',
-          dest: '<%= yeoman.dist %>'
-        }]
-      }
-    },
-
     // handlebars
     handlebars: {
       compile: {
@@ -387,8 +359,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
-    'inline',
-    'cdnify'
+    'inline'
 
 // tests have been commented out.
 // they fail because none have been written.
