@@ -74,5 +74,6 @@ function( Backbone, Communicator) {
   });
 
   Backbone.AML = Backbone.AML || {};
-  return Backbone.AML.Collection = AMLCollection;
+  Backbone.AML.Collection = AMLCollection
+  return AMLCollection;
 });

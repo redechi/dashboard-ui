@@ -51,11 +51,10 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       values = this.collection.getGraphSet(graphType);
 
       this.model.set('key', graphType);
-      this.model.set('values', values)
+      this.model.set('values', values);
     },
 
     changeFilter: function () {
-      console.log(arguments)
     },
 
     /*
@@ -91,7 +90,7 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
      *
      */
     appendSVGBarMask: function (defs) {
-      var offset = 7
+      var offset = 7;
 
       d3.selectAll('.nv-group[class*="nv-series"]')
         .attr("transform", "translate(0,"+offset+")");
@@ -129,15 +128,23 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
        var min = {y:10000},
            max = {y:0};
 
-       d3.selectAll("rect.nv-bar").each(function (bar) {
-         if (bar.y >= max.y) max = bar;
-         if (bar.y <= max.y) min = bar;
-       })
+       d3.selectAll('rect.nv-bar').each(function (bar) {
+         if (bar.y >= max.y) {
+           max = bar;
+         }
+         if (bar.y <= max.y) {
+           min = bar;
+         }
+       });
 
-       d3.selectAll("rect.nv-bar").style("fill", function(bar, i){
+       d3.selectAll('rect.nv-bar').style('fill', function(bar, i){
          var color = 'url(#gradient)';
-         if (bar.isMax) color = 'green';
-         if (bar.isMin) color = 'red';
+         if (bar.isMax) {
+           color = 'green';
+         }
+         if (bar.isMin) {
+           color = 'red';
+         }
          return color;
        });
 
@@ -157,19 +164,19 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
         .showControls(false)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
         .groupSpacing(0.1);   //Distance between each group of bars.
 
-      chart.margin({top: 0, right: 0, bottom: 20, left: 0})
+      chart.margin({top: 0, right: 0, bottom: 20, left: 0});
       chart.showYAxis(false);
       chart.reduceXTicks(false);
       chart.xAxis.tickFormat(d3.format(',f'));
       chart.xAxis.tickFormat(function(d) {
-        return d3.time.format('%e')(new Date(d))
+        return d3.time.format('%e')(new Date(d));
       });
 
       chart.height = 160;
 
       nv.utils.windowResize(chart.update);
       chart.tooltipContent(function(key, y, e, graph) {
-        return '<p>' + key + ': ' + e + '</p>'
+        return '<p>' + key + ': ' + e + '</p>';
       });
 
       var svg = d3.select(this.$el.find('svg').get(0))
@@ -194,7 +201,7 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       var value  = $(select).find(":selected").val();
       this.collection.graphType = value;
       var values = this.collection.getGraphSet(value);
-      this.model.set('values', values)
+      this.model.set('values', values);
       this.updateGraph();
     },
 
@@ -227,8 +234,8 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       });
 
       // determine max / min
-      var min = _.min(datum.values, function (val) {return val.y});
-      var max = _.max(datum.values, function (val) {return val.y});
+      var min = _.min(datum.values, function (val) { return val.y; });
+      var max = _.max(datum.values, function (val) { return val.y; });
       min.isMin = true;
       max.isMax = true;
 

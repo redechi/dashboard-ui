@@ -62,7 +62,7 @@ function(mapbox, formatters) {
         lon: location.lon
       });
 
-      var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id}).bindPopup(popupText)
+      var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id}).bindPopup(popupText);
 
       return marker;
     },

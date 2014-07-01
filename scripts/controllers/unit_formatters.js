@@ -52,14 +52,14 @@ function() {
     mi_to_m: function(mi) { return mi * 1609.34; },
     m_to_mi: function(m) { return m / 1609.34; },
     distance_mi: function(lat1, lon1, lat2, lon2) {
-      function ToRadians(degree) {
+      function toRadians(degree) {
         return (degree * (Math.PI / 180));
       }
       var radius = 3959.0; //Earth Radius in mi
-      var radianLat1 = ToRadians(lat1);
-      var radianLon1 = ToRadians(lon1);
-      var radianLat2 = ToRadians(lat2);
-      var radianLon2 = ToRadians(lon2);
+      var radianLat1 = toRadians(lat1);
+      var radianLon1 = toRadians(lon1);
+      var radianLat2 = toRadians(lat2);
+      var radianLon2 = toRadians(lon2);
       var radianDistanceLat = radianLat1 - radianLat2;
       var radianDistanceLon = radianLon1 - radianLon2;
       var sinLat = Math.sin(radianDistanceLat / 2.0);

@@ -36,7 +36,6 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     templateHelpers: function() {
       var trip = this.collection.models[0],
           helpers = {};
-      console.log(trip)
 
       if(trip) {
         helpers =  {

@@ -61,10 +61,10 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
 
       nv.addGraph(function() {
         var chart = nv.models.pieChart()
-            .x(function(d) { return d.label })
-            .y(function(d) { return d.value })
+            .x(function(d) { return d.label; })
+            .y(function(d) { return d.value; })
             .showLabels(false)    //Display pie labels
-            .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
+            .labelThreshold(0.05)  //Configure the minimum slice size for labels to show up
             .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
             .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
             .donutRatio(0.9)      //Configure how big you want the donut hole size to be.
@@ -93,7 +93,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
           .call(chart);
 
         // duplicate set for animation.
-        var datum = [
+        datum = [
           {
             "label": "score",
             "value" : score

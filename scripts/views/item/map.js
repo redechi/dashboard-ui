@@ -252,8 +252,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
         }
 
         if (startLoc) {
-          var marker = mapHelpers.createMarker('start', model, popupTemplate);
-          marker.on('click', function (e) {
+          var startMarker = mapHelpers.createMarker('start', model, popupTemplate);
+          startMarker.on('click', function (e) {
             var newModel = self.collection.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
@@ -261,13 +261,13 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
             coms.trigger('trips:unhighlight');
           });
 
-          markers.push(marker);
-          markersLayer.addLayer(marker);
+          markers.push(startMarker);
+          markersLayer.addLayer(startMarker);
         }
 
         if (endLoc) {
-          var marker = mapHelpers.createMarker('end', model, popupTemplate);
-          marker.on('click', function (e) {
+          var endMarker = mapHelpers.createMarker('end', model, popupTemplate);
+          endMarker.on('click', function (e) {
             var newModel = self.collection.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
           })
@@ -275,8 +275,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
             coms.trigger('trips:unhighlight');
           });
 
-          markers.push(marker);
-          markersLayer.addLayer(marker);
+          markers.push(endMarker);
+          markersLayer.addLayer(endMarker);
         }
 
         geoJson.addTo(pathsLayer);

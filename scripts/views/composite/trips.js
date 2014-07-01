@@ -15,7 +15,6 @@ function( Backbone, Empty, Trip, coms, tripList) {
       console.log("initialize a Trips CollectionView");
 
       coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('all', function () {console.log(arguments)});
 
       $(window).on("resize", this.resize);
     },
@@ -34,7 +33,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
     templateHelpers: function () {
       return {
         total: this.collection.length
-      }
+      };
     },
 
     export: function (e) {
@@ -44,7 +43,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
         ids = new Backbone.Collection(selected).pluck("id");
         if (!ids[0]) return alert('Please Select at least one trip');
       } else if (e.target.value === 'filtered'){
-        var filtered = this.collection.models
+        var filtered = this.collection.models;
         ids = new Backbone.Collection(filtered).pluck("id");
         if (!ids[0]) return alert('Please Select at least one trip');
       }

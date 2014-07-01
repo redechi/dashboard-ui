@@ -68,11 +68,11 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     template: FiltersTmpl,
 
     browserBack: function () {
-      window.history.back()
+      window.history.back();
     },
 
     browserForward: function () {
-      window.history.forward()
+      window.history.forward();
     },
 
     addFilterFromMenu: function(e) {

@@ -74,8 +74,7 @@ function( Backbone, coms, Trip, filterCollection) {
           }
 
           this.trigger('fetchComplete');
-        }
-        , this));
+        }, this));
     },
 
     /*
