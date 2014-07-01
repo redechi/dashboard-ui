@@ -339,8 +339,12 @@ module.exports = function (grunt) {
 
     jshint: {
       all: ['scripts/**/*.js'],
-      reporter: 'checkstyle',
-      jshintrc: './.jshintrc'
+      options: {
+        jshintrc: './.jshintrc',
+        reporter: 'checkstyle',
+        reporterOutput: 'checkstyle-result.xml',
+        force: true
+      }
     }
   });
 
