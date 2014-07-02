@@ -1,1 +1,5 @@
 scripts/templates.js
+node_modules/*
+*.md
+*.xml
+tests/**
