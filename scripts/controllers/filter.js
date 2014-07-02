@@ -81,11 +81,9 @@ function(moment, formatters) {
 
 
         return range;
-      },
       func: function(trip) {
-        return this.get('setRange').call(this, 'month');
+        return trip.get('start_time') >= this.get('value')[0] && trip.get('start_time') <= this.get('value')[1];
       },
-      setPrevRange: function() {
         var range = this.get('value'),
             rangeLength = range[1] - range[0];
         this.set('value', [range[0] - rangeLength, parseInt(range[0], 10)]);

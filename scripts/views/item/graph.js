@@ -31,8 +31,6 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
     },
 
     events: {
-      'click .prevDates': 'prevDateRange',
-      'click .nextDates': 'nextDateRange',
       'change .graphType': 'selectGraph',
       'change .durationType': 'changeFilter',
       'change #otherDrivers': 'updateGraph'
@@ -277,18 +275,6 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       }
     },
 
-
-    prevDateRange: function () {
-      var dateFilter = filters.findWhere({name: 'date'});
-      _.bind(dateFilter.get('setPrevRange'), dateFilter)();
-      coms.trigger('filters:updateDateFilterLabel');
-    },
-
-    nextDateRange: function () {
-      var dateFilter = filters.findWhere({name: 'date'});
-      _.bind(dateFilter.get('setNextRange'), dateFilter)();
-      coms.trigger('filters:updateDateFilterLabel');
-    },
 
     onRender: function() {
       nv.addGraph(_.bind(this.addGraph, this));
