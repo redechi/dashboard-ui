@@ -12,12 +12,14 @@
   </li>
 </ul>
 
-<div class="popoverContent" data-filter="date" title="Select Time Range">
+<div class="popoverContent" data-filter="date" title="Select Date Range">
   <select class="dateFilterValue">
-    <option value="day" data-offset="0">Today</option>
-    <option value="week" data-offset="0">This Week</option>
-    <option value="month" data-offset="0">This Month</option>
-    <option value="month" data-offset="-1">Last Month</option>
+    <option value="thisWeek">This Week</option>
+    <option value="thisMonth">This Month</option>
+    <option value="last30Days" selected="selected">Last 30 Days</option>
+    <option value="thisYear">This Year</option>
+    <option value="allTime">All Time</option>
+    <option value="custom">Custom</option>
   </select>
 </div>
 

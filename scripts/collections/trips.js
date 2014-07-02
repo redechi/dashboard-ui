@@ -20,6 +20,8 @@ function( Backbone, coms, Trip, filterCollection) {
       this.on('add', this.convertToLinkedList, this);
       this.on('sync', this.applyAllFilters, this);
       this.on('reset', this.applyAllFilters, this);
+
+      coms.on('filter:applyAllFilters', _.bind(this.applyAllFilters, this));
     },
 
     /*

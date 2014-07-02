@@ -3,12 +3,10 @@ define([
   'backbone',
   'communicator',
   'models/filter',
-  'amlCollection',
-  '../controllers/filter',
-  '../collections/trips',
-  '../collections/vehicles'
+  'controllers/filter',
+  './vehicles'
 ],
-function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips, vehicles) {
+function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
   'use strict';
 
   /* filters singleton */
@@ -17,41 +15,15 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips, vehi
     model: Filter,
 
     initialize: function() {
+      console.log('initialize a Filters collection');
       //Show date range filter by default
       this.on('add', this.toUrl, this);
       this.on('add', function() {
         coms.trigger('filter:add');
       });
       this.on('remove', this.toUrl, this);
+
       window.filters = this;
-
-      coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
-    },
-
-
-    updateFilterRanges: function() {
-      var ranges = trips.calculateRanges(),
-          distanceFilter = this.findWhere({name: 'distance'}),
-          durationFilter = this.findWhere({name: 'duration'}),
-          costFilter = this.findWhere({name: 'cost'});
-
-      if(distanceFilter) {
-        distanceFilter.set(ranges.distance);
-      } else {
-        _.extend(filterList.distance, ranges.distance);
-      }
-
-      if(durationFilter) {
-        durationFilter.set(ranges.duration);
-      } else {
-        _.extend(filterList.duration, ranges.duration);
-      }
-
-      if(costFilter) {
-        costFilter.set(ranges.cost);
-      } else {
-        _.extend(filterList.cost, ranges.cost);
-      }
     },
 
 
@@ -103,8 +75,8 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips, vehi
           filter.set({value: value});
 
           if(name === 'vehicle' && value !== 'all') {
-            var vehicle = vehicles.findWhere({id: value});
-            console.log(vehicles)
+            var vehicle = vehiclesCollection.findWhere({id: value});
+            console.log(vehiclesCollection)
             console.log(vehicle)
           }
 

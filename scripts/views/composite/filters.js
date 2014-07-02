@@ -3,14 +3,15 @@ define([
   'backbone',
   'communicator',
   'views/item/filter',
-  '../../collections/filters',
   '../../models/filter',
+  '../../collections/filters',
   '../../collections/vehicles',
+  '../../collections/trips',
   'hbs!tmpl/composite/filters_tmpl',
   '../../controllers/filter',
   '../../controllers/unit_formatters'
 ],
-function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, filterList, formatters  ) {
+function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters  ) {
   'use strict';
 
   /* Return a CompositeView class definition */
@@ -39,8 +40,9 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
 
       var filterLi = this.makeFilterList();
 
+      coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
+
       coms.on('filters:updateLocationFilter', _.bind(this.updateLocationFilterMap, this));
-      coms.on('filters:updateDateFilterLabel', _.bind(this.updateDateFilterLabel, this));
 
       // initialize addFilter popover
       setTimeout(function() {
@@ -54,12 +56,12 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
       this.geocoder = L.mapbox.geocoder('automatic.i86oppa4');
 
       //get a list of all vehicles and update filter
-      vehicles.fetch();
+      vehiclesCollection.fetch();
       this.updateVehicleList();
     },
 
     model: new Filter(),
-    collection: filters,
+    collection: filtersCollection,
     childView: FilterView,
     attachHtml: function(collectionView, childView, index) {
       collectionView.$('ul.appliedFilters .addFilterContainer').before(childView.el);
@@ -94,18 +96,24 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     },
 
     updateDateFilter: function (e) {
-      var dateValue = $(e.target).val(),
-          dateText = $('option:selected', e.target).text(),
+      var valueSelected = $(e.target).val(),
+          valueText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
-          dateRange = dateFilter.get('setRange').call(dateFilter, dateValue),
-          offset = $(e.target.options[e.target.selectedIndex]).data('offset');
+          value = dateFilter.get('getValue').call(dateFilter, valueSelected);
+
+      if(valueSelected === 'custom') {
+        valueText = formatters.dateRange(value);
+      }
 
       dateFilter.set({
-        offset: offset,
-        value:dateRange,
-        dateType:dateValue,
-        valueText:dateText
+        value: value,
+        valueText: valueText,
+        valueSelected: valueSelected
       });
+
+      coms.trigger('filters:updateDateFilter');
+
+      $('.btn-filter[data-filter="date"] .btn-text').text(valueText);
     },
 
     changeVehicleFilter: function (e) {
@@ -153,12 +161,6 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
 
       timeFilter.set('value', timeValue);
       $('.btn-filter[data-filter="time"] .btn-text').text(timeText);
-    },
-
-
-    updateDateFilterLabel: function() {
-      var dateFilter = this.collection.findWhere({name: 'date'});
-      $('.btn-filter[data-filter="date"] .btn-text').text(formatters.dateRange(dateFilter.get('value')));
     },
 
 
@@ -214,7 +216,7 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
     updateVehicleList: function() {
       var self = this;
       setTimeout(function() {
-        self.$el.find('.vehicleFilterValue').append(vehicles.map(function(vehicle) {
+        self.$el.find('.vehicleFilterValue').append(vehiclesCollection.map(function(vehicle) {
           return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
         }));
       }, 0);
@@ -245,6 +247,33 @@ function(_, Backbone, coms, FilterView, filters, Filter, vehicles, FiltersTmpl, 
           value: filter.get('value') || [0, filter.get('max')],
           tooltip_split: true
         });
+      }
+    },
+
+    updateFilterRanges: function() {
+      console.log('Updating Filter Ranges');
+
+      var ranges = tripsCollection.calculateRanges(),
+          distanceFilter = filtersCollection.findWhere({name: 'distance'}),
+          durationFilter = filtersCollection.findWhere({name: 'duration'}),
+          costFilter = filtersCollection.findWhere({name: 'cost'});
+
+      if(distanceFilter) {
+        distanceFilter.set(ranges.distance);
+      } else {
+        _.extend(filterList.distance, ranges.distance);
+      }
+
+      if(durationFilter) {
+        durationFilter.set(ranges.duration);
+      } else {
+        _.extend(filterList.duration, ranges.duration);
+      }
+
+      if(costFilter) {
+        costFilter.set(ranges.cost);
+      } else {
+        _.extend(filterList.cost, ranges.cost);
       }
     },
 

@@ -51,6 +51,7 @@ function( Backbone, coms ) {
      *
      */
     applyTo: function (model) {
+      console.log('apply to')
       var filtered = this
         .get('func')
         .call(this, model);

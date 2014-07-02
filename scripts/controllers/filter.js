@@ -29,69 +29,31 @@ function(moment, formatters) {
     },
 
 
+
     date: {
       name: 'date',
       title: 'By Date Range',
       label: 'during',
-      dateType: 'thisMonth',
-      valueText: 'This Month',
-      offset: 0,
+      valueText: 'Last 30 Days',
+      valueSelected: 'last30Days',
       value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
-      setRange: function (dateType) {
-        var offset = this.get('offset');
-        // default to weekly
-        var range = [
-          moment().startOf('week').add('week', offset).valueOf(),
-          moment().endOf("week").add('week', offset).valueOf()
-        ];
-
-        if(dateType == 'month') {
-          range = [
-            moment().startOf('month').add('month', offset).valueOf(),
-            moment().endOf("month").add('month', offset).valueOf()
-          ];
-        }
-
-
-        if(dateType == 'day') {
-          range = [
-            moment().startOf('day').add('day', offset).valueOf(),
-            moment().endOf("day").add('day', offset).valueOf()
-          ];
-        }
-
-        // update text offset
-        if (offset === -1 && dateType === 'day') {
-          this.set('valueText', 'Yesterday');
-          this.set('dateType', 'yesterday');
-        }
-
-
-        // update text offset
-        if (offset === -1 && dateType === 'month') {
-          this.set('valueText', 'Last Month');
-          this.set('dateType', 'lastMonth');
-        }
-
-        // update text offset
-        if (offset === -1 && dateType === 'week') {
-          this.set('valueText', 'Last Week');
-          this.set('dateType', 'lastWeek');
-        }
-
-
-        return range;
       func: function(trip) {
         return trip.get('start_time') >= this.get('value')[0] && trip.get('start_time') <= this.get('value')[1];
       },
-        var range = this.get('value'),
-            rangeLength = range[1] - range[0];
-        this.set('value', [range[0] - rangeLength, parseInt(range[0], 10)]);
-      },
-      setNextRange: function() {
-        var range = this.get('value'),
-            rangeLength = range[1] - range[0];
-        this.set('value', [parseInt(range[1], 10), range[1] + rangeLength]);
+      getValue: function(valueSelected) {
+        if(valueSelected === 'thisWeek') {
+          return [moment().startOf('week').valueOf(), moment().endOf('week').valueOf()];
+        } else if(valueSelected === 'thisMonth') {
+          return [moment().startOf('month').valueOf(), moment().endOf('month').valueOf()];
+        } else if(valueSelected === 'last30Days') {
+          return [moment().subtract('days', 30).valueOf(), moment().valueOf()];
+        } else if(valueSelected === 'thisYear') {
+          return [moment().startOf('year').valueOf(), moment().endOf('year').valueOf()];
+        } else if(valueSelected === 'allTime') {
+          return [0, 2147483648000];
+        } else if(valueSelected === 'custom') {
+            //do custom
+        }
       }
     },
 

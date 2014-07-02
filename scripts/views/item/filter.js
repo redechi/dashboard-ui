@@ -75,7 +75,8 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
       function popoverCallback() {
         if(name == 'date') {
-          $('.dateFilterValue').val(self.model.get('dateType'));
+          console.log(self.model.get('valueSelected'))
+          $('.dateFilterValue').val(self.model.get('valueSelected'));
         } else if(name == 'location') {
           $('.locationFilterValueAddress').val(self.model.get('valueText'));
           $('.locationFilterValueType').val(self.model.get('type'));
