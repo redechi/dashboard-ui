@@ -1,9 +1,10 @@
 define([
   'backbone',
+  'communicator',
   'hbs!tmpl/item/user_view_tmpl',
   '../../models/user'
 ],
-function( Backbone, UserViewTmpl,user  ) {
+function( Backbone, coms, UserViewTmpl, user  ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -14,6 +15,9 @@ function( Backbone, UserViewTmpl,user  ) {
 
       this.model.fetch();
       this.render();
+
+      coms.on('user:change', _.bind(this.render, this));
+
     },
 
     template: UserViewTmpl,
