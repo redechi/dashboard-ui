@@ -107,12 +107,13 @@ module.exports = function (grunt) {
       }
     },
 
-    // mocha command
-    exec: {
-      mocha: {
-        command: 'mocha-phantomjs http://localhost:<%= connect.testserver.options.port %>/test',
-        stdout: true
-      }
+    mocha: {
+      test: {
+        src: ['test/**/*.html'],
+      },
+      options: {
+        run: true,
+      },
     },
 
     // open app and test page
@@ -332,7 +333,7 @@ module.exports = function (grunt) {
     'handlebars',
     'compass',
     'connect:devserver',
-    'exec:mocha'
+    'mocha'
   ]);
 
   grunt.registerTask('build-local', [
@@ -360,15 +361,6 @@ module.exports = function (grunt) {
     'appcache',
     'copy',
     'inline'
-
-// tests have been commented out.
-// they fail because none have been written.
-//
-//    'connect:devserver',
-//    'exec:mocha'
   ]);
-
-
-  grunt.loadNpmTasks('grunt-contrib-jshint');
 
 };

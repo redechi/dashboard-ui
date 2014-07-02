@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/job/DeLorean-Dashboard/Mocha_Tests/scripts',//'/scripts',
+    baseUrl: '/scripts',
     urlArgs: 'cb=' + Math.random(),
 
     deps: ['backbone.marionette'],
@@ -15,12 +15,9 @@ require.config({
         moment: '../bower_components/momentjs/moment',
         d3: '../bower_components/d3/d3',
         nvd3: '../bower_components/nvd3/nv.d3',
-        mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
+        mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox',
         markercluster: '//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster',
 
-        /* backbone plugins */
-        'backbone.syphon': '../bower_components/backbone.syphon/lib/amd/backbone.syphon',
-        'backbone.iobind': '../bower_components/backbone.iobind/dist/backbone.iobind',
 
         /* alias all marionette libs */
         'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',
@@ -28,15 +25,14 @@ require.config({
         'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 
         /* alias the bootstrap js lib */
-        bootstrap: 'vendor/bootstrap',
-        'bootstrap-button': 'vendor/bootstrap-button',
+        bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
 
         /* Alias text.js for template loading and shortcut the templates dir to tmpl */
         text: '../bower_components/requirejs-text/text',
         tmpl: '../templates',
 
         /* handlebars from the require handlerbars plugin below */
-        handlebars: '../bower_components/require-handlebars-plugin/Handlebars',
+        handlebars: '../bower_components/require-handlebars-plugin/hbs/handlebars',
 
         /* require handlebars plugin - Alex Sexton */
         i18nprecompile: '../bower_components/require-handlebars-plugin/hbs/i18nprecompile',
