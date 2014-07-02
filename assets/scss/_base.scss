@@ -94,7 +94,9 @@ select {
   border: 0;
   min-width: 0;
   font-weight: 400;
-  background: transparent url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") no-repeat right 4px center;
+  @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
+  background-position: right 4px center;
+  background-repeat: no-repeat;
   background-color: #f1efeb;
 }
 
