@@ -2,10 +2,11 @@ define([
   'backbone',
   'communicator',
   '../../collections/filters',
+  '../../collections/vehicles',
   'hbs!tmpl/item/filters_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, filters, FiltersTmpl, formatters ) {
+function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     'use strict';
 
   /* Return a ItemView class definition */
@@ -28,6 +29,9 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
           this.options.callback();
         }
       };
+
+      coms.on('filter:change', _.bind(this.onChange, this));
+      coms.on('filter:add', _.bind(this.onChange, this));
     },
 
     tagName: 'li',
@@ -41,9 +45,35 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
 
     onRender: function() {
       var name = this.model.get('name'),
+          value = this.model.get('value'),
           self = this;
 
-      function initializePopover() {
+
+      this.initializePopovers();
+
+      setTimeout(_.bind(self.onChange, self), 0);
+
+      // TODO: trigger add filter analytics event
+    },
+
+    onChange: function() {
+      console.log('onChange')
+      var name = this.model.get('name');
+
+      if (name == 'vehicle') {
+        console.log(this.model.get('value'))
+        console.log(this.model.get('valueText'))
+        console.log($('.btn-filter[data-filter="vehicle"] .btn-text').text())
+        $('.appliedFilters .vehicleFilterValue').val(this.model.get('value'));
+        $('.btn-filter[data-filter="vehicle"] .btn-text').text(this.model.get('valueText'));
+      }
+    },
+
+    initializePopovers: function () {
+      var name = this.model.get('name'),
+          self = this;
+
+      function popoverCallback() {
         if(name == 'date') {
           $('.dateFilterValue').val(self.model.get('dateType'));
         } else if(name == 'location') {
@@ -70,7 +100,7 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
           content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
           title:  function() { return $('.popoverContent[data-filter="' + name + '"]').attr('title'); },
           placement: 'bottom',
-          callback: initializePopover
+          callback: popoverCallback
         });
 
         //don't show popover for date filter
@@ -80,9 +110,6 @@ function( Backbone, coms, filters, FiltersTmpl, formatters ) {
 
       }, 0);
 
-
-
-      // TODO: trigger add filter analytics event
     }
 
   });

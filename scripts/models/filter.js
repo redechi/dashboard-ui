@@ -11,6 +11,9 @@ function( Backbone, coms ) {
     initialize: function() {
       console.log('initialize a Filter model');
       this.on('change', this.updateHash, this);
+      this.on('change', function() {
+        coms.trigger('filter:change');
+      });
     },
 
     defaults: {},

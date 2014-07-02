@@ -5,9 +5,10 @@ define([
   'models/filter',
   'amlCollection',
   '../controllers/filter',
-  '../collections/trips'
+  '../collections/trips',
+  '../collections/vehicles'
 ],
-function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
+function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips, vehicles) {
   'use strict';
 
   /* filters singleton */
@@ -18,6 +19,9 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
     initialize: function() {
       //Show date range filter by default
       this.on('add', this.toUrl, this);
+      this.on('add', function() {
+        coms.trigger('filter:add');
+      });
       this.on('remove', this.toUrl, this);
       window.filters = this;
 
@@ -75,7 +79,7 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
     },
 
     fromUrl: function (string) {
-      console.log('Get Filters From URL');
+      console.log('Parsing Filters from URL');
       var filterObj = this.getFiltersFromUrl(),
           self = this;
 
@@ -97,6 +101,13 @@ function( _, Backbone, coms, FilterModel, amlCollection, filterList, trips) {
         } else {
           var filter = new FilterModel(filterList[name]);
           filter.set({value: value});
+
+          if(name === 'vehicle' && value !== 'all') {
+            var vehicle = vehicles.findWhere({id: value});
+            console.log(vehicles)
+            console.log(vehicle)
+          }
+
           self.add(filter);
         }
       });
