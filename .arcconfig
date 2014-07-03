@@ -1,5 +1,3 @@
 {
-  "conduit_uri" : "https://phabricator.automatic.co",
-  "lint.jshint.bin": "jshint",
-  "lint.jshint.config": ".jshintrc"
+  "conduit_uri" : "https://phabricator.automatic.co"
 }
