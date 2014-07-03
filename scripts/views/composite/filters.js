@@ -41,6 +41,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       var filterLi = this.makeFilterList();
 
+      this.updateFilterRanges();
       coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
       // initialize addFilter popover

@@ -16,7 +16,7 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
 
     initialize: function() {
       console.log('initialize a Filters collection');
-      //Show date range filter by default
+
       this.on('add', this.toUrl, this);
       this.on('add', function() {
         coms.trigger('filter:add');
