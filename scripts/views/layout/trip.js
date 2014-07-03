@@ -8,9 +8,6 @@ define([
 function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     'use strict';
 
-    console.log( Backbone );
-    console.log( MapSingleView );
-
 
   /* Return a Layout class definition */
   return Backbone.Marionette.LayoutView.extend({

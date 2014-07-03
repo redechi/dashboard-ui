@@ -18,9 +18,6 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
       console.log('initialize a Filters collection');
 
       this.on('add', this.toUrl, this);
-      this.on('add', function() {
-        coms.trigger('filter:add');
-      });
       this.on('remove', this.toUrl, this);
 
       window.filters = this;
@@ -74,15 +71,6 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
         } else {
           var filter = new FilterModel(filterList[name]);
           filter.set({value: value});
-
-          if(name === 'vehicle' && value !== 'all') {
-            var vehicle = vehiclesCollection.findWhere({id: value});
-            console.log(vehiclesCollection)
-            console.log(vehicle)
-          } else if(name === 'distance') {
-            console.log(value)
-          }
-
           self.add(filter);
         }
       });

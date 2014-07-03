@@ -41,17 +41,15 @@ function( Backbone, coms ) {
       } else {
         return this.get('value').join(',');
       }
-
     },
 
     /*
      *
-     * returns a boolean value: denotes weather this filter applys
+     * returns a boolean value: denotes if this filter applies
      * to the supplied model.
      *
      */
     applyTo: function (model) {
-      console.log('apply to')
       var filtered = this
         .get('func')
         .call(this, model);
