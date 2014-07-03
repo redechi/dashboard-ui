@@ -36,6 +36,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
 
+      var self = this;
+
       //update the filter ranges based on trips
       this.updateFilterRanges();
       coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
@@ -48,13 +50,12 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       this.collection.each(this.updateFilterText);
 
       // initialize addFilter popover
-      var filterLi = this.makeFilterList();
       setTimeout(function() {
         $('.addFilter').popover({
           html: true,
-          placement: 'bottom',
-          content: filterLi
+          placement: 'bottom'
         });
+        self.updateFilterList();
       }, 0);
     },
 
@@ -100,7 +101,16 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     updateFilterList: function() {
-      $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
+      var remainingFilters = _.omit(filterList, this.collection.pluck('name'));
+      
+      $('.addFilterContainer').toggle(!_.isEmpty(remainingFilters));
+      var content = $('<div>').append($('<ul>')
+        .addClass('filterList')
+        .append(_.map(remainingFilters, function(filter) {
+          return $('<li>').attr('data-filter', filter.name).text(filter.title);
+        }))).html();
+
+      $('.addFilter').data('bs.popover').options.content = content;
     },
 
     updateFilterText: function(filter) {
@@ -162,15 +172,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
         }));
       }, 0);
-    },
-
-    makeFilterList: function () {
-      var remainingFilters = _.omit(filterList, this.collection.pluck('name'));
-      return $('<div>').append($('<ul>')
-        .addClass('filterList')
-        .append(_.map(remainingFilters, function(filter) {
-          return $('<li>').attr('data-filter', filter.name).text(filter.title);
-        }))).html();
     },
 
     closePopovers: function(e) {
