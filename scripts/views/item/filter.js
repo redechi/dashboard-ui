@@ -77,21 +77,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         if(name == 'date') {
           console.log(self.model.get('valueSelected'))
           $('.dateFilterValue').val(self.model.get('valueSelected'));
-        } else if(name == 'location') {
-          $('.locationFilterValueAddress').val(self.model.get('valueText'));
-          $('.locationFilterValueType').val(self.model.get('type'));
-        } else if (name == 'distance') {
-          $('.distanceFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.distanceFilterNotes .min span').text(formatters.distance(self.model.get('min')));
-          $('.distanceFilterNotes .max span').text(formatters.distance(self.model.get('max')));
-        } else if (name == 'duration') {
-          $('.durationFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.durationFilterNotes .min span').text(formatters.duration(self.model.get('min')));
-          $('.durationFilterNotes .max span').text(formatters.duration(self.model.get('max')));
-        } else if (name == 'cost') {
-          $('.costFilterNotes').toggle(self.model.get('max') !== 0);
-          $('.costFilterNotes .min').text(formatters.cost(self.model.get('min')));
-          $('.costFilterNotes .max').text(formatters.cost(self.model.get('max')));
         }
       }
 

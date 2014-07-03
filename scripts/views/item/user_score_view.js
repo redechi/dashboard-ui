@@ -36,7 +36,7 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
         distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
         duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
         score: formatters.score(tripsCollection.getAverageScore()),
-        cost: formatters.cost(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
+        cost: formatters.costWithUnit(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
       };
 
       helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0));

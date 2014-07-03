@@ -136,7 +136,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateDurationFilter: function (e) {
       var durationValue = $(e.target).slider('getValue'),
-          durationText = durationValue.join(' - ') + ' minutes',
+          durationText = 'between ' + durationValue.join(' - ') + ' minutes',
           durationFilter = this.collection.findWhere({name: 'duration'});
 
       durationFilter.set('value', durationValue);
@@ -145,7 +145,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateDistanceFilter: function (e) {
       var distanceValue = $(e.target).slider('getValue'),
-          distanceText = distanceValue.join(' - ') + ' miles',
+          distanceText = 'between ' + distanceValue.join(' - ') + ' miles',
           distanceFilter = this.collection.findWhere({name: 'distance'});
 
       distanceFilter.set('value', distanceValue);
@@ -154,7 +154,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateCostFilter: function (e) {
       var costValue = $(e.target).slider('getValue'),
-          costText = costValue.map(formatters.cost).join(' - '),
+          costText = 'between ' + costValue.map(formatters.costWithUnit).join(' - '),
           costFilter = this.collection.findWhere({name: 'cost'});
 
       costFilter.set('value', costValue);
@@ -163,7 +163,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateTimeFilter: function (e) {
       var timeValue = $(e.target).slider('getValue'),
-          timeText = timeValue.map(function(time) {
+          timeText = 'between ' + timeValue.map(function(time) {
             return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
           }).join(' - '),
           timeFilter = this.collection.findWhere({name: 'time'});

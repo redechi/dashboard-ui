@@ -43,6 +43,9 @@ function() {
     cost: function(fuelCost) {
       return fuelCost.toFixed(2);
     },
+    costWithUnit: function(fuelCost) {
+      return '$' + fuelCost.toFixed(2);
+    },
     averageMPG: function(mpg) {
       return mpg ? mpg.toFixed(1) : 0;
     },
