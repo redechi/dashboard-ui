@@ -4,8 +4,9 @@
 define([
   'moment',
   './unit_formatters',
+  '../collections/vehicles'
 ],
-function(moment, formatters) {
+function(moment, formatters, vehiclesCollection) {
   'use strict';
 
   return {
@@ -25,6 +26,16 @@ function(moment, formatters) {
       },
       queryify: function () {
         return this.get('value');
+      },
+      updateValueText: function () {
+        var valueText;
+        if(this.get('value') === 'all') {
+          valueText = 'all vehicles';
+        } else {
+          var vehicle = vehiclesCollection.get(this.get('value'));
+          valueText = (vehicle) ? vehicle.get('display_name') : 'Unknown';
+        }
+        this.set('valueText', valueText);
       }
     },
 
@@ -54,6 +65,13 @@ function(moment, formatters) {
         } else if(valueSelected === 'custom') {
             //do custom
         }
+      },
+      updateValueText: function() {
+        var valueText = this.get('valueSelectedText');
+        if(valueText === 'custom' || !valueText) {
+          valueText = formatters.dateRange(this.get('value'));
+        }
+        this.set('valueText', valueText);
       }
     },
 
@@ -70,7 +88,11 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
       },
-      formatter: function(d) { return d + ' mi'; }
+      formatter: function(d) { return d + ' mi'; },
+      updateValueText: function() {
+        var valueText = 'between ' + this.get('value').join(' - ') + ' miles';
+        this.set('valueText', valueText);
+      }
     },
 
 
@@ -86,7 +108,11 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
       },
-      formatter: function(d) { return d + ' min'; }
+      formatter: function(d) { return d + ' min'; },
+      updateValueText: function() {
+        var valueText = 'between ' + this.get('value').join(' - ') + ' minutes';
+        this.set('valueText', valueText);
+      }
     },
 
 
@@ -101,17 +127,14 @@ function(moment, formatters) {
       func: function(trip) {
         return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
       },
-      formatter: function(d) { return '$' + d; }
+      formatter: function(d) { return '$' + d; },
+      updateValueText: function() {
+        var valueText = 'between ' + this.get('value').map(formatters.costWithUnit).join(' - ');
+        this.set('valueText', valueText);
+      }
     },
 
 
-
-    /*
-     * TODO: describe this filter better
-     *
-     * Filter between two time values.
-     *
-     */
     time: {
       name: 'time',
       title: 'time of day',
@@ -125,6 +148,12 @@ function(moment, formatters) {
       },
       formatter: function(d) {
         return moment.utc(d * 60 * 60 * 1000).format('h A');
+      },
+      updateValueText: function () {
+        var valueText = 'between ' + this.get('value').map(function(time) {
+          return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
+        }).join(' - ');
+        this.set('valueText', valueText);
       }
     }
   };

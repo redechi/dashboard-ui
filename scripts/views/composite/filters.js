@@ -37,7 +37,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
-      window.filter = this;
 
       var filterLi = this.makeFilterList();
 
@@ -107,70 +106,64 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateDateFilter: function (e) {
       var valueSelected = $(e.target).val(),
-          valueText = $('option:selected', e.target).text(),
+          valueSelectedText = $('option:selected', e.target).text(),
           dateFilter = this.collection.findWhere({name: 'date'}),
           value = dateFilter.get('getValue').call(dateFilter, valueSelected);
 
-      if(valueSelected === 'custom') {
-        valueText = formatters.dateRange(value);
-      }
-
       dateFilter.set({
         value: value,
-        valueText: valueText,
-        valueSelected: valueSelected
+        valueSelected: valueSelected,
+        valueSelectedText: valueSelectedText
       });
+      dateFilter.get('updateValueText').call(dateFilter);
+      $('.btn-filter[data-filter="date"] .btn-text').text(dateFilter.get('valueText'));
 
       coms.trigger('filters:updateDateFilter');
-
-      $('.btn-filter[data-filter="date"] .btn-text').text(valueText);
     },
 
     changeVehicleFilter: function (e) {
       var vehicleValue = $(e.target).val(),
-          vehicleText = $('option:selected', e.target).text(),
           vehicleFilter = this.collection.findWhere({name: 'vehicle'});
 
       vehicleFilter.set('value', vehicleValue);
-      vehicleFilter.set('valueText', vehicleText);
+      vehicleFilter.get('updateValueText').call(vehicleFilter);
+      $('.btn-filter[data-filter="vehicle"] .btn-text').text(vehicleFilter.get('valueText'));
     },
 
     updateDurationFilter: function (e) {
       var durationValue = $(e.target).slider('getValue'),
-          durationText = 'between ' + durationValue.join(' - ') + ' minutes',
           durationFilter = this.collection.findWhere({name: 'duration'});
 
       durationFilter.set('value', durationValue);
-      $('.btn-filter[data-filter="duration"] .btn-text').text(durationText);
+      durationFilter.get('updateValueText').call(durationFilter);
+      $('.btn-filter[data-filter="duration"] .btn-text').text(durationFilter.get('valueText'));
     },
 
     updateDistanceFilter: function (e) {
       var distanceValue = $(e.target).slider('getValue'),
-          distanceText = 'between ' + distanceValue.join(' - ') + ' miles',
           distanceFilter = this.collection.findWhere({name: 'distance'});
 
       distanceFilter.set('value', distanceValue);
-      $('.btn-filter[data-filter="distance"] .btn-text').text(distanceText);
+      distanceFilter.get('updateValueText').call(distanceFilter);
+      $('.btn-filter[data-filter="distance"] .btn-text').text(distanceFilter.get('valueText'));
     },
 
     updateCostFilter: function (e) {
       var costValue = $(e.target).slider('getValue'),
-          costText = 'between ' + costValue.map(formatters.costWithUnit).join(' - '),
           costFilter = this.collection.findWhere({name: 'cost'});
 
       costFilter.set('value', costValue);
-      $('.btn-filter[data-filter="cost"] .btn-text').text(costText);
+      costFilter.get('updateValueText').call(costFilter);
+      $('.btn-filter[data-filter="cost"] .btn-text').text(costFilter.get('valueText'));
     },
 
     updateTimeFilter: function (e) {
       var timeValue = $(e.target).slider('getValue'),
-          timeText = 'between ' + timeValue.map(function(time) {
-            return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
-          }).join(' - '),
           timeFilter = this.collection.findWhere({name: 'time'});
 
       timeFilter.set('value', timeValue);
-      $('.btn-filter[data-filter="time"] .btn-text').text(timeText);
+      timeFilter.get('updateValueText').call(timeFilter);
+      $('.btn-filter[data-filter="time"] .btn-text').text(timeFilter.get('valueText'));
     },
 
     updateVehicleList: function() {
@@ -211,8 +204,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     updateFilterRanges: function() {
-      console.log('Updating Filter Ranges');
-
       var ranges = tripsCollection.calculateRanges(),
           distanceFilter = filtersCollection.findWhere({name: 'distance'}),
           durationFilter = filtersCollection.findWhere({name: 'duration'}),

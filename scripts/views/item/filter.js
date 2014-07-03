@@ -29,9 +29,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           this.options.callback();
         }
       };
-
-      coms.on('filter:change', _.bind(this.onChange, this));
-      coms.on('filter:add', _.bind(this.onChange, this));
     },
 
     tagName: 'li',
@@ -40,7 +37,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     deleteFilter: function () {
       this.model.destroy();
       this.destroy();
-      // TODO: trigger remove filter analytics event
     },
 
     onRender: function() {
@@ -50,23 +46,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
 
       this.initializePopovers();
-
-      setTimeout(_.bind(self.onChange, self), 0);
-
-      // TODO: trigger add filter analytics event
-    },
-
-    onChange: function() {
-      console.log('onChange')
-      var name = this.model.get('name');
-
-      if (name == 'vehicle') {
-        console.log(this.model.get('value'))
-        console.log(this.model.get('valueText'))
-        console.log($('.btn-filter[data-filter="vehicle"] .btn-text').text())
-        $('.appliedFilters .vehicleFilterValue').val(this.model.get('value'));
-        $('.btn-filter[data-filter="vehicle"] .btn-text').text(this.model.get('valueText'));
-      }
     },
 
     initializePopovers: function () {
@@ -74,9 +53,10 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           self = this;
 
       function popoverCallback() {
-        if(name == 'date') {
-          console.log(self.model.get('valueSelected'))
+        if(name === 'date') {
           $('.dateFilterValue').val(self.model.get('valueSelected'));
+        } else if (name === 'vehicle') {
+          $('.vehicleFilterValue').val(self.model.get('value'));
         }
       }
 

@@ -64,7 +64,8 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
 
         if(name !== 'vehicle') {
           value = value.split(',').map(function(item) {
-            return parseFloat(item) || item;
+            var number = parseFloat(item);
+            return (isNaN(number)) ? item : number;
           });
         }
 
@@ -78,6 +79,8 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
             var vehicle = vehiclesCollection.findWhere({id: value});
             console.log(vehiclesCollection)
             console.log(vehicle)
+          } else if(name === 'distance') {
+            console.log(value)
           }
 
           self.add(filter);
