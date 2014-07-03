@@ -20,7 +20,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     events: {
       'click .btn-popover': 'closePopovers',
       'click .filterList li': 'addFilterFromMenu',
-      'click .removeFilters': 'removeFilters',
+      'click .removeFilter': 'removeFilter',
+      'click .resetFilters': 'resetFilters',
       'change .dateFilterValue': 'updateDateFilter',
       'slideStop .durationFilterValue': 'updateDurationFilter',
       'slideStop .costFilterValue': 'updateCostFilter',
@@ -87,12 +88,22 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       var filter = new Filter(filterList[filterName]);
       filter.set('showPopover', true);
       this.collection.add(filter);
-      $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
+      this.updateFilterList();
     },
 
-    removeFilters: function () {
+    removeFilter: function (e) {
+      var name = $(e.target).data('filter'),
+          filter = this.collection.findWhere({name: name});
+      this.collection.remove(filter);
+      this.updateFilterList();
+    },
+
+    resetFilters: function () {
       Backbone.history.navigate('/', {trigger: true});
-      this.collection.reset();
+    },
+
+    updateFilterList: function() {
+      $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
     },
 
     updateDateFilter: function (e) {

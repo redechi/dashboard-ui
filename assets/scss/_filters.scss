@@ -14,7 +14,7 @@
 
   .appliedFilters {
     margin: 0 100px 0 110px;
-    
+
     >li {
       display: inline-block;
       margin-bottom: 5px;
@@ -26,6 +26,20 @@
     width: 28px;
     @include hr-image('../img/icon_plus.png', '../img/icon_plus@2x.png');
     background-position: 50% center;
+  }
+
+  .removeFilter {
+    @include hr-image('../img/icon_remove.png', '../img/icon_remove@2x.png');
+    margin-top: 6px;
+    padding-left: 16px;
+    background-position: left 4px;
+    background-repeat: no-repeat;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: $highlight;
+    }
   }
 
   .resetFilters {

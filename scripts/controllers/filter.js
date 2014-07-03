@@ -12,10 +12,10 @@ function(moment, formatters) {
 
     vehicle: {
       name: 'vehicle',
-      title: 'By Vehicle',
+      title: 'vehicle',
       label: 'Show trips from',
       value: 'all',
-      valueText: 'All Vehicles',
+      valueText: 'all vehicles',
       func: function(trip) {
         if(this.get('value') === 'all') {
           return true;
@@ -32,9 +32,9 @@ function(moment, formatters) {
 
     date: {
       name: 'date',
-      title: 'By Date Range',
-      label: 'during',
-      valueText: 'Last 30 Days',
+      title: 'date of trip',
+      label: 'driven',
+      valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
       value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
       func: function(trip) {
@@ -61,12 +61,12 @@ function(moment, formatters) {
 
     distance: {
       name: 'distance',
-      title: 'By Distance',
+      title: 'distance traveled',
       label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
-      valueText: 'All Distances',
+      valueText: 'all distances',
       func: function(trip) {
         return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
       },
@@ -77,12 +77,12 @@ function(moment, formatters) {
 
     duration: {
       name: 'duration',
-      title: 'By Duration',
+      title: 'duration of trip',
       label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
-      valueText: 'All Durations',
+      valueText: 'all durations',
       func: function(trip) {
         return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
       },
@@ -90,20 +90,14 @@ function(moment, formatters) {
     },
 
 
-    /*
-     * TODO: describe this filter better
-     *
-     * Filter by total cost.
-     *
-     */
     cost: {
       name: 'cost',
-      title: 'By Cost',
+      title: 'fuel cost',
       label: 'and',
       min: 0,
       max: 100,
       value: [0, Infinity],
-      valueText: 'All Costs',
+      valueText: 'all costs',
       func: function(trip) {
         return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
       },
@@ -120,12 +114,12 @@ function(moment, formatters) {
      */
     time: {
       name: 'time',
-      title: 'By Time of Day',
+      title: 'time of day',
       label: 'and',
       min: 0,
       max: 24,
       value: [0, Infinity],
-      valueText: 'All Times',
+      valueText: 'all times of day',
       func: function(trip) {
         return moment(trip.get("start_time")).hour() >= this.get('value')[0] && moment(trip.get("end_time")).hour() <= this.get('value')[1];
       },
