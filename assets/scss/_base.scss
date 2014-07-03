@@ -206,6 +206,7 @@ header.mainHeader {
         a {
           color: $base_type;
           display: inline-block;
+          font-weight: bold;
 
           &:hover {
             color: $highlight;

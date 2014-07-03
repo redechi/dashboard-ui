@@ -10,6 +10,7 @@
     font-size: 16px;
     display: inline-block;
     margin: 0;
+    vertical-align: -4px;
   }
 
   .appliedFilters {
@@ -36,6 +37,8 @@
     background-repeat: no-repeat;
     font-size: 12px;
     cursor: pointer;
+    padding-top: 2px;
+    color: $link_type;
 
     &:hover {
       color: $highlight;
@@ -63,7 +66,7 @@
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
-    padding: 5px;
+    padding: 9px 5px;
     color: $link_type;
 
     &:hover {
