@@ -36,6 +36,13 @@ function(moment, formatters, vehiclesCollection) {
           valueText = (vehicle) ? vehicle.get('display_name') : 'Unknown';
         }
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        return this.get('value');
+      },
+      fromURL: function(value) {
+        if(!value) { return; }
+        this.set('value', value);
       }
     },
 
@@ -48,6 +55,14 @@ function(moment, formatters, vehiclesCollection) {
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
       value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
+      options: {
+        thisWeek: 'this week',
+        thisMonth: 'this month',
+        last30Days: 'in the last 30 days',
+        thisYear: 'this year',
+        allTime: 'all time',
+        custom: 'custom'
+      },
       func: function(trip) {
         return trip.get('start_time') >= this.get('value')[0] && trip.get('start_time') <= this.get('value')[1];
       },
@@ -67,11 +82,26 @@ function(moment, formatters, vehiclesCollection) {
         }
       },
       updateValueText: function() {
-        var valueText = this.get('valueSelectedText');
+        var valueText = this.get('options')[this.get('valueSelected')];
         if(valueText === 'custom' || !valueText) {
           valueText = formatters.dateRange(this.get('value'));
         }
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        var value = this.get('value').slice();
+        value.push(this.get('valueSelected'));
+        return value.join(',');
+      },
+      fromURL: function (value) {
+        if(!value) { return; }
+        var values = value.split(',');
+        if(values[2] === 'custom') {
+          this.set('value', [values[0], values[1]].map(formatters.parseNumber));
+        } else {
+          this.set('value', this.get('getValue').call(this, values[2]));
+        }
+        this.set('valueSelected', values[2]);
       }
     },
 
@@ -92,6 +122,14 @@ function(moment, formatters, vehiclesCollection) {
       updateValueText: function() {
         var valueText = 'between ' + this.get('value').join(' - ') + ' miles';
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        return this.get('value').join(',');
+      },
+      fromURL: function (value) {
+        if(!value) { return; }
+        value = value.split(',').map(formatters.parseNumber);
+        this.set('value', value);
       }
     },
 
@@ -112,6 +150,14 @@ function(moment, formatters, vehiclesCollection) {
       updateValueText: function() {
         var valueText = 'between ' + this.get('value').join(' - ') + ' minutes';
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        return this.get('value').join(',');
+      },
+      fromURL: function (value) {
+        if(!value) { return; }
+        value = value.split(',').map(formatters.parseNumber);
+        this.set('value', value);
       }
     },
 
@@ -131,6 +177,14 @@ function(moment, formatters, vehiclesCollection) {
       updateValueText: function() {
         var valueText = 'between ' + this.get('value').map(formatters.costWithUnit).join(' - ');
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        return this.get('value').join(',');
+      },
+      fromURL: function (value) {
+        if(!value) { return; }
+        value = value.split(',').map(formatters.parseNumber);
+        this.set('value', value);
       }
     },
 
@@ -154,6 +208,14 @@ function(moment, formatters, vehiclesCollection) {
           return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
         }).join(' - ');
         this.set('valueText', valueText);
+      },
+      toURL: function () {
+        return this.get('value').join(',');
+      },
+      fromURL: function (value) {
+        if(!value) { return; }
+        value = value.split(',').map(formatters.parseNumber);
+        this.set('value', value);
       }
     }
   };

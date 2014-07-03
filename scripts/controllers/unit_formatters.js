@@ -73,6 +73,11 @@ function() {
     },
     dateRange: function(dateRange) {
       return moment(dateRange[0]).format('MMM D - ') + moment(dateRange[1]).format('MMM D, YYYY');
+    },
+    parseNumber: function(item) {
+      //return text value if unparsable
+      var number = parseFloat(item);
+      return (isNaN(number)) ? item : number;
     }
   };
 });

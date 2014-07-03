@@ -21,26 +21,9 @@ function( Backbone, coms ) {
     updateHash: function () {
       var name = this.get('name'),
           regex = new RegExp('('+name+'=[^&]+)'),
-          filterObj = _.object([[name, this.filterToString()]]);
+          filterObj = _.object([[name, this.get('toURL').call(this)]]);
       var newUrl = Backbone.history.fragment.replace(regex, $.param(filterObj));
       Backbone.history.navigate(newUrl);
-    },
-
-    /*
-     *
-     * converts values to string.
-     *
-     */
-    filterToString: function () {
-      var filterName = this.get('name');
-
-      if(filterName === 'vehicle') {
-        return this.get('value');
-      } else if(filterName === 'location') {
-        return [this.get('latlng'), this.get('type'), this.get('valueText')].join(',');
-      } else {
-        return this.get('value').join(',');
-      }
     },
 
     /*

@@ -41,8 +41,8 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
      */
     toUrl: function () {
       console.log('Write Filters to URL');
-      var filterObj = _.object(this.map(function (filterModel) {
-        return [filterModel.get('name'), filterModel.filterToString()];
+      var filterObj = _.object(this.map(function (filter) {
+        return [filter.get('name'), filter.get('toURL').call(filter)];
       }));
       Backbone.history.navigate('/filter/?' + $.param(filterObj));
     },
@@ -57,22 +57,10 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
           return;
         }
 
-        var preExistingModel = self.findWhere({name: name});
+        var filter = self.findWhere({name: name}) || new FilterModel(filterList[name]);
+        filter.get('fromURL').call(filter, value);
 
-        if(name !== 'vehicle') {
-          value = value.split(',').map(function(item) {
-            var number = parseFloat(item);
-            return (isNaN(number)) ? item : number;
-          });
-        }
-
-        if (!!preExistingModel) {
-          preExistingModel.set({value: value});
-        } else {
-          var filter = new FilterModel(filterList[name]);
-          filter.set({value: value});
-          self.add(filter);
-        }
+        self.add(filter);
       });
 
       // remove any extra models
@@ -83,15 +71,13 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
         }
       }, this));
 
-      // if no fewer than two models, clear and create a vehicle and date filter.
+      // if fewer than two models, clear and create a vehicle and date filter.
       if (_.size(filterObj) < 2) {
         this.reset();
         this.add(new FilterModel(filterList.vehicle));
         this.add(new FilterModel(filterList.date));
       }
     }
-
-
 
   });
 
