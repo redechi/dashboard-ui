@@ -22,15 +22,13 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'click .filterList li': 'addFilterFromMenu',
       'click .removeFilter': 'removeFilter',
       'click .resetFilters': 'resetFilters',
-      'change .dateFilterValue': 'updateDateFilter',
-      'slideStop .durationFilterValue': 'updateDurationFilter',
-      'slideStop .costFilterValue': 'updateCostFilter',
-      'slideStop .timeFilterValue': 'updateTimeFilter',
-      'slideStop .distanceFilterValue': 'updateDistanceFilter',
-      'shown.bs.popover .btn-filter': 'initializeSliders',
-      'submit .locationFilterValue': 'updateLocationFilterForm',
-      'change .locationFilterValueType': 'updateLocationFilterForm',
+      'change .dateFilterValue': 'changeDateFilter',
+      'slideStop .durationFilterValue': 'changeDurationFilter',
+      'slideStop .costFilterValue': 'changeCostFilter',
+      'slideStop .timeFilterValue': 'changeTimeFilter',
+      'slideStop .distanceFilterValue': 'changeDistanceFilter',
       'change .vehicleFilterValue': 'changeVehicleFilter',
+      'shown.bs.popover .btn-filter': 'initializeSliders',
       'click .filterNav .undo': 'browserBack',
       'click .filterNav .redo': 'browserForward'
     },
@@ -38,12 +36,19 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
 
-      var filterLi = this.makeFilterList();
-
+      //update the filter ranges based on trips
       this.updateFilterRanges();
       coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
+      //get a list of all vehicles and update filter
+      vehiclesCollection.fetch();
+      this.updateVehicleList();
+
+      //update filter text on buttons
+      this.collection.each(this.updateFilterText);
+
       // initialize addFilter popover
+      var filterLi = this.makeFilterList();
       setTimeout(function() {
         $('.addFilter').popover({
           html: true,
@@ -51,12 +56,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           content: filterLi
         });
       }, 0);
-
-      this.geocoder = L.mapbox.geocoder('automatic.i86oppa4');
-
-      //get a list of all vehicles and update filter
-      vehiclesCollection.fetch();
-      this.updateVehicleList();
     },
 
     model: new Filter(),
@@ -104,66 +103,56 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       $('.addFilter').data('bs.popover').options.content = this.makeFilterList();
     },
 
-    updateDateFilter: function (e) {
+    updateFilterText: function(filter) {
+      var name = filter.get('name');
+      filter.get('updateValueText').call(filter);
+      $('.btn-filter[data-filter="' + name + '"] .btn-text').text(filter.get('valueText'));
+    },
+
+    changeDateFilter: function (e) {
       var valueSelected = $(e.target).val(),
           valueSelectedText = $('option:selected', e.target).text(),
-          dateFilter = this.collection.findWhere({name: 'date'}),
-          value = dateFilter.get('getValue').call(dateFilter, valueSelected);
+          filter = this.collection.findWhere({name: 'date'}),
+          value = filter.get('getValue').call(filter, valueSelected);
 
-      dateFilter.set({
+      filter.set({
         value: value,
         valueSelected: valueSelected,
         valueSelectedText: valueSelectedText
       });
-      dateFilter.get('updateValueText').call(dateFilter);
-      $('.btn-filter[data-filter="date"] .btn-text').text(dateFilter.get('valueText'));
+      this.updateFilterText(filter);
 
       coms.trigger('filters:updateDateFilter');
     },
 
     changeVehicleFilter: function (e) {
-      var vehicleValue = $(e.target).val(),
-          vehicleFilter = this.collection.findWhere({name: 'vehicle'});
-
-      vehicleFilter.set('value', vehicleValue);
-      vehicleFilter.get('updateValueText').call(vehicleFilter);
-      $('.btn-filter[data-filter="vehicle"] .btn-text').text(vehicleFilter.get('valueText'));
+      var filter = this.collection.findWhere({name: 'vehicle'});
+      filter.set('value', $(e.target).val());
+      this.updateFilterText(filter);
     },
 
-    updateDurationFilter: function (e) {
-      var durationValue = $(e.target).slider('getValue'),
-          durationFilter = this.collection.findWhere({name: 'duration'});
-
-      durationFilter.set('value', durationValue);
-      durationFilter.get('updateValueText').call(durationFilter);
-      $('.btn-filter[data-filter="duration"] .btn-text').text(durationFilter.get('valueText'));
+    changeDurationFilter: function (e) {
+      var filter = this.collection.findWhere({name: 'duration'});
+      filter.set('value', $(e.target).slider('getValue'));
+      this.updateFilterText(filter);
     },
 
-    updateDistanceFilter: function (e) {
-      var distanceValue = $(e.target).slider('getValue'),
-          distanceFilter = this.collection.findWhere({name: 'distance'});
-
-      distanceFilter.set('value', distanceValue);
-      distanceFilter.get('updateValueText').call(distanceFilter);
-      $('.btn-filter[data-filter="distance"] .btn-text').text(distanceFilter.get('valueText'));
+    changeDistanceFilter: function (e) {
+      var filter = this.collection.findWhere({name: 'distance'});
+      filter.set('value', $(e.target).slider('getValue'));
+      this.updateFilterText(filter);
     },
 
-    updateCostFilter: function (e) {
-      var costValue = $(e.target).slider('getValue'),
-          costFilter = this.collection.findWhere({name: 'cost'});
-
-      costFilter.set('value', costValue);
-      costFilter.get('updateValueText').call(costFilter);
-      $('.btn-filter[data-filter="cost"] .btn-text').text(costFilter.get('valueText'));
+    changeCostFilter: function (e) {
+      var filter = this.collection.findWhere({name: 'cost'});
+      filter.set('value', $(e.target).slider('getValue'));
+      this.updateFilterText(filter);
     },
 
-    updateTimeFilter: function (e) {
-      var timeValue = $(e.target).slider('getValue'),
-          timeFilter = this.collection.findWhere({name: 'time'});
-
-      timeFilter.set('value', timeValue);
-      timeFilter.get('updateValueText').call(timeFilter);
-      $('.btn-filter[data-filter="time"] .btn-text').text(timeFilter.get('valueText'));
+    changeTimeFilter: function (e) {
+      var filter = this.collection.findWhere({name: 'time'});
+      filter.set('value', $(e.target).slider('getValue'));
+      this.updateFilterText(filter);
     },
 
     updateVehicleList: function() {
