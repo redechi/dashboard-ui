@@ -125,8 +125,12 @@ a:hover {
     border-top-left-radius: 0;
   }
 
-  &.bottom > .arrow:after {
+  &.bottom > .arrow {
     border-bottom-color: $blue;
+
+    &:after {
+      border-bottom-color: $blue;
+    }
   }
 
   &.top {
@@ -137,8 +141,12 @@ a:hover {
     border-bottom-left-radius: 0;
   }
 
-  &.top > .arrow:after {
+  &.top > .arrow {
     border-top-color: $blue;
+
+    &:after {
+      border-top-color: $blue;
+    }
   }
 
   .popover-title {
