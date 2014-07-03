@@ -43,8 +43,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
-      coms.on('filters:updateLocationFilter', _.bind(this.updateLocationFilterMap, this));
-
       // initialize addFilter popover
       setTimeout(function() {
         $('.addFilter').popover({
@@ -172,56 +170,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       timeFilter.set('value', timeValue);
       $('.btn-filter[data-filter="time"] .btn-text').text(timeText);
-    },
-
-
-    updateLocationFilterMap: function (e) {
-      var location = {
-            type: $(e.target).data('type'),
-            latlng: [$(e.target).data('lat'), $(e.target).data('lon')],
-            valueText: $(e.target).data('name')
-          },
-          locationText = ((location.type === 'start') ? 'Starts' : 'Ends') + ' at ' + location.valueText,
-          locationFilter = this.collection.findWhere({name: 'location'});
-
-      if(locationFilter) {
-        locationFilter.set(location);
-      } else {
-        _.extend(filterList.location, location);
-        this.addFilter('location');
-      }
-
-      $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
-
-      return false;
-    },
-
-    updateLocationFilterForm: function () {
-      var location = {
-            type: $('.popover .locationFilterValueType').val(),
-            valueText: $('.popover .locationFilterValueAddress').val()
-          },
-          locationFilter = this.collection.findWhere({name: 'location'});
-
-      if(location.valueText === '') { return false; }
-
-      this.geocoder.query(location.valueText, function(err, data) {
-        if(err) {
-          $('.popover .locationFilterResults').text('Address Not Found');
-          return false;
-        } else {
-          $('.popover .locationFilterResults').empty();
-
-          location.latlng = data.latlng;
-          location.valueText = _.pluck(data.results[0], 'name').join(', ');
-          var locationText = ((location.type === 'start') ? 'Starts' : 'Ends') + ' at ' + location.valueText;
-
-          locationFilter.set(location);
-          $('.btn-filter[data-filter="location"] .btn-text').text(locationText);
-        }
-      });
-
-      return false;
     },
 
     updateVehicleList: function() {
