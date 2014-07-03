@@ -112,35 +112,6 @@ function(moment, formatters) {
 
 
 
-
-    /*
-     * TODO: describe this filter better
-     *
-     * Filter by distance from location.
-     *
-     */
-    location: {
-      name: 'location',
-      title: 'By Location',
-      label: 'and',
-      latlng: [0,0],
-      type: undefined,
-      valueText: 'Everywhere',
-      func: function(trip) {
-        var radius_mi = 0.1;
-        if(this.get('type') == 'start') {
-          return formatters.distance_mi(trip.get('start_location').lat, trip.get('start_location').lon, this.get('latlng')[0], this.get('latlng')[1]) <= radius_mi;
-        } else if(this.get('type') == 'end') {
-          return formatters.distance_mi(trip.get('end_location').lat, trip.get('end_location').lon, this.get('latlng')[0], this.get('latlng')[1]) <= radius_mi;
-        } else {
-          return true;
-        }
-      }
-    },
-
-
-
-
     /*
      * TODO: describe this filter better
      *
