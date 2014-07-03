@@ -7,3 +7,4 @@ assets/css
 .tmp/
 config.json
 checkstyle-result.xml
+scripts/templates.js
