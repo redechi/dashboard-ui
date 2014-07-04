@@ -54,6 +54,49 @@
     display: none;
   }
 
+  .popover-content {
+    .dateFilterCustom {
+      margin: 14px 0 8px;
+      overflow: hidden;
+      display: none;
+
+      .input-group {
+        width: 87px;
+        float: left;
+
+        label {
+          text-transform: uppercase;
+          font-size: 10px;
+          margin-bottom: 0;
+        }
+
+        .form-control {
+          background: $main_back;
+          border: 1px solid #EDECE9;
+          -moz-box-shadow: inset 0px 2px 0px 0px #FAF9F7;
+          box-shadow: inset 0px 2px 0px 0px #FAF9F7;
+          color: $inactive_type;
+          border-radius: 3px;
+          font-size: 12px;
+          height: inherit;
+          padding: 5px 4px 0px;
+          @include hr-image('../img/icon_calendar.png', '../img/icon_calendar@2x.png');
+          background-repeat: no-repeat;
+          background-position: right 4px center;
+
+          &:focus {
+            color: $highlight;
+            @include hr-image('../img/icon_calendar_active.png', '../img/icon_calendar_active@2x.png');
+          }
+        }
+
+        &:first-child {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
   .btn-filter {
     background-color: $header_back;
     background-repeat: no-repeat;

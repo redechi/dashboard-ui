@@ -55,6 +55,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
       function popoverCallback() {
         if(name === 'date') {
           $('.dateFilterValue').val(self.model.get('valueSelected'));
+          $('.dateFilterCustom').toggle(self.model.get('valueSelected') === 'custom');
         } else if (name === 'vehicle') {
           $('.vehicleFilterValue').val(self.model.get('value'));
         }

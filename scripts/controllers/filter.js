@@ -78,7 +78,7 @@ function(moment, formatters, vehiclesCollection) {
         } else if(valueSelected === 'allTime') {
           return [0, 2147483648000];
         } else if(valueSelected === 'custom') {
-            //do custom
+          return 'custom';
         }
       },
       updateValueText: function() {

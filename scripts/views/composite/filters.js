@@ -28,7 +28,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'slideStop .timeFilterValue': 'changeTimeFilter',
       'slideStop .distanceFilterValue': 'changeDistanceFilter',
       'change .vehicleFilterValue': 'changeVehicleFilter',
-      'shown.bs.popover .btn-filter': 'initializeSliders',
+      'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'browserBack',
       'click .filterNav .redo': 'browserForward'
     },
@@ -102,7 +102,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     updateFilterList: function() {
       var remainingFilters = _.omit(filterList, this.collection.pluck('name'));
-      
+
       $('.addFilterContainer').toggle(!_.isEmpty(remainingFilters));
       var content = $('<div>').append($('<ul>')
         .addClass('filterList')
@@ -125,12 +125,18 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           filter = this.collection.findWhere({name: 'date'}),
           value = filter.get('getValue').call(filter, valueSelected);
 
+      if(value === 'custom') {
+        value = [$('.dateFilterValueCustomStart').datepicker('getDate').getTime(), $('.dateFilterValueCustomEnd').datepicker('getDate').getTime()];
+      }
+
       filter.set({
         value: value,
         valueSelected: valueSelected,
         valueSelectedText: valueSelectedText
       });
       this.updateFilterText(filter);
+
+      $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
 
       coms.trigger('filters:updateDateFilter');
     },
@@ -178,17 +184,21 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       $('.btn-popover').not(e.currentTarget).popover('hide');
     },
 
-    initializeSliders: function(e) {
+    initializePopoverContent: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
 
-      if(name == 'distance' || name == 'duration' || name == 'cost' || name == 'time') {
+      if(name === 'distance' || name === 'duration' || name === 'cost' || name === 'time') {
         $('.popover .' + name + 'FilterValue').slider({
           min: 0,
           max: Math.ceil(filter.get('max')),
           formater: filter.get('formatter'),
           value: filter.get('value') || [0, filter.get('max')],
           tooltip_split: true
+        });
+      } else if(name === 'date') {
+        $('.popover .dateFilterCustom input').datepicker({
+          format: 'mm/dd/yy'
         });
       }
     },
