@@ -61,38 +61,32 @@ function( Backbone, coms, Trip, filterCollection) {
       return shouldExclude;
     },
 
+
     /*
      *
      * recursively fetches pages of trips until one returns empty.
      *
      */
     fetchAll: function () {
-      return this.nextSet().always(_.bind(
-        function(data, status) {
-
-          // hackaround jquery request abort (caching)
-          if ( !!data[0] || status instanceof Array && !!status[0] ) {
-            this.nextSet();
-          }
-
-          this.trigger('fetchComplete');
-        }, this));
+      this.fetchPage();
     },
+
 
     /*
      *
      * fetches the next page of data and appends it to the collection
      *
      */
-    nextSet: function() {
+    fetchPage: function() {
+      var self = this;
       this.page++;
-      return this.fetch({add : true, remove: false,
-        data: {
-          page: this.page,
-          per_page: 30
+      return this.fetch({add: true, remove: false, data: { page: this.page, per_page: 100}}).always(function(data) {
+        if(!!data[0]  || (data && data.statusText === 'cached')) {
+          return self.fetchPage();
         }
       });
     },
+
 
     /*
      *
