@@ -99,7 +99,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     resetFilters: function () {
-      Backbone.history.navigate('/', {trigger: true});
+      this.collection.reset();
     },
 
     updateFilterList: function() {
