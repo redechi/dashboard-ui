@@ -30,7 +30,9 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'change .vehicleFilterValue': 'changeVehicleFilter',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'browserBack',
-      'click .filterNav .redo': 'browserForward'
+      'click .filterNav .redo': 'browserForward',
+      'changeDate .dateFilterValueCustomStart': 'changeDateFilterCustom',
+      'changeDate .dateFilterValueCustomEnd': 'changeDateFilterCustom'
     },
 
     initialize: function() {
@@ -125,8 +127,11 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           filter = this.collection.findWhere({name: 'date'}),
           value = filter.get('getValue').call(filter, valueSelected);
 
-      if(value === 'custom') {
-        value = [$('.dateFilterValueCustomStart').datepicker('getDate').getTime(), $('.dateFilterValueCustomEnd').datepicker('getDate').getTime()];
+      if(valueSelected === 'custom') {
+        var startDate = moment(value[0]).format('MM/DD/YY'),
+            endDate = moment(value[1]).format('MM/DD/YY');
+        $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
+        $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
       }
 
       filter.set({
@@ -140,6 +145,17 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       coms.trigger('filters:updateDateFilter');
     },
+
+    changeDateFilterCustom: function (e) {
+      var filter = this.collection.findWhere({name: 'date'}),
+          value = [$('.dateFilterValueCustomStart').datepicker('getDate').getTime(), $('.dateFilterValueCustomEnd').datepicker('getDate').getTime()];
+
+      filter.set('value', value);
+      this.updateFilterText(filter);
+
+      coms.trigger('filters:updateDateFilter');
+    },
+
 
     changeVehicleFilter: function (e) {
       var filter = this.collection.findWhere({name: 'vehicle'});
@@ -198,7 +214,9 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
         });
       } else if(name === 'date') {
         $('.popover .dateFilterCustom input').datepicker({
-          format: 'mm/dd/yy'
+          format: 'mm/dd/yy',
+          startDate: new Date(2013, 2, 12),
+          endDate: new Date()
         });
       }
     },

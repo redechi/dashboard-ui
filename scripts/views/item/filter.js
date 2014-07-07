@@ -44,20 +44,26 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           value = this.model.get('value'),
           self = this;
 
-
       this.initializePopovers();
     },
 
     initializePopovers: function () {
-      var name = this.model.get('name'),
-          self = this;
+      var filter = this.model,
+          name = filter.get('name');
 
       function popoverCallback() {
         if(name === 'date') {
-          $('.dateFilterValue').val(self.model.get('valueSelected'));
-          $('.dateFilterCustom').toggle(self.model.get('valueSelected') === 'custom');
+          $('.dateFilterValue').val(filter.get('valueSelected'));
+          $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
+          if(filter.get('valueSelected') === 'custom') {
+            var value = filter.get('getValue').call(filter, 'custom'),
+                startDate = moment(value[0]).format('MM/DD/YY'),
+                endDate = moment(value[1]).format('MM/DD/YY');
+            $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
+            $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
+          }
         } else if (name === 'vehicle') {
-          $('.vehicleFilterValue').val(self.model.get('value'));
+          $('.vehicleFilterValue').val(filter.get('value'));
         }
       }
 
@@ -71,7 +77,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         });
 
         //don't show popover for date filter
-        if(name !== 'date' && self.model.get('showPopover') === true) {
+        if(name !== 'date' && filter.get('showPopover') === true) {
           $('.btn-popover[data-filter="' + name + '"]').popover('show');
         }
 
