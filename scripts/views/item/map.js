@@ -22,8 +22,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
     collection: new Backbone.Collection([]),
 
-    resetCollection: function (newCollection) {
-      this.collection.reset(newCollection.toArray());
+    resetCollection: function (collection) {
+      this.collection.reset(collection);
     },
 
     collectionEvents: {

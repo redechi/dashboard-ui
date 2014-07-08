@@ -27,7 +27,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
     template: tripList,
 
     resetCollection: function (collection) {
-      this.collection.reset(collection.toArray());
+      this.collection.reset(collection);
     },
 
     templateHelpers: function () {

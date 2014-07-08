@@ -20,7 +20,7 @@ function( Backbone, coms ) {
           regex = new RegExp('('+name+'=[^&]+)'),
           filterObj = _.object([[name, this.get('toURL').call(this)]]);
       var newUrl = Backbone.history.fragment.replace(regex, $.param(filterObj));
-      Backbone.history.navigate(newUrl, {trigger: true});
+      Backbone.history.navigate(newUrl);
     },
 
     /*

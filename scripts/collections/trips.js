@@ -43,8 +43,7 @@ function( Backbone, coms, Trip, filterCollection) {
         }
       });
 
-      var newCollection = new this.constructor(tripsToInclude);
-      coms.trigger('filter', newCollection);
+      coms.trigger('filter', tripsToInclude);
     },
 
     applyFilter: function (name, trips) {

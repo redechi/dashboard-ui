@@ -42,7 +42,7 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
     },
 
     resetCollection: function (collection) {
-      this.collection.reset(collection.toArray());
+      this.collection.reset(collection);
 
       var graphType = this.collection.graphType,
       values = this.collection.getGraphSet(graphType);

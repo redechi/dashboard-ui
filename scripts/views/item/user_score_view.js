@@ -26,8 +26,8 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
     collection: new AMLCollection([]),
     template: UserscoreTmpl,
 
-    resetCollection: function (newCollection) {
-      this.collection.reset(newCollection.toArray());
+    resetCollection: function (collection) {
+      this.collection.reset(collection);
     },
 
     templateHelpers: function() {

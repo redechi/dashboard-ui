@@ -144,6 +144,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
 
       coms.trigger('filter:updateDateFilter');
+      coms.trigger('filter:applyAllFilters');
     },
 
     changeDateFilterCustom: function (e) {
@@ -154,6 +155,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       this.updateFilterText(filter);
 
       coms.trigger('filter:updateDateFilter');
+      coms.trigger('filter:applyAllFilters');
     },
 
 
@@ -161,30 +163,36 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       var filter = this.collection.findWhere({name: 'vehicle'});
       filter.set('value', $(e.target).val());
       this.updateFilterText(filter);
+      coms.trigger('filter:applyAllFilters');
     },
 
     changeDurationFilter: function (e) {
       var filter = this.collection.findWhere({name: 'duration'});
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
+      coms.trigger('filter:applyAllFilters');
     },
 
     changeDistanceFilter: function (e) {
+      console.log('Change Distance Filter')
       var filter = this.collection.findWhere({name: 'distance'});
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
+      coms.trigger('filter:applyAllFilters');
     },
 
     changeCostFilter: function (e) {
       var filter = this.collection.findWhere({name: 'cost'});
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
+      coms.trigger('filter:applyAllFilters');
     },
 
     changeTimeFilter: function (e) {
       var filter = this.collection.findWhere({name: 'time'});
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
+      coms.trigger('filter:applyAllFilters');
     },
 
     updateVehicleList: function() {
@@ -222,6 +230,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     updateFilterRanges: function() {
+      console.log('Updating Filter Ranges');
       var ranges = tripsCollection.calculateRanges(),
           distanceFilter = filtersCollection.findWhere({name: 'distance'}),
           durationFilter = filtersCollection.findWhere({name: 'duration'}),
