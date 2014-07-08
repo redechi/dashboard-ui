@@ -52,7 +52,8 @@ module.exports = function (grunt) {
           '.htaccess',
           'index.html',
           'error.html',
-          'assets/img/**'
+          'assets/img/**',
+          'assets/fonts/**'
         ],
         tasks: ["copy"] // copy files and invalidate app cache
       }
@@ -287,9 +288,9 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             '*.{ico,txt}',
-            '.htaccess',
             'index.html',
             'assets/img/**',
+            'assets/fonts/**',
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js'
           ]
