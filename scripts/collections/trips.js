@@ -51,7 +51,11 @@ function( Backbone, coms, Trip, filterCollection) {
       var tripsCollection = this,
           filter = filterCollection.findWhere({name: name});
 
-      return trips.filter(function(trip) { return filter.applyTo(trip); });
+      if(!filter) {
+        return trips;
+      } else {
+        return trips.filter(function(trip) { return filter.applyTo(trip); });
+      }
     },
 
 

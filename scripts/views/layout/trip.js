@@ -20,8 +20,7 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
 
     /* Layout sub regions */
     regions: {
-      map: '#map',
-      user: '#user'
+      map: '#map'
     },
 
     /* ui selector cache */
@@ -53,10 +52,8 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
     /* on render callback */
     onRender: function() {
       var m = new MapSingleView({collection: this.collection});
-      var u = new UserView();
 
       this.map.show(m);
-      this.user.show(u);
     }
   });
 
