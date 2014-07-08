@@ -13,9 +13,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
   return Backbone.Marionette.ItemView.extend({
 
     events: {
-      'click .remove-filter': 'deleteFilter',
-      'change input': 'handleUpdate',
-      'change select': 'handleUpdate'
+      'click .remove-filter': 'deleteFilter'
     },
 
     initialize: function() {

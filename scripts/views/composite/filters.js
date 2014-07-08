@@ -42,7 +42,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       //update the filter ranges based on trips
       this.updateFilterRanges();
-      coms.on('filters:updateDateFilter', _.bind(this.updateFilterRanges, this));
+      coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
       //get a list of all vehicles and update filter
       vehiclesCollection.fetch();
@@ -143,7 +143,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
 
-      coms.trigger('filters:updateDateFilter');
+      coms.trigger('filter:updateDateFilter');
     },
 
     changeDateFilterCustom: function (e) {
@@ -153,7 +153,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       filter.set('value', value);
       this.updateFilterText(filter);
 
-      coms.trigger('filters:updateDateFilter');
+      coms.trigger('filter:updateDateFilter');
     },
 
 
