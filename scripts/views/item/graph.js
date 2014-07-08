@@ -32,8 +32,7 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
     events: {
       'change .graphType': 'selectGraph',
-      'change .durationType': 'changeFilter',
-      'change #otherDrivers': 'updateGraph'
+      'change .durationType': 'changeFilter'
     },
 
     initialize: function(model) {
@@ -239,8 +238,6 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
       this.chart.max = max.y;
 
-      this.addAverages();
-
       d3.select(this.$el.find('svg').get(0))
         .datum([datum])
         .call(this.chart);
@@ -248,31 +245,6 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       this.updateBarStyle();
       this.updateMinMax();
 
-    },
-
-
-    addAverages: function () {
-      var average = this.averages[this.collection.graphType],
-          svg = d3.select(this.$el.find('svg').get(0)),
-          width = svg.style('width').replace('px', ''),
-          height = 104,
-          y = parseInt((this.chart.max - average) / this.chart.max * height, 10) + 31;
-
-      svg
-        .selectAll('line.average')
-        .remove();
-
-      if($('#otherDrivers').is(':checked')) {
-        svg
-          .append('svg:line')
-          .attr('x1', 5)
-          .attr('y1', y)
-          .attr('x2', width - 5)
-          .attr('y2', y)
-          .style('stroke', 'rgb(6,120,155)')
-          .attr('class', 'average')
-          .attr('title', average + ' across all Automatic drivers');
-      }
     },
 
 
