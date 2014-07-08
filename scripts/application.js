@@ -56,8 +56,10 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
 
     complete: function(xhr, status) {
       try {
-        console.log('Caching Request: ' + this.url);
-        sessionStorage.setItem(this.url, xhr.responseText);
+        if(xhr.responseText !== '[]') {
+          console.log('Caching Request: ' + this.url);
+          sessionStorage.setItem(this.url, xhr.responseText);
+        }
       } catch (e) {
         console.warn('Could Not Cache: ' + req.url);
       }
