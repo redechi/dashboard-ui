@@ -127,9 +127,13 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           filter = this.collection.findWhere({name: 'date'}),
           value = filter.get('getValue').call(filter, valueSelected);
 
+      $('.dateFilterCustom').toggle(valueSelected === 'custom');
+
       if(valueSelected === 'custom') {
-        $('.dateFilterValueCustomStart').datepicker('setDate', moment(value[0]).toDate());
-        $('.dateFilterValueCustomEnd').datepicker('setDate', moment(value[1]).startOf('day').toDate());
+        var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
+            endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
+        $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
+        $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
       }
 
       filter.set({
@@ -138,8 +142,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
         valueSelectedText: valueSelectedText
       });
       this.updateFilterText(filter);
-
-      $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
 
       coms.trigger('filter:updateDateFilter');
       coms.trigger('filter:applyAllFilters');

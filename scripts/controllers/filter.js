@@ -78,7 +78,7 @@ function(moment, formatters, vehiclesCollection) {
         } else if(valueSelected === 'allTime') {
           return [Date.parse('Mar 12, 2013'), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'custom') {
-          return this.get('value').map(this.get('trimDate'));
+          return this.get('value');
         }
       },
       updateValueText: function() {
@@ -107,8 +107,8 @@ function(moment, formatters, vehiclesCollection) {
         //Remove future and ancient dates
         if(!value || value === 'NaN') {
           return moment().endOf('day').valueOf();
-        } else if(value > moment().endOf('day').valueOf()) {
-          return moment().endOf('day').valueOf();
+        } else if(value > moment().startOf('day').valueOf()) {
+          return moment().startOf('day').valueOf();
         } else if(value <= Date.parse('Mar 12, 2013')) {
           return Date.parse('Mar 12, 2013');
         } else {
