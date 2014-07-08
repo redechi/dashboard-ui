@@ -54,11 +54,9 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           $('.dateFilterValue').val(filter.get('valueSelected'));
           $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
           if(filter.get('valueSelected') === 'custom') {
-            var value = filter.get('getValue').call(filter, 'custom'),
-                startDate = moment(value[0]).format('MM/DD/YY'),
-                endDate = moment(value[1]).format('MM/DD/YY');
-            $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
-            $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
+            var value = filter.get('getValue').call(filter, 'custom');
+            $('.dateFilterValueCustomStart').datepicker('setDate', moment(value[0]).toDate());
+            $('.dateFilterValueCustomEnd').datepicker('setDate', moment(value[1]).startOf('day').toDate());
           }
         } else if (name === 'vehicle') {
           $('.vehicleFilterValue').val(filter.get('value'));

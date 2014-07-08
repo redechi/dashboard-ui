@@ -128,10 +128,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           value = filter.get('getValue').call(filter, valueSelected);
 
       if(valueSelected === 'custom') {
-        var startDate = moment(value[0]).format('MM/DD/YY'),
-            endDate = moment(value[1]).format('MM/DD/YY');
-        $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
-        $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
+        $('.dateFilterValueCustomStart').datepicker('setDate', moment(value[0]).toDate());
+        $('.dateFilterValueCustomEnd').datepicker('setDate', moment(value[1]).startOf('day').toDate());
       }
 
       filter.set({

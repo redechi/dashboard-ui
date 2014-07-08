@@ -33,14 +33,15 @@ function( Backbone, coms, Trip, filterCollection) {
       console.log('Apply All Filters');
       var self = this;
 
-      //first apply date filter
+      //first, apply date filter
       var tripsToInclude = this.applyFilter('date', tripsCollection);
 
       //then apply remaining filters
       filterCollection.each(function(filter) {
-        if(filter.get('name') !== 'date') {
-          tripsToInclude = self.applyFilter(filter.get('name'), tripsToInclude);
-        }
+        if(filter.get('name') === 'date') { return; }
+        if(filter.get('name') === 'vehicle' && filter.get('value') === 'all') { return; }
+
+        tripsToInclude = self.applyFilter(filter.get('name'), tripsToInclude);
       });
 
       coms.trigger('filter', tripsToInclude);

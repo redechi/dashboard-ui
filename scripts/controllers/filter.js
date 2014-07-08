@@ -76,7 +76,7 @@ function(moment, formatters, vehiclesCollection) {
         } else if(valueSelected === 'thisYear') {
           return [moment().startOf('year').valueOf(), moment().endOf('year').valueOf()];
         } else if(valueSelected === 'allTime') {
-          return [0, moment().endOf('day').valueOf()];
+          return [Date.parse('Mar 12, 2013'), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'custom') {
           return this.get('value').map(this.get('trimDate'));
         }
@@ -105,7 +105,7 @@ function(moment, formatters, vehiclesCollection) {
       },
       trimDate: function (value) {
         //Remove future and ancient dates
-        if(!value && value !== 0) {
+        if(!value || value === 'NaN') {
           return moment().endOf('day').valueOf();
         } else if(value > moment().endOf('day').valueOf()) {
           return moment().endOf('day').valueOf();
