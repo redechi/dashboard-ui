@@ -22,8 +22,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
-    noMove: false,
-
     collection: new Backbone.Collection([]),
 
     resetCollection: function (newCollection) {
@@ -66,33 +64,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       mapHelpers.enablePolyline();
 
       mapbox.addLayer(markersLayer);
-
-      this.addLockControl().addTo(mapbox);
-    },
-
-
-
-    addLockControl: function() {
-      var self = this;
-
-      L.Control.Lock = L.Control.extend({
-          options: {
-              position: 'topleft',
-          },
-
-          onAdd: function (map) {
-            var controlDiv = L.DomUtil.create('div', 'leaflet-control-lock');
-            L.DomEvent
-              .addListener(controlDiv, 'click', L.DomEvent.stopPropagation)
-              .addListener(controlDiv, 'click', L.DomEvent.preventDefault)
-              .addListener(controlDiv, 'click', function() { self.changeNoMoveStatus(); });
-
-            controlDiv.title = 'Don\'t move map';
-            return controlDiv;
-          }
-      });
-
-      return new L.Control.Lock();
     },
 
 
@@ -149,34 +120,28 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
     zoomMap: function (model) {
       var id = model.get('id'),
-          noMove = this.noMove,
           bounds;
 
-      if(!noMove) {
-        this.pathsLayer.eachLayer(function(layer) {
-          if(layer.options.id == id) {
-            layer.eachLayer(function(layer) {
-              if(layer instanceof L.Polyline) {
-                if(!bounds) {
-                  bounds = L.latLngBounds(layer.getBounds());
-                } else {
-                  bounds.extend(layer.getBounds());
-                }
+      this.pathsLayer.eachLayer(function(layer) {
+        if(layer.options.id == id) {
+          layer.eachLayer(function(layer) {
+            if(layer instanceof L.Polyline) {
+              if(!bounds) {
+                bounds = L.latLngBounds(layer.getBounds());
+              } else {
+                bounds.extend(layer.getBounds());
               }
-            });
-          }
-        });
+            }
+          });
+        }
+      });
 
-        this.fitBoundsMap(bounds);
-      }
+      this.fitBoundsMap(bounds);
     },
 
 
     unzoomMap: function (model) {
-      var noMove = this.noMove;
-      if(!noMove) {
-        this.fitBoundsMap(this.pathsLayer.getBounds());
-      }
+      this.fitBoundsMap(this.pathsLayer.getBounds());
     },
 
 
@@ -184,12 +149,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       if(bounds && bounds.isValid()) {
         this.mapbox.fitBounds(bounds, {padding: [50, 50]});
       }
-    },
-
-
-    changeNoMoveStatus: function() {
-      this.noMove = !this.noMove;
-      $('.leaflet-control-lock').toggleClass('locked', this.noMove);
     },
 
 
