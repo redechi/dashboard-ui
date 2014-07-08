@@ -30,12 +30,16 @@ function( Backbone, coms, Trip, filterCollection) {
      *
      */
     applyAllFilters: function () {
-      var tripsCollection = this;
-      var tripsToInclude = [];
+      console.log('Apply All Filters');
+      var self = this;
 
-      this.each(function (tripModel) {
-        if (tripsCollection.shouldApplyFilter(tripModel)) {
-          tripsToInclude.push(tripModel);
+      //first apply date filter
+      var tripsToInclude = this.applyFilter('date', tripsCollection);
+
+      //then apply remaining filters
+      filterCollection.each(function(filter) {
+        if(filter.get('name') !== 'date') {
+          tripsToInclude = self.applyFilter(filter.get('name'), tripsToInclude);
         }
       });
 
@@ -43,22 +47,11 @@ function( Backbone, coms, Trip, filterCollection) {
       coms.trigger('filter', newCollection);
     },
 
-    /*
-     *
-     * boolean: determines if any filters apply to model.
-     *
-     */
-    shouldApplyFilter: function (tripModel) {
-      var shouldExclude = true;
+    applyFilter: function (name, trips) {
+      var tripsCollection = this,
+          filter = filterCollection.findWhere({name: name});
 
-      filterCollection.each(function (filterModel) {
-        var inclusiveFilter = filterModel.applyTo(tripModel);
-        if (!inclusiveFilter) {
-          shouldExclude = false;
-        }
-      });
-
-      return shouldExclude;
+      return trips.filter(function(trip) { return filter.applyTo(trip); });
     },
 
 

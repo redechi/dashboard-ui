@@ -11,9 +11,6 @@ function( Backbone, coms ) {
     initialize: function() {
       console.log('initialize a Filter model');
       this.on('change', this.updateHash, this);
-      this.on('change', function() {
-        coms.trigger('filter:change');
-      });
     },
 
     defaults: {},
@@ -23,7 +20,7 @@ function( Backbone, coms ) {
           regex = new RegExp('('+name+'=[^&]+)'),
           filterObj = _.object([[name, this.get('toURL').call(this)]]);
       var newUrl = Backbone.history.fragment.replace(regex, $.param(filterObj));
-      Backbone.history.navigate(newUrl);
+      Backbone.history.navigate(newUrl, {trigger: true});
     },
 
     /*
