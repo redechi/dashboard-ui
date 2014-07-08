@@ -17,8 +17,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       console.log("initialize a Map ItemView");
       coms.on('trips:highlight', _.bind(this.highlightMap, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightMap, this));
-      coms.on('trips:zoom', _.bind(this.zoomMap, this));
-      coms.on('trips:unzoom', _.bind(this.unzoomMap, this));
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
@@ -115,33 +113,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       this.markers.forEach(function(marker) {
         markersLayer.addLayer(marker);
       });
-    },
-
-
-    zoomMap: function (model) {
-      var id = model.get('id'),
-          bounds;
-
-      this.pathsLayer.eachLayer(function(layer) {
-        if(layer.options.id == id) {
-          layer.eachLayer(function(layer) {
-            if(layer instanceof L.Polyline) {
-              if(!bounds) {
-                bounds = L.latLngBounds(layer.getBounds());
-              } else {
-                bounds.extend(layer.getBounds());
-              }
-            }
-          });
-        }
-      });
-
-      this.fitBoundsMap(bounds);
-    },
-
-
-    unzoomMap: function (model) {
-      this.fitBoundsMap(this.pathsLayer.getBounds());
     },
 
 
