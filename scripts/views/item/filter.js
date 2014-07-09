@@ -53,12 +53,17 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         if(name === 'date') {
           $('.dateFilterValue').val(filter.get('valueSelected'));
           $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
+          $('.popover .dateFilterCustom input').datepicker({
+            format: 'mm/dd/yy',
+            startDate: new Date(2013, 2, 12),
+            endDate: moment().add('days', 1).startOf('day').toDate()
+          });
           if(filter.get('valueSelected') === 'custom') {
             var value = filter.get('getValue').call(filter, 'custom'),
                 startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
                 endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-            $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
-            $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
+            $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+            $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
           }
         } else if (name === 'vehicle') {
           $('.vehicleFilterValue').val(filter.get('value'));

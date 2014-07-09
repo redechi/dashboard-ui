@@ -31,8 +31,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'browserBack',
       'click .filterNav .redo': 'browserForward',
-      'changeDate .dateFilterValueCustomStart': 'changeDateFilterCustom',
-      'changeDate .dateFilterValueCustomEnd': 'changeDateFilterCustom'
+      'changeDate .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
+      'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom'
     },
 
     initialize: function() {
@@ -132,8 +132,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       if(valueSelected === 'custom') {
         var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
             endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-        $('.dateFilterValueCustomStart').datepicker('setDate', startDate);
-        $('.dateFilterValueCustomEnd').datepicker('setDate', endDate);
+        $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+        $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
       }
 
       filter.set({
@@ -149,13 +149,20 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     changeDateFilterCustom: function (e) {
       var filter = this.collection.findWhere({name: 'date'}),
-          value = [$('.dateFilterValueCustomStart').datepicker('getDate').getTime(), $('.dateFilterValueCustomEnd').datepicker('getDate').getTime()];
+          value = filter.get('value'),
+          start = value[0],
+          end = value[1],
+          newStart = $('.popover .dateFilterValueCustomStart').datepicker('getDate').getTime(),
+          newEnd = $('.popover .dateFilterValueCustomEnd').datepicker('getDate').getTime();
 
-      filter.set('value', value);
-      this.updateFilterText(filter);
+      //check for actual change before triggering
+      if(newStart && newEnd && (start !== newStart || end !== newEnd)) {
+        filter.set('value', [newStart, newEnd]);
+        this.updateFilterText(filter);
 
-      coms.trigger('filter:updateDateFilter');
-      coms.trigger('filter:applyAllFilters');
+        coms.trigger('filter:updateDateFilter');
+        coms.trigger('filter:applyAllFilters');
+      }
     },
 
 
@@ -219,12 +226,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           formater: filter.get('formatter'),
           value: filter.get('value') || [0, filter.get('max')],
           tooltip_split: true
-        });
-      } else if(name === 'date') {
-        $('.popover .dateFilterCustom input').datepicker({
-          format: 'mm/dd/yy',
-          startDate: new Date(2013, 2, 12),
-          endDate: new Date()
         });
       }
     },
