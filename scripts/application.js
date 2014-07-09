@@ -11,15 +11,13 @@ define([
 function( Backbone, Communicator, router, regionManager, UserView, tripsCollection, util ) {
   'use strict';
 
-  var accessToken,
-      dummyToken = 'ba56eee32df6be1437768699247b406fc7d9992f';
+  // get access token from cookie
+  var accessToken = util.getCookie('token');
 
   // if playground URL, use the dummy token
   if(window.location.search.indexOf('playground') !== -1) {
+    var dummyToken = 'ba56eee32df6be1437768699247b406fc7d9992f';
     accessToken = dummyToken;
-  } else {
-    // get access token from cookie
-    accessToken = util.getCookie('token');
   }
 
   //if non-matching token in sessionStorage, clear
@@ -27,39 +25,36 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
     sessionStorage.clear();
   }
 
-  // if no access token, redirect to login
-  if(!accessToken) {
-    window.location = loginURL;
-  }
+  if(accessToken) {
+    //set access token in sessionStorage
+    sessionStorage.setItem('accessToken', accessToken);
 
-  //set access token in sessionStorage
-  sessionStorage.setItem('accessToken', accessToken);
+    $.ajaxSetup({
+      headers: {'Authorization': 'token ' + accessToken},
 
-  $.ajaxSetup({
-    headers: {'Authorization': 'token ' + accessToken},
-
-    beforeSend: function (xhr, req) {
-      try {
-        // TODO: invalidate cache at 15 min.
-        var obj = JSON.parse(sessionStorage.getItem(req.url) || undefined);
-        this.success(obj);
-        xhr.abort('cached');
-      } catch (e) {
-        console.warn('Request Not Cached: ' + req.url);
-      }
-    },
-
-    complete: function(xhr, status) {
-      try {
-        if(xhr.responseText !== '[]') {
-          console.log('Caching Request: ' + this.url);
-          sessionStorage.setItem(this.url, xhr.responseText);
+      beforeSend: function (xhr, req) {
+        try {
+          // TODO: invalidate cache at 15 min.
+          var obj = JSON.parse(sessionStorage.getItem(req.url) || undefined);
+          this.success(obj);
+          xhr.abort('cached');
+        } catch (e) {
+          console.warn('Request Not Cached: ' + req.url);
         }
-      } catch (e) {
-        console.warn('Could Not Cache: ' + req.url);
+      },
+
+      complete: function(xhr, status) {
+        try {
+          if(xhr.responseText !== '[]') {
+            console.log('Caching Request: ' + this.url);
+            sessionStorage.setItem(this.url, xhr.responseText);
+          }
+        } catch (e) {
+          console.warn('Could Not Cache: ' + req.url);
+        }
       }
-    }
-  });
+    });
+  }
 
 
   var App = new Backbone.Marionette.Application();
