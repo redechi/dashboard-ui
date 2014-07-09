@@ -82,7 +82,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
     tripsCollection.fetchAll();
 
     var headerRegion = regionManager.getRegion('main_header');
-    var u = new UserView();
+    var u = new UserView({attributes: {loggedIn: (!!accessToken)}});
     headerRegion.show(u);
   });
 
