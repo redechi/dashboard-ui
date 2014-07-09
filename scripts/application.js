@@ -4,25 +4,22 @@ define([
   'router',
   'regionManager',
   './views/item/user_view',
-  './collections/trips'
+  './collections/trips',
+  './controllers/util'
 ],
 
-function( Backbone, Communicator, router, regionManager, UserView, tripsCollection ) {
+function( Backbone, Communicator, router, regionManager, UserView, tripsCollection, util ) {
   'use strict';
 
-  var loginURL = 'https://auth.automatic.com/oauth/login',
-      dummyToken =  'ba56eee32df6be1437768699247b406fc7d9992f';
-
-  function getCookie(key) {
-    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
-  }
-
-  // get access token from cookie
-  var accessToken = getCookie('token');
+  var accessToken,
+      dummyToken = 'ba56eee32df6be1437768699247b406fc7d9992f';
 
   // if playground URL, use the dummy token
   if(window.location.search.indexOf('playground') !== -1) {
     accessToken = dummyToken;
+  } else {
+    // get access token from cookie
+    accessToken = util.getCookie('token');
   }
 
   //if non-matching token in sessionStorage, clear
