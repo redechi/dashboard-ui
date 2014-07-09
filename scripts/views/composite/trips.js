@@ -79,6 +79,9 @@ function( Backbone, Empty, Trip, coms, tripList) {
       //set sortType dropdown
       this.$el.find('.sortType').val(this.collection.sortType);
 
+      //toggle class if no trips
+      $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
+
       var resize = this.resize;
       setTimeout(resize, 0);
 

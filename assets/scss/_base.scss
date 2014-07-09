@@ -127,7 +127,7 @@ a:hover {
   }
 
   .popover-content {
-    padding: 8px 15px;
+    padding: 0 15px 4px 15px;
     min-width: 180px;
 
     ul {
@@ -135,7 +135,7 @@ a:hover {
       margin: 0;
 
       li {
-        padding: 5px 0;
+        padding: 2px 0;
         cursor: pointer;
         display: block;
 
