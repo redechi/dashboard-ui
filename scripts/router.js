@@ -8,6 +8,7 @@ define([
 
     appRoutes: {
       '(/)': 'showSummaryLayout',
+      'login': 'showLoginLayout',
       'trip/:tripid': 'showTripLayout',
       'filter(/)?:filters': 'applyFilters',
       'logout': 'logOut'

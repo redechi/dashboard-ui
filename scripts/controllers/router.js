@@ -4,9 +4,10 @@ define([
   '../collections/trips',
   '../collections/filters',
   '../views/layout/summary',
-  '../views/layout/trip'
+  '../views/layout/trip',
+  '../views/layout/login'
 ],
-function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout) {
+function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout, LoginLayout) {
   'use strict';
 
   window.TripView = TripLayout;
@@ -19,6 +20,12 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       filtersCollection.fromUrl();
       contentRegion.show(summary);
       tripsCollection.applyAllFilters();
+    },
+
+    showLoginLayout: function () {
+      var login = new LoginLayout();
+      var contentRegion = regionManager.getRegion('main_content');
+      contentRegion.show(login);
     },
 
 
