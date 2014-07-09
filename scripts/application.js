@@ -63,8 +63,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   App.addRegions({
     headerRegion: "#user",
     contentRegion: "main",
-    footerRegion: "footer",
-    overlayRegion: "#popover"
+    footerRegion: "footer"
   });
 
   /* Add initializers here */
@@ -86,7 +85,6 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   regionManager.addRegion('main_content', App.contentRegion);
   regionManager.addRegion('main_header', App.headerRegion);
   regionManager.addRegion('main_footer', App.footerRegion);
-  regionManager.addRegion('main_overlay', App.overlayRegion);
 
   return App;
 });
