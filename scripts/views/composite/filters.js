@@ -18,7 +18,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
   return Backbone.Marionette.CompositeView.extend({
 
     events: {
-      'click .btn-popover': 'closePopovers',
       'click .filterList li': 'addFilterFromMenu',
       'click .removeFilter': 'removeFilter',
       'click .resetFilters': 'resetFilters',
@@ -209,10 +208,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
         }));
       }, 0);
-    },
-
-    closePopovers: function(e) {
-      $('.btn-popover').not(e.currentTarget).popover('hide');
     },
 
     initializePopoverContent: function(e) {

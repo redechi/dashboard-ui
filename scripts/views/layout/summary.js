@@ -22,6 +22,15 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
 
       //resize right away
       setTimeout(this.resize, 0);
+
+      //only allow one popover at a time, close popovers when a user clicks off
+      $('body').on('click', function(e) {
+        $('[data-toggle="popover"]').each(function() {
+          if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            $(this).popover('hide');
+          }
+        });
+      });
     },
 
     template: SummaryTmpl,
@@ -30,7 +39,7 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
     regions: {
       map: '#map',
       filters: '#filters',
-      trips_header: '#tripsHeader',
+      trips_header: '.tripsHeader',
       graph: '#graphs',
       trips: '#trips',
       user: '#user'

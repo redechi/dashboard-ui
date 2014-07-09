@@ -1,18 +1,23 @@
-<div id="tripsHeader">
+<div class="tripsHeader">
   <div class="tripCount">{{ total }} Trips</div>
 
-  <select class="sortType">
-    <option value="start_time">Time/Date</option>
-    <option value="distance_m">Distance</option>
-    <option value="average_mpg">MPG</option>
-    <option value="fuel_cost_usd">Cost</option>
-    <option value="duration">Duration</option>
-    <option value="score">Score</option>
-  </select>
+  <div class="sortType" data-toggle="popover">Time/Date</div>
+
+  <div class="popoverTemplate" title="Sort By">
+    <ul class="sortValue listSelect">
+      <li data-value="start_time" class="selected sortDown">Time/Date</li>
+      <li data-value="distance_m">Distance</li>
+      <li data-value="average_mpg">MPG</li>
+      <li data-value="fuel_cost_usd">Cost</li>
+      <li data-value="duration">Duration</li>
+      <li data-value="score">Score</li>
+    </ul>
+  </div>
+
 </div>
 
 <ul class="trips"></ul>
 
-<div id="tripsFooter">
-  <div class="btn-export btn-popover">Export</div>
+<div class="tripsFooter">
+  <div class="btn-export btn-popover" data-toggle="popover">Export</div>
 </div>
