@@ -34,7 +34,7 @@ function( Backbone, coms, Trip, filterCollection) {
       var self = this;
 
       //first, apply date filter
-      var tripsToInclude = this.applyFilter('date', tripsCollection);
+      var tripsToInclude = this.applyFilter('date', this);
 
       //then apply remaining filters
       filterCollection.each(function(filter) {

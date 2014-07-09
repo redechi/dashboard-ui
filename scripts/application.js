@@ -13,8 +13,6 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   var loginURL = 'https://auth.automatic.com/oauth/login',
       dummyToken =  'ba56eee32df6be1437768699247b406fc7d9992f';
 
-  window.tripsCollection = tripsCollection;
-
   function getCookie(key) {
     return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(key).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
   }
