@@ -71,10 +71,11 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
       }
 
       setTimeout(function() {
+        var popoverTemplate = $('.popoverTemplate[data-filter="' + name + '"]');
         $('.btn-popover[data-filter="' + name + '"]').popover({
           html: true,
-          content: function() { return $('.popoverContent[data-filter="' + name + '"]').html(); },
-          title:  function() { return $('.popoverContent[data-filter="' + name + '"]').attr('title'); },
+          content: function() { return popoverTemplate.html(); },
+          title:  function() { return popoverTemplate.attr('title'); },
           placement: 'bottom',
           callback: popoverCallback
         });
