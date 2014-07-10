@@ -131,6 +131,16 @@
       -moz-box-shadow: 0px 1px 0px 0px #E3E2DE;
       box-shadow: 0px 1px 0px 0px #E3E2DE;
     }
+
+    &.disabled {
+      cursor: auto;
+
+      &:hover {
+        background-color: $header_back;
+        -moz-box-shadow: inherit;
+        box-shadow: inherit;
+      }
+    }
   }
 
   .btn-dropdown {
@@ -145,13 +155,9 @@
     li {
       margin: 0;
       background-position: 50% center;
-
-      a {
-        overflow: hidden;
-        text-indent: -9999px;
-        width: 35px;
-        display: block;
-      }
+      overflow: hidden;
+      text-indent: -9999px;
+      width: 35px;
 
       &.undo {
         border-top-right-radius: 0;
@@ -159,10 +165,18 @@
         border-radius: 1px;
         border-right: 1px solid rgba(0,0,0,0.10);
         @include hr-image('../img/icon_back_active.png', '../img/icon_back_active@2x.png');
+
+        &.disabled {
+          @include hr-image('../img/icon_back_inactive.png', '../img/icon_back_inactive@2x.png');
+        }
       }
 
       &.redo {
         @include hr-image('../img/icon_forward_active.png', '../img/icon_forward_active@2x.png');
+
+        &.disabled {
+          @include hr-image('../img/icon_forward_inactive.png', '../img/icon_forward_inactive@2x.png');
+        }
       }
     }
   }
