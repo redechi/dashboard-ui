@@ -27,10 +27,10 @@ function() {
       if (score == 100) return "#70CE3F";
     },
     distance: function(distance_miles) {
-      if(Math.round(distance_miles) >= 100) {
+      if (Math.round(distance_miles) >= 100) {
         return distance_miles.toFixed(0);
       } else {
-        return distance_miles.toFixed(1);
+        return ((distance_miles) ? distance_miles : 0).toFixed(1);
       }
     },
     duration: function(min) {
@@ -41,10 +41,10 @@ function() {
       return Math.round(min);
     },
     cost: function(fuelCost) {
-      return fuelCost.toFixed(2);
+      return ((fuelCost) ? fuelCost : 0).toFixed(2);
     },
     costWithUnit: function(fuelCost) {
-      return '$' + fuelCost.toFixed(2);
+      return '$' + ((fuelCost) ? fuelCost : 0).toFixed(2);
     },
     averageMPG: function(mpg) {
       return mpg ? mpg.toFixed(1) : 0;
