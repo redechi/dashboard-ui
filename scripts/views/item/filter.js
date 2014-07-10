@@ -29,14 +29,10 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     },
 
     onRender: function() {
-      var name = this.model.get('name'),
-          value = this.model.get('value'),
-          self = this;
-
-      this.initializePopovers();
+      this.initializePopover();
     },
 
-    initializePopovers: function () {
+    initializePopover: function () {
       var filter = this.model,
           name = filter.get('name');
 
@@ -62,6 +58,8 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
       }
 
       setTimeout(function() {
+        $('.btn-popover[data-filter="' + name + '"]').popover('destroy');
+
         var popoverTemplate = $('.popoverTemplate[data-filter="' + name + '"]');
         $('.btn-popover[data-filter="' + name + '"]').popover({
           html: true,
@@ -71,8 +69,8 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           callback: popoverCallback
         });
 
-        //don't show popover for date filter
-        if(name !== 'date' && filter.get('showPopover') === true) {
+        //don't show popovers for initial filters
+        if(filter.get('showPopover') === true) {
           $('.btn-popover[data-filter="' + name + '"]').popover('show');
         }
 

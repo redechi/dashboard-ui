@@ -28,8 +28,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'slideStop .distanceFilterValue': 'changeDistanceFilter',
       'change .vehicleFilterValue': 'changeVehicleFilter',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
-      'click .filterNav .undo': 'browserBack',
-      'click .filterNav .redo': 'browserForward',
+      'click .filterNav .undo': 'undo',
+      'click .filterNav .redo': 'redo',
       'changeDate .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
       'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom'
     },
@@ -37,11 +37,12 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
 
-      var self = this;
-
       //update the filter ranges based on trips
       this.updateFilterRanges();
       coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
+
+      //update Nav button status
+      coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
       //get a list of all vehicles and update filter
       vehiclesCollection.fetch();
@@ -51,13 +52,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       this.collection.each(this.updateFilterText);
 
       // initialize addFilter popover
-      setTimeout(function() {
-        $('.addFilter').popover({
-          html: true,
-          placement: 'bottom'
-        });
-        self.updateFilterList();
-      }, 0);
+      this.initializePopover();
     },
 
     model: new Filter(),
@@ -69,12 +64,40 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     template: FiltersTmpl,
 
-    browserBack: function () {
-      window.history.back();
+    updateNavButtons: function() {
+      setTimeout(function() {
+        $('.filterNav .redo').toggleClass('disabled', (Backbone.history.next.length === 0));
+        $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
+      }, 0);
     },
 
-    browserForward: function () {
-      window.history.forward();
+    undo: function() {
+      if(Backbone.history.previous.length) {
+        Backbone.history.next.unshift(Backbone.history.fragment);
+        var fragment = Backbone.history.previous.pop();
+        Backbone.history.navigate(fragment, {trigger: true});
+      }
+    },
+
+    redo: function() {
+      if(Backbone.history.next.length) {
+        Backbone.history.previous.push(Backbone.history.fragment);
+        var fragment = Backbone.history.next.shift();
+        Backbone.history.navigate(fragment, {trigger: true});
+      }
+    },
+
+    initializePopover: function() {
+      var self = this;
+
+      setTimeout(function() {
+        $('.addFilter').popover('destroy');
+        $('.addFilter').popover({
+          html: true,
+          placement: 'bottom'
+        });
+        self.updateFilterList();
+      }, 0);
     },
 
     addFilterFromMenu: function(e) {
@@ -86,18 +109,19 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       $('.addFilter').popover('hide');
       var filter = new Filter(filterList[filterName]);
       filter.set('showPopover', true);
+      this.collection.saveFilters();
       this.collection.add(filter);
       this.updateFilterList();
     },
 
-    removeFilter: function (e) {
+    removeFilter: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
       this.collection.remove(filter);
       this.updateFilterList();
     },
 
-    resetFilters: function () {
+    resetFilters: function() {
       this.collection.reset();
     },
 
@@ -135,6 +159,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
         $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
       }
 
+      this.collection.saveFilters();
       filter.set({
         value: value,
         valueSelected: valueSelected,
@@ -156,6 +181,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
       //check for actual change before triggering
       if(newStart && newEnd && (start !== newStart || end !== newEnd)) {
+        this.collection.saveFilters();
         filter.set('value', [newStart, newEnd]);
         this.updateFilterText(filter);
 
@@ -164,9 +190,9 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       }
     },
 
-
     changeVehicleFilter: function (e) {
       var filter = this.collection.findWhere({name: 'vehicle'});
+      this.collection.saveFilters();
       filter.set('value', $(e.target).val());
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
@@ -174,6 +200,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     changeDurationFilter: function (e) {
       var filter = this.collection.findWhere({name: 'duration'});
+      this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
@@ -182,6 +209,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     changeDistanceFilter: function (e) {
       console.log('Change Distance Filter')
       var filter = this.collection.findWhere({name: 'distance'});
+      this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
@@ -189,6 +217,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     changeCostFilter: function (e) {
       var filter = this.collection.findWhere({name: 'cost'});
+      this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
@@ -196,6 +225,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
 
     changeTimeFilter: function (e) {
       var filter = this.collection.findWhere({name: 'time'});
+      this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
@@ -252,6 +282,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     onRender: function() {
+      this.updateNavButtons();
     }
   });
 

@@ -87,6 +87,8 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   // contextual startup
   App.on("start", function(){
     console.log('Start History');
+    Backbone.history.previous = [];
+    Backbone.history.next = [];
     Backbone.history.start();
   });
 

@@ -81,6 +81,16 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
         this.add(new FilterModel(filterList.vehicle));
         this.add(new FilterModel(filterList.date));
       }
+    },
+
+    saveFilters: function() {
+      var fragment = Backbone.history.fragment;
+      //don't write initial or duplicate states to history
+      if(fragment !== Backbone.history.previous[0] && fragment != '' && fragment != 'filter/?vehicle=all') {
+        Backbone.history.previous.push(fragment);
+      }
+      //erase next history
+      Backbone.history.next = [];
     }
 
   });
