@@ -20,11 +20,13 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
       this.on('add', this.toUrl, this);
       this.on('remove', this.toUrl, this);
 
+      coms.on('filter:toURL', _.bind(this.toUrl, this));
+
       window.filters = this;
     },
 
 
-    getFiltersFromUrl: function () {
+    getFiltersFromUrl: function() {
       var search = Backbone.history.fragment.replace('filter/?', ''),
           filterObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
                  function(key, value) {
@@ -34,18 +36,20 @@ function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
       return filterObj;
     },
 
-    /*
-     *
-     * handles deduplication and hash generation.
-     *
-     */
-    toUrl: function () {
-      console.log('Write Filters to URL');
+
+    formatFiltersToURL: function() {
       var filterObj = _.object(this.map(function (filter) {
         return [filter.get('name'), filter.get('toURL').call(filter)];
       }));
-      Backbone.history.navigate('/filter/?' + $.param(filterObj));
+      return '/filter/?' + $.param(filterObj);
     },
+
+
+    toUrl: function() {
+      console.log('Write Filters to URL');
+      Backbone.history.navigate(this.formatFiltersToURL());
+    },
+
 
     fromUrl: function (string) {
       console.log('Parsing Filters from URL');
