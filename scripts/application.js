@@ -65,6 +65,18 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
     }
   };
 
+  //only allow one popover at a time, close popovers when a user clicks off
+  $('body').on('click', function(e) {
+    $('[data-toggle="popover"]').each(function() {
+      if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+        //allow clicking on datepicker
+        if(!$(e.target).is('.day, .month, .year, .prev, .next')) {
+          $(this).popover('hide');
+        }
+      }
+    });
+  });
+
 
   var App = new Backbone.Marionette.Application();
 

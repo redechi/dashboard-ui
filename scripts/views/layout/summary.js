@@ -7,8 +7,6 @@ define([
   './trip_list_layout'
 ],
 
-// this should probably be a composit view rather than a layout
-
 function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
     'use strict';
 
@@ -22,20 +20,10 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
 
       //resize right away
       setTimeout(this.resize, 0);
-
-      //only allow one popover at a time, close popovers when a user clicks off
-      $('body').on('click', function(e) {
-        $('[data-toggle="popover"]').each(function() {
-          if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-            $(this).popover('hide');
-          }
-        });
-      });
     },
 
     template: SummaryTmpl,
 
-    /* Layout sub regions */
     regions: {
       map: '#map',
       filters: '#filters',
@@ -45,13 +33,10 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
       user: '#user'
     },
 
-    /* ui selector cache */
     ui: {},
 
-    /* Ui events hash */
     events: {},
 
-    /* on render callback */
     onRender: function () {
 
       var tl = new TripListLayout();
