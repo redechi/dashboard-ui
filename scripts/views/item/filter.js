@@ -32,16 +32,22 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
       this.initializePopover();
     },
 
+    selectItem: function(item) {
+      $(item)
+        .addClass('selected')
+        .siblings()
+        .removeClass('selected');
+    },
+
     initializePopover: function () {
-      var filter = this.model,
+      var self = this,
+          filter = this.model,
           name = filter.get('name');
 
       function popoverCallback() {
         if(name === 'date') {
-          $('.dateFilterValue li[data-value="' + filter.get('valueSelected') + '"]')
-            .addClass('selected')
-            .siblings()
-            .removeClass('selected');
+          self.selectItem('.dateFilterValue li[data-value="' + filter.get('valueSelected') + '"]');
+
           $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
           $('.popover .dateFilterCustom input').datepicker({
             format: 'mm/dd/yy',
@@ -56,7 +62,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
             $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
           }
         } else if (name === 'vehicle') {
-          $('.vehicleFilterValue').val(filter.get('value'));
+          self.selectItem('.vehicleFilterValue li[data-value="' + filter.get('value') + '"]');
         }
       }
 

@@ -21,12 +21,12 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'click .filterList li': 'addFilterFromMenu',
       'click .removeFilter': 'removeFilter',
       'click .resetFilters': 'resetFilters',
+      'click .vehicleFilterValue li': 'changeVehicleFilter',
       'click .dateFilterValue li': 'changeDateFilter',
       'slideStop .durationFilterValue': 'changeDurationFilter',
       'slideStop .costFilterValue': 'changeCostFilter',
       'slideStop .timeFilterValue': 'changeTimeFilter',
       'slideStop .distanceFilterValue': 'changeDistanceFilter',
-      'change .vehicleFilterValue': 'changeVehicleFilter',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'undo',
       'click .filterNav .redo': 'redo',
@@ -63,6 +63,13 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     template: FiltersTmpl,
+
+    selectItem: function(item) {
+      $(item)
+        .addClass('selected')
+        .siblings()
+        .removeClass('selected');
+    },
 
     updateNavButtons: function() {
       setTimeout(function() {
@@ -145,17 +152,14 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     changeDateFilter: function (e) {
-      var valueSelected = $(e.currentTarget).data('value'),
-          valueSelectedText = $(e.currentTarget).text(),
+      var valueSelected = $(e.target).data('value'),
+          valueSelectedText = $(e.target).text(),
           filter = this.collection.findWhere({name: 'date'});
 
       if(valueSelected !== filter.get('valueSelected')) {
         var value = filter.get('getValue').call(filter, valueSelected);
-        
-        $(e.currentTarget)
-          .addClass('selected')
-          .siblings()
-          .removeClass('selected');
+
+        this.selectItem(e.target);
 
         $('.dateFilterCustom').toggle(valueSelected === 'custom');
 
@@ -199,11 +203,16 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     changeVehicleFilter: function (e) {
-      var filter = this.collection.findWhere({name: 'vehicle'});
-      this.collection.saveFilters();
-      filter.set('value', $(e.target).val());
-      this.updateFilterText(filter);
-      coms.trigger('filter:applyAllFilters');
+      var filter = this.collection.findWhere({name: 'vehicle'}),
+          value = $(e.target).data('value');
+
+      if(value !== filter.get('value')) {
+        this.selectItem(e.target);
+        this.collection.saveFilters();
+        filter.set('value', value);
+        this.updateFilterText(filter);
+        coms.trigger('filter:applyAllFilters');
+      }
     },
 
     changeDurationFilter: function (e) {
@@ -242,8 +251,10 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     updateVehicleList: function() {
       var self = this;
       setTimeout(function() {
-        self.$el.find('.vehicleFilterValue').append(vehiclesCollection.map(function(vehicle) {
-          return '<option value="' + vehicle.get('id') + '">' + vehicle.get('display_name') + '</option>';
+        $('.vehicleFilterValue', self.$el).append(vehiclesCollection.map(function(vehicle) {
+          return $('<li>')
+            .attr('data-value', vehicle.get('id'))
+            .text(vehicle.get('display_name'));
         }));
       }, 0);
     },
