@@ -162,7 +162,6 @@
       &.undo {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
-        border-radius: 1px;
         border-right: 1px solid rgba(0,0,0,0.10);
         @include hr-image('../img/icon_back_active.png', '../img/icon_back_active@2x.png');
 
@@ -172,6 +171,8 @@
       }
 
       &.redo {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
         @include hr-image('../img/icon_forward_active.png', '../img/icon_forward_active@2x.png');
 
         &.disabled {
