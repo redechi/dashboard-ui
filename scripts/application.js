@@ -56,6 +56,15 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
     });
   }
 
+  //extend popover to allow callback
+  var tmp = $.fn.popover.Constructor.prototype.show;
+  $.fn.popover.Constructor.prototype.show = function () {
+    tmp.call(this);
+    if (this.options.callback) {
+      this.options.callback();
+    }
+  };
+
 
   var App = new Backbone.Marionette.Application();
 

@@ -18,15 +18,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
     initialize: function() {
       console.log('initialize a Filters ItemView');
-
-      //extend popover to allow callback
-      var tmp = $.fn.popover.Constructor.prototype.show;
-      $.fn.popover.Constructor.prototype.show = function () {
-        tmp.call(this);
-        if (this.options.callback) {
-          this.options.callback();
-        }
-      };
     },
 
     tagName: 'li',
