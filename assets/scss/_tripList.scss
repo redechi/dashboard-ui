@@ -17,12 +17,7 @@
     }
   }
 
-  // trip count header
-  .sortType {
-    float: right;
-  }
-
-  #tripsHeader {
+  .tripsHeader {
     padding: 5px 10px;
     border-bottom: 1px solid rgb(221, 221, 221);
     overflow: hidden;
@@ -35,9 +30,24 @@
       font-size: 14px;
       color: $link_type;
     }
+
+    .sortType {
+      float: right;
+      line-height: 25px;
+      color: $highlight;
+      padding-right: 25px;
+      background-position: right 5px center;
+      background-repeat: no-repeat;
+      @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
+      cursor: pointer;
+    }
+
+    .popover-content {
+      min-width: 120px;
+    }
   }
 
-  #tripsFooter {
+  .tripsFooter {
     border-top: 1px solid $line_gray;
     height: 40px;
 

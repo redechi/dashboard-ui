@@ -17,23 +17,36 @@ function( Backbone, Empty, Trip, coms, tripList) {
       coms.on('filter', _.bind(this.resetCollection, this));
 
       $(window).on("resize", this.resize);
+
+      this.options.sortType = 'start_time';
+      this.options.sortDirection = 'sortDown';
     },
 
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
     emptyView: Empty,
     childView: Trip,
-    childViewContainer: "ul",
+    childViewContainer: "ul.trips",
     template: tripList,
-
-    resetCollection: function (collection) {
-      this.collection.reset(collection);
-    },
 
     templateHelpers: function () {
       return {
         total: this.collection.length
       };
+    },
+
+    events: {
+      'click #export li': 'export',
+      'click .sortValue li': 'changeSort'
+    },
+
+    collectionEvents: {
+      'reset': 'render',
+      'sync': 'render'
+    },
+
+    resetCollection: function (collection) {
+      this.collection.reset(collection);
     },
 
     export: function (e) {
@@ -51,53 +64,73 @@ function( Backbone, Empty, Trip, coms, tripList) {
       window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
     },
 
-    logit: function () {
-      console.log(arguments);
+    changeSort: function (e) {
+      if($(e.currentTarget).data('direction') === 'sortUp' || !$(e.currentTarget).hasClass('selected')) {
+        this.options.sortDirection = 'sortDown';
+      } else {
+        this.options.sortDirection = 'sortUp';
+      }
+      this.options.sortType = $(e.currentTarget).data('value');
+      this.options.sortTypeName = $(e.currentTarget).text();
+
+      this.setSort();
     },
 
-    changeSort: function () {
-      var sortType = this.$el.find('.sortType').val();
-      this.collection.sortType = sortType;
+    setSort: function() {
+      var sortType = this.options.sortType,
+          sortTypeName = this.options.sortTypeName,
+          sortDirection = this.options.sortDirection;
+      $('.sortValue li').removeClass();
+      $('.sortValue li[data-value="' + sortType + '"]')
+        .data('direction', sortDirection)
+        .addClass('selected')
+        .addClass(sortDirection);
 
-      this.collection.comparator = function(trip) { return -trip.get(sortType); };
+      $('.sortType').text(sortTypeName);
+
+      this.collection.comparator = function(trip) {
+        if(sortDirection == 'sortDown') {
+          return -trip.get(sortType);
+        } else {
+          return trip.get(sortType);
+        }
+      };
       this.collection.sort();
     },
 
-    events: {
-      'click #export li': 'export',
-      'change .sortType': 'changeSort'
+    enableSortPopover: function() {
+      $('.sortType').popover('destroy');
+      $('.btn-export').popover('destroy');
+      $('.btn-export').popover({
+        html: true,
+        placement: 'top',
+        content: '<ul id="export"><li data-type="all">All</li><li data-type="selected">Selected</li></ul>'
+      });
+
+      var popoverTemplate = $('.tripsHeader .popoverTemplate');
+      $('.sortType').popover({
+        html: true,
+        content: function() { return popoverTemplate.html(); },
+        title:  function() { return popoverTemplate.attr('title'); },
+        placement: 'bottom'
+      });
     },
 
-    collectionEvents: {
-      'sort': 'render',
-      'reset': 'render',
-      'sync': 'render'
-    },
-
-    /* on render callback */
     onRender: function() {
-      //set sortType dropdown
-      this.$el.find('.sortType').val(this.collection.sortType);
+      //set sortType and enable sort
+      this.setSort();
+      this.enableSortPopover();
 
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
 
       var resize = this.resize;
       setTimeout(resize, 0);
-
-      // initialize export popover
-      setTimeout(function() {
-        $('.btn-export').popover({
-          html: true,
-          placement: 'top',
-          content: '<ul id="export"><li data-type="all">All</li><li data-type="selected">Selected</li></ul>'
-        });
-      }, 0);
     },
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#trips ul.trips').height(height - $('#tripsHeader').outerHeight(true) - $('#tripsFooter').outerHeight(true) - 95);
+      $('#trips ul.trips').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 88);
     }
 
   });
