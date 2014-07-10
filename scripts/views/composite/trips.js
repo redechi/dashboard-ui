@@ -36,7 +36,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
     },
 
     events: {
-      'click #export li': 'export',
+      'click .exportOption li': 'export',
       'click .sortValue li': 'changeSort'
     },
 
@@ -60,8 +60,6 @@ function( Backbone, Empty, Trip, coms, tripList) {
         ids = new Backbone.Collection(filtered).pluck("id");
         if (!ids[0]) return alert('Please Select at least one trip');
       }
-
-      window.location = '/download/trips.csv?trip_ids=' + ids.join(',');
     },
 
     changeSort: function (e) {
@@ -99,19 +97,21 @@ function( Backbone, Empty, Trip, coms, tripList) {
     },
 
     enableSortPopover: function() {
-      $('.sortType').popover('destroy');
-      $('.btn-export').popover('destroy');
-      $('.btn-export').popover({
+      $('.export').popover('destroy');
+      var exportPopoverTemplate = $('.tripsFooter .popoverTemplate');
+      $('.export').popover({
         html: true,
-        placement: 'top',
-        content: '<ul id="export"><li data-type="all">All</li><li data-type="selected">Selected</li></ul>'
+        content: function() { return exportPopoverTemplate.html(); },
+        title:  function() { return exportPopoverTemplate.attr('title'); },
+        placement: 'top'
       });
 
-      var popoverTemplate = $('.tripsHeader .popoverTemplate');
+      $('.sortType').popover('destroy');
+      var sortPopoverTemplate = $('.tripsHeader .popoverTemplate');
       $('.sortType').popover({
         html: true,
-        content: function() { return popoverTemplate.html(); },
-        title:  function() { return popoverTemplate.attr('title'); },
+        content: function() { return sortPopoverTemplate.html(); },
+        title:  function() { return sortPopoverTemplate.attr('title'); },
         placement: 'bottom'
       });
     },
