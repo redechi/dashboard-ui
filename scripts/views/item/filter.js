@@ -38,7 +38,10 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
       function popoverCallback() {
         if(name === 'date') {
-          $('.dateFilterValue').val(filter.get('valueSelected'));
+          $('.dateFilterValue li[data-value="' + filter.get('valueSelected') + '"]')
+            .addClass('selected')
+            .siblings()
+            .removeClass('selected');
           $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
           $('.popover .dateFilterCustom input').datepicker({
             format: 'mm/dd/yy',

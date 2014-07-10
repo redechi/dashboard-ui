@@ -21,7 +21,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       'click .filterList li': 'addFilterFromMenu',
       'click .removeFilter': 'removeFilter',
       'click .resetFilters': 'resetFilters',
-      'change .dateFilterValue': 'changeDateFilter',
+      'click .dateFilterValue li': 'changeDateFilter',
       'slideStop .durationFilterValue': 'changeDurationFilter',
       'slideStop .costFilterValue': 'changeCostFilter',
       'slideStop .timeFilterValue': 'changeTimeFilter',
@@ -145,30 +145,38 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     },
 
     changeDateFilter: function (e) {
-      var valueSelected = $(e.target).val(),
-          valueSelectedText = $('option:selected', e.target).text(),
-          filter = this.collection.findWhere({name: 'date'}),
-          value = filter.get('getValue').call(filter, valueSelected);
+      var valueSelected = $(e.currentTarget).data('value'),
+          valueSelectedText = $(e.currentTarget).text(),
+          filter = this.collection.findWhere({name: 'date'});
 
-      $('.dateFilterCustom').toggle(valueSelected === 'custom');
+      if(valueSelected !== filter.get('valueSelected')) {
+        var value = filter.get('getValue').call(filter, valueSelected);
+        
+        $(e.currentTarget)
+          .addClass('selected')
+          .siblings()
+          .removeClass('selected');
 
-      if(valueSelected === 'custom') {
-        var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
-            endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-        $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-        $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+        $('.dateFilterCustom').toggle(valueSelected === 'custom');
+
+        if(valueSelected === 'custom') {
+          var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
+              endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
+          $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+          $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+        }
+
+        this.collection.saveFilters();
+        filter.set({
+          value: value,
+          valueSelected: valueSelected,
+          valueSelectedText: valueSelectedText
+        });
+        this.updateFilterText(filter);
+
+        coms.trigger('filter:updateDateFilter');
+        coms.trigger('filter:applyAllFilters');
       }
-
-      this.collection.saveFilters();
-      filter.set({
-        value: value,
-        valueSelected: valueSelected,
-        valueSelectedText: valueSelectedText
-      });
-      this.updateFilterText(filter);
-
-      coms.trigger('filter:updateDateFilter');
-      coms.trigger('filter:applyAllFilters');
     },
 
     changeDateFilterCustom: function (e) {
