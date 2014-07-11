@@ -5,18 +5,6 @@
   border-bottom: 1px solid $line_gray;
   background: $trip_list_back;
 
-  ul.trips {
-    height: 652px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    color: #777;
-    margin: 0;
-
-    a {
-      color: $base_type;
-    }
-  }
-
   .tripsHeader {
     padding: 5px 10px;
     border-bottom: 1px solid rgb(221, 221, 221);
@@ -106,282 +94,306 @@
     }
   }
 
-  // the trip
-  .trip {
-    overflow: hidden;
-    display: block;
-    position: relative;
-    border-bottom: 1px solid rgb(221, 221, 221);
+  ul.trips {
+    height: 652px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    color: #777;
+    margin: 0;
 
-    .timeTopBox, .timeBottomBox {
-      position: absolute;
-      font-size: 11px;
-      left: 0;
-      padding: 10px;
-    }
-
-    .timeTopBox {
-      top: 0;
-
-      .endDate {
-        font-size: 10px;
-      }
-    }
-
-    .timeBottomBox {
-      bottom: 0;
-    }
-
-    .tripLine {
-      @include box-sizing(border-box);
-      position: absolute;
-      width: 2px;
-      height: 90%;
-      background-color: $line_gray;
-      left: 61px;
-      top: 16px;
-      height: 60px;
-
-      & > div {
-        width: 10px;
-        height: 10px;
-        background-color: $line_gray;
-        border-radius: 5px;
-        margin-left: -4px;
-        line-height: 0;
-        text-align: center;
-        color: transparent;
-      }
-
-      & div:first-child {
-        margin-top: -3px;
-      }
-
-      & div:last-child {
-        position: absolute;
-        bottom: -3px;
-      }
-
-    }
-
-    .highlighted,
-    .highlighted:hover {
-      opacity: 1;
-      background-color: rgba(6, 216, 68, 0.1);
-    }
-
-    .tripCheck {
-      position: absolute;
-      top: 50%;
-      margin-top: -5px;
-      left: 10px;
-    }
-
-    .tripDetails {
-      display: block;
-      width: 234px;
-      float: right;
-    }
-
-    .middleBox {
-      text-align: center;
+    li {
       overflow: hidden;
-    }
+      display: block;
+      position: relative;
+      border-bottom: 1px solid rgb(221, 221, 221);
+      cursor: pointer;
 
-    .stat {
-      width: 25%;
-      float: left;
-      font-size: 14px;
-      font-weight: 400;
-      color: $base_type;
-
-      &::after, &::before {
-        font-size: 9px;
-        font-weight: normal;
-        display: inline;
-      }
-    }
-
-    .distance::after {
-      content: 'MI';
-    }
-
-    .duration::after {
-      content: ' MIN';
-    }
-
-    .mpg::after {
-      content: ' MPG';
-    }
-
-    .fuelCost::before {
-      content: '$';
-    }
-
-    &:hover{
-      background: #fff;
-
-      .stat {
-        color: $link_type;
+      .timeTopBox, .timeBottomBox {
+        position: absolute;
+        font-size: 11px;
+        left: 0;
+        padding: 10px;
       }
 
-      .startLocation {
-        color: $trip_line_blue;
+      .timeTopBox {
+        top: 0;
+
+        .endDate {
+          font-size: 10px;
+        }
       }
 
-      .endLocation {
-        color: $trip_line_blue;
+      .timeBottomBox {
+        bottom: 0;
       }
 
       .tripLine {
-        background: $trip_line_blue;
-        top: 14px;
-        height: 84px;
+        @include box-sizing(border-box);
+        position: absolute;
+        width: 2px;
+        height: 90%;
+        background-color: $line_gray;
+        left: 61px;
+        top: 16px;
+        height: 60px;
 
-        & > * {
-          color: #fff;
+        & > div {
+          width: 10px;
+          height: 10px;
+          background-color: $line_gray;
+          border-radius: 5px;
+          margin-left: -4px;
+          line-height: 0;
+          text-align: center;
+          color: transparent;
+        }
+
+        & div:first-child {
+          margin-top: -3px;
+        }
+
+        & div:last-child {
+          position: absolute;
+          bottom: -3px;
+        }
+      }
+
+      &.selected {
+        background-color: #fff;
+
+        .stat {
+          color: $link_type;
+        }
+
+        .startLocation {
+          color: $trip_line_blue;
+        }
+
+        .endLocation {
+          color: $trip_line_blue;
+        }
+
+        .tripLine {
           background: $trip_line_blue;
-          width: 16px;
-          height: 16px;
-          border-radius: 8px;
-          margin-left: -7px;
-          line-height: 15px;
+          top: 14px;
+
+          & > * {
+            color: #fff;
+            background: $trip_line_blue;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            margin-left: -7px;
+            line-height: 15px;
+          }
         }
       }
-    }
 
-    &:hover .tripEventsBox {
-      max-height: 40px;
-    }
+      .tripDetails {
+        display: block;
+        width: 234px;
+        float: right;
+      }
 
-    .startLocation, .endLocation {
-      font-size: 11px;
-      padding: 10px 15px;
-    }
-
-
-    .tripEventsBox {
-      overflow: hidden;
-      overflow-y: hidden;
-      max-height: 0px;
-
-      transition-property: all;
-      transition-duration: .5s;
-      transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
-
-      .event {
-        display: inline-block;
+      .middleBox {
         text-align: center;
-
-        i {
-          display: none;
-        }
+        overflow: hidden;
       }
 
-      .hardBrakes {
-        clear: both;
+      .stat {
+        width: 25%;
         float: left;
-        width: 21px;
-        height: 21px;
-        border-radius: 11px;
-        font-weight: bold;
-        box-sizing: border-box;
-        text-align: center;
-        margin-right: 57px;
-        margin-left: 10px;
-        position: relative;
-        background: #ffc701;
-      }
+        font-size: 14px;
+        font-weight: 400;
+        color: $base_type;
 
-      .hardBrakes.noHardBrakes {
-        color: transparent;
-        background: #7fb75c;
-
-        i {
+        &::after, &::before {
+          font-size: 9px;
+          font-weight: normal;
           display: inline;
-          color: #FFF;
-          position: absolute;
-          top: 3px;
-          left: 4px;
         }
       }
 
-      .hardBrakes:after {
-        content: 'Rough Brakes';
-        font-size: 10px;
-        line-height: 11px;
-        font-weight: normal;
-        position: absolute;
-        text-align: left;
-        margin-left: 13px;
-        color: #777;
+      .distance::after {
+        content: 'MI';
       }
 
-      .hardAccels {
-        float: left;
-        width: 21px;
-        height: 21px;
-        border-radius: 11px;
-        font-weight: bold;
-        box-sizing: border-box;
-        text-align: center;
-        margin-right: 57px;
-        position: relative;
-        background: #ffc701;
+      .duration::after {
+        content: ' MIN';
       }
 
-      .hardAccels.noHardAccels {
-        color: transparent;
-        background: #7fb75c;
+      .mpg::after {
+        content: ' MPG';
+      }
 
-        i {
-          display: inline;
-          color: #FFF;
-          position: absolute;
-          top: 3px;
-          left: 4px;
+      .fuelCost::before {
+        content: '$';
+      }
+
+      &:hover{
+        background: #fff;
+
+        .stat {
+          color: $link_type;
+        }
+
+        .startLocation {
+          color: $trip_line_blue;
+        }
+
+        .endLocation {
+          color: $trip_line_blue;
+        }
+
+        .tripLine {
+          background: $trip_line_blue;
+          top: 14px;
+          height: 84px;
+
+          & > * {
+            color: #fff;
+            background: $trip_line_blue;
+            width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            margin-left: -7px;
+            line-height: 15px;
+          }
+        }
+
+        .tripEventsBox {
+          max-height: 40px;
         }
       }
 
-      .hardAccels:after {
-        content: 'Hard Accels';
-        font-size: 10px;
-        line-height: 11px;
-        font-weight: normal;
-        position: absolute;
-        text-align: left;
-        margin-left: 13px;
-        color: #777;
+      .startLocation,
+      .endLocation {
+        font-size: 11px;
+        padding: 10px 15px;
       }
 
-      .speeding {
-        float: left;
-        width: 21px;
-        height: 21px;
-        font-weight: normal;
-        box-sizing: border-box;
-        text-align: center;
-        position: relative;
-        border-radius: 3px;
-        color: #FFF;
-        background: #fe8c0a;
-      }
+      .tripEventsBox {
+        overflow: hidden;
+        overflow-y: hidden;
+        max-height: 0px;
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 
-      .speeding.noSpeeding {
-        background: #7fb75c;
-        color: #FFF;
-      }
+        .event {
+          display: inline-block;
+          text-align: center;
 
-      .speeding::after {
-        content: 'Under 70 MPH';
-        font-size: 10px;
-        line-height: 11px;
-        font-weight: normal;
-        position: absolute;
-        text-align: left;
-        margin-left: 13px;
-        width: 40px;
-        color: #777;
+          i {
+            display: none;
+          }
+        }
+
+        .hardBrakes {
+          clear: both;
+          float: left;
+          width: 21px;
+          height: 21px;
+          border-radius: 11px;
+          font-weight: bold;
+          box-sizing: border-box;
+          text-align: center;
+          margin-right: 57px;
+          margin-left: 10px;
+          position: relative;
+          background: #ffc701;
+
+          &.noHardBrakes {
+            color: transparent;
+            background: #7fb75c;
+
+            i {
+              display: inline;
+              color: #FFF;
+              position: absolute;
+              top: 3px;
+              left: 4px;
+            }
+          }
+
+          &::after {
+            content: 'Rough Brakes';
+            font-size: 10px;
+            line-height: 11px;
+            font-weight: normal;
+            position: absolute;
+            text-align: left;
+            margin-left: 13px;
+            color: #777;
+          }
+        }
+
+        .hardAccels {
+          float: left;
+          width: 21px;
+          height: 21px;
+          border-radius: 11px;
+          font-weight: bold;
+          box-sizing: border-box;
+          text-align: center;
+          margin-right: 57px;
+          position: relative;
+          background: #ffc701;
+
+          &.noHardAccels {
+            color: transparent;
+            background: #7fb75c;
+
+            i {
+              display: inline;
+              color: #FFF;
+              position: absolute;
+              top: 3px;
+              left: 4px;
+            }
+          }
+
+          &::after {
+            content: 'Hard Accels';
+            font-size: 10px;
+            line-height: 11px;
+            font-weight: normal;
+            position: absolute;
+            text-align: left;
+            margin-left: 13px;
+            color: #777;
+          }
+        }
+
+        .speeding {
+          float: left;
+          width: 21px;
+          height: 21px;
+          font-weight: normal;
+          box-sizing: border-box;
+          text-align: center;
+          position: relative;
+          border-radius: 3px;
+          color: #FFF;
+          background: #fe8c0a;
+
+          &.noSpeeding {
+            background: #7fb75c;
+            color: #FFF;
+          }
+
+          &::after {
+            content: 'Under 70 MPH';
+            font-size: 10px;
+            line-height: 11px;
+            font-weight: normal;
+            position: absolute;
+            text-align: left;
+            margin-left: 13px;
+            width: 40px;
+            color: #777;
+          }
+        }
       }
     }
   }

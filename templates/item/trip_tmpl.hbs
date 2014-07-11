@@ -1,45 +1,42 @@
-<a href="#/trip/{{ id }}" class="trip" data-trip_id="{{ id }}">
+<div class="timeTopBox">
+  <div class="endTime">{{ formatted_end_time }}</div>
+  <div class="endDate">{{ formatted_calendar_date }}</div>
+</div>
 
-  <div class="timeTopBox">
-    <div class="endTime">{{ formatted_end_time }}</div>
-    <div class="endDate">{{ formatted_calendar_date }}</div>
+
+<div class="timeBottomBox">
+  <div class="startTime">{{ formatted_start_time }}</div>
+</div>
+
+
+
+<div class="tripLine">
+  <div>B</div>
+  <div>A</div>
+</div>
+
+
+
+<div class="tripDetails">
+
+  <div class="bottomBox">
+    <div class="startLocation">{{ start_location.display_name }}</div>
   </div>
 
-
-  <div class="timeBottomBox">
-    <div class="startTime">{{ formatted_start_time }}</div>
+  <div class="middleBox">
+    <div class="distance stat">{{ formatted_distance_miles }}</div>
+    <div class="mpg stat">{{ formatted_average_mpg }}</div>
+    <div class="fuelCost stat">{{ formatted_fuel_cost_usd }}</div>
+    <div class="duration stat">{{ formatted_duration }}</div>
+  </div>
+  <div class="tripEventsBox">
+    <div class="hardBrakes event octagon {{#if noHardBrakes}}noHardBrakes{{/if}}">{{hard_brakes}}<i class="glyphicon glyphicon-ok"></i></div>
+    <div class="hardAccels event {{#if noHardAccels}}noHardAccels{{/if}}">{{hard_accels}}<i class="glyphicon glyphicon-ok"></i></div>
+    <div class="speeding event {{#if noSpeeding}}noSpeeding{{/if}}">{{duration_over_70_min}}</div>
   </div>
 
-
-
-  <div class="tripLine">
-    <div>B</div>
-    <div>A</div>
+  <div class="topBox">
+    <div class="endLocation">{{ end_location.display_name }}</div>
   </div>
 
-
-
-  <div class="tripDetails">
-
-    <div class="bottomBox">
-      <div class="startLocation">{{ start_location.display_name }}</div>
-    </div>
-
-    <div class="middleBox">
-      <div class="distance stat">{{ formatted_distance_miles }}</div>
-      <div class="mpg stat">{{ formatted_average_mpg }}</div>
-      <div class="fuelCost stat">{{ formatted_fuel_cost_usd }}</div>
-      <div class="duration stat">{{ formatted_duration }}</div>
-    </div>
-    <div class="tripEventsBox">
-      <div class="hardBrakes event octagon {{#if noHardBrakes}}noHardBrakes{{/if}}">{{hard_brakes}}<i class="glyphicon glyphicon-ok"></i></div>
-      <div class="hardAccels event {{#if noHardAccels}}noHardAccels{{/if}}">{{hard_accels}}<i class="glyphicon glyphicon-ok"></i></div>
-      <div class="speeding event {{#if noSpeeding}}noSpeeding{{/if}}">{{duration_over_70_min}}</div>
-    </div>
-
-    <div class="topBox">
-      <div class="endLocation">{{ end_location.display_name }}</div>
-    </div>
-
-  </div>
-</a>
+</div>
