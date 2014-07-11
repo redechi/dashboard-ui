@@ -1,6 +1,5 @@
 define([
   'backbone',
-  'communicator',
   'router',
   'regionManager',
   './views/item/user_view',
@@ -8,7 +7,7 @@ define([
   './controllers/util'
 ],
 
-function( Backbone, Communicator, router, regionManager, UserView, tripsCollection, util ) {
+function( Backbone, router, regionManager, UserView, tripsCollection, util ) {
   'use strict';
 
   // get access token from cookie
@@ -55,7 +54,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
       }
     });
   }
-  
+
 
   //only allow one popover at a time, close popovers when a user clicks off
   $('body').on('click', function(e) {
@@ -76,7 +75,8 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   App.addRegions({
     headerRegion: "#user",
     contentRegion: "main",
-    footerRegion: "footer"
+    footerRegion: "footer",
+    overlayRegion: "#overlay"
   });
 
   /* Add initializers here */
@@ -100,6 +100,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
   regionManager.addRegion('main_content', App.contentRegion);
   regionManager.addRegion('main_header', App.headerRegion);
   regionManager.addRegion('main_footer', App.footerRegion);
+  regionManager.addRegion('main_overlay', App.overlayRegion);
 
   return App;
 });

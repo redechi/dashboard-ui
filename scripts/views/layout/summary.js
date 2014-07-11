@@ -1,13 +1,15 @@
 define([
   'backbone',
+  'regionManager',
   'hbs!tmpl/layout/summary_tmpl',
   '../composite/filters', // view
   '../item/graph', // view
   '../item/map', // view
+  './overlay',
   './trip_list_layout'
 ],
 
-function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
+function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView, TripListLayout) {
     'use strict';
 
   /* Return a Layout class definition */
@@ -29,8 +31,7 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
       filters: '#filters',
       trips_header: '.tripsHeader',
       graph: '#graphs',
-      trips: '#trips',
-      user: '#user'
+      trips: '#trips'
     },
 
     ui: {},
@@ -48,6 +49,10 @@ function( Backbone, SummaryTmpl, Filters, Graph, Map, TripListLayout) {
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
+
+      var overlayRegion = regionManager.getRegion('main_overlay');
+      var o = new OverlayView();
+      overlayRegion.show(o);
 
     },
 

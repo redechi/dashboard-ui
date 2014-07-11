@@ -1,5 +1,6 @@
 define([
   'backbone',
+  'regionManager',
   'views/item/empty',
   'views/item/trip',
   'communicator',
@@ -8,7 +9,7 @@ define([
   'collections/trips',
   'fileSaver'
 ],
-function( Backbone, Empty, Trip, coms, tripList, formatters, tripCollection, fileSaver) {
+function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, tripCollection, fileSaver) {
   'use strict';
 
   /* Return a ItemView class definition */
@@ -228,6 +229,10 @@ function( Backbone, Empty, Trip, coms, tripList, formatters, tripCollection, fil
 
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
+
+      if(tripCollection.length > 0) {
+        regionManager.getRegion('main_overlay').reset();
+      }
 
       var resize = this.resize;
       setTimeout(resize, 0);

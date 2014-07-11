@@ -1,11 +1,10 @@
 define([
   'backbone',
-  'communicator',
   '../composite/trips',
   '../item/user_score_view',
   'hbs!tmpl/layout/trip_list_layout_tmpl'
 ],
-function( Backbone, coms, TripsCompositView, UserScoreView, TripListLayoutTmpl  ) {
+function( Backbone, TripsCompositView, UserScoreView, TripListLayoutTmpl  ) {
     'use strict';
 
   /* Return a Layout class definition */
