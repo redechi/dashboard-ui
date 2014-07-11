@@ -3,9 +3,12 @@ define([
   'views/item/empty',
   'views/item/trip',
   'communicator',
-  'hbs!tmpl/composite/trips_list_tmpl'
+  'hbs!tmpl/composite/trips_list_tmpl',
+  'controllers/unit_formatters',
+  'collections/trips',
+  'fileSaver'
 ],
-function( Backbone, Empty, Trip, coms, tripList) {
+function( Backbone, Empty, Trip, coms, tripList, formatters, tripCollection, fileSaver) {
   'use strict';
 
   /* Return a ItemView class definition */

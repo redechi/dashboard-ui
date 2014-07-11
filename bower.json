@@ -34,7 +34,8 @@
     "sinon": "~1.10.2",
     "momentjs": "~2.7.0",
     "d3": "~3.3.13",
-    "nvd3": "~1.1.15-beta"
+    "nvd3": "~1.1.15-beta",
+    "FileSaver": ""
   },
   "devDependencies": {},
   "directory": "n",

@@ -53,6 +53,8 @@ require.config({
     mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox',
     markercluster: '//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster',
 
+    fileSaver: '../bower_components/FileSaver/FileSaver',
+
     /* alias all marionette libs */
     'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',
     'backbone.wreqr': '../bower_components/backbone.wreqr/lib/backbone.wreqr',
