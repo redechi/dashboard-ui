@@ -18,12 +18,14 @@
 <ul class="trips"></ul>
 
 <div class="tripsFooter">
-  <div class="export" data-toggle="popover">Export</div>
-  <div class="popoverTemplate" title="Export Trips to .CSV">
-    <ul class="exportOption listSelect">
-      <li data-value="selected">Export selected trips</li>
-      <li data-value="trip_list">Export trips currently in trip list</li>
-      <li data-value="all">Export all trips</li>
-    </ul>
-  </div>
+  {{#exportSupported}}
+    <div class="export" data-toggle="popover">Export</div>
+    <div class="popoverTemplate" title="Export Trips to .CSV">
+      <ul class="exportOption listSelect">
+        <li data-value="selected">Export selected trips (<span></span>)</li>
+        <li data-value="tripList">Export trips currently in trip list (<span></span>)</li>
+        <li data-value="all">Export all trips (<span></span>)</li>
+      </ul>
+    </div>
+  {{/exportSupported}}
 </div>

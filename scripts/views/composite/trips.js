@@ -30,8 +30,16 @@ function( Backbone, Empty, Trip, coms, tripList) {
     template: tripList,
 
     templateHelpers: function () {
+
+      //check for export support
+      var exportSupported = false;
+      try {
+        exportSupported = !!new Blob;
+      } catch (e) {}
+
       return {
-        total: this.collection.length
+        total: this.collection.length,
+        exportSupported: exportSupported
       };
     },
 
