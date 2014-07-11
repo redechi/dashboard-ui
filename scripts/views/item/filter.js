@@ -13,7 +13,10 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
   return Backbone.Marionette.ItemView.extend({
 
     events: {
-      'click .remove-filter': 'deleteFilter'
+      'click .remove-filter': 'deleteFilter',
+      'show.bs.popover .btn-popover[data-filter="vehicle"]': 'vehiclePopover',
+      'show.bs.popover .btn-popover[data-filter="date"]': 'datePopover',
+      'shown.bs.popover .btn-popover[data-filter="date"]': 'initializeDatePicker'
     },
 
     initialize: function() {
@@ -39,32 +42,35 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         .removeClass('selected');
     },
 
-    initializePopover: function () {
-      var self = this,
-          filter = this.model,
-          name = filter.get('name');
+    vehiclePopover: function() {
+      this.selectItem('.vehicleFilterValue li[data-value="' + this.model.get('value') + '"]');
+    },
 
-      function popoverCallback() {
-        if(name === 'date') {
-          self.selectItem('.dateFilterValue li[data-value="' + filter.get('valueSelected') + '"]');
+    datePopover: function() {
+      this.selectItem('.dateFilterValue li[data-value="' + this.model.get('valueSelected') + '"]');
+      $('.dateFilterCustom').toggle(this.model.get('valueSelected') === 'custom');
+    },
 
-          $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
-          $('.popover .dateFilterCustom input').datepicker({
-            format: 'mm/dd/yy',
-            startDate: new Date(2013, 2, 12),
-            endDate: moment().add('days', 1).startOf('day').toDate()
-          });
-          if(filter.get('valueSelected') === 'custom') {
-            var value = filter.get('getValue').call(filter, 'custom'),
-                startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
-                endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-            $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-            $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
-          }
-        } else if (name === 'vehicle') {
-          self.selectItem('.vehicleFilterValue li[data-value="' + filter.get('value') + '"]');
-        }
+    initializeDatePicker: function() {
+      var filter = this.model;
+
+      $('.popover .dateFilterCustom input').datepicker({
+        format: 'mm/dd/yy',
+        startDate: new Date(2013, 2, 12),
+        endDate: moment().add('days', 1).startOf('day').toDate()
+      });
+      if(filter.get('valueSelected') === 'custom') {
+        var value = filter.get('getValue').call(filter, 'custom'),
+            startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
+            endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
+        $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+        $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
       }
+    },
+
+    initializePopover: function () {
+      var filter = this.model,
+          name = filter.get('name');
 
       setTimeout(function() {
         $('.btn-popover[data-filter="' + name + '"]').popover('destroy');
@@ -74,8 +80,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           html: true,
           content: function() { return popoverTemplate.html(); },
           title:  function() { return popoverTemplate.attr('title'); },
-          placement: 'bottom',
-          callback: popoverCallback
+          placement: 'bottom'
         });
 
         //don't show popovers for initial filters

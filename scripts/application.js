@@ -55,15 +55,7 @@ function( Backbone, Communicator, router, regionManager, UserView, tripsCollecti
       }
     });
   }
-
-  //extend popover to allow callback
-  var tmp = $.fn.popover.Constructor.prototype.show;
-  $.fn.popover.Constructor.prototype.show = function () {
-    tmp.call(this);
-    if (this.options.callback) {
-      this.options.callback();
-    }
-  };
+  
 
   //only allow one popover at a time, close popovers when a user clicks off
   $('body').on('click', function(e) {
