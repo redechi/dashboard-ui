@@ -26,9 +26,10 @@ function( Backbone, coms, TripTmpl, formatters  ) {
       this.$el.removeClass('highlighted');
     },
 
-    selectModel: function (e) {
-      var selected = e.target.checked;
+    toggleSelect: function (e) {
+      var selected = !this.model.get('selected');
       this.model.set('selected', selected);
+      this.$el.toggleClass('selected', selected);
     },
 
     tagName: "li",
@@ -52,7 +53,7 @@ function( Backbone, coms, TripTmpl, formatters  ) {
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
-      'change [type="checkbox"]': 'selectModel'
+      'click': 'toggleSelect'
     }
 
   });
