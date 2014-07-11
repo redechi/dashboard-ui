@@ -62,16 +62,102 @@ function( Backbone, Empty, Trip, coms, tripList, formatters, tripCollection, fil
     },
 
     export: function (e) {
-      var ids = [];
-      if (e.target.value === 'selected'){
-        var selected = this.collection.where({selected: true});
-        ids = new Backbone.Collection(selected).pluck("id");
-        if (!ids[0]) return alert('Please Select at least one trip');
-      } else if (e.target.value === 'filtered'){
-        var filtered = this.collection.models;
-        ids = new Backbone.Collection(filtered).pluck("id");
-        if (!ids[0]) return alert('Please Select at least one trip');
+      var exportOption = $(e.target).data('value'),
+          selectedTrips;
+
+      if (exportOption === 'selected'){
+        selectedTrips = this.collection.where({selected: true});
+        if (!selectedTrips.length) {
+          return alert('Please Select at least one trip');
+        }
+      } else if (exportOption === 'tripList'){
+        selectedTrips = this.collection.models;
+      } else if (exportOption === 'all') {
+        selectedTrips = tripCollection;
       }
+
+      var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
+      saveAs(blob, "trips.csv");
+    },
+
+    tripsToCSV: function(trips) {
+      var self = this,
+          tripsArray = trips.map(this.tripToArray);
+
+      tripsArray.unshift(this.csvFieldNames());
+      return this.toCSV(tripsArray);
+    },
+
+    tripToArray: function(trip) {
+      var t = trip.toJSON();
+
+      return [
+        t.vehicle.year + ' ' + t.vehicle.make + ' ' + t.vehicle.model,
+        t.start_location.name,
+        t.start_location.lat,
+        t.start_location.lon,
+        t.start_location.accuracy_m,
+        formatters.formatTime(t.start_time, t.start_time_zone, 'YYYY-MM-DD h:mm A'),
+        t.end_location.name,
+        t.end_location.lat,
+        t.end_location.lon,
+        t.end_location.accuracy_m,
+        formatters.formatTime(t.end_time, t.end_time_zone, 'YYYY-MM-DD h:mm A'),
+        t.path,
+        t.distance_miles.toFixed(2) || 0,
+        t.duration.toFixed(2) || 0,
+        t.hard_accels,
+        t.hard_brakes,
+        t.duration_over_80_s,
+        t.duration_over_75_s,
+        t.duration_over_70_s,
+        t.formatted_fuel_cost_usd,
+        t.fuel_volume_gal.toFixed(2) || 0,
+        t.average_mpg.toFixed(2) || 0
+      ];
+    },
+
+    csvFieldNames: function () {
+      return [
+        'Vehicle',
+        'Start Location Name',
+        'Start Location Lat',
+        'Start Location Lon',
+        'Start Location Accuracy (meters)',
+        'Start Time',
+        'End Location Name',
+        'End Location Lat',
+        'End Location Lon',
+        'End Location Accuracy (meters)',
+        'End Time',
+        'Path',
+        'Distance (mi)',
+        'Duration (min)',
+        'Hard Accelerations',
+        'Hard Brakes',
+        'Duration Over 80 mph (secs)',
+        'Duration Over 75 mph (secs)',
+        'Duration Over 70 mph (secs)',
+        'Fuel Cost (USD)',
+        'Fuel Volume (gal)',
+        'Average MPG'
+      ];
+    },
+
+    toCSV: function (tripsArray) {
+      var self = this;
+      return tripsArray.map(function(row) {
+        return row.map(self.csvEscape).join(',');
+      }).join('\n');
+    },
+
+    csvEscape: function(item) {
+      if (item && item.indexOf && (item.indexOf(',') !== -1 || item.indexOf('"') !== -1)) {
+        item = '"' + item.replace(/"/g, '""') + '"';
+      } else {
+        item = '"' + item + '"';
+      }
+      return item;
     },
 
     changeSort: function (e) {
