@@ -37,6 +37,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
     initialize: function() {
       console.log('Initialize a Filters CompositeView');
 
+      var self = this;
+
       //update the filter ranges based on trips
       this.updateFilterRanges();
       coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
@@ -45,8 +47,10 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
       //get a list of all vehicles and update filter
-      vehiclesCollection.fetch();
-      this.updateVehicleList();
+      vehiclesCollection.fetch().always(function(vehicles) {
+        self.updateVehicleList();
+      });
+
 
       //update filter text on buttons
       this.collection.each(this.updateFilterText);
