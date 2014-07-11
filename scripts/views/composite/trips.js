@@ -45,7 +45,8 @@ function( Backbone, Empty, Trip, coms, tripList) {
 
     events: {
       'click .exportOption li': 'export',
-      'click .sortValue li': 'changeSort'
+      'click .sortValue li': 'changeSort',
+      'show.bs.popover .export': 'getTripCounts'
     },
 
     collectionEvents: {
@@ -104,7 +105,7 @@ function( Backbone, Empty, Trip, coms, tripList) {
       this.collection.sort();
     },
 
-    enableSortPopover: function() {
+    enablePopovers: function() {
       $('.export').popover('destroy');
       var exportPopoverTemplate = $('.tripsFooter .popoverTemplate');
       $('.export').popover({
@@ -124,10 +125,16 @@ function( Backbone, Empty, Trip, coms, tripList) {
       });
     },
 
+    getTripCounts: function() {
+      $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length);
+      $('.popoverTemplate .exportOption li[data-value="tripList"] span').text(this.collection.length);
+      $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripCollection.length);
+    },
+
     onRender: function() {
       //set sortType and enable sort
       this.setSort();
-      this.enableSortPopover();
+      this.enablePopovers();
 
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
