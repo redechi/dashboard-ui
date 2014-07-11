@@ -78,6 +78,7 @@ function( Backbone, Empty, Trip, coms, tripList, formatters, tripCollection, fil
 
       var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
       saveAs(blob, "trips.csv");
+      $('.export').popover('hide');
     },
 
     tripsToCSV: function(trips) {
