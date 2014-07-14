@@ -1,33 +1,31 @@
 define([
   'backbone',
   'communicator',
-  'amlCollection',
   '../../collections/trips',
   '../../controllers/unit_formatters',
   'hbs!tmpl/item/user_score_tmpl'
 ],
-function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreTmpl  ) {
+function( Backbone, coms, tripsCollection, formatters, UserscoreTmpl  ) {
     'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log("initialize a Userscore ItemView");
-      this.collection.graphType = 'average_mpg';
+      console.log("Initialize a Userscore ItemView");
       coms.on('filter', _.bind(this.resetCollection, this));
-      this.resetCollection(tripsCollection);
-      this.on('render', this.paintGraph, this);
-      tripsCollection.on('sync', this.render, this);
     },
 
     duration: 2000,
     model: new Backbone.Model({values:[],key:'No Data'}),
-    collection: new AMLCollection([]),
+    collection: new Backbone.Collection([]),
     template: UserscoreTmpl,
 
     resetCollection: function (collection) {
       this.collection.reset(collection);
+    },
+
+    collectionEvents: {
+      'reset': 'render'
     },
 
     templateHelpers: function() {
@@ -71,6 +69,8 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
             .margin({top:0, right:0, bottom:0, left:0})
             .showLegend(false)
             .color([formatters.scoreColor(score), '#ddd']);
+
+        self.$el.find('svg').empty();
 
         var svg = d3.select(self.$el.find('svg').get(0));
 
@@ -123,7 +123,9 @@ function( Backbone, coms, AMLCollection, tripsCollection, formatters, UserscoreT
       });
     },
 
-    onRender: function () {}
+    onRender: function () {
+      this.paintGraph();
+    }
   });
 
 });
