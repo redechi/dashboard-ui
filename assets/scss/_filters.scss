@@ -79,7 +79,7 @@
         background-repeat: no-repeat;
         background-position: right 4px center;
 
-        &:focus {
+        &.changed {
           color: $highlight;
           @include hr-image('../img/icon_calendar_active.png', '../img/icon_calendar_active@2x.png');
         }

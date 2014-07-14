@@ -63,8 +63,12 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         var value = filter.get('getValue').call(filter, 'custom'),
             startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
             endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-        $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-        $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+        $('.popover .dateFilterValueCustomStart')
+          .datepicker('setDate', startDate)
+          .removeClass('changed');
+        $('.popover .dateFilterValueCustomEnd')
+          .datepicker('setDate', endDate)
+          .removeClass('changed');
       }
     },
 
