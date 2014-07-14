@@ -217,6 +217,7 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
         this.collection.saveFilters();
         filter.set('value', value);
         this.updateFilterText(filter);
+        $('.btn-popover[data-filter="vehicle"]').popover('hide');
         coms.trigger('filter:applyAllFilters');
       }
     },
