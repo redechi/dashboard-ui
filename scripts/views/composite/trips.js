@@ -1,15 +1,15 @@
 define([
   'backbone',
+  'communicator',
   'regionManager',
   'views/item/empty',
   'views/item/trip',
-  'communicator',
   'hbs!tmpl/composite/trips_list_tmpl',
   'controllers/unit_formatters',
   'collections/trips',
   'fileSaver'
 ],
-function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, tripCollection, fileSaver) {
+function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, tripsCollection, fileSaver) {
   'use strict';
 
   /* Return a ItemView class definition */
@@ -24,6 +24,7 @@ function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, trip
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
+      tripsCollection.fetchAll();
     },
 
     model: new Backbone.Model({}),
@@ -74,7 +75,7 @@ function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, trip
       } else if (exportOption === 'tripList'){
         selectedTrips = this.collection.models;
       } else if (exportOption === 'all') {
-        selectedTrips = tripCollection;
+        selectedTrips = tripsCollection;
       }
 
       var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
@@ -219,7 +220,7 @@ function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, trip
     getTripCounts: function() {
       $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length);
       $('.popoverTemplate .exportOption li[data-value="tripList"] span').text(this.collection.length);
-      $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripCollection.length);
+      $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripsCollection.length);
     },
 
     onRender: function() {
@@ -230,7 +231,7 @@ function( Backbone, regionManager, Empty, Trip, coms, tripList, formatters, trip
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
 
-      if(tripCollection.length > 0) {
+      if(tripsCollection.length > 0) {
         regionManager.getRegion('main_overlay').reset();
       }
 

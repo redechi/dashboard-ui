@@ -1,7 +1,8 @@
 define([
   'backbone',
-  './controllers/router'
-],function (backbone, controller) {
+  './controllers/router',
+  './controllers/login'
+],function (backbone, router, login) {
   'use strict';
 
   var Router = backbone.Marionette.AppRouter.extend({
@@ -19,7 +20,7 @@ define([
         if (!callback) callback = this[name];
 
         var f = function() {
-          
+
           //check for access tokens on all routes, except login
           if(route !== 'login') {
             var accessToken = sessionStorage.getItem('accessToken');
@@ -28,6 +29,8 @@ define([
             if(!accessToken) {
               Backbone.history.navigate('/login', {trigger: true});
               return;
+            } else {
+              login.login();
             }
           }
 
@@ -37,7 +40,7 @@ define([
     },
 
 
-    controller: controller
+    controller: router
   });
 
   return new Router();
