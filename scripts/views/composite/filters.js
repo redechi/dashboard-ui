@@ -179,6 +179,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           $('.popover .dateFilterValueCustomEnd')
             .datepicker('setDate', endDate)
             .removeClass('changed');
+        } else {
+          $('.btn-popover[data-filter="date"]').popover('hide');
         }
 
         this.collection.saveFilters();
