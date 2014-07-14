@@ -43,6 +43,8 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
       this.updateFilterRanges();
       coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
+      coms.on('filter', _.bind(this.updateFilterRanges, this));
+
       //update Nav button status
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
