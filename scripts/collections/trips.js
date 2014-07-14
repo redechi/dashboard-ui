@@ -87,11 +87,11 @@ function( Backbone, coms, Trip, filterCollection) {
 
     /*
      *
-     * builds users average score from elements in current collection.
+     * builds users average score from array of trips
      *
      */
-    getAverageScore: function() {
-      var weightedSum = this.reduce(function(memo, trip) {
+    getAverageScore: function(trips) {
+      var weightedSum = trips.reduce(function(memo, trip) {
 
         memo.score += trip.get('score') * trip.get('duration');
         memo.time += trip.get('duration');
