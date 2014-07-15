@@ -13,7 +13,8 @@ define([
       'reset': 'showPasswordResetLayout',
       'trip/:tripid': 'showTripLayout',
       'filter(/)?:filters': 'applyFilters',
-      'logout': 'logOut'
+      'logout': 'logOut',
+      '*notFound': 'notFound'
     },
 
     route: function(route, name, callback) {
