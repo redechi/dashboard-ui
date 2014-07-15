@@ -15,24 +15,15 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
     tagName: 'div',
     model: new Backbone.Model({values:[],key:'No Data'}),
-    collection: new AMLCollection([]), // trips singleton
+    collection: new Backbone.Collection(), // trips singleton
     template: GraphTmpl,
-
-    averages: {
-      duration: 64,
-      fuel_cost_usd: 5.12,
-      distance_miles: 31.49,
-      average_mpg: 23.10,
-      score: 91.87
-    },
 
     collectionEvents: {
     //  'reset': 'updateGraph'
     },
 
     events: {
-      'change .graphType': 'selectGraph',
-      'change .durationType': 'changeFilter'
+      'click .graphValue li': 'changeGraphType'
     },
 
     initialize: function(model) {
@@ -49,9 +40,6 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
 
       this.model.set('key', graphType);
       this.model.set('values', values);
-    },
-
-    changeFilter: function () {
     },
 
     /*
@@ -188,25 +176,16 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
       return chart;
     },
 
-    /*
-     *
-     * changes graph from select element change event.
-     *
-     */
-    selectGraph: function (e) {
-      var select = e.currentTarget;
-      var value  = $(select).find(":selected").val();
-      this.collection.graphType = value;
-      var values = this.collection.getGraphSet(value);
+
+    changeGraphType: function (e) {
+      var graphType = $(e.currentTarget).data('value');
+      this.collection.graphType = graphType;
+      var values = this.getGraphData(graphType);
       this.model.set('values', values);
       this.updateGraph();
     },
 
-    /*
-     *
-     * updates graph values.
-     *
-     */
+
     updateGraph: function () {
       var datum = this.model.toJSON();
 
@@ -257,6 +236,17 @@ function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
         var dateRange = dateFilter.get('value');
         this.$el.find('.nextDates').toggle(dateRange[1] < Date.now());
       }
+
+      setTimeout(function() {
+        $('.graphType').popover('destroy');
+        var graphPopoverTemplate = $('.graphMenu .popoverTemplate');
+        $('.graphType').popover({
+          html: true,
+          content: function() { return graphPopoverTemplate.html(); },
+          title: function() { return graphPopoverTemplate.attr('title'); },
+          placement: 'bottom'
+        });
+      }, 0);
     }
   });
 

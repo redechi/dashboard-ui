@@ -1,22 +1,18 @@
-<!--
+<div class="graphMenu">
+  <div class="dateRange"></div>
 
--->
-<div class="grapModifiers">
-  <div class="dateRange">Date Range</div>
+  <div class="graphType" data-toggle="popover">MPG</div>
 
-  <select class="durationType">
-    <option value="average_mpg">By Day</option>
-    <option value="fuel_cost_usd">By Week</option>
-    <option value="score">By Month</option>
-  </select>
+  <div class="popoverTemplate" title="Graph By">
+    <ul class="graphValue listSelect">
+      <li data-value="average_mpg">MPG</li>
+      <li data-value="fuel_cost_usd">Cost</li>
+      <li data-value="score">Score</li>
+      <li data-value="distance_miles">Distance</li>
+      <li data-value="duration">Duration</li>
+    </ul>
+  </div>
 
-  <select class="graphType">
-    <option value="average_mpg">By MPG</option>
-    <option value="fuel_cost_usd">By Cost</option>
-    <option value="score">By Score</option>
-    <option value="distance_miles">By Distance</option>
-    <option value="duration">By Duration</option>
-  </select>
 </div>
 
 <svg height="225"></svg>

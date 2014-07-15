@@ -16,40 +16,27 @@
     bottom: -20px;
   }
 
-  .prevDates {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+  .graphMenu {
+    padding-top: 10px;
 
-  .nextDates {
-    position: absolute;
-    top: 0;
-    right: 0;
+    .graphType {
+      float: left;
+      margin-left: 25px;
+      line-height: 25px;
+      color: $link_type;
+      padding-right: 25px;
+      background-position: right 5px center;
+      background-repeat: no-repeat;
+      @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
+      cursor: pointer;
 
-  }
-
-  .grapModifiers {
-    margin: 10px 0;
-    & > * {
-      display: inline-block;
-    }
-  }
-
-  .prevDates,
-  .nextDates {
-    cursor: pointer;
-    height: 100%;
-    width: 34px;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.1);
+      &:hover {
+        color: $highlight;
+      }
     }
 
-    i {
-      position: absolute;
-      top: 48%;
-      margin: 0 10px;
+    .popover-content {
+        min-width: 100px;
     }
   }
 

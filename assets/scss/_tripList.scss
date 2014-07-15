@@ -22,12 +22,16 @@
     .sortType {
       float: right;
       line-height: 25px;
-      color: $highlight;
+      color: $link_type;
       padding-right: 25px;
       background-position: right 5px center;
       background-repeat: no-repeat;
       @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
       cursor: pointer;
+
+      &:hover {
+        color: $highlight;
+      }
     }
 
     .popover-content {
