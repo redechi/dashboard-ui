@@ -179,8 +179,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
           $('.popover .dateFilterValueCustomEnd')
             .datepicker('setDate', endDate)
             .removeClass('changed');
-        } else {
-          $('.btn-popover[data-filter="date"]').popover('hide');
         }
 
         this.collection.saveFilters();
@@ -226,7 +224,6 @@ function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesColle
         this.collection.saveFilters();
         filter.set('value', value);
         this.updateFilterText(filter);
-        $('.btn-popover[data-filter="vehicle"]').popover('hide');
         coms.trigger('filter:applyAllFilters');
       }
     },

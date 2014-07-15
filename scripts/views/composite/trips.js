@@ -231,6 +231,16 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
 
+      //close vehicle popover unless no matching trips
+      if(this.collection.length > 0) {
+        $('.btn-popover[data-filter="vehicle"]').popover('hide');
+      }
+
+      //close vehicle popover unless no matching trips or custom is chosen
+      if(this.collection.length > 0 && $('.dateFilterValue li.selected').data('value') !== 'custom') {
+        $('.btn-popover[data-filter="date"]').popover('hide');
+      }
+
       if(tripsCollection.length > 0) {
         regionManager.getRegion('main_overlay').reset();
       }
