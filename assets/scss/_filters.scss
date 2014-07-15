@@ -81,6 +81,9 @@
 
         &.changed {
           color: $highlight;
+        }
+
+        &:focus {
           @include hr-image('../img/icon_calendar_active.png', '../img/icon_calendar_active@2x.png');
         }
       }
