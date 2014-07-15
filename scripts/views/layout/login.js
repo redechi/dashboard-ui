@@ -38,7 +38,6 @@ function( Backbone, LoginTmpl, login) {
             scope: 'scope:trip:summary scope:location scope:mil:off scope:ignition:on scope:ignition:off scope:mil:on scope:notification:speeding scope:region:changed scope:notification:hard_brake scope:user:details scope:notification:hard_accel scope:vehicle'
           },
           function(data) {
-            console.log(data)
             if(data && data.access_token) {
               $('#loginForm .alert').addClass('hide');
               login.setCookie('token', data.access_token, 60*60*24*7);
