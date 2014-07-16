@@ -10,19 +10,6 @@ function( Backbone, Communicator ) {
 
     name: 'default_collection',
 
-    getGraphSet: function (name) {
-      var set = [];
-
-      this.each(function (model) {
-        var val = model.get(name);
-        if (val) {
-          set.push({y: val, x: model.get('end_time')});
-        }
-      });
-
-      return set.reverse();
-    },
-
     //
     //
     // sorting tools

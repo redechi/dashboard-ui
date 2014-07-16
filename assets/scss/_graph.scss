@@ -4,15 +4,14 @@
   width: 100%;
   margin-bottom: 60px;
 
-
-  svg {
-    width: 100%;
-    position: relative;
-    bottom: -20px;
-  }
-
   .graphMenu {
     padding-top: 10px;
+
+    .dateRange {
+      float: left;
+      display: inline-block;
+      line-height: 25px;
+    }
 
     .graphType {
       float: left;
@@ -32,6 +31,43 @@
 
     .popover-content {
         min-width: 100px;
+    }
+  }
+
+  .graphTooltip {
+    position: absolute;
+    z-index: 10;
+    visibility: hidden;
+    color: #FFF;
+    background: rgba(50, 50, 50, 0.7);
+    padding: 4px 8px;
+  }
+
+  .graphContainer {
+    .x.axis {
+      path {
+        fill: none;
+      }
+      line.bottom {
+        stroke: #D8D8D8;
+        shape-rendering: crispEdges;
+      }
+    }
+
+    g.bar path {
+      fill: #FFF;
+      stroke: #D8D7D3;
+      shape-rendering: crispEdges;
+    }
+
+    .grid .tick {
+      stroke: #E3E2DE;
+      opacity: 0.5;
+      shape-rendering: crispEdges;
+    }
+    .grid path {
+      stroke-width: 0;
+      shape-rendering: crispEdges;
     }
   }
 

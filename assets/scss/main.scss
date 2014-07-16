@@ -3,7 +3,6 @@
 
 @import "bootstrap_min";
 
-
 @mixin hr-image($lr-image, $hr-image) {
   background-image: url($lr-image);
   @media print,
