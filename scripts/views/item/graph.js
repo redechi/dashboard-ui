@@ -43,7 +43,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           date = dateRange[0],
           bins = {};
 
-      while(date <= dateRange[1]) {
+      while(date < dateRange[1]) {
         bins[moment(date).startOf('day').valueOf()] = 0;
         date = moment(date).add('days', 1).valueOf();
       }
@@ -94,7 +94,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
       var xAxis = d3.svg.axis()
           .scale(x)
           .orient('bottom')
-          .tickFormat(function(d) {return moment(parseInt(d, 10)).format('MMM D'); });
+          .tickFormat(function(d) {return moment(parseInt(d, 10)).format('D'); });
 
       var yAxis = d3.svg.axis()
           .scale(y)
@@ -102,16 +102,6 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           .ticks(5)
           .tickSize(-width, 0, 0)
           .tickFormat('');
-
-      svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis)
-        .selectAll('text')
-          .style('text-anchor', 'end')
-          .attr('dx', '-.8em')
-          .attr('dy', '.15em')
-          .attr('transform', function() { return 'rotate(-65)'; });
 
       svg.selectAll('.x.axis').append('line')
         .attr('class', 'bottom')
@@ -173,8 +163,11 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
         if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
           memo.min = bar;
         }
+        if(bar.values === 0) {
+          memo.empty.push(bar.key);
+        }
         return memo;
-      }, {});
+      }, {empty: []});
 
       //styles for max
       var maxBar = d3.selectAll('.bar')
@@ -220,6 +213,17 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           .attr('dy', '-0.55em')
           .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
           .attr('text-anchor', 'middle');
+
+
+      //X Axis labels
+      svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0,' + height + ')')
+        .call(xAxis)
+        .selectAll('text')
+          .style('text-anchor', 'middle')
+          .attr('dx', '-.7em')
+          .attr('class', function(d) {return (stats.empty.indexOf(d) !== -1) ? 'empty' : ''; });
     },
 
 

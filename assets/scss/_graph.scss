@@ -45,7 +45,7 @@
 
   .graphContainer {
     text {
-      fill: $link_type;
+      fill: $base_type;
     }
 
     .x.axis {
@@ -55,6 +55,9 @@
       line.bottom {
         stroke: #D8D8D8;
         shape-rendering: crispEdges;
+      }
+      text.empty {
+        fill: $inactive_type;
       }
     }
 
@@ -67,6 +70,7 @@
 
       text {
         font-size: 10px;
+        fill: $link_type;
       }
 
       &.max {
