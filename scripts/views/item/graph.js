@@ -64,6 +64,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
     makeGraph: function() {
       var data = this.model.get('values'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
+          graphType = this.model.get('graphType'),
           margin = {top: 30, right: 0, bottom: 90, left: 0},
           width = 880 - margin.left - margin.right,
           height = 235 - margin.top - margin.bottom;
@@ -194,7 +195,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           .attr('y', function(d) { return y(d.values); })
           .attr('dx', barWidth/2)
           .attr('dy', '-0.55em')
-          .text(function(d) { return d.values.toFixed(1); })
+          .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
           .attr('text-anchor', 'middle');
 
 
@@ -217,7 +218,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           .attr('y', function(d) { return y(d.values); })
           .attr('dx', barWidth/2)
           .attr('dy', '-0.55em')
-          .text(function(d) { return d.values.toFixed(1); })
+          .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
           .attr('text-anchor', 'middle');
     },
 

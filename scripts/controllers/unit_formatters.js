@@ -78,6 +78,19 @@ function() {
       //return text value if unparsable
       var number = parseFloat(item);
       return (isNaN(number)) ? item : number;
+    },
+    formatForGraphLabel: function(graphType, value) {
+      if(graphType === 'fuel_cost_usd') {
+        return this.costWithUnit(value);
+      } else if (graphType === 'score') {
+        return this.score(value);
+      } else if (graphType === 'duration') {
+        return this.duration(value);
+      } else if (graphType === 'average_mpg') {
+        return this.averageMPG(value);
+      } else if (graphType === 'distance_miles') {
+        return this.distance(value);
+      }
     }
   };
 });
