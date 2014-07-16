@@ -44,6 +44,10 @@
   }
 
   .graphContainer {
+    text {
+      fill: $link_type;
+    }
+
     .x.axis {
       path {
         fill: none;
@@ -54,10 +58,36 @@
       }
     }
 
-    g.bar path {
-      fill: #FFF;
-      stroke: #D8D7D3;
-      shape-rendering: crispEdges;
+    g.bar {
+      path {
+        fill: #FFF;
+        stroke: #D8D7D3;
+        // shape-rendering: crispEdges;
+      }
+
+      text {
+        font-size: 10px;
+      }
+
+      &.max {
+        path {
+          stroke: $green;
+        }
+
+        .barLabel {
+          fill: $green;
+        }
+      }
+
+      &.min {
+        path {
+          stroke: $red;
+        }
+
+        .barLabel {
+          fill: $red;
+        }
+      }
     }
 
     .grid .tick {

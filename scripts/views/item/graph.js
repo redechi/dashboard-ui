@@ -37,55 +37,36 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
 
 
     getGraphData: function () {
-      var graphType = this.model.get('graphType');
+      var graphType = this.model.get('graphType'),
+          dateRange = filters.findWhere({name: 'date'}).get('value'),
+          trips = this.collection.toJSON().reverse(),
+          date = dateRange[0],
+          bins = {};
 
-      var bins = d3.nest()
-        .key(function(d) { return d.start_time; })
-        .rollup(function(d) {
-          return d3.sum(d, function(g) { return g[graphType]; })
-        })
-        .entries(this.collection.toJSON())
-        .reverse();
+      while(date <= dateRange[1]) {
+        bins[moment(date).startOf('day').valueOf()] = 0;
+        date = moment(date).add('days', 1).valueOf();
+      }
 
+      this.collection.each(function(trip) {
+        var bin = moment(trip.get('start_time')).startOf('day').valueOf();
+        bins[bin] += trip.get(graphType);
+      });
 
+      var values = _.map(bins, function(value, key) {
+        return {key: key, values: value};
+      });
 
-      this.model.set('values', bins);
-    },
-
-
-    updateMinMax: function () {
-       var min = {y:10000},
-           max = {y:0};
-
-       d3.selectAll('rect.nv-bar').each(function (bar) {
-         if (bar.y >= max.y) {
-           max = bar;
-         }
-         if (bar.y <= max.y) {
-           min = bar;
-         }
-       });
-
-       d3.selectAll('rect.nv-bar').style('fill', function(bar, i){
-         var color = 'url(#gradient)';
-         if (bar.isMax) {
-           color = 'green';
-         }
-         if (bar.isMin) {
-           color = 'red';
-         }
-         return color;
-       });
-
+      this.model.set('values', values);
     },
 
 
     makeGraph: function() {
       var data = this.model.get('values'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
-          margin = {top: 10, right: 30, bottom: 90, left: 30},
+          margin = {top: 30, right: 0, bottom: 90, left: 0},
           width = 880 - margin.left - margin.right,
-          height = 225 - margin.top - margin.bottom;
+          height = 235 - margin.top - margin.bottom;
 
       d3.select('#graphs .graphContainer svg').remove();
 
@@ -97,8 +78,8 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
         .append('g')
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-      console.log(data)
 
+      //scales
       var x = d3.scale.ordinal()
           .rangeRoundBands([0, width], 0.1)
           .domain(data.map(function(d) { return d.key; }));
@@ -107,10 +88,12 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
           .range([height, 0])
           .domain([0, d3.max(data, function(d) { return d.values; })]);
 
+
+      //axes
       var xAxis = d3.svg.axis()
           .scale(x)
           .orient('bottom')
-          .tickFormat(function(d) { return moment(d).format('MMM D'); });
+          .tickFormat(function(d) {return moment(parseInt(d, 10)).format('MMM D'); });
 
       var yAxis = d3.svg.axis()
           .scale(y)
@@ -140,43 +123,102 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
         .attr('class', 'grid')
         .call(yAxis);
 
+
+      //Draw bars
+      var barWidth = Math.min(x.rangeBand(), 8);
+      var barRadius = Math.min(barWidth/2, 4);
+
       svg.selectAll('.bar')
         .data(data)
         .enter().append('g')
-          .attr('class', 'bar');
+          .attr('class', 'bar')
+          .attr('y', function(d) { return y(d.values); })
+          .attr('x', function(d) { return x(d.key); })
+          .attr('date', function(d) { return d.key; });
 
       function tooltipMouseover(d) {
         tooltip
           .style('visibility', 'visible')
-          .html('<div class="date">' + moment(d.key).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
+          .html('<div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
       }
 
       function topRoundedRect(x, y, width, height, radius) {
         return 'M' + (x + radius) + ',' + y
-             + 'h' + (width - 2 * radius)
+             + 'h' + (width - (2 * radius))
              + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
-             + 'v' + (height - 2 * radius)
-             + 'v' + radius
-             + 'h' + (-radius)
-             + 'h' + (2 * radius - width)
-             + 'h' + (-radius)
-             + 'v' + (-radius)
-             + 'v' + (2 * radius - height)
+             + 'v' + (height - radius)
+             + 'h' + (-width)
+             + 'v' + (radius - height)
              + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius)
              + 'z';
       }
 
       svg.selectAll('.bar').append('path')
-        .attr('x', function(d) { return x(d.key); })
-        .attr('y', function(d) { return y(d.values); })
-        .attr('height', function(d) { return height - y(d.values); })
-        .attr('width',  x.rangeBand())
         .on('mouseover', tooltipMouseover)
         .on('mousemove', function(){ tooltip.style('top', (event.offsetY-10)+'px').style('left',(event.offsetX+10)+'px');})
         .on('mouseout', function(){ tooltip.style('visibility', 'hidden');})
         .attr('d', function(d) {
-          return topRoundedRect(x(d.key), y(d.values), x.rangeBand(), height - y(d.values), 10);
+          if(d.values > 0) {
+            return topRoundedRect(x(d.key), y(d.values), barWidth, height - y(d.values), barRadius);
+          }
         });
+
+
+      //calculate Min and Max
+      var stats = _.reduce(data, function(memo, bar) {
+        if (!memo.max || bar.values >= memo.max.values) {
+          memo.max = bar;
+        }
+        if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
+          memo.min = bar;
+        }
+        return memo;
+      }, {});
+
+      //styles for max
+      var maxBar = d3.selectAll('.bar')
+        .filter(function(d) { return d.key === stats.max.key})
+        .classed('max', true);
+
+      maxBar.append('text')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('y', function(d) { return y(d.values); })
+          .attr('dx', barWidth/2)
+          .attr('dy', '-1.75em')
+          .text('MAX')
+          .attr('text-anchor', 'middle')
+          .attr('class', 'barLabel');
+
+      maxBar.append('text')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('y', function(d) { return y(d.values); })
+          .attr('dx', barWidth/2)
+          .attr('dy', '-0.55em')
+          .text(function(d) { return d.values.toFixed(1); })
+          .attr('text-anchor', 'middle');
+
+
+      //styles for min
+      var minBar = d3.selectAll('.bar')
+        .filter(function(d) { return d.key === stats.min.key})
+        .classed('min', true);
+
+      minBar.append('text')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('y', function(d) { return y(d.values); })
+          .attr('dx', barWidth/2)
+          .attr('dy', '-1.75em')
+          .text('MIN')
+          .attr('text-anchor', 'middle')
+          .attr('class', 'barLabel');
+
+      minBar.append('text')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('y', function(d) { return y(d.values); })
+          .attr('dx', barWidth/2)
+          .attr('dy', '-0.55em')
+          .text(function(d) { return d.values.toFixed(1); })
+          .attr('text-anchor', 'middle');
     },
 
 
