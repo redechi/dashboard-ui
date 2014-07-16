@@ -44,6 +44,10 @@
   }
 
   .graphContainer {
+    rect.graphGradient {
+      fill: url(#graphGradient);
+    }
+
     text {
       fill: $base_type;
     }
@@ -94,14 +98,17 @@
       }
     }
 
-    .grid .tick {
-      stroke: #E3E2DE;
-      opacity: 0.5;
-      shape-rendering: crispEdges;
-    }
-    .grid path {
-      stroke-width: 0;
-      shape-rendering: crispEdges;
+    .grid {
+      .tick {
+        stroke: #E3E2DE;
+        opacity: 0.5;
+        shape-rendering: crispEdges;
+      }
+
+      path {
+        stroke-width: 0;
+        shape-rendering: crispEdges;
+      }
     }
   }
 

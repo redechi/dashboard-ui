@@ -61,23 +61,58 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
     },
 
 
+    appendSVGGradient: function (defs) {
+      var gradient = defs.append('svg:linearGradient')
+        .attr('id', 'graphGradient')
+        .attr('x1', '0%')
+        .attr('y1', '0%')
+        .attr('x2', '0%')
+        .attr('y2', '100%')
+        .attr('spreadMethod', 'pad');
+
+      gradient.append('svg:stop')
+        .attr('offset', '0%')
+        .attr('stop-color', '#f1efeb')
+        .attr('stop-opacity', 0);
+
+      gradient.append('svg:stop')
+        .attr('offset', '86%')
+        .attr('stop-color', '#F4F2EF')
+        .attr('stop-opacity', 1);
+
+      return defs;
+    },
+
+
     makeGraph: function() {
       var data = this.model.get('values'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           graphType = this.model.get('graphType'),
-          margin = {top: 30, right: 0, bottom: 90, left: 0},
+          margin = {top: 30, right: 0, bottom: 60, left: 0},
           width = 880 - margin.left - margin.right,
-          height = 235 - margin.top - margin.bottom;
+          height = 225 - margin.top - margin.bottom;
 
       d3.select('#graphs .graphContainer svg').remove();
 
       var tooltip = d3.select('#graphs .graphContainer .graphTooltip');
 
+
+      //Initialize SVG
       var svg = d3.select('#graphs .graphContainer').append('svg')
           .attr('width', width + margin.left + margin.right)
           .attr('height', height + margin.top + margin.bottom)
         .append('g')
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+      //SVG defs for gradient
+      var defs = svg.append("svg:defs");
+
+      this.appendSVGGradient(defs);
+
+      svg.append('rect')
+        .attr('class', 'graphGradient')
+        .attr('width', '100%')
+        .attr('height', height);
 
 
       //scales
