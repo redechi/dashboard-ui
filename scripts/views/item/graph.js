@@ -223,8 +223,17 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
 
 
     changeGraphType: function (e) {
-      var graphType = $(e.currentTarget).data('value');
+      var graphType = $(e.currentTarget).data('value'),
+          graphTypeName = $(e.currentTarget).text();
+
       this.model.set('graphType', graphType);
+
+      $('.graphValue li').removeClass();
+      $('.graphValue li[data-value="' + graphType + '"]').addClass('selected');
+
+      $('.graphType')
+        .text(graphTypeName)
+        .popover('hide');
 
       this.getGraphData();
       this.makeGraph();
