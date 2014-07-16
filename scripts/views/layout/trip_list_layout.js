@@ -4,7 +4,7 @@ define([
   '../item/user_score_view',
   'hbs!tmpl/layout/trip_list_layout_tmpl'
 ],
-function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl  ) {
+function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
     'use strict';
 
   /* Return a Layout class definition */

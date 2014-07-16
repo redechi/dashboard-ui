@@ -7,7 +7,7 @@ define([
   '../../controllers/unit_formatters',
   '../../controllers/map_helpers'
 ],
-function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers) {
+function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers ) {
     'use strict';
 
   /* Return a ItemView class definition */

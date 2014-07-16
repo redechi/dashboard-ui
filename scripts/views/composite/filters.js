@@ -1,5 +1,4 @@
 define([
-  'underscore',
   'backbone',
   'communicator',
   'views/item/filter',
@@ -11,7 +10,7 @@ define([
   '../../controllers/filter',
   '../../controllers/unit_formatters'
 ],
-function(_, Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters  ) {
+function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters ) {
   'use strict';
 
   /* Return a CompositeView class definition */

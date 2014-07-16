@@ -4,7 +4,7 @@ define([
   'models/trip',
   './filters'
 ],
-function( Backbone, coms, Trip, filterCollection) {
+function( Backbone, coms, Trip, filterCollection ) {
   'use strict';
 
   /* trips singleton */

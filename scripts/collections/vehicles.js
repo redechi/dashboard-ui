@@ -3,7 +3,7 @@ define([
   'models/vehicle',
   '../controllers/filter'
 ],
-function( Backbone, Vehicle, filterList) {
+function( Backbone, Vehicle, filterList ) {
   'use strict';
 
   /* vehicles singleton */

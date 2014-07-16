@@ -2,7 +2,7 @@ define([
   'backbone',
   'hbs!tmpl/layout/password_reset_tmpl'
 ],
-function( Backbone, PasswordResetTmpl) {
+function( Backbone, PasswordResetTmpl ) {
     'use strict';
 
   return Backbone.Marionette.LayoutView.extend({

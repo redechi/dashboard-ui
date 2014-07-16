@@ -2,7 +2,7 @@ define([
   'backbone',
   'hbs!tmpl/layout/overlay_tmpl'
 ],
-function( Backbone, OverlayTmpl) {
+function( Backbone, OverlayTmpl ) {
     'use strict';
 
   return Backbone.Marionette.LayoutView.extend({

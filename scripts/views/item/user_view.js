@@ -4,7 +4,7 @@ define([
   'hbs!tmpl/item/user_view_tmpl',
   '../../models/user'
 ],
-function( Backbone, coms, UserViewTmpl, user  ) {
+function( Backbone, coms, UserViewTmpl, user ) {
     'use strict';
 
   return Backbone.Marionette.ItemView.extend({

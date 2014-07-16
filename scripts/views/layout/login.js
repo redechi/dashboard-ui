@@ -3,7 +3,7 @@ define([
   'hbs!tmpl/layout/login_tmpl',
   '../../controllers/login'
 ],
-function( Backbone, LoginTmpl, login) {
+function( Backbone, LoginTmpl, login ) {
     'use strict';
 
   return Backbone.Marionette.LayoutView.extend({

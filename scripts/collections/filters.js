@@ -1,12 +1,11 @@
 define([
-  'underscore',
   'backbone',
   'communicator',
   'models/filter',
   'controllers/filter',
   './vehicles'
 ],
-function( _, Backbone, coms, FilterModel, filterList, vehiclesCollection) {
+function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
   'use strict';
 
   /* filters singleton */

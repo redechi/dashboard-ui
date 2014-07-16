@@ -5,7 +5,7 @@ define([
   '../../controllers/unit_formatters',
   'hbs!tmpl/item/user_score_tmpl'
 ],
-function( Backbone, coms, tripsCollection, formatters, UserscoreTmpl  ) {
+function( Backbone, coms, tripsCollection, formatters, UserscoreTmpl ) {
     'use strict';
 
   return Backbone.Marionette.ItemView.extend({

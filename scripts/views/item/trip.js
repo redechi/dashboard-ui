@@ -4,7 +4,7 @@ define([
   'hbs!tmpl/item/trip_tmpl',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, TripTmpl, formatters  ) {
+function( Backbone, coms, TripTmpl, formatters ) {
     'use strict';
 
   /* Return a ItemView class definition */

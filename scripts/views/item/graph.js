@@ -1,13 +1,10 @@
 define([
   'backbone',
   'communicator',
-  'underscore',
   '../../collections/filters',
-  'hbs!tmpl/item/graph_tmpl',
-  'amlCollection',
-  'moment'
+  'hbs!tmpl/item/graph_tmpl'
 ],
-function( Backbone, coms, _, filters, GraphTmpl, AMLCollection, moment) {
+function( Backbone, coms, filters, GraphTmpl ) {
     'use strict';
 
   /* Return a ItemView class definition */

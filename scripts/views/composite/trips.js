@@ -9,7 +9,7 @@ define([
   'collections/trips',
   'fileSaver'
 ],
-function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, tripsCollection, fileSaver) {
+function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, tripsCollection, fileSaver ) {
   'use strict';
 
   /* Return a ItemView class definition */

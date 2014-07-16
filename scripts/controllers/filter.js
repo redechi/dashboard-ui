@@ -2,11 +2,10 @@
 // in to the appropriate collection from within the collection its self.
 
 define([
-  'moment',
   './unit_formatters',
   '../collections/vehicles'
 ],
-function(moment, formatters, vehiclesCollection) {
+function( formatters, vehiclesCollection ) {
   'use strict';
 
   return {

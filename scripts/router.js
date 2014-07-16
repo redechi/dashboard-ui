@@ -2,7 +2,7 @@ define([
   'backbone',
   './controllers/router',
   './controllers/login'
-],function (backbone, router, login) {
+],function ( backbone, router, login ) {
   'use strict';
 
   var Router = backbone.Marionette.AppRouter.extend({

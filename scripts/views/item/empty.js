@@ -2,7 +2,7 @@ define([
   'backbone',
   'hbs!tmpl/item/empty_tmpl'
 ],
-function( Backbone, EmptyTmpl  ) {
+function( Backbone, EmptyTmpl ) {
     'use strict';
 
   /* Return a ItemView class definition */

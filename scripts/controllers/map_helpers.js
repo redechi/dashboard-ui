@@ -2,7 +2,7 @@ define([
   'mapbox',
   './unit_formatters'
 ],
-function(mapbox, formatters) {
+function( mapbox, formatters ) {
   'use strict';
 
   return {

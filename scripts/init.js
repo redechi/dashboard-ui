@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['amlCollection', 'd3', 'nvd3', 'mapbox', 'markercluster', 'backbone.marionette', 'bootstrap', 'main'],
+  deps: ['amlCollection', 'd3', 'nvd3', 'mapbox', 'markercluster', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
 
 
   shim: {

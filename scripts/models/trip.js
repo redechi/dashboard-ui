@@ -1,9 +1,8 @@
 define([
   'backbone',
-  'moment',
   '../controllers/unit_formatters'
 ],
-function( Backbone, moment, formatters ) {
+function( Backbone, formatters ) {
   'use strict';
 
   /* Return a model class definition */

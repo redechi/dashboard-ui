@@ -2,7 +2,7 @@ define([
   'backbone',
   'communicator'
 ],
-function( Backbone, Communicator) {
+function( Backbone, Communicator ) {
   'use strict';
 
   /* trips singleton */

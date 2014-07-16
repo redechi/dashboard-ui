@@ -9,7 +9,7 @@ define([
   './trip_list_layout'
 ],
 
-function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView, TripListLayout) {
+function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView, TripListLayout ) {
     'use strict';
 
   /* Return a Layout class definition */
