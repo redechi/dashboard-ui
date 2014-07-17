@@ -54,7 +54,7 @@ function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView,
       headerRegion.show(u);
 
       var overlayRegion = regionManager.getRegion('main_overlay');
-      var o = new OverlayView();
+      var o = new OverlayView({type: 'loadingTrips'});
       overlayRegion.show(o);
     },
 
