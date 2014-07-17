@@ -257,49 +257,53 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
       //styles for max
-      var maxBar = d3.selectAll('.bar')
-        .filter(function(d) { return d.key === summary.max.key})
-        .classed('max', true);
+      if(summary.max) {
+        var maxBar = d3.selectAll('.bar')
+          .filter(function(d) { return d.key === summary.max.key})
+          .classed('max', true);
 
-      maxBar.append('text')
-          .attr('x', function(d) { return x(d.key); })
-          .attr('y', function(d) { return y(d.values); })
-          .attr('dx', barWidth/2)
-          .attr('dy', '-1.75em')
-          .text('MAX')
-          .attr('text-anchor', 'middle')
-          .attr('class', 'barLabel');
+        maxBar.append('text')
+            .attr('x', function(d) { return x(d.key); })
+            .attr('y', function(d) { return y(d.values); })
+            .attr('dx', barWidth/2)
+            .attr('dy', '-1.75em')
+            .text('MAX')
+            .attr('text-anchor', 'middle')
+            .attr('class', 'barLabel');
 
-      maxBar.append('text')
-          .attr('x', function(d) { return x(d.key); })
-          .attr('y', function(d) { return y(d.values); })
-          .attr('dx', barWidth/2)
-          .attr('dy', '-0.55em')
-          .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
-          .attr('text-anchor', 'middle');
+        maxBar.append('text')
+            .attr('x', function(d) { return x(d.key); })
+            .attr('y', function(d) { return y(d.values); })
+            .attr('dx', barWidth/2)
+            .attr('dy', '-0.55em')
+            .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
+            .attr('text-anchor', 'middle');
+      }
 
 
       //styles for min
-      var minBar = d3.selectAll('.bar')
-        .filter(function(d) { return d.key === summary.min.key})
-        .classed('min', true);
+      if(summary.min) {
+        var minBar = d3.selectAll('.bar')
+          .filter(function(d) { return d.key === summary.min.key})
+          .classed('min', true);
 
-      minBar.append('text')
-          .attr('x', function(d) { return x(d.key); })
-          .attr('y', function(d) { return y(d.values); })
-          .attr('dx', barWidth/2)
-          .attr('dy', '-1.75em')
-          .text('MIN')
-          .attr('text-anchor', 'middle')
-          .attr('class', 'barLabel');
+        minBar.append('text')
+            .attr('x', function(d) { return x(d.key); })
+            .attr('y', function(d) { return y(d.values); })
+            .attr('dx', barWidth/2)
+            .attr('dy', '-1.75em')
+            .text('MIN')
+            .attr('text-anchor', 'middle')
+            .attr('class', 'barLabel');
 
-      minBar.append('text')
-          .attr('x', function(d) { return x(d.key); })
-          .attr('y', function(d) { return y(d.values); })
-          .attr('dx', barWidth/2)
-          .attr('dy', '-0.55em')
-          .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
-          .attr('text-anchor', 'middle');
+        minBar.append('text')
+            .attr('x', function(d) { return x(d.key); })
+            .attr('y', function(d) { return y(d.values); })
+            .attr('dx', barWidth/2)
+            .attr('dy', '-0.55em')
+            .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
+            .attr('text-anchor', 'middle');
+      }
 
 
       //X Axis labels
