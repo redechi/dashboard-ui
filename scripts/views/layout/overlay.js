@@ -13,9 +13,12 @@ function( Backbone, OverlayTmpl ) {
 
 
     template: OverlayTmpl,
-    
 
-    onRender: function () {}
+
+    onShow: function (options) {
+      var type = this.options.type;
+      $('.' + type).show();
+    }
   });
 
 });

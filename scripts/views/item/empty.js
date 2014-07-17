@@ -11,8 +11,6 @@ function( Backbone, EmptyTmpl ) {
       console.log("initialize a Empty ItemView");
     },
 
-    template: EmptyTmpl,
-
-    onRender: function() {}
+    template: EmptyTmpl
   });
 });

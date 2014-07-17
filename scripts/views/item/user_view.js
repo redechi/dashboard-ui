@@ -28,8 +28,6 @@ function( Backbone, coms, HeaderTmpl, user ) {
 
     events: {},
 
-    model: user,
-
-    onRender: function() {}
+    model: user
   });
 });

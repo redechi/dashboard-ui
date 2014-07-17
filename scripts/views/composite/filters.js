@@ -60,7 +60,7 @@ function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollect
     },
 
     model: new Filter(),
-    
+
     collection: filtersCollection,
 
     childView: FilterView,
@@ -81,10 +81,8 @@ function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollect
 
 
     updateNavButtons: function() {
-      setTimeout(function() {
-        $('.filterNav .redo').toggleClass('disabled', (Backbone.history.next.length === 0));
-        $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
-      }, 0);
+      $('.filterNav .redo').toggleClass('disabled', (Backbone.history.next.length === 0));
+      $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
     },
 
 
@@ -336,7 +334,7 @@ function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollect
     },
 
 
-    onRender: function() {
+    onShow: function() {
       this.updateNavButtons();
     }
   });

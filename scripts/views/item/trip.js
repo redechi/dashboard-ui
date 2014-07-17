@@ -49,11 +49,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
       'click': 'toggleSelect'
-    },
-
-
-    onRender: function () {}
-
+    }
   });
 
 });

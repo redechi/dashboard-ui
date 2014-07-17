@@ -345,7 +345,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
-    onRender: function() {
+    onShow: function() {
       setTimeout(function() {
         $('.graphType').popover('destroy');
         var graphPopoverTemplate = $('.graphMenu .popoverTemplate');
