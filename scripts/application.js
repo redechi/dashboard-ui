@@ -35,11 +35,14 @@ function( Backbone, router, regionManager, login, tripsCollection ) {
     overlayRegion: "#overlay"
   });
 
-  /* Add initializers here */
+
   App.addInitializer( function () {
+    //check for browser compatibility
+    if(Modernizr && !Modernizr.svg) {
+    }
   });
 
-  // contextual startup
+
   App.on("start", function(){
     console.log('Start History');
     Backbone.history.previous = [];
