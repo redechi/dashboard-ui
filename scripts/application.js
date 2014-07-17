@@ -3,10 +3,11 @@ define([
   'router',
   'regionManager',
   './controllers/login',
-  './collections/trips'
+  './collections/trips',
+  './views/layout/overlay'
 ],
 
-function( Backbone, router, regionManager, login, tripsCollection ) {
+function( Backbone, router, regionManager, login, tripsCollection, OverlayView ) {
   'use strict';
 
   //Log the user in if access token present
@@ -39,6 +40,9 @@ function( Backbone, router, regionManager, login, tripsCollection ) {
   App.addInitializer( function () {
     //check for browser compatibility
     if(Modernizr && !Modernizr.svg) {
+      var overlayRegion = regionManager.getRegion('main_overlay');
+      var o = new OverlayView({type: 'notSupported'});
+      overlayRegion.show(o);
     }
   });
 
