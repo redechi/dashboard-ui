@@ -16,7 +16,38 @@ function( Backbone, PasswordResetTmpl ) {
 
 
     events: {
+      'submit #passwordResetRequestForm': 'resetPasswordRequest',
       'submit #passwordResetForm': 'resetPassword'
+    },
+
+
+    resetPasswordRequest: function (e) {
+      var email = $('#email', e.target).val();
+
+      if(!email) {
+        $('#email', e.target)
+          .parent('.form-group')
+          .addClass('has-error');
+
+        $('.alert', e.target)
+          .html('<strong>Error:</strong> Please enter an email address')
+          .removeClass('alert-success')
+          .addClass('alert-danger')
+          .removeClass('hide');
+      } else {
+        //TODO: post to password reset request URL
+        $('#email', e.target)
+          .parent('.form-group')
+          .removeClass('has-error');
+
+        $('.alert', e.target)
+          .html('<strong>Heads up!</strong> We sent a password reset email to ' + email + '.')
+          .removeClass('alert-danger')
+          .addClass('alert-success')
+          .removeClass('hide');
+      }
+
+      return false;
     },
 
 
@@ -31,7 +62,7 @@ function( Backbone, PasswordResetTmpl ) {
           .parent('.form-group')
           .removeClass('has-error');
 
-        $('#passwordResetForm .alert').addClass('hide');
+        $('.alert', e.target).addClass('hide');
 
         //TODO: post to password reset URL
       } else {
@@ -39,15 +70,14 @@ function( Backbone, PasswordResetTmpl ) {
           .parent('.form-group')
           .addClass('has-error');
 
-        $('#passwordResetForm .alert')
-          .text('Error: Passwords do not match')
+        $('.alert', e.target)
+          .html('<strong>Error:</strong> Passwords do not match')
+          .removeClass('alert-success')
+          .addClass('alert-danger')
           .removeClass('hide');
       }
 
       return false;
-    },
-
-
-    onRender: function () {}
+    }
   });
 });
