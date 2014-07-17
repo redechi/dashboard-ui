@@ -1,6 +1,93 @@
 #login {
-  width: 400px;
-  margin: 0 auto;
+  width: 700px;
+  margin: 50px auto;
+
+  h1 {
+    margin: 20px 0;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  h2 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  a {
+    font-size: 12px;
+  }
+
+  .topBox {
+    background: #FFF;
+    border-radius: 3px;
+    -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+    padding: 30px;
+    margin-bottom: 50px;
+
+    .graphicComputer {
+      height: 170px;
+      @include hr-image('../img/graphic_computer.png', '../img/graphic_computer@2x.png');
+      background-repeat: no-repeat;
+    }
+
+    .smallLogo {
+      @include hr-image('../img/logo_automatic_sm.png', '../img/logo_automatic_sm@2x.png');
+      background-repeat: no-repeat;
+      height: 27px;
+    }
+
+    .tryDemo {
+      display: block;
+      margin-top: 25px;
+      font-size: 14px;
+    }
+  }
+
+  #loginForm {
+    button {
+      width: 100%;
+    }
+
+    .staySignedIn {
+      font-size: 12px;
+    }
+
+    .form-group:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .forgotPasswordLink {
+    display: inline-block;
+    margin-top: 15px;
+  }
+
+  .featureList {
+    font-size: 12px;
+    margin-top: 20px;
+
+    li {
+      margin: 14px 0;
+      height: 24px;
+      line-height: 24px;
+      padding-left: 50px;
+      background-repeat: no-repeat;
+    }
+
+    .savebig {
+      @include hr-image('../img/mktg_icon_savebig.png', '../img/mktg_icon_savebig@2x.png');
+    }
+    .crashalert {
+      @include hr-image('../img/mktg_icon_crashalert.png', '../img/mktg_icon_crashalert@2x.png');
+    }
+    .check {
+      @include hr-image('../img/mktg_icon_check.png', '../img/mktg_icon_check@2x.png');
+    }
+    .map {
+      @include hr-image('../img/mktg_icon_map.png', '../img/mktg_icon_map@2x.png');
+    }
+  }
 }
 
 #passwordReset {
