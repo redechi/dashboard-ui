@@ -1,11 +1,11 @@
 define([
   'backbone',
   'communicator',
-  '../../collections/trips',
+  '../../controllers/stats',
   '../../controllers/unit_formatters',
   'hbs!tmpl/item/user_score_tmpl'
 ],
-function( Backbone, coms, tripsCollection, formatters, UserscoreTmpl ) {
+function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
     'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -31,13 +31,12 @@ function( Backbone, coms, tripsCollection, formatters, UserscoreTmpl ) {
     templateHelpers: function() {
       var helpers =  {
         total: this.collection.length,
-        distance: formatters.distance(this.collection.reduce(function(memo, trip) { return memo + trip.get('distance_miles'); }, 0)),
-        duration: formatters.duration(this.collection.reduce(function(memo, trip) { return memo + trip.get('duration'); }, 0)),
-        score: formatters.score(tripsCollection.getAverageScore(this.collection)),
-        cost: formatters.costWithUnit(this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_cost_usd'); }, 0))
+        distance: formatters.distance(stats.getSum(this.collection, 'distance_miles')),
+        duration: formatters.duration(stats.getSum(this.collection, 'duration')),
+        score: formatters.score(stats.getAverageScore(this.collection)),
+        cost: formatters.costWithUnit(stats.getSum(this.collection, 'fuel_cost_usd')),
+        mpg: formatters.averageMPG(stats.getAverageMPG(this.collection))
       };
-
-      helpers.mpg = formatters.averageMPG(helpers.distance / this.collection.reduce(function(memo, trip) { return memo + trip.get('fuel_volume_gal'); }, 0));
 
       return helpers;
     },
