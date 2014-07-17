@@ -6,6 +6,7 @@
 
   .graphMenu {
     padding-top: 10px;
+    float: left;
 
     .dateRange {
       float: left;
@@ -31,6 +32,38 @@
 
     .popover-content {
         min-width: 100px;
+    }
+  }
+
+  .graphAverages {
+    float: right;
+    position: relative;
+
+    .graphAveragesLabel {
+      text-align: right;
+      font-size: 12px;
+      display: inline-block;
+      vertical-align: middle;
+      padding-top: 10px;
+    }
+
+    .graphAveragesValue {
+      font-size: 24px;
+      display: inline-block;
+      color: $link_type;
+      vertical-align: middle;
+      padding-top: 10px;
+    }
+
+    .graphAveragesBackground {
+      font-size: 78px;
+      line-height: 78px;
+      color: $header_back;
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: -10;
+      text-transform: uppercase;
     }
   }
 
