@@ -114,42 +114,9 @@
   }
 
   .btn-filter {
-    background-color: $header_back;
-    background-repeat: no-repeat;
-    height: 28px;
-    line-height: 15px;
     margin: 0 10px;
-    font-size: 16px;
-    border-radius: 3px;
     display: inline-block;
-    text-align: center;
-    vertical-align: middle;
     cursor: pointer;
-    padding: 9px 5px;
-    color: $link_type;
-
-    &:hover {
-      background-color: #FFF;
-      color: $highlight;
-      -moz-box-shadow: 0px 1px 0px 0px #E3E2DE;
-      box-shadow: 0px 1px 0px 0px #E3E2DE;
-    }
-
-    &.disabled {
-      cursor: auto;
-
-      &:hover {
-        background-color: $header_back;
-        -moz-box-shadow: inherit;
-        box-shadow: inherit;
-      }
-    }
-  }
-
-  .btn-dropdown {
-    padding-right: 25px;
-    background-position: right 5px center;
-    @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
   }
 
   .filterNav {
