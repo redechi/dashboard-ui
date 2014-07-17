@@ -7,9 +7,8 @@ define([
   '../../controllers/unit_formatters'
 ],
 function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
-    'use strict';
+  'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     events: {
@@ -24,16 +23,15 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     },
 
     tagName: 'li',
+
     template: FiltersTmpl,
+
 
     deleteFilter: function () {
       this.model.destroy();
       this.destroy();
     },
 
-    onRender: function() {
-      this.initializePopover();
-    },
 
     selectItem: function(item) {
       $(item)
@@ -42,14 +40,17 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
         .removeClass('selected');
     },
 
+
     vehiclePopover: function() {
       this.selectItem('.vehicleFilterValue li[data-value="' + this.model.get('value') + '"]');
     },
+
 
     datePopover: function() {
       this.selectItem('.dateFilterValue li[data-value="' + this.model.get('valueSelected') + '"]');
       $('.dateFilterCustom').toggle(this.model.get('valueSelected') === 'custom');
     },
+
 
     initializeDatePicker: function() {
       var filter = this.model;
@@ -71,6 +72,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           .removeClass('changed');
       }
     },
+
 
     initializePopover: function () {
       var filter = this.model,
@@ -94,8 +96,12 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
       }, 0);
 
-    }
+    },
+
+
+    onRender: function() {
+      this.initializePopover();
+    },
 
   });
-
 });

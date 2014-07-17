@@ -8,9 +8,8 @@ define([
   '../../controllers/map_helpers'
 ],
 function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers ) {
-    'use strict';
+  'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
@@ -33,10 +32,8 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
     template: MapTmpl,
 
-    /* ui selector cache */
     ui: {},
 
-    /* Ui events hash */
     events: {
       'click .mapLocationFilter': 'updateLocationFilter'
     },
@@ -45,13 +42,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       $(e.target).data('latlng');
       coms.trigger('filters:updateLocationFilter', e);
     },
-
-    /* on render callback */
-    onRender: function () {
-      this.createMap();
-      this.updateMap();
-    },
-
 
     createMap: function() {
       var mapbox = this.mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
@@ -63,7 +53,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
       mapbox.addLayer(markersLayer);
     },
-
 
 
     highlightMap: function (model) {
@@ -223,6 +212,12 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
           mapbox.fitBounds(bounds, {padding: [50, 50]});
         }
       }, 0);
+    },
+
+
+    onRender: function () {
+      this.createMap();
+      this.updateMap();
     }
 
   });

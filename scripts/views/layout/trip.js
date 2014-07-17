@@ -6,28 +6,21 @@ define([
   '../../controllers/unit_formatters'
 ],
 function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
-    'use strict';
+  'use strict';
 
-
-  /* Return a Layout class definition */
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
       console.log("initialize a Trip Layout");
     },
 
+
     template: TripTmpl,
 
-    /* Layout sub regions */
     regions: {
       map: '#map'
     },
 
-    /* ui selector cache */
-    ui: {},
-
-    /* Ui events hash */
-    events: {},
 
     templateHelpers: function() {
       var trip = this.collection.models[0],
@@ -49,12 +42,10 @@ function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
       return helpers;
     },
 
-    /* on render callback */
+
     onRender: function() {
       var m = new MapSingleView({collection: this.collection});
-
       this.map.show(m);
     }
   });
-
 });

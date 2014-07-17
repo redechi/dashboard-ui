@@ -7,9 +7,8 @@ define([
   '../../controllers/map_helpers'
 ],
 function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
-    'use strict';
+  'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
@@ -20,16 +19,9 @@ function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
 
     template: MapSingleTmpl,
 
-    /* ui selector cache */
     ui: {},
 
-    /* Ui events hash */
     events: {},
-
-    /* on render callback */
-    onRender: function () {
-      this.createMap();
-    },
 
     templateHelpers: function() {
       var trip = this.collection.models[0];
@@ -109,8 +101,6 @@ function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
         featureLayer.addLayer(mapHelpers.createMarker('end', model, popupTemplate));
       }
 
-
-
       model.get('drive_events').forEach(function(item) {
         if(item.type === 'hard_brake') {
           hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon}));
@@ -138,8 +128,12 @@ function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
           mapbox.fitBounds(bounds, {padding: [50, 50]});
         }
       }, 0);
+    },
+
+
+    onRender: function () {
+      this.createMap();
     }
 
   });
-
 });

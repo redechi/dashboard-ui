@@ -5,30 +5,24 @@ define([
   'hbs!tmpl/layout/trip_list_layout_tmpl'
 ],
 function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
-    'use strict';
+  'use strict';
 
-  /* Return a Layout class definition */
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
       console.log("initialize a TripListLayout Layout");
     },
 
+
     template: TripListLayoutTmpl,
 
-    /* Layout sub regions */
+
     regions: {
       aggStats: "#aggStats",
       tripList: "#tripList"
     },
 
-    /* ui selector cache */
-    ui: {},
 
-    /* Ui events hash */
-    events: {},
-
-    /* on render callback */
     onRender: function() {
       var userScoreView = new UserScoreView();
       var tripsCompView = new TripsCompositeView();
@@ -37,5 +31,4 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
       this.tripList.show(tripsCompView);
     }
   });
-
 });

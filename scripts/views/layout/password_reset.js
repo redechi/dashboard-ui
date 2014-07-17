@@ -3,7 +3,7 @@ define([
   'hbs!tmpl/layout/password_reset_tmpl'
 ],
 function( Backbone, PasswordResetTmpl ) {
-    'use strict';
+  'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
 
@@ -11,13 +11,14 @@ function( Backbone, PasswordResetTmpl ) {
       console.log("initialize a Password Reset Layout");
     },
 
+
     template: PasswordResetTmpl,
 
-    ui: {},
 
     events: {
       'submit #passwordResetForm': 'resetPassword'
     },
+
 
     resetPassword: function (e) {
       var password = $('#password', e.target).val(),
@@ -46,7 +47,7 @@ function( Backbone, PasswordResetTmpl ) {
       return false;
     },
 
+
     onRender: function () {}
   });
-
 });

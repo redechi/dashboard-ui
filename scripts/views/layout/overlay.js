@@ -3,7 +3,7 @@ define([
   'hbs!tmpl/layout/overlay_tmpl'
 ],
 function( Backbone, OverlayTmpl ) {
-    'use strict';
+  'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
 
@@ -11,11 +11,9 @@ function( Backbone, OverlayTmpl ) {
       console.log("initialize an Overlay Layout");
     },
 
+
     template: OverlayTmpl,
-
-    ui: {},
-
-    events: {},
+    
 
     onRender: function () {}
   });

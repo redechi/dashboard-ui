@@ -5,7 +5,7 @@ define([
   '../../models/user'
 ],
 function( Backbone, coms, UserViewTmpl, user ) {
-    'use strict';
+  'use strict';
 
   return Backbone.Marionette.ItemView.extend({
 
@@ -26,8 +26,8 @@ function( Backbone, coms, UserViewTmpl, user ) {
 
     events: {},
 
-    onRender: function() {},
+    model: user,
 
-    model: user
+    onRender: function() {}
   });
 });

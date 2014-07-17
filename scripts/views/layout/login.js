@@ -4,7 +4,7 @@ define([
   '../../controllers/login'
 ],
 function( Backbone, LoginTmpl, login ) {
-    'use strict';
+  'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
 
@@ -12,13 +12,17 @@ function( Backbone, LoginTmpl, login ) {
       console.log("initialize a Login Layout");
     },
 
+
     template: LoginTmpl,
 
+
     ui: {},
+
 
     events: {
       'submit #loginForm': 'login'
     },
+
 
     login: function (e) {
       var email = $('#email', e.target).val(),
@@ -54,6 +58,7 @@ function( Backbone, LoginTmpl, login ) {
 
       return false;
     },
+
 
     onRender: function () {}
   });

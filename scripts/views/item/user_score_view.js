@@ -6,7 +6,7 @@ define([
   'hbs!tmpl/item/user_score_tmpl'
 ],
 function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
-    'use strict';
+  'use strict';
 
   return Backbone.Marionette.ItemView.extend({
 
@@ -16,17 +16,22 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
     },
 
     duration: 2000,
+
     model: new Backbone.Model({values:[],key:'No Data'}),
+
     collection: new Backbone.Collection([]),
+
     template: UserscoreTmpl,
 
     resetCollection: function (collection) {
       this.collection.reset(collection);
     },
+    
 
     collectionEvents: {
       'reset': 'render'
     },
+
 
     templateHelpers: function() {
       var helpers =  {
@@ -41,6 +46,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
       return helpers;
     },
 
+
     getAverageScore: function() {
       var weightedSum = this.collection.reduce(function(memo, trip) {
         memo.score += trip.get('score') * trip.get('duration');
@@ -50,6 +56,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
 
       return weightedSum.score / weightedSum.time;
     },
+
 
     paintGraph: function() {
       var self = this;
@@ -121,6 +128,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
           return chart;
       });
     },
+
 
     onRender: function () {
       this.paintGraph();

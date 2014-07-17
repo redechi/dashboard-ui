@@ -5,9 +5,8 @@ define([
   '../../controllers/unit_formatters'
 ],
 function( Backbone, coms, TripTmpl, formatters ) {
-    'use strict';
+  'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
@@ -33,8 +32,6 @@ function( Backbone, coms, TripTmpl, formatters ) {
     },
 
     tagName: "li",
-    /* on render callback */
-    onRender: function () {},
 
     template: TripTmpl,
 
@@ -46,15 +43,16 @@ function( Backbone, coms, TripTmpl, formatters ) {
       };
     },
 
-    /* ui selector cache */
     ui: {},
 
-    /* Ui events hash */
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
       'click': 'toggleSelect'
-    }
+    },
+
+
+    onRender: function () {}
 
   });
 

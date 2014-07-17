@@ -10,9 +10,8 @@ define([
 ],
 
 function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView, TripListLayout ) {
-    'use strict';
+  'use strict';
 
-  /* Return a Layout class definition */
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
@@ -24,7 +23,9 @@ function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView
       setTimeout(this.resize, 0);
     },
 
+
     template: SummaryTmpl,
+
 
     regions: {
       map: '#map',
@@ -34,12 +35,8 @@ function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView
       trips: '#trips'
     },
 
-    ui: {},
-
-    events: {},
 
     onRender: function () {
-
       var tl = new TripListLayout();
       var m = new Map();
       var g = new Graph();
@@ -53,13 +50,12 @@ function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayView();
       overlayRegion.show(o);
-
     },
+
 
     resize: function () {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
       $('#map .map').height(height - $('#graphs').outerHeight(true) - 40);
     }
   });
-
 });

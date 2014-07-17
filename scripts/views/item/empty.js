@@ -3,9 +3,8 @@ define([
   'hbs!tmpl/item/empty_tmpl'
 ],
 function( Backbone, EmptyTmpl ) {
-    'use strict';
+  'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
@@ -14,14 +13,6 @@ function( Backbone, EmptyTmpl ) {
 
     template: EmptyTmpl,
 
-    /* ui selector cache */
-    ui: {},
-
-    /* Ui events hash */
-    events: {},
-
-    /* on render callback */
     onRender: function() {}
   });
-
 });
