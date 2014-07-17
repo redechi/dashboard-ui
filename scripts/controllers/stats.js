@@ -29,5 +29,16 @@ function() {
       return (totals.distance / totals.fuel) || 0;
     },
 
+    sumTrips: function(trips, field) {
+      //Calculate sum or average, depending on field
+      if(field == 'average_mpg') {
+        return this.getAverageMPG(trips);
+      } else if(field == 'score') {
+        return this.getAverageScore(trips);
+      } else {
+        return this.getSum(trips, field);
+      }
+    },
+
   };
 });

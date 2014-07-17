@@ -3,19 +3,25 @@ define([
   'communicator',
   '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
+  'controllers/stats',
   'controllers/unit_formatters'
 ],
-function( Backbone, coms, filters, GraphTmpl, formatters ) {
-    'use strict';
+function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
+  'use strict';
 
-  var BarChart = Backbone.Marionette.ItemView.extend({
+  return Backbone.Marionette.ItemView.extend({
 
     tagName: 'div',
-    model: new Backbone.Model({values:[], graphType:'No Data'}),
-    collection: new Backbone.Collection(),
-    template: GraphTmpl,
 
-    collectionEvents: {},
+    model: new Backbone.Model({
+      values: [],
+      graphType: 'average_mpg',
+      graphTypeName: 'MPG'
+    }),
+
+    collection: new Backbone.Collection(),
+
+    template: GraphTmpl,
 
     events: {
       'click .graphValue li': 'changeGraphType'
@@ -23,9 +29,9 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
 
     initialize: function(model) {
       console.log('initialize a Graph ItemView');
-      this.model.set('graphType', 'average_mpg');
       coms.on('filter', _.bind(this.resetCollection, this));
     },
+
 
     resetCollection: function (collection) {
       this.collection.reset(collection);
@@ -36,28 +42,82 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
     },
 
 
+    averageTripsForGraph: function() {
+      var graphType = this.model.get('graphType'),
+          values = this.model.get('values'),
+          trips = this.collection;
+
+      //Calculate average depending on graphType
+      if(graphType == 'average_mpg') {
+        return stats.getAverageMPG(trips);
+      } else if(graphType == 'score') {
+        return stats.getAverageScore(trips);
+      } else {
+        var total = values.reduce(function(memo, value) {
+          return memo + value.values;
+        }, 0);
+        return total / values.length || 0;
+      }
+    },
+
+
     getGraphData: function () {
       var graphType = this.model.get('graphType'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
-          trips = this.collection.toJSON().reverse(),
           date = dateRange[0],
           bins = {};
 
+
+      //Build empty bins
       while(date < dateRange[1]) {
-        bins[moment(date).startOf('day').valueOf()] = 0;
+        bins[moment(date).startOf('day').valueOf()] = [];
         date = moment(date).add('days', 1).valueOf();
       }
 
+
+      //group trips into bins
       this.collection.each(function(trip) {
         var bin = moment(trip.get('start_time')).startOf('day').valueOf();
-        bins[bin] += trip.get(graphType);
+        bins[bin].push(trip);
       });
 
-      var values = _.map(bins, function(value, key) {
-        return {key: key, values: value};
+
+      //Combine trips into one number
+      var values = _.map(bins, function(trips, key) {
+        return {key: key, values: stats.sumTrips(trips, graphType)};
       });
 
       this.model.set('values', values);
+
+
+      //Calculate Min and Max and Empty bins
+      var summary = _.reduce(values, function(memo, bar) {
+        if (!memo.max || bar.values >= memo.max.values) {
+          memo.max = bar;
+        }
+        if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
+          memo.min = bar;
+        }
+        if(bar.values === 0) {
+          memo.empty.push(bar.key);
+        }
+        return memo;
+      }, {empty: []});
+
+      //Calculate overall average for time range
+      summary.average = this.averageTripsForGraph();
+
+      this.model.set('summary', summary);
+    },
+
+
+    updateAverages: function() {
+      var graphType = this.model.get('graphType'),
+          graphTypeName = this.model.get('graphTypeName'),
+          summary = this.model.get('summary');
+
+      $('.graphAveragesBackground').text(graphTypeName);
+      $('.graphAveragesValue').text(formatters.formatForGraphLabel(graphType, summary.average));
     },
 
 
@@ -86,15 +146,21 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
 
     makeGraph: function() {
       var data = this.model.get('values'),
+          summary = this.model.get('summary'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           graphType = this.model.get('graphType'),
           margin = {top: 30, right: 0, bottom: 60, left: 0},
           width = 880 - margin.left - margin.right,
-          height = 225 - margin.top - margin.bottom;
+          height = 225 - margin.top - margin.bottom,
+          tooltip = d3.select('#graphs .graphContainer .graphTooltip');
 
+
+      //remove any existing graph
       d3.select('#graphs .graphContainer svg').remove();
 
-      var tooltip = d3.select('#graphs .graphContainer .graphTooltip');
+
+      //update averages
+      this.updateAverages();
 
 
       //Initialize SVG
@@ -190,23 +256,9 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
         });
 
 
-      //calculate Min and Max
-      var stats = _.reduce(data, function(memo, bar) {
-        if (!memo.max || bar.values >= memo.max.values) {
-          memo.max = bar;
-        }
-        if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
-          memo.min = bar;
-        }
-        if(bar.values === 0) {
-          memo.empty.push(bar.key);
-        }
-        return memo;
-      }, {empty: []});
-
       //styles for max
       var maxBar = d3.selectAll('.bar')
-        .filter(function(d) { return d.key === stats.max.key})
+        .filter(function(d) { return d.key === summary.max.key})
         .classed('max', true);
 
       maxBar.append('text')
@@ -229,7 +281,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
 
       //styles for min
       var minBar = d3.selectAll('.bar')
-        .filter(function(d) { return d.key === stats.min.key})
+        .filter(function(d) { return d.key === summary.min.key})
         .classed('min', true);
 
       minBar.append('text')
@@ -258,7 +310,7 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
         .selectAll('text')
           .style('text-anchor', 'middle')
           .attr('dx', '-.7em')
-          .attr('class', function(d) {return (stats.empty.indexOf(d) !== -1) ? 'empty' : ''; });
+          .attr('class', function(d) {return (summary.empty.indexOf(d) !== -1) ? 'empty' : ''; });
     },
 
 
@@ -266,7 +318,10 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
       var graphType = $(e.currentTarget).data('value'),
           graphTypeName = $(e.currentTarget).text();
 
-      this.model.set('graphType', graphType);
+      this.model.set({
+        'graphType': graphType,
+        'graphTypeName': graphTypeName
+      });
 
       $('.graphValue li').removeClass();
       $('.graphValue li[data-value="' + graphType + '"]').addClass('selected');
@@ -299,6 +354,4 @@ function( Backbone, coms, filters, GraphTmpl, formatters ) {
       }, 0);
     }
   });
-
-  return BarChart;
 });
