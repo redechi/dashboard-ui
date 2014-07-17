@@ -77,7 +77,6 @@ a:hover {
   color: $highlight;
 }
 
-
 #content {
   width: 100%;
   min-width: 850px;
@@ -88,73 +87,6 @@ a:hover {
   overflow: hidden;
   box-sizing: border-box;
 }
-
-header.mainHeader {
-  position: relative;
-  border-bottom: 1px solid $line_gray;
-  height: 70px;
-  background: $header_back;
-  padding: 0 30px;
-  -moz-box-shadow: 0px 1px 0px 0px #FFFFFF;
-  box-shadow: 0px 1px 0px 0px #FFFFFF;
-
-  #logo {
-    @include hr-image('../img/logo_automatic.png', '../img/logo_automatic@2x.png');
-    width: 119px;
-    height: 33px;
-    float: left;
-    margin: 18px 0;
-    display: inline;
-    vertical-align: middle;
-  }
-
-  #user {
-    position: absolute;
-    right: 0;
-    top: 0px;
-    padding-right: 30px;
-
-    ul {
-      margin: 0;
-
-      li {
-        display: inline-block;
-        font-size: 12px;
-        line-height: 16px;
-        padding: 27px 15px;
-        color: $base_type;
-
-        .firstName {
-          padding-left: 30px;
-          padding-right: 10px;
-        }
-
-        a {
-          color: $base_type;
-          display: inline-block;
-          font-weight: bold;
-
-          &:hover {
-            color: $highlight;
-          }
-        }
-
-        &:last-child {
-          padding-right: 0;
-
-          a {
-            color: $link_type;
-
-            &:hover {
-              color: $highlight;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
 
 #left-column {
   margin: 0;

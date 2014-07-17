@@ -1,16 +1,16 @@
 define([
   'backbone',
   'communicator',
-  'hbs!tmpl/item/user_view_tmpl',
+  'hbs!tmpl/item/header_tmpl',
   '../../models/user'
 ],
-function( Backbone, coms, UserViewTmpl, user ) {
+function( Backbone, coms, HeaderTmpl, user ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log("initialize a UserView ItemView");
+      console.log("initialize a Header ItemView");
 
       if(this.attributes.loggedIn) {
         this.model.fetch();
@@ -20,7 +20,9 @@ function( Backbone, coms, UserViewTmpl, user ) {
       coms.on('user:change', _.bind(this.render, this));
     },
 
-    template: UserViewTmpl,
+    template: HeaderTmpl,
+
+    className: 'loggedInHeader',
 
     ui: {},
 

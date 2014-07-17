@@ -3,11 +3,10 @@ define([
   'router',
   'regionManager',
   './controllers/login',
-  './views/item/user_view',
   './collections/trips'
 ],
 
-function( Backbone, router, regionManager, login, UserView, tripsCollection ) {
+function( Backbone, router, regionManager, login, tripsCollection ) {
   'use strict';
 
   //Log the user in if access token present
@@ -30,7 +29,7 @@ function( Backbone, router, regionManager, login, UserView, tripsCollection ) {
 
   /* Add application regions here */
   App.addRegions({
-    headerRegion: "#user",
+    headerRegion: "header.mainHeader",
     contentRegion: "main",
     footerRegion: "footer",
     overlayRegion: "#overlay"
@@ -38,9 +37,6 @@ function( Backbone, router, regionManager, login, UserView, tripsCollection ) {
 
   /* Add initializers here */
   App.addInitializer( function () {
-    var headerRegion = regionManager.getRegion('main_header');
-    var u = new UserView({attributes: {loggedIn: login.isLoggedIn}});
-    headerRegion.show(u);
   });
 
   // contextual startup

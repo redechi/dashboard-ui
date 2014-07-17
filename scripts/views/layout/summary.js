@@ -2,14 +2,16 @@ define([
   'backbone',
   'regionManager',
   'hbs!tmpl/layout/summary_tmpl',
-  '../composite/filters', // view
-  '../item/graph', // view
-  '../item/map', // view
+  '../composite/filters',
+  '../item/graph',
+  '../item/map',
   './overlay',
+  '../item/user_view',
+  '../../controllers/login',
   './trip_list_layout'
 ],
 
-function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView, TripListLayout ) {
+function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView, OverlayView, UserView, login, TripListLayout ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -38,14 +40,18 @@ function( Backbone, regionManager, SummaryTmpl, Filters, Graph, Map, OverlayView
 
     onRender: function () {
       var tl = new TripListLayout();
-      var m = new Map();
-      var g = new Graph();
-      var f = new Filters();
+      var m = new MapView();
+      var g = new GraphView();
+      var f = new FiltersView();
 
       this.trips.show(tl);
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
+
+      var headerRegion = regionManager.getRegion('main_header');
+      var u = new UserView({attributes: {loggedIn: login.isLoggedIn}});
+      headerRegion.show(u);
 
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayView();

@@ -10,9 +10,7 @@ define([
 ],
 function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout, LoginLayout, PasswordResetLayout ) {
   'use strict';
-
-  window.TripView = TripLayout;
-
+  
   return {
 
     showSummaryLayout: function () {
