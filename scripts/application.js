@@ -32,7 +32,6 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayView )
   App.addRegions({
     headerRegion: "header.mainHeader",
     contentRegion: "main",
-    footerRegion: "footer",
     overlayRegion: "#overlay"
   });
 
@@ -57,7 +56,6 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayView )
   // save regions
   regionManager.addRegion('main_content', App.contentRegion);
   regionManager.addRegion('main_header', App.headerRegion);
-  regionManager.addRegion('main_footer', App.footerRegion);
   regionManager.addRegion('main_overlay', App.overlayRegion);
 
   return App;

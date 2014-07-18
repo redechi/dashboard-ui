@@ -76,15 +76,8 @@ a:hover {
   color: $highlight;
 }
 
-#content {
-  width: 100%;
-  min-width: 850px;
-  background: #FFF;
-  padding: 10px 20px;
-  position: relative;
-  min-height: 420px;
-  overflow: hidden;
-  box-sizing: border-box;
+main {
+  min-width: 1020px;
 }
 
 #left-column {
