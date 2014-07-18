@@ -14,7 +14,7 @@ define(function() {
     'spec/views/item/map.js',
     'spec/views/item/trip.js',
     'spec/views/item/user_score_view.js',
-    'spec/views/item/user_view.js',
+    'spec/views/item/header.js',
     'spec/views/layout/summary.js',
     'spec/views/layout/trip.js',
     'spec/views/layout/trip_list_layout.js'

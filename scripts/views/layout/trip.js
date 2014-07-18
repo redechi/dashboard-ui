@@ -2,10 +2,9 @@ define([
   'backbone',
   '../item/map_single',
   'hbs!tmpl/layout/trip_tmpl',
-  '../item/user_view',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, MapSingleView, TripTmpl, UserView, formatters ) {
+function( Backbone, MapSingleView, TripTmpl, formatters ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({

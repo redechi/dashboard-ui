@@ -6,12 +6,12 @@ define([
   '../item/graph',
   '../item/map',
   './overlay',
-  '../item/user_view',
+  '../item/header',
   '../../controllers/login',
   './trip_list_layout'
 ],
 
-function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView, OverlayView, UserView, login, TripListLayout ) {
+function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView, OverlayView, HeaderView, login, TripListLayout ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -50,8 +50,8 @@ function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView,
       this.filters.show(f);
 
       var headerRegion = regionManager.getRegion('main_header');
-      var u = new UserView({attributes: {loggedIn: login.isLoggedIn}});
-      headerRegion.show(u);
+      var h = new HeaderView({attributes: {loggedIn: login.isLoggedIn}});
+      headerRegion.show(h);
 
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayView({type: 'loadingTrips'});
