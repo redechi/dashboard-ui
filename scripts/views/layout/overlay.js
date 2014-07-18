@@ -15,9 +15,8 @@ function( Backbone, OverlayTmpl ) {
     template: OverlayTmpl,
 
 
-    onShow: function (options) {
-      var type = this.options.type;
-      $('.' + type).show();
+    className: function() {
+      return this.options.type;
     }
   });
 
