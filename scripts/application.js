@@ -39,7 +39,7 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayView )
 
   App.addInitializer( function () {
     //check for browser compatibility
-    if(Modernizr && !Modernizr.svg) {
+    if((Modernizr && !Modernizr.svg) || window.location.search.indexOf('unsupported') !== -1) {
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayView({type: 'notSupported'});
       overlayRegion.show(o);
