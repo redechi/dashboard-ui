@@ -220,7 +220,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       var barWidth = Math.min(x.rangeBand(), 8);
       var barRadius = Math.min(barWidth/2, 4);
 
-      svg.selectAll('.bar')
+      var bars = svg.selectAll('.bar')
         .data(data)
         .enter().append('g')
           .attr('class', 'bar')
@@ -228,10 +228,16 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('x', function(d) { return x(d.key); })
           .attr('date', function(d) { return d.key; });
 
-      function tooltipMouseover(d) {
+      function barMouseover(d) {
         tooltip
+          .style('top', (y(d.values) - 4) + 'px')
+          .style('left', (x(d.key) - 28) + 'px')
           .style('visibility', 'visible')
-          .html('<div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
+          .html('<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
+      }
+
+      function barMouseout(d) {
+        tooltip.style('visibility', 'hidden');
       }
 
       function topRoundedRect(x, y, width, height, radius) {
@@ -245,10 +251,9 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
              + 'z';
       }
 
-      svg.selectAll('.bar').append('path')
-        .on('mouseover', tooltipMouseover)
-        .on('mousemove', function(){ tooltip.style('top', (event.offsetY-10)+'px').style('left',(event.offsetX+10)+'px');})
-        .on('mouseout', function(){ tooltip.style('visibility', 'hidden');})
+      bars.append('path')
+        .on('mouseover', barMouseover)
+        .on('mouseout', barMouseout)
         .attr('d', function(d) {
           if(d.values > 0) {
             return topRoundedRect(x(d.key), y(d.values), barWidth, height - y(d.values), barRadius);
@@ -258,7 +263,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //styles for max
       if(summary.max) {
-        var maxBar = d3.selectAll('.bar')
+        var maxBar = bars
           .filter(function(d) { return d.key === summary.max.key})
           .classed('max', true);
 
@@ -283,7 +288,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //styles for min
       if(summary.min) {
-        var minBar = d3.selectAll('.bar')
+        var minBar = bars
           .filter(function(d) { return d.key === summary.min.key})
           .classed('min', true);
 
@@ -313,7 +318,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .call(xAxis)
         .selectAll('text')
           .style('text-anchor', 'middle')
-          .attr('dx', '-.7em')
+          .attr('dx', '-.5em')
           .attr('class', function(d) {return (summary.empty.indexOf(d) !== -1) ? 'empty' : ''; });
     },
 
