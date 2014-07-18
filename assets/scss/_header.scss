@@ -1,64 +1,150 @@
-header .loggedInHeader {
-  position: relative;
-  border-bottom: 1px solid $line_gray;
-  height: 70px;
-  background: $header_back;
-  padding: 0 30px;
-  -moz-box-shadow: 0px 1px 0px 0px #FFFFFF;
-  box-shadow: 0px 1px 0px 0px #FFFFFF;
+header {
+  min-width: 1020px;
 
-  #logo {
-    @include hr-image('../img/logo_automatic.png', '../img/logo_automatic@2x.png');
-    width: 119px;
-    height: 33px;
-    float: left;
-    margin: 18px 0;
-    display: inline;
-    vertical-align: middle;
-  }
+  .loggedIn {
+    position: relative;
+    border-bottom: 1px solid $line_gray;
+    height: 70px;
+    background: $header_back;
+    padding: 0 30px;
+    -moz-box-shadow: 0px 1px 0px 0px #FFFFFF;
+    box-shadow: 0px 1px 0px 0px #FFFFFF;
 
-  #user {
-    position: absolute;
-    right: 0;
-    top: 0px;
-    padding-right: 30px;
+    #logo {
+      @include hr-image('../img/logo_automatic.png', '../img/logo_automatic@2x.png');
+      background-repeat: no-repeat;
+      width: 119px;
+      height: 33px;
+      float: left;
+      margin: 18px 0;
+      display: inline;
+      vertical-align: middle;
 
-    ul {
-      margin: 0;
+      .demoTag {
+        display: none;
+      }
+    }
 
-      li {
+    #playgroundMenu {
+      display: none;
+    }
+
+    #userMenu {
+      position: absolute;
+      right: 0;
+      top: 0px;
+      padding-right: 30px;
+
+      ul {
+        margin: 0;
         display: inline-block;
-        font-size: 12px;
-        line-height: 16px;
-        padding: 27px 15px;
-        color: $base_type;
 
-        .firstName {
-          padding-left: 30px;
-          padding-right: 10px;
-        }
-
-        a {
-          color: $base_type;
+        li {
           display: inline-block;
-          font-weight: bold;
+          font-size: 12px;
+          line-height: 16px;
+          padding: 27px 15px;
+          color: $base_type;
 
-          &:hover {
-            color: $highlight;
+          .firstName {
+            padding-left: 30px;
+            padding-right: 10px;
           }
-        }
-
-        &:last-child {
-          padding-right: 0;
 
           a {
-            color: $link_type;
+            color: $base_type;
+            display: inline-block;
+            font-weight: bold;
 
             &:hover {
               color: $highlight;
             }
           }
+
+          &:last-child {
+            padding-right: 0;
+
+            a {
+              color: $link_type;
+
+              &:hover {
+                color: $highlight;
+              }
+            }
+          }
         }
+      }
+    }
+  }
+
+  .playground {
+    position: relative;
+    border-bottom: 1px solid $line_gray;
+    height: 70px;
+    background-color: $highlight;
+    @include hr-image('../img/graphic_link.png', '../img/graphic_link@2x.png');
+    background-repeat: no-repeat;
+    background-position: right 480px bottom;
+    padding: 0 30px;
+    -moz-box-shadow: inset 0px -1px 2px 0px rgba(0,0,0,0.10);
+    box-shadow: inset 0px -1px 2px 0px rgba(0,0,0,0.10);
+
+    #logo {
+      @include hr-image('../img/logo_automatic_blue.png', '../img/logo_automatic_blue@2x.png');
+      background-repeat: no-repeat;
+      width: 183px;
+      height: 33px;
+      float: left;
+      margin: 18px 0;
+      display: inline;
+      vertical-align: middle;
+
+      .demoTag {
+        float: right;
+        width: 50px;
+        font-size: 12px;
+        color: #B6E1F9;
+        line-height: 18px;
+        letter-spacing: 0px;
+        border-radius: 20px;
+        background: rgba(35,128,184,0.35);
+        text-align: center;
+        margin-top: 8px;
+      }
+    }
+
+    #userMenu {
+      display: none;
+    }
+
+    #playgroundMenu {
+      position: absolute;
+      right: 0;
+      top: 0px;
+      padding-right: 30px;
+
+      ul {
+        margin: 0;
+        display: inline-block;
+
+        li {
+          display: inline-block;
+          font-size: 12px;
+          line-height: 16px;
+          padding: 27px 15px;
+          color: #FFF;
+
+          a {
+            color: #FFF;
+            display: inline-block;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .btn {
+        width: 200px;
+        margin-left: 20px;
       }
     }
   }

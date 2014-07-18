@@ -2,9 +2,10 @@ define([
   'backbone',
   'communicator',
   'hbs!tmpl/item/header_tmpl',
-  '../../models/user'
+  '../../models/user',
+  '../../controllers/login'
 ],
-function( Backbone, coms, HeaderTmpl, user ) {
+function( Backbone, coms, HeaderTmpl, user, login ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -12,7 +13,7 @@ function( Backbone, coms, HeaderTmpl, user ) {
     initialize: function() {
       console.log("initialize a Header ItemView");
 
-      if(this.attributes.loggedIn) {
+      if (this.attributes.loggedIn) {
         this.model.fetch();
         this.render();
       }
@@ -22,11 +23,13 @@ function( Backbone, coms, HeaderTmpl, user ) {
 
     template: HeaderTmpl,
 
-    className: 'loggedInHeader',
-
-    ui: {},
-
-    events: {},
+    className: function() {
+      if(login.isPlayground()) {
+        return 'playground';
+      } else {
+        return 'loggedIn';
+      }
+    },
 
     model: user
   });

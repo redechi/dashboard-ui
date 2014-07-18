@@ -8,6 +8,12 @@ function( Backbone ) {
 
     isLoggedIn: false,
 
+
+    isPlayground: function () {
+      return window.location.search.indexOf('playground') !== -1;
+    },
+
+
     login: function () {
       console.log('Do Login');
 
@@ -15,7 +21,7 @@ function( Backbone ) {
       var accessToken = this.getCookie('token');
 
       // if playground URL, use the dummy token
-      if(window.location.search.indexOf('playground') !== -1) {
+      if(this.isPlayground()) {
         var dummyToken = 'ba56eee32df6be1437768699247b406fc7d9992f';
         accessToken = dummyToken;
       }
@@ -32,7 +38,6 @@ function( Backbone ) {
         sessionStorage.setItem('accessToken', accessToken);
 
         //add beforeSend and complete to Backbone.sync
-        console.log('upgrade Sync')
         var sync = Backbone.sync;
         Backbone.sync = function(method, model, options) {
           options.beforeSend = function (xhr, req) {

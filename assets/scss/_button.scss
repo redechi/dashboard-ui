@@ -1,13 +1,13 @@
 .btn {
   padding: 5px 12px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .btn-blue {
   background-color: #82C9F1;
-  border-radius: 4px;
   box-shadow: 0px 1px 0px 0px #4AB4F0;
   color: #FFF;
-  font-weight: bold;
 
   &:hover {
     background-color: #297FB8;
@@ -17,12 +17,22 @@
 
 .btn-grey {
   background-color: $header_back;
-  border-radius: 4px;
   color: $link_type;
-  font-weight: bold;
 
   &:hover {
     background-color: $line_gray;
+    color: $link_type;
+  }
+}
+
+.btn-white {
+  background-color: #FFF;
+  color: $link_type;
+  -moz-box-shadow: 0px 1px 0px 0px #227EBA;
+  box-shadow: 0px 1px 0px 0px #227EBA;
+
+  &:hover {
+    background-color: $main_back;
     color: $link_type;
   }
 }
@@ -33,6 +43,7 @@
   height: 28px;
   line-height: 15px;
   font-size: 16px;
+  font-weight: normal;
   border-radius: 3px;
   text-align: center;
   vertical-align: middle;
