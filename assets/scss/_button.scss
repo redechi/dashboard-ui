@@ -10,7 +10,8 @@
   font-weight: bold;
 
   &:hover {
-    color: $header_back;
+    background-color: #297FB8;
+    color: #FFF;
   }
 }
 
@@ -21,7 +22,8 @@
   font-weight: bold;
 
   &:hover {
-    color: $base_type;
+    background-color: $line_gray;
+    color: $link_type;
   }
 }
 
