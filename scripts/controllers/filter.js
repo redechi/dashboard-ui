@@ -53,7 +53,7 @@ function( formatters, vehiclesCollection ) {
       label: 'driven',
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
-      value: [moment().startOf('month').valueOf(), moment().endOf("month").valueOf()],
+      value: [moment().endOf('day').subtract('months', 1).valueOf(), moment().endOf("day").valueOf()],
       options: {
         thisWeek: 'this week',
         thisMonth: 'this month',
