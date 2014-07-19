@@ -16,7 +16,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     model: new Backbone.Model({
       values: [],
       graphType: 'average_mpg',
-      graphTypeName: 'MPG'
+      graphTypeName: 'MPG',
+      graphTypeUnit: 'MPG'
     }),
 
     collection: new Backbone.Collection(),
@@ -114,9 +115,10 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     updateAverages: function() {
       var graphType = this.model.get('graphType'),
           graphTypeName = this.model.get('graphTypeName'),
+          graphTypeUnit = this.model.get('graphTypeUnit'),
           summary = this.model.get('summary');
 
-      $('.graphAveragesBackground').text(graphTypeName);
+      $('.graphAveragesBackground').text(graphTypeUnit);
       $('.graphAveragesValue').text(formatters.formatForGraphLabel(graphType, summary.average));
     },
 
@@ -325,11 +327,13 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
     changeGraphType: function (e) {
       var graphType = $(e.currentTarget).data('value'),
-          graphTypeName = $(e.currentTarget).text();
+          graphTypeName = $(e.currentTarget).text(),
+          graphTypeUnit = $(e.currentTarget).data('unit');
 
       this.model.set({
         'graphType': graphType,
-        'graphTypeName': graphTypeName
+        'graphTypeName': graphTypeName,
+        'graphTypeUnit': graphTypeUnit
       });
 
       $('.graphValue li').removeClass();
