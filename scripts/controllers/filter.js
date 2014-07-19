@@ -46,7 +46,6 @@ function( formatters, vehiclesCollection ) {
     },
 
 
-
     date: {
       name: 'date',
       title: 'date of trip',
@@ -117,7 +116,6 @@ function( formatters, vehiclesCollection ) {
     },
 
 
-
     distance: {
       name: 'distance',
       title: 'distance traveled',
@@ -127,7 +125,7 @@ function( formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all distances',
       func: function(trip) {
-        return trip.get("distance_m") >= formatters.mi_to_m(this.get('value')[0]) && trip.get("distance_m") <= formatters.mi_to_m(this.get('value')[1]);
+        return trip.get("distance_miles") >= this.get('value')[0] && trip.get("distance_miles") <= this.get('value')[1];
       },
       formatter: function(d) { return d + ' mi'; },
       updateValueText: function() {
@@ -147,7 +145,6 @@ function( formatters, vehiclesCollection ) {
         this.set('value', value);
       }
     },
-
 
 
     duration: {

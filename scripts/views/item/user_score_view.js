@@ -26,7 +26,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
     resetCollection: function (collection) {
       this.collection.reset(collection);
     },
-    
+
 
     collectionEvents: {
       'reset': 'render'
@@ -44,17 +44,6 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
       };
 
       return helpers;
-    },
-
-
-    getAverageScore: function() {
-      var weightedSum = this.collection.reduce(function(memo, trip) {
-        memo.score += trip.get('score') * trip.get('duration');
-        memo.time += trip.get('duration');
-        return memo;
-      }, {time: 0, score: 0});
-
-      return weightedSum.score / weightedSum.time;
     },
 
 

@@ -32,7 +32,7 @@ function( Backbone, MapSingleView, TripTmpl, formatters ) {
           duration: formatters.duration(trip.get('duration')),
           score: formatters.score(trip.get('score')),
           cost: formatters.cost(trip.get('fuel_cost_usd')),
-          mpg: formatters.averageMPG(formatters.m_to_mi(trip.get('distance_m')) / trip.get('fuel_volume_gal')),
+          mpg: formatters.averageMPG(trip.get('distance_miles') / trip.get('fuel_volume_gal')),
           nextTrip: trip.get('nextTrip'),
           prevTrip: trip.get('prevTrip')
         };

@@ -1,12 +1,13 @@
 define([
   'backbone',
   'mapbox',
+  '../../controllers/stats',
   'hbs!tmpl/item/map_single_tmpl',
   '../../collections/trips',
   '../../controllers/unit_formatters',
   '../../controllers/map_helpers'
 ],
-function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
+function( Backbone, mapbox, stats, MapSingleTmpl, trips, formatters, mapHelpers ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -18,10 +19,6 @@ function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
     collection: trips,
 
     template: MapSingleTmpl,
-
-    ui: {},
-
-    events: {},
 
     templateHelpers: function() {
       var trip = this.collection.models[0];
@@ -86,7 +83,7 @@ function( Backbone, mapbox, MapSingleTmpl, trips, formatters, mapHelpers ) {
         distances = decodedPath.map(function(latlng, idx) {
           if(idx > 0) {
             var latlng2 = decodedPath[idx - 1];
-            var distance = formatters.distance_mi(latlng[0], latlng[1], latlng2[0], latlng2[1]);
+            var distance = stats.calculate_distance_mi(latlng[0], latlng[1], latlng2[0], latlng2[1]);
             cumulativeDistance += distance;
           }
           return cumulativeDistance;
