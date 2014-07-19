@@ -60,13 +60,12 @@
     }
   }
 
-  // sumary statistics
   .summaryStats {
-    @include lightGreenGradient;
     background-color: #fff;
+    border-bottom: 1px solid $line_gray;
     padding: 5px 0;
     overflow: hidden;
-    border-bottom: 1px solid $green;
+
 
     svg {
       position: relative;

@@ -34,7 +34,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
 
 
     templateHelpers: function() {
-      var helpers =  {
+      var helpers = {
         total: this.collection.length,
         distance: formatters.distance(stats.getSum(this.collection, 'distance_miles')),
         duration: formatters.duration(stats.getSum(this.collection, 'duration')),
@@ -43,14 +43,17 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
         mpg: formatters.averageMPG(stats.getAverageMPG(this.collection))
       };
 
+      this.score = helpers.score;
+      this.scoreColor = formatters.scoreColor(helpers.score);
+
       return helpers;
     },
 
 
     paintGraph: function() {
-      var self = this;
-      var score = self.$el.find('svg').data('score');
-      var trans = 100 - score;
+      var self = this,
+          score = this.score,
+          trans = 100 - score;
 
       nv.addGraph(function() {
         var chart = nv.models.pieChart()
@@ -63,7 +66,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
             .donutRatio(0.85)      //Configure how big you want the donut hole size to be.
             .margin({top:0, right:0, bottom:0, left:0})
             .showLegend(false)
-            .color([formatters.scoreColor(score), '#ddd']);
+            .color([self.scoreColor, '#ddd']);
 
         self.$el.find('svg').empty();
 
@@ -72,11 +75,11 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
         var datum = [
           {
             'label': 'score',
-            'value' : 0
+            'value': 0
           } ,
           {
             'label': 'Transparency',
-            'value' : 100
+            'value': 100
           }
         ];
 
@@ -91,11 +94,11 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
         datum = [
           {
             'label': 'score',
-            'value' : score
+            'value': score
           } ,
           {
             'label': 'Transparency',
-            'value' : trans
+            'value': trans
           }
         ];
 
@@ -107,7 +110,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
           .attr('x', 20)
           .attr('y', 26)
           .attr('text-anchor', 'middle')
-          .attr('fill', formatters.scoreColor(score))
+          .attr('fill', self.scoreColor)
           .attr('class', 'averageScore')
           .text(parseInt(datum[0].value));
 
@@ -120,8 +123,18 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
     },
 
 
+    styleLine: function () {
+      var rgb = this.scoreColor.replace(/[^\d,]/g, '');
+      this.$el.find('.summaryStats').css({
+        'border-bottom': '1px solid ' + this.scoreColor,
+        'box-shadow': 'inset 0px -2px 3px 0px rgba(' + rgb + ', 0.3)'
+      });
+    },
+
+
     onRender: function () {
       this.paintGraph();
+      this.styleLine();
     }
   });
 

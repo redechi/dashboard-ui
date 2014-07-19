@@ -18,13 +18,13 @@ function() {
       }
     },
     scoreColor: function (score) {
-      if (score < 20) return '#FC3B2F';
-      if (score < 40) return '#FD682B';
-      if (score < 60) return '#FD9426';
-      if (score < 80) return '#FECC2F';
-      if (score < 90) return '#B7CD37';
-      if (score < 100) return '#94CE3B';
-      if (score == 100) return '#70CE3F';
+      if (score < 20) return 'rgb(252, 59, 47)';
+      if (score < 40) return 'rgb(253, 104, 43)';
+      if (score < 60) return 'rgb(253, 148, 38)';
+      if (score < 80) return 'rgb(254, 204, 47)';
+      if (score < 90) return 'rgb(183, 205, 55)';
+      if (score < 100) return 'rgb(148, 206, 59)';
+      if (score == 100) return 'rgb(112, 206, 63)';
     },
     distance: function(distance_miles) {
       if (Math.round(distance_miles) >= 100) {
