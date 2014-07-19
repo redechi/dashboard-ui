@@ -43,6 +43,11 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayView )
       var o = new OverlayView({type: 'notSupported'});
       overlayRegion.show(o);
     }
+
+    //show staging banner, if on staging
+    if(login.isStaging()) {
+      $('#staging').show();
+    }
   });
 
 

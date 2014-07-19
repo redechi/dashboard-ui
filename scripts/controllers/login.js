@@ -14,6 +14,11 @@ function( Backbone ) {
     },
 
 
+    isStaging: function () {
+      return window.location.hostname === 'dashboard.automatic.co';
+    },
+
+
     login: function () {
       console.log('Do Login');
 
