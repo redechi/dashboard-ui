@@ -11,11 +11,11 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log("Initialize a Userscore ItemView");
+      console.log('Initialize a Userscore ItemView');
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
-    duration: 2000,
+    duration: 1000,
 
     model: new Backbone.Model({values:[],key:'No Data'}),
 
@@ -58,9 +58,9 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
             .y(function(d) { return d.value; })
             .showLabels(false)    //Display pie labels
             .labelThreshold(0.05)  //Configure the minimum slice size for labels to show up
-            .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
+            .labelType('percent') //Configure what type of data to show in the label. Can be "key", "value" or "percent"
             .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
-            .donutRatio(0.9)      //Configure how big you want the donut hole size to be.
+            .donutRatio(0.85)      //Configure how big you want the donut hole size to be.
             .margin({top:0, right:0, bottom:0, left:0})
             .showLegend(false)
             .color([formatters.scoreColor(score), '#ddd']);
@@ -71,50 +71,51 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
 
         var datum = [
           {
-            "label": "score",
-            "value" : 0
+            'label': 'score',
+            'value' : 0
           } ,
           {
-            "label": "Transparency",
-            "value" : 100
+            'label': 'Transparency',
+            'value' : 100
           }
         ];
 
-        svg.attr("width", 40)
-           .attr("height", 40);
+        svg.attr('width', 40)
+           .attr('height', 40);
 
         svg.datum(datum)
-          .transition().duration(self.duration || 2000)
+          .transition().duration(self.duration)
           .call(chart);
 
         // duplicate set for animation.
         datum = [
           {
-            "label": "score",
-            "value" : score
+            'label': 'score',
+            'value' : score
           } ,
           {
-            "label": "Transparency",
-            "value" : trans
+            'label': 'Transparency',
+            'value' : trans
           }
         ];
 
         svg.datum(datum)
-          .transition().duration(self.duration || 2000)
+          .transition().duration(self.duration)
           .call(chart);
 
         svg.append('text')
-          .attr("x", 20)
-          .attr("y", 25)
-          .attr("text-anchor", "middle")
+          .attr('x', 20)
+          .attr('y', 26)
+          .attr('text-anchor', 'middle')
           .attr('fill', formatters.scoreColor(score))
+          .attr('class', 'averageScore')
           .text(parseInt(datum[0].value));
 
         // rotate the chart 180
-        d3.select(self.$el.find(".nv-pieChart").get(0))
+        d3.select(self.$el.find('.nv-pieChart').get(0))
           .attr('transform', 'rotate(180,20,20)');
 
-          return chart;
+        return chart;
       });
     },
 
