@@ -93,7 +93,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //Calculate Min and Max and Empty bins
       var summary = _.reduce(values, function(memo, bar) {
-        if (!memo.max || bar.values >= memo.max.values) {
+        if ((!memo.max || bar.values >= memo.max.values) && bar.values > 0) {
           memo.max = bar;
         }
         if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
