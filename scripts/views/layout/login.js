@@ -1,9 +1,10 @@
 define([
   'backbone',
+  'regionManager',
   'hbs!tmpl/layout/login_tmpl',
   '../../controllers/login'
 ],
-function( Backbone, LoginTmpl, login ) {
+function( Backbone, regionManager, LoginTmpl, login ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -62,7 +63,9 @@ function( Backbone, LoginTmpl, login ) {
     },
 
 
-    onRender: function () {}
+    onRender: function () {
+      regionManager.getRegion('main_header').reset();
+    }
   });
 
 });
