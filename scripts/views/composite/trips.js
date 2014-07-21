@@ -218,7 +218,8 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
     },
 
     getTripCounts: function() {
-      $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length);
+      $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length)
+      $('.popoverTemplate .exportOption li[data-value="selected"]').toggle(this.collection.where({selected: true}).length > 0);
       $('.popoverTemplate .exportOption li[data-value="tripList"] span').text(this.collection.length);
       $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripsCollection.length);
     },
