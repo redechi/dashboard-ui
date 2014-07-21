@@ -1,8 +1,9 @@
 define([
   'backbone',
+  'regionManager',
   'hbs!tmpl/layout/overlay_tmpl'
 ],
-function( Backbone, OverlayTmpl ) {
+function( Backbone, regionManager, OverlayTmpl ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -17,6 +18,16 @@ function( Backbone, OverlayTmpl ) {
 
     className: function() {
       return this.options.type;
+    },
+
+
+    events: {
+      'click a.close': 'closeOverlay'
+    },
+
+
+    closeOverlay: function () {
+      regionManager.getRegion('main_overlay').reset();
     }
   });
 
