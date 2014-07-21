@@ -71,4 +71,29 @@
     top: 106px;
     margin-left: -190px;
   }
+
+  .noTrips .noTrips {
+    display: block;
+    width: 380px;
+    height: 175px;
+    top: 106px;
+    margin-left: -190px;
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    .noTripsIcon {
+      @include hr-image('../img/icon_notrips.png', '../img/icon_notrips@2x.png');
+      width: 80px;
+      height: 80px;
+      float: left;
+      margin-right: 20px;
+    }
+
+    p {
+      text-align: left;
+      padding-top: 5px;
+    }
+  }
 }
