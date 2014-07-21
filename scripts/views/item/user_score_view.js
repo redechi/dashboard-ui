@@ -37,7 +37,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
       var helpers = {
         total: this.collection.length,
         distance: formatters.distance(stats.getSum(this.collection, 'distance_miles')),
-        duration: formatters.duration(stats.getSum(this.collection, 'duration')),
+        duration: formatters.durationHours(stats.getSum(this.collection, 'duration')),
         score: formatters.score(stats.getAverageScore(this.collection)),
         cost: formatters.costWithUnit(stats.getSum(this.collection, 'fuel_cost_usd')),
         mpg: formatters.averageMPG(stats.getAverageMPG(this.collection))

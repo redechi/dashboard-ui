@@ -33,12 +33,12 @@ function() {
         return ((distance_miles) ? distance_miles : 0).toFixed(1);
       }
     },
-    duration: function(min) {
+    durationHours: function(min) {
       var duration = moment.duration(min, 'minutes');
       return Math.floor(duration.asHours()) + ':' + moment(duration.minutes(), 'm').format('mm');
     },
     durationMinutes: function(min) {
-      return Math.round(min);
+      return min ? min.toFixed(1) : 0;
     },
     cost: function(fuelCost) {
       return ((fuelCost) ? fuelCost : 0).toFixed(2);
