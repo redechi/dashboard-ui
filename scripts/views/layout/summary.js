@@ -26,6 +26,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       setTimeout(this.resize, 0);
 
       coms.on('error:403', _.bind(this.error403, this));
+      coms.on('error:noTrips', _.bind(this.noTrips, this));
     },
 
 
@@ -64,8 +65,13 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
     },
 
 
-    error403: function() {
+    error403: function () {
       regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error403'}));
+    },
+
+
+    noTrips: function () {
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'noTrips'}));
     }
   });
 });

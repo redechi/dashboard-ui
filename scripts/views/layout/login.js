@@ -51,12 +51,13 @@ function( Backbone, regionManager, LoginTmpl, login ) {
               sessionStorage.setItem('accessToken', data.access_token);
               Backbone.history.navigate('#/');
             }
-          }).fail(function(jqXHR, textStatus, errorThrown) {
-            //TODO: better error messages
-            $('#loginForm .alert')
-              .text('Error: ' + textStatus)
-              .removeClass('hide');
-          });
+          }
+        ).fail(function(jqXHR, textStatus, errorThrown) {
+          //TODO: better error messages
+          $('#loginForm .alert')
+            .text('Error: ' + textStatus)
+            .removeClass('hide');
+        });
       }
 
       return false;

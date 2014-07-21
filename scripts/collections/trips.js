@@ -91,11 +91,12 @@ function( Backbone, coms, Trip, filterCollection, login ) {
       }).always(function(data) {
         if(self.page == 1 && data && data.length == 0) {
           //User has no trips
+          coms.trigger('error:noTrips');
         } else if(data && data.length === self.per_page) {
-          //user has another page of trips
+          //User has another page of trips
           return self.fetchPage();
         } else if(data && data.statusText === 'cached') {
-          //we had a cached version of this page, fetch then next one
+          //Cached version of this exists, fetch then next one
           return self.fetchPage();
         }
       });
@@ -118,6 +119,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
         model.set('nextTrip', prev.get('id'));
       }
     },
+
 
     calculateRanges: function() {
       var memo = {
