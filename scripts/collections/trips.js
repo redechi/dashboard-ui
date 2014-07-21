@@ -12,6 +12,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
   var Trips = Backbone.AML.Collection.extend({
 
     page: 0,
+    per_page: 100,
     model: Trip,
     name: 'default_collection',
     url: login.getAPIUrl() + '/v1/trips',
@@ -77,14 +78,24 @@ function( Backbone, coms, Trip, filterCollection, login ) {
      */
     fetchPage: function() {
       var self = this;
+
       this.page++;
       return this.fetch({
         add: true,
         remove: false,
-        data: { page: this.page, per_page: 100},
+        data: {
+          page: this.page,
+          per_page: this.per_page
+        },
         error: login.fetchErrorHandler
       }).always(function(data) {
-        if(!!data[0]  || (data && data.statusText === 'cached')) {
+        if(self.page == 1 && data && data.length == 0) {
+          //User has no trips
+        } else if(data && data.length === self.per_page) {
+          //user has another page of trips
+          return self.fetchPage();
+        } else if(data && data.statusText === 'cached') {
+          //we had a cached version of this page, fetch then next one
           return self.fetchPage();
         }
       });

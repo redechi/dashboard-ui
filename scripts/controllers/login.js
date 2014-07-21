@@ -71,9 +71,11 @@ function( Backbone, coms ) {
               xhr.setRequestHeader('Authorization', 'token ' + accessToken);
 
               // TODO: invalidate cache at 15 min.
-              var obj = JSON.parse(sessionStorage.getItem(req.url) || undefined);
-              this.success(obj);
-              xhr.abort('cached');
+              var cached = sessionStorage.getItem(req.url);
+              if(cached) {
+                this.success(JSON.parse(cached));
+                xhr.abort('cached');
+              }
             } catch (e) {
               console.warn('Request Not Cached: ' + req.url);
             }
