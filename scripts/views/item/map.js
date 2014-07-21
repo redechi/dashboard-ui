@@ -43,8 +43,12 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
       coms.trigger('filters:updateLocationFilter', e);
     },
 
+    mapDiv: function() {
+      return this.$el.find('.map').get(0);
+    },
+
     createMap: function() {
-      var mapbox = this.mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
+      var mapbox = this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4'),
           pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
           markersLayer = this.markersLayer = new L.MarkerClusterGroup(),
           markers = this.markers = [];
@@ -120,7 +124,13 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
 
     updateMap: function () {
-      this.clearMap();
+      if(!this.mapDiv()) {
+        return
+      } else if(!this.mapbox) {
+        this.createMap();
+      } else {
+        this.clearMap();
+      }
 
       var mapbox = this.mapbox,
           pathsLayer = this.pathsLayer,
@@ -216,7 +226,6 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
 
 
     onRender: function () {
-      this.createMap();
       this.updateMap();
     }
 
