@@ -61,7 +61,7 @@ function( Backbone ) {
 
           options.complete = function(xhr, status) {
             try {
-              if(xhr.responseText !== '[]' && this.url != 'https://www.automatic.com/oauth/access_token') {
+              if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1) {
                 console.log('Caching Request: ' + this.url);
                 sessionStorage.setItem(this.url, xhr.responseText);
               }
