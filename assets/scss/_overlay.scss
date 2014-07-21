@@ -41,6 +41,16 @@
       height: 144px;
       margin: 25px 0;
     }
+
+    .close {
+      width: 25px;
+      height: 25px;
+      @include hr-image('../img/icon_close.png', '../img/icon_close@2x.png');
+      text-indent: -9999px;
+      position: absolute;
+      top: -12.5px;
+      right: -12.5px;
+    }
   }
 
   .loadingTrips .loadingTrips {
@@ -75,7 +85,7 @@
   .noTrips .noTrips {
     display: block;
     width: 380px;
-    height: 175px;
+    height: inherit;
     top: 106px;
     margin-left: -190px;
 
