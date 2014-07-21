@@ -71,9 +71,9 @@
     position: absolute;
     z-index: 10;
     visibility: hidden;
-    padding: 10px 8px;
-    width: 65px;
-    height: 65px;
+    padding: 15px;
+    min-width: 65px;
+    height: 76px;
     border-radius: 3px;
     background: #FFFFFF;
     -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
@@ -97,7 +97,7 @@
     .arrow {
       border-color: transparent;
       border-top-color: $blue;
-      left: 50%;
+      left: 39px;
       margin-left: -11px;
       border-bottom-width: 0;
       bottom: -22px;

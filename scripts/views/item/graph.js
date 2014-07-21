@@ -232,8 +232,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       function barMouseover(d) {
         tooltip
-          .style('top', (y(d.values) - 4) + 'px')
-          .style('left', (x(d.key) - 28) + 'px')
+          .style('top', (y(d.values) - 15) + 'px')
+          .style('left', (x(d.key) - 35) + 'px')
           .style('visibility', 'visible')
           .html('<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
       }
