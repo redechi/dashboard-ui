@@ -14,7 +14,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     page: 0,
     model: Trip,
     name: 'default_collection',
-    url: 'https://api.automatic.com/v1/trips',
+    url: login.getAPIUrl() + '/v1/trips',
 
     initialize: function() {
       console.log('initialize a Trips collection');

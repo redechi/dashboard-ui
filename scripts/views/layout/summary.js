@@ -56,9 +56,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       var h = new HeaderView({attributes: {loggedIn: login.isLoggedIn}});
       headerRegion.show(h);
 
-      var overlayRegion = regionManager.getRegion('main_overlay');
-      var o = new OverlayView({type: 'loadingTrips'});
-      overlayRegion.show(o);
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'loadingTrips'}));
     },
 
 

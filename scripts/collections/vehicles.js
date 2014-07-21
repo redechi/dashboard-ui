@@ -1,16 +1,17 @@
 define([
   'backbone',
   'models/vehicle',
-  '../controllers/filter'
+  '../controllers/filter',
+  '../controllers/login'
 ],
-function( Backbone, Vehicle, filterList ) {
+function( Backbone, Vehicle, filterList, login ) {
   'use strict';
 
   /* vehicles singleton */
   var Vehicles = Backbone.AML.Collection.extend({
 
     model: Vehicle,
-    url: 'https://api.automatic.com/v1/vehicles',
+    url: login.getAPIUrl() + '/v1/vehicles',
     comparator: 'display_name',
 
     initialize: function() {

@@ -20,6 +20,25 @@ function( Backbone, coms ) {
     },
 
 
+
+    getAPIUrl: function () {
+      if(window.location.search.indexOf('staging') !== -1) {
+        return 'https://api-staging.automatic.com';
+      } else {
+        return 'https://api.automatic.com';
+      }
+    },
+
+
+    getAuthorizeUrl: function () {
+      if(window.location.search.indexOf('staging') !== -1) {
+        return 'https://staging.automatic.co';
+      } else {
+        return 'https://www.automatic.com';
+      }
+    },
+
+
     login: function () {
       console.log('Do Login');
 

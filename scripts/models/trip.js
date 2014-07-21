@@ -1,12 +1,19 @@
 define([
   'backbone',
-  '../controllers/unit_formatters'
+  '../controllers/unit_formatters',
+  '../controllers/login'
 ],
-function( Backbone, formatters ) {
+function( Backbone, formatters, login ) {
   'use strict';
 
   /* Return a model class definition */
   return Backbone.Model.extend({
+
+    url: function () {
+      return login.getAPIUrl() + '/v1/trips/' + this.get('id');
+    },
+
+
     initialize: function(trip) {
       console.log('initialize a Trip model');
 
@@ -20,7 +27,6 @@ function( Backbone, formatters ) {
           sameElse : 'MMM DD'
         }
       });
-
 
       // format values
       var duration = ((this.get('end_time') - this.get('start_time')) / (1000 * 60)),
@@ -66,15 +72,7 @@ function( Backbone, formatters ) {
       } else {
         return Math.max(1, score);
       }
-    },
-
-
-    url: function () {
-      return 'https://api.automatic.com/v1/trips/' + this.get('id');
-    },
-
-    defaults: {
-    },
+    }
 
   });
 });

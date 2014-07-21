@@ -1,8 +1,9 @@
 define([
 	'backbone',
-	'communicator'
+	'communicator',
+	'../controllers/login'
 ],
-function( Backbone, coms ) {
+function( Backbone, coms, login ) {
     'use strict';
 
 	/* Return a model class definition */
@@ -16,7 +17,7 @@ function( Backbone, coms ) {
 
 		defaults: {},
 
-		url: "https://api.automatic.com/v1/user"
+		url: login.getAPIUrl() + '/v1/user'
 
   });
 

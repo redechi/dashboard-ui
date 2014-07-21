@@ -32,8 +32,10 @@ function( Backbone, LoginTmpl, login ) {
       $('#password', e.target).parent('.form-group').toggleClass('has-error', (!password));
 
       if(email && password) {
+        $('#loginForm .alert').addClass('hide');
+
         $.post(
-          'https://www.automatic.com/oauth/access_token',
+          login.getAuthorizeUrl() + '/oauth/access_token',
           {
             client_id: '385be37e93925c8fa7c7',
             grant_type: 'password',
