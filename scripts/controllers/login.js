@@ -1,7 +1,8 @@
 define([
-  'backbone'
+  'backbone',
+  'communicator'
 ],
-function( Backbone ) {
+function( Backbone, coms ) {
   'use strict';
 
   return {
@@ -99,6 +100,13 @@ function( Backbone ) {
       }
       document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
       return true;
+    },
+
+
+    fetchErrorHandler: function(model, result, xhr) {
+      if(result.status === 403) {
+        coms.trigger('error:403');
+      }
     }
 
   };

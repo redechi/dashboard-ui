@@ -2,9 +2,10 @@ define([
   'backbone',
   'communicator',
   'models/trip',
-  './filters'
+  './filters',
+  '../controllers/login'
 ],
-function( Backbone, coms, Trip, filterCollection ) {
+function( Backbone, coms, Trip, filterCollection, login ) {
   'use strict';
 
   /* trips singleton */
@@ -77,7 +78,12 @@ function( Backbone, coms, Trip, filterCollection ) {
     fetchPage: function() {
       var self = this;
       this.page++;
-      return this.fetch({add: true, remove: false, data: { page: this.page, per_page: 100}}).always(function(data) {
+      return this.fetch({
+        add: true,
+        remove: false,
+        data: { page: this.page, per_page: 100},
+        error: login.fetchErrorHandler
+      }).always(function(data) {
         if(!!data[0]  || (data && data.statusText === 'cached')) {
           return self.fetchPage();
         }

@@ -1,6 +1,7 @@
 define([
   'backbone',
   'communicator',
+  '../../controllers/login',
   'views/item/filter',
   '../../models/filter',
   '../../collections/filters',
@@ -10,7 +11,7 @@ define([
   '../../controllers/filter',
   '../../controllers/unit_formatters'
 ],
-function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters ) {
+function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -47,7 +48,7 @@ function( Backbone, coms, FilterView, Filter, filtersCollection, vehiclesCollect
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
       //get a list of all vehicles and update filter
-      vehiclesCollection.fetch().always(function(vehicles) {
+      vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(function(vehicles) {
         self.updateVehicleList();
       });
 

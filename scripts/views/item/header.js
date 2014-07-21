@@ -14,7 +14,7 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
       console.log("initialize a Header ItemView");
 
       if (this.attributes.loggedIn) {
-        this.model.fetch();
+        this.model.fetch({error: login.fetchErrorHandler});
         this.render();
       }
 

@@ -1,5 +1,6 @@
 define([
   'backbone',
+  'communicator',
   'regionManager',
   'hbs!tmpl/layout/summary_tmpl',
   '../composite/filters',
@@ -11,7 +12,7 @@ define([
   './trip_list_layout'
 ],
 
-function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView, OverlayView, HeaderView, login, TripListLayout ) {
+function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, MapView, OverlayLayout, HeaderView, login, TripListLayout ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -23,6 +24,8 @@ function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView,
 
       //resize right away
       setTimeout(this.resize, 0);
+
+      coms.on('error:403', _.bind(this.error403, this));
     },
 
 
@@ -62,6 +65,11 @@ function( Backbone, regionManager, SummaryTmpl, FiltersView, GraphView, MapView,
     resize: function () {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
       $('#map .map').height(height - $('#graphs').outerHeight(true) - 40);
+    },
+
+
+    error403: function() {
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error403'}));
     }
   });
 });
