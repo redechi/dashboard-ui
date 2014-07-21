@@ -23,7 +23,7 @@ function( Backbone, coms ) {
 
     getAPIUrl: function () {
       if(window.location.search.indexOf('staging') !== -1) {
-        return 'https://api-staging.automatic.com';
+        return 'https://api.automatic.co';
       } else {
         return 'https://api.automatic.com';
       }
