@@ -25,23 +25,8 @@
     box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
     display: none;
     background-color: #FFF;
-  }
-
-  .loadingTrips .loadingTrips {
-    background: #FFF url('../img/loader@2x.gif') left 30px center no-repeat;
-    background-size: 80px 33px;
-    text-align: right;
-    display: block;
-  }
-
-  .notSupported .notSupported {
-    width: 380px;
-    height: 400px;
-    top: 106px;
-    margin-left: -190px;
-    font-size: 12px;
     text-align: center;
-    display: block;
+    font-size: 12px;
 
     h2 {
       margin: 0;
@@ -56,10 +41,34 @@
       height: 144px;
       margin: 25px 0;
     }
+  }
+
+  .loadingTrips .loadingTrips {
+    background: #FFF url('../img/loader@2x.gif') left 30px center no-repeat;
+    background-size: 80px 33px;
+    text-align: right;
+    display: block;
+    font-size: 14px;
+  }
+
+  .notSupported .notSupported {
+    width: 380px;
+    height: 400px;
+    top: 106px;
+    margin-left: -190px;
+    display: block;
 
     .supportedBrowsers a {
       display: inline-block;
       padding: 15px 4px;
     }
+  }
+
+  .error403 .error403 {
+    display: block;
+    width: 380px;
+    height: 400px;
+    top: 106px;
+    margin-left: -190px;
   }
 }
