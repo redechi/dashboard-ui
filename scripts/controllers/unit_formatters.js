@@ -37,7 +37,7 @@ function() {
       var duration = moment.duration(min, 'minutes');
       return Math.floor(duration.asHours()) + ':' + moment(duration.minutes(), 'm').format('mm');
     },
-    durationMin: function(min) {
+    durationMinutes: function(min) {
       return Math.round(min);
     },
     cost: function(fuelCost) {
@@ -67,7 +67,7 @@ function() {
       } else if (graphType === 'score') {
         return this.score(value);
       } else if (graphType === 'duration') {
-        return this.duration(value);
+        return this.durationMinutes(value);
       } else if (graphType === 'average_mpg') {
         return this.averageMPG(value);
       } else if (graphType === 'distance_miles') {

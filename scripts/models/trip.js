@@ -33,7 +33,7 @@ function( Backbone, formatters, login ) {
           miles = formatters.m_to_mi(this.get('distance_m'));
 
       this.set('duration', duration);
-      this.set('formatted_duration', formatters.durationMin(duration));
+      this.set('formatted_duration', formatters.durationMinutes(duration));
       this.set('distance_miles', miles);
       this.set('formatted_distance_miles', formatters.distance(miles));
       this.set('formatted_average_mpg', parseInt(this.get('average_mpg') * 10) / 10);
