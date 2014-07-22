@@ -6,12 +6,17 @@ function() {
   return {
     getAverageScore: function(trips) {
       var weightedSum = trips.reduce(function(memo, trip) {
-        memo.score += trip.get('score') * trip.get('duration');
+        memo.score1 += trip.get('score')['score1'] * trip.get('duration');
+        memo.score2 += trip.get('score')['score2'] * trip.get('duration');
         memo.time += trip.get('duration');
         return memo;
-      }, {time: 0, score: 0});
+      }, {time: 0, score1: 0, score2: 0});
 
-      return (weightedSum.score / weightedSum.time) || 0;
+      var score1 = (weightedSum.score1 / weightedSum.time),
+          score2 = (weightedSum.score2 / weightedSum.time),
+          score = Math.max(0, score1) + Math.max(0, score2);
+
+      return Math.max(1, score);
     },
 
     getSum: function(trips, field) {
