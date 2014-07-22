@@ -15,6 +15,8 @@ function( mapbox, formatters ) {
       shadowSize: [41, 41],
       shadowAnchor: [12, 40]
     }),
+
+
     bIcon: L.icon({
       iconUrl: '/assets/img/b.png',
       iconSize: [25, 41],
@@ -24,28 +26,36 @@ function( mapbox, formatters ) {
       shadowSize: [41, 41],
       shadowAnchor: [12, 40]
     }),
+
+
     hardBrakeIcon: L.divIcon({
       className: 'hardBrakeIcon',
       iconSize: [12, 12]
     }),
+
+
     hardAccelIcon: L.divIcon({
       className: 'hardAccelIcon',
       iconSize: [12, 12]
     }),
-    styleLine: function(feature) {
+
+
+    styleLine: function() {
       return {
         color: '#08b1d5',
         opacity: 0.8,
         weight: 3
       };
     },
+
+
     createMarker: function (type, model, popupTemplate) {
       var id = model.get('id'),
           location,
           time,
           icon;
 
-      if(type == 'start') {
+      if(type === 'start') {
         location = model.get('start_location');
         time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A');
         icon = this.aIcon;
@@ -66,6 +76,8 @@ function( mapbox, formatters ) {
 
       return marker;
     },
+
+
     enablePolyline: L.extend(L.GeoJSON, {
       // This function is from Google's polyline utility.
       // Borrowed from: http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/decode.js

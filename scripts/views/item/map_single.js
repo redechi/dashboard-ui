@@ -83,7 +83,7 @@ function( Backbone, mapbox, stats, MapSingleTmpl, trips, formatters, mapHelpers 
         distances = decodedPath.map(function(latlng, idx) {
           if(idx > 0) {
             var latlng2 = decodedPath[idx - 1];
-            var distance = stats.calculate_distance_mi(latlng[0], latlng[1], latlng2[0], latlng2[1]);
+            var distance = stats.calculateDistanceMi(latlng[0], latlng[1], latlng2[0], latlng2[1]);
             cumulativeDistance += distance;
           }
           return cumulativeDistance;

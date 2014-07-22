@@ -6,8 +6,8 @@ function() {
   return {
     getAverageScore: function(trips) {
       var weightedSum = trips.reduce(function(memo, trip) {
-        memo.score1 += trip.get('score')['score1'] * trip.get('duration');
-        memo.score2 += trip.get('score')['score2'] * trip.get('duration');
+        memo.score1 += trip.get('score').score1 * trip.get('duration');
+        memo.score2 += trip.get('score').score2 * trip.get('duration');
         memo.time += trip.get('duration');
         return memo;
       }, {time: 0, score1: 0, score2: 0});
@@ -19,11 +19,13 @@ function() {
       return Math.max(1, score);
     },
 
-    getSum: function(trips, field) {
+
+    getSum: function(trips) {
       return trips.reduce(function(memo, trip) {
         return memo + trip.get('distance_miles');
       }, 0);
     },
+
 
     getAverageMPG: function(trips) {
       var totals = trips.reduce(function(memo, trip) {
@@ -34,18 +36,20 @@ function() {
       return (totals.distance / totals.fuel) || 0;
     },
 
+
     sumTrips: function(trips, field) {
       //Calculate sum or average, depending on field
-      if(field == 'average_mpg') {
+      if(field === 'average_mpg') {
         return this.getAverageMPG(trips);
-      } else if(field == 'score') {
+      } else if(field === 'score') {
         return this.getAverageScore(trips);
       } else {
-        return this.getSum(trips, field);
+        return this.getSum(trips);
       }
     },
 
-    calculate_distance_mi: function(lat1, lon1, lat2, lon2) {
+
+    calculateDistanceMi: function(lat1, lon1, lat2, lon2) {
       function toRadians(degree) {
         return (degree * (Math.PI / 180));
       }
@@ -61,7 +65,6 @@ function() {
       var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLon, 2.0);
       var d = radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
       return d;
-    },
-
+    }
   };
 });

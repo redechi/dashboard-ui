@@ -20,7 +20,7 @@ function( formatters, vehiclesCollection ) {
         if(this.get('value') === 'all') {
           return true;
         } else {
-          return (this.get('value') === trip.get("vehicle").id);
+          return (this.get('value') === trip.get('vehicle').id);
         }
       },
       queryify: function () {
@@ -52,7 +52,7 @@ function( formatters, vehiclesCollection ) {
       label: 'driven',
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
-      value: [moment().endOf('day').subtract('months', 1).valueOf(), moment().endOf("day").valueOf()],
+      value: [moment().endOf('day').subtract('months', 1).valueOf(), moment().endOf('day').valueOf()],
       options: {
         thisWeek: 'this week',
         thisMonth: 'this month',
@@ -125,14 +125,15 @@ function( formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all distances',
       func: function(trip) {
-        return trip.get("distance_miles") >= this.get('value')[0] && trip.get("distance_miles") <= this.get('value')[1];
+        return trip.get('distance_miles') >= this.get('value')[0] && trip.get('distance_miles') <= this.get('value')[1];
       },
       formatter: function(d) { return d + ' mi'; },
       updateValueText: function() {
+        var valueText;
         if(this.get('value')[0] === 0 && this.get('value')[1] === Infinity) {
-          var valueText = 'all distances';
+          valueText = 'all distances';
         } else {
-          var valueText = 'between ' + this.get('value').join(' - ') + ' miles';
+          valueText = 'between ' + this.get('value').join(' - ') + ' miles';
         }
         this.set('valueText', valueText);
       },
@@ -156,14 +157,15 @@ function( formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all durations',
       func: function(trip) {
-        return trip.get("duration") >= this.get('value')[0] && trip.get("duration") <= this.get('value')[1];
+        return trip.get('duration') >= this.get('value')[0] && trip.get('duration') <= this.get('value')[1];
       },
       formatter: function(d) { return d + ' min'; },
       updateValueText: function() {
+        var valueText;
         if(this.get('value')[0] === 0 && this.get('value')[1] === Infinity) {
-          var valueText = 'all durations';
+          valueText = 'all durations';
         } else {
-          var valueText = 'between ' + this.get('value').join(' - ') + ' minutes';
+          valueText = 'between ' + this.get('value').join(' - ') + ' minutes';
         }
         this.set('valueText', valueText);
       },
@@ -187,14 +189,15 @@ function( formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all costs',
       func: function(trip) {
-        return trip.get("fuel_cost_usd") >= this.get('value')[0] && trip.get("fuel_cost_usd") <= this.get('value')[1];
+        return trip.get('fuel_cost_usd') >= this.get('value')[0] && trip.get('fuel_cost_usd') <= this.get('value')[1];
       },
       formatter: function(d) { return '$' + d; },
       updateValueText: function() {
+        var valueText;
         if(this.get('value')[0] === 0 && this.get('value')[1] === Infinity) {
-          var valueText = 'all costs';
+          valueText = 'all costs';
         } else {
-          var valueText = 'between ' + this.get('value').map(formatters.costWithUnit).join(' - ');
+          valueText = 'between ' + this.get('value').map(formatters.costWithUnit).join(' - ');
         }
         this.set('valueText', valueText);
       },
@@ -218,16 +221,17 @@ function( formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all times of day',
       func: function(trip) {
-        return moment(trip.get("start_time")).hour() >= this.get('value')[0] && moment(trip.get("end_time")).hour() <= this.get('value')[1];
+        return moment(trip.get('start_time')).hour() >= this.get('value')[0] && moment(trip.get('end_time')).hour() <= this.get('value')[1];
       },
       formatter: function(d) {
         return moment.utc(d * 60 * 60 * 1000).format('h A');
       },
       updateValueText: function () {
+        var valueText;
         if(this.get('value')[0] === 0 && this.get('value')[1] === 24) {
-          var valueText = 'all times of day';
+          valueText = 'all times of day';
         } else {
-          var valueText = 'between ' + this.get('value').map(function(time) {
+          valueText = 'between ' + this.get('value').map(function(time) {
             return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
           }).join(' - ');
         }

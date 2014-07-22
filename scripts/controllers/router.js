@@ -10,7 +10,7 @@ define([
 ],
 function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout, LoginLayout, PasswordResetLayout ) {
   'use strict';
-  
+
   return {
 
     showSummaryLayout: function () {
@@ -34,6 +34,7 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(passwordReset);
     },
+
 
     showTripLayout: function (tripid) {
       var tripArray = tripsCollection.where({id: tripid}),
