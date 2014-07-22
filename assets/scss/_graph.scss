@@ -67,46 +67,51 @@
     }
   }
 
-  .graphTooltip {
+  .graphTooltipContainer {
     position: absolute;
     z-index: 10;
     visibility: hidden;
-    padding: 15px;
-    min-width: 65px;
-    height: 76px;
-    border-radius: 3px;
-    background: #FFFFFF;
-    -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
-    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
-    text-align: center;
-    border-bottom: 2px solid $blue;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
 
-    .date {
-      font-size: 10px;
-      text-transform: uppercase;
-      padding-bottom: 6px;
-    }
+    .graphTooltip {
+      padding: 15px;
+      min-width: 65px;
+      height: 76px;
+      border-radius: 3px;
+      background: #FFFFFF;
+      -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+      box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+      text-align: center;
+      border-bottom: 2px solid $blue;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      position: relative;
+      left: -50%;
 
-    .value {
-      color: $link_type;
-      font-size: 24px;
-    }
+      .date {
+        font-size: 10px;
+        text-transform: uppercase;
+        padding-bottom: 6px;
+      }
 
-    .arrow {
-      border-color: transparent;
-      border-top-color: $blue;
-      left: 39px;
-      margin-left: -11px;
-      border-bottom-width: 0;
-      bottom: -22px;
-      border-width: 11px;
-      position: absolute;
-      display: block;
-      width: 0;
-      height: 0;
-      border-style: solid;
+      .value {
+        color: $link_type;
+        font-size: 24px;
+      }
+
+      .arrow {
+        border-color: transparent;
+        border-top-color: $blue;
+        left: 50%;
+        margin-left: -11px;
+        border-bottom-width: 0;
+        bottom: -22px;
+        border-width: 11px;
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-style: solid;
+      }
     }
   }
 

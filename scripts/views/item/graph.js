@@ -154,7 +154,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           margin = {top: 30, right: 0, bottom: 60, left: 0},
           width = 880 - margin.left - margin.right,
           height = 225 - margin.top - margin.bottom,
-          tooltip = d3.select('#graphs .graphContainer .graphTooltip');
+          tooltip = $('#graphs .graphContainer .graphTooltipContainer');
 
 
       //remove any existing graph
@@ -231,15 +231,19 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('date', function(d) { return d.key; });
 
       function barMouseover(d) {
+        var tooltipContent = '<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
         tooltip
-          .style('top', (y(d.values) - 15) + 'px')
-          .style('left', (x(d.key) - 35) + 'px')
-          .style('visibility', 'visible')
-          .html('<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + d.values.toFixed(1) + '</div>');
+          .css({
+            top: (y(d.values) - 15) + 'px',
+            left: (x(d.key) + 4) + 'px',
+            visibility: 'visible'
+          })
+          .find('.graphTooltip')
+            .html(tooltipContent);
       }
 
       function barMouseout(d) {
-        tooltip.style('visibility', 'hidden');
+        tooltip.css('visibility', 'hidden');
       }
 
       function topRoundedRect(x, y, width, height, radius) {
