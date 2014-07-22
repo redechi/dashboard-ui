@@ -326,6 +326,19 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .style('text-anchor', 'middle')
           .attr('dx', '-.5em')
           .attr('class', function(d) {return (summary.empty.indexOf(d) !== -1) ? 'empty' : ''; });
+
+      //Month Labels
+      svg.append('g')
+        .attr('class', 'x axisLabel')
+        .attr('transform', 'translate(0,' + (height + 40) + ')')
+        .append('text')
+        .text(function() {
+          if(data && data[0]) {
+            console.log(data[0])
+            return moment(parseInt(data[0].key, 10)).format('MMMM YYYY')
+          }
+        });
+
     },
 
 

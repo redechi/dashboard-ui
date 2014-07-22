@@ -137,6 +137,10 @@
       }
     }
 
+    .x.axisLabel {
+      text-transform: uppercase;
+    }
+
     g.bar {
       path {
         fill: #FFF;
