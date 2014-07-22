@@ -38,7 +38,11 @@ function() {
       return Math.floor(duration.asHours()) + ':' + moment(duration.minutes(), 'm').format('mm');
     },
     durationMinutes: function(min) {
-      return min ? min.toFixed(1) : 0;
+      if (Math.round(min) >= 100) {
+        return distance_miles.toFixed(0);
+      } else {
+        return (min ? min : 0).toFixed(1);
+      }
     },
     cost: function(fuelCost) {
       return ((fuelCost) ? fuelCost : 0).toFixed(2);
