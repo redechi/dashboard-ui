@@ -39,7 +39,7 @@ function() {
     },
     durationMinutes: function(min) {
       if (Math.round(min) >= 100) {
-        return distance_miles.toFixed(0);
+        return min.toFixed(0);
       } else {
         return (min ? min : 0).toFixed(1);
       }
