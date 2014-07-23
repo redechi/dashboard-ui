@@ -1,12 +1,9 @@
 #graphs {
   position: relative;
-  height: 200px;
-  width: 100%;
-  margin-bottom: 60px;
 
   .graphMenu {
-    padding-top: 10px;
-    float: left;
+    top: 10px;
+    position: absolute;
 
     .dateRange {
       float: left;
@@ -116,6 +113,9 @@
   }
 
   .graphContainer {
+    white-space: nowrap;
+    padding-top: 50px;
+
     rect.graphGradient {
       fill: url(#graphGradient);
     }
