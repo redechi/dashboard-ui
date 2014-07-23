@@ -293,7 +293,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         var tooltipContent = '<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
         tooltip
           .css({
-            top: (y(d.values) - 15) + 'px',
+            top: (y(d.values) - 32) + 'px',
             left: x(d.key) + 'px',
             visibility: 'visible'
           })
@@ -444,6 +444,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         });
       }, 0);
     }
-    
+
   });
 });
