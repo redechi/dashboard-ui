@@ -32,7 +32,11 @@ function( Backbone, regionManager, LoginTmpl, login ) {
       $('#email', e.target).parent('.form-group').toggleClass('has-error', (!email));
       $('#password', e.target).parent('.form-group').toggleClass('has-error', (!password));
 
-      if(email && password) {
+      if(!email || !password) {
+        $('#loginForm .alert')
+          .html('<strong>Error</strong>: Please enter an email and a password')
+          .removeClass('hide');
+      } else {
         $('#loginForm .alert').addClass('hide');
 
         $.post(
@@ -52,10 +56,15 @@ function( Backbone, regionManager, LoginTmpl, login ) {
               Backbone.history.navigate('#/');
             }
           }
-        ).fail(function(jqXHR, textStatus, errorThrown) {
-          //TODO: better error messages
+        ).fail(function(jqXHR, textStatus, error) {
+          var message = '<strong>Error</strong>: ';
+          if(jqXHR.status === 401) {
+            message += 'Invalid email or password';
+          } else {
+            message += 'Unknown error';
+          }
           $('#loginForm .alert')
-            .text('Error: ' + textStatus)
+            .html(message)
             .removeClass('hide');
         });
       }
