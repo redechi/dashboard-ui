@@ -12,8 +12,8 @@ function() {
         return memo;
       }, {time: 0, score1: 0, score2: 0});
 
-      var score1 = (weightedSum.score1 / weightedSum.time),
-          score2 = (weightedSum.score2 / weightedSum.time),
+      var score1 = (weightedSum.score1 / weightedSum.time) || 0,
+          score2 = (weightedSum.score2 / weightedSum.time) || 0,
           score = Math.max(0, score1) + Math.max(0, score2);
 
       return Math.max(1, score);
