@@ -13,27 +13,10 @@ function( Backbone, coms, TripTmpl, formatters ) {
       console.log("initialize a Trip ItemView");
     },
 
-    triggerHighlight: function () {
-      coms.trigger('trips:highlight', this.model);
-      this.$el.addClass('highlighted');
-    },
-
-    removeHighlight: function () {
-      var selected = this.model.get('selected');
-      coms.trigger('trips:unhighlight');
-      if (selected) return;
-      this.$el.removeClass('highlighted');
-    },
-
-    toggleSelect: function (e) {
-      var selected = !this.model.get('selected');
-      this.model.set('selected', selected);
-      this.$el.toggleClass('selected', selected);
-    },
-
     tagName: "li",
 
     template: TripTmpl,
+    
 
     templateHelpers: function() {
       return {
@@ -43,13 +26,29 @@ function( Backbone, coms, TripTmpl, formatters ) {
       };
     },
 
-    ui: {},
 
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
       'click': 'toggleSelect'
-    }
+    },
+
+
+    triggerHighlight: function () {
+      coms.trigger('trips:highlight', this.model);
+    },
+
+
+    removeHighlight: function () {
+      coms.trigger('trips:unhighlight');
+    },
+
+
+    toggleSelect: function (e) {
+      var selected = !this.model.get('selected');
+      this.model.set('selected', selected);
+      this.$el.toggleClass('selected', selected);
+    },
   });
 
 });
