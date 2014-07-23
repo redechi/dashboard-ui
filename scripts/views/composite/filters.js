@@ -212,8 +212,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           value = filter.get('value'),
           start = value[0],
           end = value[1],
-          newStart = $('.popover .dateFilterValueCustomStart').datepicker('getDate').getTime(),
-          newEnd = $('.popover .dateFilterValueCustomEnd').datepicker('getDate').getTime();
+          newStart = $('.popover .dateFilterValueCustomStart').datepicker('getDate').valueOf(),
+          newEnd = moment($('.popover .dateFilterValueCustomEnd').datepicker('getDate')).endOf('day').valueOf();
 
       $(e.target).addClass('changed');
 
