@@ -114,7 +114,7 @@
 
   .graphContainer {
     white-space: nowrap;
-    padding-top: 50px;
+    padding-top: 30px;
 
     rect.graphGradient {
       fill: url(#graphGradient);
@@ -122,21 +122,6 @@
 
     text {
       fill: $base_type;
-    }
-
-    .x.axis {
-      path {
-        fill: none;
-      }
-      line.bottom {
-        stroke: #D8D8D8;
-        shape-rendering: crispEdges;
-      }
-
-    }
-
-    .x.axisLabel {
-      text-transform: uppercase;
     }
 
     g.bar {
@@ -163,6 +148,11 @@
           &.empty {
             fill: $inactive_type;
           }
+        }
+
+        &.axisLabel {
+          text-transform: uppercase;
+          font-size: 12px;
         }
       }
 

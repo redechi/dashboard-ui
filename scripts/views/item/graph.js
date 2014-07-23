@@ -160,7 +160,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
-    getAxisLabel: function(d) {
+    getTickLabel: function(d) {
       var binSize = this.model.get('binSize'),
           data = this.model.get('values');
 
@@ -178,6 +178,27 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
+    getMonthLabel: function(d) {
+      var data = this.model.get('values'),
+          date = moment(parseInt(d.key, 10));
+
+      if(date.date() === 1 || (d.key === data[0].key && date.date() < 29)) {
+        //only show month label at start of months and first position
+        return date.format('MMMM YYYY');
+      }
+    },
+
+
+    getYearLabel: function(d) {
+      var data = this.model.get('values'),
+          date = moment(parseInt(d.key, 10));
+      if(date.month() === 0 || (d.key === data[0].key && date.date() < 29)) {
+        //only show year label at start of years and first position
+        return date.format('YYYY');
+      }
+    },
+
+
     makeGraph: function() {
       var self = this,
           data = this.model.get('values'),
@@ -188,12 +209,18 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           margin = {top: 30, right: 0, bottom: 60, left: 0},
           width = 880 - margin.left - margin.right,
           height = 225 - margin.top - margin.bottom,
-          tooltip = $('#graphs .graphContainer .graphTooltipContainer');
+          tooltip = $('#graphs .graphContainer .graphTooltipContainer'),
+          binWidth = width / data.length,
+          barWidth = this.getBarWidth(data, width),
+          barRadius = Math.min(barWidth/2, 8);
 
 
       //remove any existing graph
       d3.select('#graphs .graphContainer svg').remove();
 
+      if(!data || !data.length) {
+        return;
+      }
 
       //update averages
       this.updateAverages();
@@ -206,18 +233,14 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .append('g')
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+
       //SVG defs for gradient
       this.appendSVGGradient(svg.append("svg:defs"));
-
       svg.append('rect')
         .attr('class', 'graphGradient')
         .attr('width', '100%')
         .attr('height', height);
 
-      //calculate bar width
-      var binWidth = width / data.length,
-          barWidth = this.getBarWidth(data, width),
-          barRadius = Math.min(barWidth/2, 8);
 
       //scales
       var x = d3.scale.linear()
@@ -350,22 +373,27 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .style('text-anchor', 'middle')
         .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
         .classed('tickLabel', true)
-        .text(function(d) { return self.getAxisLabel(d); });
+        .text(_.bind(self.getTickLabel, this));
 
-      //Month or Year Labels
-      svg.append('g')
-        .attr('class', 'axisLabel')
-        .attr('transform', 'translate(0,' + (height + 40) + ')')
-        .append('text')
-        .text(function() {
-          if(data && data[0]) {
-            if(binSize === 'day') {
-              return moment(parseInt(data[0].key, 10)).format('MMMM YYYY');
-            } else if(binSize === 'month') {
-              return moment(parseInt(data[0].key, 10)).format('YYYY');
-            }
-          }
-        });
+      //Month and Year Labels
+      if(binSize === 'day') {
+        bars.append('text')
+          .attr('transform', 'translate(0,' + (height + 45) + ')')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('dx', -barWidth/2)
+          .style('text-anchor', 'right')
+          .classed('axisLabel', true)
+          .text(_.bind(self.getMonthLabel, this));
+      } else if (binSize === 'month') {
+        bars.append('text')
+          .attr('transform', 'translate(0,' + (height + 45) + ')')
+          .attr('x', function(d) { return x(d.key); })
+          .attr('dx', -barWidth/2)
+          .style('text-anchor', 'right')
+          .classed('axisLabel', true)
+          .text(_.bind(self.getYearLabel, this));
+      }
+
     },
 
 
