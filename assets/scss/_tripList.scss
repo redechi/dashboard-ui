@@ -154,7 +154,7 @@
         width: 2px;
         height: 90%;
         background-color: $line_gray;
-        left: 61px;
+        left: 70px;
         top: 16px;
         height: 60px;
 
@@ -198,14 +198,16 @@
           background: $trip_line_blue;
           top: 14px;
 
-          & > * {
+          & > div {
             color: #fff;
             background: $trip_line_blue;
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             border-radius: 8px;
             margin-left: -7px;
             line-height: 15px;
+            font-size: 10px;
+            padding: 1px;
           }
         }
       }
@@ -279,6 +281,8 @@
             border-radius: 8px;
             margin-left: -7px;
             line-height: 15px;
+            font-size: 10px;
+            padding: 1px;
           }
         }
 
@@ -304,115 +308,70 @@
         .event {
           display: inline-block;
           text-align: center;
+          width: 25px;
+          height: 25px;
+          float: left;
+          position: relative;
+          color: transparent;
+          line-height: 25px;
+          text-align: center;
 
-          i {
-            display: none;
+          &::after {
+            font-size: 10px;
+            line-height: 11px;
+            font-weight: normal;
+            position: absolute;
+            text-align: left;
+            margin-left: 11px;
+            color: #777;
+            width: 39px;
+            padding-top: 2px;
           }
         }
 
         .hardBrakes {
           clear: both;
-          float: left;
-          width: 21px;
-          height: 21px;
-          border-radius: 11px;
-          font-weight: bold;
-          box-sizing: border-box;
-          text-align: center;
-          margin-right: 57px;
+          margin-right: 48px;
           margin-left: 10px;
-          position: relative;
-          background: #ffc701;
+          @include hr-image('../img/event_nohardbrakes_color.png', '../img/event_nohardbrakes_color@2x.png');
+          color: #FFF;
 
           &.noHardBrakes {
+            @include hr-image('../img/event_nohardbrakes_green.png', '../img/event_nohardbrakes_green@2x.png');
             color: transparent;
-            background: #7fb75c;
-
-            i {
-              display: inline;
-              color: #FFF;
-              position: absolute;
-              top: 3px;
-              left: 4px;
-            }
           }
 
           &::after {
-            content: 'Rough Brakes';
-            font-size: 10px;
-            line-height: 11px;
-            font-weight: normal;
-            position: absolute;
-            text-align: left;
-            margin-left: 13px;
-            color: #777;
-          }
-        }
-
-        .hardAccels {
-          float: left;
-          width: 21px;
-          height: 21px;
-          border-radius: 11px;
-          font-weight: bold;
-          box-sizing: border-box;
-          text-align: center;
-          margin-right: 57px;
-          position: relative;
-          background: #ffc701;
-
-          &.noHardAccels {
-            color: transparent;
-            background: #7fb75c;
-
-            i {
-              display: inline;
-              color: #FFF;
-              position: absolute;
-              top: 3px;
-              left: 4px;
-            }
-          }
-
-          &::after {
-            content: 'Hard Accels';
-            font-size: 10px;
-            line-height: 11px;
-            font-weight: normal;
-            position: absolute;
-            text-align: left;
-            margin-left: 13px;
-            color: #777;
+            content: 'No Hard Brakes';
           }
         }
 
         .speeding {
-          float: left;
-          width: 21px;
-          height: 21px;
-          font-weight: normal;
-          box-sizing: border-box;
-          text-align: center;
-          position: relative;
-          border-radius: 3px;
-          color: #FFF;
-          background: #fe8c0a;
+          margin-right: 48px;
+          @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
+          color: $link_type;
 
           &.noSpeeding {
-            background: #7fb75c;
-            color: #FFF;
+            @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
+            color: transparent;
           }
 
           &::after {
             content: 'Under 70 MPH';
-            font-size: 10px;
-            line-height: 11px;
-            font-weight: normal;
-            position: absolute;
-            text-align: left;
-            margin-left: 13px;
-            width: 40px;
-            color: #777;
+          }
+        }
+
+        .hardAccels {
+          @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
+          color: $link_type;
+
+          &.noHardAccels {
+            @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');
+            color: transparent;
+          }
+
+          &::after {
+            content: 'No Hard Accels';
           }
         }
       }
