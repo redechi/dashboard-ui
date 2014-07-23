@@ -34,6 +34,20 @@
       }
     }
 
+    .sortDirection {
+      width: 17px;
+      height: 25px;
+      float: right;
+      background-repeat: no-repeat;
+      background-position: right top 6px;
+      @include hr-image('../img/icon_sortdescending.png', '../img/icon_sortdescending@2x.png');
+      cursor: pointer;
+
+      &.sortUp {
+        @include hr-image('../img/icon_sortascending.png', '../img/icon_sortascending@2x.png');
+      }
+    }
+
     .popover-content {
       min-width: 120px;
     }

@@ -34,6 +34,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
     childViewContainer: "ul.trips",
     template: tripList,
 
+
     templateHelpers: function () {
 
       //check for export support
@@ -48,20 +49,25 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       };
     },
 
+
     events: {
       'click .exportOption li': 'export',
-      'click .sortValue li': 'changeSort',
+      'click .sortValue li': 'changeSortItem',
+      'click .sortDirection': 'changeSortDirection',
       'show.bs.popover .export': 'getTripCounts'
     },
+
 
     collectionEvents: {
       'reset': 'render',
       'sync': 'render'
     },
 
+
     resetCollection: function (collection) {
       this.collection.reset(collection);
     },
+
 
     export: function (e) {
       var exportOption = $(e.target).data('value'),
@@ -83,6 +89,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       $('.export').popover('hide');
     },
 
+
     tripsToCSV: function(trips) {
       var self = this,
           tripsArray = trips.map(this.tripToArray);
@@ -90,6 +97,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       tripsArray.unshift(this.csvFieldNames());
       return this.toCSV(tripsArray);
     },
+
 
     tripToArray: function(trip) {
       var t = trip.toJSON();
@@ -120,6 +128,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       ];
     },
 
+
     csvFieldNames: function () {
       return [
         'Vehicle',
@@ -147,12 +156,14 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       ];
     },
 
+
     toCSV: function (tripsArray) {
       var self = this;
       return tripsArray.map(function(row) {
         return row.map(self.csvEscape).join(',');
       }).join('\n');
     },
+
 
     csvEscape: function(item) {
       if (item && item.indexOf && (item.indexOf(',') !== -1 || item.indexOf('"') !== -1)) {
@@ -163,29 +174,43 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       return item;
     },
 
-    changeSort: function (e) {
-      if($(e.currentTarget).data('direction') === 'sortUp' || !$(e.currentTarget).hasClass('selected')) {
-        this.options.sortDirection = 'sortDown';
-      } else {
-        this.options.sortDirection = 'sortUp';
-      }
-      this.options.sortType = $(e.currentTarget).data('value');
-      this.options.sortTypeName = $(e.currentTarget).text();
 
-      this.setSort();
+    changeSortDirection: function(e) {
+      if($(e.currentTarget).data('direction') === 'sortDown') {
+        this.options.sortDirection = 'sortUp';
+      } else {
+        this.options.sortDirection = 'sortDown';
+      }
+
+      $('.sortDirection')
+        .data('direction', this.options.sortDirection)
+        .toggleClass('sortUp', (this.options.sortDirection === 'sortUp'));
+
+      this.doSort();
     },
 
-    setSort: function() {
-      var sortType = this.options.sortType,
-          sortTypeName = this.options.sortTypeName,
-          sortDirection = this.options.sortDirection;
-      $('.sortValue li').removeClass();
-      $('.sortValue li[data-value="' + sortType + '"]')
-        .data('direction', sortDirection)
-        .addClass('selected')
-        .addClass(sortDirection);
 
-      $('.sortType').text(sortTypeName);
+    changeSortItem: function(e) {
+      if(e) {
+        this.options.sortType = $(e.currentTarget).data('value');
+        this.options.sortTypeName = $(e.currentTarget).text();
+      }
+      $('.sortValue li').removeClass();
+      $('.sortValue li[data-value="' + this.options.sortType + '"]').addClass('selected');
+
+      $('.sortDirection')
+        .data('direction', this.options.sortDirection)
+        .toggleClass('sortUp', (this.options.sortDirection === 'sortUp'));
+
+      $('.sortType').text(this.options.sortTypeName);
+
+      this.doSort();
+    },
+
+
+    doSort: function() {
+      var sortType = this.options.sortType,
+          sortDirection = this.options.sortDirection;
 
       this.collection.comparator = function(trip) {
         if(sortDirection == 'sortDown') {
@@ -196,6 +221,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       };
       this.collection.sort();
     },
+
 
     enablePopovers: function() {
       $('.export').popover('destroy');
@@ -217,6 +243,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       });
     },
 
+
     getTripCounts: function() {
       $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length)
       $('.popoverTemplate .exportOption li[data-value="selected"]').toggle(this.collection.where({selected: true}).length > 0);
@@ -224,9 +251,10 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripsCollection.length);
     },
 
+
     onRender: function() {
-      //set sortType and enable sort
-      this.setSort();
+      //enable sort
+      this.changeSortItem();
       this.enablePopovers();
 
       //toggle class if no trips
@@ -249,6 +277,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       var resize = this.resize;
       setTimeout(resize, 0);
     },
+
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);

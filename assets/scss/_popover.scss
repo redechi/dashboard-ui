@@ -77,14 +77,6 @@
         color: $highlight;
         background-repeat: no-repeat;
         background-position: right center;
-
-        &.sortDown {
-          @include hr-image('../img/icon_sortdown.png', '../img/icon_sortdown@2x.png');
-        }
-
-        &.sortUp {
-          @include hr-image('../img/icon_sortup.png', '../img/icon_sortup@2x.png');
-        }
       }
     }
   }
