@@ -99,11 +99,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
           memo.min = bar;
         }
-        if(bar.values === 0) {
-          memo.empty.push(bar.key);
-        }
         return memo;
-      }, {empty: []});
+      }, {});
 
       //Calculate overall average for time range
       summary.average = this.averageTripsForGraph();
@@ -182,11 +179,18 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .attr('width', '100%')
         .attr('height', height);
 
+      //calculate bar width
+      var binSize = width / data.length,
+          barWidth = Math.min( 8),
+          barRadius = Math.min(barWidth/2, 4);
 
       //scales
-      var x = d3.scale.ordinal()
-          .rangeRoundBands([0, width], 0.1)
-          .domain(data.map(function(d) { return d.key; }));
+      var x = d3.scale.linear()
+          .range([0, width - (binSize / 2)])
+          .domain([
+            parseInt(d3.min(data, function(d) { return d.key; }), 10) - moment.duration(0.5, 'days').valueOf(),
+            parseInt(d3.max(data, function(d) { return d.key; }), 10)
+          ]);
 
       var y = d3.scale.linear()
           .range([height, 0])
@@ -194,11 +198,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
       //axes
-      var xAxis = d3.svg.axis()
-          .scale(x)
-          .orient('bottom')
-          .tickFormat(function(d) {return moment(parseInt(d, 10)).format('D'); });
-
       var yAxis = d3.svg.axis()
           .scale(y)
           .orient('left')
@@ -217,11 +216,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .attr('class', 'grid')
         .call(yAxis);
 
-
       //Draw bars
-      var barWidth = Math.min(x.rangeBand(), 8);
-      var barRadius = Math.min(barWidth/2, 4);
-
       var bars = svg.selectAll('.bar')
         .data(data)
         .enter().append('g')
@@ -318,23 +313,21 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
       //X Axis labels
-      svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis)
-        .selectAll('text')
-          .style('text-anchor', 'middle')
-          .attr('dx', '-.5em')
-          .attr('class', function(d) {return (summary.empty.indexOf(d) !== -1) ? 'empty' : ''; });
+      bars.append('text')
+        .attr('transform', 'translate(0,' + (height + 20) + ')')
+        .attr('x', function(d) { return x(d.key); })
+        .style('text-anchor', 'left')
+        .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
+        .classed('tickLabel', true)
+        .text(function(d) {return moment(parseInt(d.key, 10)).format('D'); });
 
       //Month Labels
       svg.append('g')
-        .attr('class', 'x axisLabel')
+        .attr('class', 'axisLabel')
         .attr('transform', 'translate(0,' + (height + 40) + ')')
         .append('text')
         .text(function() {
           if(data && data[0]) {
-            console.log(data[0])
             return moment(parseInt(data[0].key, 10)).format('MMMM YYYY')
           }
         });

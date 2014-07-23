@@ -132,9 +132,7 @@
         stroke: #D8D8D8;
         shape-rendering: crispEdges;
       }
-      text.empty {
-        fill: $inactive_type;
-      }
+
     }
 
     .x.axisLabel {
@@ -156,6 +154,15 @@
       text {
         font-size: 10px;
         fill: $link_type;
+
+        &.tickLabel {
+          font-size: 11px;
+          fill: $base_type;
+
+          &.empty {
+            fill: $inactive_type;
+          }
+        }
       }
 
       &.max {
