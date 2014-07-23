@@ -143,6 +143,11 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
+    getBarWidth: function (data, width) {
+      return Math.max((width / data.length - 15), 8);
+    },
+
+
     makeGraph: function() {
       var data = this.model.get('values'),
           summary = this.model.get('summary'),
@@ -181,8 +186,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //calculate bar width
       var binSize = width / data.length,
-          barWidth = Math.min( 8),
-          barRadius = Math.min(barWidth/2, 4);
+          barWidth = this.getBarWidth(data, width),
+          barRadius = Math.min(barWidth/2, 8);
 
       //scales
       var x = d3.scale.linear()
@@ -230,7 +235,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         tooltip
           .css({
             top: (y(d.values) - 15) + 'px',
-            left: (x(d.key) + 4) + 'px',
+            left: x(d.key) + 'px',
             visibility: 'visible'
           })
           .find('.graphTooltip')
@@ -257,7 +262,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .on('mouseout', barMouseout)
         .attr('d', function(d) {
           if(d.values > 0) {
-            return topRoundedRect(x(d.key), y(d.values), barWidth, height - y(d.values), barRadius);
+            return topRoundedRect(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
           }
         });
 
@@ -271,7 +276,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         maxBar.append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
-            .attr('dx', barWidth/2)
             .attr('dy', '-1.75em')
             .text('MAX')
             .attr('text-anchor', 'middle')
@@ -280,7 +284,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         maxBar.append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
-            .attr('dx', barWidth/2)
             .attr('dy', '-0.55em')
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
@@ -296,7 +299,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         minBar.append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
-            .attr('dx', barWidth/2)
             .attr('dy', '-1.75em')
             .text('MIN')
             .attr('text-anchor', 'middle')
@@ -305,7 +307,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         minBar.append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
-            .attr('dx', barWidth/2)
             .attr('dy', '-0.55em')
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
@@ -316,7 +317,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       bars.append('text')
         .attr('transform', 'translate(0,' + (height + 20) + ')')
         .attr('x', function(d) { return x(d.key); })
-        .style('text-anchor', 'left')
+        .style('text-anchor', 'middle')
         .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
         .classed('tickLabel', true)
         .text(function(d) {return moment(parseInt(d.key, 10)).format('D'); });
