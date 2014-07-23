@@ -66,19 +66,31 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       var graphType = this.model.get('graphType'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           date = dateRange[0],
+          binSize,
           bins = {};
 
+      //Calculate bin size
+      var days = moment.duration(dateRange[1] - dateRange[0]).asDays();
 
-      //Build empty bins
+      if(days <= 120) {
+        //use days as bin
+        binSize = 'day';
+      } else {
+        //use months as bin
+        binSize = 'month';
+      }
+
+      this.model.set('binSize', binSize);
+
       while(date < dateRange[1]) {
-        bins[moment(date).startOf('day').valueOf()] = [];
-        date = moment(date).add('days', 1).valueOf();
+        bins[moment(date).startOf(binSize).valueOf()] = [];
+        date = moment(date).add(binSize + 's', 1).valueOf();
       }
 
 
       //group trips into bins
       this.collection.each(function(trip) {
-        var bin = moment(trip.get('start_time')).startOf('day').valueOf();
+        var bin = moment(trip.get('start_time')).startOf(binSize).valueOf();
         bins[bin].push(trip);
       });
 
@@ -148,19 +160,19 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
-    getAxisLabel: function(d, data) {
-      if(data.length <= 60) {
-        return moment(parseInt(d.key, 10)).format('D');
-      } else if(data.length <= 120) {
-        //Only return odd days
-        var day = moment(parseInt(d.key, 10)).format('D');
-        return (day % 2 === 1) ? day : '';
-      } else {
-        //return months as labels
-        if(moment(parseInt(d.key, 10)).format('D') === "1") {
-          return moment(parseInt(d.key, 10)).format('MMM');
-        } else {
-          return '';
+    getAxisLabel: function(d) {
+      var binSize = this.model.get('binSize'),
+          data = this.model.get('values');
+
+      if(binSize === 'month') {
+        return moment(parseInt(d.key, 10)).format('MMM');
+      } else if(binSize === 'day') {
+        if(data.length <= 60) {
+          return moment(parseInt(d.key, 10)).format('D');
+        } else if(data.length <= 120) {
+          //Only return odd days
+          var day = moment(parseInt(d.key, 10)).format('D');
+          return (day % 2 === 1) ? day : '';
         }
       }
     },
@@ -172,6 +184,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           summary = this.model.get('summary'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           graphType = this.model.get('graphType'),
+          binSize = this.model.get('binSize'),
           margin = {top: 30, right: 0, bottom: 60, left: 0},
           width = 880 - margin.left - margin.right,
           height = 225 - margin.top - margin.bottom,
@@ -194,9 +207,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       //SVG defs for gradient
-      var defs = svg.append("svg:defs");
-
-      this.appendSVGGradient(defs);
+      this.appendSVGGradient(svg.append("svg:defs"));
 
       svg.append('rect')
         .attr('class', 'graphGradient')
@@ -204,15 +215,15 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .attr('height', height);
 
       //calculate bar width
-      var binSize = width / data.length,
+      var binWidth = width / data.length,
           barWidth = this.getBarWidth(data, width),
           barRadius = Math.min(barWidth/2, 8);
 
       //scales
       var x = d3.scale.linear()
-          .range([0, width - (binSize / 2)])
+          .range([0, width - (binWidth / 2)])
           .domain([
-            parseInt(d3.min(data, function(d) { return d.key; }), 10) - moment.duration(0.5, 'days').valueOf(),
+            parseInt(d3.min(data, function(d) { return d.key; }), 10) - moment.duration(0.5, binSize + 's').valueOf(),
             parseInt(d3.max(data, function(d) { return d.key; }), 10)
           ]);
 
@@ -339,19 +350,22 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .style('text-anchor', 'middle')
         .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
         .classed('tickLabel', true)
-        .text(function(d) { return self.getAxisLabel(d, data); });
+        .text(function(d) { return self.getAxisLabel(d); });
 
-      //Month Labels
+      //Month or Year Labels
       svg.append('g')
         .attr('class', 'axisLabel')
         .attr('transform', 'translate(0,' + (height + 40) + ')')
         .append('text')
         .text(function() {
           if(data && data[0]) {
-            return moment(parseInt(data[0].key, 10)).format('MMMM YYYY')
+            if(binSize === 'day') {
+              return moment(parseInt(data[0].key, 10)).format('MMMM YYYY');
+            } else if(binSize === 'month') {
+              return moment(parseInt(data[0].key, 10)).format('YYYY');
+            }
           }
         });
-
     },
 
 
