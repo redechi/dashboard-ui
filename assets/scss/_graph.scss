@@ -158,6 +158,7 @@
         &.tickLabel {
           font-size: 11px;
           fill: $base_type;
+          text-transform: uppercase;
 
           &.empty {
             fill: $inactive_type;

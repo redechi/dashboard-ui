@@ -148,8 +148,27 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
+    getAxisLabel: function(d, data) {
+      if(data.length <= 60) {
+        return moment(parseInt(d.key, 10)).format('D');
+      } else if(data.length <= 120) {
+        //Only return odd days
+        var day = moment(parseInt(d.key, 10)).format('D');
+        return (day % 2 === 1) ? day : '';
+      } else {
+        //return months as labels
+        if(moment(parseInt(d.key, 10)).format('D') === "1") {
+          return moment(parseInt(d.key, 10)).format('MMM');
+        } else {
+          return '';
+        }
+      }
+    },
+
+
     makeGraph: function() {
-      var data = this.model.get('values'),
+      var self = this,
+          data = this.model.get('values'),
           summary = this.model.get('summary'),
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           graphType = this.model.get('graphType'),
@@ -320,7 +339,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .style('text-anchor', 'middle')
         .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
         .classed('tickLabel', true)
-        .text(function(d) {return moment(parseInt(d.key, 10)).format('D'); });
+        .text(function(d) { return self.getAxisLabel(d, data); });
 
       //Month Labels
       svg.append('g')
