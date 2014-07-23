@@ -31,6 +31,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     initialize: function(model) {
       console.log('initialize a Graph ItemView');
       coms.on('filter', _.bind(this.resetCollection, this));
+
+      $(window).on("resize", _.bind(this.makeGraph, this));
     },
 
 
@@ -207,7 +209,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           graphType = this.model.get('graphType'),
           binSize = this.model.get('binSize'),
           margin = {top: 30, right: 0, bottom: 60, left: 0},
-          width = 880 - margin.left - margin.right,
+          outerWidth = $('#graphs').width(),
+          width = outerWidth - margin.left - margin.right,
           height = 225 - margin.top - margin.bottom,
           tooltip = $('#graphs .graphContainer .graphTooltipContainer'),
           binWidth = width / data.length,
@@ -218,6 +221,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       //remove any existing graph
       d3.select('#graphs .graphContainer svg').remove();
 
+
+      //If no data, no graph
       if(!data || !data.length) {
         return;
       }
@@ -273,6 +278,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       svg.append('g')
         .attr('class', 'grid')
         .call(yAxis);
+
 
       //Draw bars
       var bars = svg.selectAll('.bar')
@@ -438,5 +444,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         });
       }, 0);
     }
+    
   });
 });
