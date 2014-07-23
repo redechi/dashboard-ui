@@ -129,6 +129,10 @@
       border-bottom: 1px solid rgb(221, 221, 221);
       cursor: pointer;
 
+      .tripLink {
+        display: none;
+      }
+
       .timeTopBox, .timeBottomBox {
         position: absolute;
         font-size: 11px;
@@ -261,6 +265,17 @@
 
       &:hover{
         background: #fff;
+
+        .tripLink {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 0;
+        	height: 0;
+        	border-top: 27px solid $highlight;
+        	border-left: 27px solid transparent;
+        }
 
         .stat {
           color: $link_type;
