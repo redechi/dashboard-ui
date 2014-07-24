@@ -66,4 +66,24 @@
 			}
 		}
 	}
+
+  .hardBrakeIcon {
+    background: #D173EB;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.20);
+    box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.20);
+    height: 10px;
+    width: 10px;
+  }
+
+  .hardAccelIcon {
+    background: #FAD97B;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+    -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.20);
+    box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.20);
+    height: 10px;
+    width: 10px;
+  }
 }
