@@ -5,6 +5,9 @@ function() {
 
   return {
     getAverageScore: function(trips) {
+      if(!trips.length) {
+        return 0;
+      }
       var weightedSum = trips.reduce(function(memo, trip) {
         memo.score1 += trip.get('score').score1 * trip.get('duration');
         memo.score2 += trip.get('score').score2 * trip.get('duration');
