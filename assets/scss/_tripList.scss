@@ -271,10 +271,10 @@
           position: absolute;
           top: 0;
           right: 0;
-          width: 0;
-        	height: 0;
-        	border-top: 27px solid $highlight;
-        	border-left: 27px solid transparent;
+          width: 27px;
+          height: 27px;
+          @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
+          text-indent: -9999px;
         }
 
         .stat {
