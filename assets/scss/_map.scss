@@ -71,7 +71,7 @@
 #map {
   .map {
     width: 100%;
-    height: 400px;
+    height: 360px;
     position: relative;
 
 		/* Popup Styles */
@@ -91,4 +91,48 @@
 			box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
 		}
   }
+
+	.mapMenu {
+		height: 40px;
+		border: 1px solid $line_gray;
+		background: $trip_list_back;
+
+		.zoomControl {
+			height: 24px;
+			padding: 8px 0;
+			float: left;
+
+			& > div {
+				float: left;
+				width: 29px;
+				text-align: center;
+				font-size: 19px;
+				font-weight: bold;
+				line-height: 24px;
+			}
+
+			.zoomIn {
+				border-right: 1px solid $line_gray;
+
+			}
+		}
+
+		.tripEvents {
+			width: 300px;
+			float: right;
+			border-left: 1px solid $line_gray;
+			height: 40px;
+			line-height: 40px;
+
+			.showTripEvents {
+				margin-left: 8px;
+			}
+
+			.tripEventsBox {
+				float: right;
+				width: 232px;
+				padding: 7px;
+			}
+		}
+	}
 }

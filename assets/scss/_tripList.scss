@@ -325,76 +325,96 @@
         transition-delay: 0.1s;
         transition-timing-function: easeInOutSine;
 
-        .event {
-          display: inline-block;
-          text-align: center;
-          width: 25px;
-          height: 25px;
-          float: left;
-          position: relative;
-          color: transparent;
-          line-height: 25px;
-          text-align: center;
-
-          &::after {
-            font-size: 10px;
-            line-height: 11px;
-            font-weight: normal;
-            position: absolute;
-            text-align: left;
-            margin-left: 11px;
-            color: #777;
-            width: 39px;
-            padding-top: 2px;
-          }
-        }
-
         .hardBrakes {
           clear: both;
-          margin-right: 48px;
           margin-left: 10px;
-          @include hr-image('../img/event_nohardbrakes_color.png', '../img/event_nohardbrakes_color@2x.png');
-          color: #FFF;
-
-          &.noHardBrakes {
-            @include hr-image('../img/event_nohardbrakes_green.png', '../img/event_nohardbrakes_green@2x.png');
-            color: transparent;
-          }
-
-          &::after {
-            content: 'No Hard Brakes';
-          }
-        }
-
-        .speeding {
-          margin-right: 48px;
-          @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
-          color: $link_type;
-
-          &.noSpeeding {
-            @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
-            color: transparent;
-          }
-
-          &::after {
-            content: 'Under 70 MPH';
-          }
-        }
-
-        .hardAccels {
-          @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
-          color: $link_type;
-
-          &.noHardAccels {
-            @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');
-            color: transparent;
-          }
-
-          &::after {
-            content: 'No Hard Accels';
-          }
         }
       }
+    }
+  }
+}
+
+
+.tripEventsBox {
+  .event {
+    display: inline-block;
+    text-align: center;
+    width: 25px;
+    height: 25px;
+    float: left;
+    position: relative;
+    color: transparent;
+    line-height: 25px;
+
+    &::after {
+      font-size: 10px;
+      line-height: 11px;
+      font-weight: normal;
+      position: absolute;
+      text-align: left;
+      margin-left: 11px;
+      color: #777;
+      width: 39px;
+      padding-top: 2px;
+    }
+  }
+
+  .hardBrakes {
+    margin-right: 48px;
+    @include hr-image('../img/event_nohardbrakes_color.png', '../img/event_nohardbrakes_color@2x.png');
+    color: #FFF;
+
+    &.noHardBrakes {
+      @include hr-image('../img/event_nohardbrakes_green.png', '../img/event_nohardbrakes_green@2x.png');
+      color: transparent;
+    }
+
+    &.blankHardBrakes {
+      @include hr-image('../img/event_nohardbrakes_grey.png', '../img/event_nohardbrakes_grey@2x.png');
+      color: transparent;
+    }
+
+    &::after {
+      content: 'No Hard Brakes';
+    }
+  }
+
+  .speeding {
+    margin-right: 48px;
+    @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
+    color: $link_type;
+
+    &.noSpeeding {
+      @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
+      color: transparent;
+    }
+
+    &.blankSpeeding {
+      @include hr-image('../img/event_under70_grey.png', '../img/event_under70_grey@2x.png');
+      color: transparent;
+    }
+
+    &::after {
+      content: 'Under 70 MPH';
+    }
+  }
+
+  .hardAccels {
+    @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
+    color: $link_type;
+
+    &.noHardAccels {
+      @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');
+      color: transparent;
+    }
+
+    &.blankHardAccels {
+      @include hr-image('../img/event_nohardaccel_grey.png', '../img/event_nohardaccel_grey@2x.png');
+      color: transparent;
+    }
+
+    &::after {
+      content: 'No Hard Accels';
     }
   }
 }
