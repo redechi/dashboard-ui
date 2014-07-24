@@ -35,7 +35,9 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
     ui: {},
 
     events: {
-      'click .mapLocationFilter': 'updateLocationFilter'
+      'click .mapLocationFilter': 'updateLocationFilter',
+      'click .zoomIn': 'zoomIn',
+      'click .zoomOut': 'zoomOut'
     },
 
     updateLocationFilter: function (e) {
@@ -48,7 +50,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
     },
 
     createMap: function() {
-      var mapbox = this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4'),
+      var mapbox = this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4', { zoomControl: false }),
           pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
           markersLayer = this.markersLayer = new L.MarkerClusterGroup(),
           markers = this.markers = [];
@@ -222,6 +224,16 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
           mapbox.fitBounds(bounds, {padding: [50, 50]});
         }
       }, 0);
+    },
+
+
+    zoomIn: function() {
+      this.mapbox.zoomIn();
+    },
+
+
+    zoomOut: function() {
+      this.mapbox.zoomOut();
     },
 
 
