@@ -6,25 +6,29 @@ function( mapbox, formatters ) {
   'use strict';
 
   return {
+    mainIcon: L.icon({
+      iconUrl: '/assets/img/map_pin_cluster_2.png',
+      iconRetinaUrl: '/assets/img/map_pin_cluster_2@2x.png',
+      iconSize: [12, 12],
+      iconAnchor: [6, 6],
+      popupAnchor: [0,-12]
+    }),
+
     aIcon: L.icon({
-      iconUrl: '/assets/img/a.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 40],
-      popupAnchor: [0,-41],
-      shadowUrl: '//api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
-      shadowSize: [41, 41],
-      shadowAnchor: [12, 40]
+      iconUrl: '/assets/img/map_pin_a.png',
+      iconRetinaUrl: '/assets/img/map_pin_a@2x.png',
+      iconSize: [17, 28],
+      iconAnchor: [8, 28],
+      popupAnchor: [0,-28]
     }),
 
 
     bIcon: L.icon({
-      iconUrl: '/assets/img/b.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 40],
-      popupAnchor: [0,-41],
-      shadowUrl: '//api.tiles.mapbox.com/mapbox.js/v1.6.1/images/marker-shadow.png',
-      shadowSize: [41, 41],
-      shadowAnchor: [12, 40]
+      iconUrl: '/assets/img/map_pin_b.png',
+      iconRetinaUrl: '/assets/img/map_pin_b@2x.png',
+      iconSize: [17, 28],
+      iconAnchor: [8, 28],
+      popupAnchor: [0,-28]
     }),
 
 
@@ -42,10 +46,28 @@ function( mapbox, formatters ) {
 
     styleLine: function() {
       return {
-        color: '#08b1d5',
-        opacity: 0.8,
-        weight: 3
+        color: '#8D989F',
+        opacity: 0.4,
+        weight: 2
       };
+    },
+
+
+    highlightLine: function() {
+      return {
+        opacity: 1,
+        color: '#5DBEF5',
+        weight: 4,
+      };
+    },
+
+
+    highlightMarker: function (marker) {
+      if(marker.options.type === 'start') {
+        marker.setIcon(this.aIcon);
+      } else if(marker.options.type === 'end') {
+        marker.setIcon(this.bIcon);
+      }
     },
 
 
@@ -58,11 +80,11 @@ function( mapbox, formatters ) {
       if(type === 'start') {
         location = model.get('start_location');
         time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A');
-        icon = this.aIcon;
+        icon = this.mainIcon;
       } else {
         location = model.get('end_location');
         time = formatters.formatTime(model.get('end_time'), model.get('end_time_zone'), 'MMM D, YYYY h:mm A');
-        icon = this.bIcon;
+        icon = this.mainIcon;
       }
 
       var popupText = popupTemplate({

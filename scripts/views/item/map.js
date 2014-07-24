@@ -31,81 +31,69 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     template: MapTmpl,
 
-    ui: {},
-
     events: {
-      'click .mapLocationFilter': 'updateLocationFilter',
       'click .zoomIn': 'zoomIn',
       'click .zoomOut': 'zoomOut'
     },
 
-    updateLocationFilter: function (e) {
-      $(e.target).data('latlng');
-      coms.trigger('filters:updateLocationFilter', e);
-    },
 
     mapDiv: function() {
       return this.$el.find('.map').get(0);
     },
 
+
     createMap: function() {
-      var mapbox = this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4', { zoomControl: false }),
-          pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
-          markersLayer = this.markersLayer = new L.featureGroup(),
-          markers = this.markers = [];
+      this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4', { zoomControl: false });
+      this.pathsLayer = L.mapbox.featureLayer();
+      this.markersLayer = new L.featureGroup();
+      this.markers = [];
 
       mapHelpers.enablePolyline();
 
-      mapbox.addLayer(markersLayer);
+      this.mapbox.addLayer(this.markersLayer);
     },
 
 
     highlightMap: function (model) {
-      var id = model.get('id'),
-          markersLayer = this.markersLayer;
+      var id = model.get('id');
 
       this.pathsLayer.eachLayer(function(layer) {
         if(layer.options.id == id) {
           layer.eachLayer(function(layer) {
             if(layer instanceof L.Polyline) {
-              layer.setStyle({opacity: 1, color: '#68e68d'});
+              layer.setStyle(mapHelpers.highlightLine());
             }
           });
         } else {
           layer.eachLayer(function(layer) {
             if(layer instanceof L.Polyline) {
-              layer.setStyle({opacity: 0.2});
+              layer.setStyle(mapHelpers.styleLine());
             }
           });
         }
       });
 
       this.markersLayer.eachLayer(function(marker) {
-        if(marker.options.id !== id) {
-          markersLayer.removeLayer(marker);
+        if(marker.options.id === id) {
+          mapHelpers.highlightMarker(marker);
+        } else {
+          marker.setIcon(mapHelpers.mainIcon);
         }
       });
     },
 
 
     unhighlightMap: function (model) {
-      var mapbox = this.mapbox,
-          markersLayer = this.markersLayer;
-
       this.pathsLayer.eachLayer(function(layer) {
         layer.eachLayer(function(layer) {
           if(layer instanceof L.Polyline) {
-            layer.setStyle({opacity: 1, color: '#08b1d5'});
+            layer.setStyle(mapHelpers.styleLine());
           }
         });
       });
 
-      try {
-        //sometimes this is triggered along with a filter, so layers are gone
-        markersLayer.clearLayers();
-      } catch(e) { }
-      this.markers.forEach(function(marker) {
-        markersLayer.addLayer(marker);
+      this.markersLayer.eachLayer(function(marker) {
+        marker.setIcon(mapHelpers.mainIcon);
       });
     },
 
@@ -124,41 +112,40 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
+    attachEvents: function (feature, layer) {
+      var self = this;
+      layer
+        .on('mouseover', function (e) {
+          // get model from id
+          var newModel = self.collection.where({id: e.target.feature.properties.id }).pop();
+          coms.trigger('trips:highlight', newModel);
+        })
+        .on('mouseout', function () {
+          coms.trigger('trips:unhighlight');
+        });
+      return layer;
+    },
+
+
     updateMap: function () {
       if(!this.mapDiv()) {
-        return
+        return;
       } else if(!this.mapbox) {
         this.createMap();
       } else {
         this.clearMap();
       }
 
-      var mapbox = this.mapbox,
-          pathsLayer = this.pathsLayer,
-          markersLayer = this.markersLayer,
-          markers = this.markers,
-          self = this;
-
       _.templateSettings = {
         interpolate : /\{\{(.+?)\}\}/g
       };
 
-      var popupTemplate = _.template('{{name}}<br>{{time}}<br>' +
-        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="end" class="mapLocationFilter">Trips to here</a><br>' +
-        '<a href="#" data-lat="{{lat}}" data-lon="{{lon}}" data-name="{{name}}" data-type="start" class="mapLocationFilter">Trips from here</a>');
-
-      function attachEvents(feature, layer) {
-        layer
-          .on('mouseover', function (e) {
-            // get model from id
-            var newModel = self.collection.where({id: e.target.feature.properties.id }).pop();
-            coms.trigger('trips:highlight', newModel);
-          })
-          .on('mouseout', function () {
-            coms.trigger('trips:unhighlight');
-          });
-        return layer;
-      }
+      var self = this,
+          mapbox = this.mapbox,
+          pathsLayer = this.pathsLayer,
+          markersLayer = this.markersLayer,
+          markers = this.markers,
+          popupTemplate = _.template('{{name}}<br>{{time}}');
 
 
       this.collection.each(function (model) {
@@ -166,7 +153,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
             startLoc = model.get('start_location'),
             endLoc = model.get('end_location'),
             path = model.get('path'),
-            geoJson = L.geoJson([], { style: mapHelpers.styleLine, onEachFeature: attachEvents, id: id});
+            geoJson = L.geoJson([], {
+              style: mapHelpers.styleLine,
+              onEachFeature: _.bind(self.attachEvents, self),
+              id: id
+            });
 
         if (path) {
           geoJson.addData({
@@ -210,19 +201,19 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         geoJson.addTo(pathsLayer);
-
       });
 
       mapbox.addLayer(pathsLayer);
 
-      // weird timeout hack for mapbox
-      setTimeout(function () {
-        var bounds = pathsLayer.getBounds();
-        mapbox.invalidateSize();
-        if(bounds.isValid()) {
-          mapbox.fitBounds(bounds, {padding: [50, 50]});
-        }
-      }, 0);
+      this.fitBounds(pathsLayer.getBounds());
+    },
+
+
+    fitBounds: function(bounds) {
+      this.mapbox.invalidateSize();
+      if(bounds.isValid()) {
+        this.mapbox.fitBounds(bounds, {padding: [50, 50]});
+      }
     },
 
 
@@ -236,7 +227,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    onRender: function () {
+    onShow: function () {
       this.updateMap();
     }
 
