@@ -7,6 +7,7 @@
       float: left;
       display: inline-block;
       line-height: 25px;
+      margin-top:10px;
     }
 
     .graphType {
@@ -19,6 +20,7 @@
       background-repeat: no-repeat;
       @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
       cursor: pointer;
+      margin-top:10px;
 
       &:hover {
         color: $highlight;
@@ -112,7 +114,7 @@
 
   .graphContainer {
     white-space: nowrap;
-    padding-top: 30px;
+    padding-top: 35px;
 
     rect.graphGradient {
       fill: url(#graphGradient);
