@@ -10,6 +10,11 @@
   color: #FFF;
 
   &:hover {
+    background-color: #4AB4F0;
+    color: #FFF;
+  }
+
+  &:active {
     background-color: #297FB8;
     color: #FFF;
   }
@@ -20,8 +25,11 @@
   color: $link_type;
 
   &:hover {
+    background-color: #E5E4E1;
+  }
+
+  &:active {
     background-color: $line_gray;
-    color: $link_type;
   }
 }
 
