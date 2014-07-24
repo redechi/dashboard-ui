@@ -65,6 +65,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         if(layer.options.id == id) {
           layer.eachLayer(function(layer) {
             if(layer instanceof L.Polyline) {
+              layer.bringToFront();
               layer.setStyle(mapHelpers.highlightLine());
             }
           });
