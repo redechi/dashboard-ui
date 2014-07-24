@@ -16,8 +16,6 @@ require.config({
         d3: '../bower_components/d3/d3',
         nvd3: '../bower_components/nvd3/nv.d3',
         mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox',
-        markercluster: '//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster',
-
 
         /* alias all marionette libs */
         'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',

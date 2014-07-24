@@ -1,13 +1,12 @@
 define([
   'backbone',
   'mapbox',
-  'markercluster',
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
   '../../controllers/unit_formatters',
   '../../controllers/map_helpers'
 ],
-function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers ) {
+function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -52,7 +51,7 @@ function( Backbone, mapbox, markercluster, coms, MapTmpl, formatters, mapHelpers
     createMap: function() {
       var mapbox = this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4', { zoomControl: false }),
           pathsLayer = this.pathsLayer = L.mapbox.featureLayer(),
-          markersLayer = this.markersLayer = new L.MarkerClusterGroup(),
+          markersLayer = this.markersLayer = new L.featureGroup(),
           markers = this.markers = [];
 
       mapHelpers.enablePolyline();
