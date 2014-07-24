@@ -140,16 +140,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         this.clearMap();
       }
 
-      _.templateSettings = {
-        interpolate : /\{\{(.+?)\}\}/g
-      };
-
       var self = this,
           mapbox = this.mapbox,
           pathsLayer = this.pathsLayer,
           markersLayer = this.markersLayer,
-          markers = this.markers,
-          popupTemplate = _.template('{{name}}<br>{{time}}');
+          markers = this.markers;
 
 
       this.collection.each(function (model) {
@@ -177,7 +172,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (startLoc) {
-          var startMarker = mapHelpers.createMarker('start', model, popupTemplate);
+          var startMarker = mapHelpers.createMarker('start', model);
           startMarker.on('click', function (e) {
             var newModel = self.collection.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);
@@ -191,7 +186,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (endLoc) {
-          var endMarker = mapHelpers.createMarker('end', model, popupTemplate);
+          var endMarker = mapHelpers.createMarker('end', model);
           endMarker.on('click', function (e) {
             var newModel = self.collection.where({id: e.target.options.id }).pop();
             coms.trigger('trips:highlight', newModel);

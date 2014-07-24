@@ -2,7 +2,7 @@ define([
   'mapbox',
   './unit_formatters'
 ],
-function( mapbox, formatters ) {
+function( mapbox, formatters, stats ) {
   'use strict';
 
   return {
@@ -11,7 +11,7 @@ function( mapbox, formatters ) {
       iconRetinaUrl: '/assets/img/map_pin_cluster_2@2x.png',
       iconSize: [12, 12],
       iconAnchor: [6, 6],
-      popupAnchor: [0,-12]
+      popupAnchor: [0,-28]
     }),
 
     aIcon: L.icon({
@@ -71,30 +71,36 @@ function( mapbox, formatters ) {
     },
 
 
-    createMarker: function (type, model, popupTemplate) {
+    createMarker: function (type, model) {
       var id = model.get('id'),
           location,
-          time,
-          icon;
+          time;
+
+      _.templateSettings = {
+        interpolate : /\{\{(.+?)\}\}/g
+      };
+
+      var popupTemplate = _.template('{{name}}<br>{{typeText}} {{time}}');
 
       if(type === 'start') {
         location = model.get('start_location');
         time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A');
-        icon = this.mainIcon;
       } else {
         location = model.get('end_location');
         time = formatters.formatTime(model.get('end_time'), model.get('end_time_zone'), 'MMM D, YYYY h:mm A');
-        icon = this.mainIcon;
       }
 
+      var name = (location.name) ? location.name.replace(', USA', '') : 'Unknown Address';
+
       var popupText = popupTemplate({
-        name: location.name,
+        name: name,
         time: time,
         lat: location.lat,
-        lon: location.lon
+        lon: location.lon,
+        typeText: (type === 'start') ? 'Departed at' : 'Arrived at'
       });
 
-      var marker = L.marker([location.lat, location.lon], {icon: icon, type: type, id: id}).bindPopup(popupText);
+      var marker = L.marker([location.lat, location.lon], {icon: this.mainIcon, type: type, id: id}).bindPopup(popupText);
 
       return marker;
     },
