@@ -33,7 +33,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     events: {
       'click .zoomIn': 'zoomIn',
-      'click .zoomOut': 'zoomOut'
+      'click .zoomOut': 'zoomOut',
+      'change .showTripEvents': 'toggleTripEvents'
     },
 
 
@@ -45,7 +46,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     createMap: function() {
       this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.i86oppa4', { zoomControl: false });
       this.pathsLayer = L.mapbox.featureLayer();
-      this.markersLayer = new L.featureGroup();
+      this.markersLayer = L.mapbox.featureLayer();
+      this.hardBrakesLayer = L.mapbox.featureLayer();
+      this.hardAccelsLayer = L.mapbox.featureLayer();
+      this.speedingLayer = L.mapbox.featureLayer();
       this.markers = [];
 
       mapHelpers.enablePolyline();
@@ -206,6 +210,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       mapbox.addLayer(pathsLayer);
 
       this.fitBounds(pathsLayer.getBounds());
+
+      this.updateTripEvents();
     },
 
 
@@ -224,6 +230,81 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     zoomOut: function() {
       this.mapbox.zoomOut();
+    },
+
+
+    updateTripEvents: function() {
+      this.tripEvents = this.calculateTripEvents();
+      this.toggleTripEvents();
+    },
+
+
+    calculateTripEvents: function() {
+      return this.collection.reduce(function(memo, trip) {
+        memo.hardBrakes += trip.get('hard_brakes');
+        memo.speeding += trip.get('duration_over_70_min');
+        memo.hardAccels += trip.get('hard_accels');
+
+        return memo;
+      }, {hardBrakes: 0, speeding: 0, hardAccels: 0});
+    },
+
+
+    toggleTripEvents: function() {
+      if($('.showTripEvents').is(':checked')) {
+        this.showTripEvents();
+      } else {
+        this.hideTripEvents();
+      }
+    },
+
+
+    showTripEvents: function() {
+      var self = this,
+          distances = [];
+
+      $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('blank');
+      $('#map .hardBrakes')
+        .text(this.tripEvents.hardBrakes)
+        .toggleClass('noHardBakes', (this.tripEvents.hardBrakes === 0));
+      $('#map .hardAccels')
+        .text(this.tripEvents.hardAccels)
+        .toggleClass('noHardAccels', (this.tripEvents.hardAccels === 0));
+      $('#map .speeding')
+        .text(this.tripEvents.speeding)
+        .toggleClass('noSpeeding', (this.tripEvents.speeding === 0));
+
+      this.collection.each(function(model) {
+        model.get('drive_events').forEach(function(item) {
+          if(item.type === 'hard_brake') {
+            self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon}));
+          } else if(item.type === 'hard_accel') {
+            self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon}));
+          } else if(item.type === 'speeding' && distances.length) {
+          }
+        });
+      });
+
+      this.mapbox.addLayer(this.hardBrakesLayer);
+      this.mapbox.addLayer(this.hardAccelsLayer);
+    },
+
+
+    hideTripEvents: function() {
+      $('#map .tripEventsBox .hardBrakes')
+        .addClass('blank')
+        .removeClass('noHardBrakes');
+
+      $('#map .tripEventsBox .speeding')
+        .addClass('blank')
+        .removeClass('noSpeeding');
+
+      $('#map .tripEventsBox .hardAccels')
+        .addClass('blank')
+        .removeClass('noHardAccels');
+
+      this.mapbox.removeLayer(this.hardBrakesLayer);
+      this.mapbox.removeLayer(this.hardAccelsLayer);
     },
 
 
