@@ -231,6 +231,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     updateTripEvents: function() {
       this.tripEvents = this.calculateTripEvents();
       this.toggleTripEvents();
+
+      this.speedingLayer.clearLayers();
+      this.hardBrakesLayer.clearLayers();
+      this.hardAccelsLayer.clearLayers();
     },
 
 
@@ -255,9 +259,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     showTripEvents: function() {
-      var self = this,
-          distances = [];
-
       $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('blank');
       $('#map .hardBrakes')
         .text(this.tripEvents.hardBrakes)
@@ -269,19 +270,35 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         .text(this.tripEvents.speeding)
         .toggleClass('noSpeeding', (this.tripEvents.speeding === 0));
 
+      // If speeding layer is empty, calculate tripEvents layers (expensive)
+      if(!this.speedingLayer.getLayers().length) {
+        this.buildTripEventsLayer();
+      }
+
+      this.mapbox.addLayer(this.speedingLayer);
+      this.mapbox.addLayer(this.hardBrakesLayer);
+      this.mapbox.addLayer(this.hardAccelsLayer);
+    },
+
+
+    buildTripEventsLayer: function() {
+      var self = this;
+
       this.collection.each(function(model) {
         model.get('drive_events').forEach(function(item) {
+          var decodedPath = L.GeoJSON.decodeLine(model.get('path'));
+
           if(item.type === 'hard_brake') {
             self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon}));
           } else if(item.type === 'hard_accel') {
             self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon}));
-          } else if(item.type === 'speeding' && distances.length) {
+          } else if(item.type === 'speeding') {
+            var speedingPath = mapHelpers.subPath(formatters.m_to_mi(item.start_distance_m), formatters.m_to_mi(item.end_distance_m), decodedPath);
+            self.speedingLayer.addLayer(L.polyline(speedingPath, mapHelpers.speedingLine()));
           }
         });
       });
 
-      this.mapbox.addLayer(this.hardBrakesLayer);
-      this.mapbox.addLayer(this.hardAccelsLayer);
     },
 
 
@@ -300,6 +317,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       this.mapbox.removeLayer(this.hardBrakesLayer);
       this.mapbox.removeLayer(this.hardAccelsLayer);
+      this.mapbox.removeLayer(this.speedingLayer);
     },
 
 

@@ -1,6 +1,7 @@
 define([
   'mapbox',
-  './unit_formatters'
+  './unit_formatters',
+  './stats'
 ],
 function( mapbox, formatters, stats ) {
   'use strict';
@@ -62,6 +63,15 @@ function( mapbox, formatters, stats ) {
     },
 
 
+    speedingLine: function() {
+      return {
+        opacity: 1,
+        color: '#F5A623',
+        weight: 2
+      };
+    },
+
+
     highlightMarker: function (marker) {
       if(marker.options.type === 'start') {
         marker.setIcon(this.aIcon);
@@ -103,6 +113,33 @@ function( mapbox, formatters, stats ) {
       var marker = L.marker([location.lat, location.lon], {icon: this.mainIcon, type: type, id: id}).bindPopup(popupText);
 
       return marker;
+    },
+
+
+    cumulativeDistance: function(decodedPath) {
+      var cumulativeDistance = 0;
+
+      return decodedPath.map(function(latlng1, idx) {
+        if(idx > 0) {
+          var latlng2 = decodedPath[idx - 1];
+          var distance = stats.calculateDistanceMi(latlng1[0], latlng1[1], latlng2[0], latlng2[1]);
+          cumulativeDistance += distance;
+        }
+        return cumulativeDistance;
+      });
+    },
+
+
+    subPath: function(startMi, endMi, decodedPath) {
+      var distances = this.cumulativeDistance(decodedPath);
+
+      return _.reduce(distances, function(memo, distance1, idx) {
+        var distance2 = (idx < distances.length - 1) ? distances[idx + 1] : distance1;
+        if(startMi <= distance2 && endMi >= distance1) {
+          memo.push([decodedPath[idx][1], decodedPath[idx][0]]);
+        }
+        return memo;
+      }, []);
     },
 
 
