@@ -350,7 +350,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
       //styles for min
-      if(summary.min) {
+      if(summary.min && (summary.min !== summary.max)) {
         var minBar = bars
           .filter(function(d) { return d.key === summary.min.key})
           .classed('min', true);
