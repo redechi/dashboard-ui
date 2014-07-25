@@ -24,8 +24,12 @@
 
 	.mapMenu {
 		height: 40px;
-		border: 1px solid $line_gray;
-		background: $trip_list_back;
+		border-top: 1px solid $footer_top_line;
+    border-bottom: 1px solid $footer_bottom_line;
+		background: $footer_back;
+    -moz-box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
+    box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
+    overflow: hidden;
 
 		.zoomControl {
 			height: 24px;
@@ -43,25 +47,34 @@
 			}
 
 			.zoomIn {
-				border-right: 1px solid $line_gray;
+				border-right: 1px solid $line_light_gray;
 
 			}
 		}
 
 		.tripEvents {
-			width: 300px;
+			width: 318px;
 			float: right;
-			border-left: 1px solid $line_gray;
+			border-left: 1px solid $line_light_gray;
 			height: 40px;
 			line-height: 40px;
 
-			.showTripEvents {
-				margin-left: 8px;
-			}
+      label {
+        font-size: 10px;
+        color: $link_type;
+        font-weight: normal;
+        margin-bottom: 0;
+        vertical-align: top;
+
+        .showTripEvents {
+          margin-left: 8px;
+          font-size: 12px;
+          vertical-align: -1px;
+        }
+      }
 
 			.tripEventsBox {
 				float: right;
-				width: 232px;
 				padding: 7px;
 			}
 		}

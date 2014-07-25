@@ -1,14 +1,13 @@
 
 #trips {
-  border-right: 1px solid $line_gray;
-  border-left: 1px solid $line_gray;
-  border-bottom: 1px solid $line_gray;
   background: $trip_list_back;
 
   .tripsHeader {
     padding: 5px 10px;
-    border-bottom: 1px solid rgb(221, 221, 221);
     overflow: hidden;
+    border-right: 1px solid $line_light_gray;
+    border-left: 1px solid $line_light_gray;
+    border-bottom: 1px solid $line_light_gray;
 
     .tripCount {
       float: left;
@@ -54,8 +53,12 @@
   }
 
   .tripsFooter {
-    border-top: 1px solid $line_gray;
+    border-top: 1px solid $footer_top_line;
+    border-bottom: 1px solid $footer_bottom_line;
     height: 40px;
+    -moz-box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
+    box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
+    background: $footer_back;
 
     .export {
       cursor: pointer;
@@ -126,8 +129,14 @@
       overflow: hidden;
       display: block;
       position: relative;
-      border-bottom: 1px solid rgb(221, 221, 221);
+      border-top: 1px solid $line_light_gray;
+      border-right: 1px solid $line_light_gray;
+      border-left: 1px solid $line_light_gray;
       cursor: pointer;
+
+      &:first-child {
+        border-top: none;
+      }
 
       .tripLink {
         display: none;
@@ -328,6 +337,14 @@
         .hardBrakes {
           clear: both;
           margin-left: 10px;
+        }
+
+        .speeding {
+          margin-left: 0;
+        }
+
+        .hardAccels {
+          margin-left: 0;
         }
       }
     }

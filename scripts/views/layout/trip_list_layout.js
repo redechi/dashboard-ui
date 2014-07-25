@@ -18,7 +18,7 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
 
 
     regions: {
-      aggStats: "#aggStats",
+      tripStats: "#tripStats",
       tripList: "#tripList"
     },
 
@@ -27,7 +27,7 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
       var userScoreView = new UserScoreView();
       var tripsCompView = new TripsCompositeView();
 
-      this.aggStats.show(userScoreView);
+      this.tripStats.show(userScoreView);
       this.tripList.show(tripsCompView);
     }
   });
