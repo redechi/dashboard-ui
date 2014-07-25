@@ -231,11 +231,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     updateTripEvents: function() {
       this.tripEvents = this.calculateTripEvents();
-      this.toggleTripEvents();
+      this.showTripEventsSummary();
 
       this.speedingLayer.clearLayers();
       this.hardBrakesLayer.clearLayers();
       this.hardAccelsLayer.clearLayers();
+
+      this.toggleTripEvents();
     },
 
 
@@ -250,26 +252,30 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
+    showTripEventsSummary: function() {
+      $('#map .hardBrakes')
+        .text(this.tripEvents.hardBrakes)
+        .toggleClass('none', (this.tripEvents.hardBrakes === 0));
+      $('#map .hardAccels')
+        .text(this.tripEvents.hardAccels)
+        .toggleClass('none', (this.tripEvents.hardAccels === 0));
+      $('#map .speeding')
+        .text(this.tripEvents.speeding)
+        .toggleClass('none', (this.tripEvents.speeding === 0));
+    },
+
+
     toggleTripEvents: function() {
       if($('.showTripEvents').is(':checked')) {
-        this.showTripEvents();
+        this.showTripEventsMap();
       } else {
         this.hideTripEvents();
       }
     },
 
 
-    showTripEvents: function() {
+    showTripEventsMap: function() {
       $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('blank');
-      $('#map .hardBrakes')
-        .text(this.tripEvents.hardBrakes)
-        .toggleClass('noHardBakes', (this.tripEvents.hardBrakes === 0));
-      $('#map .hardAccels')
-        .text(this.tripEvents.hardAccels)
-        .toggleClass('noHardAccels', (this.tripEvents.hardAccels === 0));
-      $('#map .speeding')
-        .text(this.tripEvents.speeding)
-        .toggleClass('noSpeeding', (this.tripEvents.speeding === 0));
 
       // If speeding layer is empty, calculate tripEvents layers (expensive)
       if(!this.speedingLayer.getLayers().length) {
@@ -304,17 +310,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     hideTripEvents: function() {
-      $('#map .tripEventsBox .hardBrakes')
-        .addClass('blank')
-        .removeClass('noHardBrakes');
-
-      $('#map .tripEventsBox .speeding')
-        .addClass('blank')
-        .removeClass('noSpeeding');
-
-      $('#map .tripEventsBox .hardAccels')
-        .addClass('blank')
-        .removeClass('noHardAccels');
+      $('#map .hardBrakes, #map .speeding, #map .hardAccels').addClass('blank');
 
       this.mapbox.removeLayer(this.hardBrakesLayer);
       this.mapbox.removeLayer(this.hardAccelsLayer);

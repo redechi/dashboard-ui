@@ -1,4 +1,3 @@
-
 #trip {
   width: 750px;
   margin: 0 auto;
@@ -38,86 +37,6 @@
 
     .map {
       height: 400px;
-    }
-
-    .tripEvents {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 4px 4px;
-      border: #ccc 1px solid;
-
-      .event {
-        display: inline-block;
-        padding-right: 10px;
-        overflow: hidden;
-
-        label {
-          text-transform: uppercase;
-          color: #777;
-          font-size: 12px;
-          width: 52px;
-          line-height: 13px;
-        }
-
-        span {
-          font-size: 20px;
-          line-height: 24px;
-          vertical-align: top;
-        }
-
-      }
-      .hardBrakes span {
-        clear: both;
-        float: left;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        font-weight: bold;
-        box-sizing: border-box;
-        text-align: center;
-        background: #ff8888;
-      }
-
-      .hardBrakes.noHardBrakes span {
-        background: #7fb75c;
-        color: #FFF;
-      }
-
-      .hardAccels span {
-        clear: both;
-        float: left;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        font-weight: bold;
-        box-sizing: border-box;
-        text-align: center;
-        background: #ffd489;
-      }
-
-      .hardAccels.noHardAccels span {
-        background: #7fb75c;
-        color: #FFF;
-      }
-
-      .speeding span {
-        clear: both;
-        float: left;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        font-weight: bold;
-        box-sizing: border-box;
-        text-align: center;
-        background: #fe8c0a;
-      }
-
-      .speeding.noSpeeding span {
-        background: #7fb75c;
-        color: #FFF;
-      }
     }
   }
 }

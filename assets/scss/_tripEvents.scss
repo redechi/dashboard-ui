@@ -22,6 +22,10 @@
       width: 39px;
       padding-top: 2px;
     }
+
+    &.blank {
+      color: $link_type;
+    }
   }
 
   .hardBrakes {
@@ -29,7 +33,7 @@
     @include hr-image('../img/event_nohardbrakes_color.png', '../img/event_nohardbrakes_color@2x.png');
     color: #FFF;
 
-    &.noHardBrakes {
+    &.none {
       @include hr-image('../img/event_nohardbrakes_green.png', '../img/event_nohardbrakes_green@2x.png');
       color: transparent;
 
@@ -40,11 +44,6 @@
 
     &.blank {
       @include hr-image('../img/event_nohardbrakes_grey.png', '../img/event_nohardbrakes_grey@2x.png');
-      color: transparent;
-
-      &::after {
-        content: 'No Hard Brakes';
-      }
     }
 
     &::after {
@@ -57,7 +56,7 @@
     @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
     color: $link_type;
 
-    &.noSpeeding {
+    &.none {
       @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
       color: transparent;
 
@@ -68,11 +67,6 @@
 
     &.blank {
       @include hr-image('../img/event_under70_grey.png', '../img/event_under70_grey@2x.png');
-      color: transparent;
-
-      &::after {
-        content: 'Under 70 MPH';
-      }
     }
 
     &::after {
@@ -85,7 +79,7 @@
     @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
     color: $link_type;
 
-    &.noHardAccels {
+    &.none {
       @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');
       color: transparent;
 
@@ -96,11 +90,6 @@
 
     &.blank {
       @include hr-image('../img/event_nohardaccel_grey.png', '../img/event_nohardaccel_grey@2x.png');
-      color: transparent;
-
-      &::after {
-        content: 'No Hard Accels';
-      }
     }
 
     &::after {
