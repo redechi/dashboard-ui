@@ -58,7 +58,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
             grant_type: 'password',
             username: email,
             password: password,
-            scope: 'scope:trip:summary scope:location scope:mil:off scope:ignition:on scope:ignition:off scope:mil:on scope:notification:speeding scope:region:changed scope:notification:hard_brake scope:user:details scope:notification:hard_accel scope:vehicle'
+            scope: 'scope:trip:summary scope:location scope:mil:off scope:ignition:on scope:ignition:off scope:mil:on scope:notification:speeding scope:region:changed scope:notification:hard_brake scope:user:details scope:notification:hard_accel scope:vehicle scope:admin'
           },
           function(data) {
             if(data && data.access_token) {
