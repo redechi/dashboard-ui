@@ -22,7 +22,8 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
     events: {
       'submit #loginForm': 'login',
-      'focus #loginForm input': 'clearError'
+      'focus #loginForm input': 'clearError',
+      'click .forgotPasswordLink': 'forgotPassword'
     },
 
 
@@ -84,6 +85,15 @@ function( Backbone, regionManager, LoginTmpl, login ) {
       }
 
       return false;
+    },
+
+
+    forgotPassword: function (e) {
+      var email = $('#email', this.$el).val();
+
+      if(email) {
+        $(e.target).attr('href', '#reset?email=' + encodeURIComponent(email));
+      }
     },
 
 

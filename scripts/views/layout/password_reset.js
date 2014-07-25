@@ -78,6 +78,12 @@ function( Backbone, PasswordResetTmpl ) {
       }
 
       return false;
+    },
+
+
+    onShow: function() {
+      var email = Backbone.history.fragment.replace('reset?email=', '');
+      $('#email', this.$el).val(decodeURIComponent(email));
     }
   });
 });
