@@ -73,6 +73,7 @@
       box-shadow: none;
       color: $link_type;
       border-radius: 0;
+      padding: 6px 0;
 
       &:focus {
         color: $highlight !important;
@@ -118,6 +119,11 @@
     label {
       font-size: 12px;
       margin-bottom: 10px;
+      font-weight: normal;
+    }
+
+    .staySignedIn {
+      margin-right: 10px;
     }
 
     .form-group:last-of-type {
