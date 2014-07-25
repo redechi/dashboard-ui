@@ -9,9 +9,12 @@ function() {
         return 0;
       }
       var weightedSum = trips.reduce(function(memo, trip) {
-        memo.score1 += trip.get('score').score1 * trip.get('duration');
-        memo.score2 += trip.get('score').score2 * trip.get('duration');
-        memo.time += trip.get('duration');
+        var score = trip.get('score');
+        if(score) {
+          memo.score1 += score.score1 * trip.get('duration');
+          memo.score2 += score.score2 * trip.get('duration');
+          memo.time += trip.get('duration');
+        }
         return memo;
       }, {time: 0, score1: 0, score2: 0});
 
