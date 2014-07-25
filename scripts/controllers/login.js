@@ -46,7 +46,7 @@ function( Backbone, coms ) {
 
       // if playground URL, use the dummy token
       if(this.isPlayground()) {
-        var dummyToken = 'ba56eee32df6be1437768699247b406fc7d9992f';
+        var dummyToken = 'e38f525a0795031c9a38b0c72a0e0f30bb7823a9';
         accessToken = dummyToken;
       }
 
