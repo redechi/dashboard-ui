@@ -29,7 +29,7 @@ function( Backbone, coms ) {
     },
 
 
-    getAuthorizeUrl: function () {
+    getBaseUrl: function () {
       if(window.location.search.indexOf('staging') !== -1) {
         return 'https://staging.automatic.co';
       } else {

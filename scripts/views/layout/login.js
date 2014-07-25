@@ -59,7 +59,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
         this.clearErrors();
 
         $.post(
-          login.getAuthorizeUrl() + '/oauth/access_token',
+          login.getBaseUrl() + '/oauth/access_token',
           {
             client_id: '385be37e93925c8fa7c7',
             grant_type: 'password',

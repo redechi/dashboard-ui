@@ -1,8 +1,9 @@
 define([
   'backbone',
-  'hbs!tmpl/layout/password_reset_tmpl'
+  'hbs!tmpl/layout/password_reset_tmpl',
+  '../../controllers/login'
 ],
-function( Backbone, PasswordResetTmpl ) {
+function( Backbone, PasswordResetTmpl, login ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -21,30 +22,56 @@ function( Backbone, PasswordResetTmpl ) {
     },
 
 
+    errorAlert: function(message, emailError, passwordError) {
+      $('.alert', this.$el)
+        .html(message)
+        .removeClass('invisible');
+
+      $('#email', this.$el).parent('.form-group').toggleClass('has-error', emailError);
+      $('#password', this.$el).parent('.form-group').toggleClass('has-error', passwordError);
+      $('#passwordRepeat', this.$el).parent('.form-group').toggleClass('has-error', passwordError);
+    },
+
+
+    successAlert: function(message) {
+      $('.alert', this.$el)
+        .html(message)
+        .removeClass('invisible');
+    },
+
+
+    clearError: function(e) {
+      $(e.target).parent('.form-group').removeClass('has-error');
+    },
+
+
+    clearErrors: function() {
+      $('.alert', this.$el).addClass('invisible');
+      $('form-group', this.$el).removeClass('has-error');
+    },
+
+
     resetPasswordRequest: function (e) {
-      var email = $('#email', e.target).val();
+      var self = this,
+          email = $('#email', e.target).val();
 
       if(!email) {
-        $('#email', e.target)
-          .parent('.form-group')
-          .addClass('has-error');
-
-        $('.alert', e.target)
-          .html('<strong>Error:</strong> Please enter an email address')
-          .removeClass('alert-success')
-          .addClass('alert-danger')
-          .removeClass('hide');
+        this.errorAlert('Please enter an email address', true, false);
       } else {
-        //TODO: post to password reset request URL
-        $('#email', e.target)
-          .parent('.form-group')
-          .removeClass('has-error');
+        this.clearErrors();
 
-        $('.alert', e.target)
-          .html('<strong>Heads up!</strong> We sent a password reset email to ' + email + '.')
-          .removeClass('alert-danger')
-          .addClass('alert-success')
-          .removeClass('hide');
+        $.post(
+          login.getBaseUrl() + '/password/reset_email/', { email: email },
+          function(data) {
+            if(data && data.success) {
+              self.successAlert('Heads up!  We sent a password reset email to ' + email);
+            } else {
+              self.errorAlert('Invalid Email Address', true, false);
+            }
+          }
+        ).fail(function(jqXHR, textStatus, error) {
+          self.errorAlert('Unknown error', false, false);
+        });
       }
 
       return false;
@@ -64,7 +91,7 @@ function( Backbone, PasswordResetTmpl ) {
 
         $('.alert', e.target).addClass('hide');
 
-        //TODO: post to password reset URL
+
       } else {
         $('#password, #passwordRepeat', e.target)
           .parent('.form-group')
