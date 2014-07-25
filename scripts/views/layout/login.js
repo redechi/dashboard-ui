@@ -25,19 +25,31 @@ function( Backbone, regionManager, LoginTmpl, login ) {
     },
 
 
+    errorAlert: function(message, emailError, passwordError) {
+      $('.alert', this.$el)
+        .html(message)
+        .removeClass('invisible');
+
+      $('#email', this.$el).parent('.form-group').toggleClass('has-error', emailError);
+      $('#password', this.$el).parent('.form-group').toggleClass('has-error', passwordError);
+    },
+
+
+    clearError: function() {
+      $('.alert', this.$el).addClass('invisible');
+      $('form-group', this.$el).removeClass('has-error');
+    },
+
+
     login: function (e) {
-      var email = $('#email', e.target).val(),
+      var self = this,
+          email = $('#email', e.target).val(),
           password = $('#password', e.target).val();
 
-      $('#email', e.target).parent('.form-group').toggleClass('has-error', (!email));
-      $('#password', e.target).parent('.form-group').toggleClass('has-error', (!password));
-
       if(!email || !password) {
-        $('#loginForm .alert')
-          .html('<strong>Error</strong>: Please enter an email and a password')
-          .removeClass('hide');
+        this.errorAlert('Please enter an email and a password', (!email), (!password));
       } else {
-        $('#loginForm .alert').addClass('hide');
+        this.clearError();
 
         $.post(
           login.getAuthorizeUrl() + '/oauth/access_token',
@@ -50,22 +62,18 @@ function( Backbone, regionManager, LoginTmpl, login ) {
           },
           function(data) {
             if(data && data.access_token) {
-              $('#loginForm .alert').addClass('hide');
+              $('#loginForm .alert').addClass('invisible');
               login.setCookie('token', data.access_token, 60*60*24*7);
               sessionStorage.setItem('accessToken', data.access_token);
               Backbone.history.navigate('#/');
             }
           }
         ).fail(function(jqXHR, textStatus, error) {
-          var message = '<strong>Error</strong>: ';
           if(jqXHR.status === 401) {
-            message += 'Invalid email or password';
+            self.errorAlert('Invalid email or password', true, true);
           } else {
-            message += 'Unknown error';
+            self.errorAlert('Unknown error', false, false);
           }
-          $('#loginForm .alert')
-            .html(message)
-            .removeClass('hide');
         });
       }
 
