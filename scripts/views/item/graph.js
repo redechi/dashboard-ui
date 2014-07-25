@@ -290,7 +290,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('date', function(d) { return d.key; });
 
       function barMouseover(d) {
-        var tooltipContent = '<div class="arrow"></div><div class="date">' + moment(parseInt(d.key, 10)).format('MMM D') + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
+        var tooltipContent = '<div class="arrow"></div><div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
         tooltip
           .css({
             top: (y(d.values) - 32) + 'px',

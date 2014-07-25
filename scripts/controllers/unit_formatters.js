@@ -100,7 +100,7 @@ function() {
       return (isNaN(number)) ? item : number;
     },
 
-    
+
     formatForGraphLabel: function(graphType, value) {
       if(graphType === 'fuel_cost_usd') {
         return this.costWithUnit(value);
@@ -113,6 +113,16 @@ function() {
       } else if (graphType === 'distance_miles') {
         return this.distance(value);
       }
+    },
+
+
+    formatDateForGraphLabel: function(binSize, date) {
+      if(binSize === 'day') {
+        return moment(date).format('MMM D');
+      } else if(binSize === 'month') {
+        return moment(date).format('MMM YYYY');
+      }
+
     }
   };
 });
