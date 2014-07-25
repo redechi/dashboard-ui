@@ -21,7 +21,8 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
 
     events: {
-      'submit #loginForm': 'login'
+      'submit #loginForm': 'login',
+      'focus #loginForm input': 'clearError'
     },
 
 
@@ -35,7 +36,12 @@ function( Backbone, regionManager, LoginTmpl, login ) {
     },
 
 
-    clearError: function() {
+    clearError: function(e) {
+      $(e.target).parent('.form-group').removeClass('has-error');
+    },
+
+
+    clearErrors: function() {
       $('.alert', this.$el).addClass('invisible');
       $('form-group', this.$el).removeClass('has-error');
     },
@@ -43,13 +49,13 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
     login: function (e) {
       var self = this,
-          email = $('#email', e.target).val(),
-          password = $('#password', e.target).val();
+          email = $('#email', this.$el).val(),
+          password = $('#password', this.$el).val();
 
       if(!email || !password) {
         this.errorAlert('Please enter an email and a password', (!email), (!password));
       } else {
-        this.clearError();
+        this.clearErrors();
 
         $.post(
           login.getAuthorizeUrl() + '/oauth/access_token',
