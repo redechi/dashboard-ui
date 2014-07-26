@@ -16,7 +16,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
     tagName: "li",
 
     template: TripTmpl,
-    
+
 
     templateHelpers: function() {
       return {
@@ -40,7 +40,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
 
     removeHighlight: function () {
-      coms.trigger('trips:unhighlight');
+      coms.trigger('trips:unhighlight', this.model);
     },
 
 

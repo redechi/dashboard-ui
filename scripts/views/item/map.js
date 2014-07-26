@@ -13,8 +13,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     initialize: function() {
       console.log("initialize a Map ItemView");
-      coms.on('trips:highlight', _.bind(this.highlightMap, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightMap, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
@@ -58,7 +58,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    highlightMap: function (model) {
+    highlightTrip: function (model) {
       var id = model.get('id');
 
       this.pathsLayer.eachLayer(function(layer) {
@@ -69,7 +69,22 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
               layer.setStyle(mapHelpers.highlightLine());
             }
           });
-        } else {
+        }
+      });
+
+      this.markersLayer.eachLayer(function(marker) {
+        if(marker.options.id === id) {
+          mapHelpers.highlightMarker(marker);
+        }
+      });
+    },
+
+
+    unhighlightTrip: function (model) {
+      var id = model.get('id');
+
+      this.pathsLayer.eachLayer(function(layer) {
+        if(layer.options.id == id) {
           layer.eachLayer(function(layer) {
             if(layer instanceof L.Polyline) {
               layer.setStyle(mapHelpers.styleLine());
@@ -80,25 +95,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       this.markersLayer.eachLayer(function(marker) {
         if(marker.options.id === id) {
-          mapHelpers.highlightMarker(marker);
-        } else {
           marker.setIcon(mapHelpers.mainIcon);
         }
-      });
-    },
-
-
-    unhighlightMap: function (model) {
-      this.pathsLayer.eachLayer(function(layer) {
-        layer.eachLayer(function(layer) {
-          if(layer instanceof L.Polyline) {
-            layer.setStyle(mapHelpers.styleLine());
-          }
-        });
-      });
-
-      this.markersLayer.eachLayer(function(marker) {
-        marker.setIcon(mapHelpers.mainIcon);
       });
     },
 
@@ -118,15 +116,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     attachEvents: function (feature, layer) {
-      var self = this;
+      var model = this.collection.where({id: feature.properties.id }).pop();
       layer
-        .on('mouseover', function (e) {
-          // get model from id
-          var newModel = self.collection.where({id: e.target.feature.properties.id }).pop();
-          coms.trigger('trips:highlight', newModel);
+        .on('mouseover', function () {
+          coms.trigger('trips:highlight', model);
         })
         .on('mouseout', function () {
-          coms.trigger('trips:unhighlight');
+          coms.trigger('trips:unhighlight', model);
         });
       return layer;
     },
@@ -175,11 +171,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         if (startLoc) {
           var startMarker = mapHelpers.createMarker('start', model);
           startMarker.on('click', function (e) {
-            var newModel = self.collection.where({id: e.target.options.id }).pop();
-            coms.trigger('trips:highlight', newModel);
+            coms.trigger('trips:highlight', model);
           })
           .on('popupclose', function () {
-            coms.trigger('trips:unhighlight');
+            coms.trigger('trips:unhighlight', model);
           });
 
           markers.push(startMarker);
@@ -189,11 +184,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         if (endLoc) {
           var endMarker = mapHelpers.createMarker('end', model);
           endMarker.on('click', function (e) {
-            var newModel = self.collection.where({id: e.target.options.id }).pop();
-            coms.trigger('trips:highlight', newModel);
+            coms.trigger('trips:highlight', model);
           })
           .on('popupclose', function () {
-            coms.trigger('trips:unhighlight');
+            coms.trigger('trips:unhighlight', model);
           });
 
           markers.push(endMarker);
