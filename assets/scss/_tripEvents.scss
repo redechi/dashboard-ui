@@ -61,7 +61,8 @@
       color: transparent;
 
       &::after {
-        content: 'Under 70 MPH';
+        content: 'Under\a 70 MPH';
+        white-space: pre;
       }
     }
 
