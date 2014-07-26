@@ -27,9 +27,10 @@
 		border-top: 1px solid $footer_top_line;
     border-bottom: 1px solid $footer_bottom_line;
 		background: $footer_back;
-    -moz-box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
-    box-shadow: inset 0px 1px 2px 0px rgba(0,0,0,0.07), inset 0px 1px 0px 0px #FFFFFF;
+    -moz-box-shadow: 0px -1px 2px 0px rgba(0,0,0,0.07);
+    box-shadow: 0px -1px 2px 0px rgba(0,0,0,0.07);
     overflow: hidden;
+    position: relative;
 
 		.zoomControl {
 			height: 24px;
@@ -68,6 +69,7 @@
 
         .showTripEvents {
           margin-left: 8px;
+          margin-right: 3px;
           font-size: 12px;
           vertical-align: -1px;
         }
