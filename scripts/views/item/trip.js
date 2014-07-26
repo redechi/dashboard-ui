@@ -48,6 +48,12 @@ function( Backbone, coms, TripTmpl, formatters ) {
       var selected = !this.model.get('selected');
       this.model.set('selected', selected);
       this.$el.toggleClass('selected', selected);
+
+      if(selected) {
+        coms.trigger('trips:highlight', this.model);
+      } else {
+        coms.trigger('trips:unhighlight', this.model);
+      }
     },
   });
 

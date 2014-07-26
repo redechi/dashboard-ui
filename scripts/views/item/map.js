@@ -83,21 +83,24 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     unhighlightTrip: function (model) {
       var id = model.get('id');
 
-      this.pathsLayer.eachLayer(function(layer) {
-        if(layer.options.id == id) {
-          layer.eachLayer(function(layer) {
-            if(layer instanceof L.Polyline) {
-              layer.setStyle(mapHelpers.styleLine());
-            }
-          });
-        }
-      });
+      //don't unhighlight selected trips
+      if(!model.get('selected')) {
+        this.pathsLayer.eachLayer(function(layer) {
+          if(layer.options.id == id) {
+            layer.eachLayer(function(layer) {
+              if(layer instanceof L.Polyline) {
+                layer.setStyle(mapHelpers.styleLine());
+              }
+            });
+          }
+        });
 
-      this.markersLayer.eachLayer(function(marker) {
-        if(marker.options.id === id) {
-          marker.setIcon(mapHelpers.mainIcon);
-        }
-      });
+        this.markersLayer.eachLayer(function(marker) {
+          if(marker.options.id === id) {
+            marker.setIcon(mapHelpers.mainIcon);
+          }
+        });
+      }
     },
 
 

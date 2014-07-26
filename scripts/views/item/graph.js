@@ -28,9 +28,14 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       'click .graphValue li': 'changeGraphType'
     },
 
+
+    selectedTrips: {},
+
     initialize: function(model) {
       console.log('initialize a Graph ItemView');
       coms.on('filter', _.bind(this.resetCollection, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
 
       $(window).on("resize", _.bind(this.makeGraph, this));
     },
@@ -42,6 +47,53 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       this.getGraphData();
       this.makeGraph();
       this.setDateRange();
+    },
+
+
+    highlightTrip: function (model) {
+      var id = model.get('id'),
+          binSize = this.model.get('binSize'),
+          start_time = model.get('start_time'),
+          key = moment(start_time).startOf(binSize).valueOf();
+
+      //highlight bar
+      this.getBarByKey(key.toString())
+        .classed('selected', true);
+
+      //if selected, add to list
+      if(model.get('selected')) {
+        if(!this.selectedTrips[key]) {
+          this.selectedTrips[key] = {};
+        }
+        this.selectedTrips[key][id] = true;
+      }
+    },
+
+
+    unhighlightTrip: function (model) {
+      var id = model.get('id'),
+          binSize = this.model.get('binSize'),
+          start_time = model.get('start_time'),
+          key = moment(start_time).startOf(binSize).valueOf();
+
+      if(!model.get('selected')) {
+        if(this.selectedTrips[key]) {
+          delete this.selectedTrips[key][id];
+        }
+      }
+
+      //don't unhighlight bar if has selected trips
+      if(!_.size(this.selectedTrips[key])) {
+        this.getBarByKey(key.toString())
+          .classed('selected', false);
+      }
+    },
+
+
+    getBarByKey: function(key) {
+      return d3.select('#graphs .graphContainer svg')
+        .selectAll('.bar')
+          .filter(function(d) { return d.key === key; });
     },
 
 
@@ -328,11 +380,11 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //styles for max
       if(summary.max) {
-        var maxBar = bars
-          .filter(function(d) { return d.key === summary.max.key})
-          .classed('max', true);
+        var maxBar = this.getBarByKey(summary.max.key);
 
-        maxBar.append('text')
+        maxBar
+          .classed('max', true)
+          .append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
             .attr('dy', '-1.75em')
@@ -351,11 +403,11 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       //styles for min
       if(summary.min && (summary.min !== summary.max)) {
-        var minBar = bars
-          .filter(function(d) { return d.key === summary.min.key})
-          .classed('min', true);
+        var minBar = this.getBarByKey(summary.min.key);
 
-        minBar.append('text')
+        minBar
+          .classed('min', true)
+          .append('text')
             .attr('x', function(d) { return x(d.key); })
             .attr('y', function(d) { return y(d.values); })
             .attr('dy', '-1.75em')

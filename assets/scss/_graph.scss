@@ -129,11 +129,12 @@
         fill: #FFF;
         stroke: #D8D7D3;
         // shape-rendering: crispEdges;
+      }
 
-        &:hover {
-          fill: #82C9F1;
-          stroke: #3FA6E0;
-        }
+      path:hover,
+      &.selected path {
+        fill: #82C9F1;
+        stroke: #3FA6E0;
       }
 
       text {
