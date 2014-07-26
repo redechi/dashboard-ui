@@ -10,7 +10,7 @@ function( Backbone, MapSingleView, TripTmpl, formatters ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize a Trip Layout");
+      console.log('initialize a Trip Layout');
     },
 
 

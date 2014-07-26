@@ -9,7 +9,7 @@ function( Backbone, PasswordResetTmpl, login ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize a Password Reset Layout");
+      console.log('initialize a Password Reset Layout');
     },
 
 

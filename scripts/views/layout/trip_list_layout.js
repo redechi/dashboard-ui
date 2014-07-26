@@ -10,7 +10,7 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize a TripListLayout Layout");
+      console.log('initialize a TripListLayout Layout');
     },
 
 
@@ -18,8 +18,8 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
 
 
     regions: {
-      tripStats: "#tripStats",
-      tripList: "#tripList"
+      tripStats: '#tripStats',
+      tripList: '#tripList'
     },
 
 

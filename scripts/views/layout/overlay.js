@@ -9,7 +9,7 @@ function( Backbone, regionManager, OverlayTmpl ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize an Overlay Layout");
+      console.log('initialize an Overlay Layout');
     },
 
 

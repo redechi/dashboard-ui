@@ -18,9 +18,9 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize a Summary Layout");
+      console.log('initialize a Summary Layout');
 
-      $(window).on("resize", this.resize);
+      $(window).on('resize', this.resize);
 
       //resize right away
       setTimeout(this.resize, 0);
@@ -36,7 +36,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
     regions: {
       map: '#map',
       filters: '#filters',
-      trips_header: '.tripsHeader',
       graph: '#graphs',
       trips: '#trips'
     },

@@ -10,7 +10,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log("initialize a Login Layout");
+      console.log('initialize a Login Layout');
     },
 
 
@@ -48,7 +48,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
     },
 
 
-    login: function (e) {
+    login: function () {
       var self = this,
           email = $('#email', this.$el).val(),
           password = $('#password', this.$el).val();
