@@ -109,8 +109,10 @@ function( Backbone, PasswordResetTmpl, login ) {
 
 
     onShow: function() {
-      var email = Backbone.history.fragment.replace('reset?email=', '');
-      $('#email', this.$el).val(decodeURIComponent(email));
+      if(Backbone.history.fragment !== 'reset') {
+        var email = Backbone.history.fragment.replace('reset?email=', '');
+        $('#email', this.$el).val(decodeURIComponent(email));
+      }
     }
   });
 });
