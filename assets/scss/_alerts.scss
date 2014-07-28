@@ -1,9 +1,10 @@
 .alert-grey {
-  padding: 2px 15px;
+  padding: 3px 15px 1px;
   border: none;
   border-radius: 9px;
   background: $inactive_type;
-  height: 18px;
+  min-height: 18px;
   color: #FFF;
   font-size: 12px;
+  line-height: 14px;
 }

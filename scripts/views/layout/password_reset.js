@@ -18,6 +18,7 @@ function( Backbone, PasswordResetTmpl, login ) {
 
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
+      'focus #passwordResetRequestForm input': 'clearError',
       'submit #passwordResetForm': 'resetPassword'
     },
 
