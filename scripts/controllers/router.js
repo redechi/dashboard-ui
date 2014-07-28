@@ -29,8 +29,8 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
     },
 
 
-    showPasswordResetLayout: function () {
-      var passwordReset = new PasswordResetLayout();
+    showPasswordResetLayout: function (token) {
+      var passwordReset = new PasswordResetLayout({token: token});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(passwordReset);
     },

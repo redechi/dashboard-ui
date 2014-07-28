@@ -11,6 +11,7 @@ define([
       '(/)': 'showSummaryLayout',
       'login': 'showLoginLayout',
       'reset': 'showPasswordResetLayout',
+      'reset/:token': 'showPasswordResetLayout',
       'trip/:tripid': 'showTripLayout',
       'filter(/)?:filters': 'applyFilters',
       'logout': 'logOut',
@@ -24,7 +25,7 @@ define([
         var f = function() {
 
           //check for access tokens on all routes, except login
-          if(route !== 'login' && route !== 'reset') {
+          if(route !== 'login' && route !== 'reset'  && route !== 'reset/:token') {
             var accessToken = sessionStorage.getItem('accessToken');
 
             // if no access token, redirect to login

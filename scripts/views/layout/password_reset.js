@@ -19,7 +19,8 @@ function( Backbone, PasswordResetTmpl, login ) {
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
       'focus #passwordResetRequestForm input': 'clearError',
-      'submit #passwordResetForm': 'resetPassword'
+      'submit #passwordResetForm': 'resetPassword',
+      'focus #passwordResetForm input': 'clearError',
     },
 
 
@@ -80,37 +81,52 @@ function( Backbone, PasswordResetTmpl, login ) {
 
 
     resetPassword: function (e) {
-      var password = $('#password', e.target).val(),
+      var self = this,
+          password = $('#password', e.target).val(),
           passwordRepeat = $('#passwordRepeat', e.target).val(),
-          match = (password === passwordRepeat && password);
+          match = (password === passwordRepeat),
+          token = this.options.token;
 
-
-      if(match) {
-        $('#password, #passwordRepeat', e.target)
-          .parent('.form-group')
-          .removeClass('has-error');
-
-        $('.alert', e.target).addClass('hide');
-
-
+      if(!match) {
+        this.errorAlert('Passwords do not match', false, true);
+      } else if (password.length < 8) {
+        this.errorAlert('Password must be at least 8 characters', false, true);
       } else {
-        $('#password, #passwordRepeat', e.target)
-          .parent('.form-group')
-          .addClass('has-error');
+        this.clearErrors();
 
-        $('.alert', e.target)
-          .html('<strong>Error:</strong> Passwords do not match')
-          .removeClass('alert-success')
-          .addClass('alert-danger')
-          .removeClass('hide');
+        $.post(
+          login.getBaseUrl() + '/password/change/' + token, {password: password},
+          function(data) {
+            console.log(data);
+            if(data && data.success) {
+              self.successAlert('Your password has been successfully reset.<br><a href="#login">Log in</a>');
+            } else {
+              self.errorAlert('Unknown error', false, false);
+            }
+          }
+        ).fail(function(jqXHR, textStatus, error) {
+          console.log(jqXHR.responseJSON)
+          if(jqXHR.responseJSON && jqXHR.responseJSON.message) {
+            self.errorAlert(jqXHR.responseJSON.message, false, false);
+          } else {
+            self.errorAlert('Unknown error', false, false);
+          }
+        });
       }
 
       return false;
     },
 
 
+    onRender: function() {
+      if(this.options.token) {
+        $('#passwordResetRequestForm', this.$el).hide();
+        $('#passwordResetForm', this.$el).show();
+      }
+    },
+
     onShow: function() {
-      if(Backbone.history.fragment !== 'reset') {
+      if(Backbone.history.fragment.indexOf('email=') !== -1) {
         var email = Backbone.history.fragment.replace('reset?email=', '');
         $('#email', this.$el).val(decodeURIComponent(email));
       }
