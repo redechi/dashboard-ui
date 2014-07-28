@@ -1,14 +1,20 @@
 'use strict';
 
 var git = require('git-rev');
+var build = process.env.BUILD_NUMBER || 0;
+var tagName = 'local';
+var shortHash = 'local';
+var CDN = process.env.CDN || '';
 
-
-var tagName;
 
 git.tag(function (tag) {
   tagName = tag;
-  console.log(arguments);
 });
+
+git.short(function (short) {
+  shortHash = short;
+});
+
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -16,6 +22,7 @@ git.tag(function (tag) {
 // use this if you want to match all subfolders:
 // 'test/spec/**/*.js'
 // templateFramework: 'handlebars'
+
 
 module.exports = function (grunt) {
   // load all grunt tasks
@@ -29,7 +36,7 @@ module.exports = function (grunt) {
     dist: 'dist'
   };
 
-  var CDN = process.env.CDN || '';
+
 
   grunt.initConfig({
     yeoman: yeomanConfig,
@@ -298,7 +305,19 @@ module.exports = function (grunt) {
       }
     },
 
-    // handlebars
+    replace: {
+      buildNumber: {
+        src: '<%= yeoman.dist %>/index.html',
+        dest: '<%= yeoman.dist %>/index.html',
+        replacements: [{
+          from: /{{--version--}}/ig,
+          to: function () {
+            return tagName + ' ' + '(' + build + ' #' + shortHash + ')';
+          }
+        }]
+      }
+    },
+
     handlebars: {
       compile: {
         options: {
@@ -346,6 +365,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'replace',
     'inline',
     'connect:testserver',
     'watch'
@@ -361,6 +381,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'replace',
     'inline'
   ]);
 

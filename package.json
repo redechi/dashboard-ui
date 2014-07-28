@@ -28,6 +28,7 @@
     "grunt-mocha": "~0.4.11",
     "grunt-open": "~0.2.3",
     "grunt-requirejs": "~0.4.2",
+    "grunt-text-replace": "~0.3.12",
     "grunt-usemin": "~2.3.0",
     "matchdep": "~0.3.0",
     "mocha-phantomjs": "~3.5.0",
