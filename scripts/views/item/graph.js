@@ -260,7 +260,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           dateRange = filters.findWhere({name: 'date'}).get('value'),
           graphType = this.model.get('graphType'),
           binSize = this.model.get('binSize'),
-          margin = {top: 30, right: 0, bottom: 60, left: 0},
+          margin = {top: 45, right: 0, bottom: 60, left: 0},
           outerWidth = $('#graphs').width(),
           width = outerWidth - margin.left - margin.right,
           height = 225 - margin.top - margin.bottom,
@@ -345,7 +345,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         var tooltipContent = '<div class="arrow"></div><div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
         tooltip
           .css({
-            top: (y(d.values) - 32) + 'px',
+            top: (y(d.values) - 17) + 'px',
             left: x(d.key) + 'px',
             visibility: 'visible'
           })
