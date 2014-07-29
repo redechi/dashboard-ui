@@ -308,7 +308,7 @@ module.exports = function (grunt) {
     replace: {
       buildNumber: {
         src: '<%= yeoman.dist %>/*.html',
-        dest: '<%= yeoman.dist %>/*.html',
+        overwrite: true,
         replacements: [{
           from: /{{--version--}}/ig,
           to: function () {
