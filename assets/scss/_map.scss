@@ -27,8 +27,8 @@
 		border-top: 1px solid $footer_top_line;
     border-bottom: 1px solid $footer_bottom_line;
 		background: $footer_back;
-    -moz-box-shadow: 0px -1px 2px 0px rgba(0,0,0,0.07);
-    box-shadow: 0px -1px 2px 0px rgba(0,0,0,0.07);
+    -moz-box-shadow: 0px -3px 2px -2px  rgba(0,0,0,0.07), 0px 1px 0px 0px #FFFFFF;
+    box-shadow: 0px -3px 2px -2px rgba(0,0,0,0.07), 0px 1px 0px 0px #FFFFFF;
     overflow: hidden;
     position: relative;
 
