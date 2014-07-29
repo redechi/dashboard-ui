@@ -457,7 +457,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       //Month and Year Labels
       if(binSize === 'day') {
         bars.append('text')
-          .attr('transform', 'translate(0,' + (height + 45) + ')')
+          .attr('transform', 'translate(0,' + (height + 40) + ')')
           .attr('x', function(d) { return x(d.key); })
           .attr('dx', -barWidth/2)
           .style('text-anchor', 'right')
