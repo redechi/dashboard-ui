@@ -210,7 +210,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
     getBarWidth: function (data, width) {
-      return Math.max((width / data.length - 15), 8);
+      return Math.min(145, Math.max(8, (width / data.length - 15)));
     },
 
 
