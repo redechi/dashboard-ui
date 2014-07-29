@@ -357,7 +357,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         tooltip.css('visibility', 'hidden');
       }
 
-      function topRoundedRect(x, y, width, height, radius) {
+      //draw background separately from border to allow missing bottom border
+      function topRoundedRectBackground(x, y, width, height, radius) {
         return 'M' + (x + radius) + ',' + y
              + 'h' + (width - (2 * radius))
              + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
@@ -368,12 +369,33 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
              + 'z';
       }
 
+      function topRoundedRectBorder(x, y, width, height, radius) {
+        return 'M' + (x + radius) + ',' + y
+             + 'h' + (width - (2 * radius))
+             + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
+             + 'v' + (height - radius)
+             + 'm' + (-width) + ',' + 0
+             + 'v' + (radius - height)
+             + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius);
+      }
+
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
+        .attr('class', 'barBackground')
         .attr('d', function(d) {
           if(d.values > 0) {
-            return topRoundedRect(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
+            return topRoundedRectBackground(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
+          }
+        });
+
+      bars.append('path')
+        .on('mouseover', barMouseover)
+        .on('mouseout', barMouseout)
+        .attr('class', 'barOutline')
+        .attr('d', function(d) {
+          if(d.values > 0) {
+            return topRoundedRectBorder(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
           }
         });
 
