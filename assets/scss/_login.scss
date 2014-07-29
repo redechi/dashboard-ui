@@ -54,68 +54,13 @@
       height: 27px;
     }
 
-    .tryDemo {
-      display: block;
+    .btn {
       margin-top: 25px;
       font-size: 14px;
     }
   }
 
   #loginForm {
-    button {
-      width: 100%;
-    }
-
-    input {
-      border: none;
-      border-bottom: $line_gray 1px solid;
-      background: none;
-      box-shadow: none;
-      color: $link_type;
-      border-radius: 0;
-      padding: 6px 0;
-
-      &:focus {
-        color: $highlight !important;
-      }
-
-      /* Input Placeholder styles */
-      &::-webkit-input-placeholder { /* WebKit browsers */
-        color: $link_type;
-      }
-      &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-        color: $link_type;
-        opacity:  1;
-      }
-      &::-moz-placeholder { /* Mozilla Firefox 19+ */
-        color: $link_type;
-        opacity:  1;
-      }
-      &:-ms-input-placeholder { /* Internet Explorer 10+ */
-        color: $link_type;
-      }
-    }
-
-    .has-error input {
-      color: $red;
-
-      /* Input Placeholder styles */
-      &::-webkit-input-placeholder { /* WebKit browsers */
-        color: $red;
-      }
-      &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-        color: $red;
-        opacity:  1;
-      }
-      &::-moz-placeholder { /* Mozilla Firefox 19+ */
-        color: $red;
-        opacity:  1;
-      }
-      &:-ms-input-placeholder { /* Internet Explorer 10+ */
-        color: $red;
-      }
-    }
-
     label {
       font-size: 12px;
       margin-bottom: 10px;
@@ -124,10 +69,6 @@
 
     .staySignedIn {
       margin-right: 10px;
-    }
-
-    .form-group:last-of-type {
-      margin-bottom: 0;
     }
 
     .alert {
