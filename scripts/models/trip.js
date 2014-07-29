@@ -33,10 +33,10 @@ function( Backbone, formatters, login ) {
           miles = formatters.m_to_mi(this.get('distance_m'));
 
       this.set('duration', duration);
-      this.set('formatted_duration', formatters.durationMinutes(duration));
+      this.set('formatted_duration', Math.round(duration));
       this.set('distance_miles', miles);
       this.set('formatted_distance_miles', formatters.distance(miles));
-      this.set('formatted_average_mpg', parseInt(this.get('average_mpg') * 10) / 10);
+      this.set('formatted_average_mpg', Math.round(this.get('average_mpg')));
       this.set('formatted_fuel_cost_usd', parseInt(this.get('fuel_cost_usd') * 100) / 100);
       this.set('formatted_end_time', moment(this.get('end_time')).format('h:mm a').toUpperCase());
       this.set('formatted_start_time', moment(this.get('start_time')).format('h:mm a').toUpperCase());
