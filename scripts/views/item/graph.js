@@ -270,7 +270,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           tooltip = $('#graphs .graphContainer .graphTooltipContainer'),
           binWidth = width / data.length,
           barWidth = this.getBarWidth(data, width),
-          barRadius = Math.min(barWidth/2, 8);
+          barRadius = Math.min(barWidth/2, 6);
 
 
       //remove any existing graph
@@ -322,13 +322,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .ticks(5)
           .tickSize(-width, 0, 0)
           .tickFormat('');
-
-      svg.selectAll('.x.axis').append('line')
-        .attr('class', 'bottom')
-        .attr('x1', 0)
-        .attr('y1', 0)
-        .attr('x2', width)
-        .attr('y2', 0);
 
       svg.append('g')
         .attr('class', 'grid')
@@ -443,6 +436,16 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
       }
+
+
+      //X Axis line
+      svg.append('g')
+        .attr('class', 'x axis')
+        .append('line')
+          .attr('x1', 0)
+          .attr('y1', height)
+          .attr('x2', width)
+          .attr('y2', height);
 
 
       //X Axis labels

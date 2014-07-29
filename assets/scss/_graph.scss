@@ -196,16 +196,17 @@
         stroke: $footer_bottom_line;
         opacity: 0.5;
         shape-rendering: crispEdges;
-
-        &:first-child {
-          stroke: $line_gray;
-        }
       }
 
       path {
         stroke-width: 0;
         shape-rendering: crispEdges;
       }
+    }
+
+    .x.axis {
+      stroke: $line_gray;
+      shape-rendering: crispEdges;
     }
   }
 }
