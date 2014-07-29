@@ -66,7 +66,7 @@ function( Backbone, PasswordResetTmpl, login ) {
           login.getBaseUrl() + '/password/reset_email/', { email: email },
           function(data) {
             if(data && data.success) {
-              self.successAlert('Heads up!  We sent a password reset email to ' + email);
+              self.successAlert('We\'ve sent further instructions to ' + email);
             } else {
               self.errorAlert('Invalid Email Address', true, false);
             }
