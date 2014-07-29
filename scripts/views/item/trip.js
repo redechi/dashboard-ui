@@ -51,8 +51,10 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
       if(selected) {
         coms.trigger('trips:highlight', this.model);
+        coms.trigger('trips:select', this.model);
       } else {
         coms.trigger('trips:unhighlight', this.model);
+        coms.trigger('trips:deselect', this.model);
       }
     },
   });

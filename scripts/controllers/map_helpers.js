@@ -143,6 +143,21 @@ function( mapbox, formatters, stats ) {
     },
 
 
+    getBoundsFromTrips: function(trips) {
+      return trips.reduce(function(memo, trip) {
+        var start = [trip.get('start_location').lat, trip.get('start_location').lon],
+            end = [trip.get('end_location').lat, trip.get('end_location').lon];
+        if(!memo) {
+          memo = L.latLngBounds([start, end]);
+        } else {
+          memo.extend(start);
+          memo.extend(end);
+        }
+        return memo;
+      }, null);
+    },
+
+
     enablePolyline: L.extend(L.GeoJSON, {
       // This function is from Google's polyline utility.
       // Borrowed from: http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/decode.js

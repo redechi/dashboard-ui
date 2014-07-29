@@ -15,6 +15,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       console.log("initialize a Map ItemView");
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
+      coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
+      coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
@@ -104,10 +106,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    fitBoundsMap: function(bounds) {
-      if(bounds && bounds.isValid()) {
-        this.mapbox.fitBounds(bounds, {padding: [50, 50]});
-      }
+    changeSelectedTrips: function() {
+      var selectedTrips = this.collection.where({ selected: true }),
+          bounds = (selectedTrips.length) ? mapHelpers.getBoundsFromTrips(selectedTrips) : this.pathsLayer.getBounds();
+      this.fitBounds(bounds);
     },
 
 
@@ -202,7 +204,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       mapbox.addLayer(pathsLayer);
 
-      this.fitBounds(pathsLayer.getBounds());
+      this.fitBounds(this.pathsLayer.getBounds());
 
       this.updateTripEvents();
     },
