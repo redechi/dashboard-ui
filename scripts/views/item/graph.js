@@ -165,8 +165,11 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
           memo.min = bar;
         }
+        if(bar.values > 0) {
+          memo.barCount++;
+        }
         return memo;
-      }, {});
+      }, {barCount: 0});
 
       //Calculate overall average for time range
       summary.average = this.averageTripsForGraph();
@@ -400,8 +403,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         });
 
 
-      //styles for max
-      if(summary.max) {
+      //styles for min and max
+      if(summary.barCount > 2) {
         var maxBar = this.getBarByKey(summary.max.key);
 
         maxBar
@@ -420,11 +423,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             .attr('dy', '-0.55em')
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
-      }
 
-
-      //styles for min
-      if(summary.min && (summary.min !== summary.max)) {
         var minBar = this.getBarByKey(summary.min.key);
 
         minBar
