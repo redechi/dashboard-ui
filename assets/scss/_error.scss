@@ -1,0 +1,18 @@
+#error {
+  width: 700px;
+  text-align: center;
+
+  h1 {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .bigAlert {
+    @include hr-image('../img/icon_bigalert.png', '../img/icon_bigalert@2x.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    height: 144px;
+    margin: 25px 0;
+  }
+}
