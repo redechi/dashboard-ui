@@ -309,11 +309,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     updateFilterRanges: function() {
-      console.log('Updating Filter Ranges');
       var ranges = tripsCollection.calculateRanges(),
           distanceFilter = filtersCollection.findWhere({name: 'distance'}),
           durationFilter = filtersCollection.findWhere({name: 'duration'}),
-          costFilter = filtersCollection.findWhere({name: 'cost'});
+          costFilter = filtersCollection.findWhere({name: 'cost'}),
+          dateFilter = filtersCollection.findWhere({name: 'date'});
 
       if(distanceFilter) {
         distanceFilter.set(ranges.distance);
@@ -331,6 +331,12 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         costFilter.set(ranges.cost);
       } else {
         _.extend(filterList.cost, ranges.cost);
+      }
+
+      if(dateFilter) {
+        dateFilter.set(ranges.date);
+      } else {
+        _.extend(filterList.date, ranges.date);
       }
     },
 

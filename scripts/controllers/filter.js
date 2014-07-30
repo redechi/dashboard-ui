@@ -50,6 +50,7 @@ function( formatters, vehiclesCollection ) {
       name: 'date',
       title: 'date of trip',
       label: 'driven',
+      min: 1363071600000,
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
       value: [moment().endOf('day').subtract('months', 1).valueOf(), moment().endOf('day').valueOf()],
@@ -74,7 +75,7 @@ function( formatters, vehiclesCollection ) {
         } else if(valueSelected === 'thisYear') {
           return [moment().startOf('year').valueOf(), moment().endOf('year').valueOf()];
         } else if(valueSelected === 'allTime') {
-          return [Date.parse('Mar 12, 2013'), moment().endOf('day').valueOf()];
+          return [moment(this.get('min')).startOf('day').valueOf(), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'custom') {
           return this.get('value');
         }

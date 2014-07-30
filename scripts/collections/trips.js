@@ -125,7 +125,8 @@ function( Backbone, coms, Trip, filterCollection, login ) {
       var memo = {
         distance: {min: Infinity, max: 0},
         duration: {min: Infinity, max: 0},
-        cost: {min: Infinity, max: 0}
+        cost: {min: Infinity, max: 0},
+        date: {min: Infinity}
       };
       return this.reduce(function(memo, trip) {
         return {
@@ -141,6 +142,9 @@ function( Backbone, coms, Trip, filterCollection, login ) {
             min: Math.min(trip.get('fuel_cost_usd'), memo.cost.min),
             max: Math.max(trip.get('fuel_cost_usd'), memo.cost.max)
           },
+          date: {
+            min: Math.min(trip.get('start_time'), memo.date.min)
+          }
         };
       }, memo);
     }
