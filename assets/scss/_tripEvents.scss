@@ -2,6 +2,7 @@
   .event {
     width: 33.3%;
     float: left;
+    color: #FFF;
 
     & > div {
       display: inline-block;
@@ -22,7 +23,7 @@
         text-align: left;
         margin-left: 2px;
         color: $base_type;
-        width: 39px;
+        width: 45px;
         padding-top: 2px;
       }
     }
@@ -30,7 +31,6 @@
 
   .hardBrakes {
     @include hr-image('../img/event_nohardbrakes_color.png', '../img/event_nohardbrakes_color@2x.png');
-    color: #FFF;
 
     &.none {
       @include hr-image('../img/event_nohardbrakes_green.png', '../img/event_nohardbrakes_green@2x.png');
@@ -58,7 +58,6 @@
 
   .speeding {
     @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
-    color: $link_type;
 
     &.none {
       @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
@@ -88,7 +87,6 @@
 
   .hardAccels {
     @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
-    color: $link_type;
 
     &.none {
       @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');
