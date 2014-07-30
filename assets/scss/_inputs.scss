@@ -9,6 +9,7 @@ input.form-control {
 
   &:focus {
     color: $highlight !important;
+    box-shadow: none;
   }
 
   /* Input Placeholder styles */
