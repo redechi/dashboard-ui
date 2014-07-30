@@ -90,7 +90,6 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
     forgotPassword: function (e) {
       var email = $('#email', this.$el).val();
-
       if(email) {
         $(e.target).attr('href', '#reset?email=' + encodeURIComponent(email));
       }
@@ -99,6 +98,15 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
     onRender: function () {
       regionManager.getRegion('main_header').reset();
+    },
+
+
+    onShow: function () {
+      if(login.isStaging() && !login.isUsingStaging()) {
+        if(window.confirm('Would you like to use the staging database? (Cancel to use production)')) {
+          window.location.search = 'staging';
+        }
+      }
     }
   });
 

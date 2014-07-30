@@ -20,6 +20,11 @@ function( Backbone, coms ) {
     },
 
 
+    isUsingStaging: function () {
+      return window.location.search.indexOf('staging') !== -1;
+    },
+
+
     getAPIUrl: function () {
       if(window.location.search.indexOf('staging') !== -1) {
         return 'https://api.automatic.co';
