@@ -45,7 +45,7 @@ require.config({
     d3: '../bower_components/d3/d3',
     nvd3: '../bower_components/nvd3/nv.d3',
 
-    mapbox: '//api.tiles.mapbox.com/mapbox.js/v1.6.4/mapbox',
+    mapbox: '//api.tiles.mapbox.com/mapbox.js/v2.0.0/mapbox',
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
 
