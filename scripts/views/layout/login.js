@@ -51,7 +51,9 @@ function( Backbone, regionManager, LoginTmpl, login ) {
     login: function () {
       var self = this,
           email = $('#email', this.$el).val(),
-          password = $('#password', this.$el).val();
+          password = $('#password', this.$el).val(),
+          staySignedIn = $('.staySignedIn').is(':checked'),
+          expires = (staySignedIn) ? 60*60*24*7 : null;
 
       if(!email || !password) {
         this.errorAlert('Please enter an email and a password', (!email), (!password));
@@ -70,7 +72,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
           function(data) {
             if(data && data.access_token) {
               $('#loginForm .alert').addClass('invisible');
-              login.setCookie('token', data.access_token, 60*60*24*7);
+              login.setCookie('token', data.access_token, expires);
               sessionStorage.setItem('accessToken', data.access_token);
               Backbone.history.navigate('#/');
             }
