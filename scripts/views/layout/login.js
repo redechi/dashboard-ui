@@ -103,7 +103,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
     onShow: function () {
       if(login.isStaging() && !login.isUsingStaging()) {
-        if(window.confirm('Would you like to use the staging database? (Cancel to use production)')) {
+        if(!window.confirm('Would you like to use the Production database (OK) or Staging database (Cancel)?')) {
           window.location.search = 'staging';
         }
       }
