@@ -4,61 +4,61 @@
     height: 360px;
     position: relative;
 
-		/* Popup Styles */
-		.leaflet-popup-tip {
-			border-top-color: $blue;
-		}
+    /* Popup Styles */
+    .leaflet-popup-tip {
+      border-top-color: $blue;
+    }
 
-		.leaflet-popup-content-wrapper {
-			border: none;
-			border-bottom: 2px solid $blue;
-			border-top-right-radius: 3px;
-			border-top-left-radius: 3px;
-			border-bottom-right-radius: 0;
-			border-bottom-left-radius: 0;
-			background: #FFFFFF;
-			-moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
-			box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
-		}
+    .leaflet-popup-content-wrapper {
+      border: none;
+      border-bottom: 2px solid $blue;
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      background: #FFFFFF;
+      -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+      box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+    }
   }
 
-	.mapMenu {
-		height: 40px;
-		border-top: 1px solid $footer_top_line;
+  .mapMenu {
+    height: 40px;
+    border-top: 1px solid $footer_top_line;
     border-bottom: 1px solid $footer_bottom_line;
-		background: $footer_back;
+    background: $footer_back;
     -moz-box-shadow: 0px -3px 2px -2px  rgba(0,0,0,0.07), 0px 1px 0px 0px #FFFFFF;
     box-shadow: 0px -3px 2px -2px rgba(0,0,0,0.07), 0px 1px 0px 0px #FFFFFF;
     overflow: hidden;
     position: relative;
 
-		.zoomControl {
-			height: 24px;
-			padding: 8px 0;
-			float: left;
+    .zoomControl {
+      height: 24px;
+      padding: 8px 0;
+      float: left;
 
-			& > div {
-				float: left;
-				width: 29px;
-				text-align: center;
-				font-size: 19px;
-				font-weight: bold;
-				line-height: 24px;
-				cursor: pointer;
-			}
+      & > div {
+        float: left;
+        width: 29px;
+        text-align: center;
+        font-size: 19px;
+        font-weight: bold;
+        line-height: 24px;
+        cursor: pointer;
+      }
 
-			.zoomIn {
-				border-right: 1px solid $line_light_gray;
+      .zoomIn {
+        border-right: 1px solid $line_light_gray;
 
-			}
-		}
+      }
+    }
 
-		.tripEvents {
-			width: 318px;
-			float: right;
-			border-left: 1px solid $line_light_gray;
-			height: 40px;
-			line-height: 40px;
+    .mapMenuRight {
+      width: 318px;
+      float: right;
+      border-left: 1px solid $line_light_gray;
+      height: 40px;
+      line-height: 40px;
 
       label {
         font-size: 10px;
@@ -75,12 +75,13 @@
         }
       }
 
-			.tripEventsBox {
-				float: right;
-				padding: 7px;
-			}
-		}
-	}
+      .tripEvents {
+        float: right;
+        padding: 7px;
+        width: 265px;
+      }
+    }
+  }
 
   .hardBrakeIcon {
     background: #D173EB;

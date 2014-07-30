@@ -1,31 +1,34 @@
-
-.tripEventsBox {
+.tripEvents {
   .event {
-    display: inline-block;
-    text-align: center;
-    width: 25px;
-    height: 25px;
+    width: 33.3%;
     float: left;
-    position: relative;
-    color: transparent;
-    line-height: 27px;
-    margin-right: 48px;
 
-    &::after {
-      font-size: 10px;
-      line-height: 11px;
-      font-weight: normal;
-      position: absolute;
-      left: 25px;
-      text-align: left;
-      margin-left: 2px;
-      color: $base_type;
-      width: 39px;
-      padding-top: 2px;
-    }
+    & > div {
+      display: inline-block;
+      text-align: center;
+      width: 25px;
+      height: 25px;
+      float: left;
+      position: relative;
+      line-height: 27px;
+      background-repeat: no-repeat;
 
-    &.blank {
-      color: $link_type;
+      &::after {
+        font-size: 10px;
+        line-height: 11px;
+        font-weight: normal;
+        position: absolute;
+        left: 25px;
+        text-align: left;
+        margin-left: 2px;
+        color: $base_type;
+        width: 39px;
+        padding-top: 2px;
+      }
+
+      &.blank {
+        color: $link_type;
+      }
     }
   }
 
@@ -54,7 +57,6 @@
   .speeding {
     @include hr-image('../img/event_under70_color.png', '../img/event_under70_color@2x.png');
     color: $link_type;
-    margin-left: 10px;
 
     &.none {
       @include hr-image('../img/event_under70_green.png', '../img/event_under70_green@2x.png');
@@ -79,7 +81,6 @@
   .hardAccels {
     @include hr-image('../img/event_nohardaccel_color.png', '../img/event_nohardaccel_color@2x.png');
     color: $link_type;
-    margin-left: 10px;
 
     &.none {
       @include hr-image('../img/event_nohardaccel_green.png', '../img/event_nohardaccel_green@2x.png');

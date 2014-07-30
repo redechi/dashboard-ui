@@ -26,10 +26,16 @@
     <div class="duration stat">{{ formatted_duration }}</div>
   </div>
 
-  <div class="tripEventsBox">
-    <div class="hardBrakes event {{#if noHardBrakes}}none{{/if}}">{{hard_brakes}}</div>
-    <div class="speeding event {{#if noSpeeding}}none{{/if}}">{{duration_over_70_min}}</div>
-    <div class="hardAccels event {{#if noHardAccels}}none{{/if}}">{{hard_accels}}</div>
+  <div class="tripEvents">
+    <div class="event">
+      <div class="hardBrakes {{#if noHardBrakes}}none{{/if}}">{{hard_brakes}}</div>
+    </div>
+    <div class="event">
+      <div class="speeding {{#if noSpeeding}}none{{/if}}">{{duration_over_70_min}}</div>
+    </div>
+    <div class="event">
+      <div class="hardAccels {{#if noHardAccels}}none{{/if}}">{{hard_accels}}</div>
+    </div>
   </div>
 
   <div class="endLocation">{{ end_location.display_name }}</div>

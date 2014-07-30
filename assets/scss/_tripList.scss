@@ -1,11 +1,10 @@
-
 #trips {
-  background: $trip_list_back;
-
   .tripsHeader {
     padding: 5px 10px;
     overflow: hidden;
     border-bottom: 1px solid $line_light_gray;
+    border-right: 1px solid $line_light_gray;
+    border-left: 1px solid $line_light_gray;
 
     .tripCount {
       float: left;
@@ -167,9 +166,9 @@
         height: 90%;
         background-color: $line_gray;
         left: 70px;
-        top: 16px;
-        height: 60px;
-        transition: height 0.25s;
+        top: 15px;
+        height: 61px;
+        transition: height 0.25s, top 0.25s;
         transition-delay: 0.05s;
         transition-timing-function: ease-in-out;
 
@@ -198,77 +197,11 @@
         }
       }
 
-      &.selected,
-      &:hover {
-        background-color: #fff;
-
-        .stat {
-          color: $link_type;
-        }
-
-        .startLocation {
-          color: $highlight;
-        }
-
-        .endLocation {
-          color: $highlight;
-        }
-
-        .startTime {
-          color: $link_type;
-        }
-
-        .endTime {
-          color: $link_type;
-        }
-
-        .tripLine {
-          background: $highlight;
-          top: 14px;
-
-          & > div {
-            color: rgba(255, 255, 255, 1);
-            background: $highlight;
-            width: 15px;
-            height: 15px;
-            margin-left: -7px;
-            line-height: 15px;
-            padding: 1px;
-          }
-        }
-      }
-
-      &:hover{
-        .tripLink {
-          display: block;
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 27px;
-          height: 27px;
-          @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
-          text-indent: -9999px;
-        }
-
-        .tripLine {
-          height: 99px;
-        }
-
-        .tripEventsBox {
-          height: 41px;
-          opacity: 1;
-          padding: 10px 0 5px 0;
-        }
-      }
-
       .tripDetails {
-        display: block;
-        width: 234px;
-        float: right;
+        margin-left: 88px;
       }
 
       .middleBox {
-        text-align: center;
         overflow: hidden;
       }
 
@@ -306,28 +239,77 @@
       .startLocation,
       .endLocation {
         font-size: 12px;
-        padding: 10px 15px;
+        padding: 10px 15px 10px 0;
         font-family: AvenirNextLTPro-Thin;
       }
 
-      .tripEventsBox {
+      .tripEvents {
         overflow: hidden;
-        overflow-y: hidden;
-        height: 0px;
+        height: 0;
         opacity: 0;
         transition: height 0.25s ease-in-out 0.05s, padding 0.25s ease-in-out 0.05s, opacity 0.15s ease-in-out 0.3s;
+      }
 
-        .hardBrakes {
-          clear: both;
-          margin-left: 10px;
+      &.selected,
+      &:hover {
+        background-color: #fff;
+
+        .stat {
+          color: $link_type;
         }
 
-        .speeding {
-          margin-left: 0;
+        .startLocation {
+          color: $highlight;
         }
 
-        .hardAccels {
-          margin-left: 0;
+        .endLocation {
+          color: $highlight;
+        }
+
+        .startTime {
+          color: $link_type;
+        }
+
+        .endTime {
+          color: $link_type;
+        }
+
+        .tripLine {
+          background: $highlight;
+
+          & > div {
+            color: rgba(255, 255, 255, 1);
+            background: $highlight;
+            width: 15px;
+            height: 15px;
+            margin-left: -7px;
+            line-height: 15px;
+            padding: 1px;
+          }
+        }
+      }
+
+      &:hover{
+        .tripLink {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 27px;
+          height: 27px;
+          @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
+          text-indent: -9999px;
+        }
+
+        .tripLine {
+          top: 12px;
+          height: 108px;
+        }
+
+        .tripEvents {
+          height: 41px;
+          opacity: 1;
+          padding: 10px 0 5px 0;
         }
       }
     }
