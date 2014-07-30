@@ -25,10 +25,6 @@
         width: 39px;
         padding-top: 2px;
       }
-
-      &.blank {
-        color: $link_type;
-      }
     }
   }
 
@@ -45,8 +41,14 @@
       }
     }
 
-    &.blank {
+    &.none.grey {
+      @include hr-image('../img/event_nohardbrakes_grey_checked.png', '../img/event_nohardbrakes_grey_checked@2x.png');
+      color: transparent;
+    }
+
+    &.grey {
       @include hr-image('../img/event_nohardbrakes_grey.png', '../img/event_nohardbrakes_grey@2x.png');
+      color: $link_type;
     }
 
     &::after {
@@ -68,8 +70,14 @@
       }
     }
 
-    &.blank {
+    &.none.grey {
+      @include hr-image('../img/event_under70_grey_checked.png', '../img/event_under70_grey_checked@2x.png');
+      color: transparent;
+    }
+
+    &.grey {
       @include hr-image('../img/event_under70_grey.png', '../img/event_under70_grey@2x.png');
+      color: $link_type;
     }
 
     &::after {
@@ -91,8 +99,14 @@
       }
     }
 
-    &.blank {
+    &.none.grey {
+      @include hr-image('../img/event_nohardaccel_grey_checked.png', '../img/event_nohardaccel_grey_checked@2x.png');
+      color: transparent;
+    }
+
+    &.grey {
       @include hr-image('../img/event_nohardaccel_grey.png', '../img/event_nohardaccel_grey@2x.png');
+      color: $link_type;
     }
 
     &::after {

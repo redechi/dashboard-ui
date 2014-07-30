@@ -274,7 +274,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     showTripEventsMap: function() {
-      $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('blank');
+      $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('grey');
 
       // If speeding layer is empty, calculate tripEvents layers (expensive)
       if(!this.speedingLayer.getLayers().length) {
@@ -309,7 +309,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     hideTripEvents: function() {
-      $('#map .hardBrakes, #map .speeding, #map .hardAccels').addClass('blank');
+      $('#map .hardBrakes, #map .speeding, #map .hardAccels').addClass('grey');
 
       this.mapbox.removeLayer(this.hardBrakesLayer);
       this.mapbox.removeLayer(this.hardAccelsLayer);
