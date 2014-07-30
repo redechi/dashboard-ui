@@ -86,12 +86,6 @@ function( mapbox, formatters, stats ) {
           location,
           time;
 
-      _.templateSettings = {
-        interpolate : /\{\{(.+?)\}\}/g
-      };
-
-      var popupTemplate = _.template('{{name}}<br>{{typeText}} {{time}}');
-
       if(type === 'start') {
         location = model.get('start_location');
         time = formatters.formatTime(model.get('start_time'), model.get('start_time_zone'), 'MMM D, YYYY h:mm A');
@@ -102,11 +96,9 @@ function( mapbox, formatters, stats ) {
 
       var name = (location.name) ? location.name.replace(', USA', '') : 'Unknown Address';
 
-      var popupText = popupTemplate({
+      var popupText = L.mapbox.template('{{name}}<br>{{typeText}} {{time}}', {
         name: name,
         time: time,
-        lat: location.lat,
-        lon: location.lon,
         typeText: (type === 'start') ? 'Departed at' : 'Arrived at'
       });
 
