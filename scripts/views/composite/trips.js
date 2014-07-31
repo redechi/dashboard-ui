@@ -271,8 +271,6 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
 
     onRender: function() {
-      //enable sort
-      this.changeSortItem();
       this.enablePopovers();
 
       //toggle class if no trips
