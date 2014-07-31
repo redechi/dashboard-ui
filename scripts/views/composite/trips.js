@@ -194,6 +194,8 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
       if(e) {
         this.options.sortType = $(e.currentTarget).data('value');
         this.options.sortTypeName = $(e.currentTarget).text();
+
+        $('.sortType').popover('hide');
       }
       $('.sortValue li').removeClass();
       $('.sortValue li[data-value="' + this.options.sortType + '"]').addClass('selected');
@@ -210,16 +212,32 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
     doSort: function() {
       var sortType = this.options.sortType,
-          sortDirection = this.options.sortDirection;
+          sortDirection = this.options.sortDirection,
+          comparator,
+          trips = $('.trips li'),
+          tripList = _.map(trips, function(trip, idx) {
+            return {idx: idx, value: trip.getAttribute('data-' + sortType)};
+          });
 
-      this.collection.comparator = function(trip) {
-        if(sortDirection == 'sortDown') {
-          return -trip.get(sortType);
-        } else {
-          return trip.get(sortType);
-        }
+
+      if(sortDirection == 'sortUp') {
+        comparator = function(a, b) {
+          return a.value > b.value ? 1 : -1;
+        };
+      } else {
+        comparator = function(a, b) {
+          return a.value < b.value ? 1 : -1;
+        };
       };
-      this.collection.sort();
+
+      tripList.sort(comparator);
+
+      var sortedTrips = tripList.map(function(trip) {
+        return trips[trip.idx];
+      });
+
+
+      $('.trips', this.$el).html(sortedTrips);
     },
 
 

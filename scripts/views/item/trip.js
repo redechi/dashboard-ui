@@ -57,6 +57,17 @@ function( Backbone, coms, TripTmpl, formatters ) {
         coms.trigger('trips:deselect', this.model);
       }
     },
+
+
+    onRender: function() {
+      this.$el.attr({
+        'data-start_time': this.model.get('start_time'),
+        'data-distance_m': this.model.get('distance_m'),
+        'data-average_mpg': this.model.get('average_mpg'),
+        'data-fuel_cost_usd': this.model.get('fuel_cost_usd'),
+        'data-duration': this.model.get('duration')
+      });
+    }
   });
 
 });
