@@ -9,7 +9,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
   'use strict';
 
   /* trips singleton */
-  var Trips = Backbone.AML.Collection.extend({
+  var Trips = Backbone.Collection.extend({
 
     page: 0,
     per_page: 100,

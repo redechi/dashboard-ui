@@ -9,7 +9,7 @@ function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
   'use strict';
 
   /* filters singleton */
-  var Filter = Backbone.AML.Collection.extend({
+  var Filter = Backbone.Collection.extend({
 
     model: Filter,
 

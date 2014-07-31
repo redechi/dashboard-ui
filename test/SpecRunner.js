@@ -6,7 +6,6 @@ require.config({
 
     paths: {
         spec: '../test/spec', // lives in the test directory
-        amlCollection: 'base/collection',
 
         jquery: '../bower_components/jquery/dist/jquery',
         backbone: '../bower_components/backbone/backbone',

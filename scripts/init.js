@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['amlCollection', 'd3', 'nvd3', 'mapbox', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
+  deps: ['d3', 'nvd3', 'mapbox', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
 
 
   shim: {
@@ -35,8 +35,6 @@ require.config({
   },
 
   paths: {
-    amlCollection: 'base/collection',
-
     jquery: '../bower_components/jquery/dist/jquery',
     backbone: '../bower_components/backbone/backbone',
     underscore: '../bower_components/underscore/underscore',
