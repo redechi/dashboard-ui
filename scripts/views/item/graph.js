@@ -145,7 +145,9 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       //group trips into bins
       this.collection.each(function(trip) {
         var bin = moment(trip.get('start_time')).startOf(binSize).valueOf();
-        bins[bin].push(trip);
+        if(bins[bin]) {
+          bins[bin].push(trip);
+        }
       });
 
 

@@ -143,7 +143,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
             max: Math.max(trip.get('fuel_cost_usd'), memo.cost.max)
           },
           date: {
-            min: Math.min(trip.get('start_time'), memo.date.min)
+            min: Math.max(Math.min(trip.get('start_time'), memo.date.min), 1363071600000)
           }
         };
       }, memo);
