@@ -12,6 +12,7 @@ function( Backbone, coms, regionManager, OverlayTmpl ) {
     initialize: function() {
       console.log('initialize an Overlay Layout');
       coms.on('overlay:hide', _.bind(this.closeOverlay, this));
+      coms.on('overlay:page', _.bind(this.updateLoadingOverlayCount, this));
     },
 
 
@@ -30,6 +31,11 @@ function( Backbone, coms, regionManager, OverlayTmpl ) {
 
     closeOverlay: function () {
       regionManager.getRegion('main_overlay').reset();
+    },
+
+
+    updateLoadingOverlayCount: function(count) {
+      $('.loadingProgress').text(count + ' trips loaded');
     }
   });
 

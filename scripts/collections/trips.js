@@ -92,6 +92,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           //User has no trips
           coms.trigger('error:noTrips');
         } else if(data && data.length) {
+          coms.trigger('overlay:page', self.length);
           if(data.length === self.per_page) {
             //User has another page of trips
             return self.fetchPage();
