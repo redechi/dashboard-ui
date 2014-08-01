@@ -87,18 +87,18 @@ main {
 #staging {
   display: none;
   position: absolute;
-  top: 50px;
-  right: -120px;
-  width: 400px;
-  height: 50px;
-  line-height: 50px;
+  top: 7px;
+  left: -110px;
+  width: 263px;
+  height: 27px;
+  line-height: 25px;
   text-align: center;
   opacity: 0.7;
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  font-size: 24px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  font-size: 12px;
   font-weight: 700;
   color: white;
   background-color: $red;
