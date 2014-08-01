@@ -49,7 +49,7 @@ function( Backbone, mapbox, stats, MapSingleTmpl, trips, formatters, mapHelpers 
         interpolate : /\{\{(.+?)\}\}/g
       };
 
-      var mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.i86oppa4'),
+      var mapbox = L.mapbox.map(this.$el.find('.map').get(0), 'automatic.idonii25'),
           featureLayer = L.mapbox.featureLayer(),
           hardBrakesLayer = this.hardBrakesLayer = L.mapbox.featureLayer(),
           hardAccelsLayer = this.hardAccelsLayer = L.mapbox.featureLayer(),
