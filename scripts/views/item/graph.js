@@ -511,16 +511,14 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
 
     onShow: function() {
-      setTimeout(function() {
-        $('.graphType').popover('destroy');
-        var graphPopoverTemplate = $('.graphMenu .popoverTemplate');
-        $('.graphType').popover({
-          html: true,
-          content: function() { return graphPopoverTemplate.html(); },
-          title: function() { return graphPopoverTemplate.attr('title'); },
-          placement: 'bottom'
-        });
-      }, 0);
+      $('.graphType').popover('destroy');
+      var graphPopoverTemplate = $('.graphMenu .popoverTemplate');
+      $('.graphType').popover({
+        html: true,
+        content: function() { return graphPopoverTemplate.html(); },
+        title: function() { return graphPopoverTemplate.attr('title'); },
+        placement: 'bottom'
+      });
     }
 
   });

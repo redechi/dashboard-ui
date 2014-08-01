@@ -24,7 +24,10 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
-      tripsCollection.fetchAll();
+      this.options.fetching = true;
+      setTimeout(function() {
+        tripsCollection.fetchAll();
+      }, 200);
     },
 
     model: new Backbone.Model({}),
@@ -59,8 +62,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
 
     collectionEvents: {
-      'reset': 'render',
-      'sync': 'render'
+      'reset': 'render'
     },
 
 
@@ -271,24 +273,21 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
 
     onRender: function() {
+      console.log('rendering')
       this.enablePopovers();
 
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
 
-      //close loading overlay and vehicle popover unless no matching trips
-      if(this.collection.length > 0) {
-        $('.btn-popover[data-filter="vehicle"]').popover('hide');
+      //close loading overlay unless no matching trips
+      if(this.collection.length > 0 || this.options.fetching === false) {
         coms.trigger('overlay:hide');
-      }
-
-      //close vehicle popover unless no matching trips or custom is chosen
-      if(this.collection.length > 0 && $('.dateFilterValue li.selected').data('value') !== 'custom') {
-        $('.btn-popover[data-filter="date"]').popover('hide');
       }
 
       var resize = this.resize;
       setTimeout(resize, 0);
+
+      this.options.fetching = false;
     },
 
 

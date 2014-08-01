@@ -42,6 +42,8 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     onRender: function () {
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'loadingTrips'}));
+
       var tl = new TripListLayout();
       var m = new MapView();
       var g = new GraphView();

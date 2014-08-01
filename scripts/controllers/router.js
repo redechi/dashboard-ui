@@ -18,7 +18,6 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       var contentRegion = regionManager.getRegion('main_content');
       filtersCollection.fromUrl();
       contentRegion.show(summary);
-      tripsCollection.applyAllFilters();
     },
 
 
@@ -43,11 +42,6 @@ function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLa
       var trip = new TripLayout({collection: tripCollection});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(trip);
-    },
-
-
-    applyFilters: function () {
-      this.showSummaryLayout();
     },
 
 

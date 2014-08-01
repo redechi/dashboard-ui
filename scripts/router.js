@@ -13,7 +13,7 @@ define([
       'reset': 'showPasswordResetLayout',
       'reset/:token': 'showPasswordResetLayout',
       'trip/:tripid': 'showTripLayout',
-      'filter(/)?:filters': 'applyFilters',
+      'filter(/)?:filters': 'showSummaryLayout',
       'logout': 'logOut',
       '*notFound': 'notFound'
     },

@@ -20,68 +20,67 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     initialize: function() {
       console.log('initialize a Trips collection');
       this.on('add', this.convertToLinkedList, this);
-      this.on('sync', this.applyAllFilters, this);
-      this.on('reset', this.applyAllFilters, this);
-
       coms.on('filter:applyAllFilters', _.bind(this.applyAllFilters, this));
     },
 
-    /*
-     *
-     * creates an array of trips to update and triggers a reset.
-     *
-     */
+
     applyAllFilters: function () {
       console.log('Apply All Filters');
-      var self = this;
 
       //first, apply date filter
-      var tripsToInclude = this.applyFilter('date', this);
+      var filteredTrips = this.applyDateFilter();
 
       //then apply remaining filters
       filterCollection.each(function(filter) {
-        if(filter.get('name') === 'date') { return; }
-        if(filter.get('name') === 'vehicle' && filter.get('value') === 'all') { return; }
+        var name = filter.get('name')
+        if(name === 'date' || (name === 'vehicle' && filter.get('value') === 'all')) {
+          return;
+        }
 
-        tripsToInclude = self.applyFilter(filter.get('name'), tripsToInclude);
+        filteredTrips = filteredTrips.filter(function(trip) { return filter.applyTo(trip); });
       });
 
-      coms.trigger('filter', tripsToInclude);
+      coms.trigger('filter', filteredTrips);
     },
 
-    applyFilter: function (name, trips) {
-      var tripsCollection = this,
-          filter = filterCollection.findWhere({name: name});
 
-      if(!filter) {
-        return trips;
+    findSortedIndexByDate: function(trips, date) {
+      var searchTrip = new Trip;
+      searchTrip.set('start_time', date);
+      //binary search since trips are already sorted by date
+      return _.sortedIndex(trips, searchTrip, function(trip) {
+        return -trip.get('start_time');
+      });
+    },
+
+
+    applyDateFilter: function() {
+      var dateFilter = filterCollection.findWhere({name: 'date'}),
+          start = this.findSortedIndexByDate(this.models, dateFilter.get('value')[0]),
+          end = this.findSortedIndexByDate(this.models, dateFilter.get('value')[1]);
+
+      //Trips are in reverse chronological order
+      return this.slice(end, start);
+    },
+
+
+    fetchAll: function () {
+      var trips = JSON.parse(sessionStorage.getItem('trips'));
+
+      if(!trips) {
+        this.fetchPage();
       } else {
-        return trips.filter(function(trip) { return filter.applyTo(trip); });
+        this.set(trips);
+        coms.trigger('filter:applyAllFilters');
       }
     },
 
 
-    /*
-     *
-     * recursively fetches pages of trips until one returns empty.
-     *
-     */
-    fetchAll: function () {
-      this.fetchPage();
-    },
-
-
-    /*
-     *
-     * fetches the next page of data and appends it to the collection
-     *
-     */
     fetchPage: function() {
       var self = this;
 
       this.page++;
       return this.fetch({
-        add: true,
         remove: false,
         data: {
           page: this.page,
@@ -92,14 +91,21 @@ function( Backbone, coms, Trip, filterCollection, login ) {
         if(self.page == 1 && data && data.length == 0) {
           //User has no trips
           coms.trigger('error:noTrips');
-        } else if(data && data.length === self.per_page) {
-          //User has another page of trips
-          return self.fetchPage();
-        } else if(data && data.statusText === 'cached') {
-          //Cached version of this exists, fetch then next one
-          return self.fetchPage();
+        } else if(data && data.length) {
+          if(data.length === self.per_page) {
+            //User has another page of trips
+            return self.fetchPage();
+          } else {
+            self.saveToSessionStorage();
+            coms.trigger('filter:applyAllFilters');
+          }
         }
       });
+    },
+
+
+    saveToSessionStorage: function() {
+      sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
     },
 
 

@@ -2,10 +2,9 @@ define([
   'backbone',
   'communicator',
   'models/filter',
-  'controllers/filter',
-  './vehicles'
+  'controllers/filter'
 ],
-function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
+function( Backbone, coms, FilterModel, filterList ) {
   'use strict';
 
   /* filters singleton */
@@ -16,12 +15,20 @@ function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
     initialize: function() {
       console.log('initialize a Filters collection');
 
+      this.applyInitialFilters();
+
       this.on('add', this.toUrl, this);
       this.on('remove', this.toUrl, this);
 
       coms.on('filter:toURL', _.bind(this.toUrl, this));
+    },
 
-      window.filters = this;
+
+    applyInitialFilters: function() {
+      this.add([
+        new FilterModel(filterList.vehicle),
+        new FilterModel(filterList.date)
+      ]);
     },
 
 
@@ -45,7 +52,6 @@ function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
 
 
     toUrl: function() {
-      console.log('Write Filters to URL');
       Backbone.history.navigate(this.formatFiltersToURL());
     },
 
@@ -77,8 +83,7 @@ function( Backbone, coms, FilterModel, filterList, vehiclesCollection ) {
       // if fewer than two models, clear and create a vehicle and date filter.
       if (_.size(filterObj) < 2) {
         this.reset();
-        this.add(new FilterModel(filterList.vehicle));
-        this.add(new FilterModel(filterList.date));
+        this.applyInitialFilters();
       }
     },
 

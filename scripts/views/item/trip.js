@@ -16,16 +16,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
     tagName: "li",
 
     template: TripTmpl,
-
-
-    templateHelpers: function() {
-      return {
-        noSpeeding: (this.model.get('duration_over_70_s') === 0),
-        noHardBrakes: (this.model.get('hard_brakes') === 0),
-        noHardAccels: (this.model.get('hard_accels') === 0)
-      };
-    },
-
+    
 
     events: {
       'mouseenter': 'triggerHighlight',

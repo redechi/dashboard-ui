@@ -27,8 +27,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
     collectionEvents: {
-      'reset': 'updateMap',
-      'sync': 'updateMap'
+      'reset': 'updateMap'
     },
 
     template: MapTmpl,

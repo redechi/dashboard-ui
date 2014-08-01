@@ -87,7 +87,7 @@ function( Backbone, coms ) {
 
           options.complete = function(xhr, status) {
             try {
-              if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1) {
+              if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1 && this.url.indexOf('/trips') === -1) {
                 console.log('Caching Request: ' + this.url);
                 sessionStorage.setItem(this.url, xhr.responseText);
               }
