@@ -119,13 +119,13 @@
     overflow-y: auto;
     overflow-x: hidden;
     margin: 0;
+    border-right: 1px solid $line_light_gray;
+    border-left: 1px solid $line_light_gray;
 
     li {
       display: block;
       position: relative;
       border-top: 1px solid $line_light_gray;
-      border-right: 1px solid $line_light_gray;
-      border-left: 1px solid $line_light_gray;
       cursor: pointer;
 
       .tripLink {
@@ -300,7 +300,6 @@
           display: block;
           position: absolute;
           top: -1px;
-          right: -1px;
           width: 27px;
           height: 27px;
           @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
