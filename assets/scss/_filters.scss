@@ -68,8 +68,7 @@
       .form-control {
         background: $main_back;
         border: 1px solid #EDECE9;
-        -moz-box-shadow: inset 0px 2px 0px 0px #FAF9F7;
-        box-shadow: inset 0px 2px 0px 0px #FAF9F7;
+        @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
         color: $inactive_type;
         border-radius: 3px;
         font-size: 12px;
