@@ -31,6 +31,8 @@ input.form-control {
 
 .has-error input.form-control {
   color: $red;
+  border-color: $red;
+  @include box-shadow(none);
 
   /* Input Placeholder styles */
   &::-webkit-input-placeholder { /* WebKit browsers */
