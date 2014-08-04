@@ -25,6 +25,18 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
     });
   });
 
+  //format for moment's calendar method
+  moment.lang('en', {
+    calendar : {
+      lastDay : '[Yesterday]',
+      sameDay : '[Today]',
+      nextDay : '[Tomorrow]',
+      lastWeek : 'MMM DD',
+      nextWeek : 'MMM DD',
+      sameElse : 'MMM DD'
+    }
+  });
+
 
   var App = new Backbone.Marionette.Application();
 
