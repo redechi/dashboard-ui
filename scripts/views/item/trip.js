@@ -16,11 +16,12 @@ function( Backbone, coms, TripTmpl, formatters ) {
     tagName: "li",
 
     template: TripTmpl,
-    
+
 
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
+      'click .tripLink': 'tripLink',
       'click': 'toggleSelect'
     },
 
@@ -47,6 +48,11 @@ function( Backbone, coms, TripTmpl, formatters ) {
         coms.trigger('trips:unhighlight', this.model);
         coms.trigger('trips:deselect', this.model);
       }
+    },
+
+
+    tripLink: function (e) {
+      e.stopPropagation();
     },
 
 
