@@ -242,9 +242,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     calculateTripEvents: function() {
       return this.collection.reduce(function(memo, trip) {
-        memo.hardBrakes += trip.get('hard_brakes');
-        memo.speeding += trip.get('duration_over_70_min');
-        memo.hardAccels += trip.get('hard_accels');
+        memo.hardBrakes += trip.get('hard_brakes') || 0;
+        memo.speeding += trip.get('duration_over_70_min') || 0;
+        memo.hardAccels += trip.get('hard_accels') || 0;
 
         return memo;
       }, {hardBrakes: 0, speeding: 0, hardAccels: 0});
