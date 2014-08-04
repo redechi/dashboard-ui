@@ -1,47 +1,43 @@
 define([
   'backbone',
   'regionManager',
-  '../collections/trips',
   '../collections/filters',
   '../views/layout/summary',
   '../views/layout/trip',
   '../views/layout/login',
   '../views/layout/password_reset'
 ],
-function( Backbone, regionManager, tripsCollection, filtersCollection, SummaryLayout, TripLayout, LoginLayout, PasswordResetLayout ) {
+function( Backbone, regionManager, filtersCollection, SummaryLayout, TripLayout, LoginLayout, PasswordResetLayout ) {
   'use strict';
 
   return {
 
     showSummaryLayout: function () {
-      var summary = new SummaryLayout();
+      var layout = new SummaryLayout();
       var contentRegion = regionManager.getRegion('main_content');
       filtersCollection.fromUrl();
-      contentRegion.show(summary);
+      contentRegion.show(layout);
     },
 
 
     showLoginLayout: function () {
-      var login = new LoginLayout();
+      var layout = new LoginLayout();
       var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(login);
+      contentRegion.show(layout);
     },
 
 
     showPasswordResetLayout: function (token) {
-      var passwordReset = new PasswordResetLayout({token: token});
+      var layout = new PasswordResetLayout({token: token});
       var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(passwordReset);
+      contentRegion.show(layout);
     },
 
 
     showTripLayout: function (tripid) {
-      var tripArray = tripsCollection.where({id: tripid}),
-          tripCollection = new Backbone.Collection(tripArray);
-
-      var trip = new TripLayout({collection: tripCollection});
+      var layout = new TripLayout({id: tripid});
       var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(trip);
+      contentRegion.show(layout);
     },
 
 
