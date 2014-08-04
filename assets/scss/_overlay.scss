@@ -50,6 +50,14 @@
       top: -12.5px;
       right: -12.5px;
     }
+
+    .noTripsIcon {
+      @include hr-image('../img/icon_notrips.png', '../img/icon_notrips@2x.png');
+      width: 80px;
+      height: 80px;
+      float: left;
+      margin-right: 20px;
+    }
   }
 
   .loadingTrips .loadingTrips {
@@ -92,17 +100,22 @@
       margin-bottom: 20px;
     }
 
-    .noTripsIcon {
-      @include hr-image('../img/icon_notrips.png', '../img/icon_notrips@2x.png');
-      width: 80px;
-      height: 80px;
-      float: left;
-      margin-right: 20px;
-    }
-
     p {
       text-align: left;
       padding-top: 5px;
     }
   }
+
+  .invalidTrip .invalidTrip {
+    display: block;
+    width: 380px;
+    height: inherit;
+    top: 106px;
+    margin-left: -190px;
+
+    .btn-blue {
+      margin-top: 35px;
+    }
+  }
+
 }
