@@ -64,8 +64,13 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     },
 
 
+    fetchFromSessionStorage: function () {
+      return JSON.parse(sessionStorage.getItem('trips'));
+    },
+
+
     fetchAll: function () {
-      var trips = JSON.parse(sessionStorage.getItem('trips'));
+      var trips = this.fetchFromSessionStorage();
 
       if(!trips) {
         this.fetchPage();
