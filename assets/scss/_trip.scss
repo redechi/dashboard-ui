@@ -1,42 +1,148 @@
 #trip {
-  width: 750px;
+  width: 690px;
   margin: 0 auto;
   overflow: visible;
+  margin-top: 30px;
 
-  .tripHeader {
+  .tripNavigation {
     text-align: center;
-    font-size: 30px;
     position: relative;
+    height: 33px;
+    padding-top: 7px;
 
-    .btn {
-      margin: 0 10px;
-      position: relative;
-    }
-
-    .btn.back {
-      top: 8px;
+    .btn-back {
+      position: absolute;
+      top: 0;
       left: 0;
-      position: absolute;
-      margin-left: 0;
     }
 
-    .btn.share {
-      top: 8px;
-      right: 0;
-      position: absolute;
-      margin-right: 0;
+    .previousTrip,
+    .nextTrip {
+      text-indent: -9999px;
+      width: 8px;
+      display: inline-block;
+      background-position: top 4px left;
+      background-repeat: no-repeat;
+
+      &.noTrip {
+        cursor: default;
+        pointer-events: none;
+      }
     }
 
-    .btn.noTrip {
-      visibility: hidden;
+    .previousTrip {
+      @include hr-image('../img/icon_tripnav_left_active.png', '../img/icon_tripnav_left_active@2x.png');
+      margin-right: 10px;
+
+      &:hover {
+        @include hr-image('../img/icon_tripnav_left_hover.png', '../img/icon_tripnav_left_hover@2x.png');
+      }
+
+      &.noTrip {
+        @include hr-image('../img/icon_tripnav_left_inactive.png', '../img/icon_tripnav_left_inactive@2x.png');
+      }
+    }
+
+    .nextTrip {
+      @include hr-image('../img/icon_tripnav_right_active.png', '../img/icon_tripnav_right_active@2x.png');
+      margin-left: 10px;
+
+      &:hover {
+        @include hr-image('../img/icon_tripnav_right_hover.png', '../img/icon_tripnav_right_hover@2x.png');
+      }
+
+      &.noTrip {
+        @include hr-image('../img/icon_tripnav_right_inactive.png', '../img/icon_tripnav_right_inactive@2x.png');
+      }
     }
   }
 
-  #map {
-    position: relative;
+  .trip {
+    background: #FFF;
+    border-radius: 3px;
+    @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE);
+    margin-top: 20px;
+    padding: 10px 10px 3px 10px;
 
-    .map {
-      height: 400px;
+    .tripHeader {
+      padding: 5px 20px;
+      border-bottom: 1px solid $line_light_gray;
+      font-size: 12px;
+      overflow: hidden;
+
+      .start {
+        width: 49%;
+        float: left;
+        padding-left: 25px;
+        @include hr-image('../img/tripview_a.png', '../img/tripview_a@2x.png');
+        background-repeat: no-repeat;
+        background-position: left top 4px;
+      }
+
+      .end {
+        width: 49%;
+        float: right;
+        text-align: right;
+        padding-right: 25px;
+        @include hr-image('../img/tripview_b.png', '../img/tripview_b@2x.png');
+        background-repeat: no-repeat;
+        background-position: right top 4px;
+      }
+
+      .location {
+        color: $highlight;
+      }
     }
+
+
+    .tripStats {
+      padding: 10px;
+      overflow: hidden;
+
+      .stat {
+        float: left;
+        text-align: center;
+        display: inline-block;
+        margin: 0 77px;
+        width: 47px;
+        overflow: hidden;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .value {
+          font-size: 16px;
+          color: $link_type;
+        }
+
+
+        label {
+          font-size: 10px;
+          color: $base_type;
+        }
+      }
+    }
+
+    #map {
+      position: relative;
+
+      .map {
+        height: 400px;
+      }
+
+      .mapMenu {
+        border-bottom: none;
+
+        .mapMenuRight {
+          border-left: none;
+        }
+      }
+    }
+
   }
 }

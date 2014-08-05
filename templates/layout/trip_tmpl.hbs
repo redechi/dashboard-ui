@@ -1,41 +1,14 @@
 <div id="trip">
-  <div class="tripHeader">
-    <a href="#/" class="back btn btn-default">
-      <span class="glyphicon glyphicon-chevron-left"></span> Back
-    </a>
-    <a href="#/trip/{{ prevTrip }}" class="btn btn-default previousTrip {{#unless prevTrip }}noTrip{{/unless}}">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-    </a>
-    <span class="title">{{ title }}</span>
-    <a href="#/trip/{{ nextTrip }}" class="btn btn-default nextTrip {{#unless nextTrip }}noTrip{{/unless}}">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-    </a>
-    <!--<a href="#" class="share btn btn-default" data-toggle="popover">
-      <span class="glyphicon glyphicon-share"></span> Share
-    </a>-->
+  <div class="tripNavigation">
+    <a href="#/" class="btn btn-blue btn-back">Back</a>
+    <a href="#/trip/{{ prevTrip }}" class="previousTrip {{#unless prevTrip }}noTrip{{/unless}}" data-id="{{ prevTrip }}">Previous Trip</a>
+    <span class="title">Trip {{index}} of {{totalTripCount}}</span>
+    <a href="#/trip/{{ nextTrip }}" class="nextTrip {{#unless nextTrip }}noTrip{{/unless}}" data-id="{{ prevTrip }}">Next</a>
   </div>
-  <div class="summaryStats">
-    <div class="stat mpg">
-      <div class="value">{{ formatted_average_mpg }}</div>
-      <div class="label">MPG</div>
-    </div>
-    <div class="stat cost">
-      <div class="value">{{ formatted_fuel_cost_usd }}</div>
-      <div class="label">Fuel</div>
-    </div>
-    <div class="stat score">
-      <div class="value">{{ score }}</div>
-      <div class="label">Score</div>
-    </div>
-    <div class="stat distance">
-      <div class="value">{{ formatted_distance_miles }}</div>
-      <div class="label">Miles</div>
-    </div>
-    <div class="stat duration">
-      <div class="value">{{ duration }}</div>
-      <div class="label">Time</div>
-    </div>
+  <div class="trip">
+    <div id="tripDetails"></div>
+    <div id="map"></div>
   </div>
-  <div id="map"></div>
+
 
 </div>
