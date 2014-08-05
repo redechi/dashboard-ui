@@ -1,0 +1,28 @@
+<div class="tripHeader">
+  <div class="start">
+    <div class="time">{{ formatted_start_time }}</div>
+    <div class="location">{{ start_location.display_name }}</div>
+  </div>
+  <div class="end">
+    <div class="time">{{ formatted_end_time }}</div>
+    <div class="location">{{ end_location.display_name }}</div>
+  </div>
+</div>
+<div class="tripStats">
+  <div class="stat distance">
+    <div class="value">{{ formatted_distance_miles }}</div>
+    <label>Miles</label>
+  </div>
+  <div class="stat mpg">
+    <div class="value">{{ formatted_average_mpg }}</div>
+    <label>MPG</label>
+  </div>
+  <div class="stat cost">
+    <div class="value">{{ formatted_fuel_cost_usd }}</div>
+    <label>Fuel</label>
+  </div>
+  <div class="stat duration">
+    <div class="value">{{ formatted_duration }}</div>
+    <label>Time</label>
+  </div>
+</div>

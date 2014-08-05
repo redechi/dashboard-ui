@@ -19,7 +19,6 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
     initialize: function() {
       console.log('initialize a Trips collection');
-      this.on('add', this.convertToLinkedList, this);
       coms.on('filter:applyAllFilters', _.bind(this.applyAllFilters, this));
     },
 
@@ -112,24 +111,6 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
     saveToSessionStorage: function() {
       sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
-    },
-
-
-    /*
-     *
-     * on 'add' event link trip model with its previous and next models
-     *
-     */
-    convertToLinkedList: function(model) {
-      var idx = this.indexOf(model);
-      var prev = this.at(idx - 1);
-      var next = this.at(idx + 1);
-      if(next) {
-        model.set('prevTrip', next.get('id'));
-      }
-      if(prev) {
-        model.set('nextTrip', prev.get('id'));
-      }
     },
 
 

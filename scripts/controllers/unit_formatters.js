@@ -44,7 +44,7 @@ function() {
       if (Math.round(distanceMiles) >= 100) {
         return distanceMiles.toFixed(0);
       } else {
-        return ((distanceMiles) ? distanceMiles : 0).toFixed(1);
+        return distanceMiles ? distanceMiles.toFixed(1) : '';
       }
     },
 
