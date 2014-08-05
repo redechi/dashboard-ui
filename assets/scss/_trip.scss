@@ -65,27 +65,33 @@
     padding: 10px 10px 3px 10px;
 
     .tripHeader {
-      padding: 5px 20px;
+      padding: 5px 20px 20px 20px;
       border-bottom: 1px solid $line_light_gray;
       font-size: 12px;
       overflow: hidden;
 
-      .start {
+      .start,
+      .end {
         width: 49%;
+        background-repeat: no-repeat;
+
+        .location {
+          height: 17px;
+        }
+      }
+
+      .start {
         float: left;
         padding-left: 25px;
         @include hr-image('../img/tripview_a.png', '../img/tripview_a@2x.png');
-        background-repeat: no-repeat;
         background-position: left top 4px;
       }
 
       .end {
-        width: 49%;
         float: right;
         text-align: right;
         padding-right: 25px;
         @include hr-image('../img/tripview_b.png', '../img/tripview_b@2x.png');
-        background-repeat: no-repeat;
         background-position: right top 4px;
       }
 
