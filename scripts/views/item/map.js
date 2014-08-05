@@ -99,6 +99,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           mapHelpers.highlightMarker(marker);
         }
       });
+
+      this.speedingLayer.eachLayer(function(layer) {
+        if(layer.options.id === id) {
+          layer.bringToFront();
+          layer.setStyle(mapHelpers.highlightSpeedingLine());
+        }
+      });
     },
 
 
@@ -120,6 +127,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         this.markersLayer.eachLayer(function(marker) {
           if(marker.options.id === id) {
             marker.setIcon(mapHelpers.mainIcon);
+          }
+        });
+
+        this.speedingLayer.eachLayer(function(layer) {
+          if(layer.options.id === id) {
+            layer.setStyle(mapHelpers.speedingLine());
           }
         });
       }
@@ -256,7 +269,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.hardBrakesLayer.clearLayers();
       this.hardAccelsLayer.clearLayers();
 
-
       $('.showTripEvents').prop('checked', !!window.options.showTripEvents);
 
       this.toggleTripEvents();
@@ -314,17 +326,20 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     buildTripEventsLayer: function() {
       var self = this;
 
-      this.collection.each(function(model) {
-        model.get('drive_events').forEach(function(item) {
-          var decodedPath = L.GeoJSON.decodeLine(model.get('path'));
+      this.collection.each(function(trip) {
+        var decodedPath = L.GeoJSON.decodeLine(trip.get('path'));
 
+        trip.get('drive_events').forEach(function(item) {
           if(item.type === 'hard_brake') {
-            self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon}));
+            self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon, id: trip.get('id')}));
           } else if(item.type === 'hard_accel') {
-            self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon}));
+            self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon, id: trip.get('id')}));
           } else if(item.type === 'speeding') {
-            var speedingPath = mapHelpers.subPath(formatters.m_to_mi(item.start_distance_m), formatters.m_to_mi(item.end_distance_m), decodedPath);
-            self.speedingLayer.addLayer(L.polyline(speedingPath, mapHelpers.speedingLine()));
+            var start = formatters.m_to_mi(item.start_distance_m),
+                end = formatters.m_to_mi(item.end_distance_m),
+                speedingPath = mapHelpers.subPath(start, end, decodedPath),
+                lineOptions = _.extend({id: trip.get('id')}, mapHelpers.speedingLine());
+            self.speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));
           }
         });
       });

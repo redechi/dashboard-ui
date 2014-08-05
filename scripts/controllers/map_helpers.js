@@ -90,6 +90,15 @@ function( mapbox, formatters, stats ) {
     },
 
 
+    highlightSpeedingLine: function() {
+      return {
+        opacity: 1,
+        color: '#F5A623',
+        weight: 4
+      };
+    },
+
+
     highlightMarker: function (marker, options) {
       if(!options) {
         options = {};
