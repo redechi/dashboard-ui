@@ -284,8 +284,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
         coms.trigger('overlay:hide');
       }
 
-      var resize = this.resize;
-      setTimeout(resize, 0);
+      this.resize();
 
       this.options.fetching = false;
     },

@@ -22,9 +22,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
       $(window).on('resize', this.resize);
 
-      //resize right away
-      setTimeout(this.resize, 0);
-
       coms.on('error:403', _.bind(this.error403, this));
       coms.on('error:noTrips', _.bind(this.noTrips, this));
     },
@@ -58,9 +55,14 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
     },
 
 
+    onShow: function () {
+      this.resize();
+    },
+
+
     resize: function () {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#map .map').height(height - $('#graphs').outerHeight(true) - $('.mapMenu').outerHeight(true) - 31);
+      $('#left-column #map .map').height(height - $('#graphs').outerHeight(true) - $('.mapMenu').outerHeight(true) - 31);
     },
 
 
