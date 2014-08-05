@@ -33,6 +33,24 @@ function( mapbox, formatters, stats ) {
     }),
 
 
+    aLargeIcon: L.icon({
+      iconUrl: '/assets/img/tripview_map_a.png',
+      iconRetinaUrl: '/assets/img/tripview_map_a@2x.png',
+      iconSize: [30, 43],
+      iconAnchor: [15, 43],
+      popupAnchor: [0,-43]
+    }),
+
+
+    bLargeIcon: L.icon({
+      iconUrl: '/assets/img/tripview_map_b.png',
+      iconRetinaUrl: '/assets/img/tripview_map_b@2x.png',
+      iconSize: [30, 43],
+      iconAnchor: [15, 43],
+      popupAnchor: [0,-43]
+    }),
+
+
     hardBrakeIcon: L.divIcon({
       className: 'hardBrakeIcon',
       iconSize: [12, 12]
@@ -72,11 +90,22 @@ function( mapbox, formatters, stats ) {
     },
 
 
-    highlightMarker: function (marker) {
+    highlightMarker: function (marker, options) {
+      if(!options) {
+        options = {};
+      }
       if(marker.options.type === 'start') {
-        marker.setIcon(this.aIcon);
+        if(options.type === 'large') {
+          marker.setIcon(this.aLargeIcon);
+        } else {
+          marker.setIcon(this.aIcon);
+        }
       } else if(marker.options.type === 'end') {
-        marker.setIcon(this.bIcon);
+        if(options.type === 'large') {
+          marker.setIcon(this.bLargeIcon);
+        } else {
+          marker.setIcon(this.bIcon);
+        }
       }
     },
 

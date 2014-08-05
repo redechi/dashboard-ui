@@ -60,6 +60,26 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
+    highlightAll: function() {
+      this.pathsLayer.eachLayer(function(layer) {
+        layer.eachLayer(function(layer) {
+          if(layer instanceof L.Polyline) {
+            layer.setStyle(mapHelpers.highlightLine());
+          }
+
+          layer.removeEventListener('mouseover');
+          layer.removeEventListener('mouseout');
+        });
+      });
+
+      this.markersLayer.eachLayer(function(marker) {
+        mapHelpers.highlightMarker(marker, {type: 'large'});
+        marker.removeEventListener('click');
+        marker.removeEventListener('popupclose');
+      });
+    },
+
+
     highlightTrip: function (model) {
       var id = model.get('id');
 
