@@ -59,6 +59,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
         this.errorAlert('Please enter an email and a password', (!email), (!password));
       } else {
         this.clearErrors();
+        this.errorAlert('Logging in&hellip;', false, false);
 
         $.post(
           login.getBaseUrl() + '/oauth/access_token',
