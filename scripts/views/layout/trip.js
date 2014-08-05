@@ -61,6 +61,11 @@ function( Backbone, coms, regionManager, tripsCollection, Trip, SingleTripView, 
     template: TripTmpl,
 
 
+    events: {
+      'click .btn-back': 'backToSummary'
+    },
+
+
     regions: {
       map: '#map',
       trip: '#tripDetails'
@@ -94,6 +99,12 @@ function( Backbone, coms, regionManager, tripsCollection, Trip, SingleTripView, 
         prevTrip: prevTrip,
         nextTrip: nextTrip
       });
+    },
+
+
+    backToSummary: function() {
+      Backbone.history.navigate(window.options.filterURL, {trigger: true});
+      return false;
     },
 
 

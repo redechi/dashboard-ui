@@ -52,7 +52,8 @@ function( Backbone, coms, FilterModel, filterList ) {
 
 
     toUrl: function() {
-      Backbone.history.navigate(this.formatFiltersToURL());
+      window.options.filterURL = this.formatFiltersToURL();
+      Backbone.history.navigate(window.options.filterURL);
     },
 
 
