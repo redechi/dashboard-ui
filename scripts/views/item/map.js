@@ -256,6 +256,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.hardBrakesLayer.clearLayers();
       this.hardAccelsLayer.clearLayers();
 
+
+      $('.showTripEvents').prop('checked', !!window.options.showTripEvents);
+
       this.toggleTripEvents();
     },
 
@@ -285,7 +288,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     toggleTripEvents: function() {
-      if($('.showTripEvents').is(':checked')) {
+      window.options.showTripEvents = $('.showTripEvents').is(':checked');
+      if(window.options.showTripEvents) {
         this.showTripEventsMap();
       } else {
         this.hideTripEvents();

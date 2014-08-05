@@ -10,6 +10,9 @@ define([
 function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout ) {
   'use strict';
 
+
+  window.options = {};
+
   //Log the user in if access token present
   login.login();
 
