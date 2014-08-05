@@ -19,6 +19,14 @@
       background: #FFFFFF;
       @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE);
     }
+
+    .leaflet-bottom {
+      z-index: 0;
+    }
+
+    .leaflet-control {
+      z-index: 0;
+    }
   }
 
   .mapMenu {
