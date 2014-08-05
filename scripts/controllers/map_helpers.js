@@ -166,32 +166,16 @@ function( mapbox, formatters, stats ) {
       return _.reduce(distances, function(memo, distance1, idx) {
         var distance2 = (idx < distances.length - 1) ? distances[idx + 1] : distance1;
         if(startMi <= distance2 && endMi >= distance1) {
-          memo.push([decodedPath[idx][1], decodedPath[idx][0]]);
+          memo.push(decodedPath[idx]);
         }
         return memo;
       }, []);
     },
 
 
-    getBoundsFromTrips: function(trips) {
-      return trips.reduce(function(memo, trip) {
-        var start = [trip.get('start_location').lat, trip.get('start_location').lon],
-            end = [trip.get('end_location').lat, trip.get('end_location').lon];
-        if(!memo) {
-          memo = L.latLngBounds([start, end]);
-        } else {
-          memo.extend(start);
-          memo.extend(end);
-        }
-        return memo;
-      }, null);
-    },
-
-
     enablePolyline: L.extend(L.GeoJSON, {
       // This function is from Google's polyline utility.
       // Borrowed from: http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/decode.js
-      // Changed to return lng/lats instead of lat/lngs
       decodeLine: function (encoded) {
         var len = encoded.length;
         var index = 0;
@@ -221,7 +205,7 @@ function( mapbox, formatters, stats ) {
           var dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
           lng += dlng;
 
-          array.push([lng * 1e-5, lat * 1e-5]);
+          array.push([lat * 1e-5, lng * 1e-5]);
         }
         return array;
       }

@@ -83,16 +83,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     highlightTrip: function (model) {
       var id = model.get('id');
 
-      this.pathsLayer.eachLayer(function(layer) {
-        if(layer.options.id == id) {
-          layer.eachLayer(function(layer) {
-            if(layer instanceof L.Polyline) {
-              layer.bringToFront();
-              layer.setStyle(mapHelpers.highlightLine());
-            }
-          });
-        }
-      });
+      var path = this.pathsLayer.getLayer(model.get('pathID'));
+
+      if(path) {
+        path
+          .bringToFront()
+          .setStyle(mapHelpers.highlightLine());
+      }
 
       this.markersLayer.eachLayer(function(marker) {
         if(marker.options.id === id) {
@@ -114,15 +111,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       //don't unhighlight selected trips
       if(!model.get('selected')) {
-        this.pathsLayer.eachLayer(function(layer) {
-          if(layer.options.id == id) {
-            layer.eachLayer(function(layer) {
-              if(layer instanceof L.Polyline) {
-                layer.setStyle(mapHelpers.styleLine());
-              }
-            });
-          }
-        });
+        var path = this.pathsLayer.getLayer(model.get('pathID'));
+
+        if(path) {
+          path.setStyle(mapHelpers.styleLine());
+        }
 
         this.markersLayer.eachLayer(function(marker) {
           if(marker.options.id === id) {
@@ -140,8 +133,25 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     changeSelectedTrips: function() {
-      var selectedTrips = this.collection.where({ selected: true }),
-          bounds = (selectedTrips.length) ? mapHelpers.getBoundsFromTrips(selectedTrips) : this.pathsLayer.getBounds();
+      var self = this,
+          selectedTrips = this.collection.where({selected: true}),
+          bounds;
+
+      if(selectedTrips.length) {
+        bounds = selectedTrips.reduce(function(memo, trip) {
+          var pathBounds = self.pathsLayer.getLayer(trip.get('pathID')).getBounds();
+          if(!memo) {
+            memo = pathBounds;
+          } else {
+            memo.extend(pathBounds);
+          }
+          return memo;
+        }, null);
+
+
+      } else {
+        bounds = this.pathsLayer.getBounds();
+      }
       this.fitBounds(bounds);
     },
 
@@ -153,20 +163,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    attachEvents: function (feature, layer) {
-      var model = this.collection.where({id: feature.properties.id }).pop();
-      layer
-        .on('mouseover', function () {
-          coms.trigger('trips:highlight', model);
-        })
-        .on('mouseout', function () {
-          coms.trigger('trips:unhighlight', model);
-        });
-      return layer;
-    },
-
-
     updateMap: function () {
+      var self = this;
+
       if(!this.mapDiv()) {
         return;
       } else if(!this.mapbox) {
@@ -175,67 +174,51 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         this.clearMap();
       }
 
-      var self = this,
-          mapbox = this.mapbox,
-          pathsLayer = this.pathsLayer,
-          markersLayer = this.markersLayer,
-          markers = this.markers;
-
-
-      this.collection.each(function (model) {
-        var id = model.get('id'),
-            startLoc = model.get('start_location'),
+      this.collection.each(function(model) {
+        var startLoc = model.get('start_location'),
             endLoc = model.get('end_location'),
-            path = model.get('path'),
-            geoJson = L.geoJson([], {
-              style: mapHelpers.styleLine,
-              onEachFeature: _.bind(self.attachEvents, self),
-              id: id
-            });
+            path = model.get('path');
 
         if (path) {
-          geoJson.addData({
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: L.GeoJSON.decodeLine(path)
-            },
-            properties: {
-              id: id
-            }
+          var line = L.polyline(L.GeoJSON.decodeLine(path), mapHelpers.styleLine()).addTo(self.pathsLayer);
+          line.on('mouseover', function() {
+            coms.trigger('trips:highlight', model);
+          })
+          .on('mouseout', function() {
+            coms.trigger('trips:unhighlight', model);
           });
+
+          model.set('pathID', line._leaflet_id);
         }
 
         if (startLoc) {
           var startMarker = mapHelpers.createMarker('start', model);
-          startMarker.on('click', function (e) {
+          startMarker.on('click', function(e) {
             coms.trigger('trips:highlight', model);
           })
-          .on('popupclose', function () {
+          .on('popupclose', function() {
             coms.trigger('trips:unhighlight', model);
           });
 
-          markers.push(startMarker);
-          markersLayer.addLayer(startMarker);
+          self.markers.push(startMarker);
+          self.markersLayer.addLayer(startMarker);
         }
 
         if (endLoc) {
           var endMarker = mapHelpers.createMarker('end', model);
-          endMarker.on('click', function (e) {
+          endMarker.on('click', function(e) {
             coms.trigger('trips:highlight', model);
           })
-          .on('popupclose', function () {
+          .on('popupclose', function() {
             coms.trigger('trips:unhighlight', model);
           });
 
-          markers.push(endMarker);
-          markersLayer.addLayer(endMarker);
+          self.markers.push(endMarker);
+          self.markersLayer.addLayer(endMarker);
         }
-
-        geoJson.addTo(pathsLayer);
       });
 
-      mapbox.addLayer(pathsLayer);
+      this.mapbox.addLayer(this.pathsLayer);
 
       this.fitBounds(this.pathsLayer.getBounds());
 
@@ -246,7 +229,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     fitBounds: function(bounds) {
       this.mapbox.invalidateSize();
       if(bounds.isValid()) {
-        this.mapbox.fitBounds(bounds, {padding: [50, 50]});
+        this.mapbox.fitBounds(bounds, {padding: [20, 20]});
       }
     },
 
