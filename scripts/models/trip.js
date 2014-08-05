@@ -30,6 +30,7 @@ function( Backbone, formatters, login ) {
         formatted_end_time: (this.get('end_time') ? moment(this.get('end_time')).format('h:mm a').toUpperCase() : ''),
         formatted_start_time: (this.get('start_time') ? moment(this.get('start_time')).format('h:mm a').toUpperCase(): ''),
         formatted_calendar_date: moment(this.get('start_time')).calendar(),
+        formatted_calendar_date_with_year: moment(this.get('start_time')).format('MMM D, YYYY'),
         duration_over_70_min: Math.ceil(this.get('duration_over_70_s') / 60),
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),
