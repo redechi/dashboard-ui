@@ -77,6 +77,14 @@
   }
 }
 
+.btn-back {
+  @include hr-image('../img/icon_back_white.png', '../img/icon_back_white@2x.png');
+  background-repeat: no-repeat;
+  background-position: left 15px center;
+  font-weight: bold;
+  padding: 6px 20px 4px 33px;
+}
+
 .btn-dropdown {
   padding-right: 25px;
   background-position: right 5px center;
