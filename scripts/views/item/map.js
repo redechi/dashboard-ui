@@ -62,14 +62,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     highlightAll: function() {
       this.pathsLayer.eachLayer(function(layer) {
-        layer.eachLayer(function(layer) {
-          if(layer instanceof L.Polyline) {
-            layer.setStyle(mapHelpers.highlightLine());
-          }
-
-          layer.removeEventListener('mouseover');
-          layer.removeEventListener('mouseout');
-        });
+        layer.setStyle(mapHelpers.highlightLine());
+        layer.removeEventListener('mouseover');
+        layer.removeEventListener('mouseout');
       });
 
       this.markersLayer.eachLayer(function(marker) {
