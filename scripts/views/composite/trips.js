@@ -2,14 +2,13 @@ define([
   'backbone',
   'communicator',
   'regionManager',
-  'views/item/empty',
   'views/item/trip',
   'hbs!tmpl/composite/trips_list_tmpl',
   'controllers/unit_formatters',
   'collections/trips',
   'fileSaver'
 ],
-function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, tripsCollection, fileSaver ) {
+function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollection, fileSaver ) {
   'use strict';
 
   /* Return a ItemView class definition */
@@ -32,7 +31,6 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
-    emptyView: Empty,
     childView: Trip,
     childViewContainer: "ul.trips",
     template: tripList,
@@ -273,7 +271,6 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
 
     onRender: function() {
-      console.log('rendering')
       this.enablePopovers();
 
       //toggle class if no trips
@@ -292,7 +289,7 @@ function( Backbone, coms, regionManager, Empty, Trip, tripList, formatters, trip
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#trips ul.trips').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 88);
+      $('#trips ul.trips').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90);
     }
 
   });

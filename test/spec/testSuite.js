@@ -8,7 +8,6 @@ define(function() {
     'spec/models/trip.js',
     'spec/models/user.js',
     'spec/views/composite/filters.js',
-    'spec/views/item/empty.js',
     'spec/views/item/filter.js',
     'spec/views/item/graph.js',
     'spec/views/item/map.js',

@@ -72,44 +72,55 @@
     }
   }
 
-  .summaryStats {
-    background-color: #fff;
+  #tripStats {
+    background-color: $footer_back;
     border-bottom: 1px solid $line_light_gray;
-    padding: 5px 0;
     overflow: hidden;
 
+    .someTrips {
+      padding: 5px 0;
 
-    svg {
-      position: relative;
-      margin: 0 15px 0 10px;
-      top: 3px;
-      width: 40px;
-      height: 40px;
+      svg {
+        position: relative;
+        margin: 0 15px 0 10px;
+        top: 3px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .averageScore {
+        font-size: 16px;
+      }
+
+      .stat {
+        display: inline-block;
+        width: 55px;
+        vertical-align: 4px;
+      }
+
+      .value {
+        color: $link_type;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .label {
+        font-size: 10px;
+        color: $base_type;
+        text-transform: uppercase;
+        font-weight: normal;
+        text-align: center;
+        display: block;
+      }
     }
 
-    .averageScore {
-      font-size: 16px;
-    }
+    .noTrips {
+      display: none;
 
-    .stat {
-      display: inline-block;
-      width: 55px;
-      vertical-align: 4px;
-    }
-
-    .value {
-      color: $link_type;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    .label {
-      font-size: 10px;
-      color: $base_type;
-      text-transform: uppercase;
-      font-weight: normal;
-      text-align: center;
-      display: block;
+      .alert-grey {
+        margin: 20px 60px;
+        text-align: center;
+      }
     }
   }
 
@@ -317,5 +328,16 @@
         }
       }
     }
+  }
+}
+
+
+body.noMatchingTrips #trips #tripStats {
+  .noTrips {
+    display: block;
+  }
+
+  .someTrips {
+    display: none;
   }
 }

@@ -125,7 +125,7 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
 
     styleLine: function () {
       var rgb = this.scoreColor.replace(/[^\d,]/g, '');
-      this.$el.find('.summaryStats').css({
+      this.$el.find('.someTrips').css({
         'border-bottom': '1px solid ' + this.scoreColor,
         'box-shadow': 'inset 0px -2px 3px 0px rgba(' + rgb + ', 0.3)'
       });
