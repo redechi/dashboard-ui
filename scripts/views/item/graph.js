@@ -395,6 +395,11 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           if(d.values > 0) {
             return topRoundedRectBorder(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
           }
+        })
+        .style('stroke', function(d) {
+          if(graphType === 'score') {
+            return formatters.scoreColor(d.values);
+          }
         });
 
 
