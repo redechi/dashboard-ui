@@ -47,6 +47,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       //update Nav button status
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
+      coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
+
       //get a list of all vehicles and update filter
       vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(function(vehicles) {
         self.updateVehicleList();
@@ -116,6 +118,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         });
         self.updateFilterList();
       }, 0);
+    },
+
+
+    closePopovers: function() {
+      $('.btn-popover', this.$el).popover('hide');
     },
 
 
