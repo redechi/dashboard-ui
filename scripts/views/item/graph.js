@@ -492,10 +492,10 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         'graphTypeUnit': graphTypeUnit
       });
 
-      $('.graphValue li').removeClass();
-      $('.graphValue li[data-value="' + graphType + '"]').addClass('selected');
+      $('.graphValue li', this.$el).removeClass();
+      $('.graphValue li[data-value="' + graphType + '"]', this.$el).addClass('selected');
 
-      $('.graphType')
+      $('.graphType', this.$el)
         .text(graphTypeName)
         .popover('hide');
 
@@ -506,14 +506,14 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
     setDateRange: function() {
       var dateRange = filters.findWhere({name: 'date'}).get('value');
-      $('#graphs .dateRange').text(formatters.dateRange(dateRange));
+      $('.dateRange', this.$el).text(formatters.dateRange(dateRange));
     },
 
 
     onShow: function() {
-      $('.graphType').popover('destroy');
-      var graphPopoverTemplate = $('.graphMenu .popoverTemplate');
-      $('.graphType').popover({
+      $('.graphType', this.$el).popover('destroy');
+      var graphPopoverTemplate = $('.graphMenu .popoverTemplate', this.$el);
+      $('.graphType', this.$el).popover({
         html: true,
         content: function() { return graphPopoverTemplate.html(); },
         title: function() { return graphPopoverTemplate.attr('title'); },
