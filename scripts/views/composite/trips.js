@@ -32,7 +32,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
     childView: Trip,
-    childViewContainer: "ul.trips",
+    childViewContainer: ".trips ul",
     template: tripList,
 
 
@@ -289,7 +289,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#trips ul.trips').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90);
+      $('#trips .trips ul').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90);
     }
 
   });

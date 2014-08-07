@@ -124,207 +124,226 @@
     }
   }
 
-  ul.trips {
+  .trips {
     min-height: 403px;
     overflow-y: auto;
     overflow-x: hidden;
-    margin: 0;
-    border-right: 1px solid $line_light_gray;
-    border-left: 1px solid $line_light_gray;
 
-    li {
-      display: block;
-      position: relative;
-      border-top: 1px solid $line_light_gray;
-      cursor: pointer;
+    ul {
+      margin: 0;
+      border-right: 1px solid $line_light_gray;
+      border-left: 1px solid $line_light_gray;
 
-      .tripLink {
-        display: none;
-      }
-
-      .timeTopBox, .timeBottomBox {
-        position: absolute;
-        font-size: 11px;
-        left: 0;
-        padding: 10px;
-        font-family: AvenirNextLTPro-Thin;
-      }
-
-      .timeTopBox {
-        top: 0;
-
-        .endDate {
-          font-size: 10px;
-        }
-      }
-
-      .timeBottomBox {
-        bottom: 0;
-        font-family: AvenirNextLTPro-Thin;
-      }
-
-      .tripLine {
-        @include box-sizing(border-box);
-        position: absolute;
-        width: 2px;
-        height: 90%;
-        background-color: $line_gray;
-        left: 70px;
-        top: 15px;
-        height: 61px;
-        transition: height 0.25s, top 0.25s;
-        transition-delay: 0.05s;
-        transition-timing-function: ease-in-out;
-
-        & > div {
-          width: 10px;
-          height: 10px;
-          background-color: $line_gray;
-          border-radius: 8px;
-          margin-left: -4px;
-          font-size: 10px;
-          line-height: 10px;
-          text-align: center;
-          color: transparent;
-          transition: width 0.25s, height 0.25s, margin-left 0.25s, color 0.25s, line-height 0.25s;
-          transition-delay: 0.05s;
-          transition-timing-function: ease-in-out;
-        }
-
-        & div:first-child {
-          margin-top: -3px;
-        }
-
-        & div:last-child {
-          position: absolute;
-          bottom: -3px;
-        }
-      }
-
-      .tripDetails {
-        margin-left: 88px;
-      }
-
-      .middleBox {
-        overflow: hidden;
-      }
-
-      .stat {
-        width: 25%;
-        float: left;
-        font-size: 14px;
-        font-weight: 400;
-        color: $base_type;
-
-        &::after, &::before {
-          font-size: 9px;
-          font-weight: normal;
-          display: inline;
-          color: $base_type;
-        }
-      }
-
-      .distance::after {
-        content: 'MI';
-      }
-
-      .duration::after {
-        content: ' MIN';
-      }
-
-      .mpg::after {
-        content: ' MPG';
-      }
-
-      .fuelCost::before {
-        content: '$ ';
-      }
-
-      .startLocation,
-      .endLocation {
-        font-size: 12px;
-        padding: 10px 15px 10px 0;
-        font-family: AvenirNextLTPro-Thin;
-        height: 37px;
-      }
-
-      .tripEvents {
-        overflow: hidden;
-        height: 0;
-        opacity: 0;
-        transition: height 0.25s ease-in-out 0.05s, padding 0.25s ease-in-out 0.05s, opacity 0.15s ease-in-out 0.3s;
-      }
-
-      &.selected,
-      &:hover {
-        background-color: #fff;
-
-        .stat {
-          color: $link_type;
-        }
-
-        .startLocation {
-          color: $highlight;
-        }
-
-        .endLocation {
-          color: $highlight;
-        }
-
-        .startTime {
-          color: $link_type;
-        }
-
-        .endTime {
-          color: $link_type;
-        }
-
-        .tripLine {
-          background: $highlight;
-          top: 12px;
-
-          & > div {
-            color: rgba(255, 255, 255, 1);
-            background: $highlight;
-            width: 15px;
-            height: 15px;
-            margin-left: -7px;
-            line-height: 15px;
-            padding: 1px;
-          }
-        }
-      }
-
-      &.selected {
-        .tripLine {
-          height: 67px;
-        }
-      }
-
-      &:hover{
-        border-top-color: transparent;
-        border-right-color: transparent;
-        border-left-color: transparent;
+      li {
+        display: block;
+        position: relative;
+        border-top: 1px solid $line_light_gray;
+        cursor: pointer;
 
         .tripLink {
-          display: block;
+          display: none;
+        }
+
+        .timeBox {
           position: absolute;
-          top: -1px;
-          right: 0;
-          width: 27px;
-          height: 27px;
-          @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
-          text-indent: -9999px;
+          font-size: 11px;
+          left: 0;
+          top: 0;
+          height: 100%;
+          padding: 10px;
+          font-family: AvenirNextLTPro-Thin;
+
+          .startTime {
+            bottom: 10px;
+            position: absolute;
+          }
         }
 
         .tripLine {
-          height: 108px;
+          @include box-sizing(border-box);
+          position: absolute;
+          width: 2px;
+          height: 90%;
+          background-color: $line_gray;
+          left: 70px;
+          top: 15px;
+          height: 61px;
+          transition: height 0.25s, top 0.25s;
+          transition-delay: 0.05s;
+          transition-timing-function: ease-in-out;
+
+          & > div {
+            width: 10px;
+            height: 10px;
+            background-color: $line_gray;
+            border-radius: 8px;
+            margin-left: -4px;
+            font-size: 10px;
+            line-height: 10px;
+            text-align: center;
+            color: transparent;
+            transition: width 0.25s, height 0.25s, margin-left 0.25s, color 0.25s, line-height 0.25s;
+            transition-delay: 0.05s;
+            transition-timing-function: ease-in-out;
+          }
+
+          & div:first-child {
+            margin-top: -3px;
+          }
+
+          & div:last-child {
+            position: absolute;
+            bottom: -3px;
+          }
+        }
+
+        .tripDetails {
+          margin-left: 88px;
+        }
+
+        .middleBox {
+          overflow: hidden;
+        }
+
+        .stat {
+          width: 25%;
+          float: left;
+          font-size: 14px;
+          font-weight: 400;
+          color: $base_type;
+
+          &::after, &::before {
+            font-size: 9px;
+            font-weight: normal;
+            display: inline;
+            color: $base_type;
+          }
+        }
+
+        .distance::after {
+          content: 'MI';
+        }
+
+        .duration::after {
+          content: ' MIN';
+        }
+
+        .mpg::after {
+          content: ' MPG';
+        }
+
+        .fuelCost::before {
+          content: '$ ';
+        }
+
+        .startLocation,
+        .endLocation {
+          font-size: 12px;
+          padding: 10px 15px 10px 0;
+          font-family: AvenirNextLTPro-Thin;
+          height: 37px;
         }
 
         .tripEvents {
-          height: 41px;
-          opacity: 1;
-          padding: 10px 0 5px 0;
+          overflow: hidden;
+          height: 0;
+          opacity: 0;
+          transition: height 0.25s ease-in-out 0.05s, padding 0.25s ease-in-out 0.05s, opacity 0.15s ease-in-out 0.3s;
+        }
+
+        &.selected,
+        &:hover {
+          background-color: #fff;
+
+          .stat {
+            color: $link_type;
+          }
+
+          .startTime {
+            color: $link_type;
+          }
+
+          .endTime {
+            color: $link_type;
+          }
+
+          .tripLine {
+            top: 12px;
+
+            & > div {
+              color: rgba(255, 255, 255, 1);
+              width: 15px;
+              height: 15px;
+              margin-left: -7px;
+              line-height: 15px;
+              padding: 1px;
+            }
+          }
+        }
+
+        &.selected {
+
+          .startLocation {
+            color: $selected;
+          }
+
+          .endLocation {
+            color: $selected;
+          }
+
+          .timeBox {
+            border-left: 2px solid $selected;
+          }
+
+          .tripLine {
+            height: 67px;
+            background: $selected;
+
+            & > div {
+              background: $selected;
+            }
+          }
+        }
+
+        &:hover{
+          border-left: 1px solid transparent;
+          border-right: 1px solid transparent;
+          margin-left: -1px;
+          margin-right: -1px;
+
+          .startLocation {
+            color: $highlight;
+          }
+
+          .endLocation {
+            color: $highlight;
+          }
+
+          .tripLink {
+            display: block;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 27px;
+            height: 27px;
+            @include hr-image('../img/icon_opentrip.png', '../img/icon_opentrip@2x.png');
+            text-indent: -9999px;
+          }
+
+          .tripLine {
+            height: 108px;
+            background: $highlight;
+
+            & > div {
+              background: $highlight;
+            }
+          }
+
+          .tripEvents {
+            height: 41px;
+            opacity: 1;
+            padding: 10px 0 5px 0;
+          }
         }
       }
     }
