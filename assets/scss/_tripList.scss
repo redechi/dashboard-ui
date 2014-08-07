@@ -239,7 +239,10 @@
         .startLocation,
         .endLocation {
           font-size: 12px;
-          padding: 10px 15px 10px 0;
+          padding: 10px 0;
+          margin-right: 15px;
+          white-space: nowrap;
+          overflow: hidden;
           font-family: AvenirNextLTPro-Thin;
           height: 37px;
         }
