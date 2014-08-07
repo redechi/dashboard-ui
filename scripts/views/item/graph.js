@@ -292,9 +292,9 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       var svg = d3.select('#graphs .graphContainer').append('svg')
           .attr('width', width + margin.left + margin.right)
           .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-          .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
+          .classed(graphType, true)
+          .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       //SVG defs for gradient
       this.appendSVGGradient(svg.append("svg:defs"));
@@ -397,6 +397,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           }
         })
         .style('stroke', function(d) {
+          //color each outline by score
           if(graphType === 'score') {
             return formatters.scoreColor(d.values);
           }

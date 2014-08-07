@@ -168,8 +168,10 @@
           fill: $base_type;
         }
       }
+    }
 
-      &.max {
+    .average_mpg {
+      .max {
         path.barOutline {
           stroke: $green;
         }
@@ -179,13 +181,28 @@
         }
       }
 
-      &.min {
+      .min {
         path.barOutline {
           stroke: $red;
         }
 
         .barLabel {
           fill: $red;
+        }
+      }
+    }
+
+    .fuel_cost_usd,
+    .distance_miles,
+    .duration {
+      .max,
+      .min {
+        path.barOutline {
+          stroke: $base_type;
+        }
+
+        .barLabel {
+          fill: $base_type;
         }
       }
     }
