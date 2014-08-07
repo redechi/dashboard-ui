@@ -36,11 +36,11 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
     templateHelpers: function() {
       var helpers = {
         total: this.collection.length,
-        distance: formatters.distance(stats.getSum(this.collection, 'distance_miles')),
-        duration: formatters.durationHours(stats.getSum(this.collection, 'duration')),
-        score: formatters.score(stats.getAverageScore(this.collection)),
-        cost: formatters.costWithUnit(stats.getSum(this.collection, 'fuel_cost_usd')),
-        mpg: formatters.averageMPG(stats.getAverageMPG(this.collection))
+        distance: formatters.distance(stats.sumTrips(this.collection, 'distance_miles')),
+        duration: formatters.durationHours(stats.sumTrips(this.collection, 'duration')),
+        score: formatters.score(stats.sumTrips(this.collection, 'score')),
+        cost: formatters.costWithUnit(stats.sumTrips(this.collection, 'fuel_cost_usd')),
+        mpg: formatters.averageMPG(stats.sumTrips(this.collection, 'average_mpg'))
       };
 
       this.score = helpers.score;

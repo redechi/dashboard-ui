@@ -26,9 +26,9 @@ function() {
     },
 
 
-    getSum: function(trips) {
+    getSum: function(trips, field) {
       return trips.reduce(function(memo, trip) {
-        return memo + trip.get('distance_miles');
+        return memo + trip.get(field);
       }, 0);
     },
 
@@ -50,7 +50,7 @@ function() {
       } else if(field === 'score') {
         return this.getAverageScore(trips);
       } else {
-        return this.getSum(trips);
+        return this.getSum(trips, field);
       }
     },
 
