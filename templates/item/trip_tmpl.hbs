@@ -17,7 +17,13 @@
     <div class="distance stat">{{ formatted_distance_miles }}</div>
     <div class="mpg stat">{{ formatted_average_mpg }}</div>
     <div class="fuelCost stat">{{ formatted_fuel_cost_usd }}</div>
-    <div class="duration stat">{{ formatted_duration }}</div>
+    <div class="duration stat {{#if over60Minutes}}hours{{/if}}">
+      {{#if over60Minutes}}
+        {{ formatted_duration_hours }}
+      {{else}}
+        {{ formatted_duration_minutes }}
+      {{/if}}
+    </div>
   </div>
 
   <div class="tripEvents">

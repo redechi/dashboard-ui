@@ -11,6 +11,12 @@ function( Backbone, SingleTripTmpl ) {
       console.log("initialize a SingleTripTmpl ItemView");
     },
 
-    template: SingleTripTmpl
+    template: SingleTripTmpl,
+
+    templateHelpers: {
+      over60Minutes: function() {
+        return (this.duration >= 60);
+      }
+    }
   });
 });

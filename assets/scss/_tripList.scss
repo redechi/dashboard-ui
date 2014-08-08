@@ -228,6 +228,10 @@
           content: ' MIN';
         }
 
+        .duration.hours::after {
+          content: ' H';
+        }
+
         .mpg::after {
           content: ' MPG';
         }

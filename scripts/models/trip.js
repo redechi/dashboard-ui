@@ -22,7 +22,8 @@ function( Backbone, formatters, login ) {
 
       this.set({
         duration: duration,
-        formatted_duration: Math.round(duration),
+        formatted_duration_minutes: Math.round(duration),
+        formatted_duration_hours: formatters.durationHours(duration),
         distance_miles: miles,
         formatted_distance_miles: formatters.distance(miles),
         formatted_average_mpg: Math.round(this.get('average_mpg')),

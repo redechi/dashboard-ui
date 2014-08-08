@@ -21,8 +21,13 @@
     <div class="value">{{ formatted_fuel_cost_usd }}</div>
     <label>Fuel</label>
   </div>
-  <div class="stat duration">
-    <div class="value">{{ formatted_duration }}</div>
-    <label>Time</label>
+  <div class="stat duration {{#if over60Minutes}}hours{{/if}}">
+    {{#if over60Minutes}}
+      <div class="value">{{ formatted_duration_hours }}</div>
+      <label>Hours</label>
+    {{else}}
+      <div class="value">{{ formatted_duration_minutes }}</div>
+      <label>Mins</label>
+    {{/if}}
   </div>
 </div>

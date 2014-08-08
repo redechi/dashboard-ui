@@ -18,6 +18,13 @@ function( Backbone, coms, TripTmpl, formatters ) {
     template: TripTmpl,
 
 
+    templateHelpers: {
+      over60Minutes: function() {
+        return (this.duration >= 60);
+      }
+    },
+
+
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
