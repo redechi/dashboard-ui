@@ -23,9 +23,13 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'click .vehicleFilterValue li': 'changeVehicleFilter',
       'click .dateFilterValue li': 'changeDateFilter',
       'slideStop .durationFilterValue': 'changeDurationFilter',
+      'slide .durationFilterValue': 'updateDurationFilterLabel',
       'slideStop .costFilterValue': 'changeCostFilter',
+      'slide .costFilterValue': 'updateCostFilterLabel',
       'slideStop .timeFilterValue': 'changeTimeFilter',
+      'slide .timeFilterValue': 'updateTimeFilterLabel',
       'slideStop .distanceFilterValue': 'changeDistanceFilter',
+      'slide .distanceFilterValue': 'updateDistanceFilterLabel',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'undo',
       'click .filterNav .redo': 'redo',
@@ -259,13 +263,24 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
+    updateDurationFilterLabel: function (e) {
+      var text = 'between ' + $(e.target).slider('getValue').join(' - ') + ' minutes';
+      $('.btn-filter[data-filter="duration"] .btn-text', this.$el).text(text);
+    },
+
+
     changeDistanceFilter: function (e) {
-      console.log('Change Distance Filter')
       var filter = this.collection.findWhere({name: 'distance'});
       this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
+    },
+
+
+    updateDistanceFilterLabel: function (e) {
+      var text = 'between ' + $(e.target).slider('getValue').join(' - ') + ' miles';
+      $('.btn-filter[data-filter="distance"] .btn-text', this.$el).text(text);
     },
 
 
@@ -278,12 +293,26 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
+    updateCostFilterLabel: function (e) {
+      var text = 'between ' + $(e.target).slider('getValue').map(formatters.costWithUnit).join(' - ');
+      $('.btn-filter[data-filter="cost"] .btn-text', this.$el).text(text);
+    },
+
+
     changeTimeFilter: function (e) {
       var filter = this.collection.findWhere({name: 'time'});
       this.collection.saveFilters();
       filter.set('value', $(e.target).slider('getValue'));
       this.updateFilterText(filter);
       coms.trigger('filter:applyAllFilters');
+    },
+
+
+    updateTimeFilterLabel: function (e) {
+      var text = 'between ' + $(e.target).slider('getValue').map(function(time) {
+        return formatters.formatTime(moment(time, 'hours').valueOf(), null, 'h A');
+      }).join(' - ');
+      $('.btn-filter[data-filter="time"] .btn-text', this.$el).text(text);
     },
 
 
@@ -309,7 +338,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           max: Math.ceil(filter.get('max')),
           formater: filter.get('formatter'),
           value: filter.get('value') || [0, filter.get('max')],
-          tooltip_split: true
+          tooltip: 'hide'
         });
       }
     },
