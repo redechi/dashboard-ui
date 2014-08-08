@@ -122,7 +122,11 @@ function() {
       } else if(binSize === 'month') {
         return moment(date).format('MMM YYYY');
       }
+    },
 
+
+    formatAddress: function(address) {
+      return (address) ? address.replace(/\d{5}, USA$/, '') : 'Unknown Address';
     }
   };
 });
