@@ -43,18 +43,8 @@ function( Backbone, coms, TripTmpl, formatters ) {
     },
 
 
-    toggleSelect: function (e) {
-      var selected = !this.model.get('selected');
-      this.model.set('selected', selected);
-      this.$el.toggleClass('selected', selected);
-
-      if(selected) {
-        coms.trigger('trips:highlight', this.model);
-        coms.trigger('trips:select', this.model);
-      } else {
-        coms.trigger('trips:unhighlight', this.model);
-        coms.trigger('trips:deselect', this.model);
-      }
+    toggleSelect: function () {
+      coms.trigger('trips:toggleSelect', this.model);
     },
 
 
@@ -65,6 +55,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
     onRender: function() {
       this.$el.attr({
+        'data-id': this.model.get('id'),
         'data-start_time': this.model.get('start_time'),
         'data-distance_m': this.model.get('distance_m'),
         'data-average_mpg': this.model.get('average_mpg'),

@@ -20,6 +20,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
+      coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
 
       $(window).on("resize", this.resize);
 
@@ -85,6 +86,22 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       });
       $('.trips ul li').removeClass('selected');
       coms.trigger('trips:deselect');
+    },
+
+
+    toggleSelect: function(model) {
+      var selected = !model.get('selected'),
+          id = model.get('id');
+      model.set('selected', selected);
+      $('.trips ul li[data-id="' + id + '"]', this.$el).toggleClass('selected', selected);
+
+      if(selected) {
+        coms.trigger('trips:highlight', model);
+        coms.trigger('trips:select', model);
+      } else {
+        coms.trigger('trips:unhighlight', model);
+        coms.trigger('trips:deselect', model);
+      }
     },
 
 

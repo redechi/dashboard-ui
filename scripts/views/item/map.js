@@ -123,6 +123,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
             layer.setStyle(mapHelpers.speedingLine());
           }
         });
+
+        //close popups
+        this.mapbox.closePopup();
       }
     },
 
@@ -181,6 +184,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           })
           .on('mouseout', function() {
             coms.trigger('trips:unhighlight', model);
+          })
+          .on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
           });
 
           model.set('pathID', line._leaflet_id);
@@ -188,11 +194,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
         if (startLoc) {
           var startMarker = mapHelpers.createMarker('start', model);
-          startMarker.on('click', function(e) {
-            coms.trigger('trips:highlight', model);
-          })
-          .on('popupclose', function() {
-            coms.trigger('trips:unhighlight', model);
+          startMarker.on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
           });
 
           self.markers.push(startMarker);
@@ -201,11 +204,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
         if (endLoc) {
           var endMarker = mapHelpers.createMarker('end', model);
-          endMarker.on('click', function(e) {
-            coms.trigger('trips:highlight', model);
-          })
-          .on('popupclose', function() {
-            coms.trigger('trips:unhighlight', model);
+          endMarker.on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
           });
 
           self.markers.push(endMarker);
