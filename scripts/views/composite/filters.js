@@ -192,6 +192,12 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
         $('.dateFilterCustom').toggle(valueSelected === 'custom');
 
+        filter.set({
+          value: value,
+          valueSelected: valueSelected,
+          valueSelectedText: valueSelectedText
+        });
+
         if(valueSelected === 'custom') {
           var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
               endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
@@ -202,18 +208,13 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           $('.popover .dateFilterValueCustomEnd')
             .datepicker('setDate', endDate)
             .removeClass('changed');
+        } else {
+          this.collection.saveFilters();
+          this.updateFilterText(filter);
+
+          coms.trigger('filter:updateDateFilter');
+          coms.trigger('filter:applyAllFilters');
         }
-
-        this.collection.saveFilters();
-        filter.set({
-          value: value,
-          valueSelected: valueSelected,
-          valueSelectedText: valueSelectedText
-        });
-        this.updateFilterText(filter);
-
-        coms.trigger('filter:updateDateFilter');
-        coms.trigger('filter:applyAllFilters');
       }
     },
 
@@ -227,6 +228,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           newEnd = moment($('.popover .dateFilterValueCustomEnd').datepicker('getDate')).endOf('day').valueOf();
 
       $(e.target).addClass('changed');
+
+      $('.popover .dateFilterValueCustomStart').datepicker('hide');
+      $('.popover .dateFilterValueCustomEnd').datepicker('hide');
 
       //check for actual change before triggering
       if(newStart && newEnd && (start !== newStart || end !== newEnd)) {
