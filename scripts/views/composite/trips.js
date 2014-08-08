@@ -18,6 +18,8 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       console.log("initialize a Trips CollectionView");
 
       coms.on('filter', _.bind(this.resetCollection, this));
+      coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
+      coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
 
       $(window).on("resize", this.resize);
 
@@ -55,7 +57,8 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       'click .exportOption li': 'export',
       'click .sortValue li': 'changeSortItem',
       'click .sortDirection': 'changeSortDirection',
-      'show.bs.popover .export': 'getTripCounts'
+      'show.bs.popover .export': 'getTripCounts',
+      'click .deselectAll': 'deselectAll'
     },
 
 
@@ -66,6 +69,22 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
     resetCollection: function (collection) {
       this.collection.reset(collection);
+    },
+
+
+    changeSelectedTrips: function() {
+      var selectedTrips = this.collection.where({selected: true});
+      $('.deselectAll', this.$el).toggle(!!selectedTrips.length);
+    },
+
+
+    deselectAll: function() {
+      this.collection.where({selected: true}).forEach(function(trip) {
+        trip.set('selected', false);
+        coms.trigger('trips:unhighlight', trip);
+      });
+      $('.trips ul li').removeClass('selected');
+      coms.trigger('trips:deselect');
     },
 
 
