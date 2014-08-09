@@ -3,7 +3,7 @@ define([
   'communicator',
   '../../collections/filters',
   '../../collections/vehicles',
-  'hbs!tmpl/item/filters_tmpl',
+  'hbs!tmpl/item/filter_tmpl',
   '../../controllers/unit_formatters'
 ],
 function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
@@ -28,6 +28,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
 
     deleteFilter: function () {
+      $('.btn-popover', this.$el).popover('destroy');
       this.model.destroy();
       this.destroy();
     },
@@ -74,34 +75,27 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     },
 
 
-    initializePopover: function () {
-      var filter = this.model,
-          name = filter.get('name');
+    buildPopover: function () {
+      var name = this.model.get('name');
 
-      setTimeout(function() {
-        $('.btn-popover[data-filter="' + name + '"]').popover('destroy');
-
-        var popoverTemplate = $('.popoverTemplate[data-filter="' + name + '"]');
-        $('.btn-popover[data-filter="' + name + '"]').popover({
+      $('.btn-popover', this.$el)
+        .popover('destroy')
+        .popover({
           html: true,
-          content: function() { return popoverTemplate.html(); },
-          title:  function() { return popoverTemplate.attr('title'); },
+          content: function() { return $('.popoverTemplate[data-filter="' + name + '"]').html(); },
+          title: function() { return $('.popoverTemplate[data-filter="' + name + '"]').attr('title'); },
           placement: 'bottom'
         });
 
-        //don't show popovers for initial filters
-        if(filter.get('showPopover') === true) {
-          $('.btn-popover[data-filter="' + name + '"]').popover('show');
-        }
-
-      }, 0);
-
+      if(this.model.get('showPopover') === true) {
+        $('.btn-popover', this.$el).popover('show');
+      }
     },
 
 
-    onRender: function() {
-      this.initializePopover();
-    },
+    onShow: function() {
+      this.buildPopover();
+    }
 
   });
 });
