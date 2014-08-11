@@ -30,6 +30,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'slide .timeFilterValue': 'updateTimeFilterLabel',
       'slideStop .distanceFilterValue': 'changeDistanceFilter',
       'slide .distanceFilterValue': 'updateDistanceFilterLabel',
+      'show.bs.popover .btn-filter': 'preparePopoverContent',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'click .filterNav .undo': 'undo',
       'click .filterNav .redo': 'redo',
@@ -332,18 +333,49 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
+    preparePopoverContent: function(e) {
+      var name = $(e.target).data('filter'),
+          filter = this.collection.findWhere({name: name});
+
+      if(name === 'vehicle') {
+        this.selectItem('.vehicleFilterValue li[data-value="' + filter.get('value') + '"]');
+      } else if(name === 'date') {
+        this.selectItem('.dateFilterValue li[data-value="' + filter.get('valueSelected') + '"]');
+        $('.dateFilterCustom').toggle(filter.get('valueSelected') === 'custom');
+      }
+    },
+
+
     initializePopoverContent: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
 
       if(name === 'distance' || name === 'duration' || name === 'cost' || name === 'time') {
-        $('.popover .' + name + 'FilterValue').slider({
+        $('.popover .' + name + 'FilterValue', this.$el).slider({
           min: 0,
           max: Math.ceil(filter.get('max')),
           formater: filter.get('formatter'),
           value: filter.get('value') || [0, filter.get('max')],
           tooltip: 'hide'
         });
+      } else if(name === 'date') {
+        $('.popover .dateFilterCustom input').datepicker({
+          format: 'mm/dd/yy',
+          startDate: new Date(2013, 2, 12),
+          endDate: moment().add('days', 1).startOf('day').toDate()
+        });
+
+        if(filter.get('valueSelected') === 'custom') {
+          var value = filter.get('getValue').call(filter, 'custom'),
+              startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
+              endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
+          $('.popover .dateFilterValueCustomStart')
+            .datepicker('setDate', startDate)
+            .removeClass('changed');
+          $('.popover .dateFilterValueCustomEnd')
+            .datepicker('setDate', endDate)
+            .removeClass('changed');
+        }
       }
     },
 
