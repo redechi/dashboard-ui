@@ -22,7 +22,7 @@ function() {
           score2 = (weightedSum.score2 / weightedSum.time) || 0,
           score = Math.max(0, score1) + Math.max(0, score2);
 
-      return Math.max(1, score);
+      return Math.min(Math.max(1, score), 100);
     },
 
 
