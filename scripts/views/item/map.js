@@ -52,11 +52,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.hardBrakesLayer = L.mapbox.featureLayer();
       this.hardAccelsLayer = L.mapbox.featureLayer();
       this.speedingLayer = L.mapbox.featureLayer();
-      this.markers = [];
 
       mapHelpers.enablePolyline();
 
       this.mapbox.addLayer(this.markersLayer);
+      this.mapbox.addLayer(this.pathsLayer);
     },
 
 
@@ -76,9 +76,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     highlightTrip: function (model) {
-      var id = model.get('id');
-
-      var path = this.pathsLayer.getLayer(model.get('pathID'));
+      var id = model.get('id'),
+          path = this.pathsLayer.getLayer(model.get('pathID')),
+          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
+          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
       if(path) {
         path
@@ -86,11 +87,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           .setStyle(mapHelpers.highlightLine());
       }
 
-      this.markersLayer.eachLayer(function(marker) {
-        if(marker.options.id === id) {
-          mapHelpers.highlightMarker(marker);
-        }
-      });
+      if(startMarker) {
+        mapHelpers.highlightMarker(startMarker);
+      }
+
+      if(endMarker) {
+        mapHelpers.highlightMarker(endMarker);
+      }
 
       this.speedingLayer.eachLayer(function(layer) {
         if(layer.options.id === id) {
@@ -106,23 +109,21 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       //don't unhighlight selected trips
       if(!model.get('selected')) {
-        var path = this.pathsLayer.getLayer(model.get('pathID'));
+        var path = this.pathsLayer.getLayer(model.get('pathID')),
+            startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
+            endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
         if(path) {
           path.setStyle(mapHelpers.styleLine());
         }
 
-        this.markersLayer.eachLayer(function(marker) {
-          if(marker.options.id === id) {
-            marker.setIcon(mapHelpers.mainIcon);
-          }
-        });
+        if(startMarker) {
+          startMarker.setIcon(mapHelpers.mainIcon);
+        }
 
-        this.speedingLayer.eachLayer(function(layer) {
-          if(layer.options.id === id) {
-            layer.setStyle(mapHelpers.speedingLine());
-          }
-        });
+        if(endMarker) {
+          endMarker.setIcon(mapHelpers.mainIcon);
+        }
 
         //close popups
         this.mapbox.closePopup();
@@ -132,32 +133,28 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     changeSelectedTrips: function() {
       var self = this,
-          selectedTrips = this.collection.where({selected: true}),
-          bounds;
+          selectedTrips = this.collection.where({selected: true});
 
-      if(selectedTrips.length) {
-        bounds = selectedTrips.reduce(function(memo, trip) {
-          var pathBounds = self.pathsLayer.getLayer(trip.get('pathID')).getBounds();
+      var bounds = selectedTrips.reduce(function(memo, trip) {
+        var path = self.pathsLayer.getLayer(trip.get('pathID'));
+        if(path) {
+          var pathBounds = path.getBounds();
           if(!memo) {
             memo = pathBounds;
           } else {
             memo.extend(pathBounds);
           }
-          return memo;
-        }, null);
+        }
+        return memo;
+      }, null);
 
-
-      } else {
-        bounds = this.pathsLayer.getBounds();
-      }
-      this.fitBounds(bounds);
+      this.fitBounds(bounds || this.pathsLayer.getBounds());
     },
 
 
     clearMap: function() {
       this.pathsLayer.clearLayers();
       this.markersLayer.clearLayers();
-      this.markers = [];
     },
 
 
@@ -179,43 +176,51 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
         if (path) {
           var line = L.polyline(L.GeoJSON.decodeLine(path), mapHelpers.styleLine()).addTo(self.pathsLayer);
-          line.on('mouseover', function() {
-            coms.trigger('trips:highlight', model);
-          })
-          .on('mouseout', function() {
-            coms.trigger('trips:unhighlight', model);
-          })
-          .on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
-          });
 
-          model.set('pathID', line._leaflet_id);
+          if(self.options.layout !== 'single_trip') {
+            line.on('mouseover', function() {
+              coms.trigger('trips:highlight', model);
+            })
+            .on('mouseout', function() {
+              coms.trigger('trips:unhighlight', model);
+            })
+            .on('click', function() {
+              coms.trigger('trips:toggleSelect', model);
+            });
+          }
+          if(!model.get('pathID')) {
+            model.set('pathID', line._leaflet_id);
+          }
         }
 
         if (startLoc) {
-          var startMarker = mapHelpers.createMarker('start', model);
-          startMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
-          });
+          var startMarker = mapHelpers.createMarker('start', model).addTo(self.markersLayer);
+          if(self.options.layout !== 'single_trip') {
+            startMarker.on('click', function() {
+              coms.trigger('trips:toggleSelect', model);
+            });
+          }
 
-          self.markers.push(startMarker);
-          self.markersLayer.addLayer(startMarker);
+          if(!model.get('startMarkerID')) {
+            model.set('startMarkerID', startMarker._leaflet_id);
+          }
         }
 
         if (endLoc) {
-          var endMarker = mapHelpers.createMarker('end', model);
-          endMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
-          });
+          var endMarker = mapHelpers.createMarker('end', model).addTo(self.markersLayer);
+          if(self.options.layout !== 'single_trip') {
+            endMarker.on('click', function() {
+              coms.trigger('trips:toggleSelect', model);
+            });
+          }
 
-          self.markers.push(endMarker);
-          self.markersLayer.addLayer(endMarker);
+          if(!model.get('endMarkerID')) {
+            model.set('endMarkerID', endMarker._leaflet_id);
+          }
         }
       });
 
-      this.mapbox.addLayer(this.pathsLayer);
-
-      this.fitBounds(this.pathsLayer.getBounds());
+      this.fitBounds();
 
       this.updateTripEvents();
     },
@@ -223,6 +228,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     fitBounds: function(bounds) {
       this.mapbox.invalidateSize();
+      if(!bounds) {
+        bounds = this.pathsLayer.getBounds();
+      }
       if(bounds.isValid()) {
         this.mapbox.fitBounds(bounds, {padding: [20, 20]});
       }
@@ -278,7 +286,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     toggleTripEvents: function() {
-      window.options.showTripEvents = $('.showTripEvents').is(':checked');
+      window.options.showTripEvents = $('.showTripEvents', this.$el).is(':checked');
       if(window.options.showTripEvents) {
         this.showTripEventsMap();
       } else {
@@ -288,7 +296,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     showTripEventsMap: function() {
-      $('#map .hardBrakes, #map .speeding, #map .hardAccels').removeClass('grey');
+      $('.hardBrakes, .speeding, .hardAccels', this.$el).removeClass('grey');
 
       // If speeding layer is empty, calculate tripEvents layers (expensive)
       if(!this.speedingLayer.getLayers().length) {

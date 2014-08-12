@@ -19,10 +19,14 @@ function( Backbone, SingleTripTmpl, formatters ) {
         return (this.duration >= 60);
       },
       startAddress: function() {
-        return formatters.formatAddress(this.start_location.name);
+        if(this.start_location) {
+          return formatters.formatAddress(this.start_location.name);
+        }
       },
       endAddress: function() {
-        return formatters.formatAddress(this.end_location.name);
+        if(this.end_location) {
+          return formatters.formatAddress(this.end_location.name);
+        }
       }
     }
   });

@@ -41,16 +41,6 @@
       margin: 25px 0;
     }
 
-    .close {
-      width: 25px;
-      height: 25px;
-      @include hr-image('../img/icon_close.png', '../img/icon_close@2x.png');
-      text-indent: -9999px;
-      position: absolute;
-      top: -12.5px;
-      right: -12.5px;
-    }
-
     .noTripsIcon {
       @include hr-image('../img/icon_notrips.png', '../img/icon_notrips@2x.png');
       width: 80px;
@@ -118,4 +108,14 @@
     }
   }
 
+}
+
+.close {
+  width: 25px;
+  height: 25px;
+  @include hr-image('../img/icon_close.png', '../img/icon_close@2x.png');
+  text-indent: -9999px;
+  position: absolute;
+  top: -12.5px;
+  right: -12.5px;
 }

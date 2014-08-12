@@ -11,7 +11,6 @@ define([
 function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollection, fileSaver ) {
   'use strict';
 
-  /* Return a ItemView class definition */
   return Backbone.Marionette.CompositeView.extend({
 
     initialize: function() {
@@ -21,6 +20,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
+      coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
 
       $(window).on("resize", this.resize);
 
@@ -303,6 +303,11 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       $('.popoverTemplate .exportOption li[data-value="selected"]').toggle(this.collection.where({selected: true}).length > 0);
       $('.popoverTemplate .exportOption li[data-value="tripList"] span').text(this.collection.length);
       $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripsCollection.length);
+    },
+
+
+    showSingleTrip: function (trip) {
+      coms.trigger('trips:showSingleTripOverlay', trip, this.collection);
     },
 
 

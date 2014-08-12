@@ -50,6 +50,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
     tripLink: function (e) {
       e.stopPropagation();
+      coms.trigger('trips:showSingleTrip', this.model);
     },
 
 
