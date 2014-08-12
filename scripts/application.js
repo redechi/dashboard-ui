@@ -20,8 +20,8 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
   $('body').on('click', function(e) {
     $('[data-toggle="popover"]').each(function() {
       if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-        //allow clicking on datepicker
-        if(!$(e.target).is('.day, .month, .year, .prev, .next')) {
+        // allow clicking on datepicker
+        if($('.datepicker').has(e.target).length === 0 && !$(e.target).is('.datepicker')) {
           $(this).popover('hide');
         }
       }
