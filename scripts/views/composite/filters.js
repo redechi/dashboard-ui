@@ -389,27 +389,23 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
       if(distanceFilter) {
         distanceFilter.set(ranges.distance);
-      } else {
-        _.extend(filterList.distance, ranges.distance);
       }
+      _.extend(filterList.distance, ranges.distance);
 
       if(durationFilter) {
         durationFilter.set(ranges.duration);
-      } else {
-        _.extend(filterList.duration, ranges.duration);
       }
+      _.extend(filterList.duration, ranges.duration);
 
       if(costFilter) {
         costFilter.set(ranges.cost);
-      } else {
-        _.extend(filterList.cost, ranges.cost);
       }
+      _.extend(filterList.cost, ranges.cost);
 
       if(dateFilter) {
         dateFilter.set(ranges.date);
-      } else {
-        _.extend(filterList.date, ranges.date);
       }
+      _.extend(filterList.date, ranges.date);
     },
 
 
