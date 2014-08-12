@@ -456,6 +456,16 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('y2', height);
 
 
+      //X Axis box to hide small values of graph
+      svg.append('g')
+        .attr('class', 'x axis background')
+        .append('rect')
+          .attr('x', 0)
+          .attr('y', height + 1)
+          .attr('width', width)
+          .attr('height', 8);
+
+
       //X Axis labels
       bars.append('text')
         .attr('transform', 'translate(0,' + (height + 20) + ')')

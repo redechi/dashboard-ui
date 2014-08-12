@@ -224,5 +224,9 @@
       stroke: $line_gray;
       shape-rendering: crispEdges;
     }
+    .x.axis.background {
+      stroke: transparent;
+      fill: $main_back;
+    }
   }
 }
