@@ -21,7 +21,7 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
     $('[data-toggle="popover"]').each(function() {
       if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
         // allow clicking on datepicker
-        if($('.datepicker').has(e.target).length === 0 && !$(e.target).is('.datepicker')) {
+        if(!$(e.target).is('.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch')) {
           $(this).popover('hide');
         }
       }
