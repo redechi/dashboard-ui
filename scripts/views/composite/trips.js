@@ -40,7 +40,6 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
 
     templateHelpers: function () {
-
       //check for export support
       var exportSupported = false;
       try {
@@ -252,7 +251,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       var sortType = this.options.sortType,
           sortDirection = this.options.sortDirection,
           comparator,
-          trips = $('.trips li'),
+          trips = $('.trips ul li'),
           tripList = _.map(trips, function(trip, idx) {
             return {idx: idx, value: trip.getAttribute('data-' + sortType)};
           });
@@ -275,7 +274,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       });
 
 
-      $('.trips', this.$el).html(sortedTrips);
+      $('.trips ul', this.$el).html(sortedTrips);
     },
 
 
