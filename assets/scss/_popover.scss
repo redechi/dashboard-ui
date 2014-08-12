@@ -71,6 +71,10 @@
       }
     }
 
+    ul.exportOption li {
+      line-height: 25px;
+    }
+
     .listSelect {
       .selected {
         color: $highlight;

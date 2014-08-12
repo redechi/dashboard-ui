@@ -138,8 +138,10 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
     tripToArray: function(trip) {
       var t = trip.toJSON();
 
+      var vehicle = (t.vehicle) ? t.vehicle.year + ' ' + t.vehicle.make + ' ' + t.vehicle.model : '';
+
       return [
-        t.vehicle.year + ' ' + t.vehicle.make + ' ' + t.vehicle.model,
+        vehicle,
         t.start_location.name,
         t.start_location.lat,
         t.start_location.lon,
