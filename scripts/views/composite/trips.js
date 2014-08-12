@@ -323,9 +323,9 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       }
 
       //close all open popovers, unless no matching trips
-      if(this.collection.length > 0) {
-        coms.trigger('filter:closePopovers');
-      }
+      // if(this.collection.length > 0) {
+      //   coms.trigger('filter:closePopovers');
+      // }
 
       this.resize();
 
