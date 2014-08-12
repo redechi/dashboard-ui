@@ -3,11 +3,10 @@ define([
   'regionManager',
   '../collections/filters',
   '../views/layout/summary',
-  '../views/layout/trip',
   '../views/layout/login',
   '../views/layout/password_reset'
 ],
-function( Backbone, regionManager, filtersCollection, SummaryLayout, TripLayout, LoginLayout, PasswordResetLayout ) {
+function( Backbone, regionManager, filtersCollection, SummaryLayout, LoginLayout, PasswordResetLayout ) {
   'use strict';
 
   return {
@@ -29,13 +28,6 @@ function( Backbone, regionManager, filtersCollection, SummaryLayout, TripLayout,
 
     showPasswordResetLayout: function (token) {
       var layout = new PasswordResetLayout({token: token});
-      var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(layout);
-    },
-
-
-    showTripLayout: function (tripid) {
-      var layout = new TripLayout({id: tripid});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },

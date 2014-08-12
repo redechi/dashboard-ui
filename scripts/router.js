@@ -12,7 +12,6 @@ define([
       'login': 'showLoginLayout',
       'reset': 'showPasswordResetLayout',
       'reset/:token': 'showPasswordResetLayout',
-      'trip/:tripid': 'showTripLayout',
       'filter(/)?:filters': 'showSummaryLayout',
       'logout': 'logOut',
       '*notFound': 'notFound'
