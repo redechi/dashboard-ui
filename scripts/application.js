@@ -29,7 +29,7 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
   });
 
   //format for moment's calendar method
-  moment.lang('en', {
+  moment.locale('en', {
     calendar : {
       lastDay : '[Yesterday]',
       sameDay : '[Today]',

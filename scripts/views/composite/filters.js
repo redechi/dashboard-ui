@@ -362,7 +362,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         $('.popover .dateFilterCustom input').datepicker({
           format: 'mm/dd/yy',
           startDate: new Date(2013, 2, 12),
-          endDate: moment().add('days', 1).startOf('day').toDate()
+          endDate: moment().add(1, 'days').startOf('day').toDate()
         });
 
         if(filter.get('valueSelected') === 'custom') {

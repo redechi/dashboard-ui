@@ -53,7 +53,7 @@ function( formatters, vehiclesCollection ) {
       min: 1363071600000,
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
-      value: [moment().endOf('day').subtract('months', 1).valueOf(), moment().endOf('day').valueOf()],
+      value: [moment().endOf('day').subtract(1, 'months').valueOf(), moment().endOf('day').valueOf()],
       options: {
         thisWeek: 'this week',
         thisMonth: 'this month',
@@ -71,7 +71,7 @@ function( formatters, vehiclesCollection ) {
         } else if(valueSelected === 'thisMonth') {
           return [moment().startOf('month').valueOf(), moment().endOf('month').valueOf()];
         } else if(valueSelected === 'last30Days') {
-          return [moment().endOf('day').subtract('days', 30).valueOf(), moment().endOf('day').valueOf()];
+          return [moment().endOf('day').subtract(30, 'days').valueOf(), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'thisYear') {
           return [moment().startOf('year').valueOf(), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'allTime') {
