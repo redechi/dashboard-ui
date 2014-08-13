@@ -33,6 +33,24 @@ function( mapbox, formatters, stats ) {
     }),
 
 
+    aSelectedIcon: L.icon({
+      iconUrl: '/assets/img/map_pin_a_selected.png',
+      iconRetinaUrl: '/assets/img/map_pin_a_selected@2x.png',
+      iconSize: [17, 28],
+      iconAnchor: [8, 28],
+      popupAnchor: [0,-28]
+    }),
+
+
+    bSelectedIcon: L.icon({
+      iconUrl: '/assets/img/map_pin_b_selected.png',
+      iconRetinaUrl: '/assets/img/map_pin_b_selected@2x.png',
+      iconSize: [17, 28],
+      iconAnchor: [8, 28],
+      popupAnchor: [0,-28]
+    }),
+
+
     aLargeIcon: L.icon({
       iconUrl: '/assets/img/tripview_map_a.png',
       iconRetinaUrl: '/assets/img/tripview_map_a@2x.png',
@@ -81,6 +99,15 @@ function( mapbox, formatters, stats ) {
     },
 
 
+    selectedLine: function() {
+      return {
+        opacity: 1,
+        color: '#297FB8',
+        weight: 4,
+      };
+    },
+
+
     speedingLine: function() {
       return {
         opacity: 1,
@@ -100,9 +127,7 @@ function( mapbox, formatters, stats ) {
 
 
     highlightMarker: function (marker, options) {
-      if(!options) {
-        options = {};
-      }
+      options = options || {};
       if(marker.options.type === 'start') {
         if(options.type === 'large') {
           marker.setIcon(this.aLargeIcon);
@@ -115,6 +140,16 @@ function( mapbox, formatters, stats ) {
         } else {
           marker.setIcon(this.bIcon);
         }
+      }
+    },
+
+
+    selectMarker: function (marker, options) {
+      options = options || {};
+      if(marker.options.type === 'start') {
+        marker.setIcon(this.aSelectedIcon);
+      } else if(marker.options.type === 'end') {
+        marker.setIcon(this.bSelectedIcon);
       }
     },
 

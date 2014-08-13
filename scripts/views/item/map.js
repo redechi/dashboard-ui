@@ -15,8 +15,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       console.log("initialize a Map ItemView");
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
-      coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
-      coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
+      coms.on('trips:select', _.bind(this.selectTrip, this));
+      coms.on('trips:deselect', _.bind(this.deselectTrip, this));
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 
@@ -105,14 +105,24 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     unhighlightTrip: function (model) {
-      var id = model.get('id');
+      var id = model.get('id'),
+          path = this.pathsLayer.getLayer(model.get('pathID')),
+          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
+          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
-      //don't unhighlight selected trips
-      if(!model.get('selected')) {
-        var path = this.pathsLayer.getLayer(model.get('pathID')),
-            startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
-            endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
+      if(model.get('selected')) {
+        if(path) {
+          path.setStyle(mapHelpers.selectedLine());
+        }
 
+        if(startMarker) {
+          mapHelpers.selectMarker(startMarker);
+        }
+
+        if(endMarker) {
+          mapHelpers.selectMarker(endMarker);
+        }
+      } else {
         if(path) {
           path.setStyle(mapHelpers.styleLine());
         }
@@ -124,10 +134,66 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         if(endMarker) {
           endMarker.setIcon(mapHelpers.mainIcon);
         }
-
-        //close popups
-        this.mapbox.closePopup();
       }
+
+      //close popups
+      this.mapbox.closePopup();
+    },
+
+
+    selectTrip: function (model) {
+      var id = model.get('id'),
+          path = this.pathsLayer.getLayer(model.get('pathID')),
+          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
+          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
+
+      if(path) {
+        path
+          .bringToFront()
+          .setStyle(mapHelpers.selectedLine());
+      }
+
+      if(startMarker) {
+        mapHelpers.selectMarker(startMarker);
+      }
+
+      if(endMarker) {
+        mapHelpers.selectMarker(endMarker);
+      }
+
+      this.speedingLayer.eachLayer(function(layer) {
+        if(layer.options.id === id) {
+          layer.bringToFront();
+          layer.setStyle(mapHelpers.highlightSpeedingLine());
+        }
+      });
+
+      this.changeSelectedTrips();
+    },
+
+
+    deselectTrip: function (model) {
+      var id = model.get('id'),
+          path = this.pathsLayer.getLayer(model.get('pathID')),
+          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
+          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
+
+      if(path) {
+        path.setStyle(mapHelpers.styleLine());
+      }
+
+      if(startMarker) {
+        startMarker.setIcon(mapHelpers.mainIcon);
+      }
+
+      if(endMarker) {
+        endMarker.setIcon(mapHelpers.mainIcon);
+      }
+
+      this.changeSelectedTrips();
+
+      //close popups
+      this.mapbox.closePopup();
     },
 
 

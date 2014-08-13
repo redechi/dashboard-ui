@@ -82,9 +82,9 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       this.collection.where({selected: true}).forEach(function(trip) {
         trip.set('selected', false);
         coms.trigger('trips:unhighlight', trip);
+        coms.trigger('trips:deselect', trip);
       });
       $('.trips ul li').removeClass('selected');
-      coms.trigger('trips:deselect');
     },
 
 
