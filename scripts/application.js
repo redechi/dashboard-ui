@@ -18,13 +18,18 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
 
   //only allow one popover at a time, close popovers when a user clicks off
   $('body').on('click', function(e) {
-    $('[data-toggle="popover"]').each(function() {
-      if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-        // allow clicking on datepicker
-        if(!$(e.target).is('.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch')) {
-          $(this).popover('hide');
-        }
-      }
+    $('[data-toggle="popover"]').siblings('.popover').each(function() {
+      var $popover = $(this).siblings('[data-toggle="popover"]');
+      //don't close popover if clicking on label
+      if($popover.is(e.target)) { return; }
+
+      //don't close popover if clicking on itself
+      if($popover.has(e.target).length !== 0 || $('.popover').has(e.target).length !== 0) { return; }
+
+      //don't close popover if clicking on datepicker
+      if($(e.target).is('.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch') || $(e.target).parents('.datepicker').length !== 0) { return; }
+
+      $popover.popover('hide');
     });
   });
 
