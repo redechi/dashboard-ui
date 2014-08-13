@@ -197,6 +197,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
         $('.dateFilterCustom').toggle(valueSelected === 'custom');
 
+        this.collection.saveFilters();
+
         filter.set({
           value: value,
           valueSelected: valueSelected,
@@ -214,7 +216,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
             .datepicker('setDate', endDate)
             .removeClass('changed');
         } else {
-          this.collection.saveFilters();
           this.updateFilterText(filter);
 
           coms.trigger('filter:updateDateFilter');
