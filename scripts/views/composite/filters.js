@@ -59,7 +59,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         self.updateVehicleList();
       });
 
-
       //update filter text on buttons
       this.collection.each(this.updateFilterText);
 
@@ -97,8 +96,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     undo: function() {
       if(Backbone.history.previous.length) {
         Backbone.history.next.unshift(Backbone.history.fragment);
-        var fragment = Backbone.history.previous.pop();
-        Backbone.history.navigate(fragment, {trigger: true});
+        this.navigate(Backbone.history.previous.pop());
       }
     },
 
@@ -106,9 +104,17 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     redo: function() {
       if(Backbone.history.next.length) {
         Backbone.history.previous.push(Backbone.history.fragment);
-        var fragment = Backbone.history.next.shift();
-        Backbone.history.navigate(fragment, {trigger: true});
+        this.navigate(Backbone.history.next.shift());
       }
+    },
+
+
+    navigate: function(fragment) {
+      Backbone.history.navigate(fragment);
+      filtersCollection.fromUrl();
+      this.updateFilterList();
+      this.collection.each(this.updateFilterText);
+      coms.trigger('filter:applyAllFilters');
     },
 
 

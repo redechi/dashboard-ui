@@ -62,28 +62,19 @@ function( Backbone, coms, FilterModel, filterList ) {
       var filterObj = this.getFiltersFromUrl(),
           self = this;
 
-      _.each(filterObj, function (value, name) {
-        if (!filterList.hasOwnProperty(name)) {
-          return;
-        }
+      this.reset();
 
-        var filter = self.findWhere({name: name}) || new FilterModel(filterList[name]);
+      _.each(filterObj, function (value, name) {
+        if (!filterList.hasOwnProperty(name)) { return; }
+
+        var filter = new FilterModel(filterList[name]);
         filter.get('fromURL').call(filter, value);
 
         self.add(filter);
       });
 
-      // remove any extra models
-      this.each(_.bind(function (filter) {
-        var name = filter.get('name');
-        if (!filterObj.hasOwnProperty(name)) {
-          this.remove(filter);
-        }
-      }, this));
-
       // if fewer than two models, clear and create a vehicle and date filter.
       if (_.size(filterObj) < 2) {
-        this.reset();
         this.applyInitialFilters();
       }
     },
