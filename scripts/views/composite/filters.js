@@ -155,8 +155,12 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    resetFilters: function() {
+    resetFilters: function(e) {
+      e.preventDefault();
       this.collection.reset();
+      filtersCollection.applyInitialFilters();
+      this.updateFilterList();
+      coms.trigger('filter:applyAllFilters');
     },
 
 
