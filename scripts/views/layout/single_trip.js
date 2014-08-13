@@ -56,11 +56,15 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
 
     updateTripNavigation: function() {
-      var totalTripCount = this.collection.length,
-          idx = this.collection.indexOf(this.model);
+      var selectedTrips = new Backbone.Collection(this.collection.where({selected: true}));
+      if(!selectedTrips.length) {
+        selectedTrips = this.collection;
+      }
+      var totalTripCount = selectedTrips.length,
+          idx = selectedTrips.indexOf(this.model);
 
-      this.nextTrip = this.collection.at(idx - 1);
-      this.prevTrip = this.collection.at(idx + 1);
+      this.nextTrip = selectedTrips.at(idx - 1);
+      this.prevTrip = selectedTrips.at(idx + 1);
 
       this.model.set({
         totalTripCount: totalTripCount,
