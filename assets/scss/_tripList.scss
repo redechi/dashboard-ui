@@ -63,6 +63,7 @@
       background-repeat: no-repeat;
       background-position: left 10px top 11px;
       display: inline-block;
+      color: $link_type;
       padding: 0 10px 0 36px;
       @include hr-image('../img/icon_export.png', '../img/icon_export@2x.png');
 
