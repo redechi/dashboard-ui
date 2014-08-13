@@ -68,6 +68,7 @@
     position: absolute;
     z-index: 10;
     visibility: hidden;
+    pointer-events: none;
 
     .graphTooltip {
       padding: 15px;

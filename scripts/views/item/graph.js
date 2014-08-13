@@ -272,7 +272,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           tooltip = $('#graphs .graphContainer .graphTooltipContainer'),
           binWidth = width / data.length,
           barWidth = this.getBarWidth(data, width),
-          barRadius = Math.min(barWidth/2, 6);
+          barRadius = Math.min(barWidth/2, 6),
+          minBarHeight = 15;
 
 
       //remove any existing graph
@@ -339,19 +340,31 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('x', function(d) { return x(d.key); })
           .attr('date', function(d) { return d.key; });
 
+
+      function generateTooltip(d) {
+        var tooltip = '<div class="arrow"></div>';
+        tooltip += '<div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div>';
+        tooltip += '<div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
+        return tooltip;
+      }
+
       function barMouseover(d) {
-        var tooltipContent = '<div class="arrow"></div><div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div><div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
+        if(d.values === 0) { return; }
+
+        var top = y(d.values) < (height - minBarHeight) ? (y(d.values) - 17) : (y(d.values) - 17 - minBarHeight);
         tooltip
           .css({
-            top: (y(d.values) - 17) + 'px',
+            top: top + 'px',
             left: x(d.key) + 'px',
             visibility: 'visible'
           })
           .find('.graphTooltip')
-            .html(tooltipContent);
+            .html(generateTooltip(d));
       }
 
       function barMouseout(d) {
+        if(d.values === 0) { return; }
+
         tooltip.css('visibility', 'hidden');
       }
 
@@ -444,6 +457,17 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
       }
+
+
+      //invisible bar to make tooltip hovering easier
+      bars.append('rect')
+        .on('mouseover', barMouseover)
+        .on('mouseout', barMouseout)
+        .style('fill', 'transparent')
+        .attr('x', function(d) { return x(d.key) - (barWidth/2); })
+        .attr('y', height - minBarHeight)
+        .attr('width', barWidth)
+        .attr('height', minBarHeight);
 
 
       //X Axis line
