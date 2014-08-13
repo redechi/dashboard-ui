@@ -119,8 +119,9 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
         selectedTrips = tripsCollection;
       }
 
-      var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
-      saveAs(blob, "trips.csv");
+      var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
+          filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
+      saveAs(blob, filename);
       $('.export').popover('hide');
     },
 
