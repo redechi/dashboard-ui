@@ -60,14 +60,14 @@
 
   .notSupported .notSupported {
     width: 380px;
-    height: 400px;
+    height: 375px;
     top: 106px;
     margin-left: -190px;
     display: block;
 
     .supportedBrowsers a {
       display: inline-block;
-      padding: 15px 4px;
+      padding: 15px 4px 0;
     }
   }
 
