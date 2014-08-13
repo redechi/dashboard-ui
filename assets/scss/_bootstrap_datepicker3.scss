@@ -775,8 +775,8 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
   list-style: none;
   background-color: #ffffff;
   border: none;
-  -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px #E3E2DE;
+  -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
+  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding;
   background-clip: padding-box;
