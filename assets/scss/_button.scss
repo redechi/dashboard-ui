@@ -39,12 +39,12 @@
 
 .btn-white {
   background-color: #FFF;
-  color: $link_type;
+  color: $highlight;
   @include box-shadow(0px 1px 0px 0px #227EBA);
 
   &:hover {
     background-color: $main_back;
-    color: $link_type;
+    color: $highlight;
   }
 }
 
