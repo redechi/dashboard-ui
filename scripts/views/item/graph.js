@@ -147,7 +147,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       //Calculate bin size
       var days = moment.duration(dateRange[1] - dateRange[0]).asDays();
 
-      if(days <= 120) {
+      if(days <= 42) {
         //use days as bin
         binSize = 'day';
       } else {
