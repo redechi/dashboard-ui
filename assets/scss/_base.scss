@@ -87,8 +87,8 @@ main {
 #staging {
   display: none;
   position: absolute;
-  top: 7px;
-  left: -110px;
+  top: 4px;
+  left: -113px;
   width: 263px;
   height: 27px;
   line-height: 25px;
@@ -102,6 +102,28 @@ main {
   font-weight: 700;
   color: white;
   background-color: $red;
+  border: 2px solid white;
+  z-index: 500;
+}
+
+#stagingdb {
+  display: none;
+  position: absolute;
+  top: 22px;
+  left: -97px;
+  width: 263px;
+  height: 27px;
+  line-height: 25px;
+  text-align: center;
+  opacity: 0.8;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  background-color: $blue;
   border: 2px solid white;
   z-index: 500;
 }

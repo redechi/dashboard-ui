@@ -67,6 +67,11 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
     //show staging banner, if on staging
     if(login.isStaging()) {
       $('#staging').show();
+      if(login.isUsingStaging()) {
+        $('#stagingdb').text('db: Staging').show();
+      } else {
+        $('#stagingdb').text('db: Production').show();
+      }
     }
   });
 
