@@ -784,20 +784,41 @@ fieldset[disabled] .datepicker table tr td span.active.disabled:hover.active {
   *border-bottom-width: 2px;
   font-size: 11px;
   line-height: 1.428571429;
-  border-top: 2px solid $blue;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
 
-  &:before {
-    border: none;
+  &.datepicker-orient-top {
+    border-top: 2px solid $blue;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+
+    &:before {
+      border: none;
+    }
+
+    &:after {
+      border-bottom-color: $blue;
+      border-width: 10px;
+      top: -10px;
+    }
   }
 
-  &:after {
-    border-bottom-color: $blue;
-    border-width: 10px;
-    top: -10px;
+  &.datepicker-orient-bottom {
+    border-bottom: 2px solid $blue;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &:before {
+      border-top-color: $blue;
+      border-width: 10px;
+      bottom: -10px;
+    }
+
+    &:after {
+      border: none;
+    }
   }
 }
 .datepicker.dropdown-menu th,
