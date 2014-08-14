@@ -254,7 +254,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
           comparator,
           trips = $('.trips ul li'),
           tripList = _.map(trips, function(trip, idx) {
-            return {idx: idx, value: trip.getAttribute('data-' + sortType)};
+            return {idx: idx, value: parseFloat(trip.getAttribute('data-' + sortType))};
           });
 
 
