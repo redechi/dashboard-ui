@@ -158,6 +158,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           filter = this.collection.findWhere({name: name});
       this.collection.remove(filter);
       this.updateFilterList();
+      coms.trigger('filter:applyAllFilters');
     },
 
 
