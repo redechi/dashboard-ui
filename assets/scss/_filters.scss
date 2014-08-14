@@ -72,7 +72,7 @@
         background: $main_back;
         border: 1px solid #EDECE9;
         @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
-        color: $inactive_type;
+        color: $highlight;
         border-radius: 3px;
         font-size: 12px;
         height: inherit;
@@ -80,10 +80,6 @@
         @include hr-image('../img/icon_calendar.png', '../img/icon_calendar@2x.png');
         background-repeat: no-repeat;
         background-position: right 4px center;
-
-        &.changed {
-          color: $highlight;
-        }
 
         &:focus {
           @include hr-image('../img/icon_calendar_active.png', '../img/icon_calendar_active@2x.png');

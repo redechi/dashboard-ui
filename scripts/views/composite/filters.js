@@ -215,12 +215,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
               endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
 
-          $('.popover .dateFilterValueCustomStart')
-            .datepicker('setDate', startDate)
-            .removeClass('changed');
-          $('.popover .dateFilterValueCustomEnd')
-            .datepicker('setDate', endDate)
-            .removeClass('changed');
+          $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+          $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
         } else {
           this.updateFilterText(filter);
 
@@ -238,8 +234,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           end = value[1],
           newStart = $('.popover .dateFilterValueCustomStart').datepicker('getDate').valueOf(),
           newEnd = moment($('.popover .dateFilterValueCustomEnd').datepicker('getDate')).endOf('day').valueOf();
-
-      $(e.target).addClass('changed');
 
       $('.popover .dateFilterValueCustomStart').datepicker('hide');
       $('.popover .dateFilterValueCustomEnd').datepicker('hide');
@@ -380,12 +374,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           var value = filter.get('getValue').call(filter, 'custom'),
               startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
               endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-          $('.popover .dateFilterValueCustomStart')
-            .datepicker('setDate', startDate)
-            .removeClass('changed');
-          $('.popover .dateFilterValueCustomEnd')
-            .datepicker('setDate', endDate)
-            .removeClass('changed');
+          $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+          $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
         }
       }
     },
