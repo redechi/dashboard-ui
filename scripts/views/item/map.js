@@ -381,13 +381,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     showTripEventsSummary: function() {
-      $('#map .hardBrakes')
+      $('.tripEvents .hardBrakes', this.$el)
         .text(this.tripEvents.hardBrakes)
         .toggleClass('none', (this.tripEvents.hardBrakes === 0));
-      $('#map .hardAccels')
+      $('.tripEvents  .hardAccels', this.$el)
         .text(this.tripEvents.hardAccels)
         .toggleClass('none', (this.tripEvents.hardAccels === 0));
-      $('#map .speeding')
+      $('.tripEvents  .speeding', this.$el)
         .text(this.tripEvents.speeding)
         .toggleClass('none', (this.tripEvents.speeding === 0));
     },
@@ -404,7 +404,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     showTripEventsMap: function() {
-      $('.hardBrakes, .speeding, .hardAccels', this.$el).removeClass('grey');
+      $('.tripEvents', this.$el).removeClass('grey');
 
       // If speeding layer is empty, calculate tripEvents layers (expensive)
       if(!this.speedingLayer.getLayers().length) {
@@ -442,7 +442,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     hideTripEvents: function() {
-      $('#map .hardBrakes, #map .speeding, #map .hardAccels').addClass('grey');
+      $('.tripEvents', this.$el).addClass('grey');
 
       this.mapbox.removeLayer(this.hardBrakesLayer);
       this.mapbox.removeLayer(this.hardAccelsLayer);

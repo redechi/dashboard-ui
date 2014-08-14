@@ -41,16 +41,6 @@
       }
     }
 
-    &.none.grey {
-      @include hr-image('../img/event_nohardbrakes_grey_checked.png', '../img/event_nohardbrakes_grey_checked@2x.png');
-      color: transparent;
-    }
-
-    &.grey {
-      @include hr-image('../img/event_nohardbrakes_grey.png', '../img/event_nohardbrakes_grey@2x.png');
-      color: $link_type;
-    }
-
     &::after {
       content: 'Hard Brakes';
     }
@@ -67,16 +57,6 @@
         content: 'Under\a 70 MPH';
         white-space: pre;
       }
-    }
-
-    &.none.grey {
-      @include hr-image('../img/event_under70_grey_checked.png', '../img/event_under70_grey_checked@2x.png');
-      color: transparent;
-    }
-
-    &.grey {
-      @include hr-image('../img/event_under70_grey.png', '../img/event_under70_grey@2x.png');
-      color: $link_type;
     }
 
     &::after {
@@ -97,18 +77,40 @@
       }
     }
 
-    &.none.grey {
-      @include hr-image('../img/event_nohardaccel_grey_checked.png', '../img/event_nohardaccel_grey_checked@2x.png');
-      color: transparent;
-    }
-
-    &.grey {
-      @include hr-image('../img/event_nohardaccel_grey.png', '../img/event_nohardaccel_grey@2x.png');
-      color: $link_type;
-    }
-
     &::after {
       content: 'Hard Accels';
+    }
+  }
+
+  &.grey {
+    .hardBrakes {
+      @include hr-image('../img/event_nohardbrakes_grey.png', '../img/event_nohardbrakes_grey@2x.png');
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../img/event_nohardbrakes_grey_checked.png', '../img/event_nohardbrakes_grey_checked@2x.png');
+        color: transparent;
+      }
+    }
+
+    .speeding {
+      @include hr-image('../img/event_under70_grey.png', '../img/event_under70_grey@2x.png');
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../img/event_under70_grey_checked.png', '../img/event_under70_grey_checked@2x.png');
+        color: transparent;
+      }
+    }
+
+    .hardAccels {
+      @include hr-image('../img/event_nohardaccel_grey.png', '../img/event_nohardaccel_grey@2x.png');
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../img/event_nohardaccel_grey_checked.png', '../img/event_nohardaccel_grey_checked@2x.png');
+        color: transparent;
+      }
     }
   }
 }
