@@ -4,6 +4,7 @@
     overflow: hidden;
     border-right: 1px solid $line_light_gray;
     border-left: 1px solid $line_light_gray;
+    border-bottom: 1px solid $line_light_gray;
 
     .tripCount {
       float: left;
@@ -137,17 +138,22 @@
     min-height: 403px;
     overflow-y: auto;
     overflow-x: hidden;
+    border-right: 1px solid $line_light_gray;
+    border-left: 1px solid $line_light_gray;
 
     ul {
       margin: 0;
-      border-right: 1px solid $line_light_gray;
-      border-left: 1px solid $line_light_gray;
 
       li {
         display: block;
         position: relative;
-        border-top: 1px solid $line_light_gray;
+        border-bottom: 1px solid $line_light_gray;
         cursor: pointer;
+
+
+        &:hover {
+          border-bottom-color: $line_gray;
+        }
 
         .tripLink {
           display: none;
