@@ -1,11 +1,13 @@
 #error {
-  width: 700px;
+  width: 375px;
   text-align: center;
+  margin-top: 40px;
 
   h1 {
-    font-size: 32px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
+    color: $link_type;
   }
 
   .bigAlert {
@@ -15,4 +17,8 @@
     height: 144px;
     margin: 25px 0;
   }
+
+   p {
+     margin-bottom: 30px;
+   }
 }
