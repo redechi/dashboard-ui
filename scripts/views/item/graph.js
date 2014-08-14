@@ -36,6 +36,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
+      coms.on('trips:select', _.bind(this.selectTrip, this));
+      coms.on('trips:deselect', _.bind(this.deselectTrip, this));
 
       $(window).on("resize", _.bind(this.makeGraph, this));
     },
@@ -57,6 +59,27 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           key = moment(start_time).startOf(binSize).valueOf();
 
       //highlight bar
+      this.getBarByKey(key.toString()).classed('highlighted', true);
+    },
+
+
+    unhighlightTrip: function (model) {
+      var id = model.get('id'),
+          binSize = this.model.get('binSize'),
+          start_time = model.get('start_time'),
+          key = moment(start_time).startOf(binSize).valueOf();
+
+      this.getBarByKey(key.toString()).classed('highlighted', false);
+    },
+
+
+    selectTrip: function (model) {
+      var id = model.get('id'),
+          binSize = this.model.get('binSize'),
+          start_time = model.get('start_time'),
+          key = moment(start_time).startOf(binSize).valueOf();
+
+      //select bar
       this.getBarByKey(key.toString())
         .classed('selected', true);
 
@@ -70,19 +93,17 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
-    unhighlightTrip: function (model) {
+    deselectTrip: function (model) {
       var id = model.get('id'),
           binSize = this.model.get('binSize'),
           start_time = model.get('start_time'),
           key = moment(start_time).startOf(binSize).valueOf();
 
-      if(!model.get('selected')) {
-        if(this.selectedTrips[key]) {
-          delete this.selectedTrips[key][id];
-        }
+      if(this.selectedTrips[key]) {
+        delete this.selectedTrips[key][id];
       }
 
-      //don't unhighlight bar if has selected trips
+      //don't deselect bar if has selected trips
       if(!_.size(this.selectedTrips[key])) {
         this.getBarByKey(key.toString())
           .classed('selected', false);

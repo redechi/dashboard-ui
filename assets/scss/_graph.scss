@@ -139,13 +139,21 @@
         }
       }
 
-      &:hover path.barBackground,
       &.selected path.barBackground {
+        fill: #297FB8;
+      }
+
+      &.selected path.barOutline {
+        stroke: #297FB8;
+      }
+
+      &:hover path.barBackground,
+      &.highlighted path.barBackground {
         fill: #82C9F1;
       }
 
       &:hover path.barOutline,
-      &.selected path.barOutline {
+      &.highlighted path.barOutline {
         stroke: #3FA6E0;
       }
 
