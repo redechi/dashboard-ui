@@ -261,7 +261,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (startLoc) {
-          var startMarker = mapHelpers.createMarker('start', model).addTo(self.markersLayer);
+          var options = {icon: mapHelpers.mainIcon, type: 'start', id: model.get('id')},
+              startMarker = L.marker([startLoc.lat, startLoc.lon], options);
+
+          startMarker.addTo(self.markersLayer);
           if(self.options.layout !== 'single_trip') {
             startMarker.on('click', function() {
               coms.trigger('trips:toggleSelect', model);
@@ -274,7 +277,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (endLoc) {
-          var endMarker = mapHelpers.createMarker('end', model).addTo(self.markersLayer);
+          var options = {icon: mapHelpers.mainIcon, type: 'end', id: model.get('id')},
+              endMarker = L.marker([endLoc.lat, endLoc.lon], options);
+
+          endMarker.addTo(self.markersLayer);
           if(self.options.layout !== 'single_trip') {
             endMarker.on('click', function() {
               coms.trigger('trips:toggleSelect', model);
