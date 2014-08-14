@@ -101,8 +101,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       this.mapView = new MapView({collection: new Backbone.Collection(this.model), layout: 'single_trip'});
       this.map.show(this.mapView);
 
-      this.mapView.highlightAll();
-
       var s = new SingleTripView({model: this.model});
       this.trip.show(s);
     },

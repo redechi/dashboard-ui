@@ -248,7 +248,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
             path = model.get('path');
 
         if (path) {
-          var line = L.polyline(L.GeoJSON.decodeLine(path), mapHelpers.styleLine()).addTo(self.pathsLayer);
+          var style = (self.options.layout === 'single_trip') ? mapHelpers.highlightLine() : mapHelpers.styleLine(),
+              line = L.polyline(L.GeoJSON.decodeLine(path), style).addTo(self.pathsLayer);
 
           if(self.options.layout !== 'single_trip') {
             line.on('mouseover', function() {
@@ -267,7 +268,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (startLoc) {
-          var options = {icon: mapHelpers.mainIconSmall, type: 'start', id: model.get('id')},
+          var icon = (self.options.layout === 'single_trip') ? mapHelpers.aLargeIcon : mapHelpers.mainIconSmall,
+              options = {icon: icon, type: 'start', id: model.get('id')},
               startMarker = L.marker([startLoc.lat, startLoc.lon], options);
 
           startMarker.addTo(self.markersLayer);
@@ -283,7 +285,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (endLoc) {
-          var options = {icon: mapHelpers.mainIconSmall, type: 'end', id: model.get('id')},
+          var icon = (self.options.layout === 'single_trip') ? mapHelpers.bLargeIcon : mapHelpers.mainIconSmall,
+              options = {icon: icon, type: 'end', id: model.get('id')},
               endMarker = L.marker([endLoc.lat, endLoc.lon], options);
 
           endMarker.addTo(self.markersLayer);
@@ -327,12 +330,14 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     scaleMarkers: function() {
-      var zoom = this.mapbox.getZoom(),
+      var self = this,
+          zoom = this.mapbox.getZoom(),
           icon = this.getMarkerByZoom(zoom);
+
       console.log(zoom)
 
       this.markersLayer.eachLayer(function(marker) {
-        if(!marker.options.selected) {
+        if(!marker.options.selected && self.options.layout !== 'single_trip') {
           marker.setIcon(icon);
         }
       });
