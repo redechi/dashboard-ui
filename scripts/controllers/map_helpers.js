@@ -7,13 +7,32 @@ function( mapbox, formatters, stats ) {
   'use strict';
 
   return {
-    mainIcon: L.icon({
-      iconUrl: '/assets/img/map_pin_cluster_2.png',
-      iconRetinaUrl: '/assets/img/map_pin_cluster_2@2x.png',
+    mainIconSmall: L.icon({
+      iconUrl: '/assets/img/map_pin.png',
+      iconRetinaUrl: '/assets/img/map_pin@2x.png',
+      iconSize: [8, 8],
+      iconAnchor: [6, 6],
+      popupAnchor: [0,-28]
+    }),
+
+
+    mainIconMedium: L.icon({
+      iconUrl: '/assets/img/map_pin.png',
+      iconRetinaUrl: '/assets/img/map_pin@2x.png',
       iconSize: [12, 12],
       iconAnchor: [6, 6],
       popupAnchor: [0,-28]
     }),
+
+
+    mainIconLarge: L.icon({
+      iconUrl: '/assets/img/map_pin.png',
+      iconRetinaUrl: '/assets/img/map_pin@2x.png',
+      iconSize: [18, 18],
+      iconAnchor: [6, 6],
+      popupAnchor: [0,-28]
+    }),
+
 
     aIcon: L.icon({
       iconUrl: '/assets/img/map_pin_a.png',

@@ -58,6 +58,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       this.mapbox.addLayer(this.markersLayer);
       this.mapbox.addLayer(this.pathsLayer);
+
+      this.mapbox.on('zoomend', _.bind(this.scaleMarkers, this));
     },
 
 
@@ -129,11 +131,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if(startMarker) {
-          startMarker.setIcon(mapHelpers.mainIcon);
+          startMarker.setIcon(mapHelpers.mainIconSmall);
         }
 
         if(endMarker) {
-          endMarker.setIcon(mapHelpers.mainIcon);
+          endMarker.setIcon(mapHelpers.mainIconSmall);
         }
       }
 
@@ -156,10 +158,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       if(startMarker) {
         mapHelpers.selectMarker(startMarker);
+        startMarker.options.selected = true;
       }
 
       if(endMarker) {
         mapHelpers.selectMarker(endMarker);
+        endMarker.options.selected = true;
       }
 
       this.speedingLayer.eachLayer(function(layer) {
@@ -184,11 +188,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       }
 
       if(startMarker) {
-        startMarker.setIcon(mapHelpers.mainIcon);
+        startMarker.setIcon(mapHelpers.mainIconSmall);
+        startMarker.options.selected = false;
       }
 
       if(endMarker) {
-        endMarker.setIcon(mapHelpers.mainIcon);
+        endMarker.setIcon(mapHelpers.mainIconSmall);
+        endMarker.options.selected = false;
       }
 
       this.changeSelectedTrips();
@@ -261,7 +267,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (startLoc) {
-          var options = {icon: mapHelpers.mainIcon, type: 'start', id: model.get('id')},
+          var options = {icon: mapHelpers.mainIconSmall, type: 'start', id: model.get('id')},
               startMarker = L.marker([startLoc.lat, startLoc.lon], options);
 
           startMarker.addTo(self.markersLayer);
@@ -277,7 +283,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
 
         if (endLoc) {
-          var options = {icon: mapHelpers.mainIcon, type: 'end', id: model.get('id')},
+          var options = {icon: mapHelpers.mainIconSmall, type: 'end', id: model.get('id')},
               endMarker = L.marker([endLoc.lat, endLoc.lon], options);
 
           endMarker.addTo(self.markersLayer);
@@ -317,6 +323,30 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     zoomOut: function() {
       this.mapbox.zoomOut();
+    },
+
+
+    scaleMarkers: function() {
+      var zoom = this.mapbox.getZoom(),
+          icon = this.getMarkerByZoom(zoom);
+      console.log(zoom)
+
+      this.markersLayer.eachLayer(function(marker) {
+        if(!marker.options.selected) {
+          marker.setIcon(icon);
+        }
+      });
+    },
+
+
+    getMarkerByZoom: function(zoom) {
+      if(zoom >=15) {
+        return mapHelpers.mainIconLarge;
+      } else if(zoom >= 12) {
+        return mapHelpers.mainIconMedium;
+      } else {
+        return mapHelpers.mainIconSmall;
+      }
     },
 
 
