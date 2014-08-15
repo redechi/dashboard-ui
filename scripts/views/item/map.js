@@ -399,9 +399,26 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       $('.tripEvents  .hardAccels', this.$el)
         .text(this.tripEvents.hardAccels)
         .toggleClass('none', (this.tripEvents.hardAccels === 0));
-      $('.tripEvents  .speeding', this.$el)
-        .text(this.tripEvents.speeding)
-        .toggleClass('none', (this.tripEvents.speeding === 0));
+      if(this.tripEvents.speeding === 0) {
+        $('.tripEvents  .speeding', this.$el)
+          .text(this.tripEvents.speeding)
+          .addClass('none')
+          .removeClass('hours days');
+      }else if(this.tripEvents.speeding < 60) {
+        $('.tripEvents  .speeding', this.$el)
+          .text(this.tripEvents.speeding)
+          .removeClass('none days hours');
+      } else if(this.tripEvents.speeding < 5940) {
+        $('.tripEvents  .speeding', this.$el)
+          .text(Math.round(this.tripEvents.speeding / 60))
+          .removeClass('none days')
+          .addClass('hours');
+      } else {
+        $('.tripEvents  .speeding', this.$el)
+          .text(Math.round(this.tripEvents.speeding / (60 * 24)))
+          .removeClass('none hours')
+          .addClass('days');
+      }
     },
 
 

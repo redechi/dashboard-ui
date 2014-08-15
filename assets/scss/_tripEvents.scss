@@ -63,6 +63,14 @@
       content: 'Min Over 70 MPH';
       width: 45px;
     }
+
+    &.hours::after {
+      content: 'Hours > 70 MPH';
+    }
+
+    &.days::after {
+      content: 'Days > 70 MPH';
+    }
   }
 
   .hardAccels {
