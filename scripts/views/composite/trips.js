@@ -8,7 +8,7 @@ define([
   'collections/trips',
   'fileSaver'
 ],
-function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollection, fileSaver ) {
+function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCollection, fileSaver ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -26,6 +26,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
+      this.options.sortTypeName = 'Time/Date';
       this.options.fetching = true;
       setTimeout(function() {
         tripsCollection.fetchAll();
@@ -36,7 +37,7 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
     collection: new Backbone.Collection([]),
     childView: Trip,
     childViewContainer: ".trips ul",
-    template: tripList,
+    template: tripListTmpl,
 
 
     templateHelpers: function () {
@@ -48,7 +49,9 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
       return {
         total: this.collection.length,
-        exportSupported: exportSupported
+        exportSupported: exportSupported,
+        sortDirection: this.options.sortDirection,
+        sortTypeName: this.options.sortTypeName
       };
     },
 
@@ -213,36 +216,19 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
     },
 
 
-    changeSortDirection: function(e) {
-      if($(e.currentTarget).data('direction') === 'sortDown') {
-        this.options.sortDirection = 'sortUp';
-      } else {
-        this.options.sortDirection = 'sortDown';
-      }
-
-      $('.sortDirection')
-        .data('direction', this.options.sortDirection)
-        .toggleClass('sortUp', (this.options.sortDirection === 'sortUp'));
-
+    changeSortDirection: function() {
+      this.options.sortDirection = (this.options.sortDirection === 'sortDown') ? 'sortUp' : 'sortDown';
       this.doSort();
     },
 
 
     changeSortItem: function(e) {
       if(e) {
-        this.options.sortType = $(e.currentTarget).data('value');
-        this.options.sortTypeName = $(e.currentTarget).text();
+        this.options.sortType = $(e.target).data('value');
+        this.options.sortTypeName = $(e.target).text();
 
-        $('.sortType').popover('hide');
+        $('.sortType', this.$el).popover('hide');
       }
-      $('.sortValue li').removeClass();
-      $('.sortValue li[data-value="' + this.options.sortType + '"]').addClass('selected');
-
-      $('.sortDirection')
-        .data('direction', this.options.sortDirection)
-        .toggleClass('sortUp', (this.options.sortDirection === 'sortUp'));
-
-      $('.sortType').text(this.options.sortTypeName);
 
       this.doSort();
     },
@@ -250,32 +236,13 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
 
     doSort: function() {
       var sortType = this.options.sortType,
-          sortDirection = this.options.sortDirection,
-          comparator,
-          trips = $('.trips ul li'),
-          tripList = _.map(trips, function(trip, idx) {
-            return {idx: idx, value: parseFloat(trip.getAttribute('data-' + sortType))};
-          });
+          sortDirection = (this.options.sortDirection === 'sortUp') ? 1 : -1;
 
-
-      if(sortDirection == 'sortUp') {
-        comparator = function(a, b) {
-          return a.value > b.value ? 1 : -1;
-        };
-      } else {
-        comparator = function(a, b) {
-          return a.value < b.value ? 1 : -1;
-        };
+      this.collection.comparator = function(trip) {
+        return trip.get(sortType) * sortDirection;
       };
 
-      tripList.sort(comparator);
-
-      var sortedTrips = tripList.map(function(trip) {
-        return trips[trip.idx];
-      });
-
-
-      $('.trips ul', this.$el).html(sortedTrips);
+      this.collection.sort();
     },
 
 
@@ -323,6 +290,10 @@ function( Backbone, coms, regionManager, Trip, tripList, formatters, tripsCollec
       if(this.collection.length > 0 || this.options.fetching === false) {
         coms.trigger('overlay:hide');
       }
+
+      //Set sort paramaters
+      $('.sortValue li[data-value="' + this.options.sortType + '"]', this.$el).addClass('selected');
+
 
       //close all open popovers, unless no matching trips
       // if(this.collection.length > 0) {
