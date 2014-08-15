@@ -14,7 +14,7 @@ require.config({
         moment: '../bower_components/momentjs/moment',
         d3: '../bower_components/d3/d3',
         nvd3: '../bower_components/nvd3/nv.d3',
-        mapbox: '//api.tiles.mapbox.com/mapbox.js/v2.0.0/mapbox',
+        mapbox: '../bower_components/mapbox/index',
 
         /* alias all marionette libs */
         'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',

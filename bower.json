@@ -33,7 +33,9 @@
     "momentjs": "~2.8.1",
     "d3": "~3.4.11",
     "nvd3": "~1.1.15-beta",
-    "FileSaver": ""
+    "FileSaver": "",
+    "mapbox.js": "https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js",
+    "mapbox.css": "https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css"
   },
   "devDependencies": {},
   "directory": "n",

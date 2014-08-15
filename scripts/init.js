@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['d3', 'nvd3', 'mapbox', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
+  deps: ['d3', 'nvd3', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
 
 
   shim: {
@@ -42,8 +42,7 @@ require.config({
     moment: '../bower_components/momentjs/moment',
     d3: '../bower_components/d3/d3',
     nvd3: '../bower_components/nvd3/nv.d3',
-
-    mapbox: '//api.tiles.mapbox.com/mapbox.js/v2.0.0/mapbox',
+    mapbox: '../bower_components/mapbox.js/index',
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
 
