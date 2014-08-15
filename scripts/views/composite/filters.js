@@ -52,7 +52,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       //update Nav button status
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
 
-      //coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
+      coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
 
       //get a list of all vehicles and update filter
       vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(function(vehicles) {
@@ -132,9 +132,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    // closePopovers: function() {
-    //   $('.btn-popover', this.$el).popover('hide');
-    // },
+    closePopovers: function() {
+      $('.btn-popover', this.$el).popover('hide');
+    },
 
 
     addFilterFromMenu: function(e) {

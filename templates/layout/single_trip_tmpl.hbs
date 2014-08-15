@@ -1,9 +1,9 @@
 <div class="trip">
   <div class="close">x</div>
   <div class="tripNavigation">
-    <div class="prevTrip {{#unless prevTrip }}noTrip{{/unless}}" data-id="{{ prevTrip }}">Previous Trip</div>
-    <span class="title">Trip {{index}} of {{totalTripCount}}</span>
-    <div class="nextTrip {{#unless nextTrip }}noTrip{{/unless}}" data-id="{{ prevTrip }}">Next</div>
+    <div class="prevTrip">Previous Trip</div>
+    <span class="title">Trip <span class="tripIndex"></span> of <span class="totalTripCount"></span></span>
+    <div class="nextTrip">Next</div>
   </div>
   <div id="tripDetails"></div>
   <div id="map"></div>

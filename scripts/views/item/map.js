@@ -452,6 +452,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     onShow: function () {
       this.updateMap();
+      if(this.options.layout === 'single_trip') {
+        $('.showTripEvents', this.$el).prop('checked', true);
+        this.toggleTripEvents();
+      }
     }
 
   });

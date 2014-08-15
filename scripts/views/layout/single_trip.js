@@ -21,10 +21,9 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       if(!this.model) {
         regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'invalidTrip'}));
       }
+
+      coms.trigger('filter:closePopovers');
     },
-
-
-    collection: new Backbone.Collection([]),
 
 
     template: TripTmpl,
@@ -34,11 +33,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       'click .close': 'closeOverlay',
       'click .nextTrip': 'showNextTrip',
       'click .prevTrip': 'showPrevTrip'
-    },
-
-
-    collectionEvents: {
-      'reset': 'render'
     },
 
 
@@ -66,12 +60,10 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       this.nextTrip = selectedTrips.at(idx - 1);
       this.prevTrip = selectedTrips.at(idx + 1);
 
-      this.model.set({
-        totalTripCount: totalTripCount,
-        index: totalTripCount - idx,
-        prevTrip: (this.prevTrip) ? this.prevTrip.get('id') : null,
-        nextTrip: (this.nextTrip) ? this.nextTrip.get('id') : null
-      });
+      $('.prevTrip', this.$el).toggleClass('noTrip', !this.prevTrip);
+      $('.nextTrip', this.$el).toggleClass('noTrip', !this.nextTrip);
+      $('.tripIndex', this.$el).text(totalTripCount - idx);
+      $('.totalTripCount', this.$el).text(totalTripCount);
     },
 
 
@@ -82,27 +74,35 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
     showNextTrip: function() {
       this.model = this.nextTrip;
-      this.render();
+      this.showTrip();
     },
 
 
     showPrevTrip: function() {
       this.model = this.prevTrip;
-      this.render();
+      this.showTrip();
     },
 
 
-    onBeforeRender: function() {
+    showTrip: function() {
+      this.mapView.collection = new Backbone.Collection(this.model);
+      this.mapView.updateMap();
+
+      this.singleTripView.model = this.model;
+      this.singleTripView.render();
+
       this.updateTripNavigation();
     },
 
 
     onRender: function() {
-      this.mapView = new MapView({collection: new Backbone.Collection(this.model), layout: 'single_trip'});
-      this.map.show(this.mapView);
+      this.mapView = new MapView({layout: 'single_trip'});
 
-      var s = new SingleTripView({model: this.model});
-      this.trip.show(s);
+      this.singleTripView = new SingleTripView();
+      this.showTrip();
+
+      this.map.show(this.mapView);
+      this.trip.show(this.singleTripView);
     },
 
 
