@@ -11,6 +11,7 @@
     position: relative;
     height: 33px;
     padding-top: 7px;
+    @include noSelection;
 
     .btn-back {
       position: absolute;
