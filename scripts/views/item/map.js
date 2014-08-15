@@ -137,6 +137,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         if(endMarker) {
           endMarker.setIcon(mapHelpers.mainIconSmall);
         }
+
+        this.speedingLayer.eachLayer(function(layer) {
+          if(layer.options.id === id) {
+            layer.setStyle(mapHelpers.speedingLine());
+          }
+        });
       }
 
       //close popups
@@ -196,6 +202,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         endMarker.setIcon(mapHelpers.mainIconSmall);
         endMarker.options.selected = false;
       }
+
+      this.speedingLayer.eachLayer(function(layer) {
+        if(layer.options.id === id) {
+          layer.setStyle(mapHelpers.speedingLine());
+        }
+      });
 
       this.changeSelectedTrips();
 
