@@ -100,47 +100,38 @@ function( mapbox, formatters, stats ) {
     }),
 
 
-    styleLine: function() {
+    styleLine: function(zoom) {
       return {
         color: '#8D989F',
         opacity: 0.4,
-        weight: 2
+        weight: this.getPathWidthbyZoom(zoom)
       };
     },
 
 
-    highlightLine: function() {
+    highlightLine: function(zoom) {
       return {
         opacity: 1,
         color: '#5DBEF5',
-        weight: 4,
+        weight: Math.max(4, this.getPathWidthbyZoom(zoom))
       };
     },
 
 
-    selectedLine: function() {
+    selectedLine: function(zoom) {
       return {
         opacity: 1,
         color: '#297FB8',
-        weight: 4,
+        weight: Math.max(4, this.getPathWidthbyZoom(zoom))
       };
     },
 
 
-    speedingLine: function() {
+    speedingLine: function(zoom) {
       return {
         opacity: 1,
         color: '#F5A623',
-        weight: 2
-      };
-    },
-
-
-    highlightSpeedingLine: function() {
-      return {
-        opacity: 1,
-        color: '#F5A623',
-        weight: 4
+        weight: Math.max(4, this.getPathWidthbyZoom(zoom))
       };
     },
 
@@ -169,6 +160,42 @@ function( mapbox, formatters, stats ) {
         marker.setIcon(this.aSelectedIcon);
       } else if(marker.options.type === 'end') {
         marker.setIcon(this.bSelectedIcon);
+      }
+    },
+
+
+    getMarkerSizeByZoom: function(zoom) {
+      if(zoom >=15) {
+        return this.mainIconLarge;
+      } else if(zoom >= 12) {
+        return this.mainIconMedium;
+      } else {
+        return this.mainIconSmall;
+      }
+    },
+
+
+    getPathWidthbyZoom: function(zoom) {
+      if(zoom <= 8) {
+        return 2;
+      } else if(zoom === 9) {
+        return 3;
+      } else if(zoom === 10) {
+        return 4;
+      } else if(zoom === 11) {
+        return 5;
+      } else if(zoom === 12) {
+        return 6;
+      } else if(zoom === 13) {
+        return 8;
+      } else if(zoom === 14) {
+        return 10;
+      } else if(zoom === 15) {
+        return 13;
+      } else if(zoom === 16) {
+        return 16;
+      } else {
+        return 20;
       }
     },
 
