@@ -346,7 +346,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.hardBrakesLayer.clearLayers();
       this.hardAccelsLayer.clearLayers();
 
-      $('.showTripEvents').prop('checked', !!window.options.showTripEvents);
+      $('.showTripEvents', this.$el).prop('checked', !!window.options.showTripEvents);
 
       this.toggleTripEvents();
     },
