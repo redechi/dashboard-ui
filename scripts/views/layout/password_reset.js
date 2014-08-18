@@ -10,11 +10,19 @@ function( Backbone, PasswordResetTmpl, login ) {
 
     initialize: function() {
       console.log('initialize a Password Reset Layout');
+
+      if(this.options.token && this.options.token.indexOf('email=') !== -1) {
+        var email = this.options.token.replace('email=', '');
+        this.templateHelpers = {
+          email: decodeURIComponent(email)
+        };
+        delete this.options.token;
+      }
     },
 
 
     template: PasswordResetTmpl,
-
+    
 
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
@@ -122,13 +130,6 @@ function( Backbone, PasswordResetTmpl, login ) {
       if(this.options.token) {
         $('#passwordResetRequestForm', this.$el).hide();
         $('#passwordResetForm', this.$el).show();
-      }
-    },
-
-    onShow: function() {
-      if(Backbone.history.fragment.indexOf('email=') !== -1) {
-        var email = Backbone.history.fragment.replace('reset?email=', '');
-        $('#email', this.$el).val(decodeURIComponent(email));
       }
     }
   });
