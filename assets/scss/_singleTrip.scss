@@ -1,7 +1,7 @@
 #singleTrip {
   width: 690px;
   position: absolute;
-  top: 100px;
+  top: 55px;
   margin-left: -345px;
   left: 50%;
   z-index: 1002;
@@ -73,17 +73,9 @@
       font-size: 12px;
       overflow: hidden;
 
-      .start,
-      .end {
-        width: 49%;
-        background-repeat: no-repeat;
-
-        .location {
-          height: 17px;
-        }
-      }
-
       .start {
+        width: 300px;
+        background-repeat: no-repeat;
         float: left;
         padding-left: 25px;
         @include hr-image('../img/tripview_a.png', '../img/tripview_a@2x.png');
@@ -91,6 +83,8 @@
       }
 
       .end {
+        width: 300px;
+        background-repeat: no-repeat;
         float: right;
         text-align: right;
         padding-right: 25px;
@@ -107,6 +101,7 @@
     .tripStats {
       padding: 10px;
       overflow: hidden;
+      background: $footer_back;
 
       .stat {
         float: left;
@@ -133,6 +128,9 @@
         label {
           font-size: 10px;
           color: $base_type;
+          text-transform: uppercase;
+          font-weight: normal;
+          text-align: center;
         }
       }
     }

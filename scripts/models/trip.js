@@ -27,7 +27,7 @@ function( Backbone, formatters, login ) {
         distance_miles: miles,
         formatted_distance_miles: formatters.distance(miles),
         formatted_average_mpg: Math.round(this.get('average_mpg')),
-        formatted_fuel_cost_usd: Math.round(this.get('fuel_cost_usd') * 100) / 100,
+        formatted_fuel_cost_usd: formatters.cost(this.get('fuel_cost_usd')),
         formatted_end_time: (this.get('end_time') ? moment(this.get('end_time')).format('h:mm a').toUpperCase() : ''),
         formatted_start_time: (this.get('start_time') ? moment(this.get('start_time')).format('h:mm a').toUpperCase(): ''),
         formatted_calendar_date: moment(this.get('start_time')).calendar(),
