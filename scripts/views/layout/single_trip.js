@@ -22,6 +22,12 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
         regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'invalidTrip'}));
       }
 
+      //if user clicks on a selected trips, only toggle through selected
+      var selectedTrips = new Backbone.Collection(this.collection.where({selected: true}));
+      if(selectedTrips.contains(this.model)) {
+        this.collection = selectedTrips;
+      }
+
       coms.trigger('filter:closePopovers');
     },
 
@@ -50,15 +56,11 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
 
     updateTripNavigation: function() {
-      var selectedTrips = new Backbone.Collection(this.collection.where({selected: true}));
-      if(!selectedTrips.length) {
-        selectedTrips = this.collection;
-      }
-      var totalTripCount = selectedTrips.length,
-          idx = selectedTrips.indexOf(this.model);
+      var totalTripCount = this.collection.length,
+          idx = this.collection.indexOf(this.model);
 
-      this.nextTrip = selectedTrips.at(idx - 1);
-      this.prevTrip = selectedTrips.at(idx + 1);
+      this.nextTrip = this.collection.at(idx - 1);
+      this.prevTrip = this.collection.at(idx + 1);
 
       $('.prevTrip', this.$el).toggleClass('noTrip', !this.prevTrip);
       $('.nextTrip', this.$el).toggleClass('noTrip', !this.nextTrip);
