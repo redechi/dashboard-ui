@@ -299,7 +299,8 @@ module.exports = function (grunt) {
             'assets/img/**',
             'assets/fonts/**',
             'bower_components/requirejs/require.js',
-            'bower_components/modernizr/modernizr.js'
+            'bower_components/modernizr/modernizr.js',
+            'bower_components/mapbox.css/index.css'
           ]
         }]
       }
