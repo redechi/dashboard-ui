@@ -17,17 +17,14 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
-      coms.on('filter', _.bind(this.resetCollection, this));
+      coms.on('filter', _.bind(this.resetView, this));
     },
 
     collection: new Backbone.Collection([]),
 
-    resetCollection: function (collection) {
+    resetView: function (collection) {
       this.collection.reset(collection);
-    },
-
-    collectionEvents: {
-      'reset': 'updateMap'
+      this.updateMap();
     },
 
     template: MapTmpl,
@@ -229,9 +226,64 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    updateMap: function () {
-      var self = this;
+    addTripToMap: function(model) {
+      var startLoc = model.get('start_location'),
+          endLoc = model.get('end_location');
 
+      //Add Path
+      var style = (this.options.layout === 'single_trip') ? mapHelpers.highlightLine(this.mapbox.getZoom()) : mapHelpers.styleLine(this.mapbox.getZoom()),
+          decodedLine = L.GeoJSON.decodeLine(model.get('path')),
+          line = L.polyline(decodedLine, style).addTo(this.pathsLayer);
+
+      if(this.options.layout !== 'single_trip') {
+        model.set('pathID', line._leaflet_id);
+
+        line.on('mouseover', function() {
+          coms.trigger('trips:highlight', model);
+        })
+        .on('mouseout', function() {
+          coms.trigger('trips:unhighlight', model);
+        })
+        .on('click', function() {
+          coms.trigger('trips:toggleSelect', model);
+        });
+      }
+
+      //Add Start Location
+      if(startLoc) {
+        var icon = (this.options.layout === 'single_trip') ? mapHelpers.aLargeIcon : mapHelpers.mainIconSmall,
+            options = {icon: icon, type: 'start', id: model.get('id')},
+            latlon = [startLoc.lat, startLoc.lon],
+            startMarker = L.marker(latlon, options).addTo(this.markersLayer);
+
+        if(this.options.layout !== 'single_trip') {
+          model.set('startMarkerID', startMarker._leaflet_id);
+
+          startMarker.on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
+          });
+        }
+      }
+
+      //Add End Location
+      if(endLoc) {
+        var icon = (this.options.layout === 'single_trip') ? mapHelpers.bLargeIcon : mapHelpers.mainIconSmall,
+            options = {icon: icon, type: 'end', id: model.get('id')},
+            latlon = [endLoc.lat, endLoc.lon],
+            endMarker = L.marker(latlon, options).addTo(this.markersLayer);
+
+        if(this.options.layout !== 'single_trip') {
+          model.set('endMarkerID', endMarker._leaflet_id);
+
+          endMarker.on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
+          });
+        }
+      }
+    },
+
+
+    updateMap: function () {
       if(!this.mapDiv()) {
         return;
       } else if(!this.mapbox) {
@@ -240,65 +292,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         this.clearMap();
       }
 
-      this.collection.each(function(model) {
-        var startLoc = model.get('start_location'),
-            endLoc = model.get('end_location'),
-            path = model.get('path');
-
-        if (path) {
-          var style = (self.options.layout === 'single_trip') ? mapHelpers.highlightLine(self.mapbox.getZoom()) : mapHelpers.styleLine(self.mapbox.getZoom()),
-              line = L.polyline(L.GeoJSON.decodeLine(path), style).addTo(self.pathsLayer);
-
-          if(self.options.layout !== 'single_trip') {
-            line.on('mouseover', function() {
-              coms.trigger('trips:highlight', model);
-            })
-            .on('mouseout', function() {
-              coms.trigger('trips:unhighlight', model);
-            })
-            .on('click', function() {
-              coms.trigger('trips:toggleSelect', model);
-            });
-          }
-          if(!model.get('pathID')) {
-            model.set('pathID', line._leaflet_id);
-          }
-        }
-
-        if (startLoc) {
-          var icon = (self.options.layout === 'single_trip') ? mapHelpers.aLargeIcon : mapHelpers.mainIconSmall,
-              options = {icon: icon, type: 'start', id: model.get('id')},
-              startMarker = L.marker([startLoc.lat, startLoc.lon], options);
-
-          startMarker.addTo(self.markersLayer);
-          if(self.options.layout !== 'single_trip') {
-            startMarker.on('click', function() {
-              coms.trigger('trips:toggleSelect', model);
-            });
-          }
-
-          if(!model.get('startMarkerID')) {
-            model.set('startMarkerID', startMarker._leaflet_id);
-          }
-        }
-
-        if (endLoc) {
-          var icon = (self.options.layout === 'single_trip') ? mapHelpers.bLargeIcon : mapHelpers.mainIconSmall,
-              options = {icon: icon, type: 'end', id: model.get('id')},
-              endMarker = L.marker([endLoc.lat, endLoc.lon], options);
-
-          endMarker.addTo(self.markersLayer);
-          if(self.options.layout !== 'single_trip') {
-            endMarker.on('click', function() {
-              coms.trigger('trips:toggleSelect', model);
-            });
-          }
-
-          if(!model.get('endMarkerID')) {
-            model.set('endMarkerID', endMarker._leaflet_id);
-          }
-        }
-      });
+      this.collection.each(_.bind(this.addTripToMap, this));
 
       this.fitBounds();
 
