@@ -6,11 +6,9 @@ define([
   '../item/map',
   '../item/header',
   'hbs!tmpl/layout/single_trip_tmpl',
-  '../layout/overlay',
-  '../../controllers/login',
-  '../../controllers/unit_formatters'
+  '../layout/overlay'
 ],
-function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, OverlayLayout, login, formatters ) {
+function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, OverlayLayout ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({

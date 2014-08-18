@@ -3,10 +3,9 @@ define([
   'communicator',
   '../../collections/filters',
   '../../collections/vehicles',
-  'hbs!tmpl/item/filter_tmpl',
-  '../../controllers/unit_formatters'
+  'hbs!tmpl/item/filter_tmpl'
 ],
-function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
+function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -15,11 +14,14 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
       'click .remove-filter': 'deleteFilter'
     },
 
+
     initialize: function() {
       console.log('initialize a Filters ItemView');
     },
 
+
     tagName: 'li',
+
 
     template: FiltersTmpl,
 
@@ -39,7 +41,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
     },
 
 
-    buildPopover: function () {
+    createFilterPopover: function () {
       var name = this.model.get('name');
 
       $('.btn-popover', this.$el)
@@ -48,7 +50,8 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
           html: true,
           content: function() { return $('.popoverTemplate[data-filter="' + name + '"]').html(); },
           title: function() { return $('.popoverTemplate[data-filter="' + name + '"]').attr('title'); },
-          placement: 'bottom'
+          placement: 'bottom',
+          viewport: 'body>main'
         });
 
       if(this.model.get('showPopover') === true) {
@@ -58,7 +61,7 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl, formatters ) {
 
 
     onShow: function() {
-      this.buildPopover();
+      this.createFilterPopover();
     }
 
   });

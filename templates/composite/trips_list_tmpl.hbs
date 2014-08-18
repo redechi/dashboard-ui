@@ -3,7 +3,7 @@
   <div class="sortDirection {{ sortDirection }}"></div>
   <div class="sortType" data-toggle="popover">{{ sortTypeName }}</div>
 
-  <div class="popoverTemplate" title="Sort By">
+  <div class="popoverTemplate">
     <ul class="sortValue listSelect">
       <li data-value="start_time">Time/Date</li>
       <li data-value="distance_m">Distance</li>
@@ -22,7 +22,7 @@
 <div class="tripsFooter">
   {{#exportSupported}}
     <div class="export" data-toggle="popover">Export</div>
-    <div class="popoverTemplate" title="Export Trips to .CSV">
+    <div class="popoverTemplate">
       <ul class="exportOption listSelect">
         <li data-value="selected">Export selected trips (<span></span>)</li>
         <li data-value="tripList">Export trips currently in trip list (<span></span>)</li>

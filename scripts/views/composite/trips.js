@@ -124,6 +124,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
       var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
           filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
+          
       saveAs(blob, filename);
       $('.export').popover('hide');
     },
@@ -247,23 +248,25 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
 
     enablePopovers: function() {
-      $('.export').popover('destroy');
-      var exportPopoverTemplate = $('.tripsFooter .popoverTemplate');
-      $('.export').popover({
-        html: true,
-        content: function() { return exportPopoverTemplate.html(); },
-        title:  function() { return exportPopoverTemplate.attr('title'); },
-        placement: 'top'
-      });
+      $('.export')
+        .popover('destroy')
+        .popover({
+          html: true,
+          content: function() { return $('.tripsFooter .popoverTemplate').html(); },
+          title: 'Export Trips to .csv',
+          placement: 'top',
+          viewport: 'body>main'
+        });
 
-      $('.sortType').popover('destroy');
-      var sortPopoverTemplate = $('.tripsHeader .popoverTemplate');
-      $('.sortType').popover({
-        html: true,
-        content: function() { return sortPopoverTemplate.html(); },
-        title:  function() { return sortPopoverTemplate.attr('title'); },
-        placement: 'bottom'
-      });
+      $('.sortType')
+        .popover('destroy')
+        .popover({
+          html: true,
+          content: function() { return $('.tripsHeader .popoverTemplate').html(); },
+          title: 'Sort By',
+          placement: 'bottom',
+          viewport: 'body>main'
+        });
     },
 
 

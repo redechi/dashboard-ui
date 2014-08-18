@@ -122,11 +122,13 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       var self = this;
 
       setTimeout(function() {
-        $('.addFilter').popover('destroy');
-        $('.addFilter').popover({
-          html: true,
-          placement: 'bottom'
-        });
+        $('.addFilter', self.$el)
+          .popover('destroy')
+          .popover({
+            html: true,
+            placement: 'bottom',
+            viewport: 'body>main'
+          });
         self.updateFilterList();
       }, 0);
     },

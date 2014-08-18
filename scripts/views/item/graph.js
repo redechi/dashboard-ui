@@ -571,15 +571,21 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
+    createGraphPopover: function() {
+      $('.graphType', this.$el)
+        .popover('destroy')
+        .popover({
+          html: true,
+          content: function() { return $('.graphMenu .popoverTemplate', this.$el).html(); },
+          title: 'Choose Metric',
+          placement: 'bottom',
+          viewport: 'body>main'
+        });
+    },
+
+
     onShow: function() {
-      $('.graphType', this.$el).popover('destroy');
-      var graphPopoverTemplate = $('.graphMenu .popoverTemplate', this.$el);
-      $('.graphType', this.$el).popover({
-        html: true,
-        content: function() { return graphPopoverTemplate.html(); },
-        title: function() { return graphPopoverTemplate.attr('title'); },
-        placement: 'bottom'
-      });
+      this.createGraphPopover();
     }
 
   });
