@@ -9,11 +9,6 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
 
   return Backbone.Marionette.LayoutView.extend({
 
-    initialize: function() {
-      console.log('initialize a TripListLayout Layout');
-    },
-
-
     template: TripListLayoutTmpl,
 
 

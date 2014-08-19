@@ -14,8 +14,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log('initialize a Single Trip Composite View');
-
       if(!this.model) {
         regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'invalidTrip'}));
       }

@@ -12,7 +12,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log("initialize a Map ItemView");
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));

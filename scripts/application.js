@@ -77,7 +77,6 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
 
 
   App.on("start", function(){
-    console.log('Start History');
     Backbone.history.previous = [];
     Backbone.history.next = [];
     Backbone.history.start();

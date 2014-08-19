@@ -13,8 +13,6 @@ function( Backbone, coms, FilterModel, filterList ) {
     model: Filter,
 
     initialize: function() {
-      console.log('initialize a Filters collection');
-
       this.applyInitialFilters();
 
       this.on('add', this.toUrl, this);
@@ -58,7 +56,6 @@ function( Backbone, coms, FilterModel, filterList ) {
 
 
     fromUrl: function (string) {
-      console.log('Parsing Filters from URL');
       var filterObj = this.getFiltersFromUrl(),
           self = this;
 

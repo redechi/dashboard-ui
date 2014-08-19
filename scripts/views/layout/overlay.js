@@ -10,7 +10,6 @@ function( Backbone, coms, regionManager, OverlayTmpl ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log('initialize an Overlay Layout');
       coms.on('overlay:hide', _.bind(this.closeOverlay, this));
       coms.on('overlay:page', _.bind(this.updateLoadingOverlayCount, this));
     },

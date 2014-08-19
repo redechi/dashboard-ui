@@ -11,8 +11,6 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log("initialize a Header ItemView");
-
       if (this.attributes.loggedIn) {
         this.model.fetch({error: login.fetchErrorHandler});
         this.render();

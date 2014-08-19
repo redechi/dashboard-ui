@@ -19,8 +19,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log('initialize a Summary Layout');
-
       $(window).on('resize', this.resize);
 
       coms.on('error:403', _.bind(this.error403, this));
@@ -90,7 +88,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
     hideSingleTrip: function () {
       regionManager.getRegion('main_overlay').reset();
       this.singleTrip.reset();
-
     }
   });
 });

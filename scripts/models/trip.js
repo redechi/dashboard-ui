@@ -15,8 +15,6 @@ function( Backbone, formatters, login ) {
 
 
     initialize: function(trip) {
-      console.log('initialize a Trip model');
-
       var duration = ((this.get('end_time') - this.get('start_time')) / (1000 * 60)),
           miles = formatters.m_to_mi(this.get('distance_m'));
 

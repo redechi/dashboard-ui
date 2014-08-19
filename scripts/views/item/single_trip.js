@@ -8,10 +8,6 @@ function( Backbone, SingleTripTmpl, formatters ) {
 
   return Backbone.Marionette.ItemView.extend({
 
-    initialize: function() {
-      console.log("initialize a SingleTripTmpl ItemView");
-    },
-
     template: SingleTripTmpl,
 
     templateHelpers: {

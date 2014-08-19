@@ -9,10 +9,6 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
   return Backbone.Marionette.ItemView.extend({
 
-    initialize: function() {
-      console.log("initialize a Trip ItemView");
-    },
-
     tagName: "li",
 
     template: TripTmpl,

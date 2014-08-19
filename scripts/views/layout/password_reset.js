@@ -9,8 +9,6 @@ function( Backbone, PasswordResetTmpl, login ) {
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      console.log('initialize a Password Reset Layout');
-
       if(this.options.token && this.options.token.indexOf('email=') !== -1) {
         var email = this.options.token.replace('email=', '');
         this.templateHelpers = {
@@ -22,7 +20,7 @@ function( Backbone, PasswordResetTmpl, login ) {
 
 
     template: PasswordResetTmpl,
-    
+
 
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
@@ -105,7 +103,6 @@ function( Backbone, PasswordResetTmpl, login ) {
         $.post(
           login.getBaseUrl() + '/password/change/' + token, {password: password},
           function(data) {
-            console.log(data);
             if(data && data.success) {
               self.successAlert('Your password has been successfully reset.<br><a href="#login">Log in</a>');
             } else {
@@ -113,7 +110,6 @@ function( Backbone, PasswordResetTmpl, login ) {
             }
           }
         ).fail(function(jqXHR, textStatus, error) {
-          console.log(jqXHR.responseJSON)
           if(jqXHR.responseJSON && jqXHR.responseJSON.message) {
             self.errorAlert(jqXHR.responseJSON.message, false, false);
           } else {

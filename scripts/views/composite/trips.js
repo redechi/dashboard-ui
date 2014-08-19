@@ -14,8 +14,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
   return Backbone.Marionette.CompositeView.extend({
 
     initialize: function() {
-      console.log("initialize a Trips CollectionView");
-
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));

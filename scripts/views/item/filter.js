@@ -14,12 +14,6 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
       'click .remove-filter': 'deleteFilter'
     },
 
-
-    initialize: function() {
-      console.log('initialize a Filters ItemView');
-    },
-
-
     tagName: 'li',
 
 

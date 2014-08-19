@@ -9,7 +9,6 @@ function( Backbone, coms ) {
   return Backbone.Model.extend({
 
     initialize: function() {
-      console.log('initialize a Filter model');
       this.on('change', function() {
         coms.trigger('filter:toURL');
       });

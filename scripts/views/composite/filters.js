@@ -39,8 +39,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
     initialize: function() {
-      console.log('Initialize a Filters CompositeView');
-
       var self = this;
 
       //update the filter ranges based on trips

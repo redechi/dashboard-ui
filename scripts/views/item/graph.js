@@ -32,7 +32,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     selectedTrips: {},
 
     initialize: function(model) {
-      console.log('initialize a Graph ItemView');
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:highlight', _.bind(this.highlightTrip, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
@@ -45,7 +44,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
     resetCollection: function (collection) {
       this.collection.reset(collection);
-
       this.getGraphData();
       this.makeGraph();
       this.setDateRange();

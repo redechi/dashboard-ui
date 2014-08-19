@@ -9,14 +9,9 @@ function( Backbone, Vehicle, filterList, login ) {
 
   /* vehicles singleton */
   var Vehicles = Backbone.Collection.extend({
-
     model: Vehicle,
     url: login.getAPIUrl() + '/v1/vehicles',
-    comparator: 'display_name',
-
-    initialize: function() {
-      console.log('initialize a Vehicles collection');
-    }
+    comparator: 'display_name'
 
   });
 

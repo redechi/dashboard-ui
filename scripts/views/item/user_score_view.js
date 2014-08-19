@@ -11,7 +11,6 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      console.log('Initialize a Userscore ItemView');
       coms.on('filter', _.bind(this.resetCollection, this));
     },
 

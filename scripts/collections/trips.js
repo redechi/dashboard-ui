@@ -18,14 +18,11 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     url: login.getAPIUrl() + '/v1/trips',
 
     initialize: function() {
-      console.log('initialize a Trips collection');
       coms.on('filter:applyAllFilters', _.bind(this.applyAllFilters, this));
     },
 
 
     applyAllFilters: function () {
-      console.log('Apply All Filters');
-
       //first, apply date filter
       var filteredTrips = this.applyDateFilter();
 

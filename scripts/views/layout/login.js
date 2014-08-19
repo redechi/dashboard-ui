@@ -9,15 +9,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
   return Backbone.Marionette.LayoutView.extend({
 
-    initialize: function() {
-      console.log('initialize a Login Layout');
-    },
-
-
     template: LoginTmpl,
-
-
-    ui: {},
 
 
     events: {
