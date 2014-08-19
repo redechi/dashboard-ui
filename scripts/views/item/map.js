@@ -227,26 +227,29 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     addTripToMap: function(model) {
-      var startLoc = model.get('start_location'),
+      var path = model.get('path'),
+          startLoc = model.get('start_location'),
           endLoc = model.get('end_location');
 
       //Add Path
-      var style = (this.options.layout === 'single_trip') ? mapHelpers.highlightLine(this.mapbox.getZoom()) : mapHelpers.styleLine(this.mapbox.getZoom()),
-          decodedLine = L.GeoJSON.decodeLine(model.get('path')),
-          line = L.polyline(decodedLine, style).addTo(this.pathsLayer);
+      if(path) {
+        var style = (this.options.layout === 'single_trip') ? mapHelpers.highlightLine(this.mapbox.getZoom()) : mapHelpers.styleLine(this.mapbox.getZoom()),
+            decodedLine = L.GeoJSON.decodeLine(model.get('path')),
+            line = L.polyline(decodedLine, style).addTo(this.pathsLayer);
 
-      if(this.options.layout !== 'single_trip') {
-        model.set('pathID', line._leaflet_id);
+        if(this.options.layout !== 'single_trip') {
+          model.set('pathID', line._leaflet_id);
 
-        line.on('mouseover', function() {
-          coms.trigger('trips:highlight', model);
-        })
-        .on('mouseout', function() {
-          coms.trigger('trips:unhighlight', model);
-        })
-        .on('click', function() {
-          coms.trigger('trips:toggleSelect', model);
-        });
+          line.on('mouseover', function() {
+            coms.trigger('trips:highlight', model);
+          })
+          .on('mouseout', function() {
+            coms.trigger('trips:unhighlight', model);
+          })
+          .on('click', function() {
+            coms.trigger('trips:toggleSelect', model);
+          });
+        }
       }
 
       //Add Start Location
@@ -421,21 +424,23 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       var self = this;
 
       this.collection.each(function(trip) {
-        var decodedPath = L.GeoJSON.decodeLine(trip.get('path'));
+        if(trip.get('path')) {
+          var decodedPath = L.GeoJSON.decodeLine(trip.get('path'));
 
-        trip.get('drive_events').forEach(function(item) {
-          if(item.type === 'hard_brake') {
-            self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon, id: trip.get('id')}));
-          } else if(item.type === 'hard_accel') {
-            self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon, id: trip.get('id')}));
-          } else if(item.type === 'speeding') {
-            var start = formatters.m_to_mi(item.start_distance_m),
-                end = formatters.m_to_mi(item.end_distance_m),
-                speedingPath = mapHelpers.subPath(start, end, decodedPath),
-                lineOptions = _.extend({id: trip.get('id')}, mapHelpers.speedingLine(self.mapbox.getZoom()));
-            self.speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));
-          }
-        });
+          trip.get('drive_events').forEach(function(item) {
+            if(item.type === 'hard_brake') {
+              self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon, id: trip.get('id')}));
+            } else if(item.type === 'hard_accel') {
+              self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon, id: trip.get('id')}));
+            } else if(item.type === 'speeding') {
+              var start = formatters.m_to_mi(item.start_distance_m),
+                  end = formatters.m_to_mi(item.end_distance_m),
+                  speedingPath = mapHelpers.subPath(start, end, decodedPath),
+                  lineOptions = _.extend({id: trip.get('id')}, mapHelpers.speedingLine(self.mapbox.getZoom()));
+              self.speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));
+            }
+          });
+        }
       });
 
     },
