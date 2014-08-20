@@ -59,22 +59,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    highlightAll: function() {
-      var self = this;
-      this.pathsLayer.eachLayer(function(layer) {
-        layer.setStyle(mapHelpers.highlightLine(self.mapbox.getZoom()));
-        layer.removeEventListener('mouseover');
-        layer.removeEventListener('mouseout');
-      });
-
-      this.markersLayer.eachLayer(function(marker) {
-        mapHelpers.highlightMarker(marker, {type: 'large'});
-        marker.removeEventListener('click');
-        marker.removeEventListener('popupclose');
-      });
-    },
-
-
     highlightTrip: function (model) {
       var self = this,
           id = model.get('id'),
@@ -85,7 +69,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       if(path) {
         path
           .bringToFront()
-          .setStyle(mapHelpers.highlightLine(this.mapbox.getZoom()));
+          .setStyle(mapHelpers.highlightLine(this.zoom));
       }
 
       if(startMarker) {
@@ -110,7 +94,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       if(model.get('selected')) {
         if(path) {
-          path.setStyle(mapHelpers.selectedLine(this.mapbox.getZoom()));
+          path.setStyle(mapHelpers.selectedLine(this.zoom));
         }
 
         if(startMarker) {
@@ -122,7 +106,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         }
       } else {
         if(path) {
-          path.setStyle(mapHelpers.styleLine(this.mapbox.getZoom()));
+          path.setStyle(mapHelpers.styleLine(this.zoom));
         }
 
         if(startMarker) {
@@ -149,7 +133,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       if(path) {
         path
           .bringToFront()
-          .setStyle(mapHelpers.selectedLine(this.mapbox.getZoom()));
+          .setStyle(mapHelpers.selectedLine(this.zoom));
       }
 
       if(startMarker) {
@@ -178,7 +162,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
       if(path) {
-        path.setStyle(mapHelpers.styleLine(this.mapbox.getZoom()));
+        path.setStyle(mapHelpers.styleLine(this.zoom));
       }
 
       if(startMarker) {
@@ -232,9 +216,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       //Add Path
       if(path) {
-        var style = (this.options.layout === 'single_trip') ? mapHelpers.highlightLine(this.mapbox.getZoom()) : mapHelpers.styleLine(this.mapbox.getZoom()),
-            decodedLine = L.GeoJSON.decodeLine(model.get('path')),
-            line = L.polyline(decodedLine, style).addTo(this.pathsLayer);
+        var decodedLine = L.GeoJSON.decodeLine(model.get('path')),
+            line = L.polyline(decodedLine, this.pathStyle).addTo(this.pathsLayer);
 
         if(this.options.layout !== 'single_trip') {
           model.set('pathID', line._leaflet_id);
@@ -253,8 +236,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       //Add Start Location
       if(startLoc) {
-        var icon = (this.options.layout === 'single_trip') ? mapHelpers.aLargeIcon : mapHelpers.mainIconSmall,
-            options = {icon: icon, type: 'start', id: model.get('id')},
+        var options = {icon: this.aIcon, type: 'start', id: model.get('id')},
             latlon = [startLoc.lat, startLoc.lon],
             startMarker = L.marker(latlon, options).addTo(this.markersLayer);
 
@@ -269,8 +251,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
       //Add End Location
       if(endLoc) {
-        var icon = (this.options.layout === 'single_trip') ? mapHelpers.bLargeIcon : mapHelpers.mainIconSmall,
-            options = {icon: icon, type: 'end', id: model.get('id')},
+        var options = {icon: this.bIcon, type: 'end', id: model.get('id')},
             latlon = [endLoc.lat, endLoc.lon],
             endMarker = L.marker(latlon, options).addTo(this.markersLayer);
 
@@ -292,6 +273,16 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         this.createMap();
       } else {
         this.clearMap();
+      }
+
+      if(this.options.layout === 'single_trip') {
+        this.pathStyle = mapHelpers.highlightLine(this.zoom);
+        this.aIcon = mapHelpers.aLargeIcon;
+        this.bIcon = mapHelpers.bLargeIcon;
+      } else {
+        this.pathStyle = mapHelpers.styleLine(this.zoom);
+        this.aIcon = mapHelpers.mainIconSmall;
+        this.bIcon = mapHelpers.mainIconSmall;
       }
 
       this.collection.each(_.bind(this.addTripToMap, this));
@@ -324,17 +315,23 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     scaleMarkers: function() {
+      this.zoom = this.mapbox.getZoom();
+
       var self = this,
-          zoom = this.mapbox.getZoom(),
-          icon = mapHelpers.getMarkerSizeByZoom(zoom),
-          weight = mapHelpers.getPathWidthbyZoom(zoom);
+          icon = mapHelpers.getMarkerSizeByZoom(this.zoom),
+          weight = mapHelpers.getPathWidthbyZoom(this.zoom);
 
       this.markersLayer.eachLayer(function(marker) {
         if(!marker.options.selected && self.options.layout !== 'single_trip') {
           marker.setIcon(icon);
         }
       });
+
       this.pathsLayer.eachLayer(function(path) {
+        path.setStyle({weight: weight});
+      });
+      
+      self.speedingLayer.eachLayer(function(path) {
         path.setStyle({weight: weight});
       });
     },
@@ -420,7 +417,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     buildTripEventsLayer: function() {
-      var self = this;
+      var self = this,
+          speedingLine = mapHelpers.speedingLine(this.zoom);
 
       this.collection.each(function(trip) {
         if(trip.get('path')) {
@@ -435,7 +433,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
               var start = formatters.m_to_mi(item.start_distance_m),
                   end = formatters.m_to_mi(item.end_distance_m),
                   speedingPath = mapHelpers.subPath(start, end, decodedPath),
-                  lineOptions = _.extend({id: trip.get('id')}, mapHelpers.speedingLine(self.mapbox.getZoom()));
+                  lineOptions = _.extend({id: trip.get('id')}, speedingLine);
               self.speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));
             }
           });
