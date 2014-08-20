@@ -20,7 +20,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
 
-      $(window).on("resize", this.resize);
+      $(window).on("resize", _.bind(this.resize, this));
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
@@ -30,6 +30,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         tripsCollection.fetchAll();
       }, 200);
     },
+
+    tripsHeight: 0,
 
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
@@ -122,7 +124,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
       var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
           filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
-          
+
       saveAs(blob, filename);
       $('.export').popover('hide');
     },
@@ -301,15 +303,20 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       //   coms.trigger('filter:closePopovers');
       // }
 
-      this.resize();
-
+      $('.trips ul', this.$el).height(this.tripsHeight);
       this.options.fetching = false;
+    },
+
+
+    onShow: function() {
+      _.defer(_.bind(this.resize, this));
     },
 
 
     resize: function() {
       var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#trips .trips ul').height(height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90);
+      this.tripsHeight = height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90;
+      $('.trips ul', this.$el).height(this.tripsHeight);
     }
 
   });
