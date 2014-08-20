@@ -22,11 +22,7 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
     template: HeaderTmpl,
 
     className: function() {
-      if(login.isPlayground()) {
-        return 'playground';
-      } else {
-        return 'loggedIn';
-      }
+      return (login.isPlayground()) ? 'playground' : 'loggedIn';
     },
 
     model: user

@@ -1,29 +1,11 @@
 define([
   'backbone',
-  'hbs!tmpl/item/single_trip_tmpl',
-  '../../controllers/unit_formatters'
+  'hbs!tmpl/item/single_trip_tmpl'
 ],
-function( Backbone, SingleTripTmpl, formatters ) {
+function( Backbone, SingleTripTmpl ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
-
-    template: SingleTripTmpl,
-
-    templateHelpers: {
-      over60Minutes: function() {
-        return (this.duration >= 60);
-      },
-      startAddress: function() {
-        if(this.start_location) {
-          return formatters.formatAddress(this.start_location.name);
-        }
-      },
-      endAddress: function() {
-        if(this.end_location) {
-          return formatters.formatAddress(this.end_location.name);
-        }
-      }
-    }
+    template: SingleTripTmpl
   });
 });

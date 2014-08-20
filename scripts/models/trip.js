@@ -20,6 +20,7 @@ function( Backbone, formatters, login ) {
 
       this.set({
         duration: duration,
+        over60Minutes: (duration >= 60),
         formatted_duration_minutes: Math.round(duration),
         formatted_duration_hours: formatters.durationHours(duration),
         distance_miles: miles,
@@ -33,7 +34,9 @@ function( Backbone, formatters, login ) {
         duration_over_70_min: Math.ceil(this.get('duration_over_70_s') / 60),
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),
-        noHardAccels: (this.get('hard_accels') === 0)
+        noHardAccels: (this.get('hard_accels') === 0),
+        startAddress: (this.get('start_location')) ? formatters.formatAddress(this.get('start_location').name) : 'Unknown Address',
+        endAddress: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').name) : 'Unknown Address'
       });
     }
 

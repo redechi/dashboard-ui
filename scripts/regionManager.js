@@ -20,12 +20,7 @@ function( Backbone, Communicator ) {
     /* add region facade */
     addRegion: function( regionName, regionId ) {
       var region = this.getRegion( regionName );
-
-      if( region ) {
-        return region;
-      }
-
-      return this._regionManager.addRegion( regionName, regionId );
+      return region || this._regionManager.addRegion( regionName, regionId );
     },
 
     /* remove region facade */

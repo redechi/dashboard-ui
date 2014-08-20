@@ -53,9 +53,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
 
       //get a list of all vehicles and update filter
-      vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(function(vehicles) {
-        self.updateVehicleList();
-      });
+      vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(_.bind(this.updateVehicleList, this));
 
       //update filter text on buttons
       this.collection.each(this.updateFilterText);
