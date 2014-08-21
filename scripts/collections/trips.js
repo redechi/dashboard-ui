@@ -66,14 +66,28 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
 
     fetchAll: function () {
-      var trips = this.fetchFromSessionStorage();
-
-      if(!trips) {
-        this.fetchPage();
+      if(login.isPlayground()) {
+        //get trips from local JSON
+        var self = this;
+        $.getJSON('./assets/data/playground.json', function(trips) {
+          self.setTrips(trips);
+        });
       } else {
-        this.set(trips);
-        coms.trigger('filter:applyAllFilters');
+        //get trips from sessionStorage
+        var trips = this.fetchFromSessionStorage();
+        if(!trips) {
+          //get trips from server
+          this.fetchPage();
+        } else {
+          this.setTrips(trips);
+        }
       }
+    },
+
+
+    setTrips: function(trips) {
+      this.set(trips);
+      coms.trigger('filter:applyAllFilters');
     },
 
 
