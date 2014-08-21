@@ -71,17 +71,13 @@ module.exports = function (grunt) {
         options: {
           port: 1234,
           base: '<%= yeoman.app%>',
-          middleware: function (connect) {
-
-            return [
-              function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-                res.setHeader('Access-Control-Allow-Credentials', true);
-                next();
-              },
-
-              connect.static(__dirname)
-            ];
+          middleware: function (connect, options, middlewares) {
+            middlewares.unshift(function(req, res, next) {
+              res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+              res.setHeader('Access-Control-Allow-Credentials', true);
+              next();
+            });
+            return middlewares;
           }
         }
       },
@@ -90,17 +86,13 @@ module.exports = function (grunt) {
         options: {
           port: 1234,
           base: '<%= yeoman.dist%>',
-          middleware: function (connect) {
-
-            return [
-              function(req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-                res.setHeader('Access-Control-Allow-Credentials', true);
-                next();
-              },
-
-              connect.static(__dirname+'/'+ yeomanConfig.dist)
-            ];
+          middleware: function (connect, options, middlewares) {
+            middlewares.unshift(function(req, res, next) {
+              res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+              res.setHeader('Access-Control-Allow-Credentials', true);
+              next();
+            });
+            return middlewares;
           }
         }
       }
@@ -339,6 +331,18 @@ module.exports = function (grunt) {
         reporterOutput: 'checkstyle-result.xml',
         force: true
       }
+    },
+
+    compress: {
+      main: {
+        options: {
+          mode: 'gzip'
+        },
+        expand: true,
+        cwd: '<%= yeoman.app %>',
+        dest: '<%= yeoman.dist %>',
+        src: ['assets/data/**']
+      }
     }
   });
 
@@ -366,6 +370,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'compress',
     'replace',
     'inline',
     'connect:testserver',
@@ -382,6 +387,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'compress',
     'replace',
     'inline'
   ]);
