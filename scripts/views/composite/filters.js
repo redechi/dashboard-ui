@@ -211,11 +211,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         });
 
         if(valueSelected === 'custom') {
-          var startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
-              endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-
-          $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-          $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+          this.setCustomDateFilter(filter);
         } else {
           this.updateFilterText(filter);
 
@@ -246,6 +242,16 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         coms.trigger('filter:updateDateFilter');
         coms.trigger('filter:applyAllFilters');
       }
+    },
+
+
+    setCustomDateFilter: function(filter) {
+      var value = filter.get('getValue').call(filter, 'custom'),
+          startDate = moment(filter.get('trimDate').call(filter, value[0])).startOf('day').toDate(),
+          endDate = moment(filter.get('trimDate').call(filter, value[1])).startOf('day').toDate();
+
+      $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
+      $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
     },
 
 
@@ -370,11 +376,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         });
 
         if(filter.get('valueSelected') === 'custom') {
-          var value = filter.get('getValue').call(filter, 'custom'),
-              startDate = moment(filter.get('trimDate').call(filter, value[0])).toDate(),
-              endDate = moment(filter.get('trimDate').call(filter, value[1])).toDate();
-          $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-          $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+          this.setCustomDateFilter(filter);
         }
       }
     },
