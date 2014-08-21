@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['d3', 'nvd3', 'moment', 'backbone.marionette', 'bootstrap', 'main'],
+  deps: ['d3', 'nvd3', 'moment', 'backbone.marionette', 'bootstrap', 'main', 'jquery.scrollTo'],
 
 
   shim: {
@@ -38,6 +38,7 @@ require.config({
     jquery: '../bower_components/jquery/dist/jquery',
     backbone: '../bower_components/backbone/backbone',
     underscore: '../bower_components/underscore/underscore',
+    'jquery.scrollTo': '../bower_components/jquery.scrollTo/jquery.scrollTo',
 
     moment: '../bower_components/momentjs/moment',
     d3: '../bower_components/d3/d3',

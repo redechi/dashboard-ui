@@ -91,15 +91,21 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
-    toggleSelect: function(model) {
+    toggleSelect: function(model, options) {
       var selected = !model.get('selected'),
-          id = model.get('id');
+          id = model.get('id'),
+          div = $('.trips ul li[data-id="' + id + '"]', this.$el);
       model.set('selected', selected);
-      $('.trips ul li[data-id="' + id + '"]', this.$el).toggleClass('selected', selected);
+      div.toggleClass('selected', selected);
 
       if(selected) {
         coms.trigger('trips:highlight', model);
         coms.trigger('trips:select', model);
+
+        if(options && options.scroll) {
+          //scroll trip list
+          $('.trips', this.$el).scrollTo(div, {duration: 500, easing: 'swing', offset: (-(this.tripsHeight - 136) / 2)});
+        }
       } else {
         coms.trigger('trips:unhighlight', model);
         coms.trigger('trips:deselect', model);

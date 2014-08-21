@@ -229,7 +229,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
             coms.trigger('trips:unhighlight', model);
           })
           .on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
+            coms.trigger('trips:toggleSelect', model, {scroll: true});
           });
         }
       }
@@ -244,7 +244,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           model.set('startMarkerID', startMarker._leaflet_id);
 
           startMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
+            coms.trigger('trips:toggleSelect', model, {scroll: true});
           });
         }
       }
@@ -259,7 +259,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           model.set('endMarkerID', endMarker._leaflet_id);
 
           endMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model);
+            coms.trigger('trips:toggleSelect', model, {scroll: true});
           });
         }
       }
@@ -330,7 +330,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.pathsLayer.eachLayer(function(path) {
         path.setStyle({weight: weight});
       });
-      
+
       self.speedingLayer.eachLayer(function(path) {
         path.setStyle({weight: weight});
       });
