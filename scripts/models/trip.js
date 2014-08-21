@@ -36,7 +36,9 @@ function( Backbone, formatters, login ) {
         noHardBrakes: (this.get('hard_brakes') === 0),
         noHardAccels: (this.get('hard_accels') === 0),
         startAddress: (this.get('start_location')) ? formatters.formatAddress(this.get('start_location').name) : 'Unknown Address',
-        endAddress: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').name) : 'Unknown Address'
+        endAddress: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').name) : 'Unknown Address',
+        formattedStartDisplayName: (this.get('start_location')) ? formatters.formatAddress(this.get('start_location').display_name) : 'Unknown Address',
+        formattedEndDisplayName: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').display_name) : 'Unknown Address'
       });
     }
 
