@@ -1,6 +1,9 @@
 {
-  "name": "AutomaticWebApp",
-  "version": "0.0.1",
+  "name": "AutomaticDashboard",
+  "description": "dashboard.automatic.com",
+  "repository": "https://github.com/Automatic/automatic_dashboard.git",
+  "private": true,
+  "version": "0.1.0",
   "scripts": {
     "start": "grunt"
   },
