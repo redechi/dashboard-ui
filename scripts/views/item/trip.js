@@ -32,7 +32,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
 
     toggleSelect: function () {
-      coms.trigger('trips:toggleSelect', this.model);
+      coms.trigger('trips:toggleSelect', [this.model]);
     },
 
 

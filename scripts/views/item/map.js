@@ -16,6 +16,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
+      coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('filter', _.bind(this.resetView, this));
     },
 
@@ -149,8 +150,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       if(this.speedingLayer.getLayers().length) {
         this.speedingLayer.bringToFront();
       }
-
-      this.changeSelectedTrips();
     },
 
 
@@ -174,8 +173,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         endMarker.setIcon(mapHelpers.mainIconSmall);
         endMarker.options.selected = false;
       }
-
-      this.changeSelectedTrips();
 
       //close popups
       this.mapbox.closePopup();
@@ -229,7 +226,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
             coms.trigger('trips:unhighlight', model);
           })
           .on('click', function() {
-            coms.trigger('trips:toggleSelect', model, {scroll: true});
+            coms.trigger('trips:toggleSelect', [model], {scroll: true});
           });
         }
       }
@@ -244,7 +241,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           model.set('startMarkerID', startMarker._leaflet_id);
 
           startMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model, {scroll: true});
+            coms.trigger('trips:toggleSelect', [model], {scroll: true});
           });
         }
       }
@@ -259,7 +256,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           model.set('endMarkerID', endMarker._leaflet_id);
 
           endMarker.on('click', function() {
-            coms.trigger('trips:toggleSelect', model, {scroll: true});
+            coms.trigger('trips:toggleSelect', [model], {scroll: true});
           });
         }
       }

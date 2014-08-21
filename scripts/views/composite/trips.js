@@ -15,10 +15,10 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
     initialize: function() {
       coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('trips:select', _.bind(this.changeSelectedTrips, this));
-      coms.on('trips:deselect', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
+      coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
+      coms.on('trips:selectByDate', _.bind(this.selectByDate, this));
 
       $(window).on("resize", _.bind(this.resize, this));
 
@@ -81,35 +81,51 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
-    deselectAll: function() {
-      this.collection.where({selected: true}).forEach(function(trip) {
-        trip.set('selected', false);
-        coms.trigger('trips:unhighlight', trip);
-        coms.trigger('trips:deselect', trip);
+    selectByDate: function(startDate, endDate, options) {
+      var trips = this.collection.filter(function(trip) {
+        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
       });
-      $('.trips ul li').removeClass('selected');
+      coms.trigger('trips:toggleSelect', trips, options);
     },
 
 
-    toggleSelect: function(model, options) {
-      var selected = !model.get('selected'),
-          id = model.get('id'),
-          div = $('.trips ul li[data-id="' + id + '"]', this.$el);
-      model.set('selected', selected);
-      div.toggleClass('selected', selected);
+    deselectAll: function() {
+      var trips = this.collection.where({selected: true});
+      coms.trigger('trips:toggleSelect', trips, {selected: false});
+    },
 
-      if(selected) {
-        coms.trigger('trips:highlight', model);
-        coms.trigger('trips:select', model);
 
-        if(options && options.scroll) {
-          //scroll trip list
-          $('.trips', this.$el).scrollTo(div, {duration: 500, easing: 'swing', offset: (-(this.tripsHeight - 136) / 2)});
+    toggleSelect: function(trips, options) {
+      var self = this,
+          scrolling = false;
+      options = options || {};
+
+      trips.forEach(function(trip) {
+        var div = $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el),
+            selected;
+
+        if(options.selected === undefined) {
+          //toggle selected status
+          selected = !trip.get('selected');
+        } else {
+          selected = options.selected;
         }
-      } else {
-        coms.trigger('trips:unhighlight', model);
-        coms.trigger('trips:deselect', model);
-      }
+
+        trip.set('selected', selected);
+        div.toggleClass('selected', selected);
+
+        if(selected) {
+          if(options.scroll && !scrolling) {
+            scrolling = true;
+            $('.trips', self.$el).scrollTo(div, {duration: 500, easing: 'swing', offset: (-(self.tripsHeight - 136) / 2)});
+          }
+          coms.trigger('trips:select', trip);
+        } else {
+          coms.trigger('trips:deselect', trip);
+        }
+      });
+
+      coms.trigger('trips:changeSelectedTrips');
     },
 
 

@@ -356,8 +356,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .enter().append('g')
           .attr('class', 'bar')
           .attr('y', function(d) { return y(d.values); })
-          .attr('x', function(d) { return x(d.key); })
-          .attr('date', function(d) { return d.key; });
+          .attr('x', function(d) { return x(d.key); });
 
 
       function generateTooltip(d) {
@@ -365,6 +364,16 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         tooltip += '<div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div>';
         tooltip += '<div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
         return tooltip;
+      }
+
+      function barClick(d) {
+        var startDate = parseInt(d.key, 10),
+            endDate = moment(startDate).endOf(binSize).valueOf(),
+            fullySelected = !$(this).data('fullySelected');
+
+        $(this).data('fullySelected', fullySelected);
+
+        coms.trigger('trips:selectByDate', startDate, endDate, {selected: fullySelected, scroll: true});
       }
 
       function barMouseover(d) {
@@ -412,6 +421,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
+        .on('click', barClick)
         .attr('class', 'barBackground')
         .attr('d', function(d) {
           if(d.values > 0) {
@@ -422,6 +432,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
+        .on('click', barClick)
         .attr('class', 'barOutline')
         .attr('d', function(d) {
           if(d.values > 0) {
