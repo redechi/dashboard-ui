@@ -348,6 +348,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'handlebars',
+    'compass',
     'appcache',
     'connect:devserver',
     'open',
