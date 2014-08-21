@@ -319,12 +319,18 @@
           }
 
           .tripLine {
-            height: 67px;
+            height: 108px !important;
             background: $selected;
 
             & > div {
               background: $selected;
             }
+          }
+
+          .tripEvents {
+            height: 41px;
+            opacity: 1;
+            padding: 10px 0 5px 0;
           }
         }
 
@@ -354,18 +360,12 @@
           }
 
           .tripLine {
-            height: 108px;
             background: $highlight;
+            height: 67px;
 
             & > div {
               background: $highlight;
             }
-          }
-
-          .tripEvents {
-            height: 41px;
-            opacity: 1;
-            padding: 10px 0 5px 0;
           }
         }
       }
