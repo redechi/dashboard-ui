@@ -94,7 +94,13 @@ function( Backbone, coms, Trip, filterCollection, login ) {
             start = dateFilter.get('value')[0],
             end = moment().valueOf();
 
-        this.fetchPage(start, end);
+        var trips = this.fetchFromSessionStorage();
+        if(trips && trips.length) {
+          this.set(trips);
+          coms.trigger('filter:applyAllFilters');
+        } else {
+          this.fetchPage(start, end);
+        }
       }
     },
 
@@ -116,22 +122,38 @@ function( Backbone, coms, Trip, filterCollection, login ) {
         },
         error: login.fetchErrorHandler
       }).always(function(data) {
-        // if(page === 1 && data && data.length === 0) {
-        //   //User has no trips
-        //   coms.trigger('error:noTrips');
-        // } else if(data.length) {
-          coms.trigger('overlay:page', self.length);
-          if(data.length === per_page) {
-            //User has another page of trips
-            return self.fetchPage(start, end, (page + 1));
-          } else {
-            self.startDate = Math.min(start, self.startDate);
+        coms.trigger('overlay:page', self.length);
+        if(data.length === per_page) {
+          //User has another page of trips
+          return self.fetchPage(start, end, (page + 1));
+        } else {
+          self.startDate = Math.min(start, self.startDate);
+          self.saveToSessionStorage();
 
-            coms.trigger('filter:applyAllFilters');
+          if(!self.length) {
           }
-        // }
+
+          coms.trigger('filter:applyAllFilters');
+        }
       });
     },
+
+
+
+    saveToSessionStorage: function() {
+      sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
+      sessionStorage.setItem('tripsStart', this.startDate);
+    },
+
+
+    fetchFromSessionStorage: function () {
+      var start = sessionStorage.getItem('tripsStart');
+      if(start) {
+        this.startDate = start;
+      }
+      return JSON.parse(sessionStorage.getItem('trips'));
+    },
+
 
     calculateRanges: function() {
       var memo = {
