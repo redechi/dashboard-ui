@@ -16,7 +16,21 @@ function( Backbone, formatters, login ) {
 
     initialize: function(trip) {
       var duration = ((this.get('end_time') - this.get('start_time')) / (1000 * 60)),
-          miles = formatters.m_to_mi(this.get('distance_m'));
+          miles = formatters.m_to_mi(this.get('distance_m')),
+          startAddress = 'Unknown Address',
+          endAddress = 'Unknown Address',
+          startDisplayName = 'Unknown Address',
+          endDisplayName = 'Unknown Address';
+
+      if(this.get('start_location')) {
+        startAddress = formatters.formatAddress(this.get('start_location').name);
+        startDisplayName = this.get('start_location').display_name || startAddress;
+      }
+
+      if(this.get('end_location')) {
+        endAddress = formatters.formatAddress(this.get('end_location').name);
+        endDisplayName = this.get('end_location').display_name || endAddress;
+      }
 
       this.set({
         duration: duration,
@@ -35,10 +49,10 @@ function( Backbone, formatters, login ) {
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),
         noHardAccels: (this.get('hard_accels') === 0),
-        startAddress: (this.get('start_location')) ? formatters.formatAddress(this.get('start_location').name) : 'Unknown Address',
-        endAddress: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').name) : 'Unknown Address',
-        formattedStartDisplayName: (this.get('start_location')) ? formatters.formatAddress(this.get('start_location').display_name) : 'Unknown Address',
-        formattedEndDisplayName: (this.get('end_location')) ? formatters.formatAddress(this.get('end_location').display_name) : 'Unknown Address'
+        startAddress: startAddress,
+        endAddress: endAddress,
+        startDisplayName: startDisplayName,
+        endDisplayName: endDisplayName
       });
     }
 
