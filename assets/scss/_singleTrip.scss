@@ -13,12 +13,6 @@
     padding-top: 7px;
     @include noSelection;
 
-    .btn-back {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
     .prevTrip,
     .nextTrip {
       text-indent: -9999px;
