@@ -11,10 +11,8 @@ function( Backbone, coms, Trip, filterCollection, login ) {
   /* trips singleton */
   var Trips = Backbone.Collection.extend({
 
-    page: 0,
-    per_page: 100,
     model: Trip,
-    name: 'default_collection',
+    startDate: moment().endOf('day').valueOf(),
     url: login.getAPIUrl() + '/v1/trips',
 
     initialize: function() {
@@ -23,20 +21,38 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
 
     applyAllFilters: function () {
-      //first, apply date filter
-      var filteredTrips = this.applyDateFilter();
+      var dateFilter = filterCollection.findWhere({name: 'date'}),
+          start = dateFilter.get('value')[0],
+          end = dateFilter.get('value')[1];
 
-      //then apply remaining filters
-      filterCollection.each(function(filter) {
-        var name = filter.get('name')
-        if(name === 'date' || (name === 'vehicle' && filter.get('value') === 'all')) {
-          return;
+      if(start < this.startDate) {
+        this.fetchPage(start, this.startDate);
+      } else {
+
+        //if date Filter = allTime, set date min
+        if(dateFilter.get('valueSelected') === 'allTime') {
+          var min = moment(this.last().get('start_time')).startOf('day').valueOf();
+          dateFilter.set({
+            min: min,
+            value: [min, end]
+          });
         }
 
-        filteredTrips = filteredTrips.filter(function(trip) { return filter.applyTo(trip); });
-      });
+        //first, apply date filter
+        var filteredTrips = this.applyDateFilter();
 
-      coms.trigger('filter', filteredTrips);
+        //then apply remaining filters
+        filterCollection.each(function(filter) {
+          var name = filter.get('name')
+          if(name === 'date' || (name === 'vehicle' && filter.get('value') === 'all')) {
+            return;
+          }
+
+          filteredTrips = filteredTrips.filter(function(trip) { return filter.applyTo(trip); });
+        });
+
+        coms.trigger('filter', filteredTrips);
+      }
     },
 
 
@@ -60,77 +76,68 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     },
 
 
-    fetchFromSessionStorage: function () {
-      return JSON.parse(sessionStorage.getItem('trips'));
+    fetchPlaygroundTrips: function() {
+      var self = this;
+      $.getJSON('./assets/data/playground.json', function(trips) {
+        self.set(trips);
+        coms.trigger('filter:applyAllFilters');
+      });
     },
 
 
     fetchAll: function () {
       if(login.isPlayground()) {
         //get trips from local JSON
-        var self = this;
-        $.getJSON('./assets/data/playground.json', function(trips) {
-          self.setTrips(trips);
-        });
+        this.fetchPlaygroundTrips();
       } else {
-        //get trips from sessionStorage
-        var trips = this.fetchFromSessionStorage();
-        if(!trips) {
-          //get trips from server
-          this.fetchPage();
-        } else {
-          this.setTrips(trips);
-        }
+        var dateFilter = filterCollection.findWhere({name: 'date'}),
+            start = dateFilter.get('value')[0],
+            end = moment().valueOf();
+
+        this.fetchPage(start, end);
       }
     },
 
 
-    setTrips: function(trips) {
-      this.set(trips);
-      coms.trigger('filter:applyAllFilters');
-    },
+    fetchPage: function(start, end, page) {
+      var self = this,
+          per_page = 100;
 
-
-    fetchPage: function() {
-      var self = this;
-
-      this.page++;
+      if(page === undefined) {
+        page = 1;
+      }
       return this.fetch({
         remove: false,
         data: {
-          page: this.page,
-          per_page: this.per_page
+          page: page,
+          per_page: per_page,
+          start: start,
+          end: end
         },
         error: login.fetchErrorHandler
       }).always(function(data) {
-        if(self.page == 1 && data && data.length == 0) {
-          //User has no trips
-          coms.trigger('error:noTrips');
-        } else if(data && data.length) {
+        // if(page === 1 && data && data.length === 0) {
+        //   //User has no trips
+        //   coms.trigger('error:noTrips');
+        // } else if(data.length) {
           coms.trigger('overlay:page', self.length);
-          if(data.length === self.per_page) {
+          if(data.length === per_page) {
             //User has another page of trips
-            return self.fetchPage();
+            return self.fetchPage(start, end, (page + 1));
           } else {
-            self.saveToSessionStorage();
+            self.startDate = Math.min(start, self.startDate);
+
             coms.trigger('filter:applyAllFilters');
           }
-        }
+        // }
       });
     },
-
-
-    saveToSessionStorage: function() {
-      sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
-    },
-
 
     calculateRanges: function() {
       var memo = {
         distance: {min: Infinity, max: 0},
         duration: {min: Infinity, max: 0},
-        cost: {min: Infinity, max: 0},
-        date: {min: Infinity}
+        cost: {min: Infinity, max: 0}
       };
       return this.reduce(function(memo, trip) {
         return {
@@ -145,9 +152,6 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           cost: {
             min: Math.min(trip.get('fuel_cost_usd'), memo.cost.min),
             max: Math.max(trip.get('fuel_cost_usd'), memo.cost.max)
-          },
-          date: {
-            min: Math.max(Math.min(trip.get('start_time'), memo.date.min), 1363071600000)
           }
         };
       }, memo);
