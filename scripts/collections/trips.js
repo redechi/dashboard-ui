@@ -131,6 +131,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           self.saveToSessionStorage();
 
           if(!self.length) {
+            self.checkForNoTrips();
           }
 
           coms.trigger('filter:applyAllFilters');
@@ -138,6 +139,19 @@ function( Backbone, coms, Trip, filterCollection, login ) {
       });
     },
 
+
+    checkForNoTrips: function() {
+      this.fetch({
+        remove: false,
+        data: { per_page: 1 },
+        error: login.fetchErrorHandler
+      }).always(function(data) {
+        if(data && data.length === 0) {
+          //User has no trips at all
+          coms.trigger('error:noTrips');
+        }
+      });
+    },
 
 
     saveToSessionStorage: function() {
