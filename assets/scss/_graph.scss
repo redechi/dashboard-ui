@@ -125,6 +125,8 @@
     }
 
     g.bar {
+      cursor: pointer;
+      
       path.barBackground {
         fill: #FFF;
       }
