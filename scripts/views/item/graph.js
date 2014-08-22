@@ -157,7 +157,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       while(date < dateRange[1]) {
         bins[moment(date).startOf(binSize).valueOf()] = [];
-        date = moment(date).add(binSize + 's', 1).valueOf();
+        date = moment(date).add(1, binSize + 's').valueOf();
       }
 
 
