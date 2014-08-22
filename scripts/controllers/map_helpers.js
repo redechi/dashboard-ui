@@ -193,9 +193,9 @@ function( mapbox, formatters, stats ) {
       } else if(zoom === 15) {
         return 13;
       } else if(zoom === 16) {
-        return 16;
+        return 14;
       } else {
-        return 20;
+        return 16;
       }
     },
 
