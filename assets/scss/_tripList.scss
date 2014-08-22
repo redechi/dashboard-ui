@@ -256,8 +256,7 @@
           content: '$ ';
         }
 
-        .startLocation,
-        .endLocation {
+        .location {
           font-size: 12px;
           padding: 10px 0;
           margin-right: 15px;
@@ -306,11 +305,7 @@
 
         &.selected {
 
-          .startLocation {
-            color: $selected;
-          }
-
-          .endLocation {
+          .location {
             color: $selected;
           }
 
@@ -340,14 +335,10 @@
           margin-left: -1px;
           margin-right: -1px;
 
-          .startLocation {
+          .location {
             color: $highlight;
           }
-
-          .endLocation {
-            color: $highlight;
-          }
-
+          
           .tripLink {
             display: block;
             position: absolute;
