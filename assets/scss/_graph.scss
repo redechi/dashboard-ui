@@ -21,6 +21,7 @@
       @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
       cursor: pointer;
       margin-top:10px;
+      @include noSelection;
 
       &:hover {
         color: $highlight;
@@ -126,7 +127,7 @@
 
     g.bar {
       cursor: pointer;
-      
+
       path.barBackground {
         fill: #FFF;
       }

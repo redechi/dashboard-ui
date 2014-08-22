@@ -76,6 +76,8 @@
     }
 
     .listSelect {
+      @include noSelection;
+
       .selected {
         color: $highlight;
         background-repeat: no-repeat;

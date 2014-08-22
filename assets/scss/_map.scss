@@ -51,6 +51,7 @@
       height: 24px;
       padding: 8px 0;
       float: left;
+      @include noSelection;
 
       & > div {
         float: left;
@@ -81,6 +82,7 @@
         font-weight: normal;
         margin-bottom: 0;
         vertical-align: top;
+        @include noSelection;
 
         .showTripEvents {
           margin-left: 8px;
