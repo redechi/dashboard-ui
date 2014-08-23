@@ -134,16 +134,16 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       if(path) {
         path
           .bringToFront()
-          .setStyle(mapHelpers.selectedLine(this.zoom));
+          .setStyle(mapHelpers.highlightLine(this.zoom));
       }
 
       if(startMarker) {
-        mapHelpers.selectMarker(startMarker);
+        mapHelpers.highlightMarker(startMarker);
         startMarker.options.selected = true;
       }
 
       if(endMarker) {
-        mapHelpers.selectMarker(endMarker);
+        mapHelpers.highlightMarker(endMarker);
         endMarker.options.selected = true;
       }
 
