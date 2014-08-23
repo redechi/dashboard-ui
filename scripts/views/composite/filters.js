@@ -35,7 +35,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'click .filterNav .undo': 'undo',
       'click .filterNav .redo': 'redo',
       'changeDate .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
-      'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom'
+      'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
+      'mouseleave .popover': 'mouseLeavePopover'
     },
 
     initialize: function() {
@@ -132,6 +133,16 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
     closePopovers: function() {
       $('.btn-popover', this.$el).popover('hide');
+    },
+
+
+    mouseLeavePopover: function(e) {
+      //allow date selector mouseover
+      if($(e.relatedTarget).is('.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch') || $(e.relatedTarget).parents('.datepicker').length !== 0) {
+        return;
+      } else {
+        this.closePopovers();
+      }
     },
 
 
