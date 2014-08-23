@@ -85,7 +85,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     },
 
 
-    fetchAll: function () {
+    fetchInitial: function () {
       if(login.isPlayground()) {
         //get trips from local JSON
         this.fetchPlaygroundTrips();
@@ -137,6 +137,11 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           coms.trigger('filter:applyAllFilters');
         }
       });
+    },
+
+
+    fetchAll: function() {
+      this.fetchPage(0, this.startDate);
     },
 
 

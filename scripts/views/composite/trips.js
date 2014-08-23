@@ -15,6 +15,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
     initialize: function() {
       coms.on('filter', _.bind(this.resetCollection, this));
+      coms.on('filter:applyAllFilters', _.bind(this.notifyExport, this));
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
       coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
@@ -31,7 +32,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       this.options.sortTypeName = 'Time/Date';
       this.options.fetching = true;
       setTimeout(function() {
-        tripsCollection.fetchAll();
+        tripsCollection.fetchInitial();
       }, 200);
     },
 
@@ -181,15 +182,29 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
       if (exportOption === 'selected'){
         selectedTrips = this.collection.where({selected: true});
+        this.downloadExport(selectedTrips);
         if (!selectedTrips.length) {
           return alert('Please Select at least one trip');
         }
       } else if (exportOption === 'tripList'){
         selectedTrips = this.collection.models;
+        this.downloadExport(selectedTrips);
       } else if (exportOption === 'all') {
-        selectedTrips = tripsCollection;
+        this.waitingForExport = true;
+        tripsCollection.fetchAll();
       }
+    },
 
+
+    notifyExport: function() {
+      if(this.waitingForExport) {
+        this.waitingForExport = false;
+        this.downloadExport(tripsCollection);
+      }
+    },
+
+
+    downloadExport: function(selectedTrips) {
       //Safari does not support filesaver
       if(typeof safari !== "undefined") {
         window.location.href = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
@@ -348,7 +363,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       $('.popoverTemplate .exportOption li[data-value="selected"] span').text(this.collection.where({selected: true}).length)
       $('.popoverTemplate .exportOption li[data-value="selected"]').toggle(this.collection.where({selected: true}).length > 0);
       $('.popoverTemplate .exportOption li[data-value="tripList"] span').text(this.collection.length);
-      $('.popoverTemplate .exportOption li[data-value="all"] span').text(tripsCollection.length);
     },
 
 
