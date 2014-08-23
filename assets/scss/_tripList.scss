@@ -18,17 +18,13 @@
     .sortType {
       float: right;
       line-height: 25px;
-      color: $link_type;
+      color: $highlight;
       padding-right: 25px;
       background-position: right 5px center;
       background-repeat: no-repeat;
-      @include hr-image('../img/icon_dropdown.png', '../img/icon_dropdown@2x.png');
+      @include hr-image('../img/icon_dropdown_blue.png', '../img/icon_dropdown_blue@2x.png');
       cursor: pointer;
       @include noSelection;
-
-      &:hover {
-        color: $highlight;
-      }
     }
 
     .sortDirection {
@@ -37,12 +33,12 @@
       float: right;
       background-repeat: no-repeat;
       background-position: right top 6px;
-      @include hr-image('../img/icon_sortdescending.png', '../img/icon_sortdescending@2x.png');
+      @include hr-image('../img/icon_sortdescending_blue.png', '../img/icon_sortdescending_blue@2x.png');
       cursor: pointer;
       @include noSelection;
 
       &.sortUp {
-        @include hr-image('../img/icon_sortascending.png', '../img/icon_sortascending@2x.png');
+        @include hr-image('../img/icon_sortascending_blue.png', '../img/icon_sortascending_blue@2x.png');
       }
     }
 
