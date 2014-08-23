@@ -60,8 +60,16 @@
     font-size: 12px;
     line-height: 40px;
 
+    .popover {
+      left: 88px !important;
+
+      .arrow {
+        left: 88% !important;
+      }
+    }
+
     .export {
-      float: left;
+      float: right;
       cursor: pointer;
       background-repeat: no-repeat;
       background-position: left 10px top 11px;
@@ -77,11 +85,13 @@
       }
     }
 
-    .deselectAll {
-      display: none;
-      float: right;
+    .deselectAll,
+    .selectAll {
+      float: left;
       cursor: pointer;
-      padding: 0 10px 0 36px;
+      padding: 0 10px;
+      color: $link_type;
+      @include noSelection;
     }
   }
 

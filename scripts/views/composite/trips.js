@@ -65,6 +65,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       'click .sortValue li': 'changeSortItem',
       'click .sortDirection': 'changeSortDirection',
       'show.bs.popover .export': 'getTripCounts',
+      'click .selectAll': 'selectAll',
       'click .deselectAll': 'deselectAll'
     },
 
@@ -84,7 +85,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       $('.tripCount span')
         .text('(' + selectedTrips.length +  ' selected)')
         .toggle(selectedTrips.length > 0);
-      $('.deselectAll', this.$el).toggle(!!selectedTrips.length);
+      $('.selectAll', this.$el).toggleClass('hide', !!selectedTrips.length);
+      $('.deselectAll', this.$el).toggleClass('hide', !selectedTrips.length);
     },
 
 
@@ -109,6 +111,11 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
       });
       coms.trigger('trips:unhighlight', trips);
+    },
+
+
+    selectAll: function() {
+      coms.trigger('trips:toggleSelect', this.collection, {selected: true});
     },
 
 
