@@ -144,10 +144,16 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         selectedTrips = tripsCollection;
       }
 
-      var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
-          filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
+      //Safari does not support filesaver
+      if(typeof safari !== "undefined") {
+        window.location.href = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
+      } else {
+        var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
+            filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
 
-      saveAs(blob, filename);
+        saveAs(blob, filename);
+      }
+
       $('.export').popover('hide');
     },
 
