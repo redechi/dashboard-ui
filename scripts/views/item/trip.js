@@ -22,12 +22,12 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
 
     triggerHighlight: function () {
-      coms.trigger('trips:highlight', this.model);
+      coms.trigger('trips:highlight', [this.model]);
     },
 
 
     removeHighlight: function () {
-      coms.trigger('trips:unhighlight', this.model);
+      coms.trigger('trips:unhighlight', [this.model]);
     },
 
 

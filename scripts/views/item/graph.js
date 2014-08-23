@@ -33,8 +33,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
     initialize: function(model) {
       coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
 
@@ -50,24 +50,32 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
     },
 
 
-    highlightTrip: function (model) {
-      var id = model.get('id'),
-          binSize = this.model.get('binSize'),
-          start_time = model.get('start_time'),
-          key = moment(start_time).startOf(binSize).valueOf();
+    highlightTrips: function (trips) {
+      var self = this;
 
-      //highlight bar
-      this.getBarByKey(key.toString()).classed('highlighted', true);
+      trips.forEach(function(model) {
+        var id = model.get('id'),
+            binSize = self.model.get('binSize'),
+            start_time = model.get('start_time'),
+            key = moment(start_time).startOf(binSize).valueOf();
+
+        //highlight bar
+        self.getBarByKey(key.toString()).classed('highlighted', true);
+      });
     },
 
 
-    unhighlightTrip: function (model) {
-      var id = model.get('id'),
-          binSize = this.model.get('binSize'),
-          start_time = model.get('start_time'),
-          key = moment(start_time).startOf(binSize).valueOf();
+    unhighlightTrips: function (trips) {
+      var self = this;
 
-      this.getBarByKey(key.toString()).classed('highlighted', false);
+      trips.forEach(function(model) {
+        var id = model.get('id'),
+            binSize = self.model.get('binSize'),
+            start_time = model.get('start_time'),
+            key = moment(start_time).startOf(binSize).valueOf();
+
+        self.getBarByKey(key.toString()).classed('highlighted', false);
+      });
     },
 
 
@@ -379,6 +387,10 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       function barMouseover(d) {
         if(d.values === 0) { return; }
 
+        var startDate = parseInt(d.key, 10),
+            endDate = moment(startDate).endOf(binSize).valueOf();
+        coms.trigger('trips:highlightByDate', startDate, endDate);
+
         var top = y(d.values) < (height - minBarHeight) ? (y(d.values) - 17) : (y(d.values) - 17 - minBarHeight);
         tooltip
           .css({
@@ -392,6 +404,10 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
 
       function barMouseout(d) {
         if(d.values === 0) { return; }
+
+        var startDate = parseInt(d.key, 10),
+            endDate = moment(startDate).endOf(binSize).valueOf();
+        coms.trigger('trips:unhighlightByDate', startDate, endDate);
 
         tooltip.css('visibility', 'hidden');
       }

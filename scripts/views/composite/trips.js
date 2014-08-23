@@ -19,8 +19,10 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
       coms.on('trips:selectByDate', _.bind(this.selectByDate, this));
-      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
+      coms.on('trips:highlightByDate', _.bind(this.highlightByDate, this));
+      coms.on('trips:unhighlightByDate', _.bind(this.unhighlightByDate, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
 
       $(window).on("resize", _.bind(this.resize, this));
 
@@ -91,6 +93,22 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
+    highlightByDate: function(startDate, endDate) {
+      var trips = this.collection.filter(function(trip) {
+        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
+      });
+      coms.trigger('trips:highlight', trips);
+    },
+
+
+    unhighlightByDate: function(startDate, endDate) {
+      var trips = this.collection.filter(function(trip) {
+        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
+      });
+      coms.trigger('trips:unhighlight', trips);
+    },
+
+
     deselectAll: function() {
       var trips = this.collection.where({selected: true});
       coms.trigger('trips:toggleSelect', trips, {selected: false});
@@ -131,13 +149,19 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
-    highlightTrip: function(trip) {
-      $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).addClass('highlighted');
+    highlightTrips: function(trips) {
+      var self = this;
+      trips.forEach(function(trip) {
+        $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).addClass('highlighted');
+      });
     },
 
 
-    unhighlightTrip: function(trip) {
-      $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).removeClass('highlighted');
+    unhighlightTrips: function(trips) {
+      var self = this;
+      trips.forEach(function(trip) {
+        $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).removeClass('highlighted');
+      });
     },
 
 

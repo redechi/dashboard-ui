@@ -12,8 +12,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
   return Backbone.Marionette.ItemView.extend({
 
     initialize: function() {
-      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
       coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
@@ -60,67 +60,70 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    highlightTrip: function (model) {
-      var self = this,
-          id = model.get('id'),
-          path = this.pathsLayer.getLayer(model.get('pathID')),
-          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
-          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
+    highlightTrips: function (trips) {
+      var self = this;
 
-      if(path) {
-        path
-          .bringToFront()
-          .setStyle(mapHelpers.highlightLine(this.zoom));
-      }
+      trips.forEach(function(model) {
+        var id = model.get('id'),
+            path = self.pathsLayer.getLayer(model.get('pathID')),
+            startMarker = self.markersLayer.getLayer(model.get('startMarkerID')),
+            endMarker = self.markersLayer.getLayer(model.get('endMarkerID'));
 
-      if(startMarker) {
-        mapHelpers.highlightMarker(startMarker);
-      }
+        if(path) {
+          path
+            .bringToFront()
+            .setStyle(mapHelpers.highlightLine(self.zoom));
+        }
 
-      if(endMarker) {
-        mapHelpers.highlightMarker(endMarker);
-      }
-      if(this.speedingLayer.getLayers().length) {
-        this.speedingLayer.bringToFront();
-      }
+        if(startMarker) {
+          mapHelpers.highlightMarker(startMarker);
+        }
+
+        if(endMarker) {
+          mapHelpers.highlightMarker(endMarker);
+        }
+        if(self.speedingLayer.getLayers().length) {
+          self.speedingLayer.bringToFront();
+        }
+      });
     },
 
 
-    unhighlightTrip: function (model) {
-      var self = this,
-          id = model.get('id'),
-          path = this.pathsLayer.getLayer(model.get('pathID')),
-          startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
-          endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
+    unhighlightTrips: function (trips) {
+      var self = this;
 
-      if(model.get('selected')) {
-        if(path) {
-          path.setStyle(mapHelpers.selectedLine(this.zoom));
-        }
+      trips.forEach(function(model) {
+        var id = model.get('id'),
+            path = self.pathsLayer.getLayer(model.get('pathID')),
+            startMarker = self.markersLayer.getLayer(model.get('startMarkerID')),
+            endMarker = self.markersLayer.getLayer(model.get('endMarkerID'));
 
-        if(startMarker) {
-          mapHelpers.selectMarker(startMarker);
-        }
+        if(model.get('selected')) {
+          if(path) {
+            path.setStyle(mapHelpers.selectedLine(self.zoom));
+          }
 
-        if(endMarker) {
-          mapHelpers.selectMarker(endMarker);
-        }
-      } else {
-        if(path) {
-          path.setStyle(mapHelpers.styleLine(this.zoom));
-        }
+          if(startMarker) {
+            mapHelpers.selectMarker(startMarker);
+          }
 
-        if(startMarker) {
-          startMarker.setIcon(mapHelpers.mainIconSmall);
-        }
+          if(endMarker) {
+            mapHelpers.selectMarker(endMarker);
+          }
+        } else {
+          if(path) {
+            path.setStyle(mapHelpers.styleLine(self.zoom));
+          }
 
-        if(endMarker) {
-          endMarker.setIcon(mapHelpers.mainIconSmall);
-        }
-      }
+          if(startMarker) {
+            startMarker.setIcon(mapHelpers.mainIconSmall);
+          }
 
-      //close popups
-      this.mapbox.closePopup();
+          if(endMarker) {
+            endMarker.setIcon(mapHelpers.mainIconSmall);
+          }
+        }
+      });
     },
 
 
@@ -174,8 +177,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         endMarker.options.selected = false;
       }
 
-      //close popups
-      this.mapbox.closePopup();
     },
 
 
@@ -220,10 +221,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           model.set('pathID', line._leaflet_id);
 
           line.on('mouseover', function() {
-            coms.trigger('trips:highlight', model);
+            coms.trigger('trips:highlight', [model]);
           })
           .on('mouseout', function() {
-            coms.trigger('trips:unhighlight', model);
+            coms.trigger('trips:unhighlight', [model]);
           })
           .on('click', function() {
             coms.trigger('trips:toggleSelect', [model], {scroll: true});
