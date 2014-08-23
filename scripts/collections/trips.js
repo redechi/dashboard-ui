@@ -157,15 +157,24 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     saveToSessionStorage: function() {
       sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
       sessionStorage.setItem('tripsStart', this.startDate);
+      //expire after 1 hour
+      sessionStorage.setItem('expires', moment().add(1, 'hours').valueOf());
     },
 
 
     fetchFromSessionStorage: function () {
-      var start = sessionStorage.getItem('tripsStart');
-      if(start) {
-        this.startDate = start;
+      var expires = sessionStorage.getItem('expires');
+
+      if(expires > moment().valueOf()) {
+        var start = sessionStorage.getItem('tripsStart');
+        if(start) {
+          this.startDate = start;
+        }
+        return JSON.parse(sessionStorage.getItem('trips'));
+      } else {
+        return;
       }
-      return JSON.parse(sessionStorage.getItem('trips'));
+
     },
 
 
