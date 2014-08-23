@@ -47,6 +47,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
 
       coms.on('filter', _.bind(this.updateFilterRanges, this));
+      coms.on('filter', _.bind(this.checkIfClosePopovers, this));
 
       //update Nav button status
       coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
@@ -128,6 +129,14 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           });
         self.updateFilterList();
       }, 0);
+    },
+
+
+    checkIfClosePopovers: function(collection) {
+      var dateFilterValueSelected = this.collection.findWhere({name: 'date'}).get('valueSelected');
+      if(collection.length > 0 && dateFilterValueSelected !== 'custom') {
+        $('.btn-popover[data-filter="date"], .btn-popover[data-filter="vehicle"]', this.$el).popover('hide');
+      }
     },
 
 
