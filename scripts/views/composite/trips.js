@@ -19,6 +19,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
       coms.on('trips:selectByDate', _.bind(this.selectByDate, this));
+      coms.on('trips:highlight', _.bind(this.highlightTrip, this));
+      coms.on('trips:unhighlight', _.bind(this.unhighlightTrip, this));
 
       $(window).on("resize", _.bind(this.resize, this));
 
@@ -126,6 +128,16 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       });
 
       coms.trigger('trips:changeSelectedTrips');
+    },
+
+
+    highlightTrip: function(trip) {
+      $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).addClass('highlighted');
+    },
+
+
+    unhighlightTrip: function(trip) {
+      $('.trips ul li[data-id="' + trip.get('id') + '"]', self.$el).removeClass('highlighted');
     },
 
 

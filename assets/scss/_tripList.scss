@@ -154,11 +154,6 @@
         border-bottom: 1px solid $line_light_gray;
         cursor: pointer;
 
-
-        &:hover {
-          border-bottom-color: $line_gray;
-        }
-
         .tripLink {
           display: none;
         }
@@ -277,7 +272,8 @@
         }
 
         &.selected,
-        &:hover {
+        &:hover,
+        &.highlighted {
           background-color: #fff;
 
           .stat {
@@ -307,7 +303,6 @@
         }
 
         &.selected {
-
           .location {
             color: $selected;
           }
@@ -332,11 +327,13 @@
           }
         }
 
-        &:hover{
+        &:hover,
+        &.highlighted {
           border-left: 1px solid transparent;
           border-right: 1px solid transparent;
           margin-left: -1px;
           margin-right: -1px;
+          border-bottom-color: $line_gray;
 
           .location {
             color: $highlight;
