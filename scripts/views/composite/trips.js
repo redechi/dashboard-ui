@@ -81,6 +81,9 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
     changeSelectedTrips: function() {
       var selectedTrips = this.collection.where({selected: true});
+      $('.tripCount span')
+        .text('(' + selectedTrips.length +  ' selected)')
+        .toggle(selectedTrips.length > 0);
       $('.deselectAll', this.$el).toggle(!!selectedTrips.length);
     },
 
