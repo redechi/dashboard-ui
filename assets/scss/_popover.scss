@@ -83,6 +83,13 @@
         background-repeat: no-repeat;
         background-position: right center;
       }
+
+      &.animate li:active {
+        color: $selected;
+        @include hr-image('../img/spinner_gif.gif', '../img/spinner_gif@2x.gif');
+        background-repeat: no-repeat;
+        background-position: center right;
+      }
     }
   }
 }
