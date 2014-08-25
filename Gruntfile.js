@@ -43,6 +43,9 @@ module.exports = function (grunt) {
 
     // watch list
     watch: {
+      options: {
+        livereload: true
+      },
       compass: {
         files: ["assets/scss/*.scss"],
         tasks: ["compass"]
