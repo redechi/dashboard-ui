@@ -1,7 +1,7 @@
 'use strict';
 
 var git = require('git-rev');
-var build = process.env.BUILD_NUMBER || 0;
+var build = process.env.BUILD_ID || 0;
 var tagName = 'local';
 var shortHash = 'local';
 var CDN = process.env.CDN || '';
