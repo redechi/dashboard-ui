@@ -46,15 +46,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
 
     templateHelpers: function () {
-      //check for export support
-      var exportSupported = false;
-      try {
-        exportSupported = !!new Blob;
-      } catch (e) {}
-
       return {
         total: this.collection.length,
-        exportSupported: exportSupported,
         sortDirection: this.options.sortDirection,
         sortTypeName: this.options.sortTypeName
       };
@@ -176,9 +169,32 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
+    isSafari: function() {
+      return navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1;
+    },
+
+
+    exportIsSupported: function() {
+      //check for export support
+      var exportSupported = false;
+      try {
+        exportSupported = !!new Blob;
+      } catch (e) {}
+
+      return exportSupported;
+    },
+
+
     export: function (e) {
       var exportOption = $(e.target).data('value'),
           selectedTrips;
+
+      if(!this.exportIsSupported()) {
+        alert('Export is not supported in your browser. Try again with IE10+, Chrome, Firefox or Safari.');
+        return false;
+      } else if(this.isSafari()) {
+        alert('Exported file will download in CSV format with the filename "Unknown" to your Downloads folder.');
+      }
 
       if (exportOption === 'selected'){
         selectedTrips = this.collection.where({selected: true});

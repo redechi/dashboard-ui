@@ -22,14 +22,12 @@
 <div class="tripsFooter">
   <div class="deselectAll hide">Deselect all</div>
   <div class="selectAll">Select all</div>
-  {{#exportSupported}}
-    <div class="export" data-toggle="popover">Export</div>
-    <div class="popoverTemplate">
-      <ul class="exportOption listSelect">
-        <li data-value="selected">Export selected trips (<span></span>)</li>
-        <li data-value="tripList">Export trips currently in trip list (<span></span>)</li>
-        <li data-value="all">Export all trips</li>
-      </ul>
-    </div>
-  {{/exportSupported}}
+  <div class="export" data-toggle="popover">Export</div>
+  <div class="popoverTemplate">
+    <ul class="exportOption listSelect">
+      <li data-value="selected">Export selected trips (<span></span>)</li>
+      <li data-value="tripList">Export trips currently in trip list (<span></span>)</li>
+      <li data-value="all">Export all trips</li>
+    </ul>
+  </div>
 </div>
