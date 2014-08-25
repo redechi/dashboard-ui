@@ -4,11 +4,10 @@ define([
   'regionManager',
   './controllers/login',
   './collections/trips',
-  './views/layout/overlay',
-  './polyfills/pointer_events_polyfill'
+  './views/layout/overlay'
 ],
 
-function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout, PointerEventsPolyfill ) {
+function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout ) {
   'use strict';
 
 
