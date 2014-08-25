@@ -58,8 +58,8 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       this.nextTrip = this.collection.at(idx - 1);
       this.prevTrip = this.collection.at(idx + 1);
 
-      $('.prevTrip', this.$el).toggleClass('noTrip', !this.prevTrip);
-      $('.nextTrip', this.$el).toggleClass('noTrip', !this.nextTrip);
+      $('.prevTrip', this.$el).toggleClass('disabled', !this.prevTrip);
+      $('.nextTrip', this.$el).toggleClass('disabled', !this.nextTrip);
       $('.tripIndex', this.$el).text(totalTripCount - idx);
       $('.totalTripCount', this.$el).text(totalTripCount);
     },
@@ -71,14 +71,18 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
 
     showNextTrip: function() {
-      this.model = this.nextTrip;
-      this.showTrip();
+      if(this.nextTrip) {
+        this.model = this.nextTrip;
+        this.showTrip();
+      }
     },
 
 
     showPrevTrip: function() {
-      this.model = this.prevTrip;
-      this.showTrip();
+      if(this.prevTrip) {
+        this.model = this.prevTrip;
+        this.showTrip();
+      }
     },
 
 

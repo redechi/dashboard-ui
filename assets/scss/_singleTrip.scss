@@ -22,7 +22,7 @@
       background-repeat: no-repeat;
       cursor: pointer;
 
-      &.noTrip {
+      &.disabled {
         cursor: default;
         pointer-events: none;
       }
@@ -36,7 +36,7 @@
         @include hr-image('../img/icon_tripnav_left_hover.png', '../img/icon_tripnav_left_hover@2x.png');
       }
 
-      &.noTrip {
+      &.disabled {
         @include hr-image('../img/icon_tripnav_left_inactive.png', '../img/icon_tripnav_left_inactive@2x.png');
       }
     }
@@ -49,7 +49,7 @@
         @include hr-image('../img/icon_tripnav_right_hover.png', '../img/icon_tripnav_right_hover@2x.png');
       }
 
-      &.noTrip {
+      &.disabled {
         @include hr-image('../img/icon_tripnav_right_inactive.png', '../img/icon_tripnav_right_inactive@2x.png');
       }
     }
