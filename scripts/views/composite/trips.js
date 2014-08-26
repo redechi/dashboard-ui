@@ -190,7 +190,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
           selectedTrips;
 
       if(!this.exportIsSupported()) {
-        alert('Export is not supported in your browser. Try again with IE10+, Chrome, Firefox or Safari.');
+        alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
         return false;
       } else if(this.isSafari()) {
         alert('Exported file will download in CSV format with the filename "Unknown" to your Downloads folder.');
