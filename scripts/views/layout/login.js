@@ -71,6 +71,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
             }
           }
         ).fail(function(jqXHR, textStatus, error) {
+          console.error(jqXHR);
           if(jqXHR.status === 401) {
             self.errorAlert('Invalid email or password', true, true);
           } else {
