@@ -164,6 +164,7 @@
           font-size: 11px;
           fill: $base_type;
           text-transform: uppercase;
+          text-anchor: middle;
 
           &.empty {
             fill: $inactive_type;
@@ -174,6 +175,7 @@
           text-transform: uppercase;
           font-size: 12px;
           fill: $base_type;
+          text-anchor: right;
         }
       }
     }

@@ -540,7 +540,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       bars.append('text')
         .attr('transform', 'translate(0,' + (height + 20) + ')')
         .attr('x', function(d) { return x(d.key); })
-        .style('text-anchor', 'middle')
         .attr('class', function(d) {return (d.values === 0) ? 'empty' : ''; })
         .classed('tickLabel', true)
         .text(_.bind(self.getTickLabel, this));
@@ -551,7 +550,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('transform', 'translate(0,' + (height + 40) + ')')
           .attr('x', function(d) { return x(d.key); })
           .attr('dx', -barWidth/2)
-          .style('text-anchor', 'right')
           .classed('axisLabel', true)
           .text(_.bind(self.getMonthLabel, this));
       } else if (binSize === 'month') {
@@ -559,7 +557,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
           .attr('transform', 'translate(0,' + (height + 45) + ')')
           .attr('x', function(d) { return x(d.key); })
           .attr('dx', -barWidth/2)
-          .style('text-anchor', 'right')
           .classed('axisLabel', true)
           .text(_.bind(self.getYearLabel, this));
       }
