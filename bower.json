@@ -23,6 +23,7 @@
     "chai": "~1.9.1",
     "d3": "~3.4.11",
     "FileSaver": "",
+    "fontawesome": "~4.2.0",
     "jquery": "~2.1.1",
     "jquery.scrollTo": "~1.4.13",
     "mapbox.js": "https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js",

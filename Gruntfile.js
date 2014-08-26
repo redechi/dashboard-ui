@@ -298,6 +298,8 @@ module.exports = function (grunt) {
             'bower_components/mapbox.css/index.css',
             'bower_components/bootstrap/dist/css/bootstrap.css',
             'bower_components/bootstrap-datepicker/css/datepicker2.css',
+            'bower_components/fontawesome/fonts/**',
+            'bower_components/fontawesome/scss/**'
           ]
         }]
       }

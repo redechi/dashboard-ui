@@ -5,6 +5,9 @@
 @import "../../bower_components/bootstrap-datepicker/css/datepicker3.css";
 @import "../../bower_components/mapbox.css/index.css";
 
+$fa-font-path: "../../bower_components/fontawesome/fonts";
+@import "../../bower_components/fontawesome/scss/font-awesome.scss";
+
 @mixin hr-image($lr-image, $hr-image) {
   background-image: url($lr-image);
   @media print,
