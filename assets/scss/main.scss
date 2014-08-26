@@ -1,7 +1,9 @@
 @import "compass/css3";
 @import "compass/utilities/sprites";
 
-@import "bootstrap_min";
+@import "../../bower_components/bootstrap/dist/css/bootstrap.css";
+@import "../../bower_components/bootstrap-datepicker/css/datepicker3.css";
+@import "../../bower_components/mapbox.css/index.css";
 
 @mixin hr-image($lr-image, $hr-image) {
   background-image: url($lr-image);
@@ -42,10 +44,9 @@ $line_light_gray: #EDECE9;
 $footer_top_line: #D8D7D3;
 $footer_bottom_line: #E3E2DE;
 
-@import "bootstrap_datepicker3";
-
 @import "fonts";
 @import "base";
+@import "datepicker";
 @import "popover";
 @import "button";
 @import "inputs";
