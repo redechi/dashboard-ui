@@ -17,14 +17,7 @@
 
     .sortType {
       float: right;
-      line-height: 25px;
-      color: $highlight;
-      padding-right: 25px;
-      background-position: right 5px center;
-      background-repeat: no-repeat;
-      @include hr-image('../img/icon_dropdown_blue.png', '../img/icon_dropdown_blue@2x.png');
-      cursor: pointer;
-      @include noSelection;
+      @extend .blue-dropdown
     }
 
     .sortDirection {

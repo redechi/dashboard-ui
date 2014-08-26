@@ -1,0 +1,14 @@
+.blue-dropdown {
+  color: $highlight;
+  line-height: 25px;
+  padding-right: 25px;
+  background-position: right 5px center;
+  background-repeat: no-repeat;
+  @include hr-image('../img/icon_dropdown_blue.png', '../img/icon_dropdown_blue@2x.png');
+  cursor: pointer;
+  @include noSelection;
+  
+  &:hover {
+    color: $selected;
+  }
+}

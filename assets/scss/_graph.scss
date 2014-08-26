@@ -13,15 +13,8 @@
     .graphType {
       float: left;
       margin-left: 25px;
-      line-height: 25px;
-      color: $highlight;
-      padding-right: 25px;
-      background-position: right 5px center;
-      background-repeat: no-repeat;
-      @include hr-image('../img/icon_dropdown_blue.png', '../img/icon_dropdown_blue@2x.png');
-      cursor: pointer;
       margin-top:10px;
-      @include noSelection;
+      @extend .blue-dropdown;
     }
 
     .popover-content {
