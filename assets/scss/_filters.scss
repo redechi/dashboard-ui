@@ -24,8 +24,9 @@
   .addFilter {
     display: inline-block;
     width: 28px;
-    @include hr-image('../img/icon_plus.png', '../img/icon_plus@2x.png');
-    background-position: 50% center;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 12px;
   }
 
   .removeFilter {
@@ -113,7 +114,6 @@
   .btn-filter {
     margin: 0 10px;
     display: inline-block;
-    cursor: pointer;
   }
 
   .filterNav {
