@@ -15,7 +15,7 @@ function( formatters, vehiclesCollection ) {
       title: 'vehicle',
       label: 'Show trips from',
       value: 'all',
-      valueText: 'all vehicles',
+      valueText: 'all my vehicles',
       func: function(trip) {
         if(this.get('value') === 'all') {
           return true;
@@ -29,7 +29,7 @@ function( formatters, vehiclesCollection ) {
       updateValueText: function () {
         var valueText;
         if(this.get('value') === 'all') {
-          valueText = 'all vehicles';
+          valueText = 'all my vehicles';
         } else {
           var vehicle = vehiclesCollection.get(this.get('value'));
           valueText = (vehicle) ? vehicle.get('display_name') : 'Unknown';
