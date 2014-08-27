@@ -17,7 +17,8 @@
 
     .sortType {
       float: right;
-      @extend .blue-dropdown
+      margin-right: 10px;
+      @extend .blue-dropdown;
     }
 
     .sortDirection {
