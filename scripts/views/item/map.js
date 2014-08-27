@@ -316,12 +316,14 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       this.zoom = this.mapbox.getZoom();
 
       var self = this,
-          icon = mapHelpers.getMarkerSizeByZoom(this.zoom),
+          normalIcon = mapHelpers.getMarkerSizeByZoom(this.zoom, 'normal'),
+          hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(this.zoom, 'hardBrake'),
+          hardAccelIcon = mapHelpers.getMarkerSizeByZoom(this.zoom, 'hardAccel'),
           weight = mapHelpers.getPathWidthbyZoom(this.zoom);
 
       this.markersLayer.eachLayer(function(marker) {
         if(!marker.options.selected && self.options.layout !== 'single_trip') {
-          marker.setIcon(icon);
+          marker.setIcon(normalIcon);
         }
       });
 
@@ -329,8 +331,16 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         path.setStyle({weight: weight});
       });
 
-      self.speedingLayer.eachLayer(function(path) {
+      this.speedingLayer.eachLayer(function(path) {
         path.setStyle({weight: weight});
+      });
+
+      this.hardBrakesLayer.eachLayer(function(marker) {
+        marker.setIcon(hardBrakeIcon);
+      });
+
+      this.hardAccelsLayer.eachLayer(function(marker) {
+        marker.setIcon(hardAccelIcon);
       });
     },
 
@@ -416,7 +426,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     buildTripEventsLayer: function() {
       var self = this,
-          speedingLine = mapHelpers.speedingLine(this.zoom);
+          speedingLine = mapHelpers.speedingLine(this.zoom),
+          hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(this.zoom, 'hardBrake'),
+          hardAccelIcon = mapHelpers.getMarkerSizeByZoom(this.zoom, 'hardAccel');
 
       this.collection.each(function(trip) {
         if(trip.get('path')) {
@@ -424,9 +436,9 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
           trip.get('drive_events').forEach(function(item) {
             if(item.type === 'hard_brake') {
-              self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardBrakeIcon, id: trip.get('id')}));
+              self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: hardBrakeIcon, id: trip.get('id')}));
             } else if(item.type === 'hard_accel') {
-              self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: mapHelpers.hardAccelIcon, id: trip.get('id')}));
+              self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: hardAccelIcon, id: trip.get('id')}));
             } else if(item.type === 'speeding') {
               var start = formatters.m_to_mi(item.start_distance_m),
                   end = formatters.m_to_mi(item.end_distance_m),

@@ -88,15 +88,39 @@ function( mapbox, formatters, stats ) {
     }),
 
 
-    hardBrakeIcon: L.divIcon({
+    hardBrakeIconSmall: L.divIcon({
+      className: 'hardBrakeIcon',
+      iconSize: [8, 8]
+    }),
+
+
+    hardBrakeIconMedium: L.divIcon({
       className: 'hardBrakeIcon',
       iconSize: [12, 12]
     }),
 
 
-    hardAccelIcon: L.divIcon({
+    hardBrakeIconLarge: L.divIcon({
+      className: 'hardBrakeIcon',
+      iconSize: [18, 18]
+    }),
+
+
+    hardAccelIconSmall: L.divIcon({
+      className: 'hardAccelIcon',
+      iconSize: [8, 8]
+    }),
+
+
+    hardAccelIconMedium: L.divIcon({
       className: 'hardAccelIcon',
       iconSize: [12, 12]
+    }),
+
+
+    hardAccelIconLarge: L.divIcon({
+      className: 'hardAccelIcon',
+      iconSize: [18, 18]
     }),
 
 
@@ -164,14 +188,33 @@ function( mapbox, formatters, stats ) {
     },
 
 
-    getMarkerSizeByZoom: function(zoom) {
-      if(zoom >=15) {
-        return this.mainIconLarge;
-      } else if(zoom >= 12) {
-        return this.mainIconMedium;
-      } else {
-        return this.mainIconSmall;
+    getMarkerSizeByZoom: function(zoom, type) {
+      if(type === 'normal') {
+        if(zoom >= 15) {
+          return this.mainIconLarge;
+        } else if(zoom >= 12) {
+          return this.mainIconMedium;
+        } else {
+          return this.mainIconSmall;
+        }
+      } else if(type === 'hardBrake') {
+        if(zoom >= 15) {
+          return this.hardBrakeIconLarge;
+        } else if(zoom >= 12) {
+          return this.hardBrakeIconMedium;
+        } else {
+          return this.hardBrakeIconSmall;
+        }
+      } else if(type === 'hardAccel') {
+        if(zoom >= 15) {
+          return this.hardAccelIconLarge;
+        } else if(zoom >= 12) {
+          return this.hardAccelIconMedium;
+        } else {
+          return this.hardAccelIconSmall;
+        }
       }
+
     },
 
 
