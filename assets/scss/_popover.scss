@@ -78,17 +78,24 @@
     .listSelect {
       @include noSelection;
 
+      li i {
+        float: right;
+        display: none;
+      }
+
       .selected {
         color: $highlight;
-        background-repeat: no-repeat;
-        background-position: right center;
       }
 
       &.animate li:active {
         color: $selected;
-        @include hr-image('../img/spinner_gif.gif', '../img/spinner_gif@2x.gif');
-        background-repeat: no-repeat;
-        background-position: center right;
+
+        i {
+          @extend .fa;
+          @extend .fa-cog;
+          @extend .fa-spin;
+          display: inline;
+        }
       }
     }
   }

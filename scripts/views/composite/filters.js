@@ -357,7 +357,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         $('.vehicleFilterValue', self.$el).append(vehiclesCollection.map(function(vehicle) {
           return $('<li>')
             .attr('data-value', vehicle.get('id'))
-            .text(vehicle.get('display_name'));
+            .text(vehicle.get('display_name'))
+            .append('<i>');
         }));
       }, 0);
     },
