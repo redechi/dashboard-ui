@@ -178,24 +178,18 @@ function( mapbox, formatters, stats ) {
     getPathWidthbyZoom: function(zoom) {
       if(zoom <= 8) {
         return 2;
-      } else if(zoom === 9) {
+      } else if(zoom === 9 || zoom === 10) {
         return 3;
-      } else if(zoom === 10) {
+      } else if(zoom === 11 || zoom === 12 || zoom === 13) {
         return 4;
-      } else if(zoom === 11) {
-        return 5;
-      } else if(zoom === 12) {
-        return 6;
-      } else if(zoom === 13) {
-        return 8;
       } else if(zoom === 14) {
-        return 10;
+        return 6;
       } else if(zoom === 15) {
-        return 13;
+        return 10;
       } else if(zoom === 16) {
-        return 14;
+        return 12;
       } else {
-        return 16;
+        return 12;
       }
     },
 
