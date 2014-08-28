@@ -90,37 +90,37 @@ function( mapbox, formatters, stats ) {
 
     hardBrakeIconSmall: L.divIcon({
       className: 'hardBrakeIcon',
-      iconSize: [8, 8]
+      iconSize: [6, 6]
     }),
 
 
     hardBrakeIconMedium: L.divIcon({
       className: 'hardBrakeIcon',
-      iconSize: [12, 12]
+      iconSize: [10, 10]
     }),
 
 
     hardBrakeIconLarge: L.divIcon({
       className: 'hardBrakeIcon',
-      iconSize: [18, 18]
+      iconSize: [16, 16]
     }),
 
 
     hardAccelIconSmall: L.divIcon({
       className: 'hardAccelIcon',
-      iconSize: [8, 8]
+      iconSize: [6, 6]
     }),
 
 
     hardAccelIconMedium: L.divIcon({
       className: 'hardAccelIcon',
-      iconSize: [12, 12]
+      iconSize: [10, 10]
     }),
 
 
     hardAccelIconLarge: L.divIcon({
       className: 'hardAccelIcon',
-      iconSize: [18, 18]
+      iconSize: [16, 16]
     }),
 
 
