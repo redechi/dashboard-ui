@@ -19,11 +19,30 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
       coms.on('user:change', _.bind(this.render, this));
     },
 
+
     template: HeaderTmpl,
+
+
+    events: {
+      'click .login': 'login',
+      'click .whatIsAutomatic': 'whatIsAutomatic'
+    },
+
 
     className: function() {
       return (login.isDemo()) ? 'demo' : 'loggedIn';
     },
+
+
+    login: function() {
+      ga('send', 'event', 'button', 'click', 'login');
+    },
+
+
+    whatIsAutomatic: function() {
+      ga('send', 'event', 'button', 'click', 'whatIsAutomatic');
+    },
+
 
     onShow: function() {
       //Get Satisfaction feedback link

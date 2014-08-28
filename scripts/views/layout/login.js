@@ -16,14 +16,29 @@ function( Backbone, regionManager, LoginTmpl, login ) {
       'submit #loginForm form': 'login',
       'focus #loginForm input': 'clearError',
       'click .forgotPasswordLink': 'forgotPassword',
-      'click .toggleLoginForm': 'toggleLoginForm'
+      'click .toggleLoginForm': 'toggleLoginForm',
+      'click .learnMore': 'learnMore',
+      'click .tryDemo': 'tryDemo'
     },
 
 
     toggleLoginForm: function(e) {
       e.preventDefault();
+
+      ga('send', 'event', 'button', 'click', 'login');
+      
       $('#loginDemo', this.$el).toggle(!$('#loginDemo', this.$el).is(':visible'));
       $('#loginForm', this.$el).toggle(!$('#loginForm', this.$el).is(':visible'));
+    },
+
+
+    learnMore: function() {
+      ga('send', 'event', 'button', 'click', 'learnMore');
+    },
+
+
+    tryDemo: function() {
+      ga('send', 'event', 'button', 'click', 'tryDemo');
     },
 
 
