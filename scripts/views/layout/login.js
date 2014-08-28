@@ -13,9 +13,17 @@ function( Backbone, regionManager, LoginTmpl, login ) {
 
 
     events: {
-      'submit #loginForm': 'login',
+      'submit #loginForm form': 'login',
       'focus #loginForm input': 'clearError',
-      'click .forgotPasswordLink': 'forgotPassword'
+      'click .forgotPasswordLink': 'forgotPassword',
+      'click .toggleLoginForm': 'toggleLoginForm'
+    },
+
+
+    toggleLoginForm: function(e) {
+      e.preventDefault();
+      $('#loginDemo', this.$el).toggle(!$('#loginDemo', this.$el).is(':visible'));
+      $('#loginForm', this.$el).toggle(!$('#loginForm', this.$el).is(':visible'));
     },
 
 
