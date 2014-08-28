@@ -434,6 +434,17 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
              + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius);
       }
 
+      //invisible bar to make tooltip hovering easier
+      bars.append('rect')
+        .on('mouseover', barMouseover)
+        .on('mouseout', barMouseout)
+        .attr('class', 'invisibleHover')
+        .attr('x', function(d) { return x(d.key) - (barWidth/2); })
+        .attr('y', height - minBarHeight)
+        .attr('width', barWidth)
+        .attr('height', minBarHeight);
+        
+
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
@@ -503,17 +514,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             .text(function(d) { return formatters.formatForGraphLabel(graphType, d.values); })
             .attr('text-anchor', 'middle');
       }
-
-
-      //invisible bar to make tooltip hovering easier
-      bars.append('rect')
-        .on('mouseover', barMouseover)
-        .on('mouseout', barMouseout)
-        .style('fill', 'transparent')
-        .attr('x', function(d) { return x(d.key) - (barWidth/2); })
-        .attr('y', height - minBarHeight)
-        .attr('width', barWidth)
-        .attr('height', minBarHeight);
 
 
       //X Axis line

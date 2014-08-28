@@ -132,6 +132,11 @@
         }
       }
 
+      rect.invisibleHover {
+        fill:transparent;
+        cursor: auto;
+      }
+
       &.selected path.barBackground {
         fill: #297FB8;
       }
