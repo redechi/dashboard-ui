@@ -85,6 +85,16 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
+    activateItem: function(item) {
+      $(item).addClass('active');
+    },
+
+
+    deactivateAll: function() {
+      $('.listSelect.animate li', this.$el).removeClass('active');
+    },
+
+
     updateNavButtons: function() {
       $('.filterNav .redo').toggleClass('disabled', (Backbone.history.next.length === 0));
       $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
@@ -136,6 +146,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       var dateFilterValueSelected = this.collection.findWhere({name: 'date'}).get('valueSelected');
       if(collection.length > 0 && dateFilterValueSelected !== 'custom') {
         $('.btn-popover[data-filter="date"], .btn-popover[data-filter="vehicle"]', this.$el).popover('hide');
+      } else {
+        this.deactivateAll();
       }
     },
 
@@ -220,6 +232,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
         this.selectItem(e.target);
 
+        this.activateItem(e.target);
+
         $('.dateFilterCustom').toggle(valueSelected === 'custom');
 
         this.collection.saveFilters();
@@ -272,6 +286,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
       $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
       $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+
+      this.deactivateAll();
     },
 
 

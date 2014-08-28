@@ -88,7 +88,8 @@
         color: $highlight;
       }
 
-      &.animate li:active {
+      &.animate li:active,
+      &.animate li.active {
         color: $selected;
 
         i {
