@@ -228,7 +228,10 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
             filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
 
-        saveAs(blob, filename);
+        _.defer(function() {
+          //fix for firefox on callback - needs a timeout
+          saveAs(blob, filename);
+        });
       }
 
       $('.export').popover('hide');
