@@ -9,7 +9,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
   return Backbone.Marionette.ItemView.extend({
 
-    tagName: "li",
+    tagName: 'li',
 
     template: TripTmpl,
 

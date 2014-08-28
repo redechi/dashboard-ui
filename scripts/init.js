@@ -58,7 +58,7 @@ require.config({
     bootstrapDatepicker: '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
 
     /* shortcut the templates dir to tmpl */
-    tmpl: "../templates",
+    tmpl: '../templates',
 
     /* handlebars from the require handlerbars plugin below */
     handlebars: '../bower_components/require-handlebars-plugin/Handlebars',

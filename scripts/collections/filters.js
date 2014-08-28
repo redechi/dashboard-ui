@@ -34,7 +34,7 @@ function( Backbone, coms, FilterModel, filterList ) {
       var search = Backbone.history.fragment.replace('filter/?', ''),
           filterObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
                  function(key, value) {
-                   return key === "" ? value : decodeURIComponent(value);
+                   return key === '' ? value : decodeURIComponent(value);
                  }) : {};
 
       return filterObj;

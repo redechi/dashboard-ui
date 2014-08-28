@@ -38,7 +38,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
 
-      $(window).on("resize", _.bind(this.makeGraph, this));
+      $(window).on('resize', _.bind(this.makeGraph, this));
     },
 
 
@@ -325,7 +325,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       //SVG defs for gradient
-      this.appendSVGGradient(svg.append("svg:defs"));
+      this.appendSVGGradient(svg.append('svg:defs'));
       svg.append('rect')
         .attr('class', 'graphGradient')
         .attr('width', '100%')

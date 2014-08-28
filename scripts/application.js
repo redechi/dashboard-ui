@@ -28,15 +28,15 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
               }
               xdr = new window.XDomainRequest();
               xdr.onload = function() {
-                callback( 200, "OK", { text: xdr.responseText }, "Content-Type: " + xdr.contentType );
+                callback( 200, 'OK', { text: xdr.responseText }, 'Content-Type: ' + xdr.contentType );
               };
               xdr.onerror = function() {
-                callback( 404, "Not Found" );
+                callback( 404, 'Not Found' );
               };
               xdr.onprogress = function() {};
               if ( s.xdrTimeout ) {
                 xdr.ontimeout = function() {
-                  callback( 0, "timeout" );
+                  callback( 0, 'timeout' );
                 };
                 xdr.timeout = s.xdrTimeout;
               }
@@ -95,9 +95,9 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
 
   /* Add application regions here */
   App.addRegions({
-    headerRegion: "header.mainHeader",
-    contentRegion: "main",
-    overlayRegion: "#overlay"
+    headerRegion: 'header.mainHeader',
+    contentRegion: 'main',
+    overlayRegion: '#overlay'
   });
 
 
