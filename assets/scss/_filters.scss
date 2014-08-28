@@ -71,7 +71,7 @@
 
       .form-control {
         background: $main_back;
-        border: 1px solid #EDECE9;
+        border: 1px solid $line_light_gray;
         @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
         color: $highlight;
         border-radius: 3px;

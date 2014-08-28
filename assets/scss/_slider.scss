@@ -18,7 +18,7 @@
 .slider.slider-horizontal .slider-track {
   height: 2px;
   width: 100%;
-  background-color: #D8D7D3;
+  background-color: $footer_top_line;
   margin-top: -5px;
   top: 50%;
   left: 0;
@@ -120,7 +120,7 @@
   outline: none;
 
   &:active {
-    background-color: #D8D7D3;
+    background-color: $footer_top_line;
   }
 }
 .slider-handle.round {
