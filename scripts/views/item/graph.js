@@ -443,7 +443,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         .attr('y', height - minBarHeight)
         .attr('width', barWidth)
         .attr('height', minBarHeight);
-        
+
 
       bars.append('path')
         .on('mouseover', barMouseover)
@@ -578,9 +578,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
       $('.graphValue li', this.$el).removeClass();
       $('.graphValue li[data-value="' + graphType + '"]', this.$el).addClass('selected');
 
-      $('.graphType', this.$el)
-        .text(graphTypeName)
-        .popover('hide');
+      $('.graphType', this.$el).popover('hide');
+      $('.graphType span', this.$el).text(graphTypeName);
 
       this.getGraphData();
       this.makeGraph();
