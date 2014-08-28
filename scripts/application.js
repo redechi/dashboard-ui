@@ -121,7 +121,7 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
   });
 
 
-  App.on("start", function(){
+  App.on('start', function(){
     Backbone.history.previous = [];
     Backbone.history.next = [];
     Backbone.history.start();
