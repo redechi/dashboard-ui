@@ -24,7 +24,7 @@ header {
       }
     }
 
-    #playgroundMenu {
+    #demoMenu {
       display: none;
     }
 
@@ -76,7 +76,7 @@ header {
     }
   }
 
-  .playground {
+  .demo {
     position: relative;
     border-bottom: 1px solid $line_gray;
     height: 70px;
@@ -115,7 +115,7 @@ header {
       display: none;
     }
 
-    #playgroundMenu {
+    #demoMenu {
       position: absolute;
       right: 0;
       top: 0px;

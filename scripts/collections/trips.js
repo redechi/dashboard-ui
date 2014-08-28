@@ -76,9 +76,9 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     },
 
 
-    fetchPlaygroundTrips: function() {
+    fetchDemoTrips: function() {
       var self = this;
-      $.getJSON('./assets/data/playground.json', function(trips) {
+      $.getJSON('./assets/data/demo.json', function(trips) {
         self.set(trips);
         coms.trigger('filter:applyAllFilters');
       });
@@ -86,9 +86,9 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
 
     fetchInitial: function () {
-      if(login.isPlayground()) {
+      if(login.isDemo()) {
         //get trips from local JSON
-        this.fetchPlaygroundTrips();
+        this.fetchDemoTrips();
       } else {
         var dateFilter = filterCollection.findWhere({name: 'date'}),
             start = dateFilter.get('value')[0],

@@ -22,7 +22,7 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
     template: HeaderTmpl,
 
     className: function() {
-      return (login.isPlayground()) ? 'playground' : 'loggedIn';
+      return (login.isDemo()) ? 'demo' : 'loggedIn';
     },
 
     onShow: function() {

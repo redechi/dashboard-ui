@@ -10,8 +10,8 @@ function( Backbone, coms ) {
     isLoggedIn: false,
 
 
-    isPlayground: function () {
-      return window.location.search.indexOf('playground') !== -1;
+    isDemo: function () {
+      return window.location.search.indexOf('demo') !== -1;
     },
 
 
@@ -47,10 +47,10 @@ function( Backbone, coms ) {
       // get access token from cookie
       var accessToken = this.getCookie('token');
 
-      // if playground URL, use the dummy token
-      if(this.isPlayground()) {
-        var dummyToken = 'e38f525a0795031c9a38b0c72a0e0f30bb7823a9';
-        accessToken = dummyToken;
+      // if demo URL, use the demo token
+      if(this.isDemo()) {
+        var demoToken = 'e38f525a0795031c9a38b0c72a0e0f30bb7823a9';
+        accessToken = demoToken;
       }
 
       //if non-matching token in sessionStorage, clear
