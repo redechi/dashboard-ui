@@ -297,7 +297,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
         bounds = this.pathsLayer.getBounds();
       }
       if(bounds.isValid()) {
-        this.mapbox.fitBounds(bounds, {padding: [20, 20]});
+        this.mapbox.fitBounds(bounds, {padding: [45, 45]});
       }
     },
 
