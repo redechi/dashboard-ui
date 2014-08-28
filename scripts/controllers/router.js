@@ -1,12 +1,13 @@
 define([
   'backbone',
+  'communicator',
   'regionManager',
   '../collections/filters',
   '../views/layout/summary',
   '../views/layout/login',
   '../views/layout/password_reset'
 ],
-function( Backbone, regionManager, filtersCollection, SummaryLayout, LoginLayout, PasswordResetLayout ) {
+function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, LoginLayout, PasswordResetLayout ) {
   'use strict';
 
   return {
@@ -36,6 +37,7 @@ function( Backbone, regionManager, filtersCollection, SummaryLayout, LoginLayout
     logOut: function () {
       sessionStorage.clear();
       document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      coms.trigger('overlay:hide');
       window.location = '#login';
     },
 
