@@ -49,7 +49,7 @@ function( Backbone, coms ) {
 
       // if demo URL, use the demo token
       if(this.isDemo()) {
-        var demoToken = 'e38f525a0795031c9a38b0c72a0e0f30bb7823a9';
+        var demoToken = 'b331bf31db33e2e208fda60f18bb47f82c81d3b2';
         accessToken = demoToken;
       }
 
