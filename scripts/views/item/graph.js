@@ -391,7 +391,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
             endDate = moment(startDate).endOf(binSize).valueOf();
         coms.trigger('trips:highlightByDate', startDate, endDate);
 
-        var top = y(d.values) < (height - minBarHeight) ? (y(d.values) - 17) : (y(d.values) - 17 - minBarHeight);
+        var magicNumber = 19,
+            top = y(d.values) < (height - minBarHeight) ? (y(d.values) - magicNumber) : (y(d.values) - magicNumber - minBarHeight);
         tooltip
           .css({
             top: top + 'px',
