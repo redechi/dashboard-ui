@@ -44,11 +44,13 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
     },
 
 
-    onShow: function() {
+    onRender: function() {
       //Get Satisfaction feedback link
-      if (typeof GSFN !== 'undefined') {
-        GSFN.loadWidget(7348, {containerId: 'getsat-widget-7348'});
-      }
+      _.defer(function() {
+        if (typeof GSFN !== 'undefined') {
+          GSFN.loadWidget(7348, {containerId: 'getsat-widget-7348'});
+        }
+      });
     },
 
     model: user
