@@ -169,6 +169,11 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     },
 
 
+    activateItem: function(item) {
+      $(item).addClass('active');
+    },
+
+
     isSafari: function() {
       return navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1;
     },
@@ -195,6 +200,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       } else if(this.isSafari()) {
         alert('Exported file will download in CSV format with the filename "Unknown" to your Downloads folder.');
       }
+
+      this.activateItem(e.target);
 
       if (exportOption === 'selected'){
         selectedTrips = this.collection.where({selected: true});
