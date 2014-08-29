@@ -23,6 +23,9 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
     template: HeaderTmpl,
 
 
+    model: user,
+
+
     events: {
       'click .login': 'login',
       'click .whatIsAutomatic': 'whatIsAutomatic'
@@ -45,14 +48,24 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
 
 
     onRender: function() {
-      //Get Satisfaction feedback link
-      _.defer(function() {
-        if (typeof GSFN !== 'undefined') {
-          GSFN.loadWidget(7348, {containerId: 'getsat-widget-7348'});
-        }
-      });
+      this.loadGetSatisfaction();
     },
 
-    model: user
+
+    onShow: function() {
+      this.loadGetSatisfaction();
+    },
+    
+
+    loadGetSatisfaction: function() {
+      //Get Satisfaction feedback link
+      if($('#getsat-widget-7348').length) {
+        _.defer(function() {
+          if (typeof GSFN !== 'undefined') {
+            GSFN.loadWidget(7348, {containerId: 'getsat-widget-7348'});
+          }
+        });
+      }
+    }
   });
 });
