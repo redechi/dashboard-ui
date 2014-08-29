@@ -382,6 +382,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
         $(this).data('fullySelected', fullySelected);
 
         coms.trigger('trips:selectByDate', startDate, endDate, {selected: fullySelected, scroll: true});
+        coms.trigger('trips:highlightByDate', startDate, endDate);
       }
 
       function barMouseover(d) {

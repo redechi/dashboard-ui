@@ -33,6 +33,8 @@ function( Backbone, coms, TripTmpl, formatters ) {
 
     toggleSelect: function () {
       coms.trigger('trips:toggleSelect', [this.model]);
+      //because mouse must be on top of this element, keep it highlighted
+      coms.trigger('trips:highlight', [this.model]);
     },
 
 
