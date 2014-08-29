@@ -39,6 +39,7 @@ require.config({
     backbone: '../bower_components/backbone/backbone',
     underscore: '../bower_components/underscore/underscore',
     'jquery.scrollTo': '../bower_components/jquery.scrollTo/jquery.scrollTo',
+    'mobile-detect': '../bower_components/mobile-detect/mobile-detect',
 
     moment: '../bower_components/momentjs/moment',
     d3: '../bower_components/d3/d3',

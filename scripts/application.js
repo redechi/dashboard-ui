@@ -4,10 +4,11 @@ define([
   'regionManager',
   './controllers/login',
   './collections/trips',
-  './views/layout/overlay'
+  './views/layout/overlay',
+  'mobile-detect'
 ],
 
-function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout ) {
+function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
   'use strict';
 
   (function( jQuery ) {
@@ -111,6 +112,14 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
     if(!Modernizr.svg || !Modernizr.cors || window.location.search.indexOf('unsupported') !== -1) {
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayLayout({type: 'notSupported'});
+      overlayRegion.show(o);
+    }
+
+    //check for mobile
+    var md = new MobileDetect(window.navigator.userAgent);
+    if(md.phone()) {
+      var overlayRegion = regionManager.getRegion('main_overlay');
+      var o = new OverlayLayout({type: 'notSupportedMobile'});
       overlayRegion.show(o);
     }
 
