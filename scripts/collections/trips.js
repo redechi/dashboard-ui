@@ -80,6 +80,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
       var self = this;
       $.getJSON('./assets/data/demo.json', function(trips) {
         self.set(trips);
+        self.startDate = 0;
         coms.trigger('filter:applyAllFilters');
       });
     },

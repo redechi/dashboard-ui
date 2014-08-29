@@ -213,8 +213,14 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         selectedTrips = this.collection.models;
         this.downloadExport(selectedTrips);
       } else if (exportOption === 'all') {
-        this.waitingForExport = true;
-        tripsCollection.fetchAll();
+        if(tripsCollection.startDate === 0) {
+          //all trips are already downloaded
+          this.downloadExport(tripsCollection);
+        } else {
+          //fetch all trips
+          this.waitingForExport = true;
+          tripsCollection.fetchAll();
+        }
       }
     },
 
