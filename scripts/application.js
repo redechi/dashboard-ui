@@ -58,6 +58,9 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
 
   window.options = {};
 
+  //make sure Modernizr is here
+  Modernizr = Modernizr || {};
+
   //Log the user in if access token present
   login.login();
 
@@ -90,6 +93,8 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
     }
   });
 
+  //add cors detection to modernizr
+  Modernizr.addTest('cors', 'XMLHttpRequest' in window && 'withCredentials' in new XMLHttpRequest());
 
   var App = new Backbone.Marionette.Application();
 
@@ -103,7 +108,7 @@ function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout
 
   App.addInitializer( function () {
     //check for browser compatibility
-    if((Modernizr && !Modernizr.svg) || window.location.search.indexOf('unsupported') !== -1) {
+    if(!Modernizr.svg || !Modernizr.cors || window.location.search.indexOf('unsupported') !== -1) {
       var overlayRegion = regionManager.getRegion('main_overlay');
       var o = new OverlayLayout({type: 'notSupported'});
       overlayRegion.show(o);
