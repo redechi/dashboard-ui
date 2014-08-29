@@ -24,8 +24,7 @@ function( Backbone, coms, regionManager, OverlayTmpl ) {
 
 
     events: {
-      'click a.close': 'closeOverlay',
-      'click .noTrips .btn': 'closeOverlay'
+      'click a.btn-close': 'closeOverlay'
     },
 
 
