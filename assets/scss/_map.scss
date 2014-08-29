@@ -70,7 +70,7 @@
     }
 
     .mapMenuRight {
-      width: 318px;
+      width: 340px;
       float: right;
       border-left: 1px solid $line_light_gray;
       height: 40px;
@@ -95,7 +95,14 @@
       .tripEvents {
         float: right;
         padding: 7px;
-        width: 265px;
+        width: 285px;
+
+        .event {
+          &> div::after {
+            margin-left: 8px;
+            width: 51px;
+          }
+        }
       }
     }
   }
