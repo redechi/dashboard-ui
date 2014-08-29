@@ -38,6 +38,9 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           });
         }
 
+        //unselect all trips
+        this.deselectAll();
+
         //first, apply date filter
         var filteredTrips = this.applyDateFilter();
 
@@ -53,6 +56,13 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
         coms.trigger('filter', filteredTrips);
       }
+    },
+
+
+    deselectAll: function() {
+      this.each(function(trip) {
+        trip.set('selected', false);
+      });
     },
 
 
