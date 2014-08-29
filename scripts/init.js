@@ -13,20 +13,11 @@ require.config({
       exports: 'Backbone'
     },
 
-    bootstrapSlider: {
-        deps: ['jquery'],
-        exports: 'jquery'
-    },
+    bootstrapSlider: ['jquery'],
 
-    bootstrapDatepicker: {
-      deps: ['jquery'],
-      exports: 'jquery'
-    },
+    bootstrapDatepicker: ['jquery'],
 
-    bootstrap: {
-        deps: ['jquery', 'bootstrapSlider', 'bootstrapDatepicker'],
-        exports: 'jquery'
-    },
+    bootstrap: ['jquery', 'bootstrapSlider', 'bootstrapDatepicker'],
 
     nvd3: {
       deps: ['d3'],
