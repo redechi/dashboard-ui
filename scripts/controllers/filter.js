@@ -71,7 +71,7 @@ function( formatters, vehiclesCollection ) {
         } else if(valueSelected === 'thisMonth') {
           return [moment().startOf('month').valueOf(), moment().endOf('month').valueOf()];
         } else if(valueSelected === 'last30Days') {
-          return [moment().endOf('day').subtract(30, 'days').valueOf(), moment().endOf('day').valueOf()];
+          return [moment().endOf('day').subtract(29, 'days').startOf('day').valueOf(), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'thisYear') {
           return [moment().startOf('year').valueOf(), moment().endOf('day').valueOf()];
         } else if(valueSelected === 'allTime') {
