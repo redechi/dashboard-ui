@@ -20,7 +20,8 @@ function( formatters, vehiclesCollection ) {
         if(this.get('value') === 'all') {
           return true;
         } else {
-          return (this.get('value') === trip.get('vehicle').id);
+          var vehicleId = trip.get('vehicle') ? trip.get('vehicle').id : undefined;
+          return (this.get('value') === vehicleId);
         }
       },
       queryify: function () {
