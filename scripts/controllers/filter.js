@@ -53,7 +53,7 @@ function( formatters, vehiclesCollection ) {
       min: 1363071600000,
       valueText: 'in the last 30 days',
       valueSelected: 'last30Days',
-      value: [moment().endOf('day').subtract(1, 'months').valueOf(), moment().endOf('day').valueOf()],
+      value: [moment().endOf('day').subtract(29, 'days').startOf('day').valueOf(), moment().endOf('day').valueOf()],
       options: {
         thisWeek: 'this week',
         thisMonth: 'this month',
