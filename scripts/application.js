@@ -1,14 +1,18 @@
 define([
+  'domReady!',
   'backbone',
   'router',
   'regionManager',
   './controllers/login',
   './collections/trips',
   './views/layout/overlay',
-  'mobile-detect'
+  'mobile-detect',
+  'bootstrapSlider',
+  'bootstrapDatepicker',
+  'bootstrap/popover'
 ],
 
-function( Backbone, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
+function( doc, Backbone, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
   'use strict';
 
   (function( jQuery ) {

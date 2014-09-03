@@ -6,7 +6,8 @@ define([
   'hbs!tmpl/composite/trips_list_tmpl',
   'controllers/unit_formatters',
   'collections/trips',
-  'fileSaver'
+  'fileSaver',
+  'jquery.scrollTo'
 ],
 function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCollection, fileSaver ) {
   'use strict';

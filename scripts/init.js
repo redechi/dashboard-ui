@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['d3', 'nvd3', 'moment', 'backbone.marionette', 'bootstrap', 'main', 'jquery.scrollTo'],
+  deps: ['moment', 'backbone.marionette', 'main'],
 
 
   shim: {
@@ -17,7 +17,15 @@ require.config({
 
     bootstrapDatepicker: ['jquery'],
 
-    bootstrap: ['jquery', 'bootstrapSlider', 'bootstrapDatepicker'],
+    'bootstrap/tooltip': {
+      deps: ['jquery'],
+      exports: '$.fn.tooltip'
+    },
+
+    'bootstrap/popover': {
+      deps: ['jquery', 'bootstrap/tooltip'],
+      exports: '$.fn.popover'
+    },
 
     nvd3: {
       deps: ['d3'],
@@ -39,13 +47,15 @@ require.config({
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
 
+    domReady: '../bower_components/domReady/domReady',
+
     /* alias all marionette libs */
     'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',
     'backbone.wreqr': '../bower_components/backbone.wreqr/lib/backbone.wreqr',
     'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 
     /* alias the bootstrap js lib */
-    bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+    bootstrap: '../bower_components/bootstrap/js',
     bootstrapSlider: '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
     bootstrapDatepicker: '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
 

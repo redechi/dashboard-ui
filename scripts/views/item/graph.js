@@ -4,9 +4,11 @@ define([
   '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
   'controllers/stats',
-  'controllers/unit_formatters'
+  'controllers/unit_formatters',
+  'd3',
+  'nvd3'
 ],
-function( Backbone, coms, filters, GraphTmpl, stats, formatters ) {
+function( Backbone, coms, filters, GraphTmpl, stats, formatters, d3, nvd3 ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
