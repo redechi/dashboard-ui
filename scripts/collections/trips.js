@@ -86,10 +86,23 @@ function( Backbone, coms, Trip, filterCollection, login ) {
     },
 
 
+    makeTripsRecent: function (trips) {
+      var firstTrip = trips[0],
+          offset = moment().diff(moment(firstTrip.start_time)),
+          dayOffset = moment.duration(Math.floor(moment.duration(offset).asDays()), 'days');
+
+      return trips.map(function(trip) {
+        trip.start_time = trip.start_time + dayOffset;
+        trip.end_time = trip.end_time + dayOffset;
+        return trip;
+      });
+    },
+
+
     fetchDemoTrips: function() {
       var self = this;
       $.getJSON('./assets/data/demo.json', function(trips) {
-        self.set(trips);
+        self.set(self.makeTripsRecent(trips));
         self.startDate = 0;
         coms.trigger('filter:applyAllFilters');
       });
