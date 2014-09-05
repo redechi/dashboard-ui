@@ -101,7 +101,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
     fetchDemoTrips: function() {
       var self = this;
-      $.getJSON('./assets/data/demo.json', function(trips) {
+      $.getJSON('./assets/data/trips.json', function(trips) {
         self.set(self.makeTripsRecent(trips));
         self.startDate = 0;
         coms.trigger('filter:applyAllFilters');

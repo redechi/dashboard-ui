@@ -54,8 +54,10 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
       coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
 
-      //get a list of all vehicles and update filter
-      vehiclesCollection.fetch({error: login.fetchErrorHandler}).always(_.bind(this.updateVehicleList, this));
+      coms.on('filter:updateVehicleList', _.bind(this.updateVehicleList, this));
+
+      //get vehicles
+      vehiclesCollection.fetchInitial();
 
       //update filter text on buttons
       this.collection.each(this.updateFilterText);
@@ -368,15 +370,12 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     updateVehicleList: function() {
-      var self = this;
-      setTimeout(function() {
-        $('.vehicleFilterValue', self.$el).append(vehiclesCollection.map(function(vehicle) {
-          return $('<li>')
-            .attr('data-value', vehicle.get('id'))
-            .text(vehicle.get('display_name'))
-            .append('<i>');
-        }));
-      }, 0);
+      $('.vehicleFilterValue', this.$el).append(vehiclesCollection.map(function(vehicle) {
+        return $('<li>')
+          .attr('data-value', vehicle.get('id'))
+          .text(vehicle.get('display_name'))
+          .append('<i>');
+      }));
     },
 
 
