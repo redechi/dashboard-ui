@@ -1,6 +1,7 @@
 define([
   'domReady!',
   'backbone',
+  'communicator',
   'router',
   'regionManager',
   './controllers/login',
@@ -12,7 +13,7 @@ define([
   'bootstrap/popover'
 ],
 
-function( doc, Backbone, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
+function( doc, Backbone, coms, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
   'use strict';
 
   (function( jQuery ) {
@@ -84,6 +85,11 @@ function( doc, Backbone, router, regionManager, login, tripsCollection, OverlayL
 
       $popover.popover('hide');
     });
+  });
+
+  //update mouseUp status on body
+  $('body').on('mouseup', function() {
+    coms.trigger('app:mouseup');
   });
 
   //format for moment's calendar method
