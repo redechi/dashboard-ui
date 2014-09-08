@@ -239,17 +239,6 @@ module.exports = function (grunt) {
       }
     },
 
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/assets/img',
-          src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%= yeoman.dist %>/assets/img'
-        }]
-      }
-    },
-
     htmlmin: {
       dist: {
         options: {
@@ -391,7 +380,6 @@ module.exports = function (grunt) {
     'requirejs:distMainCss',
     'requirejs:distInlineCss',
     'requirejs:prodjs',
-    // 'imagemin',
     'htmlmin',
     'appcache',
     'copy',
