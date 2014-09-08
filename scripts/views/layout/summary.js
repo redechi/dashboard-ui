@@ -22,6 +22,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       $(window).on('resize', this.resize);
 
       coms.on('error:403', _.bind(this.error403, this));
+      coms.on('error:500', _.bind(this.error500, this));
       coms.on('error:noTrips', _.bind(this.noTrips, this));
 
       coms.on('trips:showSingleTripOverlay', _.bind(this.showSingleTripOverlay, this));
@@ -71,6 +72,11 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
     error403: function () {
       regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error403'}));
+    },
+
+
+    error500: function () {
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error500'}));
     },
 
 

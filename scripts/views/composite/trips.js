@@ -25,6 +25,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       coms.on('trips:unhighlightByDate', _.bind(this.unhighlightByDate, this));
       coms.on('trips:highlight', _.bind(this.highlightTrips, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
+      coms.on('error:403', _.bind(this.setError, this));
+      coms.on('error:500', _.bind(this.setError, this));
 
       $(window).on("resize", _.bind(this.resize, this));
 
@@ -37,7 +39,9 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       }, 200);
     },
 
+
     tripsHeight: 0,
+
 
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
@@ -67,6 +71,11 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
     collectionEvents: {
       'reset': 'render'
+    },
+
+
+    setError: function() {
+      this.options.error = true;
     },
 
 
@@ -410,19 +419,13 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
       //toggle class if no trips
       $('body').toggleClass('noMatchingTrips', (this.collection.length === 0));
 
-      //close loading overlay unless no matching trips
-      if(this.collection.length > 0 || this.options.fetching === false) {
+      //close loading overlay unless no matching trips or error
+      if((this.collection.length > 0 || this.options.fetching === false) && !this.options.error) {
         coms.trigger('overlay:hide');
       }
 
       //Set sort paramaters
       $('.sortValue li[data-value="' + this.options.sortType + '"]', this.$el).addClass('selected');
-
-
-      //close all open popovers, unless no matching trips
-      // if(this.collection.length > 0) {
-      //   coms.trigger('filter:closePopovers');
-      // }
 
       $('.trips ul', this.$el).height(this.tripsHeight);
       this.options.fetching = false;

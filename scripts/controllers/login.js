@@ -128,6 +128,10 @@ function( Backbone, coms ) {
     fetchErrorHandler: function(model, result) {
       if(result.status === 403) {
         coms.trigger('error:403');
+      } else if (result.status >= 500 && result.status < 600) {
+        coms.trigger('error:500');
+      } else {
+        coms.trigger('error:500');
       }
     }
 
