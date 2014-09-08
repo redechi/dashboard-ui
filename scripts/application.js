@@ -87,11 +87,6 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
     });
   });
 
-  //update mouseUp status on body
-  $('body').on('mouseup', function() {
-    coms.trigger('app:mouseup');
-  });
-
   //format for moment's calendar method
   moment.locale('en', {
     calendar : {

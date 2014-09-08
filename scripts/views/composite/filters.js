@@ -37,7 +37,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'changeDate .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
       'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
       'mouseleave .popover': 'mouseLeavePopover',
-      'mousedown .popover': 'setMouseDown'
+      'slideStart .popover input.slider': 'slideStart',
+      'slideStop .popover input.slider': 'slideStop',
     },
 
     initialize: function() {
@@ -56,9 +57,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
 
       coms.on('filter:updateVehicleList', _.bind(this.updateVehicleList, this));
-
-      //update mouseDown status
-      coms.on('app:mouseup', _.bind(this.setMouseUp, this));
 
       //get vehicles
       vehiclesCollection.fetchInitial();
@@ -80,13 +78,13 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     childView: FilterView,
 
 
-    setMouseDown: function() {
-      this.mouseDown = true;
+    slideStart: function() {
+      this.sliding = true;
     },
 
 
-    setMouseUp: function() {
-      this.mouseDown = false;
+    slideStop: function() {
+      this.sliding = false;
     },
 
 
@@ -178,9 +176,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     mouseLeavePopover: function(e) {
-      //allow date selector mouseover and don't close if mousedown
+      //allow date selector mouseover and don't close if slider is sliding
       var datePickerDivs = '.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch';
-      if(this.mouseDown || $(e.relatedTarget).is(datePickerDivs) || $(e.relatedTarget).parents('.datepicker').length !== 0) {
+      if(this.sliding || $(e.relatedTarget).is(datePickerDivs) || $(e.relatedTarget).parents('.datepicker').length !== 0) {
         return;
       } else {
         this.closePopovers();
@@ -419,7 +417,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         $('.popover .' + name + 'FilterValue', this.$el).slider({
           min: 0,
           max: Math.ceil(filter.get('max')),
-          formater: filter.get('formatter'),
+          formatter: filter.get('formatter'),
           value: filter.get('value') || [0, filter.get('max')],
           tooltip: 'hide'
         });
