@@ -26,7 +26,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
       e.preventDefault();
 
       ga('send', 'event', 'button', 'click', 'login');
-      
+
       $('#loginDemo', this.$el).toggle(!$('#loginDemo', this.$el).is(':visible'));
       $('#loginForm', this.$el).toggle(!$('#loginForm', this.$el).is(':visible'));
     },
@@ -94,8 +94,7 @@ function( Backbone, regionManager, LoginTmpl, login ) {
             }
           }
         ).fail(function(jqXHR, textStatus, error) {
-          console.error(jqXHR);
-          if(jqXHR.status === 401) {
+          if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
             self.errorAlert('Invalid email or password', true, true);
           } else {
             self.errorAlert('Unknown error', false, false);
