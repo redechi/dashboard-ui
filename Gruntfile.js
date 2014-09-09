@@ -103,10 +103,7 @@ module.exports = function (grunt) {
 
     inline: {
       dist: {
-        options:{
-          uglify: true
-        },
-        src: [ 'dist/app.html' ]
+        src: ['<%= yeoman.dist %>/*.html']
       }
     },
 
