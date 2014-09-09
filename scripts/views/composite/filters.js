@@ -58,11 +58,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
       coms.on('filter:updateVehicleList', _.bind(this.updateVehicleList, this));
 
-      //get vehicles
-      vehiclesCollection.fetchInitial();
+      //handle unattached vehicles
+      coms.on('filter:checkUnattachedVehicles', _.bind(this.toggleUnattachedVehicles, this));
 
       //update filter text on buttons
-      this.collection.each(this.updateFilterText);
+      this.collection.each(_.bind(this.updateFilterText, this));
 
       // initialize addFilter popover
       this.initializePopover();
@@ -88,7 +88,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    attachHtml: function(collectionView, childView, index) {
+    attachHtml: function(collectionView, childView) {
       collectionView.$('ul.appliedFilters .addFilterContainer').before(childView.el);
     },
 
@@ -161,8 +161,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     checkIfClosePopovers: function(collection) {
-      var dateFilterValueSelected = this.collection.findWhere({name: 'date'}).get('valueSelected');
-      if(collection.length > 0 && dateFilterValueSelected !== 'custom') {
+      var dateFilter = this.collection.findWhere({name: 'date'});
+
+      if(collection.length > 0 && dateFilter.get('valueSelected') !== 'custom') {
         $('.btn-popover[data-filter="date"], .btn-popover[data-filter="vehicle"]', this.$el).popover('hide');
       } else {
         this.deactivateAll();
@@ -176,8 +177,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     mouseLeavePopover: function(e) {
-      //allow date selector mouseover and don't close if slider is sliding
       var datePickerDivs = '.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch';
+
+      //allow date selector mouseover and don't close if slider is sliding
       if(this.sliding || $(e.relatedTarget).is(datePickerDivs) || $(e.relatedTarget).parents('.datepicker').length !== 0) {
         return;
       } else {
@@ -205,6 +207,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     removeFilter: function(e) {
       var name = $(e.target).data('filter'),
           filter = this.collection.findWhere({name: name});
+
       this.collection.remove(filter);
       this.updateFilterList();
       coms.trigger('filter:applyAllFilters');
@@ -236,8 +239,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
     updateFilterText: function(filter) {
       var name = filter.get('name');
+
       filter.get('updateValueText').call(filter);
-      $('.btn-filter[data-filter="' + name + '"] .btn-text').text(filter.get('valueText'));
+      $('.btn-filter[data-filter="' + name + '"] .btn-text', this.$el).text(filter.get('valueText'));
     },
 
 
@@ -387,12 +391,17 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     updateVehicleList: function() {
-      $('.vehicleFilterValue', this.$el).append(vehiclesCollection.map(function(vehicle) {
-        return $('<li>')
+      var self = this,
+          filter = this.collection.findWhere({name: 'vehicle'});
+
+      vehiclesCollection.each(function(vehicle) {
+        $('<li>')
           .attr('data-value', vehicle.get('id'))
           .text(vehicle.get('display_name'))
-          .append('<i>');
-      }));
+          .append('<i>')
+          .insertAfter($('.vehicleFilterValue li[data-value="all"]', self.$el));
+      });
+      this.updateFilterText(filter);
     },
 
 
@@ -464,8 +473,23 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
+    hasUnattachedVehicles: function(trips) {
+      return trips.some(function(trip) {
+        return trip.get('vehicle') === undefined;
+      });
+    },
+
+
+    toggleUnattachedVehicles: function(trips) {
+      $('.vehicleFilterValue li[data-value="other"]', this.$el).toggleClass('hide', !this.hasUnattachedVehicles(trips));
+    },
+
+
     onShow: function() {
       this.updateNavButtons();
+
+      //get vehicles
+      vehiclesCollection.fetchInitial();
     }
   });
 

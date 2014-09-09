@@ -121,6 +121,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
         var trips = this.fetchFromSessionStorage();
         if(trips && trips.length) {
           this.set(trips);
+          coms.trigger('filter:checkUnattachedVehicles', this);
           coms.trigger('filter:applyAllFilters');
         } else {
           this.fetchPage(start, end);
@@ -157,7 +158,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           if(!self.length) {
             self.checkForNoTrips();
           }
-
+          coms.trigger('filter:checkUnattachedVehicles', self);
           coms.trigger('filter:applyAllFilters');
         }
       });

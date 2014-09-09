@@ -19,6 +19,8 @@ function( formatters, vehiclesCollection ) {
       func: function(trip) {
         if(this.get('value') === 'all') {
           return true;
+        } else if(this.get('value') === 'other') {
+          return (trip.get('vehicle') === undefined);
         } else {
           var vehicleId = trip.get('vehicle') ? trip.get('vehicle').id : undefined;
           return (this.get('value') === vehicleId);
@@ -31,6 +33,8 @@ function( formatters, vehiclesCollection ) {
         var valueText;
         if(this.get('value') === 'all') {
           valueText = 'all my vehicles';
+        } else if(this.get('value') === 'other') {
+          valueText = 'other vehicle(s)';
         } else {
           var vehicle = vehiclesCollection.get(this.get('value'));
           valueText = (vehicle) ? vehicle.get('display_name') : 'Unknown';
