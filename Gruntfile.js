@@ -294,6 +294,19 @@ module.exports = function (grunt) {
       }
     },
 
+    cacheBust: {
+      options: {
+        encoding: 'utf8',
+        algorithm: 'md5',
+        length: 16
+      },
+      assets: {
+        files: [{
+          src: '<%= yeoman.dist %>/*.html'
+        }]
+      }
+    },
+
     replace: {
       buildNumber: {
         src: '<%= yeoman.dist %>/*.html',
@@ -370,6 +383,7 @@ module.exports = function (grunt) {
     'compress',
     'replace',
     'inline',
+    'cacheBust',
     'connect:testserver',
     'watch'
   ]);
@@ -385,7 +399,8 @@ module.exports = function (grunt) {
     'copy',
     'compress',
     'replace',
-    'inline'
+    'inline',
+    'cacheBust'
   ]);
 
 };
