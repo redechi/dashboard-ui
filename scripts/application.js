@@ -113,19 +113,24 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
 
 
   App.addInitializer( function () {
+    var overlayRegion = regionManager.getRegion('main_overlay'),
+        overlayLayout;
+
     //check for browser compatibility
     if(!Modernizr.svg || !Modernizr.cors || window.location.search.indexOf('unsupported') !== -1) {
-      var overlayRegion = regionManager.getRegion('main_overlay');
-      var o = new OverlayLayout({type: 'notSupported'});
-      overlayRegion.show(o);
+      overlayLayout = new OverlayLayout({type: 'notSupported'});
+      overlayRegion.show(overlayLayout);
     }
 
     //check for mobile
     var md = new MobileDetect(window.navigator.userAgent);
     if(md.phone()) {
-      var overlayRegion = regionManager.getRegion('main_overlay');
-      var o = new OverlayLayout({type: 'notSupportedMobile'});
-      overlayRegion.show(o);
+      overlayLayout = new OverlayLayout({
+        type: 'notSupportedMobile',
+        isiPhone: md.is('iPhone'),
+        isAndroid: md.is('android')
+      });
+      overlayRegion.show(overlayLayout);
     }
 
     //show staging banner, if on staging

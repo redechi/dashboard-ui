@@ -84,6 +84,20 @@
       display: inline-block;
       padding: 15px 4px 0;
     }
+
+    .iOSAppLink {
+      display: none;
+    }
+  }
+
+  .notSupportedMobile.isiPhone .notSupportedMobile {
+    .iOSAppLink {
+      display: block;
+    }
+
+    .learnMoreLink {
+      display: none;
+    }
   }
 
   .error403 .error403,
@@ -94,7 +108,7 @@
     top: 106px;
     margin-left: -190px;
   }
-  
+
   .noTrips .noTrips {
     display: block;
     width: 380px;
