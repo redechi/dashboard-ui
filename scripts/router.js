@@ -11,6 +11,7 @@ define([
       window.addEventListener('hashchange', this.trackPageview, false);
     },
 
+
     appRoutes: {
       '(/)': 'showSummaryLayout',
       'login': 'showLoginLayout',
@@ -20,6 +21,7 @@ define([
       'logout': 'logOut',
       '*notFound': 'notFound'
     },
+    
 
     route: function(route, name, callback) {
         var router = this;

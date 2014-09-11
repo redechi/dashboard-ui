@@ -55,7 +55,7 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
     onShow: function() {
       this.loadGetSatisfaction();
     },
-    
+
 
     loadGetSatisfaction: function() {
       //Get Satisfaction feedback link

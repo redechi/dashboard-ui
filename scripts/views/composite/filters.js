@@ -139,7 +139,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       Backbone.history.navigate(fragment);
       filtersCollection.fromUrl();
       this.updateFilterList();
-      this.collection.each(this.updateFilterText);
+      this.collection.each(_.bind(this.updateFilterText, this));
       coms.trigger('filter:applyAllFilters');
     },
 

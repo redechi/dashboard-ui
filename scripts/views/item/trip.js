@@ -43,6 +43,7 @@ function( Backbone, coms, TripTmpl, formatters ) {
       coms.trigger('trips:showSingleTrip', this.model);
     },
 
+
     onRender: function() {
       this.$el
         .attr({ 'data-id': this.model.get('id') })

@@ -64,8 +64,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       var self = this;
 
       trips.forEach(function(model) {
-        var id = model.get('id'),
-            path = self.pathsLayer.getLayer(model.get('pathID')),
+        var path = self.pathsLayer.getLayer(model.get('pathID')),
             startMarker = self.markersLayer.getLayer(model.get('startMarkerID')),
             endMarker = self.markersLayer.getLayer(model.get('endMarkerID'));
 
@@ -93,8 +92,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
       var self = this;
 
       trips.forEach(function(model) {
-        var id = model.get('id'),
-            path = self.pathsLayer.getLayer(model.get('pathID')),
+        var path = self.pathsLayer.getLayer(model.get('pathID')),
             startMarker = self.markersLayer.getLayer(model.get('startMarkerID')),
             endMarker = self.markersLayer.getLayer(model.get('endMarkerID'));
 
@@ -128,9 +126,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     selectTrip: function (model) {
-      var self = this,
-          id = model.get('id'),
-          path = this.pathsLayer.getLayer(model.get('pathID')),
+      var path = this.pathsLayer.getLayer(model.get('pathID')),
           startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
           endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
@@ -157,9 +153,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
 
     deselectTrip: function (model) {
-      var self = this,
-          id = model.get('id'),
-          path = this.pathsLayer.getLayer(model.get('pathID')),
+      var path = this.pathsLayer.getLayer(model.get('pathID')),
           startMarker = this.markersLayer.getLayer(model.get('startMarkerID')),
           endMarker = this.markersLayer.getLayer(model.get('endMarkerID'));
 
