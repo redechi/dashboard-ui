@@ -84,6 +84,19 @@ function( Backbone, coms ) {
           };
 
           options.complete = function(xhr, status) {
+
+
+            if (status !== 200 && status !== 204) {
+              this.retryCount = this.retryCount || 0;
+              this.retryMax = this.retryMax || 3;
+              this.retryCount++;
+
+              if (this.retryCount < this.retryMax) {
+                return $.ajax(this);
+              }
+            }
+
+
             try {
               if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1 && this.url.indexOf('/trips') === -1) {
                 sessionStorage.setItem(this.url, xhr.responseText);
