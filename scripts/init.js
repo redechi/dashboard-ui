@@ -43,7 +43,7 @@ require.config({
     moment: '../bower_components/momentjs/moment',
     d3: '../bower_components/d3/d3',
     nvd3: '../bower_components/nvd3/nv.d3',
-    mapbox: '../bower_components/mapbox.js/index',
+    mapbox: '../bower_components/mapbox.js/mapbox',
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
 
