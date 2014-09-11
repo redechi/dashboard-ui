@@ -5,10 +5,11 @@ define([
   'hbs!tmpl/item/graph_tmpl',
   'controllers/stats',
   'controllers/unit_formatters',
+  'controllers/analytics',
   'd3',
   'nvd3'
 ],
-function( Backbone, coms, filters, GraphTmpl, stats, formatters, d3, nvd3 ) {
+function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, nvd3 ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -584,6 +585,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, d3, nvd3 ) {
 
       $('.graphType', this.$el).popover('hide');
       $('.graphType span', this.$el).text(graphTypeName);
+
+      analytics.trackEvent('graph type', 'selected', graphTypeName);
 
       this.getGraphData();
       this.makeGraph();

@@ -4,9 +4,10 @@ define([
   '../../communicator',
   'hbs!tmpl/item/map_tmpl',
   '../../controllers/unit_formatters',
-  '../../controllers/map_helpers'
+  '../../controllers/map_helpers',
+  '../../controllers/analytics'
 ],
-function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
+function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -222,6 +223,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
           })
           .on('click', function() {
             coms.trigger('trips:toggleSelect', [model], {scroll: true});
+            analytics.trackEvent('select trip from map', 'click');
           });
         }
       }
@@ -237,6 +239,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
           startMarker.on('click', function() {
             coms.trigger('trips:toggleSelect', [model], {scroll: true});
+            analytics.trackEvent('select trip from map', 'click');
           });
         }
       }
@@ -298,11 +301,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
 
     zoomIn: function() {
       this.mapbox.zoomIn();
+      analytics.trackEvent('map zoom in', 'click');
     },
 
 
     zoomOut: function() {
       this.mapbox.zoomOut();
+      analytics.trackEvent('map zoom out', 'click');
     },
 
 
@@ -394,10 +399,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers ) {
     },
 
 
-    toggleTripEvents: function() {
+    toggleTripEvents: function(e) {
       window.options.showTripEvents = $('.showTripEvents', this.$el).is(':checked');
       if(window.options.showTripEvents) {
         this.showTripEventsMap();
+        if(e) {
+          analytics.trackEvent('trip events', 'click');
+        }
       } else {
         this.hideTripEvents();
       }

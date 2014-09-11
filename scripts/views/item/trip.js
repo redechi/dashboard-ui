@@ -2,9 +2,9 @@ define([
   'backbone',
   'communicator',
   'hbs!tmpl/item/trip_tmpl',
-  '../../controllers/unit_formatters'
+  '../../controllers/analytics'
 ],
-function( Backbone, coms, TripTmpl, formatters ) {
+function( Backbone, coms, TripTmpl, analytics ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -35,6 +35,8 @@ function( Backbone, coms, TripTmpl, formatters ) {
       coms.trigger('trips:toggleSelect', [this.model]);
       //because mouse must be on top of this element, keep it highlighted
       coms.trigger('trips:highlight', [this.model]);
+
+      analytics.trackEvent('select trip', 'click');
     },
 
 

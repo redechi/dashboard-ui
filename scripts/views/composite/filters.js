@@ -9,9 +9,10 @@ define([
   '../../collections/trips',
   'hbs!tmpl/composite/filters_tmpl',
   '../../controllers/filter',
-  '../../controllers/unit_formatters'
+  '../../controllers/unit_formatters',
+  '../../controllers/analytics'
 ],
-function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters ) {
+function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters, analytics ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -123,6 +124,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       if(Backbone.history.previous.length) {
         Backbone.history.next.unshift(Backbone.history.fragment);
         this.navigate(Backbone.history.previous.pop());
+        analytics.trackEvent('undo filter', 'click');
       }
     },
 
@@ -131,6 +133,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       if(Backbone.history.next.length) {
         Backbone.history.previous.push(Backbone.history.fragment);
         this.navigate(Backbone.history.next.shift());
+        analytics.trackEvent('redo filter', 'click');
       }
     },
 
@@ -220,6 +223,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       filtersCollection.applyInitialFilters();
       this.updateFilterList();
       coms.trigger('filter:applyAllFilters');
+      analytics.trackEvent('reset filters', 'click');
     },
 
 
@@ -275,6 +279,10 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           coms.trigger('filter:updateDateFilter');
           coms.trigger('filter:applyAllFilters');
         }
+
+        if(valueSelected === 'all') {
+          analytics.trackEvent('show all trips', 'click');
+        }
       }
     },
 
@@ -298,6 +306,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
         coms.trigger('filter:updateDateFilter');
         coms.trigger('filter:applyAllFilters');
+
+        analytics.trackEvent('custom date filter', 'click');
       }
     },
 

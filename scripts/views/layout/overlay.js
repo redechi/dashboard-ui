@@ -2,9 +2,10 @@ define([
   'backbone',
   'communicator',
   'regionManager',
-  'hbs!tmpl/layout/overlay_tmpl'
+  'hbs!tmpl/layout/overlay_tmpl',
+  '../../controllers/analytics'
 ],
-function( Backbone, coms, regionManager, OverlayTmpl ) {
+function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -12,6 +13,18 @@ function( Backbone, coms, regionManager, OverlayTmpl ) {
     initialize: function() {
       coms.on('overlay:hide', _.bind(this.closeOverlay, this));
       coms.on('overlay:page', _.bind(this.updateLoadingOverlayCount, this));
+
+      if(this.options.type === 'notSupported') {
+        analytics.trackPageview('/unsupported');
+      } else if(this.options.type === 'notSupportedMobile') {
+        analytics.trackPageview('/unsupportedMobile');
+      } else if(this.options.type === 'noTrips') {
+        analytics.trackEvent('no trips overlay', 'shown');
+      } else if(this.options.type === 'error403') {
+        analytics.trackEvent('error403 overlay', 'shown');
+      } else if(this.options.type === 'error500') {
+        analytics.trackEvent('error500 overlay', 'shown');
+      }
     },
 
 

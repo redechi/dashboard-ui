@@ -3,9 +3,10 @@ define([
   'communicator',
   'hbs!tmpl/item/header_tmpl',
   '../../models/user',
-  '../../controllers/login'
+  '../../controllers/login',
+  '../../controllers/analytics'
 ],
-function( Backbone, coms, HeaderTmpl, user, login ) {
+function( Backbone, coms, HeaderTmpl, user, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -28,7 +29,9 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
 
     events: {
       'click .login': 'login',
-      'click .whatIsAutomatic': 'whatIsAutomatic'
+      'click .whatIsAutomatic': 'whatIsAutomatic',
+      'click .buyNow': 'buyNow',
+      'click .widget-link': 'supportLink'
     },
 
 
@@ -38,12 +41,22 @@ function( Backbone, coms, HeaderTmpl, user, login ) {
 
 
     login: function() {
-      ga('send', 'event', 'button', 'click', 'login');
+      analytics.trackEvent('login', 'click');
     },
 
 
     whatIsAutomatic: function() {
-      ga('send', 'event', 'button', 'click', 'whatIsAutomatic');
+      analytics.trackEvent('what is Automatic', 'click');
+    },
+
+
+    buyNow: function() {
+      analytics.trackEvent('buy now', 'click');
+    },
+
+
+    supportLink: function() {
+      analytics.trackEvent('support', 'click');
     },
 
 

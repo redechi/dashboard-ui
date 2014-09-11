@@ -2,9 +2,10 @@ define([
   'backbone',
   'regionManager',
   'hbs!tmpl/layout/login_tmpl',
-  '../../controllers/login'
+  '../../controllers/login',
+  '../../controllers/analytics'
 ],
-function( Backbone, regionManager, LoginTmpl, login ) {
+function( Backbone, regionManager, LoginTmpl, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -25,20 +26,20 @@ function( Backbone, regionManager, LoginTmpl, login ) {
     toggleLoginForm: function(e) {
       e.preventDefault();
 
-      ga('send', 'event', 'button', 'click', 'login');
-
       $('#loginDemo', this.$el).toggle(!$('#loginDemo', this.$el).is(':visible'));
       $('#loginForm', this.$el).toggle(!$('#loginForm', this.$el).is(':visible'));
+
+      analytics.trackEvent('login', 'click');
     },
 
 
     learnMore: function() {
-      ga('send', 'event', 'button', 'click', 'learnMore');
+      analytics.trackEvent('learn more', 'click');
     },
 
 
     tryDemo: function() {
-      ga('send', 'event', 'button', 'click', 'tryDemo');
+      analytics.trackEvent('try demo', 'click');
     },
 
 

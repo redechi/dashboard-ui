@@ -1,14 +1,15 @@
 define([
   'backbone',
   './controllers/router',
-  './controllers/login'
-],function ( backbone, router, login ) {
+  './controllers/login',
+  './controllers/analytics'
+],function ( backbone, router, login, analytics ) {
   'use strict';
 
   var Router = backbone.Marionette.AppRouter.extend({
 
     initialize: function() {
-      window.addEventListener('hashchange', this.trackPageview, false);
+      window.addEventListener('hashchange', _.bind(this.trackPageview, this), false);
     },
 
 
@@ -55,30 +56,21 @@ define([
 
 
     trackPageview: function () {
-      var gaFragment = Backbone.history.getFragment();
+      var urlFragment = Backbone.history.getFragment();
+
+      //prepend slash
+      if (!/^\//.test(urlFragment) && urlFragment !== '') {
+        urlFragment = '/' + urlFragment;
+      }
 
       //only track if changed.
-      if(this.gaFragment === gaFragment) {
+      if(this.urlFragment === urlFragment) {
         return;
       }
 
-      this.gaFragment = gaFragment;
+      this.urlFragment = urlFragment;
 
-      //prepend slash
-      if (!/^\//.test(gaFragment) && gaFragment !== '') {
-        gaFragment = '/' + gaFragment;
-      }
-
-      var ga;
-      if (window.GoogleAnalyticsObject && window.GoogleAnalyticsObject !== 'ga') {
-        ga = window.GoogleAnalyticsObject;
-      } else {
-        ga = window.ga;
-      }
-
-      if (typeof ga !== 'undefined') {
-        ga('send', 'pageview', gaFragment);
-      }
+      analytics.trackPageview(urlFragment);
     },
 
 

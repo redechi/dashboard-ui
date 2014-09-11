@@ -5,11 +5,12 @@ define([
   'views/item/trip',
   'hbs!tmpl/composite/trips_list_tmpl',
   'controllers/unit_formatters',
+  'controllers/analytics',
   'collections/trips',
   'fileSaver',
   'jquery.scrollTo'
 ],
-function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCollection, fileSaver ) {
+function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -120,12 +121,14 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
 
     selectAll: function() {
       coms.trigger('trips:toggleSelect', this.collection, {selected: true});
+      analytics.trackEvent('select all', 'click');
     },
 
 
     deselectAll: function() {
       var trips = this.collection.where({selected: true});
       coms.trigger('trips:toggleSelect', trips, {selected: false});
+      analytics.trackEvent('deselect all', 'click');
     },
 
 
@@ -232,6 +235,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
           tripsCollection.fetchAll();
         }
       }
+
+      analytics.trackEvent('export', 'downloaded', exportOption);
     },
 
 
@@ -351,6 +356,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
     changeSortDirection: function() {
       this.options.sortDirection = (this.options.sortDirection === 'sortDown') ? 'sortUp' : 'sortDown';
       this.doSort();
+
+      analytics.trackEvent('sort direction', 'changed', this.options.sortDirection);
     },
 
 
@@ -360,6 +367,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, tripsCo
         this.options.sortTypeName = $(e.target).text();
 
         $('.sortType', this.$el).popover('hide');
+
+        analytics.trackEvent('sort type', 'selected', this.options.sortTypeName);
       }
 
       this.doSort();

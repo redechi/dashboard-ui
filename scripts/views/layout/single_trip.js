@@ -6,9 +6,10 @@ define([
   '../item/map',
   '../item/header',
   'hbs!tmpl/layout/single_trip_tmpl',
-  '../layout/overlay'
+  '../layout/overlay',
+  '../../controllers/analytics'
 ],
-function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, OverlayLayout ) {
+function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, OverlayLayout, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -94,6 +95,8 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       this.singleTripView.render();
 
       this.updateTripNavigation();
+
+      analytics.trackPageview('/trips/' + this.model.get('id'));
     },
 
 
