@@ -7,13 +7,14 @@ define([
   './controllers/login',
   './collections/trips',
   './views/layout/overlay',
+  'fastclick',
   'mobile-detect',
   'bootstrapSlider',
   'bootstrapDatepicker',
   'bootstrap/popover'
 ],
 
-function( doc, Backbone, coms, router, regionManager, login, tripsCollection, OverlayLayout, MobileDetect ) {
+function( doc, Backbone, coms, router, regionManager, login, tripsCollection, OverlayLayout, FastClick, MobileDetect ) {
   'use strict';
 
   (function( jQuery ) {
@@ -66,6 +67,11 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
 
   //make sure Modernizr is here
   Modernizr = Modernizr || {};
+
+  //add fastclick to make mobile touch events fast
+  $(function() {
+    FastClick.attach(document.body);
+  });
 
   //Log the user in if access token present
   login.login();

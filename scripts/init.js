@@ -47,6 +47,8 @@ require.config({
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
 
+    fastclick: '../bower_components/fastclick/lib/fastclick',
+
     domReady: '../bower_components/domReady/domReady',
 
     /* alias all marionette libs */
