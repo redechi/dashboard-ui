@@ -28,18 +28,16 @@ function( Backbone, regionManager, LoginTmpl, login, analytics ) {
 
       $('#loginDemo', this.$el).toggle(!$('#loginDemo', this.$el).is(':visible'));
       $('#loginForm', this.$el).toggle(!$('#loginForm', this.$el).is(':visible'));
-
-      analytics.trackEvent('login', 'click');
     },
 
 
     learnMore: function() {
-      analytics.trackEvent('learn more', 'click');
+      analytics.trackEvent('learn more', 'Click');
     },
 
 
     tryDemo: function() {
-      analytics.trackEvent('try demo', 'click');
+      analytics.trackEvent('try demo', 'Click');
     },
 
 
@@ -90,6 +88,8 @@ function( Backbone, regionManager, LoginTmpl, login, analytics ) {
             if(data && data.access_token) {
               $('#loginForm .alert').addClass('invisible');
               login.setCookie('token', data.access_token, expires);
+              analytics.trackEvent('login', 'Login');
+              analytics.identifyUser(email);
               sessionStorage.setItem('accessToken', data.access_token);
               Backbone.history.navigate('#/');
             }

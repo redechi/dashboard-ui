@@ -223,7 +223,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           })
           .on('click', function() {
             coms.trigger('trips:toggleSelect', [model], {scroll: true});
-            analytics.trackEvent('select trip from map', 'click');
+            analytics.trackEvent('trip path on map', 'Select');
           });
         }
       }
@@ -239,7 +239,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
           startMarker.on('click', function() {
             coms.trigger('trips:toggleSelect', [model], {scroll: true});
-            analytics.trackEvent('select trip from map', 'click');
+            analytics.trackEvent('trip path on map', 'Select');
           });
         }
       }
@@ -301,13 +301,11 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
     zoomIn: function() {
       this.mapbox.zoomIn();
-      analytics.trackEvent('map zoom in', 'click');
     },
 
 
     zoomOut: function() {
       this.mapbox.zoomOut();
-      analytics.trackEvent('map zoom out', 'click');
     },
 
 
@@ -404,7 +402,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
       if(window.options.showTripEvents) {
         this.showTripEventsMap();
         if(e) {
-          analytics.trackEvent('trip events', 'click');
+          analytics.trackEvent('trip events', 'Click');
         }
       } else {
         this.hideTripEvents();

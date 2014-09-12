@@ -124,7 +124,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       if(Backbone.history.previous.length) {
         Backbone.history.next.unshift(Backbone.history.fragment);
         this.navigate(Backbone.history.previous.pop());
-        analytics.trackEvent('undo filter', 'click');
+        analytics.trackEvent('undo filter', 'Click');
       }
     },
 
@@ -133,7 +133,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       if(Backbone.history.next.length) {
         Backbone.history.previous.push(Backbone.history.fragment);
         this.navigate(Backbone.history.next.shift());
-        analytics.trackEvent('redo filter', 'click');
+        analytics.trackEvent('redo filter', 'Click');
       }
     },
 
@@ -204,6 +204,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       this.collection.saveFilters();
       this.collection.add(filter);
       this.updateFilterList();
+      analytics.trackEvent(filterName + ' filter', 'Add');
     },
 
 
@@ -223,7 +224,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       filtersCollection.applyInitialFilters();
       this.updateFilterList();
       coms.trigger('filter:applyAllFilters');
-      analytics.trackEvent('reset filters', 'click');
+      analytics.trackEvent('reset filters', 'Click');
     },
 
 
@@ -280,8 +281,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           coms.trigger('filter:applyAllFilters');
         }
 
-        if(valueSelected === 'all') {
-          analytics.trackEvent('show all trips', 'click');
+        if(valueSelected === 'allTime') {
+          analytics.trackEvent('show all trips', 'Click');
         }
       }
     },
@@ -307,7 +308,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         coms.trigger('filter:updateDateFilter');
         coms.trigger('filter:applyAllFilters');
 
-        analytics.trackEvent('custom date filter', 'click');
+        analytics.trackEvent('custom date filter', 'Click');
       }
     },
 

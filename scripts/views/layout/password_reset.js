@@ -1,9 +1,10 @@
 define([
   'backbone',
   'hbs!tmpl/layout/password_reset_tmpl',
-  '../../controllers/login'
+  '../../controllers/login',
+  '../../controllers/analytics'
 ],
-function( Backbone, PasswordResetTmpl, login ) {
+function( Backbone, PasswordResetTmpl, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -126,6 +127,9 @@ function( Backbone, PasswordResetTmpl, login ) {
       if(this.options.token) {
         $('#passwordResetRequestForm', this.$el).hide();
         $('#passwordResetForm', this.$el).show();
+        analytics.trackEvent('reset password form', 'Show');
+      } else {
+        analytics.trackEvent('reset password request', 'Show');
       }
     }
   });

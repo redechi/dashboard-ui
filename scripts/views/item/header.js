@@ -28,7 +28,6 @@ function( Backbone, coms, HeaderTmpl, user, login, analytics ) {
 
 
     events: {
-      'click .login': 'login',
       'click .whatIsAutomatic': 'whatIsAutomatic',
       'click .buyNow': 'buyNow',
       'click .widget-link': 'supportLink'
@@ -40,23 +39,18 @@ function( Backbone, coms, HeaderTmpl, user, login, analytics ) {
     },
 
 
-    login: function() {
-      analytics.trackEvent('login', 'click');
-    },
-
-
     whatIsAutomatic: function() {
-      analytics.trackEvent('what is Automatic', 'click');
+      analytics.trackEvent('what is Automatic', 'Click');
     },
 
 
     buyNow: function() {
-      analytics.trackEvent('buy now', 'click');
+      analytics.trackEvent('buy now', 'Click');
     },
 
 
     supportLink: function() {
-      analytics.trackEvent('support', 'click');
+      analytics.trackEvent('support', 'Click');
     },
 
 

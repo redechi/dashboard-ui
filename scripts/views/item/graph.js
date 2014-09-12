@@ -586,7 +586,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       $('.graphType', this.$el).popover('hide');
       $('.graphType span', this.$el).text(graphTypeName);
 
-      analytics.trackEvent('graph type', 'selected', graphTypeName);
+      analytics.trackEvent('graph type', 'Change', graphTypeName);
 
       this.getGraphData();
       this.makeGraph();

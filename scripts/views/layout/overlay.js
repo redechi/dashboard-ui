@@ -19,11 +19,11 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
       } else if(this.options.type === 'notSupportedMobile') {
         analytics.trackPageview('/unsupportedMobile');
       } else if(this.options.type === 'noTrips') {
-        analytics.trackEvent('no trips overlay', 'shown');
+        analytics.trackEvent('no trips overlay', 'Show');
       } else if(this.options.type === 'error403') {
-        analytics.trackEvent('error403 overlay', 'shown');
+        analytics.trackEvent('error403 overlay', 'Show');
       } else if(this.options.type === 'error500') {
-        analytics.trackEvent('error500 overlay', 'shown');
+        analytics.trackEvent('error500 overlay', 'Show');
       }
     },
 

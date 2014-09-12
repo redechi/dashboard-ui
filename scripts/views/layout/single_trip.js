@@ -97,6 +97,7 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       this.updateTripNavigation();
 
       analytics.trackPageview('/trips/' + this.model.get('id'));
+      analytics.trackEvent('single trip', 'Show');
     },
 
 

@@ -121,14 +121,14 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
     selectAll: function() {
       coms.trigger('trips:toggleSelect', this.collection, {selected: true});
-      analytics.trackEvent('select all', 'click');
+      analytics.trackEvent('select all', 'Click');
     },
 
 
     deselectAll: function() {
       var trips = this.collection.where({selected: true});
       coms.trigger('trips:toggleSelect', trips, {selected: false});
-      analytics.trackEvent('deselect all', 'click');
+      analytics.trackEvent('deselect all', 'Click');
     },
 
 
@@ -236,7 +236,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
         }
       }
 
-      analytics.trackEvent('export', 'downloaded', exportOption);
+      analytics.trackEvent('export', 'Download', exportOption);
     },
 
 
@@ -357,7 +357,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
       this.options.sortDirection = (this.options.sortDirection === 'sortDown') ? 'sortUp' : 'sortDown';
       this.doSort();
 
-      analytics.trackEvent('sort direction', 'changed', this.options.sortDirection);
+      analytics.trackEvent('sort direction', 'Change', this.options.sortDirection);
     },
 
 
@@ -368,7 +368,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
         $('.sortType', this.$el).popover('hide');
 
-        analytics.trackEvent('sort type', 'selected', this.options.sortTypeName);
+        analytics.trackEvent('sort type', 'Change', this.options.sortTypeName);
       }
 
       this.doSort();
