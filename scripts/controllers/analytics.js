@@ -1,40 +1,46 @@
+define('mixpanel-preinit', function() {
+  // this is a stripped down version of the mixpanel snippet that removes the loading of the lib via external script tag and the stubs for queuing calls
+  var b=window.mixpanel=window.mixpanel||[];var i,g;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";b._i.push([a,e,d])};b.__SV=1.2;
+  b.init('223ff08a9595ad8b3b14bf4ad696dd17');
+});
+
+
 define([
-  'backbone'
+  'backbone',
+  'mixpanel',
+  'ga'
 ],
-function( Backbone ) {
+function( Backbone, mixpanel ) {
   'use strict';
+
+  window.ga('create', 'UA-33317148-4');
+  window.ga('require', 'displayfeatures');
+  window.ga('send', 'pageview');
 
   return {
     trackPageview: function(urlFragment) {
-      if(typeof ga !== 'undefined') {
-        ga('send', 'pageview', urlFragment);
-      }
+      window.ga('send', 'pageview', urlFragment);
     },
 
 
     trackEvent: function(category, action, label) {
-      if(typeof ga !== 'undefined') {
-        ga('send', 'event', category, action, label);
-      }
-      if(typeof mixpanel !== 'undefined') {
-        mixpanel.track(action + ' ' + category, {
-          label: label
-        });
-      }
+      window.ga('send', 'event', category, action, label);
+
+      mixpanel.track(action + ' ' + category, {
+        label: label
+      });
     },
 
 
     identifyUser: function(email, firstName, lastName) {
-      if(typeof mixpanel !== 'undefined') {
-        mixpanel.identify(email);
-        mixpanel.people.set({
-          $last_login: new Date(),
-          $email: email
-        });
-        mixpanel.register({
-          'App': 'Dashboard'
-        });
-      }
+      mixpanel.identify(email);
+      mixpanel.people.set({
+        $last_login: new Date(),
+        $email: email
+      });
+      mixpanel.register({
+        'App': 'Dashboard'
+      });
     }
   };
 });
