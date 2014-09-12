@@ -121,3 +121,11 @@ main {
   font-size: 10px;
   color: #F3F3F2;
 }
+
+
+@media screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  main {
+    min-width: 0;
+    min-height: 0;
+  }
+}

@@ -84,13 +84,10 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
 
     //check for mobile
     var md = new MobileDetect(window.navigator.userAgent);
-    if(md.phone()) {
-      overlayLayout = new OverlayLayout({
-        type: 'notSupportedMobile',
-        isiPhone: md.is('iPhone'),
-        isAndroid: md.is('android')
-      });
-      overlayRegion.show(overlayLayout);
+    if(md.is('iPhone')) {
+      $('body').addClass('isiPhone');
+    } else if(md.is('android')) {
+      $('body').addClass('isAndroid');
     }
 
     //show staging banner, if on staging

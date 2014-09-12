@@ -33,12 +33,20 @@
     padding: 20px 30px;
     text-align: center;
 
+    .mobileTitle {
+      display: none;
+    }
+
     .btn {
       margin: 25px auto 15px;
       font-size: 16px;
       width: 275px;
       line-height: 20px;
       padding-top: 7px;
+    }
+
+    .mobileBlock {
+        display: none;
     }
   }
 
@@ -88,18 +96,15 @@
   .bottomBox {
     padding: 20px 30px;
     overflow: hidden;
+    @include hr-image('../img/logo_automatic_sm.png', '../img/logo_automatic_sm@2x.png');
+    background-repeat: no-repeat;
+    background-position: 30px center;
 
-    .smallLogo {
-      @include hr-image('../img/logo_automatic_sm.png', '../img/logo_automatic_sm@2x.png');
-      background-repeat: no-repeat;
-      height: 27px;
-      float: left;
-      width: 97px;
-    }
-
-    a {
+    .btn {
       float: right;
       line-height: 27px;
+      background-color: transparent;
+      font-weight: normal;
     }
   }
 
@@ -147,6 +152,96 @@
 
     .forgotPassword {
       margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  #blurrydash {
+    min-width: 0;
+    display: none;
+  }
+
+  #login {
+    width: 100%;
+    margin: 0;
+    @include box-shadow(none);
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 20px;
+      line-height: 28px;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .topBox {
+      padding: 30px 25px;
+
+      .mobileTitle {
+        display: inline;
+      }
+
+      .loginBlock {
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 20px 0 0;
+      }
+
+      .mobileBlock {
+        display: block;
+        padding-top: 189px;
+        @include hr-image('../img/laptop.png', '../img/laptop@2x.png');
+        background-repeat: no-repeat;
+
+        .iOSAppLink {
+          display: none;
+        }
+
+      }
+    }
+
+    .middleBox {
+      padding: 30px 25px 13px 25px;
+
+      .graphicLink {
+        background-position: center top;
+        width: 100%;
+      }
+
+      .featureList {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+    }
+
+    .bottomBox {
+      padding: 0 25px;
+      @include hr-image('../img/logo_automatic.png', '../img/logo_automatic@2x.png');
+      background-color: $main_back;
+      background-position: center 77px;
+      height: 112px;
+
+      .btn {
+        width: 100%;
+        background-color: $header_back;
+      }
+    }
+  }
+
+  .isiPhone #login .topBox .mobileBlock {
+    .learnMoreLink {
+      display: none;
+    }
+    .iOSAppLink {
+      display: block;
     }
   }
 }

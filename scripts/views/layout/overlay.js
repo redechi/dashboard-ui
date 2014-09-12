@@ -16,8 +16,6 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
 
       if(this.options.type === 'notSupported') {
         analytics.trackPageview('/unsupported');
-      } else if(this.options.type === 'notSupportedMobile') {
-        analytics.trackPageview('/unsupportedMobile');
       } else if(this.options.type === 'noTrips') {
         analytics.trackEvent('no trips overlay', 'Show');
       } else if(this.options.type === 'error403') {
