@@ -41,7 +41,7 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
 
-      $(window).on('resize', _.bind(this.makeGraph, this));
+      $(window).on('resize', _.debounce(_.bind(this.makeGraph, this), 100));
     },
 
 

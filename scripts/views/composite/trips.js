@@ -29,7 +29,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
       coms.on('error:403', _.bind(this.setError, this));
       coms.on('error:500', _.bind(this.setError, this));
 
-      $(window).on("resize", _.bind(this.resize, this));
+      $(window).on('resize', _.debounce(_.bind(this.resize, this), 100));
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
@@ -47,7 +47,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
     model: new Backbone.Model({}),
     collection: new Backbone.Collection([]),
     childView: Trip,
-    childViewContainer: ".trips ul",
+    childViewContainer: '.trips ul',
     template: tripListTmpl,
 
 

@@ -150,7 +150,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     initializePopover: function() {
       var self = this;
 
-      setTimeout(function() {
+      _.defer(function(){
         $('.addFilter', self.$el)
           .popover('destroy')
           .popover({
@@ -159,7 +159,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
             viewport: 'body>main'
           });
         self.updateFilterList();
-      }, 0);
+      });
     },
 
 

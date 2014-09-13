@@ -19,7 +19,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      $(window).on('resize', this.resize);
+      $(window).on('resize', _.debounce(this.resize, 100));
 
       coms.on('error:403', _.bind(this.error403, this));
       coms.on('error:500', _.bind(this.error500, this));
