@@ -36,7 +36,8 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
 
 
     createFilterPopover: function () {
-      var name = this.model.get('name');
+      var self = this,
+          name = this.model.get('name');
 
       $('.btn-popover', this.$el)
         .popover('destroy')
@@ -49,7 +50,9 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
         });
 
       if(this.model.get('showPopover') === true) {
-        $('.btn-popover', this.$el).popover('show');
+        _.defer(function(){
+          $('.btn-popover', self.$el).popover('show');
+        });
       }
     },
 
