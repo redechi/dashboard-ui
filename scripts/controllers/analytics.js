@@ -1,7 +1,7 @@
 define('mixpanel-preinit', function() {
   // this is a stripped down version of the mixpanel snippet that removes the loading of the lib via external script tag and the stubs for queuing calls
   var b=window.mixpanel=window.mixpanel||[];var i,g;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";b._i.push([a,e,d])};b.__SV=1.2;
-  b.init('223ff08a9595ad8b3b14bf4ad696dd17');
+  b.init('d326b2d504cef20b730aaa5bd44c8be2');
 });
 
 
