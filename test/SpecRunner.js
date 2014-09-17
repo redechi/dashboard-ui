@@ -32,7 +32,7 @@ require.config({
         /* alias the bootstrap js lib */
         bootstrap: '../bower_components/bootstrap/js',
         bootstrapSlider: '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
-        bootstrapDatepicker: '../bower_components/bootstrap-datepicker/js/bootstrap-datepicker',
+        bootstrapDatetimepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
 
         /* shortcut the templates dir to tmpl */
         tmpl: '../templates',

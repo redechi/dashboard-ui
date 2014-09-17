@@ -283,7 +283,7 @@ module.exports = function (grunt) {
             'bower_components/modernizr/modernizr.js',
             'bower_components/mapbox.css/index.css',
             'bower_components/bootstrap/dist/css/bootstrap.css',
-            'bower_components/bootstrap-datepicker/css/datepicker2.css',
+            'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
             'bower_components/fontawesome/fonts/**',
             'bower_components/fontawesome/scss/**'
           ]

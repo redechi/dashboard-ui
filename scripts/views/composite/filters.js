@@ -33,10 +33,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'slide .distanceFilterValue': 'updateDistanceFilterLabel',
       'show.bs.popover .btn-filter': 'preparePopoverContent',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
+      'hide.bs.popover .btn-filter': 'hidePopoverContent',
       'click .filterNav .undo': 'undo',
       'click .filterNav .redo': 'redo',
-      'changeDate .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
-      'changeDate .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
+      'dp.change .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
+      'dp.change .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
       'mouseleave .popover': 'mouseLeavePopover',
       'slideStart .popover input.slider': 'slideStart',
       'slideStop .popover input.slider': 'slideStop',
@@ -180,10 +181,10 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     mouseLeavePopover: function(e) {
-      var datePickerDivs = '.day, .month, .year, .prev, .next, .dow, .datepicker, .datepicker-switch';
+      var datetimepickerDivs = '.day, .month, .year, .prev, .next, .dow, .datepicker, .picker-switch, .datepicker-days, .datepicker-months, .datepicker-years, .bootstrap-datetimepicker-widget';
 
       //allow date selector mouseover and don't close if slider is sliding
-      if(this.sliding || $(e.relatedTarget).is(datePickerDivs) || $(e.relatedTarget).parents('.datepicker').length !== 0) {
+      if(this.sliding || $(e.relatedTarget).is(datetimepickerDivs) || $(e.relatedTarget).parents('.datepicker').length !== 0) {
         return;
       } else {
         this.closePopovers();
@@ -293,11 +294,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           value = filter.get('value'),
           start = value[0],
           end = value[1],
-          newStart = $('.popover .dateFilterValueCustomStart').datepicker('getDate').valueOf(),
-          newEnd = moment($('.popover .dateFilterValueCustomEnd').datepicker('getDate')).endOf('day').valueOf();
+          newStart = $('.popover .dateFilterValueCustomStart').data('DateTimePicker').getDate().valueOf(),
+          newEnd = moment($('.popover .dateFilterValueCustomEnd').data('DateTimePicker').getDate()).endOf('day').valueOf();
 
-      $('.popover .dateFilterValueCustomStart').datepicker('hide');
-      $('.popover .dateFilterValueCustomEnd').datepicker('hide');
+      $('.popover .dateFilterValueCustomStart').data('DateTimePicker').hide();
+      $('.popover .dateFilterValueCustomEnd').data('DateTimePicker').hide();
 
       //check for actual change before triggering
       if(newStart && newEnd && (start !== newStart || end !== newEnd)) {
@@ -318,8 +319,8 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           startDate = moment(filter.get('trimDate').call(filter, value[0])).startOf('day').toDate(),
           endDate = moment(filter.get('trimDate').call(filter, value[1])).startOf('day').toDate();
 
-      $('.popover .dateFilterValueCustomStart').datepicker('setDate', startDate);
-      $('.popover .dateFilterValueCustomEnd').datepicker('setDate', endDate);
+      $('.popover .dateFilterValueCustomStart').data('DateTimePicker').setDate(startDate);
+      $('.popover .dateFilterValueCustomEnd').data('DateTimePicker').setDate(endDate);
 
       this.deactivateAll();
     },
@@ -442,16 +443,26 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
           tooltip: 'hide'
         });
       } else if(name === 'date') {
-        $('.popover .dateFilterCustom input').datepicker({
-          format: 'mm/dd/yy',
-          startDate: new Date(2013, 2, 12),
-          endDate: moment().add(1, 'days').startOf('day').toDate()
+
+        $('.popover .dateFilterCustom input').datetimepicker({
+          minDate: new Date(2013, 2, 12),
+          maxDate: moment().add(1, 'days').startOf('day').toDate(),
+          pickTime: false
         });
 
         if(filter.get('valueSelected') === 'custom') {
           this.setCustomDateFilter(filter);
         }
       }
+    },
+
+
+    hidePopoverContent: function() {
+      $('.popover .dateFilterCustom input').each(function() {
+        if($(this).data('DateTimePicker')) {
+          $(this).data('DateTimePicker').destroy();
+        }
+      });
     },
 
 

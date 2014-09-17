@@ -1,73 +1,79 @@
 /* Overrides styles form Bootstrap Datepicker */
 
-.datepicker table tr td,
-.datepicker table tr th {
+.bootstrap-datetimepicker-widget {
+  width: inherit;
+}
+
+.bootstrap-datetimepicker-widget table tr td,
+.bootstrap-datetimepicker-widget table tr th {
   width: 24px;
   height: 24px;
   border-radius: 3px;
 }
-.datepicker table tr td.day {
+.bootstrap-datetimepicker-widget table tr td.day {
   color: $link_type;
+  width: 24px;
+  height: 24px;
 }
-.datepicker table tr td.day.old {
+.bootstrap-datetimepicker-widget table tr td.day.old {
   color: $inactive_type;
 }
-.datepicker table tr td.active:hover,
-.datepicker table tr td.active:hover:hover,
-.datepicker table tr td.active.disabled:hover,
-.datepicker table tr td.active.disabled:hover:hover,
-.datepicker table tr td.active:focus,
-.datepicker table tr td.active:hover:focus,
-.datepicker table tr td.active.disabled:focus,
-.datepicker table tr td.active.disabled:hover:focus,
-.datepicker table tr td.active:active,
-.datepicker table tr td.active:hover:active,
-.datepicker table tr td.active.disabled:active,
-.datepicker table tr td.active.disabled:hover:active,
-.datepicker table tr td.active.active,
-.datepicker table tr td.active:hover.active,
-.datepicker table tr td.active.disabled.active,
-.datepicker table tr td.active.disabled:hover.active,
-.open .dropdown-toggle.datepicker table tr td.active,
-.open .dropdown-toggle.datepicker table tr td.active:hover,
-.open .dropdown-toggle.datepicker table tr td.active.disabled,
-.open .dropdown-toggle.datepicker table tr td.active.disabled:hover {
+.bootstrap-datetimepicker-widget table tr td.active:hover,
+.bootstrap-datetimepicker-widget table tr td.active:hover:hover,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:hover,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:hover,
+.bootstrap-datetimepicker-widget table tr td.active:focus,
+.bootstrap-datetimepicker-widget table tr td.active:hover:focus,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:focus,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:focus,
+.bootstrap-datetimepicker-widget table tr td.active:active,
+.bootstrap-datetimepicker-widget table tr td.active:hover:active,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:active,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:active,
+.bootstrap-datetimepicker-widget table tr td.active.active,
+.bootstrap-datetimepicker-widget table tr td.active:hover.active,
+.bootstrap-datetimepicker-widget table tr td.active.disabled.active,
+.bootstrap-datetimepicker-widget table tr td.active.disabled:hover.active,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active:hover,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active.disabled,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active.disabled:hover {
   background-color: $highlight;
   border-color: none;
   color: #ffffff;
 }
-.datepicker table tr td span.active:hover,
-.datepicker table tr td span.active:hover:hover,
-.datepicker table tr td span.active.disabled:hover,
-.datepicker table tr td span.active.disabled:hover:hover,
-.datepicker table tr td span.active:focus,
-.datepicker table tr td span.active:hover:focus,
-.datepicker table tr td span.active.disabled:focus,
-.datepicker table tr td span.active.disabled:hover:focus,
-.datepicker table tr td span.active:active,
-.datepicker table tr td span.active:hover:active,
-.datepicker table tr td span.active.disabled:active,
-.datepicker table tr td span.active.disabled:hover:active,
-.datepicker table tr td span.active.active,
-.datepicker table tr td span.active:hover.active,
-.datepicker table tr td span.active.disabled.active,
-.datepicker table tr td span.active.disabled:hover.active,
-.open .dropdown-toggle.datepicker table tr td span.active,
-.open .dropdown-toggle.datepicker table tr td span.active:hover,
-.open .dropdown-toggle.datepicker table tr td span.active.disabled,
-.open .dropdown-toggle.datepicker table tr td span.active.disabled:hover {
+.bootstrap-datetimepicker-widget table tr td span.active:hover,
+.bootstrap-datetimepicker-widget table tr td span.active:hover:hover,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:hover,
+.bootstrap-datetimepicker-widget table tr td span.active:focus,
+.bootstrap-datetimepicker-widget table tr td span.active:hover:focus,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:focus,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:focus,
+.bootstrap-datetimepicker-widget table tr td span.active:active,
+.bootstrap-datetimepicker-widget table tr td span.active:hover:active,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:active,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:active,
+.bootstrap-datetimepicker-widget table tr td span.active.active,
+.bootstrap-datetimepicker-widget table tr td span.active:hover.active,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled.active,
+.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover.active,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active:hover,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled,
+.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover {
   color: #ffffff;
   background-color: $highlight;
   border-color: none;
 }
-.datepicker.dropdown-menu {
+.bootstrap-datetimepicker-widget.dropdown-menu {
   border: none;
   -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
   box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
   font-size: 11px;
   color: inherit;
 
-  &.datepicker-orient-top {
+  &.bottom {
     border-top: 2px solid $blue;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
@@ -85,7 +91,7 @@
     }
   }
 
-  &.datepicker-orient-bottom {
+  &.top {
     border-bottom: 2px solid $blue;
     border-top-right-radius: 3px;
     border-top-left-radius: 3px;
@@ -103,7 +109,7 @@
     }
   }
 }
-.datepicker.dropdown-menu th,
-.datepicker.dropdown-menu td {
+.bootstrap-datetimepicker-widget.dropdown-menu th,
+.bootstrap-datetimepicker-widget.dropdown-menu td {
   padding: 2px 5px;
 }

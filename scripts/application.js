@@ -10,7 +10,7 @@ define([
   'fastclick',
   'mobile-detect',
   'bootstrapSlider',
-  'bootstrapDatepicker',
+  'bootstrapDatetimepicker',
   'bootstrap/popover'
 ],
 
