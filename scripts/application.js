@@ -56,6 +56,9 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
       lastWeek : 'MMM DD',
       nextWeek : 'MMM DD',
       sameElse : 'MMM DD'
+    },
+    week : {
+      dow : 1
     }
   });
 
