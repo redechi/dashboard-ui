@@ -13,34 +13,44 @@ define([
 function( Backbone, mixpanel ) {
   'use strict';
 
-  window.ga('create', 'UA-33317148-4');
-  window.ga('require', 'displayfeatures');
-  window.ga('send', 'pageview');
+  try {
+    window.ga('create', 'UA-33317148-4');
+    window.ga('require', 'displayfeatures');
+    window.ga('send', 'pageview');
+  } catch(e) { }
 
   return {
     trackPageview: function(urlFragment) {
-      window.ga('send', 'pageview', urlFragment);
+      try {
+        window.ga('send', 'pageview', urlFragment);
+      } catch(e) { }
     },
 
 
     trackEvent: function(category, action, label) {
-      window.ga('send', 'event', category, action, label);
+      try {
+        window.ga('send', 'event', category, action, label);
+      } catch(e) { }
 
-      mixpanel.track(action + ' ' + category, {
-        label: label
-      });
+      try {
+        mixpanel.track(action + ' ' + category, {
+          label: label
+        });
+      } catch(e) { }
     },
 
 
     identifyUser: function(email, firstName, lastName) {
-      mixpanel.identify(email);
-      mixpanel.people.set({
-        $last_login: new Date(),
-        $email: email
-      });
-      mixpanel.register({
-        'App': 'Dashboard'
-      });
+      try {
+        mixpanel.identify(email);
+        mixpanel.people.set({
+          $last_login: new Date(),
+          $email: email
+        });
+        mixpanel.register({
+          'App': 'Dashboard'
+        });
+      } catch(e) { }
     }
   };
 });
