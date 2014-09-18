@@ -77,7 +77,8 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
 
   App.addInitializer( function () {
     var overlayRegion = regionManager.getRegion('main_overlay'),
-        overlayLayout;
+        overlayLayout,
+        md = new MobileDetect(window.navigator.userAgent);
 
     //check for browser compatibility
     if(!Modernizr.svg || !Modernizr.cors || window.location.search.indexOf('unsupported') !== -1) {
@@ -86,12 +87,22 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
     }
 
     //check for mobile
-    var md = new MobileDetect(window.navigator.userAgent);
     if(md.is('iPhone')) {
       $('body').addClass('isiPhone');
     } else if(md.is('android')) {
       $('body').addClass('isAndroid');
     }
+
+    //if tablet and user hasn't already closed the warning, show it
+    if(sessionStorage.getItem('warningClosed') !== 'true' && md.tablet() !== null) {
+      $('.tabletWarning').slideDown();
+    }
+
+    //tablet warning click function
+    $('.closeWarning').click(function() {
+      $('.tabletWarning').slideUp('fast');
+      sessionStorage.setItem('warningClosed', 'true');
+    });
 
     //show staging banner, if on staging
     if(login.isStaging()) {

@@ -65,7 +65,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     resize: function () {
-      var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
+      var height = $(window).height() - $('.tabletWarning').outerHeight(true) - $('header').outerHeight(true) - $('#filters').outerHeight(true);
       $('#leftColumn #map .map').height(height - $('#graphs').outerHeight(true) - $('.mapMenu').outerHeight(true) - 31);
     },
 

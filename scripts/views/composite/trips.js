@@ -447,7 +447,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
 
     resize: function() {
-      var height = $(window).height() - $('header').outerHeight(true) - $('#filters').outerHeight(true);
+      var height = $(window).height() - $('.tabletWarning').outerHeight(true) - $('header').outerHeight(true) - $('#filters').outerHeight(true);
       this.tripsHeight = height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90;
       $('.trips ul', this.$el).height(this.tripsHeight);
     }

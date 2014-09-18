@@ -1,0 +1,27 @@
+.tabletWarning {
+  height: 40px;
+  border-bottom: 1px solid $line_gray;
+  background-color: $main_back;
+  padding: 10px 30px;
+  @include hr-image('../img/icon_warning_small.png', '../img/icon_warning_small@2x.png');
+  background-repeat: no-repeat;
+  background-position: center left 30px;
+  display: none;
+
+  .warningText {
+    float: left;
+    display: inline-block;
+    padding-left: 40px;
+  }
+
+  .closeWarning {
+    float: right;
+    display: inline-block;
+    color: $highlight;
+    cursor: pointer;
+
+    &:hover {
+      color: $selected;
+    }
+  }
+}
