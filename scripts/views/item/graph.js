@@ -35,13 +35,12 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
     selectedTrips: {},
 
     initialize: function(model) {
+      coms.on('resize', _.bind(this.makeGraph, this));
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('trips:highlight', _.bind(this.highlightTrips, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
       coms.on('trips:select', _.bind(this.selectTrip, this));
       coms.on('trips:deselect', _.bind(this.deselectTrip, this));
-
-      $(window).on('resize', _.debounce(_.bind(this.makeGraph, this), 100));
     },
 
 

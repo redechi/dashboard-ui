@@ -27,48 +27,46 @@ header {
     #demoMenu {
       display: none;
     }
+  }
 
-    #userMenu {
-      position: absolute;
-      right: 0;
-      top: 0px;
-      padding-right: 30px;
+  #userMenu {
+    float: right;
 
-      ul {
-        margin: 0;
+    ul {
+      margin: 0;
+
+      li {
         display: inline-block;
+        font-size: 12px;
+        line-height: 16px;
+        padding: 27px 15px;
+        color: $base_type;
+        max-height: 70px;
+        overflow: hidden;
 
-        li {
-          display: inline-block;
-          font-size: 12px;
-          line-height: 16px;
-          padding: 27px 15px;
+        .firstName {
+          padding-left: 30px;
+          padding-right: 10px;
+        }
+
+        a {
           color: $base_type;
+          display: inline-block;
+          font-weight: bold;
 
-          .firstName {
-            padding-left: 30px;
-            padding-right: 10px;
+          &:hover {
+            color: $highlight;
           }
+        }
+
+        &:last-child {
+          padding-right: 0;
 
           a {
-            color: $base_type;
-            display: inline-block;
-            font-weight: bold;
+            color: $link_type;
 
             &:hover {
               color: $highlight;
-            }
-          }
-
-          &:last-child {
-            padding-right: 0;
-
-            a {
-              color: $link_type;
-
-              &:hover {
-                color: $highlight;
-              }
             }
           }
         }

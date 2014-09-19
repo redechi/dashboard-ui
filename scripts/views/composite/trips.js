@@ -16,6 +16,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
   return Backbone.Marionette.CompositeView.extend({
 
     initialize: function() {
+      coms.on('resize', _.bind(this.resize, this));
       coms.on('filter', _.bind(this.resetCollection, this));
       coms.on('filter:applyAllFilters', _.bind(this.notifyExport, this));
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
@@ -29,12 +30,12 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
       coms.on('error:403', _.bind(this.setError, this));
       coms.on('error:500', _.bind(this.setError, this));
 
-      $(window).on('resize', _.debounce(_.bind(this.resize, this), 100));
-
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
       this.options.sortTypeName = 'Time/Date';
       this.options.fetching = true;
+      this.selectors = {};
+
       setTimeout(function() {
         tripsCollection.fetchInitial();
       }, 200);
@@ -442,13 +443,22 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
 
     onShow: function() {
-      _.defer(_.bind(this.resize, this));
+      _.defer(_.bind(function() {
+        this.selectors = {
+          window: $(window),
+          tabletWarning: $('.tabletWarning:visible'),
+          header: $('header'),
+          filters: $('#filters')
+        };
+
+        this.resize();
+      }, this));
     },
 
 
     resize: function() {
-      var height = $(window).height() - $('.tabletWarning').outerHeight(true) - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      this.tripsHeight = height - $('.tripsHeader').outerHeight(true) - $('.tripsFooter').outerHeight(true) - 90;
+      var height = this.selectors.window.height() - this.selectors.tabletWarning.outerHeight(true) - this.selectors.header.outerHeight(true) - this.selectors.filters.outerHeight(true);
+      this.tripsHeight = height - $('.tripsHeader', this.$el).outerHeight(true) - $('.tripsFooter', this.$el).outerHeight(true) - 90;
       $('.trips ul', this.$el).height(this.tripsHeight);
     }
 

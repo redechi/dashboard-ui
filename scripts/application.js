@@ -95,12 +95,16 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
 
     //if tablet and user hasn't already closed the warning, show it
     if(sessionStorage.getItem('warningClosed') !== 'true' && md.tablet() !== null) {
-      $('.tabletWarning').slideDown();
+      $('.tabletWarning').slideDown('slow', function() {
+        coms.trigger('resize');
+      });
     }
 
     //tablet warning click function
     $('.closeWarning').click(function() {
-      $('.tabletWarning').slideUp('fast');
+      $('.tabletWarning').slideUp('fast', function() {
+        coms.trigger('resize');
+      });
       sessionStorage.setItem('warningClosed', 'true');
     });
 
@@ -113,6 +117,11 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
         $('#stagingdb').text('db: Production').show();
       }
     }
+
+    //listen for resize
+    $(window).on('resize', _.debounce(function() {
+      coms.trigger('resize');
+    }, 100));
   });
 
 

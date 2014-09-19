@@ -19,7 +19,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
   return Backbone.Marionette.LayoutView.extend({
 
     initialize: function() {
-      $(window).on('resize', _.debounce(this.resize, 100));
+      coms.on('resize', _.bind(this.resize, this));
 
       coms.on('error:403', _.bind(this.error403, this));
       coms.on('error:500', _.bind(this.error500, this));
@@ -27,6 +27,8 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
       coms.on('trips:showSingleTripOverlay', _.bind(this.showSingleTripOverlay, this));
       coms.on('trips:closeSingleTripOverlay', _.bind(this.hideSingleTrip, this));
+
+      this.selectors = {};
     },
 
 
@@ -60,13 +62,25 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     onShow: function () {
-      this.resize();
+      _.defer(_.bind(function() {
+        this.selectors = {
+          window: $(window),
+          tabletWarning: $('.tabletWarning:visible'),
+          header: $('header'),
+          filters: $('#filters'),
+          graphs: $('#graphs', this.$el),
+          mapMenu: $('.mapMenu', this.$el),
+          map: $('#leftColumn #map .map', this.$el)
+        };
+
+        this.resize();
+      }, this));
     },
 
 
     resize: function () {
-      var height = $(window).height() - $('.tabletWarning').outerHeight(true) - $('header').outerHeight(true) - $('#filters').outerHeight(true);
-      $('#leftColumn #map .map').height(height - $('#graphs').outerHeight(true) - $('.mapMenu').outerHeight(true) - 31);
+      var height = this.selectors.window.height() - this.selectors.tabletWarning.outerHeight(true) - this.selectors.header.outerHeight(true) - this.selectors.filters.outerHeight(true);
+      this.selectors.map.height(height - this.selectors.graphs.outerHeight(true) - this.selectors.mapMenu.outerHeight(true) - 31);
     },
 
 
