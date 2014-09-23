@@ -93,6 +93,12 @@ module.exports = function (grunt) {
             middlewares.unshift(function(req, res, next) {
               res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
               res.setHeader('Access-Control-Allow-Credentials', true);
+              
+              //serve /assets/data folder compressed
+              if(req.url.substr(0, 12) === '/assets/data') {
+                res.setHeader('Content-Encoding', 'gzip');
+              }
+
               next();
             });
             return middlewares;
