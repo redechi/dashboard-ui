@@ -17,31 +17,11 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
   return Backbone.Marionette.CompositeView.extend({
 
-    events: {
-      'click .filterList li': 'addFilterFromMenu',
-      'click .removeFilter': 'removeFilter',
-      'click .resetFilters': 'resetFilters',
-      'click .vehicleFilterValue li': 'changeVehicleFilter',
-      'click .dateFilterValue li': 'changeDateFilter',
-      'slideStop .durationFilterValue': 'changeDurationFilter',
-      'slide .durationFilterValue': 'updateDurationFilterLabel',
-      'slideStop .costFilterValue': 'changeCostFilter',
-      'slide .costFilterValue': 'updateCostFilterLabel',
-      'slideStop .timeFilterValue': 'changeTimeFilter',
-      'slide .timeFilterValue': 'updateTimeFilterLabel',
-      'slideStop .distanceFilterValue': 'changeDistanceFilter',
-      'slide .distanceFilterValue': 'updateDistanceFilterLabel',
-      'show.bs.popover .btn-filter': 'preparePopoverContent',
-      'shown.bs.popover .btn-filter': 'initializePopoverContent',
-      'hide.bs.popover .btn-filter': 'hidePopoverContent',
-      'click .filterNav .undo': 'undo',
-      'click .filterNav .redo': 'redo',
-      'dp.change .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
-      'dp.change .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
-      'mouseleave .popover': 'mouseLeavePopover',
-      'slideStart .popover input.slider': 'slideStart',
-      'slideStop .popover input.slider': 'slideStop',
-    },
+    model: new Filter(),
+    collection: filtersCollection,
+    childView: FilterView,
+    template: FiltersTmpl,
+
 
     initialize: function() {
       var self = this;
@@ -71,13 +51,31 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    model: new Filter(),
-
-
-    collection: filtersCollection,
-
-
-    childView: FilterView,
+    events: {
+      'click .filterList li': 'addFilterFromMenu',
+      'click .removeFilter': 'removeFilter',
+      'click .resetFilters': 'resetFilters',
+      'click .vehicleFilterValue li': 'changeVehicleFilter',
+      'click .dateFilterValue li': 'changeDateFilter',
+      'slideStop .durationFilterValue': 'changeDurationFilter',
+      'slide .durationFilterValue': 'updateDurationFilterLabel',
+      'slideStop .costFilterValue': 'changeCostFilter',
+      'slide .costFilterValue': 'updateCostFilterLabel',
+      'slideStop .timeFilterValue': 'changeTimeFilter',
+      'slide .timeFilterValue': 'updateTimeFilterLabel',
+      'slideStop .distanceFilterValue': 'changeDistanceFilter',
+      'slide .distanceFilterValue': 'updateDistanceFilterLabel',
+      'show.bs.popover .btn-filter': 'preparePopoverContent',
+      'shown.bs.popover .btn-filter': 'initializePopoverContent',
+      'hide.bs.popover .btn-filter': 'hidePopoverContent',
+      'click .filterNav .undo': 'undo',
+      'click .filterNav .redo': 'redo',
+      'dp.change .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
+      'dp.change .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
+      'mouseleave .popover': 'mouseLeavePopover',
+      'slideStart .popover input.slider': 'slideStart',
+      'slideStop .popover input.slider': 'slideStop',
+    },
 
 
     slideStart: function() {
@@ -93,8 +91,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     attachHtml: function(collectionView, childView) {
       collectionView.$('ul.appliedFilters .addFilterContainer').before(childView.el);
     },
-
-    template: FiltersTmpl,
 
 
     selectItem: function(item) {

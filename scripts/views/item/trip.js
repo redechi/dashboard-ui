@@ -10,8 +10,8 @@ function( Backbone, coms, TripTmpl, analytics ) {
   return Backbone.Marionette.ItemView.extend({
 
     tagName: 'li',
-
     template: TripTmpl,
+
 
     events: {
       'mouseenter': 'triggerHighlight',

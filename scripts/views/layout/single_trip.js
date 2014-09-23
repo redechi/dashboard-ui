@@ -14,6 +14,9 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
   return Backbone.Marionette.LayoutView.extend({
 
+    template: TripTmpl,
+    
+
     initialize: function() {
       if(!this.model) {
         regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'invalidTrip'}));
@@ -27,9 +30,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
       coms.trigger('filter:closePopovers');
     },
-
-
-    template: TripTmpl,
 
 
     events: {

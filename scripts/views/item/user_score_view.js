@@ -10,17 +10,18 @@ function( Backbone, coms, stats, formatters, UserscoreTmpl ) {
 
   return Backbone.Marionette.ItemView.extend({
 
+    model: new Backbone.Model({values:[],key:'No Data'}),
+    collection: new Backbone.Collection([]),
+    template: UserscoreTmpl,
+
+
     initialize: function() {
       coms.on('filter', _.bind(this.resetCollection, this));
     },
+    
 
     duration: 1000,
 
-    model: new Backbone.Model({values:[],key:'No Data'}),
-
-    collection: new Backbone.Collection([]),
-
-    template: UserscoreTmpl,
 
     resetCollection: function (collection) {
       this.collection.reset(collection);

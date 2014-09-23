@@ -18,9 +18,11 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
   return Backbone.Marionette.LayoutView.extend({
 
+    template: SummaryTmpl,
+
+
     initialize: function() {
       coms.on('resize', _.bind(this.resize, this));
-
       coms.on('error:403', _.bind(this.error403, this));
       coms.on('error:500', _.bind(this.error500, this));
       coms.on('error:noTrips', _.bind(this.noTrips, this));
@@ -30,9 +32,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
       this.selectors = {};
     },
-
-
-    template: SummaryTmpl,
 
 
     regions: {

@@ -10,6 +10,9 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
 
   return Backbone.Marionette.LayoutView.extend({
 
+    template: OverlayTmpl,
+
+
     initialize: function() {
       coms.on('overlay:hide', _.bind(this.closeOverlay, this));
       coms.on('overlay:page', _.bind(this.updateLoadingOverlayCount, this));
@@ -24,9 +27,6 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
         analytics.trackEvent('error500 overlay', 'Show');
       }
     },
-
-
-    template: OverlayTmpl,
 
 
     className: function() {

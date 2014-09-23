@@ -10,14 +10,13 @@ function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
 
   return Backbone.Marionette.ItemView.extend({
 
+    tagName: 'li',
+    template: FiltersTmpl,
+
+
     events: {
       'click .remove-filter': 'deleteFilter'
     },
-
-    tagName: 'li',
-
-
-    template: FiltersTmpl,
 
 
     deleteFilter: function () {

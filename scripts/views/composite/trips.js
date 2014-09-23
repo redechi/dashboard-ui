@@ -15,6 +15,13 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
   return Backbone.Marionette.CompositeView.extend({
 
+    model: new Backbone.Model({}),
+    collection: new Backbone.Collection([]),
+    childView: Trip,
+    childViewContainer: '.trips ul',
+    template: tripListTmpl,
+    
+
     initialize: function() {
       coms.on('resize', _.bind(this.resize, this));
       coms.on('filter', _.bind(this.resetCollection, this));
@@ -43,13 +50,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
 
     tripsHeight: 0,
-
-
-    model: new Backbone.Model({}),
-    collection: new Backbone.Collection([]),
-    childView: Trip,
-    childViewContainer: '.trips ul',
-    template: tripListTmpl,
 
 
     templateHelpers: function () {

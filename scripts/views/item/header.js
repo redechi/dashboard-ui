@@ -11,6 +11,10 @@ function( Backbone, coms, HeaderTmpl, user, login, analytics ) {
 
   return Backbone.Marionette.ItemView.extend({
 
+    template: HeaderTmpl,
+    model: user,
+    
+
     initialize: function() {
       if (this.attributes.loggedIn) {
         this.model.fetch({error: login.fetchErrorHandler});
@@ -19,12 +23,6 @@ function( Backbone, coms, HeaderTmpl, user, login, analytics ) {
 
       coms.on('user:change', _.bind(this.render, this));
     },
-
-
-    template: HeaderTmpl,
-
-
-    model: user,
 
 
     events: {

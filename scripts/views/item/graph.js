@@ -12,9 +12,7 @@ define([
 function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, nvd3 ) {
   'use strict';
 
-  return Backbone.Marionette.ItemView.extend({
-
-    tagName: 'div',
+  return Backbone.Marionette.ItemView.extend({    
 
     model: new Backbone.Model({
       values: [],
@@ -22,10 +20,10 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       graphTypeName: 'MPG',
       graphTypeUnit: 'MPG'
     }),
-
+    tagName: 'div',
     collection: new Backbone.Collection(),
-
     template: GraphTmpl,
+
 
     events: {
       'click .graphValue li': 'changeGraphType'

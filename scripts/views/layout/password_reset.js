@@ -9,6 +9,9 @@ function( Backbone, PasswordResetTmpl, login, analytics ) {
 
   return Backbone.Marionette.LayoutView.extend({
 
+    template: PasswordResetTmpl,
+
+
     initialize: function() {
       if(this.options.token && this.options.token.indexOf('email=') !== -1) {
         var email = this.options.token.replace('email=', '');
@@ -19,10 +22,7 @@ function( Backbone, PasswordResetTmpl, login, analytics ) {
       }
     },
 
-
-    template: PasswordResetTmpl,
-
-
+    
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
       'focus #passwordResetRequestForm input': 'clearError',

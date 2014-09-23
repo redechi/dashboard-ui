@@ -12,6 +12,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
   return Backbone.Marionette.ItemView.extend({
 
+    collection: new Backbone.Collection([]),
+    template: MapTmpl,
+    
+
     initialize: function() {
       coms.on('trips:highlight', _.bind(this.highlightTrips, this));
       coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
@@ -21,14 +25,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
       coms.on('filter', _.bind(this.resetView, this));
     },
 
-    collection: new Backbone.Collection([]),
 
     resetView: function (collection) {
       this.collection.reset(collection);
       this.updateMap();
     },
 
-    template: MapTmpl,
 
     events: {
       'click .zoomIn': 'zoomIn',
