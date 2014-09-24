@@ -211,8 +211,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
       if(!this.exportIsSupported()) {
         alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
         return false;
-      } else if(this.isSafari()) {
-        alert('Exported file will download in CSV format with the filename "Unknown" to your Downloads folder.');
       }
 
       this.activateItem(e.target);
@@ -249,18 +247,23 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
     },
 
 
-    downloadExport: function(selectedTrips) {
-      //Safari does not support filesaver
-      if(typeof safari !== "undefined") {
-        window.location.href = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
-      } else {
-        var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"}),
-            filename = 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
+    exportFilename: function() {
+      return 'automatic-trips-' + moment().format('YYYY-MM-DD') + '.csv';
+    },
 
-        setTimeout(function() {
+
+    downloadExport: function(selectedTrips) {
+      //Safari does not support filesaver, so use URL
+      if(this.isSafari()) {
+        var blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
+        coms.trigger('trips:showDownloadExportOverlay', blobUrl);
+      } else {
+        var blob = new Blob([this.tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
+
+        setTimeout(_.bind(function() {
           //fix for firefox on callback - needs a timeout
-          saveAs(blob, filename);
-        }, 500);
+          saveAs(blob, this.exportFilename());
+        }, this), 500);
       }
 
       $('.export').popover('hide');

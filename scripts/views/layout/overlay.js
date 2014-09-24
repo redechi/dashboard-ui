@@ -29,6 +29,13 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
     },
 
 
+    templateHelpers: function() {
+      return {
+        blobUrl: this.options.blobUrl
+      };
+    },
+
+
     className: function() {
       var classes = [this.options.type];
       if(this.options.isiPhone) {

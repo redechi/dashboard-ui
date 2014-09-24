@@ -29,6 +29,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
       coms.on('trips:showSingleTripOverlay', _.bind(this.showSingleTripOverlay, this));
       coms.on('trips:closeSingleTripOverlay', _.bind(this.hideSingleTrip, this));
+      coms.on('trips:showDownloadExportOverlay', _.bind(this.showDownloadExportOverlay, this));
 
       this.selectors = {};
     },
@@ -101,6 +102,13 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
     showSingleTripOverlay: function (trip, collection) {
       regionManager.getRegion('main_overlay').show(new OverlayLayout());
       this.singleTrip.show(new SingleTripLayout({model: trip, collection: collection}));
+    },
+
+    showDownloadExportOverlay: function (blobUrl) {
+      regionManager.getRegion('main_overlay').show(new OverlayLayout({
+        type: 'downloadExport',
+        blobUrl: blobUrl
+      }));
     },
 
 

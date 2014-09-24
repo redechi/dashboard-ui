@@ -48,6 +48,14 @@
       float: left;
       margin-right: 20px;
     }
+
+    .csvIcon {
+      @include hr-image('../img/icon_csv.png', '../img/icon_csv@2x.png');
+      width: 80px;
+      height: 80px;
+      float: left;
+      margin-right: 20px;
+    }
   }
 
   .loadingTrips .loadingTrips {
@@ -107,6 +115,24 @@
 
     .btn-blue {
       margin-top: 35px;
+    }
+  }
+
+  .downloadExport .downloadExport {
+    display: block;
+    width: 380px;
+    height: inherit;
+    top: 106px;
+    margin-left: -190px;
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    p {
+      text-align: left;
+      padding-top: 5px;
+      padding-bottom: 15px;
     }
   }
 
