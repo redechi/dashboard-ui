@@ -1,11 +1,12 @@
 define([
   'backbone',
+  'communicator',
   'regionManager',
   'hbs!tmpl/layout/login_tmpl',
   '../../controllers/login',
   '../../controllers/analytics'
 ],
-function( Backbone, regionManager, LoginTmpl, login, analytics ) {
+function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -20,6 +21,11 @@ function( Backbone, regionManager, LoginTmpl, login, analytics ) {
       'click .toggleLoginForm': 'toggleLoginForm',
       'click .learnMore': 'learnMore',
       'click .tryDemo': 'tryDemo'
+    },
+
+
+    initialize: function() {
+      coms.on('login:error', this.errorAlert, this);
     },
 
 
@@ -46,8 +52,8 @@ function( Backbone, regionManager, LoginTmpl, login, analytics ) {
         .html(message)
         .removeClass('invisible');
 
-      $('#email', this.$el).parent('.form-group').toggleClass('has-error', emailError);
-      $('#password', this.$el).parent('.form-group').toggleClass('has-error', passwordError);
+      $('#email', this.$el).parent('.form-group').toggleClass('has-error', !!emailError);
+      $('#password', this.$el).parent('.form-group').toggleClass('has-error', !!passwordError);
     },
 
 
@@ -63,44 +69,16 @@ function( Backbone, regionManager, LoginTmpl, login, analytics ) {
 
 
     login: function () {
-      var self = this,
-          email = $('#email', this.$el).val(),
+      var email = $('#email', this.$el).val(),
           password = $('#password', this.$el).val(),
-          staySignedIn = $('.staySignedIn').is(':checked'),
-          expires = (staySignedIn) ? 60*60*24*7 : null;
+          staySignedIn = $('.staySignedIn', this.$el).is(':checked');
 
       if(!email || !password) {
-        this.errorAlert('Please enter an email and a password', (!email), (!password));
+        this.errorAlert('Please enter an email and a password', !email, !password);
       } else {
-        this.clearErrors();
-        this.errorAlert('Logging in&hellip;', false, false);
+        this.errorAlert('Logging in&hellip;');
 
-        $.post(
-          login.getBaseUrl() + '/oauth/access_token',
-          {
-            client_id: '385be37e93925c8fa7c7',
-            grant_type: 'password',
-            username: email,
-            password: password,
-            scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic'
-          },
-          function(data) {
-            if(data && data.access_token) {
-              $('#loginForm .alert').addClass('invisible');
-              login.setCookie('token', data.access_token, expires);
-              analytics.trackEvent('login', 'Login');
-              analytics.identifyUser(email);
-              sessionStorage.setItem('accessToken', data.access_token);
-              Backbone.history.navigate('#/');
-            }
-          }
-        ).fail(function(jqXHR, textStatus, error) {
-          if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
-            self.errorAlert('Invalid email or password', true, true);
-          } else {
-            self.errorAlert('Unknown error', false, false);
-          }
-        });
+        login.login(email, password, staySignedIn);
       }
 
       return false;

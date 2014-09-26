@@ -39,7 +39,7 @@ define([
               Backbone.history.navigate('/login', {trigger: true});
               return;
             } else {
-              login.login();
+              login.setAccessToken();
             }
           }
 

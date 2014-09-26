@@ -1,8 +1,9 @@
 define([
   'backbone',
-  'communicator'
+  'communicator',
+  './analytics'
 ],
-function( Backbone, coms ) {
+function( Backbone, coms, analytics ) {
   'use strict';
 
   return {
@@ -43,7 +44,39 @@ function( Backbone, coms ) {
     },
 
 
-    login: function () {
+    login: function(email, password, staySignedIn) {
+      var self = this,
+          expires = (staySignedIn) ? 60*60*24*7 : null;
+
+      $.post(
+        self.getBaseUrl() + '/oauth/access_token',
+        {
+          client_id: '385be37e93925c8fa7c7',
+          grant_type: 'password',
+          username: email,
+          password: password,
+          scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic'
+        },
+        function(data) {
+          if(data && data.access_token) {
+            self.setCookie('token', data.access_token, expires);
+            analytics.trackEvent('login', 'Login');
+            analytics.identifyUser(email);
+            sessionStorage.setItem('accessToken', data.access_token);
+            Backbone.history.navigate('#/');
+          }
+        }
+      ).fail(function(jqXHR) {
+        if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
+          coms.trigger('login:error', 'Invalid email or password', true, true);
+        } else {
+          coms.trigger('login:error', 'Unknown error', false, false);
+        }
+      });
+    },
+
+
+    setAccessToken: function () {
       // get access token from cookie
       var accessToken = this.getCookie('token');
 

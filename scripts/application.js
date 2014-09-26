@@ -28,7 +28,7 @@ function( doc, Backbone, coms, router, regionManager, login, tripsCollection, Ov
   });
 
   //Log the user in if access token present
-  login.login();
+  login.setAccessToken();
 
   //only allow one popover at a time, close popovers when a user clicks off
   $('body').on('click', function(e) {
