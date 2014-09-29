@@ -14,7 +14,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
     collection: new Backbone.Collection([]),
     template: MapTmpl,
-    
+
 
     initialize: function() {
       coms.on('trips:highlight', _.bind(this.highlightTrips, this));
@@ -466,10 +466,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
     onShow: function () {
       this.updateMap();
-      if(this.options.layout === 'single_trip') {
-        $('.showTripEvents', this.$el).prop('checked', true);
-        this.toggleTripEvents();
-      }
+      $('.showTripEvents', this.$el).prop('checked', true);
+      this.toggleTripEvents();
     }
 
   });
