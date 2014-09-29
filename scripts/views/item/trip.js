@@ -16,8 +16,8 @@ function( Backbone, coms, TripTmpl, analytics ) {
     events: {
       'mouseenter': 'triggerHighlight',
       'mouseleave': 'removeHighlight',
-      'click .tripLink': 'tripLink',
-      'click': 'toggleSelect'
+      'change .tripSelect': 'toggleSelect',
+      'click': 'tripLink'
     },
 
 
@@ -41,8 +41,11 @@ function( Backbone, coms, TripTmpl, analytics ) {
 
 
     tripLink: function (e) {
-      e.stopPropagation();
-      coms.trigger('trips:showSingleTrip', this.model);
+      //allow click on tripSelect checkbox
+      if(!$(e.target).is('.tripSelect')) {
+        e.stopPropagation();
+        coms.trigger('trips:showSingleTrip', this.model);
+      }
     },
 
 
