@@ -80,12 +80,6 @@ function( Backbone, coms, analytics ) {
       // get access token from cookie
       var accessToken = this.getCookie('token');
 
-      // if demo URL, use the demo token
-      if(this.isDemo()) {
-        var demoToken = 'b331bf31db33e2e208fda60f18bb47f82c81d3b2';
-        accessToken = demoToken;
-      }
-
       //if non-matching token in sessionStorage, clear
       if(sessionStorage.getItem('accessToken') !== accessToken) {
         sessionStorage.clear();
