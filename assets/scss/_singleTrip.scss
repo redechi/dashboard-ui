@@ -56,7 +56,7 @@
   }
 
   .trip {
-    background: #FFF;
+    background: $white;
     border-radius: 3px;
     @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $footer_bottom_line);
     padding: 10px 10px 3px 10px;
@@ -95,7 +95,7 @@
     .tripStats {
       padding: 10px;
       overflow: hidden;
-      background: $footer_back;
+      background: $white;
 
       .stat {
         float: left;

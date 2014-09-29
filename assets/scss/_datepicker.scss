@@ -40,7 +40,7 @@
 .open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active.disabled:hover {
   background-color: $highlight;
   border-color: none;
-  color: #ffffff;
+  color: $white;
 }
 .bootstrap-datetimepicker-widget table tr td span.active:hover,
 .bootstrap-datetimepicker-widget table tr td span.active:hover:hover,
@@ -62,7 +62,7 @@
 .open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active:hover,
 .open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled,
 .open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover {
-  color: #ffffff;
+  color: $white;
   background-color: $highlight;
   border-color: none;
 }

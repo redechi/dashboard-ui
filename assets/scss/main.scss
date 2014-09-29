@@ -28,17 +28,18 @@ $fa-font-path: "../../bower_components/fontawesome/fonts";
   user-select: none;
 }
 
-$main_back: #F9F8F6;
-$header_back: #F1EFEB;
-$footer_back: #FDFDFD;
+$main_back: #FAF9F7;
+$header_back: #F5F4F1;
 
+$white: #ffffff;
 $green: #77CB49;
 $red: #F63C39;
 $blue: #5db2ef;
 
-$base_type: #8D989F;
+$base_type: #737c81;
 $inactive_type: #BBC8CF;
-$link_type: #596064;
+$disabled_type: #8D989F;
+$link_type: #2c3032;
 $highlight: #4AB4F0;
 $selected: #227EB9;
 
@@ -46,6 +47,7 @@ $line_gray: #D8D8D8;
 $line_light_gray: #EDECE9;
 $footer_top_line: #D8D7D3;
 $footer_bottom_line: #E3E2DE;
+$graph_outline: #BBB9B3;
 
 @import "fonts";
 @import "base";

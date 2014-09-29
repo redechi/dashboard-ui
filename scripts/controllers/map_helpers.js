@@ -126,7 +126,7 @@ function( mapbox, formatters, stats ) {
 
     styleLine: function(zoom) {
       return {
-        color: '#8D989F',
+        color: '#737c81',
         opacity: 0.4,
         weight: this.getPathWidthbyZoom(zoom)
       };

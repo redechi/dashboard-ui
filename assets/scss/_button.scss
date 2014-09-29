@@ -9,20 +9,20 @@
 .btn-blue {
   background-color: #82C9F1;
   @include box-shadow(0px 1px 0px 0px $highlight);
-  color: #FFF;
+  color: $white;
 
   &:hover {
     background-color: $highlight;
-    color: #FFF;
+    color: $white;
   }
 
   &:active {
     background-color: #297FB8;
-    color: #FFF;
+    color: $white;
   }
 
   &:focus {
-    color: #FFF;
+    color: $white;
   }
 }
 
@@ -40,7 +40,7 @@
 }
 
 .btn-white {
-  background-color: #FFF;
+  background-color: $white;
   color: $highlight;
   @include box-shadow(0px 1px 0px 0px #227EBA);
 
@@ -64,13 +64,14 @@
   color: $link_type;
 
   &:hover {
-    background-color: #FFF;
+    background-color: $white;
     color: $highlight;
     @include box-shadow(0px 1px 0px 0px $footer_bottom_line);
   }
 
   &.disabled {
     cursor: auto;
+    color: $disabled_type;
 
     &:hover {
       background-color: $header_back;

@@ -2,7 +2,7 @@
   .event {
     width: 33.3%;
     float: left;
-    color: #FFF;
+    color: $white;
 
     & > div {
       display: inline-block;
@@ -13,6 +13,7 @@
       position: relative;
       line-height: 27px;
       background-repeat: no-repeat;
+      font-size: 12px;
 
       &::after {
         font-size: 10px;

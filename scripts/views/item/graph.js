@@ -209,35 +209,13 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
 
     updateAverages: function() {
       var graphType = this.model.get('graphType'),
-          graphTypeName = this.model.get('graphTypeName'),
-          graphTypeUnit = this.model.get('graphTypeUnit'),
-          summary = this.model.get('summary');
+          graphAveragesUnit = this.model.get('graphTypeUnit'),
+          summary = this.model.get('summary'),
+          graphAveragesValue = formatters.formatForGraphLabel(graphType, summary.average);
 
-      $('.graphAveragesBackground').text(graphTypeUnit);
-      $('.graphAveragesValue').text(formatters.formatForGraphLabel(graphType, summary.average));
-    },
-
-
-    appendSVGGradient: function (defs) {
-      var gradient = defs.append('svg:linearGradient')
-        .attr('id', 'graphGradient')
-        .attr('x1', '0%')
-        .attr('y1', '0%')
-        .attr('x2', '0%')
-        .attr('y2', '100%')
-        .attr('spreadMethod', 'pad');
-
-      gradient.append('svg:stop')
-        .attr('offset', '0%')
-        .attr('stop-color', '#f1efeb')
-        .attr('stop-opacity', 0);
-
-      gradient.append('svg:stop')
-        .attr('offset', '86%')
-        .attr('stop-color', '#F4F2EF')
-        .attr('stop-opacity', 1);
-
-      return defs;
+      $('.graphAveragesBackground').text(graphAveragesUnit);
+      $('.graphAveragesValue').text(graphAveragesValue);
+      $('.graphAveragesUnit').text(graphAveragesUnit);
     },
 
 
@@ -323,13 +301,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
           .classed(graphType, true)
           .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-      //SVG defs for gradient
-      this.appendSVGGradient(svg.append('svg:defs'));
-      svg.append('rect')
-        .attr('class', 'graphGradient')
-        .attr('width', '100%')
-        .attr('height', height);
 
 
       //scales

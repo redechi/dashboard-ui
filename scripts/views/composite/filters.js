@@ -54,7 +54,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     events: {
       'click .filterList li': 'addFilterFromMenu',
       'click .removeFilter': 'removeFilter',
-      'click .resetFilters': 'resetFilters',
+      'click .reset': 'resetFilters',
       'click .vehicleFilterValue li': 'changeVehicleFilter',
       'click .dateFilterValue li': 'changeDateFilter',
       'slideStop .durationFilterValue': 'changeDurationFilter',
@@ -69,7 +69,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'hide.bs.popover .btn-filter': 'hidePopoverContent',
       'click .filterNav .undo': 'undo',
-      'click .filterNav .redo': 'redo',
       'dp.change .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
       'dp.change .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
       'mouseleave .popover': 'mouseLeavePopover',
@@ -112,7 +111,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     updateNavButtons: function() {
-      $('.filterNav .redo').toggleClass('disabled', (Backbone.history.next.length === 0));
       $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
     },
 
@@ -122,15 +120,6 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
         Backbone.history.next.unshift(Backbone.history.fragment);
         this.navigate(Backbone.history.previous.pop());
         analytics.trackEvent('undo filter', 'Click');
-      }
-    },
-
-
-    redo: function() {
-      if(Backbone.history.next.length) {
-        Backbone.history.previous.push(Backbone.history.fragment);
-        this.navigate(Backbone.history.next.shift());
-        analytics.trackEvent('redo filter', 'Click');
       }
     },
 

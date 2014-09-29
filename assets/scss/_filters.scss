@@ -13,7 +13,7 @@
   }
 
   .appliedFilters {
-    margin: 0 100px 0 110px;
+    margin-right: 100px;
 
     >li {
       display: inline-block;
@@ -43,11 +43,6 @@
     &:hover {
       color: $highlight;
     }
-  }
-
-  .resetFilters {
-    float: right;
-    line-height: 25px;
   }
 
   .dateFilterValue.listSelect {
@@ -99,7 +94,7 @@
     border-bottom-left-radius: 3px;
     background: rgba(255,9,5,0.50);
     font-size: 12px;
-    color: #FFFFFF;
+    color: $white;
     line-height: 30px;
     height: 30px;
     text-align: center;
@@ -117,34 +112,29 @@
   }
 
   .filterNav {
-    float: left;
+    float: right;
+
+    label {
+      padding: 4px 10px 0 0;
+      margin-bottom: 0;
+    }
 
     li {
       margin: 0;
-      background-position: 50% center;
       overflow: hidden;
-      text-indent: -9999px;
-      width: 35px;
+      width: 50px;
+      font-size: 14px;
+      vertical-align: top;
 
       &.undo {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
         border-right: 1px solid rgba(0,0,0,0.10);
-        @include hr-image('../img/icon_back_active.png', '../img/icon_back_active@2x.png');
-
-        &.disabled {
-          @include hr-image('../img/icon_back_inactive.png', '../img/icon_back_inactive@2x.png');
-        }
       }
 
-      &.redo {
+      &.reset {
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        @include hr-image('../img/icon_forward_active.png', '../img/icon_forward_active@2x.png');
-
-        &.disabled {
-          @include hr-image('../img/icon_forward_inactive.png', '../img/icon_forward_inactive@2x.png');
-        }
       }
     }
   }
