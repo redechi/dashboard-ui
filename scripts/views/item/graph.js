@@ -12,7 +12,7 @@ define([
 function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, nvd3 ) {
   'use strict';
 
-  return Backbone.Marionette.ItemView.extend({    
+  return Backbone.Marionette.ItemView.extend({
 
     model: new Backbone.Model({
       values: [],
@@ -374,16 +374,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
         return tooltip;
       }
 
-      function barClick(d) {
-        var startDate = parseInt(d.key, 10),
-            endDate = moment(startDate).endOf(binSize).valueOf(),
-            fullySelected = !$(this).data('fullySelected');
-
-        $(this).data('fullySelected', fullySelected);
-
-        coms.trigger('trips:selectByDate', startDate, endDate, {selected: fullySelected, scroll: true});
-        coms.trigger('trips:highlightByDate', startDate, endDate);
-      }
 
       function barMouseover(d) {
         if(d.values === 0) { return; }
@@ -450,7 +440,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
-        .on('click', barClick)
         .attr('class', 'barBackground')
         .attr('d', function(d) {
           if(d.values > 0) {
@@ -461,7 +450,6 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       bars.append('path')
         .on('mouseover', barMouseover)
         .on('mouseout', barMouseout)
-        .on('click', barClick)
         .attr('class', 'barOutline')
         .attr('d', function(d) {
           if(d.values > 0) {

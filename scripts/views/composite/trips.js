@@ -20,7 +20,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
     childView: Trip,
     childViewContainer: '.trips ul',
     template: tripListTmpl,
-    
+
 
     initialize: function() {
       coms.on('resize', _.bind(this.resize, this));
@@ -29,7 +29,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
       coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
       coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
       coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
-      coms.on('trips:selectByDate', _.bind(this.selectByDate, this));
       coms.on('trips:highlightByDate', _.bind(this.highlightByDate, this));
       coms.on('trips:unhighlightByDate', _.bind(this.unhighlightByDate, this));
       coms.on('trips:highlight', _.bind(this.highlightTrips, this));
@@ -93,14 +92,6 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
         .toggle(selectedTrips.length > 0);
       $('.selectAll', this.$el).toggleClass('hide', !!selectedTrips.length);
       $('.deselectAll', this.$el).toggleClass('hide', !selectedTrips.length);
-    },
-
-
-    selectByDate: function(startDate, endDate, options) {
-      var trips = this.collection.filter(function(trip) {
-        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
-      });
-      coms.trigger('trips:toggleSelect', trips, options);
     },
 
 
