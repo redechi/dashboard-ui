@@ -22,7 +22,7 @@ define([
       'logout': 'logOut',
       '*notFound': 'notFound'
     },
-    
+
 
     route: function(route, name, callback) {
         var router = this;
@@ -31,7 +31,7 @@ define([
         var f = function() {
 
           //check for access tokens on all routes, except login
-          if(route !== 'login' && route !== 'reset'  && route !== 'reset/:token') {
+          if(route !== 'login' && route !== 'reset'  && route !== 'reset/:token'  && !login.isDemo()) {
             var accessToken = sessionStorage.getItem('accessToken');
 
             // if no access token, redirect to login
