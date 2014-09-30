@@ -143,6 +143,8 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
         trip.set('selected', selected);
         div.toggleClass('selected', selected);
 
+        $('.tripSelect', div).prop('checked', selected);
+
         if(selected) {
           if(options.scroll && !scrolling) {
             scrolling = true;
