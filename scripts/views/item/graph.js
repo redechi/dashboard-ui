@@ -244,11 +244,13 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
 
     getMonthLabel: function(d) {
       var data = this.model.get('values'),
-          date = moment(parseInt(d.key, 10));
+          date = moment(parseInt(d.key, 10)),
+          firstDate = _.first(data).key,
+          lastDate = _.last(data).key;
 
-      if(date.date() === 1 || (d.key === data[0].key && date.date() < 29)) {
-        //only show month label at start of months and first position
-        return date.format('MMMM YYYY');
+      if((date.date() === 1 && d.key < lastDate) || (d.key === firstDate && date.date() < 29)) {
+        //only show month label at start of months (if more than one day of that month is shown) and first position
+        return date.format('MMM \'YY');
       }
     },
 
