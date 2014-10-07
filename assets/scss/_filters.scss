@@ -111,7 +111,7 @@
     display: inline-block;
   }
 
-  .filterNav {
+  .filterControls {
     float: right;
 
     label {
@@ -123,7 +123,7 @@
       margin: 0;
       overflow: hidden;
       width: 50px;
-      font-size: 14px;
+      font-size: 12px;
       vertical-align: top;
 
       &.undo {

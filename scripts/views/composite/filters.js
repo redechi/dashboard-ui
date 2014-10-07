@@ -68,7 +68,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
       'show.bs.popover .btn-filter': 'preparePopoverContent',
       'shown.bs.popover .btn-filter': 'initializePopoverContent',
       'hide.bs.popover .btn-filter': 'hidePopoverContent',
-      'click .filterNav .undo': 'undo',
+      'click .filterControls .undo': 'undo',
       'dp.change .popover .dateFilterValueCustomStart': 'changeDateFilterCustom',
       'dp.change .popover .dateFilterValueCustomEnd': 'changeDateFilterCustom',
       'mouseleave .popover': 'mouseLeavePopover',
@@ -111,7 +111,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     updateNavButtons: function() {
-      $('.filterNav .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
+      $('.filterControls .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
     },
 
 
