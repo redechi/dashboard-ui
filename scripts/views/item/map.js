@@ -26,6 +26,13 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     },
 
 
+    templateHelpers: function() {
+      return {
+        singleTrip: this.options.layout === 'single_trip'
+      };
+    },
+
+
     resetView: function (collection) {
       this.collection.reset(collection);
       this.updateMap();
@@ -35,7 +42,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     events: {
       'click .zoomIn': 'zoomIn',
       'click .zoomOut': 'zoomOut',
-      'change .showTripEvents': 'toggleTripEvents'
+      'change .showTripEvents': 'toggleTripEvents',
+      'change .autoZoom input': 'toggleAutoZoom'
     },
 
 
@@ -84,10 +92,16 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         if(endMarker) {
           mapHelpers.highlightMarker(endMarker);
         }
+
         if(self.speedingLayer.getLayers().length) {
           self.speedingLayer.bringToFront();
         }
       });
+
+      if(window.options.autoZoom) {
+        var bounds = this.getBoundsFromTrips(trips);
+        this.fitBounds(bounds || this.pathsLayer.getBounds());
+      }
     },
 
 
@@ -125,6 +139,10 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           }
         }
       });
+
+      if(window.options.autoZoom) {
+        this.fitBounds(this.pathsLayer.getBounds());
+      }
     },
 
 
@@ -178,10 +196,17 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
 
     changeSelectedTrips: function() {
-      var self = this,
-          selectedTrips = this.collection.where({selected: true});
+      var selectedTrips = this.collection.where({selected: true}),
+          bounds = this.getBoundsFromTrips(selectedTrips);
 
-      var bounds = selectedTrips.reduce(function(memo, trip) {
+      this.fitBounds(bounds || this.pathsLayer.getBounds());
+    },
+
+
+    getBoundsFromTrips: function(trips) {
+      var self = this;
+
+      return trips.reduce(function(memo, trip) {
         var path = self.pathsLayer.getLayer(trip.get('pathID'));
         if(path) {
           var pathBounds = path.getBounds();
@@ -193,8 +218,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         }
         return memo;
       }, null);
-
-      this.fitBounds(bounds || this.pathsLayer.getBounds());
     },
 
 
@@ -461,6 +484,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
       this.mapbox.removeLayer(this.hardBrakesLayer);
       this.mapbox.removeLayer(this.hardAccelsLayer);
       this.mapbox.removeLayer(this.speedingLayer);
+    },
+
+
+    toggleAutoZoom: function() {
+      window.options.autoZoom = $('.autoZoom input', this.$el).is(':checked');
+      analytics.trackEvent('auto zoom', 'Toggle');
     },
 
 
