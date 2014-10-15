@@ -17,12 +17,12 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
 
     initialize: function() {
-      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
-      coms.on('trips:select', _.bind(this.selectTrip, this));
-      coms.on('trips:deselect', _.bind(this.deselectTrip, this));
-      coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
-      coms.on('filter', _.bind(this.resetView, this));
+      coms.on('trips:highlight', this.highlightTrips, this);
+      coms.on('trips:unhighlight', this.unhighlightTrips, this);
+      coms.on('trips:select', this.selectTrip, this);
+      coms.on('trips:deselect', this.deselectTrip, this);
+      coms.on('trips:changeSelectedTrips', this.changeSelectedTrips, this);
+      coms.on('filter', this.resetView, this);
     },
 
 

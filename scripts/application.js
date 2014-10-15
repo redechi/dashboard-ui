@@ -4,6 +4,7 @@ define([
   'communicator',
   'router',
   'regionManager',
+  'moment',
   './controllers/login',
   './collections/trips',
   './views/layout/overlay',
@@ -14,7 +15,7 @@ define([
   'bootstrap/popover'
 ],
 
-function( doc, Backbone, coms, router, regionManager, login, tripsCollection, OverlayLayout, FastClick, MobileDetect ) {
+function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollection, OverlayLayout, FastClick, MobileDetect ) {
   'use strict';
 
   window.options = {};

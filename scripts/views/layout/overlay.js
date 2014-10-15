@@ -14,8 +14,8 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
 
 
     initialize: function() {
-      coms.on('overlay:hide', _.bind(this.closeOverlay, this));
-      coms.on('overlay:page', _.bind(this.updateLoadingOverlayCount, this));
+      coms.on('overlay:hide', this.closeOverlay, this);
+      coms.on('overlay:page', this.updateLoadingOverlayCount, this);
 
       if(this.options.type === 'notSupported') {
         analytics.trackPageview('/unsupported');
@@ -31,7 +31,9 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
 
     templateHelpers: function() {
       return {
-        blobUrl: this.options.blobUrl
+        blobUrl: this.options.blobUrl,
+        firstName: this.options.firstName,
+        lastName: this.options.lastName
       };
     },
 
@@ -48,7 +50,8 @@ function( Backbone, coms, regionManager, OverlayTmpl, analytics ) {
 
 
     events: {
-      'click a.btn-close': 'closeOverlay',
+      'click .btn-close': 'closeOverlay',
+      'click .close': 'closeOverlay',
       'click a.iOSAppLink': 'iOSAppLink'
     },
 

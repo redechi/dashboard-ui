@@ -1,0 +1,111 @@
+<div id="progress">
+  {{#if is_finished}}
+
+    <h2 class="sectionHeader">Medal</h2>
+
+    <div class="finished">
+      <div class="completedMedal {{medal}}">
+        <div class="medalImage" data-slug="{{medal}}" data-completed="true"></div>
+        <div class="medalName">{{medal}}</div>
+        <div class="medalSubtitle">Automatic License+ Medal</div>
+        <div class="studentName">{{student.first_name}} {{student.last_name}}</div>
+      </div>
+
+      <div class="duration">
+        <h3>Awarded</h3>
+        <div class="endDate">{{endDate}}</div>
+      </div>
+
+      <div class="duration">
+        <h3>License+ Start Date</h3>
+        <div class="startDate">{{startDate}}</div>
+      </div>
+
+      <div class="finalScore">
+        <h3>Final Score</h3>
+        <svg></svg>
+      </div>
+
+      <div class="distance">
+        <h3>Miles Driven</h3>
+        <div class="milesDriven">{{distanceDriven}}</div>
+      </div>
+    </div>
+
+  {{else}}
+
+    <h2 class="sectionHeader">Progress</h2>
+
+    <div class="ongoing">
+      <div class="score">
+        <div class="scoreContainer">
+          <svg></svg>
+        </div>
+      </div>
+
+      <div class="remaining">
+        <div class="timeRemaining">{{timeRemaining}} remaining</div>
+        <div class="timeRemainingBar">
+          <div class="timeRemainingValue"></div>
+        </div>
+      </div>
+
+      <div class="medals">
+        <h3>Medal Tracking</h3>
+        <div class="medal bronze {{#if bronze}}completed{{/if}}" data-slug="bronze" data-completed="false">bronze<br>70-79</div>
+        <div class="medal silver {{#if silver}}completed{{/if}}" data-slug="silver" data-completed="false">silver<br>80-89</div>
+        <div class="medal gold {{#if gold}}completed{{/if}}" data-slug="gold" data-completed="false">gold<br>90-100</div>
+      </div>
+
+      <div class="duration">
+        <h3>License+ Start Date</h3>
+        <div class="startDate">{{startDate}}</div>
+      </div>
+
+      <div class="distance">
+        <h3>Miles Driven</h3>
+        <div class="milesDriven">{{distanceDriven}}</div>
+      </div>
+    </div>
+  {{/if}}
+</div>
+
+<div id="badges">
+  <h2 class="sectionHeader">Badges</h2>
+
+  <div class="badgeList">
+    {{#each badges}}
+      <div class="badgeItem {{slug}} {{#if completed}}completed{{/if}}" data-slug="{{slug}}" data-completed="{{completed}}">
+        <div class="badgeTitle">{{name}}</div>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="comingSoon">
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+    <div class="badgeItem empty">
+      <div class="emptyBadge"></div>
+      <div class="badgeTitle">Coming Soon</div>
+    </div>
+  </div>
+
+</div>

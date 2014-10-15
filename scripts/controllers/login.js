@@ -1,84 +1,141 @@
 define([
   'backbone',
   'communicator',
-  './analytics'
+  './analytics',
+  '../models/settings',
+  '../controllers/cache',
+  '../controllers/cookie'
 ],
-function( Backbone, coms, analytics ) {
+function( Backbone, coms, analytics, settings, cache, cookie ) {
   'use strict';
 
   return {
 
     isLoggedIn: false,
+    isDemo: settings.isDemo,
+    isStaging: settings.isStaging,
+    isUsingStaging: settings.isUsingStaging,
 
 
-    isDemo: function () {
-      return window.location.search.indexOf('demo') !== -1;
-    },
-
-
-    isStaging: function () {
-      return window.location.hostname === 'dashboard.automatic.co';
-    },
-
-
-    isUsingStaging: function () {
-      return window.location.search.indexOf('staging') !== -1;
-    },
-
-
-    getAPIUrl: function () {
-      if(window.location.search.indexOf('staging') !== -1) {
-        return 'https://api.automatic.co';
-      } else {
-        return 'https://api.automatic.com';
-      }
-    },
-
-
-    getBaseUrl: function () {
-      if(window.location.search.indexOf('staging') !== -1) {
-        return 'https://staging.automatic.co';
-      } else {
-        return 'https://www.automatic.com';
-      }
-    },
-
-
-    login: function(email, password, staySignedIn) {
+    login: function(model) {
       var self = this,
-          expires = (staySignedIn) ? 60*60*24*7 : null;
+          isValid = model.isValid();
 
-      $.post(
-        self.getBaseUrl() + '/oauth/access_token',
-        {
-          client_id: '385be37e93925c8fa7c7',
-          grant_type: 'password',
-          username: email,
-          password: password,
-          scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic'
-        },
-        function(data) {
+      // protect login
+      if (!model.get('type') === 'login' || !isValid) {
+        return isValid;
+      }
+
+      var attributes = {
+        username: model.get('username'),
+        password: model.get('password'),
+        client_id: model.get('client_id'),
+        grant_type: model.get('grant_type'),
+        scope: model.get('scope')
+      };
+
+      return $.post(
+        model.url(),
+        attributes,
+        function (data) {
           if(data && data.access_token) {
-            self.setCookie('token', data.access_token, expires);
+            var expires = (model.get('staySignedIn')) ?  data.expires_in : undefined ;
+            cookie.setCookie('token', data.access_token, expires);
             analytics.trackEvent('login', 'Login');
-            analytics.identifyUser(email);
+            analytics.identifyUser(model.get('username'));
             sessionStorage.setItem('accessToken', data.access_token);
-            Backbone.history.navigate('#/');
+
+            //if coming from coach_login, show licenseplus
+            if(_.contains(['coach'], model.get('type'))) {
+              $.ajax({
+                type: 'POST',
+                url: settings.get('newton_host') + '/internal/licenseplus/accept/',
+                data: {
+                  token: model.get('token')
+                },
+                headers: {
+                  Authorization: 'bearer ' + data.access_token
+                }
+              }).done(function() {
+                Backbone.history.navigate('#licenseplus?coachAccepted', {trigger: true});
+              }).fail(_.bind(self.error, model));
+            } else {
+              Backbone.history.navigate('#/');
+            }
           }
-        }
-      ).fail(function(jqXHR) {
-        if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
-          coms.trigger('login:error', 'Invalid email or password', true, true);
-        } else {
-          coms.trigger('login:error', 'Unknown error', false, false);
-        }
+        })
+        .fail(this.error.bind(model));
+    },
+
+
+    logout: function() {
+      sessionStorage.clear();
+      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    },
+
+
+    createAccount: function(model) {
+      var self = this,
+          isValid = model.isValid();
+
+      // protect createAccount
+      if (!model.get('type') === 'createAccount' || !isValid) {
+        return isValid;
+      }
+
+      var attributes = model.toJSON();
+
+      delete attributes.type;
+      delete attributes.token;
+      delete attributes.scope;
+      delete attributes.grant_type;
+      delete attributes.staySignedIn;
+
+      attributes.type = 'coach';
+      attributes.source = 'DASHBOARD';
+      attributes.device_identifier = Math.random().toString(36).substring(2,18);
+
+      return $.ajax({
+        url: model.url(),
+        type: 'POST',
+        data: attributes,
+        headers: {
+          Authorization: 'client ' + model.get('client_id')
+        },
+        datatype: 'json',
+        success: function(data) {
+          model.set('type', 'coach');
+          self.login(model);
+        },
+        error: _.bind(this.error, model)
       });
+    },
+
+
+    error: function (jqXHR){
+      var model = this,
+          message = '';
+
+      if(jqXHR.status === 400 && jqXHR.responseText.indexOf('Invalid value') !== -1) {
+        message = 'The coach invite URL was invalid.';
+      } else if(jqXHR.status === 400 && jqXHR.responseJSON && jqXHR.responseJSON.error === 'err_incoming_relationship_already_exists') {
+        message = 'You may only coach one student at a time, and you cannot be both a student and a coach.';
+      } else if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
+        message = 'Invalid email or password';
+      } else if(jqXHR.status === 409) {
+        message = 'An account with that email already exists. Try logging in.';
+      } else {
+        message = 'Unknown error<br> If this persists please contact <a href="mailto:support@automatic.com">Support</a>.';
+      }
+
+      coms.trigger('login:error', message);
+      model.trigger('invalid', message);
     },
 
 
     setAccessToken: function () {
       // get access token from cookie
-      var accessToken = this.getCookie('token');
+      var accessToken = cookie.getCookie('token');
 
       //if non-matching token in sessionStorage, clear
       if(sessionStorage.getItem('accessToken') !== accessToken) {
@@ -97,10 +154,14 @@ function( Backbone, coms, analytics ) {
           options.beforeSend = function (xhr, req) {
             try {
               //Set request header
-              xhr.setRequestHeader('Authorization', 'token ' + accessToken);
+              if(req.url.indexOf('automatic-newton') !== -1) {
+                xhr.setRequestHeader('Authorization', 'bearer ' + accessToken);
+              } else {
+                xhr.setRequestHeader('Authorization', 'token ' + accessToken);
+              }
 
-              // TODO: invalidate cache at 15 min.
-              var cached = sessionStorage.getItem(req.url);
+              //check for cached response
+              var cached = cache.fetch(req.url);
               if(cached) {
                 this.success(JSON.parse(cached));
                 xhr.abort('cached');
@@ -112,8 +173,8 @@ function( Backbone, coms, analytics ) {
 
           options.complete = function(xhr, status) {
 
-
-            if (status !== 200 && status !== 204) {
+            // intentionally skip 500 its a legit server issue
+            if (status > 500 && status < 600) {
               this.retryCount = this.retryCount || 0;
               this.retryMax = this.retryMax || 3;
               this.retryCount++;
@@ -126,54 +187,16 @@ function( Backbone, coms, analytics ) {
 
             try {
               if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1 && this.url.indexOf('/trips') === -1) {
-                sessionStorage.setItem(this.url, xhr.responseText);
+                cache.save(this.url, xhr.responseText);
               }
             } catch (e) {
-              console.warn('Could Not Cache: ' + req.url);
+              console.warn('Could Not Cache: ' + this.url);
             }
           };
 
           return sync(method, model, options);
         };
       }
-    },
-
-
-    getCookie: function(key) {
-      return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
-    },
-
-
-    setCookie: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-      if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-      var sExpires = '';
-      if (vEnd) {
-        switch (vEnd.constructor) {
-          case Number:
-            sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd;
-            break;
-          case String:
-            sExpires = '; expires=' + vEnd;
-            break;
-          case Date:
-            sExpires = '; expires=' + vEnd.toUTCString();
-            break;
-        }
-      }
-      document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '');
-      return true;
-    },
-
-
-    fetchErrorHandler: function(model, result) {
-      if(result.status === 403) {
-        coms.trigger('error:403');
-      } else if (result.status >= 500 && result.status < 600) {
-        coms.trigger('error:500');
-      } else {
-        coms.trigger('error:500');
-      }
     }
-
   };
 });

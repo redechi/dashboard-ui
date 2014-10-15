@@ -1,11 +1,8 @@
 define([
   'backbone',
-  'communicator',
-  '../../collections/filters',
-  '../../collections/vehicles',
   'hbs!tmpl/item/filter_tmpl'
 ],
-function( Backbone, coms, filters, vehicles, FiltersTmpl ) {
+function( Backbone, FiltersTmpl ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({

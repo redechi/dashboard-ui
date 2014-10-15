@@ -3,10 +3,12 @@ define([
   'communicator',
   'regionManager',
   'hbs!tmpl/layout/login_tmpl',
+  '../../models/login',
+  '../../models/settings',
   '../../controllers/login',
   '../../controllers/analytics'
 ],
-function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
+function( Backbone, coms, regionManager, LoginTmpl, LoginModel, settings, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -20,14 +22,38 @@ function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
       'click .forgotPasswordLink': 'forgotPassword',
       'click .toggleLoginForm': 'toggleLoginForm',
       'click .learnMore': 'learnMore',
-      'click .tryDemo': 'tryDemo'
+      'click .tryDemo': 'tryDemo',
+      'change input[name="username"]': 'dataBindInput',
+      'change input[name="password"]': 'dataBindInput',
+      'change input[name="staySignedIn"]': 'dataBindInput'
     },
+
+    model: new LoginModel({type: 'login'}),
 
 
     initialize: function() {
-      coms.on('login:error', this.errorAlert, this);
+      this.model.on('invalid', this.loginError, this);
+      coms.on('login:error', this.loginError, this);
+
+      if(settings.isStaging() && !settings.isUsingStaging()) {
+        if(!window.confirm('Would you like to use the Production database (OK) or Staging database (Cancel)?')) {
+          window.location.search = 'staging';
+        }
+      }
     },
 
+    dataBindInput: function (e) {
+      var value = '',
+          name = $(e.target).attr('name');
+
+      if ($(e.target).attr('type') === 'checkbox') {
+        value = $(e.target).is(':checked');
+      } else {
+        value = $(e.target).val();
+      }
+
+      this.model.set(name, value);
+    },
 
     toggleLoginForm: function(e) {
       e.preventDefault();
@@ -47,13 +73,12 @@ function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
     },
 
 
-    errorAlert: function(message, emailError, passwordError) {
+    errorAlert: function(message, formGroup) {
       $('.alert', this.$el)
-        .html(message)
+        .append($('<li>').html(message))
         .removeClass('invisible');
 
-      $('#email', this.$el).parent('.form-group').toggleClass('has-error', !!emailError);
-      $('#password', this.$el).parent('.form-group').toggleClass('has-error', !!passwordError);
+      $(formGroup).addClass('has-error');
     },
 
 
@@ -63,30 +88,38 @@ function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
 
 
     clearErrors: function() {
-      $('.alert', this.$el).addClass('invisible');
+      $('.alert', this.$el)
+        .empty()
+        .addClass('invisible');
+
       $('form-group', this.$el).removeClass('has-error');
     },
 
+    /*
+     *
+     * Accepts model or string for validation errors;
+     *
+     */
+    loginError: function(obj) {
+      var message = obj;
+      if (typeof message !== 'string') message = obj.validate();
+      this.clearErrors();
+      this.errorAlert(message, $('#loginForm .form-group', this.$el));
+    },
 
-    login: function () {
-      var email = $('#email', this.$el).val(),
-          password = $('#password', this.$el).val(),
-          staySignedIn = $('.staySignedIn', this.$el).is(':checked');
 
-      if(!email || !password) {
-        this.errorAlert('Please enter an email and a password', !email, !password);
-      } else {
+    login: function (e) {
+      e.preventDefault();
+      var isValid = login.login(this.model)
+      if (isValid) {
+        this.clearErrors();
         this.errorAlert('Logging in&hellip;');
-
-        login.login(email, password, staySignedIn);
       }
-
-      return false;
     },
 
 
     forgotPassword: function (e) {
-      var email = $('#email', this.$el).val();
+      var email = $('#loginForm input[name="email"]', this.$el).val();
       if(email) {
         $(e.target).attr('href', '#reset?email=' + encodeURIComponent(email));
       }
@@ -96,15 +129,5 @@ function( Backbone, coms, regionManager, LoginTmpl, login, analytics ) {
     onRender: function () {
       regionManager.getRegion('main_header').reset();
     },
-
-
-    onShow: function () {
-      if(login.isStaging() && !login.isUsingStaging()) {
-        if(!window.confirm('Would you like to use the Production database (OK) or Staging database (Cancel)?')) {
-          window.location.search = 'staging';
-        }
-      }
-    }
   });
-
 });

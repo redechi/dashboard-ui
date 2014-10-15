@@ -29,10 +29,11 @@
 </div>
 
 <div class="overlayContent noTrips">
+  <div class="close">x</div>
   <h2>You haven't taken any trips yet.</h2>
   <div class="noTripsIcon"></div>
   <p>Once you start driving with Automatic, your trips and drive data will be available here to explore. Use our <a href="https://automatic.com/app?utm_source=dashboard%20CTA&utm_medium=button&utm_campaign=dashboard%20demo%20CTA%20">mobile app</a> to get started.</p>
-  <a href="#logout" class="btn btn-blue btn-close">Log Out</a>
+  <div class="btn btn-blue btn-close">OK</div>
 </div>
 
 <div class="overlayContent invalidTrip">
@@ -46,6 +47,18 @@
   <div class="csvIcon"></div>
   <p>Your trips will be downloaded as a file called "Unknown". To open it, you will need to rename it and add the ".csv" extension.</p>
   <a class="btn btn-blue btn-close" href="{{blobUrl}}">Download now</a>
+</div>
+
+<div class="overlayContent coachAccepted">
+  <h2>Congratulations!</h2>
+  <div class="coachIcon"></div>
+  <p>You are now coaching {{firstName}} {{lastName}}.</p>
+  <a class="btn btn-blue btn-close btn-block">Continue</a>
+</div>
+
+<div class="overlayContent getSatisfaction">
+  <div class="close">x</div>
+  <div id="getsat-widget-7392"></div>
 </div>
 
 <div class="overlay"></div>

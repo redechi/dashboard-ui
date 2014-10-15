@@ -13,7 +13,7 @@ $fa-font-path: "../../bower_components/fontawesome/fonts";
   @media print,
          (-webkit-min-device-pixel-ratio: 1.25),
          (-o-min-device-pixel-ratio: 5/4),
-         (min-resolution: 120dpi) {
+         (min-resolution: 120dppx) {
     background-image: url($hr-image);
     background-size: image-width($lr-image) image-height($lr-image);
   }
@@ -42,11 +42,11 @@ $disabled_type: #8D989F;
 $link_type: #2c3032;
 $highlight: #4AB4F0;
 $selected: #227EB9;
+$disabled: #E3E2DE;
 
 $line_gray: #D8D8D8;
 $line_light_gray: #EDECE9;
 $footer_top_line: #D8D7D3;
-$footer_bottom_line: #E3E2DE;
 $graph_outline: #BBB9B3;
 
 @import "fonts";
@@ -61,12 +61,17 @@ $graph_outline: #BBB9B3;
 @import "error";
 @import "tablet_warning";
 @import "overlay";
-@import "tripEvents";
+@import "trip_events";
 @import "header";
 @import "login";
+@import "coach_login";
 @import "password_reset";
 @import "map";
 @import "graph";
-@import "tripList";
-@import "singleTrip";
+@import "trip_list";
+@import "user_score";
+@import "single_trip";
 @import "filters";
+@import "licenseplus";
+@import "student_trip_list";
+@import "single_badge";

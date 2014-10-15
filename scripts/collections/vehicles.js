@@ -1,21 +1,17 @@
 define([
   'backbone',
   'communicator',
-  'models/vehicle',
   '../controllers/filter',
-  '../controllers/login'
+  '../models/settings'
 ],
-function( Backbone, coms, Vehicle, filterList, login ) {
+function( Backbone, coms, filterList, settings ) {
   'use strict';
 
   /* vehicles singleton */
   var Vehicles = Backbone.Collection.extend({
-    model: Vehicle,
 
-
-    url: login.getAPIUrl() + '/v1/vehicles',
-
-
+    model: Backbone.Model.extend({}),
+    url: settings.get('api_host') + '/v1/vehicles',
     comparator: 'display_name',
 
 
@@ -29,12 +25,12 @@ function( Backbone, coms, Vehicle, filterList, login ) {
 
 
     fetchInitial: function () {
-      if(login.isDemo()) {
+      if(settings.isDemo()) {
         //get trips from local JSON
         this.fetchDemoVehicles();
       } else {
         return this.fetch({
-          error: login.fetchErrorHandler
+          error: settings.requestErrorHandler
         }).always(function() {
           coms.trigger('filter:updateVehicleList');
         });

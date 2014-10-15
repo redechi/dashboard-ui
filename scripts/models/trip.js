@@ -1,21 +1,18 @@
 define([
   'backbone',
-  '../controllers/unit_formatters',
-  '../controllers/login'
+  'moment',
+  '../controllers/unit_formatters'
 ],
-function( Backbone, formatters, login ) {
+function( Backbone, moment, formatters ) {
   'use strict';
 
   /* Return a model class definition */
   return Backbone.Model.extend({
 
-    url: function () {
-      return login.getAPIUrl() + '/v1/trips/' + this.get('id');
-    },
-
-
     initialize: function(trip) {
-      var duration = ((this.get('end_time') - this.get('start_time')) / (1000 * 60)),
+      var start_time = this.get('start_time') || this.get('started_at'),
+          end_time = this.get('end_time') || this.get('ended_at'),
+          duration = moment(end_time).diff(moment(start_time), 'minutes', true),
           miles = formatters.m_to_mi(this.get('distance_m')),
           startAddress = 'Unknown Address',
           endAddress = 'Unknown Address',
@@ -41,10 +38,10 @@ function( Backbone, formatters, login ) {
         formatted_distance_miles: formatters.distance(miles),
         formatted_average_mpg: Math.round(this.get('average_mpg')),
         formatted_fuel_cost_usd: formatters.cost(this.get('fuel_cost_usd')),
-        formatted_end_time: (this.get('end_time') ? moment(this.get('end_time')).format('h:mm a').toUpperCase() : ''),
-        formatted_start_time: (this.get('start_time') ? moment(this.get('start_time')).format('h:mm a').toUpperCase(): ''),
-        formatted_calendar_date: moment(this.get('start_time')).calendar(),
-        formatted_calendar_date_with_year: moment(this.get('start_time')).format('MMM D, YYYY'),
+        formatted_end_time: (end_time ? moment(end_time).format('h:mm a').toUpperCase() : ''),
+        formatted_start_time: (start_time ? moment(start_time).format('h:mm a').toUpperCase(): ''),
+        formatted_calendar_date: moment(start_time).calendar(),
+        formatted_calendar_date_with_year: moment(start_time).format('MMM D, YYYY'),
         duration_over_70_min: Math.ceil(this.get('duration_over_70_s') / 60),
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),

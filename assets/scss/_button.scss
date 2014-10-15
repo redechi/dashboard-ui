@@ -4,6 +4,10 @@
   border: none;
   font-weight: bold;
   @include noSelection;
+
+  &.no-hover {
+    cursor: auto;
+  }
 }
 
 .btn-blue {
@@ -24,6 +28,14 @@
   &:focus {
     color: $white;
   }
+
+  &.no-hover {
+    &:hover,
+    &:active {
+      background-color: $highlight;
+      @include box-shadow(none);
+    }
+  }
 }
 
 .btn-grey {
@@ -37,6 +49,14 @@
   &:active {
     background-color: $line_gray;
   }
+
+  &.no-hover {
+    &:hover,
+    &:active {
+      background-color: $header_back;
+      @include box-shadow(none);
+    }
+  }
 }
 
 .btn-white {
@@ -47,6 +67,14 @@
   &:hover {
     background-color: $main_back;
     color: $highlight;
+  }
+
+  &.no-hover {
+    &:hover,
+    &:active {
+      background-color: $white;
+      color: $highlight;
+    }
   }
 }
 
@@ -66,7 +94,7 @@
   &:hover {
     background-color: $white;
     color: $highlight;
-    @include box-shadow(0px 1px 0px 0px $footer_bottom_line);
+    @include box-shadow(0px 1px 0px 0px $disabled);
   }
 
   &.disabled {

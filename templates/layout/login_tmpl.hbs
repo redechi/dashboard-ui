@@ -35,14 +35,14 @@
     <a href="#" class="toggleLoginForm back">Back</a>
     <form role="form">
       <div class="form-group">
-        <input type="text" class="form-control" id="email" placeholder="Email Address" spellcheck="false">
+        <input type="text" class="form-control" name="username" placeholder="Email Address" spellcheck="false">
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <input type="password" class="form-control" name="password" placeholder="Password">
       </div>
-      <div class="alert alert-grey invisible" role="alert"></div>
+      <ul class="alert alert-grey invisible" role="alert"></ul>
       <div class="form-group">
-        <label><input type="checkbox" checked class="staySignedIn"> Keep me signed in</label>
+        <label><input type="checkbox" checked name="staySignedIn" class="staySignedIn"> Keep me signed in</label>
       </div>
       <button type="submit" class="btn btn-blue btn-block">Login</button>
     </form>

@@ -1,6 +1,7 @@
 define([
   'backbone',
   'communicator',
+  'moment',
   '../../controllers/login',
   'views/item/filter',
   '../../models/filter',
@@ -12,7 +13,7 @@ define([
   '../../controllers/unit_formatters',
   '../../controllers/analytics'
 ],
-function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters, analytics ) {
+function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, vehiclesCollection, tripsCollection, FiltersTmpl, filterList, formatters, analytics ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -24,24 +25,19 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     initialize: function() {
-      var self = this;
-
       //update the filter ranges based on trips
       this.updateFilterRanges();
-      coms.on('filter:updateDateFilter', _.bind(this.updateFilterRanges, this));
+      coms.on('filter:updateDateFilter', this.updateFilterRanges, this);
 
-      coms.on('filter', _.bind(this.updateFilterRanges, this));
-      coms.on('filter', _.bind(this.checkIfClosePopovers, this));
+      coms.on('filter', this.updateFilterRanges, this);
+      coms.on('filter', this.checkIfClosePopovers, this);
 
-      //update Nav button status
-      coms.on('filter:applyAllFilters', _.bind(this.updateNavButtons, this));
-
-      coms.on('filter:closePopovers', _.bind(this.closePopovers, this));
-
-      coms.on('filter:updateVehicleList', _.bind(this.updateVehicleList, this));
+      coms.on('filter:applyAllFilters', this.updateFilterControls, this);
+      coms.on('filter:closePopovers', this.closePopovers, this);
+      coms.on('filter:updateVehicleList', this.updateVehicleList, this);
 
       //handle unattached vehicles
-      coms.on('filter:checkUnattachedVehicles', _.bind(this.toggleUnattachedVehicles, this));
+      coms.on('filter:checkUnattachedVehicles', this.toggleUnattachedVehicles, this);
 
       //update filter text on buttons
       this.collection.each(_.bind(this.updateFilterText, this));
@@ -110,8 +106,9 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    updateNavButtons: function() {
+    updateFilterControls: function() {
       $('.filterControls .undo').toggleClass('disabled', (Backbone.history.previous.length === 0));
+      $('.filterControls .reset').toggleClass('disabled', (Backbone.history.previous.length === 0));
     },
 
 
@@ -204,11 +201,12 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
     },
 
 
-    resetFilters: function(e) {
-      e.preventDefault();
+    resetFilters: function() {
+      $('.btn-filter.reset', this.$el).addClass('disabled');
       this.collection.reset();
       filtersCollection.applyInitialFilters();
       this.updateFilterList();
+      Backbone.history.previous = [];
       coms.trigger('filter:applyAllFilters');
       analytics.trackEvent('reset filters', 'Click');
     },
@@ -493,7 +491,7 @@ function( Backbone, coms, login, FilterView, Filter, filtersCollection, vehicles
 
 
     onShow: function() {
-      this.updateNavButtons();
+      this.updateFilterControls();
 
       //get vehicles
       vehiclesCollection.fetchInitial();

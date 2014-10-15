@@ -26,6 +26,44 @@ header {
       }
     }
 
+    #licenseplusToggle {
+      float: left;
+      width: 250px;
+      height: 70px;
+      padding: 27px 0 27px 40px;
+      font-size: 14px;
+
+      a {
+        vertical-align: top;
+      }
+
+      .toggleContainer {
+        margin: 1px 10px;
+        height: 16px;
+        border: 1px solid $base_type;
+        border-radius: 8px;
+        width: 30px;
+        background-color: $base_type;
+        display: inline-block;
+        cursor: pointer;
+
+        .toggle {
+          width: 14px;
+          height: 14px;
+          background-color: #FFF;
+          border-radius: 7px;
+
+          &.left {
+            float: left;
+          }
+
+          &.right {
+            float: right;
+          }
+        }
+      }
+    }
+
     #demoMenu {
       display: none;
     }
@@ -109,6 +147,10 @@ header {
         height: 18px;
         padding-top: 2px;
       }
+    }
+
+    #licenseplusToggle {
+      display: none;
     }
 
     #userMenu {

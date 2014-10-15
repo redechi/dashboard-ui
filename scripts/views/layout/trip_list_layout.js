@@ -4,7 +4,7 @@ define([
   '../item/user_score_view',
   'hbs!tmpl/layout/trip_list_layout_tmpl'
 ],
-function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
+function( Backbone, TripsView, UserScoreView, TripListLayoutTmpl ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -20,10 +20,10 @@ function( Backbone, TripsCompositeView, UserScoreView, TripListLayoutTmpl ) {
 
     onRender: function() {
       var userScoreView = new UserScoreView();
-      var tripsCompView = new TripsCompositeView();
+      var tripsView = new TripsView();
 
       this.tripStats.show(userScoreView);
-      this.tripList.show(tripsCompView);
+      this.tripList.show(tripsView);
     }
   });
 });

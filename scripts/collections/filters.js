@@ -18,7 +18,7 @@ function( Backbone, coms, FilterModel, filterList ) {
       this.on('add', this.toUrl, this);
       this.on('remove', this.toUrl, this);
 
-      coms.on('filter:toURL', _.bind(this.toUrl, this));
+      coms.on('filter:toURL', this.toUrl, this);
     },
 
 

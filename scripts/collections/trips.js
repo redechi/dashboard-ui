@@ -1,11 +1,13 @@
 define([
   'backbone',
   'communicator',
+  'moment',
   'models/trip',
   './filters',
-  '../controllers/login'
+  '../models/settings',
+  '../controllers/cache'
 ],
-function( Backbone, coms, Trip, filterCollection, login ) {
+function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
   'use strict';
 
   /* trips singleton */
@@ -13,10 +15,10 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
     model: Trip,
     startDate: moment().endOf('day').valueOf(),
-    url: login.getAPIUrl() + '/v1/trips',
+    url: settings.get('api_host') + '/v1/trips',
 
     initialize: function() {
-      coms.on('filter:applyAllFilters', _.bind(this.applyAllFilters, this));
+      coms.on('filter:applyAllFilters', this.applyAllFilters, this);
     },
 
 
@@ -31,11 +33,16 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
         //if date Filter = allTime, set date min
         if(dateFilter.get('valueSelected') === 'allTime') {
-          var min = moment(this.last().get('start_time')).startOf('day').valueOf();
-          dateFilter.set({
-            min: min,
-            value: [min, end]
-          });
+          var lastTrip = this.last();
+
+          if(lastTrip) {
+            var min = moment(lastTrip.get('start_time')).startOf('day').valueOf();
+            
+            dateFilter.set({
+              min: min,
+              value: [min, end]
+            });
+          }
         }
 
         //unselect all trips
@@ -110,7 +117,7 @@ function( Backbone, coms, Trip, filterCollection, login ) {
 
 
     fetchInitial: function () {
-      if(login.isDemo()) {
+      if(settings.isDemo()) {
         //get trips from local JSON
         this.fetchDemoTrips();
       } else {
@@ -118,8 +125,14 @@ function( Backbone, coms, Trip, filterCollection, login ) {
             start = dateFilter.get('value')[0],
             end = moment().valueOf();
 
-        var trips = this.fetchFromSessionStorage();
+        var trips = cache.fetch('trips');
+
         if(trips && trips.length) {
+          var start = sessionStorage.getItem('tripsStart');
+          if(start) {
+            this.startDate = start;
+          }
+
           this.set(trips);
           coms.trigger('filter:checkUnattachedVehicles', this);
           coms.trigger('filter:applyAllFilters');
@@ -145,15 +158,18 @@ function( Backbone, coms, Trip, filterCollection, login ) {
           start: start,
           end: end
         },
-        error: login.fetchErrorHandler
+        error: settings.fetchErrorHandler
       }).always(function(data) {
         coms.trigger('overlay:page', self.length);
+
         if(data.length === per_page) {
           //User has another page of trips
           return self.fetchPage(start, end, (page + 1));
         } else {
           self.startDate = Math.min(start, self.startDate);
-          self.saveToSessionStorage();
+
+          cache.save('trips', self.toJSON());
+          sessionStorage.setItem('tripsStart', self.startDate);
 
           if(!self.length) {
             self.checkForNoTrips();
@@ -174,37 +190,13 @@ function( Backbone, coms, Trip, filterCollection, login ) {
       this.fetch({
         remove: false,
         data: { per_page: 1 },
-        error: login.fetchErrorHandler
+        error: settings.fetchErrorHandler
       }).always(function(data) {
         if(data && data.length === 0) {
           //User has no trips at all
           coms.trigger('error:noTrips');
         }
       });
-    },
-
-
-    saveToSessionStorage: function() {
-      sessionStorage.setItem('trips', JSON.stringify(this.toJSON()));
-      sessionStorage.setItem('tripsStart', this.startDate);
-      //expire after 1 hour
-      sessionStorage.setItem('expires', moment().add(1, 'hours').valueOf());
-    },
-
-
-    fetchFromSessionStorage: function () {
-      var expires = sessionStorage.getItem('expires');
-
-      if(expires > moment().valueOf()) {
-        var start = sessionStorage.getItem('tripsStart');
-        if(start) {
-          this.startDate = start;
-        }
-        return JSON.parse(sessionStorage.getItem('trips'));
-      } else {
-        return;
-      }
-
     },
 
 

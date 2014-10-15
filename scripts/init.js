@@ -1,7 +1,7 @@
 require.config({
 
   /* starting point for application */
-  deps: ['moment', 'backbone.marionette', 'main'],
+  deps: ['backbone.marionette', 'main'],
 
 
   shim: {

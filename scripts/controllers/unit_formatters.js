@@ -1,6 +1,7 @@
 define([
+  'moment'
 ],
-function() {
+function( moment ) {
   'use strict';
 
   return {
@@ -42,7 +43,7 @@ function() {
 
     distance: function(distanceMiles) {
       if (Math.round(distanceMiles) >= 100) {
-        return distanceMiles.toFixed(0);
+        return distanceMiles.toFixed();
       } else {
         return distanceMiles ? distanceMiles.toFixed(1) : '';
       }
@@ -57,7 +58,7 @@ function() {
 
     durationMinutes: function(min) {
       if (Math.round(min) >= 100) {
-        return min.toFixed(0);
+        return min.toFixed();
       } else {
         return (min ? min : 0).toFixed(1);
       }
@@ -80,7 +81,7 @@ function() {
 
 
     score: function(score) {
-      return Math.round(score);
+      return Math.round(score) || undefined;
     },
 
 
@@ -98,6 +99,11 @@ function() {
       //return text value if unparsable
       var number = parseFloat(item);
       return (isNaN(number)) ? item : number;
+    },
+
+
+    numberWithCommas: function(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
 
 

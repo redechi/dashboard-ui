@@ -1,20 +1,21 @@
 define([
-	'backbone',
-	'communicator',
-	'../controllers/login'
+  'backbone',
+  'communicator',
+  '../controllers/login',
+  './settings'
 ],
-function( Backbone, coms, login ) {
+function( Backbone, coms, login, settings ) {
     'use strict';
 
-	var User = Backbone.Model.extend({
-		initialize: function() {
-			this.on('change', function() {
-				coms.trigger('user:change');
-			});
-		},
+  var User = Backbone.Model.extend({
+    initialize: function() {
+      this.on('change', function() {
+        coms.trigger('user:change');
+      });
+    },
 
-		url: login.getAPIUrl() + '/v1/user'
+    url: settings.get('api_host') + '/v1/user'
   });
 
-	return new User();
+  return new User();
 });

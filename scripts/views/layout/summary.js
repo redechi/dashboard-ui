@@ -22,14 +22,22 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     initialize: function() {
-      coms.on('resize', _.bind(this.resize, this));
-      coms.on('error:403', _.bind(this.error403, this));
-      coms.on('error:500', _.bind(this.error500, this));
-      coms.on('error:noTrips', _.bind(this.noTrips, this));
+      coms.off('resize');
+      coms.off('error:403');
+      coms.off('error:500');
+      coms.off('error:noTrips');
+      coms.off('trips:showSingleTripOverlay');
+      coms.off('trips:closeSingleTripOverlay');
+      coms.off('trips:showDownloadExportOverlay');
 
-      coms.on('trips:showSingleTripOverlay', _.bind(this.showSingleTripOverlay, this));
-      coms.on('trips:closeSingleTripOverlay', _.bind(this.hideSingleTrip, this));
-      coms.on('trips:showDownloadExportOverlay', _.bind(this.showDownloadExportOverlay, this));
+      coms.on('resize', this.resize, this);
+      coms.on('error:403', this.error403, this);
+      coms.on('error:500', this.error500, this);
+      coms.on('error:noTrips', this.noTrips, this);
+
+      coms.on('trips:showSingleTripOverlay', this.showSingleTripOverlay, this);
+      coms.on('trips:closeSingleTripOverlay', this.hideSingleTrip, this);
+      coms.on('trips:showDownloadExportOverlay', this.showDownloadExportOverlay, this);
 
       this.selectors = {};
     },
@@ -51,13 +59,16 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       var m = new MapView();
       var g = new GraphView();
       var f = new FiltersView();
+      var h = new HeaderView({attributes: {
+        loggedIn: login.isLoggedIn,
+        licenseplusMenu: 'dashboard'
+      }});
 
       this.trips.show(tl);
       this.graph.show(g);
       this.map.show(m);
       this.filters.show(f);
-
-      regionManager.getRegion('main_header').show(new HeaderView({attributes: {loggedIn: login.isLoggedIn}}));
+      regionManager.getRegion('main_header').show(h);
     },
 
 
@@ -103,6 +114,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       regionManager.getRegion('main_overlay').show(new OverlayLayout());
       this.singleTrip.show(new SingleTripLayout({model: trip, collection: collection}));
     },
+
 
     showDownloadExportOverlay: function (blobUrl) {
       regionManager.getRegion('main_overlay').show(new OverlayLayout({

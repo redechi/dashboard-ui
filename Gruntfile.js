@@ -8,7 +8,9 @@ var CDN = process.env.CDN || '';
 
 
 git.tag(function (tag) {
-  tagName = tag;
+  var regex = /release\/(.*)\-/,
+      match = regex.exec(tag);
+  tagName = (match.length) ? match[1] : '';
 });
 
 git.short(function (short) {
@@ -26,9 +28,13 @@ git.short(function (short) {
 
 module.exports = function (grunt) {
   // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  // show elapsed time at the end
-  require('time-grunt')(grunt);
+  require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
+
+  if(build === 0) {
+    // show elapsed time at the end if local
+    require('time-grunt')(grunt);
+  }
+
 
   // configurable paths
   var yeomanConfig = {
@@ -47,8 +53,8 @@ module.exports = function (grunt) {
         livereload: true
       },
       compass: {
-        files: ["assets/scss/*.scss"],
-        tasks: ["compass"]
+        files: ['assets/scss/*.scss'],
+        tasks: ['compass']
       },
 
       handlebars: {
@@ -65,7 +71,7 @@ module.exports = function (grunt) {
           'assets/img/**',
           'assets/fonts/**'
         ],
-        tasks: ["copy"] // copy files and invalidate app cache
+        tasks: ['copy'] // copy files and invalidate app cache
       }
     },
 
@@ -93,7 +99,7 @@ module.exports = function (grunt) {
             middlewares.unshift(function(req, res, next) {
               res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
               res.setHeader('Access-Control-Allow-Credentials', true);
-              
+
               //serve /assets/data folder compressed
               if(req.url.substr(0, 12) === '/assets/data') {
                 res.setHeader('Content-Encoding', 'gzip');
@@ -125,7 +131,7 @@ module.exports = function (grunt) {
     // open app and test page
     open: {
       server: {
-        path: 'http://localhost:<%= connect.devserver.options.port %>'
+        path: 'http://localhost:<%= connect.devserver.options.port %>?staging'
       }
     },
 
@@ -156,28 +162,28 @@ module.exports = function (grunt) {
 
       distMainCss: {
         options: {
-          appDir: "<%= yeoman.app %>",
-          optimizeCss: "standard",
-          cssIn: "assets/css/main.css",
-          out: "<%= yeoman.dist %>/assets/css/main.css",
-          cssPrefix: ""
+          appDir: '<%= yeoman.app %>',
+          optimizeCss: 'standard',
+          cssIn: 'assets/css/main.css',
+          out: '<%= yeoman.dist %>/assets/css/main.css',
+          cssPrefix: ''
         }
       },
 
       distInlineCss: {
         options: {
-          appDir: "<%= yeoman.app %>",
-          optimizeCss: "standard",
-          cssIn: "assets/css/inline.css",
-          out: "<%= yeoman.dist %>/assets/css/inline.css",
-          cssPrefix: ""
+          appDir: '<%= yeoman.app %>',
+          optimizeCss: 'standard',
+          cssIn: 'assets/css/inline.css',
+          out: '<%= yeoman.dist %>/assets/css/inline.css',
+          cssPrefix: ''
         }
       },
 
       localjs: {
         options: {
-          appDir: "<%= yeoman.app %>",
-          include: ["./main"],
+          appDir: '<%= yeoman.app %>',
+          include: ['./main'],
           out: '<%= yeoman.dist %>/assets/js/main.js',
           name: 'init',
           baseUrl: 'scripts',
@@ -203,8 +209,8 @@ module.exports = function (grunt) {
 
       prodjs: {
         options: {
-          appDir: "<%= yeoman.app %>",
-          include: ["./main"],
+          appDir: '<%= yeoman.app %>',
+          include: ['./main'],
           out: '<%= yeoman.dist %>/assets/js/main.js',
           name: 'init',
           baseUrl: 'scripts',
@@ -281,17 +287,12 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: '<%= yeoman.dist %>',
           src: [
-            '*.{ico,txt}',
             'index.html',
             'assets/img/**',
             'assets/fonts/**',
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js',
-            'bower_components/mapbox.css/index.css',
-            'bower_components/bootstrap/dist/css/bootstrap.css',
-            'bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
             'bower_components/fontawesome/fonts/**',
-            'bower_components/fontawesome/scss/**'
           ]
         }]
       }
@@ -319,6 +320,14 @@ module.exports = function (grunt) {
           to: function () {
             return tagName + ' ' + '(' + build + ' #' + shortHash + ')';
           }
+        }]
+      },
+      'data-main': {
+        src: '<%= yeoman.dist %>/*.html',
+        overwrite: true,
+        replacements: [{
+          from: / data\-main\="(.*?)"/g,
+          to: ''
         }]
       }
     },

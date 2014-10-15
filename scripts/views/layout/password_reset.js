@@ -2,9 +2,10 @@ define([
   'backbone',
   'hbs!tmpl/layout/password_reset_tmpl',
   '../../controllers/login',
+  '../../models/settings',
   '../../controllers/analytics'
 ],
-function( Backbone, PasswordResetTmpl, login, analytics ) {
+function( Backbone, PasswordResetTmpl, login, settings, analytics ) {
   'use strict';
 
   return Backbone.Marionette.LayoutView.extend({
@@ -22,7 +23,7 @@ function( Backbone, PasswordResetTmpl, login, analytics ) {
       }
     },
 
-    
+
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
       'focus #passwordResetRequestForm input': 'clearError',
@@ -70,7 +71,7 @@ function( Backbone, PasswordResetTmpl, login, analytics ) {
         this.clearErrors();
 
         $.post(
-          login.getBaseUrl() + '/password/reset_email/', { email: email },
+          settings.get('base_host') + '/password/reset_email/', {email: email},
           function(data) {
             if(data && data.success) {
               self.successAlert('We\'ve sent further instructions to ' + email);
@@ -102,7 +103,7 @@ function( Backbone, PasswordResetTmpl, login, analytics ) {
         this.clearErrors();
 
         $.post(
-          login.getBaseUrl() + '/password/change/' + token, {password: password},
+          settings.get('base_host') + '/password/change/' + token, {password: password},
           function(data) {
             if(data && data.success) {
               self.successAlert('Your password has been successfully reset.<br><a href="#login">Log in</a>');

@@ -15,11 +15,12 @@ define([
 
     appRoutes: {
       '(/)': 'showSummaryLayout',
-      'login': 'showLoginLayout',
-      'reset': 'showPasswordResetLayout',
-      'reset/:token': 'showPasswordResetLayout',
-      'filter(/)?:filters': 'showSummaryLayout',
-      'logout': 'logOut',
+      'login(/:token)': 'showLoginLayout',
+      'reset(/:token)': 'showPasswordResetLayout',
+      'filter(/)(?:filters)': 'showSummaryLayout',
+      'licenseplus': 'showLicensePlusLayout',
+      'logout': 'logout',
+      'coach_login(/:token)': 'showCoachLoginLayout',
       '*notFound': 'notFound'
     },
 
@@ -29,9 +30,8 @@ define([
         if (!callback) callback = this[name];
 
         var f = function() {
-
-          //check for access tokens on all routes, except login
-          if(route !== 'login' && route !== 'reset'  && route !== 'reset/:token'  && !login.isDemo()) {
+          //check for access tokens on all routes, except login, coach_login, password reset and demo
+          if(!/^login|^reset\/?.+|^coach_login\/?.+/.test(route) && !login.isDemo()) {
             var accessToken = sessionStorage.getItem('accessToken');
 
             // if no access token, redirect to login

@@ -36,6 +36,8 @@ function( Backbone, coms, TripTmpl, analytics ) {
       //because mouse must be on top of this element, keep it highlighted
       coms.trigger('trips:highlight', [this.model]);
 
+      $(e.currentTarget).toggleClass('selected');
+
       analytics.trackEvent('trip', 'Select');
     },
 

@@ -1,15 +1,15 @@
 define([
   'backbone',
   'communicator',
+  'moment',
   '../../collections/filters',
   'hbs!tmpl/item/graph_tmpl',
   'controllers/stats',
   'controllers/unit_formatters',
   'controllers/analytics',
-  'd3',
-  'nvd3'
+  'd3'
 ],
-function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, nvd3 ) {
+function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analytics, d3 ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -20,6 +20,8 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
       graphTypeName: 'MPG',
       graphTypeUnit: 'MPG'
     }),
+
+
     tagName: 'div',
     collection: new Backbone.Collection(),
     template: GraphTmpl,
@@ -33,12 +35,12 @@ function( Backbone, coms, filters, GraphTmpl, stats, formatters, analytics, d3, 
     selectedTrips: {},
 
     initialize: function(model) {
-      coms.on('resize', _.bind(this.makeGraph, this));
-      coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
-      coms.on('trips:select', _.bind(this.selectTrip, this));
-      coms.on('trips:deselect', _.bind(this.deselectTrip, this));
+      coms.on('resize', this.makeGraph, this);
+      coms.on('filter', this.resetCollection, this);
+      coms.on('trips:highlight', this.highlightTrips, this);
+      coms.on('trips:unhighlight', this.unhighlightTrips, this);
+      coms.on('trips:select', this.selectTrip, this);
+      coms.on('trips:deselect', this.deselectTrip, this);
     },
 
 

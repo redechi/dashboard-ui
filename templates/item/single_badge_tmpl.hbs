@@ -1,0 +1,25 @@
+<div class="close">x</div>
+<h1>{{name}}</h1>
+<div class="badgeProgress">
+  {{#if isBadge}}
+    {{#if completed}}
+      {{first_name}} earned this License+ Badge!
+    {{else}}
+      {{first_name}} is still working on this badge.
+    {{/if}}
+  {{/if}}
+</div>
+<div class="badgeImage {{slug}} {{#if completed}}completed{{/if}}"></div>
+<div class="badgeRequirements">
+  {{#if completed}}
+    {{first_name}} <strong>{{accomplishment}}</strong>!
+  {{else}}
+    {{first_name}} needs to <strong>{{requirement}}</strong>
+    to receive this {{type}}.
+  {{/if}}
+</div>
+{{#if completed}}
+  <a href="mailto:{{email}}" class="btn btn-blue">Send Congratulations</a>
+{{else}}
+  <a href="mailto:{{email}}" class="btn btn-blue">Encourage {{first_name}}</a>
+{{/if}}

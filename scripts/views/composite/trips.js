@@ -2,6 +2,7 @@ define([
   'backbone',
   'communicator',
   'regionManager',
+  'moment',
   'views/item/trip',
   'hbs!tmpl/composite/trips_list_tmpl',
   'controllers/unit_formatters',
@@ -10,7 +11,7 @@ define([
   'fileSaver',
   'jquery.scrollTo'
 ],
-function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
+function( Backbone, coms, regionManager, moment, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -23,18 +24,18 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
 
     initialize: function() {
-      coms.on('resize', _.bind(this.resize, this));
-      coms.on('filter', _.bind(this.resetCollection, this));
-      coms.on('filter:applyAllFilters', _.bind(this.notifyExport, this));
-      coms.on('trips:toggleSelect', _.bind(this.toggleSelect, this));
-      coms.on('trips:changeSelectedTrips', _.bind(this.changeSelectedTrips, this));
-      coms.on('trips:showSingleTrip', _.bind(this.showSingleTrip, this));
-      coms.on('trips:highlightByDate', _.bind(this.highlightByDate, this));
-      coms.on('trips:unhighlightByDate', _.bind(this.unhighlightByDate, this));
-      coms.on('trips:highlight', _.bind(this.highlightTrips, this));
-      coms.on('trips:unhighlight', _.bind(this.unhighlightTrips, this));
-      coms.on('error:403', _.bind(this.setError, this));
-      coms.on('error:500', _.bind(this.setError, this));
+      coms.on('resize', this.resize, this);
+      coms.on('filter', this.resetCollection, this);
+      coms.on('filter:applyAllFilters', this.notifyExport, this);
+      coms.on('trips:toggleSelect', this.toggleSelect, this);
+      coms.on('trips:changeSelectedTrips', this.changeSelectedTrips, this);
+      coms.on('trips:showSingleTrip', this.showSingleTrip, this);
+      coms.on('trips:highlightByDate', this.highlightByDate, this);
+      coms.on('trips:unhighlightByDate', this.unhighlightByDate, this);
+      coms.on('trips:highlight', this.highlightTrips, this);
+      coms.on('trips:unhighlight', this.unhighlightTrips, this);
+      coms.on('error:403', this.setError, this);
+      coms.on('error:500', this.setError, this);
 
       this.options.sortType = 'start_time';
       this.options.sortDirection = 'sortDown';
@@ -71,6 +72,7 @@ function( Backbone, coms, regionManager, Trip, tripListTmpl, formatters, analyti
 
 
     collectionEvents: {
+      'sort': 'render',
       'reset': 'render'
     },
 

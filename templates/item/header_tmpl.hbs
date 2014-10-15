@@ -2,12 +2,23 @@
   <div class="demoTag">demo</div>
 </div>
 
+{{#if licenseplusMenu}}
+  <div id="licenseplusToggle">
+    <a href="#licenseplus">License+</a>
+    <div class="toggleContainer">
+      <div class="toggle {{licenseplusMenu}}"></div>
+    </div>
+    <a href="#">My Dashboard</a>
+  </div>
+{{/if}}
+
 <div id="userMenu">
   <ul>
     <li>
       <a href="http://blog.automatic.com">Blog</a>
     </li>
-    <li id="getsat-widget-7348">
+    <li class="support">
+      <a href="#">Support</a>
     </li>
     <li>
       <span class="firstName">{{ first_name }}</span>
