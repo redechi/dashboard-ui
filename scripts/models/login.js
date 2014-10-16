@@ -13,7 +13,7 @@ function( Backbone, settings ) {
 
 
     defaults: {
-      client_id: '385be37e93925c8fa7c7',
+      client_id: settings.get('client_id'),
       grant_type: 'password',
       scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic',
       staySignedIn: true

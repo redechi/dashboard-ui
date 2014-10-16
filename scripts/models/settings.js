@@ -7,6 +7,7 @@ function( Backbone, coms ) {
 
 
   var stagingData = {
+    client_id: '0720f83e74f19181e49d',
     api_host: 'https://api.automatic.co',
     newton_host: 'https://automatic-newton-stage.herokuapp.com',
     base_host: 'https://staging.automatic.co'
@@ -33,7 +34,7 @@ function( Backbone, coms ) {
   var Settings = Backbone.Model.extend({
 
     isDemo: isDemo,
-    isStaging:isStaging,
+    isStaging: isStaging,
     isUsingStaging: isUsingStaging,
 
 
