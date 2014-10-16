@@ -18,8 +18,6 @@ define([
 function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollection, OverlayLayout, FastClick, MobileDetect ) {
   'use strict';
 
-  window.options = {};
-
   //make sure Modernizr is here
   Modernizr = Modernizr || {};
 

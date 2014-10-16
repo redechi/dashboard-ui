@@ -106,7 +106,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           mapHelpers.highlightMarker(endMarker);
         }
 
-        if(self.speedingLayer.getLayers().length && window.options.showTripEvents) {
+        if(self.speedingLayer.getLayers().length && self.showTripEvents()) {
           self.speedingLayer.bringToFront();
         }
       });
@@ -171,7 +171,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         endMarker.options.selected = true;
       }
 
-      if(this.speedingLayer.getLayers().length && window.options.showTripEvents) {
+      if(this.speedingLayer.getLayers().length && this.showTripEvents()) {
         this.speedingLayer.bringToFront();
       }
     },
@@ -379,7 +379,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
       this.hardBrakesLayer.clearLayers();
       this.hardAccelsLayer.clearLayers();
 
-      $('.showTripEvents', this.$el).prop('checked', !!window.options.showTripEvents);
+      $('.showTripEvents', this.$el).prop('checked', this.showTripEvents());
 
       this.toggleTripEvents();
     },
@@ -426,9 +426,14 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     },
 
 
+
+    showTripEvents: function() {
+      return $('.showTripEvents', this.$el).is(':checked');
+    },
+
+
     toggleTripEvents: function(e) {
-      window.options.showTripEvents = $('.showTripEvents', this.$el).is(':checked');
-      if(window.options.showTripEvents) {
+      if(this.showTripEvents()) {
         this.showTripEventsMap();
         if(e) {
           analytics.trackEvent('trip events', 'Click');
@@ -492,7 +497,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
 
     toggleAutoZoom: function() {
-      window.options.autoZoom = $('.autoZoom input', this.$el).is(':checked');
       analytics.trackEvent('auto zoom', 'Toggle');
     },
 

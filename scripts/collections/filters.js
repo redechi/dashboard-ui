@@ -50,8 +50,7 @@ function( Backbone, coms, FilterModel, filterList ) {
 
 
     toUrl: function() {
-      window.options.filterURL = this.formatFiltersToURL();
-      Backbone.history.navigate(window.options.filterURL);
+      Backbone.history.navigate(this.formatFiltersToURL());
     },
 
 

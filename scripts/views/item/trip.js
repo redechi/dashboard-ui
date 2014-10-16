@@ -24,7 +24,7 @@ function( Backbone, coms, TripTmpl, analytics ) {
     triggerHighlight: function () {
       coms.trigger('trips:highlight', [this.model]);
 
-      if(window.options.autoZoom) {
+      if($('.autoZoom input').is(':checked')) {
         coms.trigger('trips:zoom', [this.model]);
       }
     },
@@ -33,7 +33,7 @@ function( Backbone, coms, TripTmpl, analytics ) {
     removeHighlight: function () {
       coms.trigger('trips:unhighlight', [this.model]);
 
-      if(window.options.autoZoom) {
+      if($('.autoZoom input').is(':checked')) {
         coms.trigger('trips:unzoom', [this.model]);
       }
     },
