@@ -1,3 +1,18 @@
+/*
+ *
+ * @type Constructor
+ * @class Controller
+ *
+ *
+ * This controller handles all login related tasks. Notable methods are
+ *
+ * this.login :: accepts or rejects user login.
+ *
+ * this.createUser :: creates a user and then sends that user to
+ * the this.login method
+ *
+ */
+
 define([
   'backbone',
   'communicator',
@@ -151,6 +166,7 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
         //add beforeSend and complete to Backbone.sync
         var sync = Backbone.sync;
         Backbone.sync = function(method, model, options) {
+          options = options || {};
           options.beforeSend = function (xhr, req) {
             try {
               //Set request header
@@ -158,6 +174,10 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
                 xhr.setRequestHeader('Authorization', 'bearer ' + accessToken);
               } else {
                 xhr.setRequestHeader('Authorization', 'token ' + accessToken);
+              }
+
+              if(req.skipCache !== false) {
+                return;
               }
 
               //check for cached response

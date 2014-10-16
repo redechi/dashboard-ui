@@ -10,12 +10,18 @@ define([
   './views/layout/overlay',
   'fastclick',
   'mobile-detect',
+
+  // must be included so it exists
+  'views/item/admin',
+
+  // Why do these need to be included?
   'bootstrapSlider',
   'bootstrapDatetimepicker',
   'bootstrap/popover'
+
 ],
 
-function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollection, OverlayLayout, FastClick, MobileDetect ) {
+function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
   'use strict';
 
   //make sure Modernizr is here
@@ -69,21 +75,18 @@ function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollec
   /* Add application regions here */
   App.addRegions({
     headerRegion: 'header.mainHeader',
-    contentRegion: 'main',
-    overlayRegion: '#overlay'
+    contentRegion: 'main'
   });
 
 
   App.addInitializer( function () {
-    var overlayRegion = regionManager.getRegion('main_overlay'),
-        overlayLayout,
-        md = new MobileDetect(window.navigator.userAgent);
+    var md = new MobileDetect(window.navigator.userAgent);
 
     //check for browser compatibility
     if(!Modernizr.svg || !Modernizr.cors || window.location.search.indexOf('unsupported') !== -1) {
-      overlayLayout = new OverlayLayout({type: 'notSupported'});
-      overlayRegion.show(overlayLayout);
+      new OverlayLayout({type: 'notSupported'});
     }
+
 
     //check for mobile
     if(md.is('iPhone')) {
@@ -133,7 +136,6 @@ function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollec
   // save regions
   regionManager.addRegion('main_content', App.contentRegion);
   regionManager.addRegion('main_header', App.headerRegion);
-  regionManager.addRegion('main_overlay', App.overlayRegion);
 
   return App;
 });

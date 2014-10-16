@@ -1,7 +1,6 @@
 define([
   'backbone',
   'communicator',
-  'regionManager',
   'hbs!tmpl/item/header_tmpl',
   '../../models/user',
   '../../models/licenseplus',
@@ -9,7 +8,7 @@ define([
   '../../controllers/login',
   '../../controllers/analytics'
 ],
-function( Backbone, coms, regionManager, HeaderTmpl, user, Licenseplus, OverlayLayout, login, analytics ) {
+function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, analytics ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -91,7 +90,9 @@ function( Backbone, coms, regionManager, HeaderTmpl, user, Licenseplus, OverlayL
       e.preventDefault();
       analytics.trackEvent('support', 'Click');
 
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'getSatisfaction'}));
+      new OverlayLayout({
+        type: 'getSatisfaction'
+      });
 
       if(typeof GSFN !== 'undefined') {
         $('#getsat-widget-7392').empty();

@@ -1,3 +1,16 @@
+
+/*
+ *
+ * @type Singleton
+ * @class settings
+ *
+ * This detects weather you are on staging or production and applies the
+ * correct environment based on your query string flags.
+ *
+ * EX :: settings.get("api_host";)
+ *
+ */
+
 define([
   'backbone',
   'communicator'

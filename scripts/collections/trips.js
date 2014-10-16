@@ -37,7 +37,7 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
 
           if(lastTrip) {
             var min = moment(lastTrip.get('start_time')).startOf('day').valueOf();
-            
+
             dateFilter.set({
               min: min,
               value: [min, end]

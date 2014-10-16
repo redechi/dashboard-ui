@@ -1,7 +1,6 @@
 define([
   'backbone',
   'communicator',
-  'regionManager',
   'moment',
   'views/item/trip',
   'hbs!tmpl/composite/trips_list_tmpl',
@@ -11,7 +10,7 @@ define([
   'fileSaver',
   'jquery.scrollTo'
 ],
-function( Backbone, coms, regionManager, moment, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
+function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -429,7 +428,7 @@ function( Backbone, coms, regionManager, moment, Trip, tripListTmpl, formatters,
 
       //close loading overlay unless no matching trips or error
       if((this.collection.length > 0 || this.options.fetching === false) && !this.options.error) {
-        coms.trigger('overlay:hide');
+        coms.trigger('overlay:destroy');
       }
 
       //Set sort paramaters

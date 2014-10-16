@@ -1,5 +1,6 @@
 #overlay{
-  .overlay {
+
+  #overlayMask {
     position: fixed;
     top: 0;
     left: 0;
@@ -9,20 +10,19 @@
     background: rgba(249, 248, 246, 0.85);
   }
 
-  .overlayContent {
+  #overlayContent {
+    @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $disabled);
+    position: absolute;
     width: 271px;
     height: 93px;
     margin-top: -46px;
     margin-left: -135px;
-    position: fixed;
     top: 50%;
     left: 50%;
     border-radius: 3px;
     font-size: 16px;
     padding: 35px 30px;
     z-index: 1002;
-    @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $disabled);
-    display: none;
     background-color: $white;
     text-align: center;
     font-size: 12px;
@@ -56,114 +56,254 @@
       float: left;
       margin-right: 20px;
     }
-  }
 
-  .loadingTrips .loadingTrips {
-    background: $white url('../img/loader@2x.gif') left 30px center no-repeat;
-    background-size: 80px 33px;
-    text-align: right;
-    display: block;
-    font-size: 14px;
-  }
-
-  .notSupported .notSupported {
-    width: 380px;
-    height: 375px;
-    top: 106px;
-    margin-left: -190px;
-    display: block;
-
-    .supportedBrowsers a {
-      display: inline-block;
-      padding: 15px 4px 0;
-    }
-  }
-
-  .error403 .error403,
-  .error500 .error500 {
-    display: block;
-    width: 380px;
-    height: 400px;
-    top: 106px;
-    margin-left: -190px;
-  }
-
-  .noTrips .noTrips {
-    display: block;
-    width: 380px;
-    height: inherit;
-    top: 106px;
-    margin-left: -190px;
-
-    h2 {
-      margin-bottom: 20px;
+    &.loadingTrips {
+      background: $white url('../img/loader@2x.gif') left 30px center no-repeat;
+      background-size: 80px 33px;
+      text-align: right;
+      display: block;
+      font-size: 14px;
     }
 
-    p {
-      text-align: left;
-      padding-top: 5px;
-      padding-bottom: 15px;
-    }
-  }
+    &.notSupported {
+      width: 380px;
+      height: 375px;
+      top: 106px;
+      margin-left: -190px;
+      display: block;
 
-  .invalidTrip .invalidTrip {
-    display: block;
-    width: 380px;
-    height: inherit;
-    top: 106px;
-    margin-left: -190px;
-
-    .btn-blue {
-      margin-top: 35px;
-    }
-  }
-
-  .downloadExport .downloadExport {
-    display: block;
-    width: 380px;
-    height: inherit;
-    top: 106px;
-    margin-left: -190px;
-
-    h2 {
-      margin-bottom: 20px;
+      .supportedBrowsers a {
+        display: inline-block;
+        padding: 15px 4px 0;
+      }
     }
 
-    p {
-      text-align: left;
-      padding-top: 5px;
-      padding-bottom: 15px;
-    }
-  }
-
-  .coachAccepted .coachAccepted {
-    width: 380px;
-    height: 375px;
-    top: 106px;
-    margin-left: -190px;
-    display: block;
-
-    .coachIcon {
-      @include hr-image('../img/icon_coaching.png', '../img/icon_coaching@2x.png');
-      background-repeat: no-repeat;
-      background-position: top center;
-      width: 294x;
-      height: 169px;
-      margin: 20px auto;
+    &.error403,
+    &.error500 {
+      display: block;
+      width: 380px;
+      height: 400px;
+      top: 106px;
+      margin-left: -190px;
     }
 
-    .btn-close {
-      margin-top: 20px;
-    }
-  }
+    &.noTrips {
+      display: block;
+      width: 380px;
+      height: inherit;
+      top: 106px;
+      margin-left: -190px;
 
-  .getSatisfaction .getSatisfaction {
-    width: 700px;
-    height: 503px;
-    top: 106px;
-    margin-left: -350px;
-    display: block;
-    padding: 0;
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      p {
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 15px;
+      }
+    }
+
+    &.invalidTrip {
+      display: block;
+      width: 380px;
+      height: inherit;
+      top: 106px;
+      margin-left: -190px;
+
+      .btn-blue {
+        margin-top: 35px;
+      }
+    }
+
+    &.downloadExport {
+      display: block;
+      width: 380px;
+      height: inherit;
+      top: 106px;
+      margin-left: -190px;
+
+      h2 {
+        margin-bottom: 20px;
+      }
+
+      p {
+        text-align: left;
+        padding-top: 5px;
+        padding-bottom: 15px;
+      }
+    }
+
+    &.coachAccepted {
+      width: 380px;
+      height: 375px;
+      top: 106px;
+      margin-left: -190px;
+      display: block;
+
+      .coachIcon {
+        @include hr-image('../img/icon_coaching.png', '../img/icon_coaching@2x.png');
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 294x;
+        height: 169px;
+        margin: 20px auto;
+      }
+
+      .btn-close {
+        margin-top: 20px;
+      }
+    }
+
+    &.admin {
+      width: 700px;
+      height: 400px;
+      margin-left: -350px;
+      top: 150px;
+
+      .errorMessage {
+        color: red;
+      }
+    }
+
+    &.getSatisfaction {
+      width: 700px;
+      height: 503px;
+      top: 106px;
+      margin-left: -350px;
+      display: block;
+      padding: 0;
+    }
+
+    &.singleBadge {
+      width: 390px;
+      top: 106px;
+      margin-left: -195px;
+      left: 50%;
+      z-index: 1002;
+      height: auto;
+      padding: 0;
+
+      .singleBadgeOverlay {
+        padding: 35px 30px;
+
+        h1 {
+          font-size: 20px;
+          color: $link_type;
+        }
+
+        .badgeImage {
+          margin-top: 20px;
+          background-repeat: no-repeat;
+          background-position: top center;
+          height: 150px;
+          @include hr-image('../img/badge-generic-big-inProgress.png', '../img/badge-generic-big-inProgress@2x.png');
+
+          &.completed {
+            @include hr-image('../img/badge-generic-big.png', '../img/badge-generic-big@2x.png');
+          }
+
+          &.highway_driving {
+            @include hr-image('../img/badge-highway-big-inProgress.png', '../img/badge-highway-big-inProgress@2x.png');
+
+            &.completed {
+              @include hr-image('../img/badge-highway-big.png', '../img/badge-highway-big@2x.png');
+            }
+          }
+
+          &.night_driving {
+            @include hr-image('../img/badge-night-big-inProgress.png', '../img/badge-night-big-inProgress@2x.png');
+
+            &.completed {
+              @include hr-image('../img/badge-night-big.png', '../img/badge-night-big@2x.png');
+            }
+          }
+
+          &.smooth_braking {
+            @include hr-image('../img/badge-braking-big-inProgress.png', '../img/badge-braking-big-inProgress@2x.png');
+
+            &.completed {
+              @include hr-image('../img/badge-braking-big.png', '../img/badge-braking-big@2x.png');
+            }
+          }
+
+          &.smooth_acceleration {
+            @include hr-image('../img/badge-accel-big-inProgress.png', '../img/badge-accel-big-inProgress@2x.png');
+
+            &.completed {
+              @include hr-image('../img/badge-accel-big.png', '../img/badge-accel-big@2x.png');
+            }
+          }
+
+          &.coach_accepted {
+            @include hr-image('../img/badge-coaching-big-inProgress.png', '../img/badge-coaching-big-inProgress@2x.png');
+
+            &.completed {
+              @include hr-image('../img/badge-coaching-big.png', '../img/badge-coaching-big@2x.png');
+            }
+          }
+
+          &.bronze {
+            @include hr-image('../img/medal_tracking_bronze.png', '../img/medal_tracking_bronze@2x.png');
+            height: 170px;
+
+            &.completed {
+              @include hr-image('../img/medal_bronze.png', '../img/medal_bronze@2x.png');
+            }
+          }
+
+          &.silver {
+            @include hr-image('../img/medal_tracking_silver.png', '../img/medal_tracking_silver@2x.png');
+            height: 170px;
+
+            &.completed {
+              @include hr-image('../img/medal_silver.png', '../img/medal_silver@2x.png');
+            }
+          }
+
+          &.gold {
+            @include hr-image('../img/medal_tracking_gold.png', '../img/medal_tracking_gold@2x.png');
+            height: 170px;
+
+            &.completed {
+              @include hr-image('../img/medal_gold.png', '../img/medal_gold@2x.png');
+            }
+          }
+
+          &.certified {
+            @include hr-image('../img/medal_certificate.png', '../img/medal_certificate@2x.png');
+            height: 170px;
+          }
+        }
+
+        .badgeProgress {
+          width: 170px;
+          margin: 20px auto;
+        }
+
+        .badgeRequirements {
+          width: 275px;
+          margin: 20px auto;
+        }
+
+        &.bronze {
+          @include hr-image('../img/ornament-guilloche-bronze.png', '../img/ornament-guilloche-bronze@2x.png');
+        }
+
+        &.silver {
+          @include hr-image('../img/ornament-guilloche-silver.png', '../img/ornament-guilloche-silver@2x.png');
+        }
+
+        &.gold {
+          @include hr-image('../img/ornament-guilloche-gold.png', '../img/ornament-guilloche-gold@2x.png');
+        }
+
+        &.certified {
+          @include hr-image('../img/ornament-guilloche-white.png', '../img/ornament-guilloche-white@2x.png');
+        }
+      }
+    }
   }
 }
 
@@ -188,8 +328,9 @@
 }
 
 
-@media screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  .overlayContent {
+@media screen and (max-device-width : 480px) {
+
+  #overlay #overlayContent {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -198,7 +339,8 @@
     width: 100% !important;
   }
 
-  #overlay .coachAccepted .coachAccepted .coachIcon {
+   #overlay #overlayContent.coachAccepted .coachIcon {
     background-size: contain;
   }
+
 }

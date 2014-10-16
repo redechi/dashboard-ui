@@ -122,8 +122,10 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
     onRender: function() {
       _.defer(this.enablePopovers);
 
-      // toggle loading
-      $('.loading', this.$el).toggle(this.collection.length === 0);
+      //close loading overlay unless no matching trips or error
+      if((this.collection.length > 0 || this.options.fetching === false) && !this.options.error) {
+        coms.trigger('overlay:destroy');
+      }
 
       //Set sort paramaters
       $('.sortValue li[data-value="' + this.options.sortType + '"]', this.$el).addClass('selected');

@@ -1,0 +1,31 @@
+<div>
+  <h1>Admin</h1>
+
+  <div class="admin" style="text-align: left;">
+  {{isDemo}}:{{isStaging}}:{{isUsingStaging}}<br>
+  client id: {{ client_id }}<br>
+  base host: {{ base_host }}<br>
+  api host: {{ api_host }}<br>
+  newton host: {{ newton_host }}<br>
+  </div>
+
+  <br>
+
+  <div class="message errorMessage">
+  </div>
+
+  <hr>
+
+  <form>
+    <label>Coach Email</label>
+    <input name="coachEmail" type="input">
+    <input class="btn btn-blue addCoach" type="submit" value="Add Coach">
+    <input class="deleteCoach btn btn-gray" value="Delete Coach" type="button">
+  </form>
+
+  <hr>
+
+  <form>
+    <input class="btn btn-blue sendReminder" type="submit" value="Trigger Reminder Email">
+  </form>
+</div>

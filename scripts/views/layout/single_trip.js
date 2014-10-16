@@ -15,11 +15,11 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
   return Backbone.Marionette.LayoutView.extend({
 
     template: TripTmpl,
-    
+
 
     initialize: function() {
       if(!this.model) {
-        regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'invalidTrip'}));
+        new OverlayLayout({type: 'invalidTrip'});
       }
 
       //if user clicks on a selected trips, only toggle through selected
@@ -28,12 +28,12 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
         this.collection = selectedTrips;
       }
 
-      coms.trigger('filter:closePopovers');
+      coms.once('overlay:hide', _.bind(this.destroy, this));
     },
 
 
     events: {
-      'click .close': 'closeOverlay',
+      'click .close': 'destroy',
       'click .nextTrip': 'showNextTrip',
       'click .prevTrip': 'showPrevTrip'
     },
@@ -47,7 +47,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
     updateTrip: function() {
       this.model.initialize();
-      coms.trigger('overlay:hide');
       this.onShow();
     },
 
@@ -63,11 +62,6 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
       $('.nextTrip', this.$el).toggleClass('disabled', !this.nextTrip);
       $('.tripIndex', this.$el).text(totalTripCount - idx);
       $('.totalTripCount', this.$el).text(totalTripCount);
-    },
-
-
-    closeOverlay: function() {
-      coms.trigger('trips:closeSingleTripOverlay');
     },
 
 
@@ -109,6 +103,11 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
       this.map.show(this.mapView);
       this.trip.show(this.singleTripView);
+    },
+
+
+    onBeforeDestroy: function () {
+      coms.trigger('overlay:destroy');
     },
 
 

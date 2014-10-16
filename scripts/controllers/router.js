@@ -54,7 +54,7 @@ function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, Licen
 
     logout: function () {
       login.logout();
-      coms.trigger('overlay:hide');
+      coms.trigger('overlay:destroy');
       window.location = (login.isUsingStaging()) ? '/?staging' : '/';
     },
 

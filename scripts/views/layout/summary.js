@@ -27,7 +27,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       coms.off('error:500');
       coms.off('error:noTrips');
       coms.off('trips:showSingleTripOverlay');
-      coms.off('trips:closeSingleTripOverlay');
       coms.off('trips:showDownloadExportOverlay');
 
       coms.on('resize', this.resize, this);
@@ -36,7 +35,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       coms.on('error:noTrips', this.noTrips, this);
 
       coms.on('trips:showSingleTripOverlay', this.showSingleTripOverlay, this);
-      coms.on('trips:closeSingleTripOverlay', this.hideSingleTrip, this);
       coms.on('trips:showDownloadExportOverlay', this.showDownloadExportOverlay, this);
 
       this.selectors = {};
@@ -53,7 +51,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     onRender: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'loadingTrips'}));
+      new OverlayLayout({type: 'loadingTrips'});
 
       var tl = new TripListLayout();
       var m = new MapView();
@@ -96,37 +94,34 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     error403: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error403'}));
+      new OverlayLayout({type: 'error403'});
     },
 
 
     error500: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error500'}));
+      new OverlayLayout({type: 'error500'});
     },
 
 
     noTrips: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'noTrips'}));
+      new OverlayLayout({type: 'noTrips'});
     },
 
 
     showSingleTripOverlay: function (trip, collection) {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout());
-      this.singleTrip.show(new SingleTripLayout({model: trip, collection: collection}));
-    },
-
-
-    showDownloadExportOverlay: function (blobUrl) {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({
-        type: 'downloadExport',
-        blobUrl: blobUrl
+      new OverlayLayout({activeMask: true});
+      this.singleTrip.show(new SingleTripLayout({
+        model: trip,
+        collection: collection
       }));
     },
 
 
-    hideSingleTrip: function () {
-      regionManager.getRegion('main_overlay').reset();
-      this.singleTrip.reset();
+    showDownloadExportOverlay: function (blobUrl) {
+      new OverlayLayout({
+        type: 'downloadExport',
+        blobUrl: blobUrl
+      });
     }
   });
 });

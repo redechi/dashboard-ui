@@ -94,43 +94,37 @@ function( Backbone, coms, regionManager, LicenseplusTmpl, OverlayLayout, SingleB
 
 
     error403: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error403'}));
+      new OverlayLayout({type: 'error403'});
     },
 
 
     error500: function () {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({type: 'error500'}));
+      new OverlayLayout({type: 'error500'});
     },
 
 
     showBadgeOverlay: function(badge) {
-      regionManager.getRegion('main_overlay').show(new OverlayLayout());
-      this.singleBadge.show(new SingleBadgeView({model: badge}));
+      new OverlayLayout({contentView: new SingleBadgeView({model: badge}), type: 'singleBadge'});
     },
 
 
     hideBadgeOverlay: function () {
-      regionManager.getRegion('main_overlay').reset();
       this.singleBadge.reset();
     },
 
 
     checkIfCoachAccepted: function() {
       if(Backbone.history.getFragment().indexOf('?coachAccepted') > -1) {
-        this.showCoachAcceptedOverlay();
+        var student = this.model.get('student') || {};
+
+        new OverlayLayout({
+          type: 'coachAccepted',
+          firstName: student.first_name,
+          lastName: student.last_name
+        });
+
         Backbone.history.navigate('#licenseplus');
       }
-    },
-
-
-    showCoachAcceptedOverlay: function () {
-      var student = this.model.get('student') || {};
-
-      regionManager.getRegion('main_overlay').show(new OverlayLayout({
-        type: 'coachAccepted',
-        firstName: student.first_name,
-        lastName: student.last_name
-      }));
     },
 
 
