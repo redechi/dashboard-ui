@@ -96,6 +96,11 @@
           @include hr-image('../img/medal_gold.png', '../img/medal_gold@2x.png');
         }
       }
+
+      &.certified {
+        @include hr-image('../img/medal_certificate.png', '../img/medal_certificate@2x.png');
+        height: 170px;
+      }
     }
 
     .badgeProgress {
@@ -118,6 +123,10 @@
 
     &.gold {
       @include hr-image('../img/ornament-guilloche-gold.png', '../img/ornament-guilloche-gold@2x.png');
+    }
+
+    &.certified {
+      @include hr-image('../img/ornament-guilloche-white.png', '../img/ornament-guilloche-white@2x.png');
     }
   }
 }

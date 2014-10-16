@@ -7,14 +7,13 @@ function( Backbone, coms, SingleBadgeTmpl) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
-    
+
     template: SingleBadgeTmpl,
 
 
     className: function() {
       var className = 'singleBadgeOverlay';
-
-      if(this.model.get('progress') === 1) {
+      if(this.model.get('completed')) {
         className += ' ' + this.model.get('slug');
       }
       return className;

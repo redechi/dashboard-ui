@@ -76,6 +76,14 @@ function(formatters) {
       requirement: 'complete 100 hours of coached driving in License+ with a score of 90-100',
       accomplishment: 'completed 100 hours of coached driving in License+ with a score 90 or above',
       type: 'medal'
+    },
+
+    certified: {
+      slug: 'certified',
+      name: 'License+ Certified',
+      requirement: 'complete 100 hours of coached driving in License+',
+      accomplishment: 'completed 100 hours of coached driving in License+',
+      type: 'medal'
     }
 
   };

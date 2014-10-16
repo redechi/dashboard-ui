@@ -4,10 +4,10 @@
     <h2 class="sectionHeader">Medal</h2>
 
     <div class="finished">
-      <div class="completedMedal {{medal}}">
-        <div class="medalImage" data-slug="{{medal}}" data-completed="true"></div>
-        <div class="medalName">{{medal}}</div>
-        <div class="medalSubtitle">Automatic License+ Medal</div>
+      <div class="completedMedal {{medalName}}">
+        <div class="medalImage" data-slug="{{medalName}}" data-completed="true"></div>
+        <div class="medalName">{{medalName}}</div>
+        <div class="medalSubtitle">Automatic License+ {{#if medal}}Medal{{/if}}</div>
         <div class="studentName">{{student.first_name}} {{student.last_name}}</div>
       </div>
 

@@ -176,10 +176,11 @@
         padding: 20px;
         background-repeat: repeat-x;
         @include hr-image('../img/ornament-guilloche-white.png', '../img/ornament-guilloche-white@2x.png');
-
+        
         .medalImage {
           height: 170px;
           width: 153px;
+          @include hr-image('../img/medal_certificate.png', '../img/medal_certificate@2x.png');
           background-repeat: no-repeat;
           background-position: top center;
           margin: 0 auto 20px;
