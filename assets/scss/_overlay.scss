@@ -176,11 +176,19 @@
       padding: 0;
     }
 
+    &.singleTrip {
+      width: 690px;
+      top: 106px;
+      margin-left: -345px;
+      z-index: 1002;
+      height: auto;
+      padding: 10px 10px 3px 10px;
+    }
+
     &.singleBadge {
       width: 390px;
       top: 106px;
       margin-left: -195px;
-      left: 50%;
       z-index: 1002;
       height: auto;
       padding: 0;

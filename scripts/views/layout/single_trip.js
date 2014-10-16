@@ -28,7 +28,7 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
         this.collection = selectedTrips;
       }
 
-      coms.once('overlay:hide', _.bind(this.destroy, this));
+      coms.once('overlay:hide', this.destroy, this);
     },
 
 
@@ -112,7 +112,8 @@ function( Backbone, coms, Trip, SingleTripView, MapView, HeaderView, TripTmpl, O
 
 
     onShow: function() {
-      this.mapView.fitBounds();
+      var self = this;
+      _.defer(function() { self.mapView.fitBounds(); });
     }
   });
 });

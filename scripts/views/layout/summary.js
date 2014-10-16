@@ -109,11 +109,14 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     showSingleTripOverlay: function (trip, collection) {
-      new OverlayLayout({activeMask: true});
-      this.singleTrip.show(new SingleTripLayout({
-        model: trip,
-        collection: collection
-      }));
+      new OverlayLayout({
+        activeMask: true,
+        contentView: new SingleTripLayout({
+          model: trip,
+          collection: collection
+        }),
+        type: 'singleTrip'
+      });
     },
 
 
