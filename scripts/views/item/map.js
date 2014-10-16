@@ -106,7 +106,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           mapHelpers.highlightMarker(endMarker);
         }
 
-        if(self.speedingLayer.getLayers().length) {
+        if(self.speedingLayer.getLayers().length && window.options.showTripEvents) {
           self.speedingLayer.bringToFront();
         }
       });
@@ -171,7 +171,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         endMarker.options.selected = true;
       }
 
-      if(this.speedingLayer.getLayers().length) {
+      if(this.speedingLayer.getLayers().length && window.options.showTripEvents) {
         this.speedingLayer.bringToFront();
       }
     },
