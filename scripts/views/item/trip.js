@@ -23,11 +23,19 @@ function( Backbone, coms, TripTmpl, analytics ) {
 
     triggerHighlight: function () {
       coms.trigger('trips:highlight', [this.model]);
+
+      if(window.options.autoZoom) {
+        coms.trigger('trips:zoom', [this.model]);
+      }
     },
 
 
     removeHighlight: function () {
       coms.trigger('trips:unhighlight', [this.model]);
+
+      if(window.options.autoZoom) {
+        coms.trigger('trips:unzoom', [this.model]);
+      }
     },
 
 

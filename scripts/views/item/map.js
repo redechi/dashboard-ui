@@ -19,6 +19,8 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     initialize: function() {
       coms.on('trips:highlight', this.highlightTrips, this);
       coms.on('trips:unhighlight', this.unhighlightTrips, this);
+      coms.on('trips:zoom', this.zoomTrips, this);
+      coms.on('trips:unzoom', this.unzoomTrips, this);
       coms.on('trips:select', this.selectTrip, this);
       coms.on('trips:deselect', this.deselectTrip, this);
       coms.on('trips:changeSelectedTrips', this.changeSelectedTrips, this);
@@ -71,6 +73,17 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     },
 
 
+    zoomTrips: function(trips) {
+      var bounds = this.getBoundsFromTrips(trips);
+      this.fitBounds(bounds || this.pathsLayer.getBounds());
+    },
+
+
+    unzoomTrips: function() {
+      this.fitBounds(this.pathsLayer.getBounds());
+    },
+
+
     highlightTrips: function (trips) {
       var self = this;
 
@@ -97,11 +110,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           self.speedingLayer.bringToFront();
         }
       });
-
-      if(window.options.autoZoom) {
-        var bounds = this.getBoundsFromTrips(trips);
-        this.fitBounds(bounds || this.pathsLayer.getBounds());
-      }
     },
 
 
@@ -139,10 +147,6 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           }
         }
       });
-
-      if(window.options.autoZoom) {
-        this.fitBounds(this.pathsLayer.getBounds());
-      }
     },
 
 
