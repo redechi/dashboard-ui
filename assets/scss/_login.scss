@@ -199,11 +199,15 @@
         padding-top: 189px;
         @include hr-image('../img/laptop.png', '../img/laptop@2x.png');
         background-repeat: no-repeat;
+        background-position: center top;
 
         .iOSAppLink {
           display: none;
         }
 
+        .androidAppLink {
+          display: none;
+        }
       }
     }
 
@@ -240,7 +244,18 @@
     .learnMoreLink {
       display: none;
     }
+
     .iOSAppLink {
+      display: block;
+    }
+  }
+
+  .isAndroid #login .topBox .mobileBlock {
+    .learnMoreLink {
+      display: none;
+    }
+
+    .androidAppLink {
       display: block;
     }
   }

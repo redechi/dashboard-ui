@@ -87,11 +87,10 @@ function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollec
       new OverlayLayout({type: 'notSupported'});
     }
 
-
     //check for mobile
-    if(md.is('iPhone')) {
+    if(md.phone() === 'iPhone') {
       $('body').addClass('isiPhone');
-    } else if(md.is('android')) {
+    } else if(md.os() === 'AndroidOS') {
       $('body').addClass('isAndroid');
     }
 
