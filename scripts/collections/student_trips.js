@@ -29,7 +29,6 @@ function( Backbone, coms, Trip, filterCollection, settings, cache ) {
       var trips = cache.fetch('studentTrips');
       if(trips && trips.length) {
         this.set(trips);
-        coms.trigger('studentTrips:render');
       } else {
         this.fetchPage();
       }
@@ -55,7 +54,7 @@ function( Backbone, coms, Trip, filterCollection, settings, cache ) {
           return self.fetchPage(page + 1);
         } else {
           cache.save('studentTrips', self.toJSON());
-          coms.trigger('studentTrips:render');
+          self.trigger('reset');
         }
       });
     }

@@ -16,7 +16,6 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
       coms.on('error:403', this.setError, this);
       coms.on('error:500', this.setError, this);
       coms.on('resize', this.resize, this);
-      coms.on('studentTrips:render', this.hideLoading, this);
 
       this.options.sortType = 'started_at';
       this.options.sortDirection = 'sortDown';
@@ -54,7 +53,7 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
 
     collectionEvents: {
       'sort': 'render',
-      'add': 'render'
+      'reset': 'render'
     },
 
 
@@ -114,17 +113,13 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
     },
 
 
-    hideLoading: function() {
-      $('.loading', this.$el).hide();
-    },
-
-
     onRender: function() {
       _.defer(this.enablePopovers);
 
       //close loading overlay unless no matching trips or error
       if((this.collection.length > 0 || this.options.fetching === false) && !this.options.error) {
         coms.trigger('overlay:destroy');
+        $('.loading', this.$el).hide();
       }
 
       //Set sort paramaters
