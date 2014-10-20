@@ -19,7 +19,8 @@ define([
   './analytics',
   '../models/settings',
   '../controllers/cache',
-  '../controllers/cookie'
+  '../controllers/cookie',
+  'purl'
 ],
 function( Backbone, coms, analytics, settings, cache, cookie ) {
   'use strict';
@@ -149,8 +150,11 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
 
 
     setAccessToken: function () {
-      // get access token from cookie
-      var accessToken = cookie.getCookie('token');
+      // get access token from URL parameter (for testing)
+      var accessToken = $.url().param('accessToken');
+
+      // else get access token from cookie
+      accessToken = accessToken || cookie.getCookie('token');
 
       //if non-matching token in sessionStorage, clear
       if(sessionStorage.getItem('accessToken') !== accessToken) {
@@ -206,7 +210,8 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
 
 
             try {
-              if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1 && this.url.indexOf('/trips') === -1) {
+              var hash = $.url(this.url).attr('fragment');
+              if(xhr.responseText !== '[]' && status !== 'error' && hash.indexOf('/oauth/access_token') === -1 && hash.indexOf('/trips') === -1) {
                 cache.save(this.url, xhr.responseText);
               }
             } catch (e) {

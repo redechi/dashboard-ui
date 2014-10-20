@@ -2,7 +2,8 @@ define([
   'backbone',
   'communicator',
   'models/filter',
-  'controllers/filter'
+  'controllers/filter',
+  'purl'
 ],
 function( Backbone, coms, FilterModel, filterList ) {
   'use strict';
@@ -31,13 +32,7 @@ function( Backbone, coms, FilterModel, filterList ) {
 
 
     getFiltersFromUrl: function() {
-      var search = Backbone.history.fragment.replace('filter/?', ''),
-          filterObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
-                 function(key, value) {
-                   return key === '' ? value : decodeURIComponent(value);
-                 }) : {};
-
-      return filterObj;
+      return $.url(Backbone.history.fragment).param();
     },
 
 
