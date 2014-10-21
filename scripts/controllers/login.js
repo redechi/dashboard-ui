@@ -74,7 +74,9 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
                 }
               }).done(function() {
                 Backbone.history.navigate('#licenseplus?coachAccepted', {trigger: true});
-              }).fail(_.bind(self.error, model));
+              }).fail(function() {
+                Backbone.history.navigate('#licenseplus', {trigger: true});
+              })
             } else {
               Backbone.history.navigate('#/');
             }
