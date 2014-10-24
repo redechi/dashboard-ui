@@ -84,9 +84,9 @@ function( Backbone, coms, OverlayTmpl, analytics ) {
 
 
     events: {
-      'click .close': 'myDestroy',
-      'click .btn-close': 'myDestroy',
-      'click .mask-close': 'myDestroy',
+      'click .close': 'triggerDestroy',
+      'click .btn-close': 'triggerDestroy',
+      'click .mask-close': 'triggerDestroy',
       'click a.iOSAppLink': 'iOSAppLink',
       'click a.androidAppLink': 'androidAppLink'
     },
@@ -137,6 +137,11 @@ function( Backbone, coms, OverlayTmpl, analytics ) {
 
     onBeforeDestroy: function () {
       coms.trigger('overlay:hide', this);
+    },
+
+
+    triggerDestroy: function() {
+      coms.trigger('overlay:destroy');
     },
 
 
