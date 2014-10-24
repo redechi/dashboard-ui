@@ -54,6 +54,10 @@ function( Backbone, settings ) {
       }
 
 
+      if(!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(self.get('username'))) {
+        return 'Please enter a valid email address';
+      }
+
       if(!self.get('first_name')) {
         return 'Please enter your first name';
       }
