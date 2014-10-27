@@ -132,13 +132,14 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
 
     error: function (jqXHR){
       var model = this,
+          error = (jqXHR.responseJSON && jqXHR.responseJSON.error) ? jqXHR.responseJSON.error : '',
           message = '';
 
       if(jqXHR.status === 400 && jqXHR.responseText.indexOf('Invalid value') !== -1) {
         message = 'The coach invite URL was invalid.';
-      } else if(jqXHR.status === 400 && jqXHR.responseJSON && jqXHR.responseJSON.error === 'err_incoming_relationship_already_exists') {
+      } else if(jqXHR.status === 400 && error === 'err_incoming_relationship_already_exists') {
         message = 'You may only coach one student at a time, and you cannot be both a student and a coach.';
-      } else if(jqXHR.status === 401 && jqXHR.statusText === 'UNAUTHORIZED') {
+      } else if(jqXHR.status === 401 && error === 'invalid_credentials') {
         message = 'Invalid email or password';
       } else if(jqXHR.status === 409) {
         message = 'An account with that email already exists. Try logging in.';
