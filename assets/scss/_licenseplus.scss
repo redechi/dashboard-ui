@@ -93,7 +93,6 @@
           .timeRemainingValue {
             width: 0;
             height: 16px;
-            background-color: $green;
             float: left;
             -webkit-transition: width 1s ease-in-out;
             -moz-transition: width 1s ease-in-out;
@@ -176,7 +175,7 @@
         padding: 20px;
         background-repeat: repeat-x;
         @include hr-image('../img/ornament-guilloche-white.png', '../img/ornament-guilloche-white@2x.png');
-        
+
         .medalImage {
           height: 170px;
           width: 153px;

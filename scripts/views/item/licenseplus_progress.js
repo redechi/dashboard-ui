@@ -100,7 +100,9 @@ function( Backbone, coms, moment, LicenseplusProgressTmpl, badges, graphHelpers,
     onShow: function() {
       var self = this;
       _.defer(_.bind(function() {
-        $('.timeRemainingValue', self.$el).width(self.model.get('percentComplete') + '%');
+        $('.timeRemainingValue', self.$el)
+          .width(self.model.get('percentComplete') + '%')
+          .css('backgroundColor', formatters.scoreColor(this.model.get('score')));
       }, this));
     },
 
