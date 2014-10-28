@@ -37,44 +37,42 @@ function( Backbone, settings ) {
 
 
     validate: function (attrs, options) {
-      var self = this;
-
-      if(!self.get('username')) {
+      if(!this.get('username')) {
         return 'Please enter your email';
       }
 
-      if(!self.get('password')) {
+      if(!this.get('password')) {
         return 'Please enter your password';
       }
 
 
       // exit here if login form
-      if(self.get('type') !== 'create_coach') {
+      if(this.get('type') !== 'create_coach') {
         return;
       }
 
 
-      if(!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(self.get('username'))) {
+      if(!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(this.get('username'))) {
         return 'Please enter a valid email address';
       }
 
-      if(!self.get('first_name')) {
+      if(!this.get('first_name')) {
         return 'Please enter your first name';
       }
 
-      if(!self.get('last_name')) {
+      if(!this.get('last_name')) {
         return 'Please enter your last name';
       }
 
-      if(!self.get('password_repeat')) {
+      if(!this.get('password_repeat')) {
         return 'Please enter repeat your password';
       }
 
-      if(self.get('password') !== self.get('password_repeat')) {
+      if(this.get('password') !== this.get('password_repeat')) {
         return 'Passwords do not match';
       }
 
-      if(self.get('password') && self.get('password').length < 8) {
+      if(this.get('password') && this.get('password').length < 8) {
         return 'Your password must be at least 8 characters';
       }
     }

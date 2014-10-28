@@ -107,9 +107,9 @@ function( Backbone, coms, regionManager, CoachLoginTmpl, LoginModel, login, anal
 
       e.preventDefault();
 
-      $('input[name="username"]', this.$el).trigger('change');
-      $('input[name="password"]', this.$el).trigger('change');
-      $('input[name="staySignedIn"]', this.$el).trigger('change');
+      $('#loginForm input', this.$el).each(function() {
+        $(this).trigger('change');
+      });
 
       var isValid = login.login(this.model);
       if (isValid) {
@@ -122,12 +122,9 @@ function( Backbone, coms, regionManager, CoachLoginTmpl, LoginModel, login, anal
     createAccount: function (e) {
       this.model.set('type', 'create_coach');
 
-      $('input[name="username"]', this.$el).trigger('change');
-      $('input[name="password"]', this.$el).trigger('change');
-      $('input[name="last_name"]', this.$el).trigger('change');
-      $('input[name="first_name"]', this.$el).trigger('change');
-      $('input[name="staySignedIn"]', this.$el).trigger('change');
-      $('input[name="password_repeat"]', this.$el).trigger('change');
+      $('#createAccountForm input', this.$el).each(function() {
+        $(this).trigger('change');
+      });
 
       e.preventDefault();
       var isValid = login.createAccount(this.model);
