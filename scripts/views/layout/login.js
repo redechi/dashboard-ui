@@ -110,6 +110,11 @@ function( Backbone, coms, regionManager, LoginTmpl, LoginModel, settings, login,
 
     login: function (e) {
       e.preventDefault();
+
+      $('input[name="username"]', this.$el).trigger('change');
+      $('input[name="password"]', this.$el).trigger('change');
+      $('input[name="staySignedIn"]', this.$el).trigger('change');
+
       var isValid = login.login(this.model)
       if (isValid) {
         this.clearErrors();
