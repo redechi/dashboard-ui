@@ -17,15 +17,6 @@
         <link type="text/css" rel="stylesheet" href="assets/css/inline.css?__inline=true">
         <link type="text/css" rel="stylesheet" href="assets/css/main.css"/>
 
-        <script>
-          //errorception
-          (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
-          c&&c.apply(this,a)};var b=function(){var c=e.createElement(rr),b=e.getElementsByTagName(rr)[0];
-          c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
-          _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
-          (window,document,"script","541b1c43c1f32d0e0c00042d");
-        </script>
-
         <script src="bower_components/modernizr/modernizr.js"></script>
     </head>
 
@@ -45,6 +36,14 @@
         <div id="automaticVersion">{{--version--}}</div>
 
         <script data-main="scripts/init" src="bower_components/requirejs/require.js"></script>
+        <script src="bower_components/raven-js/dist/raven.min.js"></script>
+
+        <script>
+          Raven.config('https://1e1818d9c5714d4990a766550ec593db@app.getsentry.com/33040', {
+            whitelistUrls: ['dashboard.automatic.com/']
+          }).install();
+        </script>
+
         <script src="assets/js/main.js"></script>
         <script src="//loader.engage.gsfn.us/loader.js"></script>
     </body>

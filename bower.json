@@ -39,7 +39,8 @@
     "seiyria-bootstrap-slider": "~4.0.1",
     "sinon": "~1.10.3",
     "underscore": "~1.7.0",
-    "mobile-detect": "~0.4.0"
+    "mobile-detect": "~0.4.0",
+    "raven-js": "~1.1.16"
   },
   "devDependencies": {},
   "directory": "n",

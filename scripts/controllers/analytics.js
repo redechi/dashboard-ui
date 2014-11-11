@@ -50,6 +50,10 @@ function( Backbone, mixpanel ) {
         mixpanel.register({
           'App': 'Dashboard'
         });
+
+        Raven.setUser({
+          email: email
+        });
       } catch(e) { }
     }
   };
