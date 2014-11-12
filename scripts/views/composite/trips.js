@@ -20,6 +20,7 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
     childView: Trip,
     childViewContainer: '.trips ul',
     template: tripListTmpl,
+    selectors: {},
 
 
     initialize: function() {
@@ -40,7 +41,6 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
       this.options.sortDirection = 'sortDown';
       this.options.sortTypeName = 'Time/Date';
       this.options.fetching = true;
-      this.selectors = {};
 
       setTimeout(function() {
         tripsCollection.fetchInitial();

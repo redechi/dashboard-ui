@@ -19,6 +19,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
   return Backbone.Marionette.LayoutView.extend({
 
     template: SummaryTmpl,
+    selectors: {},
 
 
     initialize: function() {
@@ -36,8 +37,6 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
       coms.on('trips:showSingleTripOverlay', this.showSingleTripOverlay, this);
       coms.on('trips:showDownloadExportOverlay', this.showDownloadExportOverlay, this);
-
-      this.selectors = {};
     },
 
 
