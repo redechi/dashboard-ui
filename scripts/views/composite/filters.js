@@ -221,8 +221,8 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
         .append(_.map(remainingFilters, function(filter) {
           return $('<li>').attr('data-filter', filter.name).text(filter.title);
         }))).html();
-        
-      if(('.addFilter').data('bs.popover') && ('.addFilter').data('bs.popover').options) {
+
+      if($('.addFilter').data('bs.popover') && $('.addFilter').data('bs.popover').options) {
         $('.addFilter').data('bs.popover').options.content = content;
       }
     },
