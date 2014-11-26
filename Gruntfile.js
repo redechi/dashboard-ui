@@ -10,7 +10,7 @@ var CDN = process.env.CDN || '';
 git.tag(function (tag) {
   var regex = /release\/(.*)\-/,
       match = regex.exec(tag);
-  tagName = (match.length) ? match[1] : '';
+  tagName = (match && match.length > 0) ? match[1] : '';
 });
 
 git.short(function (short) {
