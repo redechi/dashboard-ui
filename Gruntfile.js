@@ -296,6 +296,18 @@ module.exports = function (grunt) {
             'bower_components/raven-js/dist/**'
           ]
         }]
+      },
+      favicon: {
+        files: [{
+          expand: true,
+          flatten: true,
+          dot: true,
+          cwd: '<%= yeoman.app %>',
+          dest: '<%= yeoman.dist %>',
+          src: [
+            'assets/favicons/*',
+          ]
+        }]
       }
     },
 
@@ -393,6 +405,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'copy:favicon',
     'compress',
     'replace',
     'inline',
@@ -410,6 +423,7 @@ module.exports = function (grunt) {
     'htmlmin',
     'appcache',
     'copy',
+    'copy:favicon',
     'compress',
     'replace',
     'inline',
