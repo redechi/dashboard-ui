@@ -29,6 +29,14 @@
     text-align: center;
   }
 
+  a.toggleLoginForm {
+    color: $blue;
+  }
+
+  a.toggleLoginForm:hover {
+    color: $link_type;
+  }
+
   .topBox {
     padding: 20px 30px;
     text-align: center;
