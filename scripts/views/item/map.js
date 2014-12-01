@@ -468,7 +468,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         if(trip.get('path')) {
           var decodedPath = L.GeoJSON.decodeLine(trip.get('path'));
 
-          trip.get('drive_events').forEach(function(item) {
+          _.each(trip.get('drive_events'), function(item) {
             if(item.type === 'hard_brake') {
               self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: hardBrakeIcon, id: trip.get('id')}));
             } else if(item.type === 'hard_accel') {
