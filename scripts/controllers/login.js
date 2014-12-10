@@ -141,7 +141,7 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
         message = 'You may only coach one student at a time, and you cannot be both a student and a coach.';
       } else if(jqXHR.status === 401 && error === 'invalid_credentials') {
         message = 'Invalid email or password';
-      } else if(jqXHR.status === 409) {
+      } else if(jqXHR.status === 409 || jqXHR.status === 422) {
         message = 'An account with that email already exists. Try logging in.';
       } else {
         message = 'Unknown error<br> If this persists please contact <a href="mailto:support@automatic.com">Support</a>.';
