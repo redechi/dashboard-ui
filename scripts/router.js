@@ -36,7 +36,7 @@ define([
 
             // if no access token, redirect to login
             if(!accessToken) {
-              Backbone.history.navigate('/login', {trigger: true});
+              Backbone.history.navigate('/login', {trigger: true, replace: true});
               return;
             } else {
               login.setAccessToken();
