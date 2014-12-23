@@ -48,7 +48,7 @@ require.config({
         hbs: '../bower_components/require-handlebars-plugin/hbs',
 
         /* Mixpanel */
-        mixpanel: '//cdn.mxpnl.com/libs/mixpanel-2.2.min',
+        mixpanel: '../bower_components/mixpanel/mixpanel',
 
         /* Google Analytics */
         ga: '//www.google-analytics.com/analytics'

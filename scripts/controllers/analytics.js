@@ -7,29 +7,33 @@ define('mixpanel-preinit', function() {
 
 define([
   'backbone',
-  'mixpanel',
-  'ga'
+  'mixpanel'
 ],
 function( Backbone, mixpanel ) {
   'use strict';
 
   try {
-    window.ga('create', 'UA-33317148-4');
-    window.ga('require', 'displayfeatures');
-    window.ga('send', 'pageview');
+    // Require google analytics here to handle error if it is blocked by browser
+    require(['ga'], function() {
+      ga('create', 'UA-33317148-4');
+      ga('require', 'displayfeatures');
+      ga('send', 'pageview');
+    }, function() {
+      window.ga = _.noop;
+    });
   } catch(e) { }
 
   return {
     trackPageview: function(urlFragment) {
       try {
-        window.ga('send', 'pageview', urlFragment);
+        ga('send', 'pageview', urlFragment);
       } catch(e) { }
     },
 
 
     trackEvent: function(category, action, label) {
       try {
-        window.ga('send', 'event', category, action, label);
+        ga('send', 'event', category, action, label);
       } catch(e) { }
 
       try {
