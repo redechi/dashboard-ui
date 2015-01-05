@@ -123,14 +123,13 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
       } else {
         var dateFilter = filterCollection.findWhere({name: 'date'}),
             start = dateFilter.get('value')[0],
-            end = moment().valueOf();
-
-        var trips = cache.fetch('trips');
+            end = moment().valueOf(),
+            trips = cache.fetch('trips');
 
         if(trips && trips.length) {
-          var start = sessionStorage.getItem('tripsStart');
-          if(start) {
-            this.startDate = start;
+          var startDate = sessionStorage.getItem('tripsStart');
+          if(startDate) {
+            this.startDate = startDate;
           }
 
           this.set(trips);
@@ -169,7 +168,7 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
           self.startDate = Math.min(start, self.startDate);
 
           cache.save('trips', self.toJSON());
-          sessionStorage.setItem('tripsStart', self.startDate);
+          cache.save('tripsStart', self.startDate);
 
           if(!self.length) {
             self.checkForNoTrips();

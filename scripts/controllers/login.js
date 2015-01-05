@@ -59,7 +59,7 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
             cookie.setCookie('token', data.access_token, expires);
             analytics.trackEvent('login', 'Login');
             analytics.identifyUser(model.get('username'));
-            sessionStorage.setItem('accessToken', data.access_token);
+            cache.save('accessToken', data.access_token);
 
             //if coming from coach_login, show licenseplus
             if(_.contains(['coach'], model.get('type'))) {
@@ -168,7 +168,7 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
         this.isLoggedIn = true;
 
         //set access token in sessionStorage
-        sessionStorage.setItem('accessToken', accessToken);
+        cache.save('accessToken', accessToken);
 
         //add beforeSend and complete to Backbone.sync
         var sync = Backbone.sync;

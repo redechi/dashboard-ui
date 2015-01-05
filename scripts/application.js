@@ -6,6 +6,7 @@ define([
   'regionManager',
   'moment',
   './controllers/login',
+  './controllers/cache',
   './collections/trips',
   './views/layout/overlay',
   'fastclick',
@@ -21,7 +22,7 @@ define([
 
 ],
 
-function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
+function( doc, Backbone, coms, router, regionManager, moment, login, cache, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
   'use strict';
 
   //make sure Modernizr is here
@@ -106,7 +107,7 @@ function( doc, Backbone, coms, router, regionManager, moment, login, tripsCollec
       $('.tabletWarning').slideUp('fast', function() {
         coms.trigger('resize');
       });
-      sessionStorage.setItem('warningClosed', 'true');
+      cache.save('warningClosed', true);
     });
 
     //show staging banner, if on staging
