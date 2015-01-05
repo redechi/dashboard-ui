@@ -42,7 +42,7 @@ function( Backbone, moment, formatters ) {
         formatted_start_time: (start_time ? moment(start_time).format('h:mm a').toUpperCase(): ''),
         formatted_calendar_date: moment(start_time).calendar(),
         formatted_calendar_date_with_year: moment(start_time).format('MMM D, YYYY'),
-        duration_over_70_min: Math.ceil(this.get('duration_over_70_s') / 60),
+        duration_over_70_min: Math.round(this.get('duration_over_70_s') / 60),
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),
         noHardAccels: (this.get('hard_accels') === 0),
