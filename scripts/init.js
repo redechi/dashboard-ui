@@ -65,7 +65,7 @@ require.config({
     'backbone.babysitter': '../bower_components/backbone.babysitter/lib/backbone.babysitter',
 
     /* alias the bootstrap js lib */
-    bootstrap: '../bower_components/bootstrap/js',
+    bootstrap: '../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap',
     bootstrapSlider: '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
     bootstrapDatetimepicker: '../bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker',
 
