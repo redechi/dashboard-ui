@@ -20,8 +20,8 @@ function( Backbone, coms ) {
 
 
   var stagingData = {
-    api_host: 'https://api.automatic.co',
-    newton_host: 'https://automatic-newton-stage.herokuapp.com',
+    api_host: 'https://automatic-api-staging.herokuapp.com',
+    newton_host: 'https://api.automatic.co',
     base_host: 'https://staging.automatic.co'
   };
 
@@ -52,7 +52,7 @@ function( Backbone, coms ) {
 
     defaults: {
       client_id: '385be37e93925c8fa7c7',
-      newton_host: 'https://automatic-newton.herokuapp.com',
+      newton_host: 'https://api.automatic.com',
       base_host: 'https://www.automatic.com',
       api_host: 'https://api.automatic.com'
     },
