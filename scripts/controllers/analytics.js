@@ -6,10 +6,9 @@ define('mixpanel-preinit', function() {
 
 
 define([
-  'backbone',
-  'mixpanel'
+  'backbone'
 ],
-function( Backbone, mixpanel ) {
+function( Backbone ) {
   'use strict';
 
   try {
@@ -20,6 +19,13 @@ function( Backbone, mixpanel ) {
       ga('send', 'pageview');
     }, function() {
       window.ga = _.noop;
+    });
+  } catch(e) { }
+
+  try {
+    // require mixpanel here to handle error if it is blocked by browser
+    require(['mixpanel'], null, function() {
+      window.mixpanel = _.noop;
     });
   } catch(e) { }
 
