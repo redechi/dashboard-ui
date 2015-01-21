@@ -6,6 +6,10 @@
     padding-top: 7px;
     @include noSelection;
 
+    .title {
+      line-height: 21px;
+    }
+
     .prevTrip,
     .nextTrip {
       text-indent: -9999px;
@@ -14,6 +18,7 @@
       background-position: top 4px left;
       background-repeat: no-repeat;
       cursor: pointer;
+      vertical-align: top;
 
       &.disabled {
         cursor: default;
