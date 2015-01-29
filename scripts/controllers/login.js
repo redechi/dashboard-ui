@@ -177,7 +177,7 @@ function( Backbone, coms, analytics, settings, cache, cookie ) {
           options.beforeSend = function (xhr, req) {
             try {
               //Set request header
-              if(req.url.indexOf('automatic-newton') !== -1) {
+              if(req.url.indexOf('api.automatic') !== -1) {
                 xhr.setRequestHeader('Authorization', 'bearer ' + accessToken);
               } else {
                 xhr.setRequestHeader('Authorization', 'token ' + accessToken);
