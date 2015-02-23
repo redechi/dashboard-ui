@@ -55,7 +55,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
 
 
     createMap: function() {
-      L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlNjM0FzVXcifQ.hn43-OTg0ZF4qGIGjFdapQ';
+      L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
       this.mapbox = L.mapbox.map(this.mapDiv(), 'automatic.idonii25', { zoomControl: false, attributionControl: false});
       this.mapbox.addControl(L.control.attribution({position: 'bottomleft', prefix: false}));
       this.pathsLayer = L.mapbox.featureLayer();
