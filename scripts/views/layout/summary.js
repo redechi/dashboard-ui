@@ -87,8 +87,10 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
 
 
     resize: function () {
-      var height = this.selectors.window.height() - this.selectors.tabletWarning.outerHeight(true) - this.selectors.header.outerHeight(true) - this.selectors.filters.outerHeight(true);
-      this.selectors.map.height(height - this.selectors.graphs.outerHeight(true) - this.selectors.mapMenu.outerHeight(true) - 31);
+      if(this.selectors) {
+        var height = this.selectors.window.height() - this.selectors.tabletWarning.outerHeight(true) - this.selectors.header.outerHeight(true) - this.selectors.filters.outerHeight(true);
+        this.selectors.map.height(height - this.selectors.graphs.outerHeight(true) - this.selectors.mapMenu.outerHeight(true) - 31);
+      }
     },
 
 
