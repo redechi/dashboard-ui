@@ -24,7 +24,7 @@ require.config({
 
         domReady: '../bower_components/domReady/domReady',
 
-        purl: '../bower_components/purl/purl',
+        deparam: '../bower_components/jquery-deparam/jquery-deparam',
 
         /* alias all marionette libs */
         'backbone.marionette': '../bower_components/backbone.marionette/lib/core/backbone.marionette',

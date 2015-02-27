@@ -3,9 +3,9 @@ define([
   'communicator',
   'models/filter',
   'controllers/filter',
-  'purl'
+  'deparam'
 ],
-function( Backbone, coms, FilterModel, filterList ) {
+function( Backbone, coms, FilterModel, filterList, deparam ) {
   'use strict';
 
   /* filters singleton */
@@ -32,7 +32,9 @@ function( Backbone, coms, FilterModel, filterList ) {
 
 
     getFiltersFromUrl: function() {
-      return $.url(Backbone.history.fragment).param();
+      var queryStart = Backbone.history.fragment.indexOf('?');
+      var query = Backbone.history.fragment.substring(queryStart + 1);
+      return deparam(query);
     },
 
 
