@@ -23,7 +23,7 @@ require.config({
     },
 
     'bootstrap/popover': {
-      deps: ['jquery', 'bootstrap/tooltip'],
+      deps: ['bootstrap/tooltip'],
       exports: '$.fn.popover'
     },
 
@@ -36,7 +36,6 @@ require.config({
       deps: ['mixpanel-preinit'],
       exports: 'mixpanel'
     }
-
   },
 
   paths: {
@@ -46,9 +45,9 @@ require.config({
     'jquery.scrollTo': '../bower_components/jquery.scrollTo/jquery.scrollTo',
     'mobile-detect': '../bower_components/mobile-detect/mobile-detect',
 
-    moment: '../bower_components/momentjs/moment',
+    moment: '../bower_components/moment/moment',
     d3: '../bower_components/d3/d3',
-    nvd3: '../bower_components/nvd3/nv.d3',
+    nvd3: '../bower_components/nvd3/build/nv.d3',
     mapbox: '../bower_components/mapbox.js/mapbox',
 
     fileSaver: '../bower_components/FileSaver/FileSaver',
