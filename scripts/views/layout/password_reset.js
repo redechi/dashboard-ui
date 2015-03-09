@@ -71,7 +71,8 @@ function( Backbone, PasswordResetTmpl, login, settings, analytics ) {
         this.clearErrors();
 
         $.post(
-          settings.get('base_host') + '/password/reset_email/', {email: email},
+          settings.get('base_host') + '/password/reset_email/',
+          {email: email},
           function(data) {
             if(data && data.success) {
               self.successAlert('We\'ve sent further instructions to ' + email);
@@ -103,7 +104,8 @@ function( Backbone, PasswordResetTmpl, login, settings, analytics ) {
         this.clearErrors();
 
         $.post(
-          settings.get('base_host') + '/password/change/' + token, {password: password},
+          settings.get('base_host') + '/password/change/' + token + '/',
+          {password: password},
           function(data) {
             if(data && data.success) {
               self.successAlert('Your password has been successfully reset.<br><a href="#login">Log in</a>');
