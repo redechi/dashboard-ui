@@ -10,14 +10,14 @@ function( Backbone, OverlayLayout, settingsModel, AdminTmpl  ) {
   var coach;
   var CoachModel = Backbone.Model.extend({
       url: function () {
-        return settingsModel.get('newton_host') + '/internal/licenseplus/';
+        return settingsModel.get('api_host') + '/internal/licenseplus/';
       }
   });
 
   var reminder;
   var EmailReminderModel = Backbone.Model.extend({
       url: function () {
-        return settingsModel.get('newton_host') + '/internal/licenseplus/reminder/';
+        return settingsModel.get('api_host') + '/internal/licenseplus/reminder/';
       }
   });
 

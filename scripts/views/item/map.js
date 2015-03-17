@@ -388,7 +388,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     calculateTripEvents: function() {
       return this.collection.reduce(function(memo, trip) {
         memo.hardBrakes += trip.get('hard_brakes') || 0;
-        memo.speeding += trip.get('duration_over_70_min') || 0;
+        memo.speeding += Math.round(trip.get('duration_over_70_s') / 60, 0) || 0;
         memo.hardAccels += trip.get('hard_accels') || 0;
 
         return memo;
@@ -468,14 +468,14 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
         if(trip.get('path')) {
           var decodedPath = L.GeoJSON.decodeLine(trip.get('path'));
 
-          _.each(trip.get('drive_events'), function(item) {
+          _.each(trip.get('vehicle_events'), function(item) {
             if(item.type === 'hard_brake') {
               self.hardBrakesLayer.addLayer(L.marker([item.lat, item.lon], {icon: hardBrakeIcon, id: trip.get('id')}));
             } else if(item.type === 'hard_accel') {
               self.hardAccelsLayer.addLayer(L.marker([item.lat, item.lon], {icon: hardAccelIcon, id: trip.get('id')}));
             } else if(item.type === 'speeding') {
-              var start = formatters.m_to_mi(item.start_distance_m),
-                  end = formatters.m_to_mi(item.end_distance_m),
+              var start = formatters.metersToMiles(item.start_distance_m),
+                  end = formatters.metersToMiles(item.end_distance_m),
                   speedingPath = mapHelpers.subPath(start, end, decodedPath),
                   lineOptions = _.extend({id: trip.get('id')}, speedingLine);
               self.speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));

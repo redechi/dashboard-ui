@@ -23,8 +23,7 @@ function( moment, formatters, vehiclesCollection ) {
         } else if(this.get('value') === 'other') {
           return (trip.get('vehicle') === undefined);
         } else {
-          var vehicleId = trip.get('vehicle') ? trip.get('vehicle').id : undefined;
-          return (this.get('value') === vehicleId);
+          return (this.get('value') === trip.get('vehicle_id'));
         }
       },
       queryify: function () {
@@ -69,7 +68,7 @@ function( moment, formatters, vehiclesCollection ) {
         custom: 'custom'
       },
       func: function(trip) {
-        return trip.get('start_time') >= this.get('value')[0] && trip.get('start_time') <= this.get('value')[1];
+        return trip.get('started_at') >= this.get('value')[0] && trip.get('started_at') <= this.get('value')[1];
       },
       getValue: function(valueSelected) {
         if(valueSelected === 'thisWeek') {
@@ -228,7 +227,7 @@ function( moment, formatters, vehiclesCollection ) {
       value: [0, Infinity],
       valueText: 'all times of day',
       func: function(trip) {
-        return moment(trip.get('start_time')).hour() >= this.get('value')[0] && moment(trip.get('end_time')).hour() <= this.get('value')[1];
+        return moment(trip.get('started_at')).hour() >= this.get('value')[0] && moment(trip.get('ended_at')).hour() <= this.get('value')[1];
       },
       formatter: function(d) {
         return moment.utc(d * 60 * 60 * 1000).format('h A');

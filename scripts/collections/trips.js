@@ -3,19 +3,22 @@ define([
   'communicator',
   'moment',
   'models/trip',
+  'controllers/unit_formatters',
   './filters',
   '../models/settings',
   '../controllers/cache'
 ],
-function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
+function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, cache ) {
   'use strict';
+
+  var initUrl = settings.get('api_host') + '/trip/';
 
   /* trips singleton */
   var Trips = Backbone.Collection.extend({
 
     model: Trip,
     startDate: moment().endOf('day').valueOf(),
-    url: settings.get('api_host') + '/v1/trips',
+    url: initUrl,
 
     initialize: function() {
       coms.on('filter:applyAllFilters', this.applyAllFilters, this);
@@ -30,13 +33,12 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
       if(start < this.startDate) {
         this.fetchPage(start, this.startDate);
       } else {
-
         //if date Filter = allTime, set date min
         if(dateFilter.get('valueSelected') === 'allTime') {
           var lastTrip = this.last();
 
           if(lastTrip) {
-            var min = moment(lastTrip.get('start_time')).startOf('day').valueOf();
+            var min = moment(lastTrip.get('started_at')).startOf('day').valueOf();
 
             dateFilter.set({
               min: min,
@@ -53,7 +55,7 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
 
         //then apply remaining filters
         filterCollection.each(function(filter) {
-          var name = filter.get('name')
+          var name = filter.get('name');
           if(name === 'date' || (name === 'vehicle' && filter.get('value') === 'all')) {
             return;
           }
@@ -75,10 +77,10 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
 
     findSortedIndexByDate: function(trips, date) {
       var searchTrip = new Trip;
-      searchTrip.set('start_time', date);
+      searchTrip.set('started_at', date);
       //binary search since trips are already sorted by date
       return _.sortedIndex(trips, searchTrip, function(trip) {
-        return -trip.get('start_time');
+        return -trip.get('started_at');
       });
     },
 
@@ -95,12 +97,12 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
 
     makeTripsRecent: function (trips) {
       var firstTrip = trips[0],
-          offset = moment().diff(moment(firstTrip.start_time)),
+          offset = moment().diff(moment(firstTrip.started_at)),
           dayOffset = moment.duration(Math.floor(moment.duration(offset).asDays()), 'days');
 
       return trips.map(function(trip) {
-        trip.start_time = trip.start_time + dayOffset;
-        trip.end_time = trip.end_time + dayOffset;
+        trip.started_at = trip.started_at + dayOffset;
+        trip.ended_at = trip.ended_at + dayOffset;
         return trip;
       });
     },
@@ -143,29 +145,36 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
 
 
     fetchPage: function(start, end, page) {
+      // api expects epoch time in seconds, hence dividing by 1000
       var self = this,
-          per_page = 100;
+          limit = 250,
+          params = {
+            limit: limit,
+            started_at__gte: start / 1000,
+            ended_at__lte: end / 1000
+          };
+
+      if (!start && !end) {
+        params = undefined;
+      }
 
       if(page === undefined) {
         page = 1;
       }
       return this.fetch({
         remove: false,
-        data: {
-          page: page,
-          per_page: per_page,
-          start: start,
-          end: end
-        },
+        data: params,
         error: settings.fetchErrorHandler
       }).always(function(data) {
         coms.trigger('overlay:page', self.length);
 
-        if(data.length === per_page) {
+        if(data._metadata.next) {
           //User has another page of trips
-          return self.fetchPage(start, end, (page + 1));
+          return self.fetchPage();
         } else {
-          self.startDate = Math.min(start, self.startDate);
+
+          // setting start date is important to see how far back we've looked for trips
+          self.startDate = start;
 
           cache.save('trips', self.toJSON());
           cache.save('tripsStart', self.startDate);
@@ -184,11 +193,28 @@ function( Backbone, coms, moment, Trip, filterCollection, settings, cache ) {
       this.fetchPage(0, this.startDate);
     },
 
+    parse: function(response) {
+      if (response._metadata && response._metadata.next) {
+        this.url = response._metadata.next;
+      } else {
+        this.url = initUrl;
+      }
+      response.results = _.map(response.results, function(trip){
+        var vehicleUrl = trip.vehicle.split('/');
+        trip.vehicle_id = vehicleUrl[vehicleUrl.length - 2];
+        trip.started_at = moment(trip.started_at).valueOf();
+        trip.ended_at = moment(trip.ended_at).valueOf();
+        trip.average_mpg = formatters.kmplToMpg(trip.average_kmpl);
+        trip.fuel_volume_gal = formatters.litersToGal(trip.fuel_volume_l);
+        return trip;
+      });
+      return response.results;
+    },
 
     checkForNoTrips: function() {
       this.fetch({
         remove: false,
-        data: { per_page: 1 },
+        data: { limit: 1 },
         error: settings.fetchErrorHandler
       }).always(function(data) {
         if(data && data.length === 0) {

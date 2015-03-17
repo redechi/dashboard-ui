@@ -65,7 +65,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
             if(_.contains(['coach'], model.get('type'))) {
               $.ajax({
                 type: 'POST',
-                url: settings.get('newton_host') + '/internal/licenseplus/accept/',
+                url: settings.get('api_host') + '/internal/licenseplus/accept/',
                 data: {
                   token: model.get('token')
                 },
@@ -178,11 +178,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
           options.beforeSend = function (xhr, req) {
             try {
               //Set request header
-              if(req.url.indexOf('api.automatic') !== -1) {
-                xhr.setRequestHeader('Authorization', 'bearer ' + accessToken);
-              } else {
-                xhr.setRequestHeader('Authorization', 'token ' + accessToken);
-              }
+              xhr.setRequestHeader('Authorization', 'bearer ' + accessToken);
 
               if(req.skipCache !== false) {
                 return;

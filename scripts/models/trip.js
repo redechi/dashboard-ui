@@ -10,23 +10,23 @@ function( Backbone, moment, formatters ) {
   return Backbone.Model.extend({
 
     initialize: function(trip) {
-      var start_time = this.get('start_time') || this.get('started_at'),
-          end_time = this.get('end_time') || this.get('ended_at'),
+      var start_time = this.get('started_at'),
+          end_time = this.get('ended_at'),
           duration = moment(end_time).diff(moment(start_time), 'minutes', true),
-          miles = formatters.m_to_mi(this.get('distance_m')),
+          miles = formatters.metersToMiles(this.get('distance_m')),
           startAddress = 'Unknown Address',
           endAddress = 'Unknown Address',
           startDisplayName = 'Unknown Address',
           endDisplayName = 'Unknown Address';
 
-      if(this.get('start_location')) {
-        startAddress = formatters.formatAddress(this.get('start_location').name);
-        startDisplayName = this.get('start_location').display_name || startAddress;
+      if(this.get('start_address')) {
+        startAddress = formatters.formatAddress(this.get('start_address').name);
+        startDisplayName = this.get('start_address').display_name || startAddress;
       }
 
-      if(this.get('end_location')) {
-        endAddress = formatters.formatAddress(this.get('end_location').name);
-        endDisplayName = this.get('end_location').display_name || endAddress;
+      if(this.get('end_address')) {
+        endAddress = formatters.formatAddress(this.get('end_address').name);
+        endDisplayName = this.get('end_address').display_name || endAddress;
       }
 
       this.set({
@@ -36,7 +36,7 @@ function( Backbone, moment, formatters ) {
         formatted_duration_hours: formatters.durationHours(duration),
         distance_miles: miles,
         formatted_distance_miles: formatters.distance(miles),
-        formatted_average_mpg: Math.round(this.get('average_mpg')),
+        formatted_average_mpg: (this.get('average_mpg') ? this.get('average_mpg').toFixed(1) : ''),
         formatted_fuel_cost_usd: formatters.cost(this.get('fuel_cost_usd')),
         formatted_end_time: (end_time ? moment(end_time).format('h:mm a').toUpperCase() : ''),
         formatted_start_time: (start_time ? moment(start_time).format('h:mm a').toUpperCase(): ''),

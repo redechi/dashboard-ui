@@ -7,10 +7,11 @@ define([
   'controllers/unit_formatters',
   'controllers/analytics',
   'collections/trips',
+  'collections/vehicles',
   'fileSaver',
   'jquery.scrollTo'
 ],
-function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tripsCollection, fileSaver ) {
+function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tripsCollection, vehiclesCollection, fileSaver ) {
   'use strict';
 
   return Backbone.Marionette.CompositeView.extend({
@@ -37,7 +38,7 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
       coms.on('error:403', this.setError, this);
       coms.on('error:500', this.setError, this);
 
-      this.options.sortType = 'start_time';
+      this.options.sortType = 'started_at';
       this.options.sortDirection = 'sortDown';
       this.options.sortTypeName = 'Time/Date';
       this.options.fetching = true;
@@ -98,7 +99,7 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
 
     highlightByDate: function(startDate, endDate) {
       var trips = this.collection.filter(function(trip) {
-        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
+        return trip.get('started_at') >= startDate && trip.get('started_at') < endDate;
       });
       coms.trigger('trips:highlight', trips);
     },
@@ -106,7 +107,7 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
 
     unhighlightByDate: function(startDate, endDate) {
       var trips = this.collection.filter(function(trip) {
-        return trip.get('start_time') >= startDate && trip.get('start_time') < endDate;
+        return trip.get('started_at') >= startDate && trip.get('started_at') < endDate;
       });
       coms.trigger('trips:unhighlight', trips);
     },
@@ -274,15 +275,14 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
 
 
     tripToArray: function(trip) {
-      var t = trip.toJSON();
-
-      var vehicle = (t.vehicle) ? t.vehicle.year + ' ' + t.vehicle.make + ' ' + t.vehicle.model : '';
+      var t = trip.toJSON(),
+          v = vehiclesCollection.getVehicle(t.vehicle);
 
       return [
-        vehicle,
-        t.start_location.name,
+        formatters.formatVehicle(v),
+        t.start_address.name,
         formatters.formatTime(t.start_time, t.start_time_zone, 'YYYY-MM-DD h:mm A'),
-        t.end_location.name,
+        t.end_address.name,
         formatters.formatTime(t.end_time, t.end_time_zone, 'YYYY-MM-DD h:mm A'),
         t.distance_miles.toFixed(2) || 0,
         t.duration.toFixed(2) || 0,
@@ -304,8 +304,7 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
       ];
     },
 
-
-    csvFieldNames: function () {
+    csvFieldNames: function() {
       return [
         'Vehicle',
         'Start Location Name',

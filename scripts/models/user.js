@@ -14,7 +14,7 @@ function( Backbone, coms, login, settings ) {
       });
     },
 
-    url: settings.get('api_host') + '/v1/user'
+    url: settings.get('api_host') + '/user/me/'
   });
 
   return new User();

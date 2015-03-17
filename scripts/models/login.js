@@ -15,7 +15,7 @@ function( Backbone, settings ) {
     defaults: {
       client_id: settings.get('client_id'),
       grant_type: 'password',
-      scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic',
+      scope: 'scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic scope:behavior',
       staySignedIn: true
     },
 
@@ -25,7 +25,7 @@ function( Backbone, settings ) {
           path = '';
 
       if (this.get('type') === 'create_coach' ) {
-        host = settings.get('newton_host');
+        host = settings.get('api_host');
         path = '/user/';
       } else {
         host = settings.get('base_host');

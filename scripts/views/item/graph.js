@@ -58,7 +58,7 @@ function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analyti
       trips.forEach(function(model) {
         var id = model.get('id'),
             binSize = self.model.get('binSize'),
-            start_time = model.get('start_time'),
+            start_time = model.get('started_at'),
             key = moment(start_time).startOf(binSize).valueOf();
 
         //highlight bar
@@ -73,7 +73,7 @@ function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analyti
       trips.forEach(function(model) {
         var id = model.get('id'),
             binSize = self.model.get('binSize'),
-            start_time = model.get('start_time'),
+            start_time = model.get('started_at'),
             key = moment(start_time).startOf(binSize).valueOf();
 
         self.getBarByKey(key.toString()).classed('highlighted', false);
@@ -84,7 +84,7 @@ function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analyti
     selectTrip: function (model) {
       var id = model.get('id'),
           binSize = this.model.get('binSize'),
-          start_time = model.get('start_time'),
+          start_time = model.get('started_at'),
           key = moment(start_time).startOf(binSize).valueOf();
 
       //select bar
@@ -104,7 +104,7 @@ function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analyti
     deselectTrip: function (model) {
       var id = model.get('id'),
           binSize = this.model.get('binSize'),
-          start_time = model.get('start_time'),
+          start_time = model.get('started_at'),
           key = moment(start_time).startOf(binSize).valueOf();
 
       if(this.selectedTrips[key]) {
@@ -170,10 +170,9 @@ function( Backbone, coms, moment, filters, GraphTmpl, stats, formatters, analyti
         date = moment(date).add(1, binSize + 's').valueOf();
       }
 
-
       //group trips into bins
       this.collection.each(function(trip) {
-        var bin = moment(trip.get('start_time')).startOf(binSize).valueOf();
+        var bin = moment(trip.get('started_at')).startOf(binSize).valueOf();
         if(bins[bin]) {
           bins[bin].push(trip);
         }

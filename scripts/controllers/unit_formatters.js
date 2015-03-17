@@ -85,15 +85,33 @@ function( moment ) {
     },
 
 
-    m_to_mi: function(m) {
+    metersToMiles: function(m) {
+      // converts meters to miles
       return m / 1609.34;
     },
 
+    msToSec: function(ms) {
+      // converts milliseconds to seconds
+      return Math.round(ms / 1000);
+    },
+
+    kmplToMpg: function(kmpl) {
+      // converts kilometers per liter to miles per gallon
+      return kmpl * 2.35214583;
+    },
+
+    litersToGal: function(liters) {
+      // converts liters to gallons
+      return liters * 0.264172;
+    },
 
     dateRange: function(dateRange) {
       return moment(dateRange[0]).format('MMM D - ') + moment(dateRange[1]).format('MMM D, YYYY');
     },
 
+    formatVehicle: function(vehicle) {
+      return (vehicle) ? vehicle.get('year') + ' ' + vehicle.get('make') + ' ' + vehicle.get('model') : '';
+    },
 
     parseNumber: function(item) {
       //return text value if unparsable

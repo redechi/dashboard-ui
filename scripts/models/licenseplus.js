@@ -9,7 +9,7 @@ function( Backbone, coms, settings ) {
   return Backbone.Model.extend({
 
     url: function() {
-      return settings.get('newton_host') + '/internal/licenseplus/';
+      return settings.get('api_host') + '/internal/licenseplus/';
     }
   });
 });

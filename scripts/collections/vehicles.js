@@ -11,7 +11,7 @@ function( Backbone, coms, filterList, settings ) {
   var Vehicles = Backbone.Collection.extend({
 
     model: Backbone.Model.extend({}),
-    url: settings.get('api_host') + '/v1/vehicles',
+    url: settings.get('api_host') + '/vehicle/',
     comparator: 'display_name',
 
 
@@ -23,6 +23,9 @@ function( Backbone, coms, filterList, settings ) {
       });
     },
 
+    parse: function(response) {
+      return response.results;
+    },
 
     fetchInitial: function () {
       if(settings.isDemo()) {
@@ -35,6 +38,10 @@ function( Backbone, coms, filterList, settings ) {
           coms.trigger('filter:updateVehicleList');
         });
       }
+    },
+
+    getVehicle: function(url) {
+      return this.findWhere({url: url});
     }
 
   });

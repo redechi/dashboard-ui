@@ -1,6 +1,7 @@
 define([
+  'controllers/unit_formatters'
 ],
-function() {
+function(formatters) {
   'use strict';
 
   return {
@@ -9,18 +10,19 @@ function() {
         return 0;
       }
       var weightedSum = trips.reduce(function(memo, trip) {
-        var score = trip.get('score');
-        if(score) {
-          memo.score1 += score.score1 * trip.get('duration');
-          memo.score2 += score.score2 * trip.get('duration');
+        var scoreA = trip.get('score_a'),
+            scoreB = trip.get('score_b');
+        if (scoreA && scoreB) {
+          memo.scoreA += scoreA * trip.get('duration');
+          memo.scoreB += scoreB * trip.get('duration');
           memo.time += trip.get('duration');
         }
         return memo;
-      }, {time: 0, score1: 0, score2: 0});
+      }, {time: 0, scoreA: 0, scoreB: 0});
 
-      var score1 = (weightedSum.score1 / weightedSum.time) || 0,
-          score2 = (weightedSum.score2 / weightedSum.time) || 0,
-          score = Math.max(0, score1) + Math.max(0, score2);
+      var scoreA = (weightedSum.scoreA / weightedSum.time) || 0,
+          scoreB = (weightedSum.scoreB / weightedSum.time) || 0,
+          score = Math.max(0, scoreA) + Math.max(0, scoreB);
 
       return Math.min(Math.max(1, score), 100);
     },
@@ -35,7 +37,7 @@ function() {
 
     getAverageMPG: function(trips) {
       var totals = trips.reduce(function(memo, trip) {
-        memo.distance += trip.get('distance_miles');
+        memo.distance += formatters.metersToMiles(trip.get('distance_m'));
         memo.fuel += trip.get('fuel_volume_gal');
         return memo;
       }, {distance: 0, fuel: 0});
