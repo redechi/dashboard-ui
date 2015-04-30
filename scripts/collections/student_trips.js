@@ -16,7 +16,7 @@ function( Backbone, coms, Trip, filterCollection, settings, cache ) {
 
 
     url: function() {
-      return settings.get('api_host') + '/user/' + this.student_id + '/trip/';
+      return settings.get('licenseplus_api_host') + '/user/' + this.student_id + '/trip/';
     },
 
 
