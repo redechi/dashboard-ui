@@ -155,7 +155,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
     setAccessToken: function () {
 
       // get access token from URL parameter (for testing)
-      var search = deparam(window.location.href);
+      var search = deparam(window.location.search.substring(1));
 
       // else get access token from cookie
       var accessToken = search.accessToken || cookie.getCookie('token');
