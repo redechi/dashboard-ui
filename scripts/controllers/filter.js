@@ -232,7 +232,7 @@ function( moment, formatters, vehiclesCollection ) {
       formatter: function(d) {
         return moment.utc(d * 60 * 60 * 1000).format('h A');
       },
-      updateValueText: function () {
+      updateValueText: function() {
         var valueText;
         if(this.get('value')[0] === 0 && this.get('value')[1] === 24) {
           valueText = 'all times of day';
@@ -249,6 +249,26 @@ function( moment, formatters, vehiclesCollection ) {
       fromURL: function (value) {
         if(!value) { return; }
         value = value.split(',').map(formatters.parseNumber);
+        this.set('value', value);
+      }
+    },
+
+    businessTag: {
+      name: 'businessTag',
+      title: 'tagged as business trip',
+      label: 'and',
+      value: 'true',
+      valueText: 'tagged as business trip',
+      applyOnAdd: true,
+      func: function(trip) {
+        return _.contains(trip.get('tags'), 'business');
+      },
+      updateValueText: _.noop,
+      toURL: function() {
+        return this.get('value');
+      },
+      fromURL: function(value) {
+        if(!value) { return; }
         this.set('value', value);
       }
     }

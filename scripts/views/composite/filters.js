@@ -183,7 +183,11 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
     addFilter: function (filterName) {
       $('.addFilter').popover('hide');
       var filter = new Filter(filterList[filterName]);
-      filter.set('showPopover', true);
+
+      // open popover if filter is not applyOnAdd
+      if(!filter.get('applyOnAdd')) {
+        filter.set('showPopover', true);
+      }
       this.collection.saveFilters();
       this.collection.add(filter);
       this.updateFilterList();

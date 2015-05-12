@@ -17,6 +17,7 @@ function( Backbone, coms, FilterModel, filterList, deparam ) {
       this.applyInitialFilters();
 
       this.on('add', this.toUrl, this);
+      this.on('add', this.applyFilter, this);
       this.on('remove', this.toUrl, this);
 
       coms.on('filter:toURL', this.toUrl, this);
@@ -80,6 +81,13 @@ function( Backbone, coms, FilterModel, filterList, deparam ) {
       }
       //erase next history
       Backbone.history.next = [];
+    },
+
+    applyFilter: function(filter) {
+      // if filter has applyOnAdd = true, apply it right on add
+      if(filter.get('applyOnAdd')) {
+        coms.trigger('filter:applyAllFilters');
+      }
     }
 
   });
