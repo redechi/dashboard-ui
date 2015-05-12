@@ -10,19 +10,19 @@ function(formatters) {
         return 0;
       }
       var weightedSum = trips.reduce(function(memo, trip) {
-        var scoreA = trip.get('score_a'),
-            scoreB = trip.get('score_b');
-        if (scoreA && scoreB) {
-          memo.scoreA += scoreA * trip.get('duration');
-          memo.scoreB += scoreB * trip.get('duration');
+        var scoreEvents = trip.get('score_events'),
+            scoreSpeeding = trip.get('score_speeding');
+        if (scoreEvents && scoreSpeeding) {
+          memo.scoreEvents += scoreEvents * trip.get('duration');
+          memo.scoreSpeeding += scoreSpeeding * trip.get('duration');
           memo.time += trip.get('duration');
         }
         return memo;
-      }, {time: 0, scoreA: 0, scoreB: 0});
+      }, {time: 0, scoreEvents: 0, scoreSpeeding: 0});
 
-      var scoreA = (weightedSum.scoreA / weightedSum.time) || 0,
-          scoreB = (weightedSum.scoreB / weightedSum.time) || 0,
-          score = Math.max(0, scoreA) + Math.max(0, scoreB);
+      var scoreEvents = (weightedSum.scoreEvents / weightedSum.time) || 0,
+          scoreSpeeding = (weightedSum.scoreSpeeding / weightedSum.time) || 0,
+          score = Math.max(0, scoreEvents) + Math.max(0, scoreSpeeding);
 
       return Math.min(Math.max(1, score), 100);
     },

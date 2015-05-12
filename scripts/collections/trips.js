@@ -95,23 +95,31 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
     },
 
 
-    makeTripsRecent: function (trips) {
+    makeTripsRecent: function(trips) {
       var firstTrip = trips[0],
           offset = moment().diff(moment(firstTrip.started_at)),
           dayOffset = moment.duration(Math.floor(moment.duration(offset).asDays()), 'days');
 
       return trips.map(function(trip) {
-        trip.started_at = trip.started_at + dayOffset;
-        trip.ended_at = trip.ended_at + dayOffset;
+        trip.started_at = moment(trip.started_at).add(dayOffset, 'days');
+        trip.ended_at = moment(trip.ended_at).add(dayOffset, 'days');
         return trip;
       });
     },
 
 
+    prepareDemoTrips: function(trips) {
+      return this.makeTripsRecent(this.formatTrips(trips.map(function(trip) {
+        trip.average_kmpl = (trip.distance_m / 1000) / trip.fuel_volume_l;
+        return trip;
+      })));
+    },
+
+
     fetchDemoTrips: function() {
       var self = this;
-      $.getJSON('./assets/data/trips.json', function(trips) {
-        self.set(self.makeTripsRecent(trips));
+      $.getJSON('./assets/data/trips.json', function(results) {
+        self.set(self.prepareDemoTrips(results.results));
         self.startDate = 0;
         coms.trigger('filter:applyAllFilters');
       });
@@ -194,12 +202,16 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
     },
 
     parse: function(response) {
-      if (response._metadata && response._metadata.next) {
+      if(response._metadata && response._metadata.next) {
         this.url = response._metadata.next;
       } else {
         this.url = initUrl;
       }
-      response.results = _.map(response.results, function(trip){
+      return this.formatTrips(response.results);
+    },
+
+    formatTrips: function(trips) {
+      return _.map(trips, function(trip){
         var vehicleUrl = trip.vehicle.split('/');
         trip.vehicle_id = vehicleUrl[vehicleUrl.length - 2];
         trip.started_at = moment(trip.started_at).valueOf();
@@ -208,7 +220,6 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
         trip.fuel_volume_gal = formatters.litersToGal(trip.fuel_volume_l);
         return trip;
       });
-      return response.results;
     },
 
     checkForNoTrips: function() {

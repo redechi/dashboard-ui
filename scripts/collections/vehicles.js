@@ -17,8 +17,8 @@ function( Backbone, coms, filterList, settings ) {
 
     fetchDemoVehicles: function() {
       var self = this;
-      $.getJSON('./assets/data/vehicles.json', function(vehicles) {
-        self.set(vehicles);
+      $.getJSON('./assets/data/vehicles.json', function(results) {
+        self.set(results.results);
         coms.trigger('filter:updateVehicleList');
       });
     },

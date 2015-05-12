@@ -19,7 +19,7 @@ function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, a
 
     initialize: function() {
       var self = this;
-      if (this.attributes.loggedIn) {
+      if(this.attributes.loggedIn && !login.isDemo()) {
         this.model.fetch({error: login.fetchErrorHandler});
         var licenseplus = new Licenseplus();
         licenseplus.fetch({success: function() {
