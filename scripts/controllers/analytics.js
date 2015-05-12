@@ -14,11 +14,13 @@ function( Backbone ) {
   try {
     // Require google analytics here to handle error if it is blocked by browser
     require(['ga'], function() {
+      if(typeof ga === 'undefined') {
+        window.ga = _.noop;
+      }
+
       ga('create', 'UA-33317148-4');
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
-    }, function() {
-      window.ga = _.noop;
     });
   } catch(e) { }
 
