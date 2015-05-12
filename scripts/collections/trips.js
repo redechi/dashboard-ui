@@ -176,7 +176,7 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
       }).always(function(data) {
         coms.trigger('overlay:page', self.length);
 
-        if(data._metadata.next) {
+        if(data && data._metadata && data._metadata.next) {
           //User has another page of trips
           return self.fetchPage();
         } else {
