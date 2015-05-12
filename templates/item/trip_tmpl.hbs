@@ -40,6 +40,10 @@
 
   <div class="location">{{ startDisplayName }}</div>
 
+  {{#if taggedBusiness}}
+    <div class="tagged-business" title="Tagged as business trip">Tagged Business</div>
+  {{/if}}
+
 </div>
 
 <input type="checkbox" class="tripSelect" value="{{ id }}">

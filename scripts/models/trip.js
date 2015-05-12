@@ -49,7 +49,8 @@ function( Backbone, moment, formatters ) {
         startAddress: startAddress,
         endAddress: endAddress,
         startDisplayName: startDisplayName,
-        endDisplayName: endDisplayName
+        endDisplayName: endDisplayName,
+        taggedBusiness: _.contains(this.get('tags'), 'business')
       });
     }
 

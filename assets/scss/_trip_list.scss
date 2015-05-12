@@ -271,6 +271,20 @@
         transition: height 0.25s ease-in-out 0.05s, padding 0.25s ease-in-out 0.05s, opacity 0.15s ease-in-out 0.3s;
       }
 
+      .tagged-business {
+        @include hr-image('../img/icon_tagged_business.png', '../img/icon_tagged_business@2x.png');
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-size: 16px 16px;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 16px;
+        height: 16px;
+        text-indent: 100%;
+        white-space: nowrap;
+      }
+
       &.selected,
       &:hover,
       &.highlighted {
@@ -299,6 +313,10 @@
             line-height: 15px;
             padding: 1px;
           }
+        }
+
+        .tagged-business {
+          @include hr-image('../img/icon_tagged_business_blue.png', '../img/icon_tagged_business_blue@2x.png');
         }
       }
 
