@@ -300,7 +300,8 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
         t.end_location.lat,
         t.end_location.lon,
         t.end_location.accuracy_m,
-        t.path
+        t.path,
+        t.tags.join(',')
       ];
     },
 
@@ -327,7 +328,8 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
         'End Location Lat',
         'End Location Lon',
         'End Location Accuracy (meters)',
-        'Path'
+        'Path',
+        'Tags'
       ];
     },
 
