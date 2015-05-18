@@ -10,9 +10,9 @@ function( Backbone, moment, formatters ) {
   return Backbone.Model.extend({
 
     initialize: function(trip) {
-      var start_time = this.get('started_at'),
-          end_time = this.get('ended_at'),
-          duration = moment(end_time).diff(moment(start_time), 'minutes', true),
+      var started_at = this.get('started_at'),
+          ended_at = this.get('ended_at'),
+          duration = moment(ended_at).diff(moment(started_at), 'minutes', true),
           miles = formatters.metersToMiles(this.get('distance_m')),
           startAddress = 'Unknown Address',
           endAddress = 'Unknown Address',
@@ -38,10 +38,10 @@ function( Backbone, moment, formatters ) {
         formatted_distance_miles: formatters.distance(miles),
         formatted_average_mpg: (this.get('average_mpg') ? this.get('average_mpg').toFixed(1) : ''),
         formatted_fuel_cost_usd: formatters.cost(this.get('fuel_cost_usd')),
-        formatted_end_time: (end_time ? moment(end_time).format('h:mm a').toUpperCase() : ''),
-        formatted_start_time: (start_time ? moment(start_time).format('h:mm a').toUpperCase(): ''),
-        formatted_calendar_date: moment(start_time).calendar(),
-        formatted_calendar_date_with_year: moment(start_time).format('MMM D, YYYY'),
+        formatted_ended_at: (ended_at ? moment(ended_at).format('h:mm a').toUpperCase() : ''),
+        formatted_started_at: (started_at ? moment(started_at).format('h:mm a').toUpperCase(): ''),
+        formatted_calendar_date: moment(started_at).calendar(),
+        formatted_calendar_date_with_year: moment(started_at).format('MMM D, YYYY'),
         duration_over_70_min: Math.round(this.get('duration_over_70_s') / 60),
         noSpeeding: (this.get('duration_over_70_s') === 0),
         noHardBrakes: (this.get('hard_brakes') === 0),

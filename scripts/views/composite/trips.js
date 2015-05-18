@@ -281,9 +281,9 @@ function( Backbone, coms, moment, Trip, tripListTmpl, formatters, analytics, tri
       return [
         formatters.formatVehicle(v),
         t.start_address ? t.start_address.name : '',
-        formatters.formatTime(t.start_time, t.start_time_zone, 'YYYY-MM-DD h:mm A'),
+        formatters.formatTime(t.started_at, t.start_time_zone, 'YYYY-MM-DD h:mm A'),
         t.end_address ? t.end_address.name : '',
-        formatters.formatTime(t.end_time, t.end_time_zone, 'YYYY-MM-DD h:mm A'),
+        formatters.formatTime(t.ended_at, t.end_time_zone, 'YYYY-MM-DD h:mm A'),
         t.distance_miles.toFixed(2) || 0,
         t.duration.toFixed(2) || 0,
         t.formatted_fuel_cost_usd,
