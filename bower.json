@@ -35,7 +35,7 @@
     "mocha": "~2.2.4",
     "modernizr": "~2.8.3",
     "moment": "~2.10.2",
-    "nvd3": "~1.7.1",
+    "nvd3": "~1.2.1",
     "raven-js": "~1.1.18",
     "requirejs": "~2.1.17",
     "require-handlebars-plugin": "~0.11.2",
