@@ -1,0 +1,66 @@
+#apps {
+  max-width: 510px;
+  margin: 0 auto;
+  min-height: 78px;
+  box-sizing: border-box;
+  padding: 25px 30px;
+
+  .appListTitle {
+    font-size: 18px;
+    margin: 0 0 15px;
+  }
+
+  .appList {
+    .loading {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .noApps {
+      display: none;
+      height: 60px;
+    }
+
+    li {
+      border-top: 1px solid $line_light_gray;
+      clear: both;
+      overflow: hidden;
+      padding: 15px 0;
+
+      &:last-child {
+        border-bottom: 1px solid $line_light_gray;
+      }
+
+      .appIcon {
+        width: 80px;
+        height: 80px;
+        float: left;
+
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      .appTitle {
+        font-size: 16px;
+        margin: 10px 0 0 15px;
+        float: left;
+        width: 180px;
+      }
+
+      .appControls {
+        float: right;
+        width: 125px;
+
+        .btn {
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+
+  .moreApps {
+    margin-top: 20px;
+  }
+}

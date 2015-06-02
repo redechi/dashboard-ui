@@ -21,6 +21,7 @@ define([
       'licenseplus': 'showLicensePlusLayout',
       'logout': 'logout',
       'coach_login(/:token)': 'showCoachLoginLayout',
+      'connected_apps': 'showAppsLayout',
       '*notFound': 'notFound'
     },
 

@@ -1,0 +1,12 @@
+<div class="appIcon">
+  {{#if icon }}
+    <img src="{{icon}}">
+  {{else}}
+    <img src="/assets/img/default-app-image.png">
+  {{/if}}
+</div>
+<h3 class="appTitle">{{ name }}</h3>
+<div class="appControls">
+  <a href="{{app_url}}" target="_blank" class="btn btn-block btn-blue btn-appLink">View App</a>
+  <button class="btn btn-block btn-grey btn-revokeApp">Revoke App</button>
+</div>

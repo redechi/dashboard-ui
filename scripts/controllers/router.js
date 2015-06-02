@@ -8,10 +8,11 @@ define([
   '../views/layout/login',
   '../views/layout/coach_login',
   '../views/layout/password_reset',
+  '../views/layout/apps',
   '../controllers/login'
 ],
 
-function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, LicenseplusLayout, LoginLayout, CoachLoginLayout, PasswordResetLayout, login ) {
+function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, LicenseplusLayout, LoginLayout, CoachLoginLayout, PasswordResetLayout, AppsLayout, login ) {
   'use strict';
 
   return {
@@ -47,6 +48,13 @@ function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, Licen
 
     showPasswordResetLayout: function (token) {
       var layout = new PasswordResetLayout({token: token});
+      var contentRegion = regionManager.getRegion('main_content');
+      contentRegion.show(layout);
+    },
+
+
+    showAppsLayout: function (token) {
+      var layout = new AppsLayout({token: token});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },
