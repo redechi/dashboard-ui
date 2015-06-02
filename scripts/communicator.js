@@ -19,11 +19,11 @@ define([
   'backbone',
   'backbone.marionette'
 ],
-function( Backbone ) {
+function(Backbone) {
     'use strict';
 
   var Communicator = Backbone.Marionette.Controller.extend({
-    initialize: function( options ) {
+    initialize: function() {
       _.extend(this, Backbone.Events);
 
       // keep this around for logging coms

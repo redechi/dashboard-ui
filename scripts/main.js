@@ -2,7 +2,7 @@ require([
   'backbone',
   'application'
 ],
-function ( Backbone, App ) {
+function(Backbone, App) {
   'use strict';
 
   App.start();

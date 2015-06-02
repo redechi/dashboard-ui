@@ -2,12 +2,12 @@ define([
   'backbone',
   'communicator'
 ],
-function( Backbone, Communicator ) {
+function(Backbone, Communicator) {
   'use strict';
 
   var RegionManager = Backbone.Marionette.Controller.extend({
 
-    initialize: function( options ) {
+    initialize: function() {
       /* internal region manager */
       this._regionManager = new Backbone.Marionette.RegionManager();
 
@@ -17,20 +17,21 @@ function( Backbone, Communicator ) {
       Communicator.trigger('RM:getRegion', this.getRegion, this);
     },
 
+
     /* add region facade */
-    addRegion: function( regionName, regionId ) {
-      var region = this.getRegion( regionName );
-      return region || this._regionManager.addRegion( regionName, regionId );
+    addRegion: function(regionName, regionId) {
+      var region = this.getRegion(regionName);
+      return region || this._regionManager.addRegion(regionName, regionId);
     },
 
     /* remove region facade */
-    removeRegion: function( regionName ) {
-      this._regionManager.removeRegion( regionName );
+    removeRegion: function(regionName) {
+      this._regionManager.removeRegion(regionName);
     },
 
     /* get region facade */
-    getRegion: function( regionName ) {
-      return this._regionManager.get( regionName );
+    getRegion: function(regionName) {
+      return this._regionManager.get(regionName);
     }
   });
 

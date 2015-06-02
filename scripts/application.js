@@ -14,15 +14,13 @@ define([
 
   // must be included so it exists
   'views/item/admin',
-
-  // Why do these need to be included?
   'bootstrapSlider',
   'bootstrapDatetimepicker',
   'bootstrap/popover'
 
 ],
 
-function( doc, Backbone, coms, router, regionManager, moment, login, cache, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
+function(dom, Backbone, coms, router, regionManager, moment, login, cache, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
   'use strict';
 
   //make sure Modernizr is here
