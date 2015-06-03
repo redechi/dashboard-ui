@@ -12,12 +12,12 @@ function( Backbone, AppTmpl ) {
 
 
     events: {
-      'click .btn-revokeApp': 'revokeApp'
+      'click .btn-disconnectApp': 'disconnectApp'
     },
 
 
-    revokeApp: function() {
-      if(confirm('Are you sure you want to revoke access from ' + this.model.get('name') + '?')) {
+    disconnectApp: function() {
+      if(confirm('Are you sure you want to disconnect ' + this.model.get('name') + '?')) {
         this.model.destroy();
       }
     }
