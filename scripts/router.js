@@ -22,6 +22,7 @@ define([
       'logout': 'logout',
       'coach_login(/:token)': 'showCoachLoginLayout',
       'connected_apps': 'showAppsLayout',
+      'labs': 'showLabsLayout',
       '*notFound': 'notFound'
     },
 

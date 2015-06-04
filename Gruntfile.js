@@ -293,7 +293,8 @@ module.exports = function (grunt) {
             'bower_components/requirejs/require.js',
             'bower_components/modernizr/modernizr.js',
             'bower_components/fontawesome/fonts/**',
-            'bower_components/raven-js/dist/**'
+            'bower_components/raven-js/dist/**',
+            'labs/**'
           ]
         }]
       },

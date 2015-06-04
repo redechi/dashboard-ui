@@ -1,0 +1,56 @@
+html {
+  height: 100%;
+}
+
+body {
+  font-family: avenir, "avenir next", helvetica, arial, sans-serif;
+  height: 100%;
+  margin: 0;
+  color: #2c3032;
+}
+
+/* Loading Overlay */
+.loading {
+  text-align: center;
+  font-size: 20px;
+  height: 140px;
+  background: #FFF url("../img/loading.gif") center bottom 10px no-repeat;
+  position: absolute;
+  padding: 10px;
+  right: 50%;
+  top: 275px;
+  width: 200px;
+  margin-right: -100px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+  display: none;
+}
+
+.automatic-labs {
+  position: absolute;
+  text-decoration: none;
+  bottom: 10px;
+  color: #2c3032;
+  height: 40px;
+  left: 10px;
+  width: 150px;
+  line-height: 40px;
+  padding-left: 45px;
+  background: url("../img/automatic_logo.png") 0 0 no-repeat;
+}
+
+.automatic-labs.dark {
+  color: #fff;
+}
+
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi) {
+  .automatic-labs {
+    background-image: url("../img/automatic_logo@2x.png");
+    background-size: 36px 39px;
+  }
+}
