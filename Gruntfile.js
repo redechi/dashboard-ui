@@ -320,7 +320,10 @@ module.exports = function (grunt) {
       },
       assets: {
         files: [{
-          src: '<%= yeoman.dist %>/*.html'
+          src: [
+            '<%= yeoman.dist %>/*.html',
+            '<%= yeoman.dist %>/labs/**/*.html',
+          ]
         }]
       }
     },
