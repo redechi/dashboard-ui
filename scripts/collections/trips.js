@@ -159,7 +159,8 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
           params = {
             limit: limit,
             started_at__gte: start / 1000,
-            ended_at__lte: end / 1000
+            ended_at__lte: end / 1000,
+            page: page
           };
 
       if (!start && !end) {
@@ -167,8 +168,9 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
       }
 
       if(page === undefined) {
-        page = 1;
+        params.page = 1;
       }
+
       return this.fetch({
         remove: false,
         data: params,
@@ -178,7 +180,7 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
 
         if(data && data._metadata && data._metadata.next) {
           //User has another page of trips
-          return self.fetchPage();
+          return self.fetchPage(page + 1);
         } else {
 
           // setting start date is important to see how far back we've looked for trips
@@ -201,17 +203,9 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
       this.fetchPage(0, this.startDate);
     },
 
-    parse: function(response) {
-      if(response._metadata && response._metadata.next) {
-        this.url = response._metadata.next;
-      } else {
-        this.url = initUrl;
-      }
-      return this.formatTrips(response.results);
-    },
 
-    formatTrips: function(trips) {
-      return _.map(trips, function(trip){
+    parse: function(response) {
+      return _.map(response.results, function(trip){
         var vehicleUrl = trip.vehicle.split('/');
         trip.vehicle_id = vehicleUrl[vehicleUrl.length - 2];
         trip.started_at = moment(trip.started_at).valueOf();
@@ -221,6 +215,7 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
         return trip;
       });
     },
+
 
     checkForNoTrips: function() {
       this.fetch({

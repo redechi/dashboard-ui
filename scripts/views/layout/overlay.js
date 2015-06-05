@@ -33,10 +33,8 @@ define([
   'hbs!tmpl/layout/overlay_tmpl',
   '../../controllers/analytics'
 ],
-function( Backbone, coms, OverlayTmpl, analytics ) {
+function(Backbone, coms, OverlayTmpl, analytics) {
   'use strict';
-
-  var previousOverlay;
 
   return Backbone.Marionette.LayoutView.extend({
 
@@ -115,7 +113,7 @@ function( Backbone, coms, OverlayTmpl, analytics ) {
         this.$el.find(this.regions.maskRegion).addClass('mask-close');
       }
 
-      if (!view && !!type) {
+      if(!view && !!type) {
         var template = this.$el.find('#'+type).text();
         var NewView = Backbone.Marionette.LayoutView.extend({template: template});
         this.mainRegion.show(new NewView());
@@ -125,17 +123,12 @@ function( Backbone, coms, OverlayTmpl, analytics ) {
         $('#overlayContent', this.$el).hide();
       }
 
-      if (previousOverlay && previousOverlay.myDestroy) {
-        previousOverlay.myDestroy();
-      }
-
       $('body').append(this.$el);
-      previousOverlay = this;
       coms.on('overlay:show', this);
     },
 
 
-    onBeforeDestroy: function () {
+    onBeforeDestroy: function() {
       coms.trigger('overlay:hide', this);
     },
 
@@ -145,7 +138,7 @@ function( Backbone, coms, OverlayTmpl, analytics ) {
     },
 
 
-    myDestroy: function () {
+    myDestroy: function() {
       this.destroy();
     },
 

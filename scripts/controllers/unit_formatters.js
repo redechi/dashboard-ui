@@ -150,7 +150,25 @@ function( moment ) {
 
 
     formatAddress: function(address) {
-      return (address) ? address.replace(/\d{5}, USA$/, '') : 'Unknown Address';
+      var formattedAddress = '';
+
+      if(address.street_number) {
+        formattedAddress += address.street_number + ' ';
+      }
+      if(address.street_name) {
+        formattedAddress += address.street_name + ', ';
+      }
+      if(address.city) {
+        formattedAddress += address.city;
+      }
+      if(address.city && address.state) {
+        formattedAddress += ', ';
+      }
+      if(address.state) {
+        formattedAddress += address.state;
+      }
+
+      return formattedAddress || 'Unknown Address';
     }
   };
 });

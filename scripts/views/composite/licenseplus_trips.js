@@ -20,6 +20,7 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
       this.options.sortType = 'started_at';
       this.options.sortDirection = 'sortDown';
       this.options.sortTypeName = 'Time/Date';
+      this.options.fetching = true;
 
       studentTripsCollection.student_id = this.attributes.student_id;
 
@@ -126,6 +127,7 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
       $('.sortValue li[data-value="' + this.options.sortType + '"]', this.$el).addClass('selected');
 
       $('.trips ul', this.$el).height(this.tripsHeight);
+      this.options.fetching = false;
     },
 
 
@@ -133,7 +135,6 @@ function( Backbone, coms, moment, LicenseplusTrip, licenseplusTripTmpl, analytic
       this.tripsHeight = $('#studentTrips').outerHeight(true) - $('.tripsHeader', this.$el).outerHeight(true) - $('.sectionHeader', this.$el).outerHeight(true);
       $('.trips ul', this.$el).height(this.tripsHeight);
     }
-
   });
 
 });

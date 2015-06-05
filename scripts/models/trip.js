@@ -20,12 +20,12 @@ function( Backbone, moment, formatters ) {
           endDisplayName = 'Unknown Address';
 
       if(this.get('start_address')) {
-        startAddress = formatters.formatAddress(this.get('start_address').name);
+        startAddress = formatters.formatAddress(this.get('start_address'));
         startDisplayName = this.get('start_address').display_name || startAddress;
       }
 
       if(this.get('end_address')) {
-        endAddress = formatters.formatAddress(this.get('end_address').name);
+        endAddress = formatters.formatAddress(this.get('end_address'));
         endDisplayName = this.get('end_address').display_name || endAddress;
       }
 
