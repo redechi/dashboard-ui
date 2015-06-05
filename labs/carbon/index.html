@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Carbon Calculator | Automatic Labs</title>
+    <title>Driving Carbon Calculator | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css" rel="stylesheet" />
@@ -29,7 +29,7 @@
         margin-top: 30px;
         background: #eee;
         font-size: 12px;
-        padding: 10px 15px;
+        padding: 10px 15px 20px;
         line-height: 20px;
       }
 
@@ -37,6 +37,17 @@
         background: #eee;
         margin-bottom: 40px;
         padding: 10px 15px;
+      }
+
+      .trees {
+        font-size: 135px;
+        line-height: 165px;
+        overflow: hidden;
+      }
+
+      .trees span {
+        float: left;
+        overflow: hidden;
       }
     </style>
   </head>
@@ -55,26 +66,33 @@
       <div class="calculations">
         <p>In the last <span class="months"></span> months of driving, you drove <span class="miles"></span> miles on <span class="trips"></span> trips.</p>
         <p>This used <span class="gallons"></span> gallons of gasoline which resulted in <span class="pounds"></span> pounds of CO<sub>2</sub> emissions.</p>
-
+        <p>That means the CO<sub>2</sub> effficiency of your driving is <span class="poundsPerMile"></span> lbs/mi.</p>
+        <p>Your CO<sub>2</sub> emissions from this driving requires <span class="treeCount"></span> large tropical trees over <span class="years"></span> years to be fully sequestered.</p>
+        <div class="trees"></div>
+        <p>A large tropical tree will sequester 50 pounds of CO<sub>2</sub> per year.</p>
         <div class="notes">
-          This is based on an estimate of <span class="epaRate"></span> lbs CO<sub>2</sub>/gallon of gasoline.  This value assumes that all the carbon in the gasoline is converted to CO<sub>2</sub>.<br>
+          This is based on an estimate of <span class="epaRate"></span> lbs CO<sub>2</sub>/gallon of gasoline. This value assumes that all the carbon in the gasoline is converted to CO<sub>2</sub>.<br>
           Sources: <a href="http://www.epa.gov/cleanenergy/energy-resources/refs.html">EPA</a> and <a href="http://www.eia.gov/tools/faqs/faq.cfm?id=307&t=11">U.S. Energy Information Administration</a>
         </div>
       </div>
     </div>
-    <a href="#labs" class="automatic-labs">Labs</a>
+    <a href="/#labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
     <script src="../common/js/main.js"></script>
 
     <script>
       var trips = [];
+      var treeAnimate;
 
       function gallonsTolbsCO2(g) {
         return g * $('.fuelType').val();
       }
+
 
       function calculate() {
         var stats = trips.reduce(function(memo, trip) {
@@ -87,7 +105,12 @@
         var totalFuelGallons = litersToGallons(stats.fuel_volume_l);
         var totalCO2Pounds = gallonsTolbsCO2(totalFuelGallons);
 
+        var tree = 50;
+
         var months = moment().diff(moment(trips.slice(-1)[0].started_at), 'months');
+        var years = moment().diff(moment(trips.slice(-1)[0].started_at), 'years', true);
+
+        var treeCount = (totalCO2Pounds / tree) / years;
 
         $('.calculations').show();
 
@@ -96,9 +119,29 @@
         $('.miles').text(formatNumber(totalDistanceMiles.toFixed(1)));
         $('.gallons').text(totalFuelGallons.toFixed(1));
         $('.pounds').text(formatNumber(totalCO2Pounds.toFixed(0)));
+        $('.poundsPerMile').text(formatNumber((totalCO2Pounds / totalDistanceMiles).toFixed(3)));
+        $('.years').text(years.toFixed(1));
+        $('.treeCount').text(treeCount.toFixed(1));
+
+        clearInterval(treeAnimate);
+        $('.trees').empty();
+        treeAnimate = setInterval(addTree, 300);
+        var i = 0;
+
+        function addTree() {
+          i += 1;
+
+          if(i < treeCount) {
+            $('.trees').append('<span>&#127795;</span>');
+          } else {
+            $('.trees').append('<span style="width: ' + ((treeCount % 1) * 135) +  'px;">&#127795;</span>');
+            clearInterval(treeAnimate);
+          }
+        }
 
         $('.epaRate').text($('.fuelType').val());
       }
+
 
       fetchTrips(function(results) {
         trips = results;

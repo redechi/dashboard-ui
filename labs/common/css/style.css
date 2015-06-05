@@ -29,7 +29,7 @@ body {
 }
 
 .automatic-labs {
-  position: absolute;
+  position: fixed;
   text-decoration: none;
   bottom: 10px;
   color: #2c3032;

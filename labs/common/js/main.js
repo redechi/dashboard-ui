@@ -8,12 +8,25 @@ function hideLoading() {
 }
 
 
+function getAccessToken() {
+  var query = getQueryParams(document.location.search);
+  return query.accessToken || getCookie('token');
+}
+
+
 function fetchTrips(cb) {
+  var accessToken = getAccessToken();
+
+  if(!accessToken) {
+    alert('To access Automatic Labs, please log in first.');
+    window.location = '/';
+  }
+
   function fetchTripsPage(url) {
     $.ajax({
       url: url,
       headers: {
-        Authorization: 'bearer ' + sessionStorage.getItem('accessToken')
+        Authorization: 'bearer ' + accessToken
       }
     })
     .done(function(results) {
@@ -91,4 +104,24 @@ function formatNumber(x) {
   var parts = x.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
+}
+
+
+function getQueryParams(qs) {
+  qs = qs.split('+').join(' ');
+
+  var params = {},
+      tokens,
+      re = /[?&]?([^=]+)=([^&]*)/g;
+
+  while((tokens = re.exec(qs)) !== null) {
+    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+
+  return params;
+}
+
+
+function getCookie(key) {
+  return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
 }
