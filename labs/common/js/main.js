@@ -80,3 +80,15 @@ function metersToMiles(m) {
   // converts meters to miles
   return m / 1609.34;
 }
+
+
+function litersToGallons(l) {
+  return l * 0.264172;
+}
+
+
+function formatNumber(x) {
+  var parts = x.toString().split(".");
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return parts.join(".");
+}
