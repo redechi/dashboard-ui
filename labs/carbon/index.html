@@ -39,8 +39,8 @@
       }
 
       .trees {
-        font-size: 135px;
-        line-height: 165px;
+        font-size: 70px;
+        line-height: 86px;
         overflow: hidden;
       }
 
@@ -124,7 +124,7 @@
 
         clearInterval(treeAnimate);
         $('.trees').empty();
-        treeAnimate = setInterval(addTree, 300);
+        treeAnimate = setInterval(addTree, 200);
         var i = 0;
 
         function addTree() {
@@ -133,7 +133,7 @@
           if(i < treeCount) {
             $('.trees').append('<span>&#127795;</span>');
           } else {
-            $('.trees').append('<span style="width: ' + ((treeCount % 1) * 135) +  'px;">&#127795;</span>');
+            $('.trees').append('<span style="width: ' + ((treeCount % 1) * 70) +  'px;">&#127795;</span>');
             clearInterval(treeAnimate);
           }
         }

@@ -36,12 +36,20 @@ function fetchTrips(cb) {
         if(results._metadata.next) {
           fetchTripsPage(results._metadata.next);
         } else {
-          cacheTrips(trips);
-          hideLoading();
-          cb(trips);
+          returnTrips();
         }
       }
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      console.error(errorThrown);
+      returnTrips();
     });
+  }
+
+  function returnTrips() {
+    cacheTrips(trips);
+    hideLoading();
+    cb(trips);
   }
 
   var ts = localStorage.getItem('ts');
