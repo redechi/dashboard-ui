@@ -100,10 +100,52 @@ function litersToGallons(l) {
 }
 
 
+function kmplToMpg(kmpl) {
+  return kmpl * 2.35214583;
+}
+
+
 function formatNumber(x) {
   var parts = x.toString().split(".");
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return parts.join(".");
+}
+
+
+function formatDate(time, timezone) {
+  try {
+    return moment(time).tz(timezone).format('MMM D, YYYY');
+  } catch(e) {
+    return moment(time).format('MMM D, YYYY');
+  }
+}
+
+
+function formatTime(time, timezone) {
+  try {
+    return moment(time).tz(timezone).format('h:mm A');
+  } catch(e) {
+    return moment(time).format('h:mm A');
+  }
+}
+
+
+function formatDuration(s) {
+  var duration = moment.duration(s, 'seconds'),
+      hours = (duration.asHours() >= 1) ? Math.floor(duration.asHours()) + ' h ' : '',
+      minutes = duration.minutes() + ' min';
+  return hours + minutes;
+}
+
+
+function formatAddress(address) {
+  if(!address) {
+    address = {};
+  }
+
+  address.cleaned = (address && address.name) ? address.name.replace(/\d+, USA/gi, '') : 'Unknown Address';
+
+  return address;
 }
 
 

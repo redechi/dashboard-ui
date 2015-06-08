@@ -15,7 +15,7 @@ body {
   font-size: 20px;
   height: 140px;
   background: #FFF url("../img/loading.gif") center bottom 10px no-repeat;
-  position: absolute;
+  position: fixed;
   padding: 10px;
   right: 50%;
   top: 275px;
@@ -43,6 +43,50 @@ body {
 
 .automatic-labs.dark {
   color: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.btn.btn-lg {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
+}
+
+.btn.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+.btn.btn-blue {
+  color: #ffffff;
+  background-color: #82C9F1;
+}
+
+.btn.btn-blue:hover {
+  background-color: #4AB4F0;
 }
 
 
