@@ -2,7 +2,7 @@ define([
   'backbone',
   '../models/settings'
 ],
-function( Backbone, settings ) {
+function(Backbone, settings) {
   'use strict';
 
   /* apps singleton */
@@ -10,16 +10,8 @@ function( Backbone, settings ) {
 
     model: Backbone.Model.extend({}),
 
-    baseUrl: function() {
-      if(settings.isUsingStaging) {
-        return 'https://api.automatic.co/v1';
-      } else {
-        return 'https://api.automatic.com/v1';
-      }
-    },
-
     url: function() {
-      return this.baseUrl() + '/access_token';
+      return settings.get('api_host') + '/v1/access_token';
     },
 
     fetchInitial: function () {
