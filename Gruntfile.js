@@ -131,7 +131,7 @@ module.exports = function (grunt) {
     // open app and test page
     open: {
       server: {
-        path: 'http://localhost:<%= connect.devserver.options.port %>?staging'
+        path: 'http://localhost:<%= connect.devserver.options.port %>'
       }
     },
 
