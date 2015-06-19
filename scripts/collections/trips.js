@@ -154,22 +154,14 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
 
     fetchPage: function(start, end, page) {
       // api expects epoch time in seconds, hence dividing by 1000
-      var self = this,
-          limit = 250,
-          params = {
+      var self = this;
+      var limit = 250;
+      var params = {
             limit: limit,
-            started_at__gte: start / 1000,
-            ended_at__lte: end / 1000,
-            page: page
+            started_at__gte: (start / 1000) || undefined,
+            ended_at__lte: (end / 1000) || undefined,
+            page: page || 1
           };
-
-      if (!start && !end) {
-        params = undefined;
-      }
-
-      if(page === undefined) {
-        params.page = 1;
-      }
 
       return this.fetch({
         remove: false,
@@ -180,7 +172,7 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
 
         if(data && data._metadata && data._metadata.next) {
           //User has another page of trips
-          return self.fetchPage(page + 1);
+          return self.fetchPage(start, end, params.page + 1);
         } else {
 
           // setting start date is important to see how far back we've looked for trips
