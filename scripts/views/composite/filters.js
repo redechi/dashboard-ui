@@ -278,7 +278,9 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
     },
 
 
-    changeDateFilterCustom: function (e) {
+    changeDateFilterCustom: function () {
+      this.activateItem($('.dateFilterValue li[data-value="custom"]'));
+
       var filter = this.collection.findWhere({name: 'date'}),
           value = filter.get('value'),
           start = value[0],
