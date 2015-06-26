@@ -108,18 +108,19 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
     },
 
 
-    prepareDemoTrips: function(trips) {
-      return this.makeTripsRecent(this.formatTrips(trips.map(function(trip) {
+    prepareDemoTrips: function(response) {
+      response.results = this.makeTripsRecent(response.results.map(function(trip) {
         trip.average_kmpl = (trip.distance_m / 1000) / trip.fuel_volume_l;
         return trip;
-      })));
+      }));
+      return response;
     },
 
 
     fetchDemoTrips: function() {
       var self = this;
       $.getJSON('./assets/data/trips.json', function(results) {
-        self.set(self.prepareDemoTrips(results.results));
+        self.set(self.parse(self.prepareDemoTrips(results)));
         self.startDate = 0;
         coms.trigger('filter:applyAllFilters');
       });

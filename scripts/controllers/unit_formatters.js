@@ -168,7 +168,7 @@ function( moment ) {
         formattedAddress += address.state;
       }
 
-      return formattedAddress || 'Unknown Address';
+      return formattedAddress || address.display_name || 'Unknown Address';
     }
   };
 });
