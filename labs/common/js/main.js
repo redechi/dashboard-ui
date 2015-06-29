@@ -16,6 +16,9 @@ function getAccessToken() {
 
 function fetchTrips(cb) {
   var accessToken = getAccessToken();
+  var ts = localStorage.getItem('ts');
+  var trips = [];
+  var oneHourAgo = Date.now() - (60*60*1000);
 
   if(!accessToken) {
     alert('To access Automatic Labs, please log in first.');
@@ -32,6 +35,10 @@ function fetchTrips(cb) {
     .done(function(results) {
       if(results && results.results) {
         trips = trips.concat(results.results);
+
+        var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
+
+        $('.loading .text').text('Loaded ' + trips.length + ' of ' + count);
 
         if(results._metadata.next) {
           fetchTripsPage(results._metadata.next);
@@ -52,9 +59,7 @@ function fetchTrips(cb) {
     cb(trips);
   }
 
-  var ts = localStorage.getItem('ts');
-  var trips = [];
-  if(ts < Date.now() - (60*60*1000)) {
+  if(!ts || ts < oneHourAgo) {
     showLoading();
     fetchTripsPage('https://api.automatic.com/trip/?limit=250&page=1');
   } else {
