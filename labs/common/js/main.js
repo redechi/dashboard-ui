@@ -16,7 +16,7 @@ function getAccessToken() {
 
 function fetchTrips(cb) {
   var accessToken = getAccessToken();
-  var ts = localStorage.getItem('ts');
+  var ts = sessionStorage.getItem('labs_ts');
   var trips = [];
   var oneHourAgo = Date.now() - (60*60*1000);
 
@@ -71,8 +71,8 @@ function fetchTrips(cb) {
 
 function cacheTrips(trips) {
   var order = _.pluck(trips, 'id');
-  localStorage.setItem('order', JSON.stringify(order));
-  localStorage.setItem('ts', Date.now());
+  sessionStorage.setItem('labs_order', JSON.stringify(order));
+  sessionStorage.setItem('labs_ts', Date.now());
 
   trips.forEach(function(trip) {
     cacheTrip(trip);
@@ -81,23 +81,23 @@ function cacheTrips(trips) {
 
 
 function cacheTrip(trip) {
-  localStorage.setItem(trip.id, JSON.stringify(trip));
+  sessionStorage.setItem('labs_' + trip.id, JSON.stringify(trip));
 }
 
 
 function cacheVehicles(vehicles) {
-  localStorage.setItem('vehicles', JSON.stringify(vehicles));
+  sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
 }
 
 
 function getCachedTrips(trip_id) {
   if(trip_id) {
     // get specific cached trip
-    return JSON.parse(localStorage.getItem(trip_id) || '{}');
+    return JSON.parse(sessionStorage.getItem('labs_' + trip_id) || '{}');
   } else {
     // get all cached trips
-    var order = JSON.parse(localStorage.getItem('order') || '[]');
-    return order.map(function(trip_id) { return JSON.parse(localStorage.getItem(trip_id) || {}); });
+    var order = JSON.parse(sessionStorage.getItem('labs_order') || '[]');
+    return order.map(function(trip_id) { return JSON.parse(sessionStorage.getItem('labs_' + trip_id) || {}); });
   }
 }
 
