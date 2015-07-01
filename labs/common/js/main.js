@@ -10,7 +10,7 @@ function hideLoading() {
 
 function getAccessToken() {
   var query = getQueryParams(document.location.search);
-  return query.accessToken || getCookie('token');
+  return query.accessToken || getCookie('accessToken');
 }
 
 

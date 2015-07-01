@@ -56,7 +56,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
         function (data) {
           if(data && data.access_token) {
             var expires = (model.get('staySignedIn')) ?  data.expires_in : undefined ;
-            cookie.setCookie('token', data.access_token, expires);
+            cookie.setCookie('accessToken', data.access_token, expires);
             analytics.trackEvent('login', 'Login');
             analytics.identifyUser(model.get('username'));
             cache.save('accessToken', data.access_token);
@@ -88,7 +88,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
 
     logout: function() {
       sessionStorage.clear();
-      document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     },
 
 
@@ -158,7 +158,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
       var search = deparam(window.location.search.substring(1));
 
       // else get access token from cookie
-      var accessToken = search.accessToken || cookie.getCookie('token');
+      var accessToken = search.accessToken || cookie.getCookie('accessToken');
 
       //if non-matching token in sessionStorage, clear
       if(sessionStorage.getItem('accessToken') !== accessToken) {
