@@ -37,12 +37,9 @@ function(Backbone, coms, moment, Trip, formatters, filterCollection, settings, c
           limit = 250,
           params = {
             limit: limit,
-            page: page
+            page: page || 1
           };
 
-      if(page === undefined) {
-        params.page = 1;
-      }
       return this.fetch({
         remove: false,
         data: params,
@@ -52,7 +49,7 @@ function(Backbone, coms, moment, Trip, formatters, filterCollection, settings, c
 
         if(data && data._metadata && data._metadata.next) {
           //User has another page of trips
-          return self.fetchPage(page + 1);
+          return self.fetchPage(params.page + 1);
         } else {
           cache.save('studentTrips', self.toJSON());
           self.trigger('reset');
