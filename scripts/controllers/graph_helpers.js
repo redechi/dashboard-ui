@@ -10,7 +10,7 @@ function( formatters ) {
 
       //put nvd3 into production mode
       nv.dev = false;
-      
+
       var scoreColor = formatters.scoreColor(score),
           trans = 100 - score;
 
@@ -73,9 +73,8 @@ function( formatters ) {
           .attr('class', 'averageScore')
           .text(parseInt(datum[0].value));
 
-        // rotate the chart 180
-        d3.select($('.nv-pieChart', container).get(0))
-          .attr('transform', 'rotate(180,' + (options.width / 2) + ',' + (options.height / 2) + ')');
+        // rotate the pie chart 180
+        d3.select('.nv-pieChart').attr('transform', 'rotate(180,' + (options.width / 2) + ',' + (options.height / 2) + ')');
 
         return chart;
       });
