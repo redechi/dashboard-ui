@@ -17,8 +17,8 @@ function(formatters) {
     night_driving: {
       slug: 'night_driving',
       name: 'Night Driving',
-      requirement: 'drive 20 hours at night with their coach',
-      accomplishment: 'drove 20 hours at night with their coach',
+      requirement: 'drive 10 hours at night with their coach',
+      accomplishment: 'drove 10 hours at night with their coach',
       type: 'badge'
     },
 
