@@ -57,8 +57,7 @@ function( Backbone, coms, regionManager, SummaryTmpl, FiltersView, GraphView, Ma
       var g = new GraphView();
       var f = new FiltersView();
       var h = new HeaderView({attributes: {
-        loggedIn: login.isLoggedIn,
-        licenseplusMenu: 'dashboard'
+        loggedIn: login.isLoggedIn
       }});
 
       this.trips.show(tl);

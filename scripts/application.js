@@ -13,14 +13,13 @@ define([
   'mobile-detect',
 
   // must be included so it exists
-  'views/item/admin',
   'bootstrapSlider',
   'bootstrapDatetimepicker',
   'bootstrap/popover'
 
 ],
 
-function(dom, Backbone, coms, router, regionManager, moment, login, cache, tripsCollection, OverlayLayout, FastClick, MobileDetect, AdminView) {
+function(dom, Backbone, coms, router, regionManager, moment, login, cache, tripsCollection, OverlayLayout, FastClick, MobileDetect) {
   'use strict';
 
   //make sure Modernizr is here

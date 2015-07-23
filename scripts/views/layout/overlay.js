@@ -10,9 +10,9 @@
  * an overlay with optionally an active or inactive masking layer. The overlay
  * only accets two types of objects
  *
- * 1) A type :: `{type: 'coachAccepted'}` :: this is the ID on a dom template
+ * 1) A type :: `{type: 'noTrips'}` :: this is the ID on a dom template
  * in templates/layout/overlay_tmpl.hbs
- * EX: new Overlay({type: 'coachOverlay'});
+ * EX: new Overlay({type: 'noTrips'});
  *
  * 2) A View :: this is any existing or pre-exiting view.
  * EX: new Overlay(new CustomView());
@@ -86,7 +86,9 @@ function(Backbone, coms, OverlayTmpl, analytics) {
       'click .btn-close': 'triggerDestroy',
       'click .mask-close': 'triggerDestroy',
       'click a.iOSAppLink': 'iOSAppLink',
-      'click a.androidAppLink': 'androidAppLink'
+      'click a.androidAppLink': 'androidAppLink',
+      'click .btn-decline-terms': 'triggerAgreementWarning',
+      'click .btn-accept-terms': 'triggerAgreementAccept'
     },
 
 

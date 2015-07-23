@@ -4,16 +4,14 @@ define([
   'regionManager',
   '../collections/filters',
   '../views/layout/summary',
-  '../views/layout/licenseplus',
   '../views/layout/login',
-  '../views/layout/coach_login',
   '../views/layout/password_reset',
   '../views/layout/apps',
   '../views/layout/labs',
   '../controllers/login'
 ],
 
-function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, LicenseplusLayout, LoginLayout, CoachLoginLayout, PasswordResetLayout, AppsLayout, LabsLayout, login ) {
+function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, LoginLayout, PasswordResetLayout, AppsLayout, LabsLayout, login ) {
   'use strict';
 
   return {
@@ -26,22 +24,8 @@ function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, Licen
     },
 
 
-    showLicensePlusLayout: function () {
-      var layout = new LicenseplusLayout();
-      var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(layout);
-    },
-
-
     showLoginLayout: function (token) {
       var layout = new LoginLayout({token: token});
-      var contentRegion = regionManager.getRegion('main_content');
-      contentRegion.show(layout);
-    },
-
-
-    showCoachLoginLayout: function (token) {
-      var layout = new CoachLoginLayout({token: token});
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },

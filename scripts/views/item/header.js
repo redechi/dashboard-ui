@@ -3,12 +3,12 @@ define([
   'communicator',
   'hbs!tmpl/item/header_tmpl',
   '../../models/user',
-  '../../models/licenseplus',
   '../layout/overlay',
   '../../controllers/login',
+  '../../controllers/cache',
   '../../controllers/analytics'
 ],
-function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, analytics ) {
+function( Backbone, coms, HeaderTmpl, user, OverlayLayout, login, cache, analytics ) {
   'use strict';
 
   return Backbone.Marionette.ItemView.extend({
@@ -18,19 +18,15 @@ function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, a
 
 
     initialize: function() {
-      var self = this;
       if(this.attributes.loggedIn && !login.isDemo()) {
         this.model.fetch({error: login.fetchErrorHandler});
-        var licenseplus = new Licenseplus();
-        licenseplus.fetch({success: function() {
-          self.isCoach = (licenseplus.get('user_type') === 'coach');
-          self.render();
-        }});
-
         this.render();
       }
-
+      coms.off('user:change');
       coms.on('user:change', this.render, this);
+
+      // Check if user has licenseplus
+      login.checkIfUserIsCoach();
     },
 
 
@@ -38,7 +34,8 @@ function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, a
       'click .whatIsAutomatic': 'whatIsAutomatic',
       'click .buyNow': 'buyNow',
       'click .support': 'supportLink',
-      'click #licenseplusToggle .toggleContainer': 'toggleLicenseplusMenu'
+      'click #licenseplusToggle .toggleContainer': 'showLicensePlus',
+      'click #licenseplusToggle .licenseplusLink': 'showLicensePlus'
     },
 
 
@@ -49,29 +46,14 @@ function( Backbone, coms, HeaderTmpl, user, Licenseplus, OverlayLayout, login, a
 
     templateHelpers: function() {
       return {
-        licenseplusMenu: this.setLicenseplusMenuClass()
+        licenseplusMenu: cache.fetch('licensePlusProgram', true)
       };
     },
+    
 
-
-    setLicenseplusMenuClass: function() {
-      if(this.isCoach) {
-        if(this.attributes.licenseplusMenu === 'licenseplus') {
-          return 'left';
-        } else if(this.attributes.licenseplusMenu === 'dashboard') {
-          return 'right';
-        }
-      } else {
-        return undefined;
-      }
-    },
-
-
-    toggleLicenseplusMenu: function() {
-      if($('#licenseplusToggle .toggle').hasClass('right')) {
-        Backbone.history.navigate('#licenseplus', {trigger: true});
-      } else {
-        Backbone.history.navigate('#', {trigger: true});
+    showLicensePlus: function() {
+      if(confirm('License+ has moved to licenseplus.automatic.com. Click "OK" to be redirected.')) {
+        window.location = 'https://licenseplus.automatic.com';
       }
     },
 

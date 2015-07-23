@@ -14,11 +14,16 @@ function( moment ) {
       } catch(e) {}
     },
 
-    fetch: function(key) {
+    fetch: function(key, ignoreExpires) {
       var expires = sessionStorage.getItem(key + '_expires');
 
-      if(expires > moment().valueOf()) {
-        return JSON.parse(sessionStorage.getItem(key));
+      if(expires > moment().valueOf() || ignoreExpires) {
+        try {
+          return JSON.parse(sessionStorage.getItem(key));
+        } catch(e) {
+          return sessionStorage.getItem(key);
+        }
+
       } else {
         return;
       }

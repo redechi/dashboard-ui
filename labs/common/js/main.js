@@ -8,14 +8,9 @@ function hideLoading() {
 }
 
 
-function getAccessToken() {
-  var query = getQueryParams(document.location.search);
-  return query.accessToken || getCookie('accessToken');
-}
-
-
 function fetchTrips(cb) {
-  var accessToken = getAccessToken();
+  var queryParams = getQueryParams(document.location.search);
+  var accessToken = queryParams.accessToken || getCookie('accessToken');
   var ts = sessionStorage.getItem('labs_ts');
   var trips = [];
   var oneHourAgo = Date.now() - (60*60*1000);

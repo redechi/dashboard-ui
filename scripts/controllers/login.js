@@ -16,13 +16,14 @@
 define([
   'backbone',
   'communicator',
-  './analytics',
+  '../views/layout/overlay',
   '../models/settings',
-  '../controllers/cache',
-  '../controllers/cookie',
+  './cache',
+  './cookie',
+  './analytics',
   'deparam'
 ],
-function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
+function( Backbone, coms, OverlayLayout, settings, cache, cookie, analytics, deparam ) {
   'use strict';
 
   return {
@@ -34,14 +35,7 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
 
 
     login: function(model) {
-      var self = this,
-          isValid = model.isValid();
-
-      // protect login
-      if (!model.get('type') === 'login' || !isValid) {
-        return isValid;
-      }
-
+      var self = this;
       var attributes = {
         username: model.get('username'),
         password: model.get('password'),
@@ -61,28 +55,101 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
             analytics.identifyUser(model.get('username'));
             cache.save('accessToken', data.access_token);
 
-            //if coming from coach_login, show licenseplus
-            if(_.contains(['coach'], model.get('type'))) {
-              $.ajax({
-                type: 'POST',
-                url: settings.get('api_host') + '/internal/licenseplus/accept/',
-                data: {
-                  token: model.get('token')
-                },
-                headers: {
-                  Authorization: 'bearer ' + data.access_token
-                }
-              }).done(function() {
-                Backbone.history.navigate('#licenseplus?coachAccepted', {trigger: true});
-              }).fail(function() {
-                Backbone.history.navigate('#licenseplus', {trigger: true});
-              })
-            } else {
-              Backbone.history.navigate('#/');
-            }
+            Backbone.history.navigate('#/');
           }
         })
         .fail(this.error.bind(model));
+    },
+
+
+    checkIfUserIsCoach: function() {
+      if(cache.fetch('licenseplusSessionToken', true)) {
+        this.getLicensePlusPrograms();
+      } else {
+        this.getLicensePlusGrantToken();
+      }
+    },
+
+
+    getLicensePlusGrantToken: function() {
+      var self = this;
+
+      $.ajax({
+        url: settings.get('base_host') + '/oauth/authorize/',
+        type: 'POST',
+        headers: {
+          Accept: 'application/json'
+        },
+        datatype: 'json',
+        data: {
+          client_id: settings.get('licenseplus_client_id'),
+          response_type: 'code',
+          authorize: 'Authorize App',
+          delegate_access_token: cache.fetch('accessToken', true),
+          scope: 'scope:user:profile'
+        },
+
+        success: function(data) {
+          console.log('Received Grant Token', data);
+          if (data && data.grant_token) {
+            self.getLicensePlusSessionID(data.grant_token);
+          } else {
+            console.error(new Error('Error Getting Grant Token'), data);
+          }
+        },
+
+        error: function(jqxhr, textStatus, err) {
+          console.error('Error Getting Grant Token', err);
+        }
+      });
+    },
+
+
+    getLicensePlusSessionID: function(grantToken) {
+      var self = this;
+
+      $.ajax({
+        url: settings.get('licenseplus_host') + '/oauth/access_token/',
+        type: 'POST',
+        datatype: 'json',
+        data: {
+          code: grantToken
+        },
+
+        success: function(data) {
+          console.log('Received LPlus Session ID', data);
+          if (data && data.session_id) {
+            cache.save('licenseplusSessionToken', data.session_id);
+
+            self.getLicensePlusPrograms();
+          } else {
+            console.error('Unknown Error accessing Session ID');
+          }
+        },
+
+        error: function(jqxhr, textStatus, err) {
+          console.error('Error getting LPlus Session ID', err);
+        }
+      });
+    },
+
+
+    getLicensePlusPrograms: function() {
+      var self = this;
+      $.ajax({
+        type: 'GET',
+        url: settings.get('licenseplus_host') + '/user/me/',
+        headers: {
+          Authorization: 'LPlusSessionId ' + cache.fetch('licenseplusSessionToken', true)
+        }
+      }).done(function(data) {
+        if(data && data.programs_as_coach && data.programs_as_coach.length) {
+          cache.save('licensePlusProgram', data.programs_as_coach[0]);
+          coms.trigger('user:change');
+        }
+      }).fail(function(jqXHR, textStatus, error) {
+        console.error(error);
+      });
     },
 
 
@@ -92,68 +159,22 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
     },
 
 
-    createAccount: function(model) {
-      var self = this,
-          isValid = model.isValid();
-
-      // protect createAccount
-      if (!model.get('type') === 'createAccount' || !isValid) {
-        return isValid;
-      }
-
-      var attributes = model.toJSON();
-
-      delete attributes.type;
-      delete attributes.token;
-      delete attributes.scope;
-      delete attributes.grant_type;
-      delete attributes.staySignedIn;
-
-      attributes.type = 'coach';
-      attributes.source = 'DASHBOARD';
-      attributes.device_identifier = Math.random().toString(36).substring(2,18);
-
-      return $.ajax({
-        url: model.url(),
-        type: 'POST',
-        data: attributes,
-        headers: {
-          Authorization: 'client ' + model.get('client_id')
-        },
-        datatype: 'json',
-        success: function(data) {
-          model.set('type', 'coach');
-          self.login(model);
-        },
-        error: _.bind(this.error, model)
-      });
-    },
-
-
     error: function (jqXHR){
-      var model = this,
-          error = (jqXHR.responseJSON && jqXHR.responseJSON.error) ? jqXHR.responseJSON.error : '',
-          message = '';
+      var error = (jqXHR.responseJSON && jqXHR.responseJSON.error) ? jqXHR.responseJSON.error : '';
+      var message = '';
 
-      if(jqXHR.status === 400 && jqXHR.responseText.indexOf('Invalid value') !== -1) {
-        message = 'The coach invite URL was invalid.';
-      } else if(jqXHR.status === 400 && error === 'err_incoming_relationship_already_exists') {
-        message = 'You may only coach one student at a time, and you cannot be both a student and a coach.';
-      } else if(jqXHR.status === 401 && error === 'invalid_credentials') {
+      if(jqXHR.status === 401 && error === 'invalid_credentials') {
         message = 'Invalid email or password';
-      } else if(jqXHR.status === 409 || jqXHR.status === 422) {
-        message = 'An account with that email already exists. Try logging in.';
       } else {
         message = 'Unknown error<br> If this persists please contact <a href="mailto:support@automatic.com">Support</a>.';
       }
 
       coms.trigger('login:error', message);
-      model.trigger('invalid', message);
+      this.trigger('invalid', message);
     },
 
 
     setAccessToken: function () {
-
       // get access token from URL parameter (for testing)
       var search = deparam(window.location.search.substring(1));
 
@@ -207,7 +228,6 @@ function( Backbone, coms, analytics, settings, cache, cookie, deparam ) {
                 return $.ajax(this);
               }
             }
-
 
             try {
               if(xhr.responseText !== '[]' && status !== 'error' && this.url.indexOf('/oauth/access_token') === -1 && this.url.indexOf('/trips') === -1) {

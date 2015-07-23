@@ -21,59 +21,17 @@ function( Backbone, settings ) {
 
 
     url: function () {
-      var host = '',
-          path = '';
-
-      if (this.get('type') === 'create_coach' ) {
-        host = settings.get('api_host');
-        path = '/user/';
-      } else {
-        host = settings.get('base_host');
-        path = '/oauth/access_token/';
-      }
-
-      return host + path;
+      return settings.get('base_host') + '/oauth/access_token/';
     },
 
 
-    validate: function (attrs, options) {
+    validate: function() {
       if(!this.get('username')) {
         return 'Please enter your email';
       }
 
       if(!this.get('password')) {
         return 'Please enter your password';
-      }
-
-
-      // exit here if login form
-      if(this.get('type') !== 'create_coach') {
-        return;
-      }
-
-
-      if(!/[^\s@]+@[^\s@]+\.[^\s@]+/.test(this.get('username'))) {
-        return 'Please enter a valid email address';
-      }
-
-      if(!this.get('first_name')) {
-        return 'Please enter your first name';
-      }
-
-      if(!this.get('last_name')) {
-        return 'Please enter your last name';
-      }
-
-      if(!this.get('password_repeat')) {
-        return 'Please enter repeat your password';
-      }
-
-      if(this.get('password') !== this.get('password_repeat')) {
-        return 'Passwords do not match';
-      }
-
-      if(this.get('password') && this.get('password').length < 8) {
-        return 'Your password must be at least 8 characters';
       }
     }
 

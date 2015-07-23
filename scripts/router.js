@@ -2,8 +2,9 @@ define([
   'backbone',
   './controllers/router',
   './controllers/login',
-  './controllers/analytics'
-], function(Backbone, router, login, analytics) {
+  './controllers/analytics',
+  './controllers/cache'
+], function(Backbone, router, login, analytics, cache) {
   'use strict';
 
   var Router = Backbone.Marionette.AppRouter.extend({
@@ -18,9 +19,7 @@ define([
       'login(/:token)': 'showLoginLayout',
       'reset(/:token)': 'showPasswordResetLayout',
       'filter(/)(?:filters)': 'showSummaryLayout',
-      'licenseplus': 'showLicensePlusLayout',
       'logout': 'logout',
-      'coach_login(/:token)': 'showCoachLoginLayout',
       'connected_apps': 'showAppsLayout',
       'labs': 'showLabsLayout',
       '*notFound': 'notFound'
@@ -33,8 +32,8 @@ define([
       callback = callback || this[name];
 
       var f = function() {
-        //check for access tokens on all routes, except login, coach_login, password reset and demo
-        if(!/^login|^reset\/?.+|^coach_login\/?.+/.test(route) && !login.isDemo()) {
+        //check for access tokens on all routes, except login, password reset and demo
+        if(!/^login|^logout|^reset\/?.+/.test(route) && !login.isDemo()) {
           var accessToken = sessionStorage.getItem('accessToken');
 
           // if no access token, redirect to login
