@@ -73,32 +73,54 @@
 
       var tripTemplate = _.template($('#tripTemplate').html());
       var hyperlapse;
-      var trips;
+      var trips = [];
       var trip;
       var map;
       var marker;
       var generating = false;
+      var loading = false;
+      var page = 'https://api.automatic.com/trip/?limit=10&page=1';
 
-      fetchTrips(function(results) {
-        trips = results;
+      function loadTripsFromServer() {
+        if(this.shouldLoad()) {
+          loading = true;
 
-        trips.forEach(function(trip) {
-          _.extend(trip, {
-            started_at_time: formatTime(trip.started_at, trip.start_timezone),
-            started_at_date: formatDate(trip.started_at, trip.start_timezone),
-            ended_at_time: formatTime(trip.ended_at, trip.end_timezone),
-            ended_at_date: formatDate(trip.ended_at, trip.end_timezone),
-            duration: formatDuration(trip.duration_s),
-            start_address: formatAddress(trip.start_address),
-            end_address: formatAddress(trip.end_address),
-            distance: metersToMiles(trip.distance_m).toFixed(),
-            average_mpg: kmplToMpg(trip.average_kmpl).toFixed(1),
-            fuel_cost_usd: (trip.fuel_cost_usd || 0).toFixed(2)
+          fetchTripsPage(page, function(results) {
+            if(!results || !results.results) {
+              page = null;
+              return false;
+            }
+
+            page = results._metadata.next;
+            loading = false;
+
+            trips = trips.concat(results.results);
+
+            results.results.forEach(function(trip) {
+              _.extend(trip, {
+                started_at_time: formatTime(trip.started_at, trip.start_timezone),
+                started_at_date: formatDate(trip.started_at, trip.start_timezone),
+                ended_at_time: formatTime(trip.ended_at, trip.end_timezone),
+                ended_at_date: formatDate(trip.ended_at, trip.end_timezone),
+                duration: formatDuration(trip.duration_s),
+                start_address: formatAddress(trip.start_address),
+                end_address: formatAddress(trip.end_address),
+                distance: metersToMiles(trip.distance_m).toFixed(),
+                average_mpg: kmplToMpg(trip.average_kmpl).toFixed(1),
+                fuel_cost_usd: (trip.fuel_cost_usd || 0).toFixed(2)
+              });
+
+              $('#trips').append($(tripTemplate(trip)).data('trip', trip));
+            });
+          }, function(jqXHR) {
+            loading = false;
           });
+        }
+      }
 
-          $('#trips').append($(tripTemplate(trip)).data('trip', trip));
-        });
-      });
+      function shouldLoad() {
+        return loading !== true && page && $(window).scrollTop() + $(window).height() >= $('body').height() - 70;
+      }
 
       function generateHyperlapse(trip) {
         if(!trip.path) {
@@ -215,7 +237,7 @@
         return marker;
       }
 
-      $('.btn-hyperlapse').click(function() {
+      $('#trips').on('click', '.btn-hyperlapse', function() {
         var tripId = $(this).data('trip-id');
 
         var trip = _.findWhere(trips, {id: tripId});
@@ -232,6 +254,11 @@
       $('.btn-pause').click(pauseHyperlapse);
 
       $('.btn-play').click(playHyperlapse);
+
+
+      //load initial trips
+      loadTripsFromServer();
+      window.addEventListener('scroll', loadTripsFromServer);
 
     </script>
 
