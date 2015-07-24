@@ -45,7 +45,7 @@
     <script>
       var totalDistanceMeters = 0;
 
-      fetchTrips(function(trips) {
+      fetchAllTrips(function(trips) {
         var mapId = 'nightmap',
             map = L.mapbox.map(mapId, 'brendannee.008fdb34'),
             lineStyle = {color: '#e6ed57', opacity: 0.4, weight: 2},

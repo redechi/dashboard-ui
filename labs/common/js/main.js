@@ -8,7 +8,7 @@ function hideLoading() {
 }
 
 
-function fetchTrips(cb) {
+function fetchAllTrips(cb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = queryParams.accessToken || getCookie('accessToken');
   var ts = sessionStorage.getItem('labs_ts');
@@ -20,47 +20,56 @@ function fetchTrips(cb) {
     window.location = '/';
   }
 
-  function fetchTripsPage(url) {
-    $.ajax({
-      url: url,
-      headers: {
-        Authorization: 'bearer ' + accessToken
+  function handleTripResults(results) {
+    if(results && results.results) {
+      trips = trips.concat(results.results);
+
+      var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
+
+      $('.loading .text').text('Loaded ' + trips.length + ' of ' + count);
+
+      if(results._metadata.next) {
+        fetchTripsPage(results._metadata.next, handleTripResults, handleTripError);
+      } else {
+        returnTrips(trips, cb);
       }
-    })
-    .done(function(results) {
-      if(results && results.results) {
-        trips = trips.concat(results.results);
-
-        var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
-
-        $('.loading .text').text('Loaded ' + trips.length + ' of ' + count);
-
-        if(results._metadata.next) {
-          fetchTripsPage(results._metadata.next);
-        } else {
-          returnTrips();
-        }
-      }
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      console.error(errorThrown);
-      returnTrips();
-    });
+    }
   }
 
-  function returnTrips() {
-    cacheTrips(trips);
-    hideLoading();
-    cb(trips);
+  function handleTripError(jqXHR, textStatus, errorThrown) {
+    console.error(errorThrown);
+    returnTrips(trips, cb);
   }
 
   if(!ts || ts < oneHourAgo) {
     showLoading();
-    fetchTripsPage('https://api.automatic.com/trip/?limit=250&page=1');
+    fetchTripsPage('https://api.automatic.com/trip/?limit=250&page=1', handleTripResults, handleTripError);
   } else {
     trips = getCachedTrips();
     cb(trips);
   }
+}
+
+
+function fetchTripsPage(url, cb, errCb) {
+  var queryParams = getQueryParams(document.location.search);
+  var accessToken = queryParams.accessToken || getCookie('accessToken');
+
+  $.ajax({
+    url: url,
+    headers: {
+      Authorization: 'bearer ' + accessToken
+    }
+  })
+  .done(cb)
+  .fail(errCb);
+}
+
+
+function returnTrips(trips, cb) {
+  cacheTrips(trips);
+  hideLoading();
+  cb(trips);
 }
 
 
