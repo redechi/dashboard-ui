@@ -49,9 +49,10 @@ function( Backbone, coms, HeaderTmpl, user, OverlayLayout, login, cache, analyti
         licenseplusMenu: cache.fetch('licensePlusProgram', true)
       };
     },
-    
 
-    showLicensePlus: function() {
+
+    showLicensePlus: function(e) {
+      e.preventDefault();
       if(confirm('License+ has moved to licenseplus.automatic.com. Click "OK" to be redirected.')) {
         window.location = 'https://licenseplus.automatic.com';
       }
