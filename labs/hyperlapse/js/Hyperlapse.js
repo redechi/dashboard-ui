@@ -131,6 +131,7 @@ var Hyperlapse = function(container, params) {
 		_lat = 0, _lon = 0,
 		_position_x = 0, _position_y = 0,
 		_is_playing = false, _is_loading = false,
+		_has_started = false,
 		_point_index = 0,
 		_origin_heading = 0, _origin_pitch = 0,
 		_forward = true,
@@ -542,11 +543,22 @@ var Hyperlapse = function(container, params) {
 	};
 
 	var animate = function() {
+		var loopDelay = 3000;
 		var ptime = _ctime;
+		var ntime = self.millis;
 		_ctime = Date.now();
 		_dtime += _ctime - ptime;
-		if(_dtime >= self.millis) {
-			if(_is_playing) loop();
+
+		if(_point_index === 0 && _has_started) {
+			console.log('delaying start');
+			ntime = self.millis + loopDelay;
+		}
+
+		if(_dtime >= ntime) {
+			if(_is_playing) {
+				loop();
+				_has_started = true;
+			}
 			_dtime = 0;
 		}
 
