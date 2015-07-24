@@ -303,16 +303,15 @@ var Hyperlapse = function(container, params) {
 				if (self.onRouteComplete) self.onRouteComplete(e);
 			});
 		}
-
-
 	};
 
 	var parsePoints = function(response) {
+		var count = 0;
 
-		_loader.load( _raw_points[_point_index], function() {
+		_raw_points.forEach(function(raw_point, idx) {
+			_loader.load( raw_point, function() {
 
-			if(_loader.id != _prev_pano_id) {
-				_prev_pano_id = _loader.id;
+				count += 1;
 
 				var hp = new HyperlapsePoint( _loader.location, _loader.id, {
 					heading:_loader.rotation,
@@ -322,31 +321,15 @@ var Hyperlapse = function(container, params) {
 					image_date: _loader.image_date
 				} );
 
-				_h_points.push( hp );
+				_h_points[idx] = hp;
 
 				handleRouteProgress( {point: hp} );
 
-				if(_point_index == _raw_points.length-1) {
+				if(count == _raw_points.length) {
 					handleRouteComplete( {response: response, points: _h_points} );
-				} else {
-					_point_index++;
-					if(!_cancel_load) parsePoints(response);
-					else handleLoadCanceled( {} );
 				}
-			} else {
-
-				_raw_points.splice(_point_index, 1);
-
-				if(_point_index == _raw_points.length) {
-					handleRouteComplete( {response: response, points: _h_points} ); // FIX
-				} else {
-					if(!_cancel_load) parsePoints(response);
-					else handleLoadCanceled( {} );
-				}
-
-			}
-
-		} );
+			});
+		});
 	};
 
 	var getElevation = function(locations, callback) {
