@@ -54,6 +54,10 @@
           return alert('Unable to generate hyperlapse for trips with no path');
         }
 
+        if(!trip.distance_m) {
+          return alert('Unable to generate hyperlapse for trips with no distance');
+        }
+
         var pointCount = 1;
 
         showLoading();
@@ -64,7 +68,7 @@
           millis: 200,
           width: $(window).width(),
           height: $(window).height(),
-          max_points: 200
+          max_points: trip.max_points || 200
       	});
 
       	hyperlapse.onError = function(e) {
@@ -151,8 +155,10 @@
 
       $('.btn-play').click(playHyperlapse);
 
-      document.title = 'Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address;
-      $('.page-title, .pano-title-share').text('Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address + ' - ' + metersToMiles(trip.distance_m).toFixed() + ' miles');
+      if (trip.start_address && trip.end_address) {
+        document.title = 'Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address;
+        $('.page-title, .pano-title-share').text('Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address + ' - ' + metersToMiles(trip.distance_m).toFixed() + ' miles');
+      }
 
       //load hyperlapse
       generateHyperlapse(trip);

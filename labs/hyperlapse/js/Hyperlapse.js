@@ -550,7 +550,6 @@ var Hyperlapse = function(container, params) {
 		_dtime += _ctime - ptime;
 
 		if(_point_index === 0 && _has_started) {
-			console.log('delaying start');
 			ntime = self.millis + loopDelay;
 		}
 

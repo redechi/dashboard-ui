@@ -19,6 +19,16 @@
     <div id="trips" class="wrapper">
       <h1>Hyperlapse Generator</h1>
       <p>Select a trip below to generate a hyperlapse. It can take up to a minute for the imagery to download and be compiled.</p>
+
+      <label>Number of points: </label>
+      <select id="maxPoints">
+        <option value="10">10 (5 seconds)</option>
+        <option value="50">50 (10 seconds)</option>
+        <option value="100">100 (20 seconds)</option>
+        <option value="200" selected>200 (40 seconds)</option>
+        <option value="500">500 (2 minutes)</option>
+      </select>
+
     </div>
 
     <div id="pano" class="pano">
@@ -138,6 +148,7 @@
         var pointCount = 1;
 
         showLoading();
+        $('.loading .text').text('');
       	hyperlapse = new Hyperlapse(document.getElementById('pano'), {
       		zoom: 1,
       		elevation: 50,
@@ -145,7 +156,7 @@
           millis: 200,
           width: $(window).width(),
           height: $(window).height(),
-          max_points: 200
+          max_points: parseInt($('#maxPoints').val(), 10)
       	});
 
       	hyperlapse.onError = function(e) {
@@ -246,7 +257,8 @@
           path: trip.path,
           start_address: trip.start_address.cleaned,
           end_address: trip.end_address.cleaned,
-          distance_m: trip.distance_m
+          distance_m: trip.distance_m,
+          max_points: parseInt($('#maxPoints').val(), 10)
         };
 
         var shareURL = 'https://dashboard.automatic.com/labs/hyperlapse/share.html?' + $.param(params);
@@ -273,7 +285,6 @@
       $('.share-url').click(function(e) {
         e.stopPropagation();
         $('.share-url').select();
-
       });
 
       $('.btn-close').click(stopHyperlapse);
