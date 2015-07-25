@@ -147,6 +147,23 @@
   display: none;
 }
 
+.pano .pano-title {
+  position: absolute;
+  top: 80px;
+  left: 30px;
+  color: white;
+  font-size: 20px;
+}
+
+.pano .pano-title-share {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  color: white;
+  font-size: 20px;
+  margin-right: 150px;
+}
+
 .pano .btn i {
   top: 3px;
   padding-right: 12px;
@@ -156,6 +173,18 @@
   position: absolute;
   top: 10px;
   left: 10px;
+}
+
+.pano .btn-share {
+  position: absolute;
+  top: 10px;
+  right: 150px;
+}
+
+.pano .share-url {
+  width: 350px;
+  display: none;
+  margin-left: 10px;
 }
 
 .pano .btn-pause {
@@ -171,6 +200,19 @@
   display: none;
 }
 
+.pano .credits {
+  background: url("../../common/img/automatic_logo.png") 0 0 no-repeat;
+  height: 40px;
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+  color: white;
+  text-decoration: none;
+  line-height: 40px;
+  padding-left: 43px;
+  font-weight: bold;
+}
+
 .pano .panomap {
   width: 250px;
   height: 250px;
@@ -179,10 +221,12 @@
   right: 10px;
 }
 
-.pano .title {
-  color: #ffffff;
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  margin: 0 100px 0 0;
+@media (min-width: 800px) {
+  .pano .pano-title {
+    font-size: 26px;
+  }
+
+  .pano .pano-title-share {
+    font-size: 26px;
+  }
 }

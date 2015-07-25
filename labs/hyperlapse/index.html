@@ -22,6 +22,8 @@
     </div>
 
     <div id="pano" class="pano">
+      <div class="pano-title"></div>
+      <div class="btn btn-lg btn-default btn-share"><i class="fa fa-share"></i> Share <input type="text" class="share-url" readonly></div>
       <div class="btn btn-lg btn-default btn-pause"><i class="fa fa-pause"></i> Pause</div>
       <div class="btn btn-lg btn-default btn-play"><i class="fa fa-play"></i> Play</div>
       <div class="btn btn-lg btn-default btn-close"><i class="fa fa-arrow-left"></i> Back</div>
@@ -169,6 +171,8 @@
           $('#pano').fadeIn();
           hideLoading();
           drawPanoMap(trip);
+          setShareUrl(trip);
+          $('.pano-title').text('Hyperlapse from ' + trip.start_address.cleaned + ' to ' + trip.end_address.cleaned + ' - ' + metersToMiles(trip.distance_m).toFixed() + ' miles');
           generating = false;
       	};
 
@@ -196,11 +200,13 @@
         $('.btn-play').show();
       }
 
+
       function playHyperlapse() {
         hyperlapse.play();
         $('.btn-play').hide();
         $('.btn-pause').show();
       }
+
 
       function drawPanoMap(trip) {
         if(map) {
@@ -209,12 +215,14 @@
 
         map = L.mapbox.map('panomap', 'automatic.h5kpm228', {zoomControl: false});
 
-        var line = L.polyline(L.GeoJSON.decodeLine(trip.path), {
+        var points = L.GeoJSON.decodeLine(trip.path);
+
+        var line = L.polyline(points, {
           color: '#08b1d5',
           opacity: 0.9
         }).addTo(map);
 
-        marker = L.circleMarker([trip.start_location.lat, trip.start_location.lon], {
+        marker = L.circleMarker(points[0], {
           radius: 8,
           fill: true,
           fillColor: '#08b1d5',
@@ -231,8 +239,19 @@
         map.scrollWheelZoom.disable();
 
         marker.addTo(map);
+      }
 
-        return marker;
+      function setShareUrl(trip) {
+        var params = {
+          path: trip.path,
+          start_address: trip.start_address.cleaned,
+          end_address: trip.end_address.cleaned,
+          distance_m: trip.distance_m
+        };
+
+        var shareURL = 'https://dashboard.automatic.com/labs/hyperlapse/share.html?' + $.param(params);
+
+        $('.share-url').val(shareURL);
       }
 
       $('#trips').on('click', '.btn-hyperlapse', function() {
@@ -245,6 +264,16 @@
         }
 
         generateHyperlapse(trip);
+      });
+
+      $('.btn-share').click(function() {
+        $('.share-url').animate({width: 'toggle'}, 500);
+      });
+
+      $('.share-url').click(function(e) {
+        e.stopPropagation();
+        $('.share-url').select();
+
       });
 
       $('.btn-close').click(stopHyperlapse);
