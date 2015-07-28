@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>County Driving Map | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <style>
+      .wrapper {
+        width: 700px;
+        margin: 0 auto;
+      }
+
+      .map-info {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 5px 8px;
+      }
+
+      .map-info h1 {
+        margin: 0;
+      }
+
+      .map-info h3 {
+        margin: 0;
+      }
+
+      .state {
+        float: left;
+        width: 175px;
+        overflow: auto;
+      }
+
+      .state:nth-child(4n+1) {
+        clear: both;
+      }
+
+      .map {
+        width: 100%;
+      }
+
+      .county {
+        fill: none;
+        stroke: #CCC;
+      }
+
+      .county.visited {
+        fill: rgb(207, 81, 50);
+        stroke: rgb(102, 37, 20);
+        opacity: 0.8;
+      }
+
+      .graph-tooltip {
+         position: absolute;
+         text-align: center;
+         min-width: 150px;
+         height: 20px;
+         padding: 2px;
+         font-size: 16px;
+         background: #ddd;
+         border: 1px solid #aaa;
+         border-radius: 8px;
+         pointer-events: none;
+      }
+
+      .graph-tooltip.visited {
+        color: #fff;
+        background: rgb(207, 81, 50);
+        border-color: rgb(102, 37, 20);
+      }
+
+      .loading {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="text"></div>
+    </div>
+    <div class="map-info">
+      <h1>County Driving Map</h1>
+      <h3>Collect them all!</h3>
+    </div>
+    <div id="countymap" class="map"></div>
+    <div class="wrapper">
+      <div id="results"></div>
+    </div>
+    <a href="/#labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+
+    <script src="../common/js/main.js"></script>
+
+    <script>
+      var states = {};
+      var counties = {};
+      var idx = 0;
+      var paths;
+      var container;
+      var countyData;
+      var d3Path;
+      var drag;
+      var graphTooltip;
+
+      function renderCounties() {
+        $('#results').empty();
+
+        var stateContainer = $('<div>').addClass('states');
+
+        _.keys(states).sort().forEach(function(state) {
+          var container = $('<div>').addClass('state');
+          $('<h3>').text(state).appendTo(container);
+
+          $(container).append(_.keys(states[state]).sort().map(function(county) {
+            return $('<div>').text(county);
+          }));
+
+          container.appendTo(stateContainer);
+        });
+
+        stateContainer.appendTo('#results');
+
+        updateMap();
+      }
+
+      function summarize() {
+        var totalCounties = 3232;
+        var totalStates = 50;
+        var stateCount = _.size(states);
+        var countyCount = _.reduce(states, function(memo, counties) {
+          return memo += _.size(counties);
+        }, 0);
+        $('<small>').html('<sup>*</sup> or county equivalents').prependTo('#results');
+        $('<p>').html('You have driven to ' + countyCount + ' of ' + totalCounties + '<sup>*</sup> US Counties and ' + stateCount + ' of ' + totalStates + ' US States').prependTo('#results');
+      }
+
+
+      function drawMap() {
+        var width = $(window).width(),
+            height = Math.max($(window).height() / 2, 500),
+            marginLeft = (width - 960) / 2;
+
+        graphTooltip = d3.select('body').append('div')
+        .attr('class', 'graph-tooltip')
+        .style('opacity', 0);
+
+        var zoom = d3.behavior.zoom()
+        .scaleExtent([1, 40])
+        .on('zoom', zoomed);
+
+        drag = d3.behavior.drag()
+        .origin(function(d) { return d; })
+        .on('dragstart', dragstarted)
+        .on('drag', dragged)
+        .on('dragend', dragended);
+
+        d3Path = d3.geo.path();
+
+        var svg = d3.select('#countymap').append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .call(zoom);
+
+        container = svg.append('g');
+
+        queue()
+        .defer(d3.json, 'counties.json')
+        .await(function(error, us) {
+          countyData = us;
+
+          container.attr('class', 'counties')
+          .style('stroke-width', 0.5)
+          .attr("transform", "translate(" + marginLeft + ",0)")
+          .selectAll('path')
+          .data(topojson.feature(countyData, countyData.objects.counties).features)
+          .enter().append('path')
+          .attr('class', 'county')
+          .attr('data-county', function(d) {return d.id; })
+          .attr('d', d3Path)
+          .call(drag)
+          .on('mouseover', function(d) {
+            var county = counties[d.id];
+
+            if(county) {
+              graphTooltip.attr('class', 'graph-tooltip');
+
+              d3.select(this).transition().duration(100).style('opacity', 1);
+              graphTooltip.transition().duration(100)
+              .style('opacity', 1);
+
+              graphTooltip.text(county.county + ', ' + county.state)
+                .style('left', (d3.event.pageX) + 'px')
+                .style('top', (d3.event.pageY -30) + 'px');
+            }
+          })
+          .on('mouseout', function() {
+            d3.select(this)
+            .transition().duration(300)
+            .style('opacity', 0.8);
+            graphTooltip.transition().duration(300)
+            .style('opacity', 0);
+          });
+
+          updateMap();
+        });
+
+        function dottype(d) {
+          d.x = +d.x;
+          d.y = +d.y;
+          return d;
+        }
+
+        function zoomed() {
+          container.style('stroke-width', Math.min(1.5 / d3.event.scale, 0.5) + 'px');
+          container.attr('transform', 'translate(' + d3.event.translate + ')scale(' + d3.event.scale + ')');
+        }
+
+        function dragstarted(d) {
+          d3.event.sourceEvent.stopPropagation();
+          d3.select(this).classed('dragging', true);
+        }
+
+        function dragged(d) {
+          d3.select(this).attr('cx', d.x = d3.event.x).attr('cy', d.y = d3.event.y);
+        }
+
+        function dragended(d) {
+          d3.select(this).classed('dragging', false);
+        }
+      }
+
+
+      function updateMap() {
+        _.each(states, function(state) {
+          _.each(state, function(id) {
+            $('[data-county="' + id + '"]').attr('class', 'visited county');
+          });
+        });
+      }
+
+
+      function getCounties() {
+        var length = 0;
+        var pathsChunk = [];
+        var maxLength = 3000;
+
+        while(length < maxLength) {
+          var path = paths.pop();
+          if(path) {
+              length += path.length;
+              pathsChunk.push(path);
+          } else {
+            length = maxLength;
+          }
+        }
+
+        $('.loading .title').text('Processing trips ' + (idx + 1) + '-' + (idx + pathsChunk.length));
+
+        idx += pathsChunk.length;
+
+        $.ajax({
+          url: 'https://trip-geography.herokuapp.com',
+          method: 'POST',
+          data: JSON.stringify(pathsChunk),
+          contentType: 'application/json'
+        }).done(function(data) {
+          _.each(data, function(county) {
+            if(!states[county.state]) {
+              states[county.state] = {};
+            }
+            var id = parseInt(county.id, 10).toString();
+            states[county.state][county.county] = id;
+            counties[id] = county;
+          });
+
+          renderCounties();
+
+          if (paths.length) {
+            getCounties();
+          } else {
+            summarize();
+            hideLoading();
+          }
+
+        }).fail(function(jqXHR, textStatus, error) {
+          alert('Unable to fetch counties');
+          console.error(error);
+          hideLoading();
+        });
+      }
+
+
+      fetchAllTrips(function(trips) {
+        if(!trips || !trips.length) {
+          return alert('You have no trips');
+        }
+
+        drawMap();
+
+        paths = _.compact(_.pluck(trips, 'path'));
+
+        getCounties();
+      });
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
