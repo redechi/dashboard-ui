@@ -17,7 +17,7 @@ function fetchAllTrips(cb) {
 
   if(!accessToken) {
     alert('To access Automatic Labs, please log in first.');
-    window.location = '/';
+    window.location = '/#logout';
   }
 
   function handleTripResults(results) {
