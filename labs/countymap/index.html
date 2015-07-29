@@ -305,7 +305,7 @@
       function getCounties() {
         var length = 0;
         var pathsChunk = [];
-        var maxLength = 3000;
+        var maxLength = 10000;
 
         while(length < maxLength) {
           var path = paths.pop();
@@ -324,7 +324,7 @@
         idx += pathsChunk.length;
 
         $.ajax({
-          url: 'https://trip-geography.herokuapp.com',
+          url: 'https://1vcb2sxf7h.execute-api.us-east-1.amazonaws.com/prod/getCounty',
           method: 'POST',
           data: JSON.stringify(pathsChunk),
           contentType: 'application/json'
