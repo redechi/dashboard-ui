@@ -26,7 +26,8 @@ function fetchAllTrips(cb) {
 
       var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
 
-      $('.loading .text').text('Loaded ' + trips.length + ' of ' + count);
+      $('.loading .title').text('Loading...');
+      $('.loading .text').text(trips.length + ' of ' + count + ' trips');
 
       if(results._metadata.next) {
         fetchTripsPage(results._metadata.next, handleTripResults, handleTripError);

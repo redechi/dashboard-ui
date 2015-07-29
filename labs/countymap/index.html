@@ -140,7 +140,7 @@
           return memo += _.size(counties);
         }, 0);
         $('<small>').html('<sup>*</sup> or county equivalents').prependTo('#results');
-        $('<p>').html('You have driven to ' + countyCount + ' of ' + totalCounties + '<sup>*</sup> US Counties and ' + stateCount + ' of ' + totalStates + ' US States').prependTo('#results');
+        $('<p>').html('You have driven to ' + countyCount + ' of ' + totalCounties + ' US Counties<sup>*</sup> and ' + stateCount + ' of ' + totalStates + ' US States').prependTo('#results');
       }
 
 
@@ -318,6 +318,7 @@
         }
 
         $('.loading .title').text('Processing trips ' + (idx + 1) + '-' + (idx + pathsChunk.length));
+        $('.loading .text').empty();
         showLoading();
 
         idx += pathsChunk.length;
@@ -347,9 +348,14 @@
           }
 
         }).fail(function(jqXHR, textStatus, error) {
-          alert('Unable to fetch counties');
           console.error(error);
-          hideLoading();
+
+          if (paths.length) {
+            getCounties();
+          } else {
+            summarize();
+            hideLoading();
+          }
         });
       }
 

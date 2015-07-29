@@ -20,7 +20,7 @@
       <h1>Hyperlapse Generator</h1>
       <p>Select a trip below to generate a hyperlapse. It can take up to a minute for the imagery to download and be compiled.</p>
 
-      <label>Number of points: </label>
+      <label>Number of images in hyperlapse (time to generate): </label>
       <select id="maxPoints">
         <option value="10">10 (5 seconds)</option>
         <option value="50">50 (10 seconds)</option>
@@ -173,8 +173,7 @@
         };
 
         hyperlapse.onLoadProgress = function(e) {
-          $('.loading .title').text('Generating ');
-          $('.loading .text').text('Panorama ' + e.position + '/' + pointCount);
+          $('.loading .text').text('Images ' + e.position + '/' + pointCount);
         };
 
       	hyperlapse.onLoadComplete = function(e) {

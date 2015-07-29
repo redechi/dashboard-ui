@@ -221,6 +221,10 @@
   right: 10px;
 }
 
+.automatic-labs {
+  z-index: 1002;
+}
+
 @media (min-width: 800px) {
   .pano .pano-title {
     font-size: 26px;
