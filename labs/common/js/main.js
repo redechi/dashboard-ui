@@ -76,8 +76,12 @@ function returnTrips(trips, cb) {
 
 function cacheTrips(trips) {
   var order = _.pluck(trips, 'id');
-  sessionStorage.setItem('labs_order', JSON.stringify(order));
-  sessionStorage.setItem('labs_ts', Date.now());
+  try {
+    sessionStorage.setItem('labs_order', JSON.stringify(order));
+    sessionStorage.setItem('labs_ts', Date.now());
+  } catch(e) {
+    sessionStorage.clear();
+  }
 
   trips.forEach(function(trip) {
     cacheTrip(trip);
@@ -86,17 +90,25 @@ function cacheTrips(trips) {
 
 
 function cacheTrip(trip) {
-  sessionStorage.setItem('labs_' + trip.id, JSON.stringify(trip));
+  try {
+    sessionStorage.setItem('labs_' + trip.id, JSON.stringify(_.omit(trip, 'vehicle_events')));
+  } catch(e) {
+    sessionStorage.clear();
+  }
 }
 
 
 function cacheVehicles(vehicles) {
-  sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
+  try {
+    sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
+  } catch(e) {
+    sessionStorage.clear();
+  }
 }
 
 
 function getCachedTrips(trip_id) {
-  if(trip_id) {
+  if (trip_id) {
     // get specific cached trip
     return JSON.parse(sessionStorage.getItem('labs_' + trip_id) || '{}');
   } else {
