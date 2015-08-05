@@ -48,7 +48,7 @@
         <option value="-6.1745,106.8227">Jakarta</option>
         <option value="-26.2044,28.0456">Johannesburg</option>
         <option value="6.4531,3.3958">Lagos</option>
-        <option value="51.5072,0.1275">London</option>
+        <option value="51.5072,-0.1275">London</option>
         <option value="34.0500,-118.2500">Los Angeles</option>
         <option value="19.4333,-99.1333">Mexico City</option>
         <option value="55.7500,37.6167">Moscow</option>
@@ -56,6 +56,7 @@
         <option value="40.7127,-74.0059">New York</option>
         <option value="48.8567,2.3508">Paris</option>
         <option value="-22.9068,-43.1729">Rio de Janeiro</option>
+        <option value="37.7833,-122.4167">San Francisco</option>
         <option value="35.6833,139.6833">Tokyo</option>
         <option value="45.4375,12.3358">Venice</option>
         <option value="48.2000,16.3667">Vienna</option>
@@ -101,13 +102,25 @@
       }
 
 
+      function filterTrips(trips, center) {
+        // remove all trips that start or end more than 50 miles from home
+        var maxDistanceMi = 50;
+        return _.reject(trips, function(trip) {
+          var startDistanceFromCenter = calculateDistanceMi(trip.start_location.lat, trip.start_location.lon, center[0], center[1]);
+          var endDistanceFromCenter = calculateDistanceMi(trip.end_location.lat, trip.end_location.lon, center[0], center[1]);
+          return (startDistanceFromCenter > maxDistanceMi || endDistanceFromCenter > maxDistanceMi);
+        });
+      }
+
+
       fetchAllTrips(function(trips) {
         var mapId = 'relocatemap';
         var map = L.mapbox.map(mapId, 'automatic.lm09hkd2');
         var lineStyle = {color: '#b84329', opacity: 0.8, weight: 2};
-        var center = weightedCenter(trips);
         var bounds;
         var lines = [];
+        var commuteTrips = filterTrips(trips, weightedCenter(trips));
+        var center = weightedCenter(commuteTrips);
 
         drawTrips();
         map.fitBounds(bounds);
@@ -136,13 +149,13 @@
 
 
         function drawTrips(offset) {
-          trips.forEach(function(trip) {
+          commuteTrips.forEach(function(trip) {
 
             if (trip.path) {
               var points = L.GeoJSON.decodeLine(trip.path);
 
               if (offset) {
-              points = _.map(points, function(point) {
+                points = _.map(points, function(point) {
                   return [
                     point[0] + offset[0],
                     point[1] + offset[1]
