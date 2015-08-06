@@ -160,6 +160,15 @@ function formatTime(time, timezone) {
 }
 
 
+function formatDayOfWeek(time, timezone) {
+  try {
+    return moment(time).tz(timezone).format('dddd');
+  } catch(e) {
+    return moment(time).format('dddd');
+  }
+}
+
+
 function formatDuration(s) {
   var duration = moment.duration(s, 'seconds'),
       hours = (duration.asHours() >= 1) ? Math.floor(duration.asHours()) + ' h ' : '',
