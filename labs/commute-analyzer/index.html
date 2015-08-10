@@ -33,28 +33,39 @@
           <input type="submit" value="Filter Trips">
         </form>
       </div>
+      <div class="locations">
+        <h4>Select Locations</h4>
+        <div class="location">
+          <label>Start Location</label>
+          <select class="start-locations"></select>
+        </div>
+        <div class="location">
+          <label>End Location</label>
+          <select class="end-locations"></select>
+        </div>
+      </div>
       <div class="results-summary">
-        <p><span class="trip-count"></span> trips found between <span class="start-address"></span> and <span class="end-address"></span>.</p>
+        <h4><span class="trip-count"></span> trips found between <span class="start-address"></span> and <span class="end-address"></span>.</h4>
       </div>
       <div id="commutemap" class="map"></div>
       <div class="results">
-        <h2>To work:</h2>
+        <h2>To <span class="b-address"></span>:</h2>
         <ul>
-          <li>Fastest Trip: <span class="towork-fastest"></span></li>
-          <li>Slowest Trip: <span class="towork-slowest"></span></li>
-          <li>Average Duration: <span class="towork-average"></span></li>
+          <li>Fastest Trip: <span class="to-b-fastest"></span></li>
+          <li>Slowest Trip: <span class="to-b-slowest"></span></li>
+          <li>Average Duration: <span class="to-b-average"></span></li>
         </ul>
-        <div id="towork-dayofweek"></div>
-        <div id="towork-departuretime"></div>
+        <div id="to-b-dayofweek"></div>
+        <div id="to-b-departuretime"></div>
 
-        <h2>From work:</h2>
+        <h2>To <span class="a-address"></span>:</h2>
         <ul>
-          <li>Fastest Trip: <span class="tohome-fastest"></span></li>
-          <li>Slowest Trip: <span class="tohome-slowest"></span></li>
-          <li>Average Duration: <span class="tohome-average"></span></li>
+          <li>Fastest Trip: <span class="to-a-fastest"></span></li>
+          <li>Slowest Trip: <span class="to-a-slowest"></span></li>
+          <li>Average Duration: <span class="to-a-average"></span></li>
         </ul>
-        <div id="tohome-dayofweek"></div>
-        <div id="tohome-departuretime"></div>
+        <div id="to-a-dayofweek"></div>
+        <div id="to-a-departuretime"></div>
       </div>
     </div>
 
@@ -79,6 +90,7 @@
       var markerStyle = {'marker-size': 'large', 'marker-color': '#f78e13'};
       var bounds;
       var layers = [];
+      var clusters;
 
       function formatSeconds(s) {
         if (!s) {
@@ -99,15 +111,15 @@
           var endCluster = truncateLocation(trip.end_location.lat, trip.end_location.lon);
 
           if (!memo[startCluster]) {
-            memo[startCluster] = 0;
+            memo[startCluster] = {count: 0, address: trip.start_address.display_name};
           }
 
           if (!memo[endCluster]) {
-            memo[endCluster] = 0;
+            memo[endCluster] = {count: 0, address: trip.end_address.display_name};
           }
 
-          memo[startCluster] += 1;
-          memo[endCluster] += 1;
+          memo[startCluster].count += 1;
+          memo[endCluster].count += 1;
 
           return memo;
         }, {});
@@ -120,10 +132,10 @@
           var endCluster = truncateLocation(trip.end_location.lat, trip.end_location.lon);
 
           if (cluster1 === startCluster && cluster2 === endCluster) {
-            trip.type = 'toWork';
+            trip.type = 'toB';
             return true;
           } else if (cluster1 === endCluster && cluster2 === startCluster) {
-            trip.type = 'toHome';
+            trip.type = 'toA';
             return true;
           } else {
             return false;
@@ -181,46 +193,46 @@
         var summary = {};
         var groups = _.groupBy(trips, 'type');
 
-        var toWork = groups.toWork ? summarizeGroup(groups.toWork) : null;
-        var toHome = groups.toHome ? summarizeGroup(groups.toHome) : null;
-        var homeAddress;
-        var homeLocation;
-        var workAddress;
-        var workLocation;
+        var toB = groups.toB ? summarizeGroup(groups.toB) : null;
+        var toA = groups.toA ? summarizeGroup(groups.toA) : null;
+        var aAddress;
+        var aLocation;
+        var bAddress;
+        var bLocation;
 
-        if (toWork) {
-          toWork.dayOfWeek = summarizeByDayOfWeek(groups.toWork);
-          toWork.departureTime = summarizeByDepartureTime(groups.toWork);
+        if (toB) {
+          toB.dayOfWeek = summarizeByDayOfWeek(groups.toB);
+          toB.departureTime = summarizeByDepartureTime(groups.toB);
 
-          homeAddress = groups.toWork[0].start_address.display_name;
-          homeLocation = [groups.toWork[0].start_location.lat, groups.toWork[0].start_location.lon];
+          aAddress = groups.toB[0].start_address.display_name;
+          aLocation = [groups.toB[0].start_location.lat, groups.toB[0].start_location.lon];
         }
 
-        if (toHome) {
-          toHome.dayOfWeek = summarizeByDayOfWeek(groups.toHome);
-          toHome.departureTime = summarizeByDepartureTime(groups.toHome);
+        if (toA) {
+          toA.dayOfWeek = summarizeByDayOfWeek(groups.toA);
+          toA.departureTime = summarizeByDepartureTime(groups.toA);
 
-          workAddress = groups.toHome[0].start_address.display_name;
-          workLocation = [groups.toHome[0].start_location.lat, groups.toHome[0].start_location.lon];
+          bAddress = groups.toA[0].start_address.display_name;
+          bLocation = [groups.toA[0].start_location.lat, groups.toA[0].start_location.lon];
         }
 
-        if (!homeAddress && toHome) {
-          homeAddress = groups.toHome[0].end_address.display_name;
-          homeLocation = [groups.toHome[0].end_location.lat, groups.toHome[0].end_location.lon];
+        if (!aAddress && toA) {
+          aAddress = groups.toA[0].end_address.display_name;
+          aLocation = [groups.toA[0].end_location.lat, groups.toA[0].end_location.lon];
         }
 
-        if (!workAddress && toWork) {
-          workAddress = groups.toWork[0].end_address.display_name;
-          workLocation = [groups.toWork[0].end_location.lat, groups.toWork[0].end_location.lon];
+        if (!bAddress && toB) {
+          bAddress = groups.toB[0].end_address.display_name;
+          bLocation = [groups.toB[0].end_location.lat, groups.toB[0].end_location.lon];
         }
 
         return {
-          toWork: toWork,
-          toHome: toHome,
-          homeAddress: homeAddress,
-          homeLocation: homeLocation,
-          workAddress: workAddress,
-          workLocation: workLocation
+          toB: toB,
+          toA: toA,
+          aAddress: aAddress,
+          aLocation: aLocation,
+          bAddress: bAddress,
+          bLocation: bLocation
         };
       }
 
@@ -236,7 +248,7 @@
       }
 
 
-      function drawDayofWeekBarChart(data, target) {
+      function drawDayofWeekChart(data, target) {
         var barData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(function(day) {
 
           return {
@@ -261,8 +273,8 @@
       }
 
 
-      function drawDepartureTimeBarChart(data, target) {
-        var barData = _.map(data, function(data, bin) {
+      function drawDepartureTimeChart(data, target) {
+        var chartData = _.map(data, function(data, bin) {
           var d = moment().startOf('day').add(bin * 15, 'minutes');
           return {
             date: d.toDate(),
@@ -272,7 +284,8 @@
 
         MG.data_graphic({
           title: 'Commute Duration by Departure Time (minutes)',
-          data: barData,
+          data: chartData,
+          interpolate: 'basic',
           width: 700,
           height: 250,
           right: 10,
@@ -316,36 +329,61 @@
           }
         });
 
-        var homeMarker = L.marker(summary.homeLocation, {
+        var aMarker = L.marker(summary.aLocation, {
           icon: L.mapbox.marker.icon(markerStyle)
-        }).bindPopup(summary.homeAddress).addTo(map);
-        layers.push(homeMarker);
+        }).bindPopup(summary.aAddress).addTo(map);
+        layers.push(aMarker);
 
-        var workMarker = L.marker(summary.workLocation, {
+        var bMarker = L.marker(summary.bLocation, {
           icon: L.mapbox.marker.icon(markerStyle)
-        }).bindPopup(summary.workAddress).addTo(map);
-        layers.push(workMarker);
+        }).bindPopup(summary.bAddress).addTo(map);
+        layers.push(bMarker);
       }
 
 
       function processTrips(trips) {
-        var clusters = clusterTrips(trips);
-        var sortedClusters = _.sortBy(_.pairs(clusters), function(cluster) {
-          return -cluster[1];
+        clusters = _.sortBy(_.pairs(clusterTrips(trips)), function(cluster) {
+          return -cluster[1].count;
         });
 
-        if (sortedClusters.length < 2) {
+        if (clusters.length < 2) {
           return alert('Not enough Automatic trips to analyze');
         }
 
-        var home = sortedClusters[0];
-        var work = sortedClusters[1];
+        $('.start-locations').append(clusters.slice(0, 10).map(function(cluster) {
+          return $('<option>').text(cluster[1].address + ' (' + cluster[1].count + ' trips)').attr('value', cluster[0]);
+        }));
 
-        if (home[1] < 5 || work[1] < 5) {
+        $('.end-locations').append(clusters.slice(0, 10).map(function(cluster, idx) {
+          var option = $('<option>').text(cluster[1].address + ' (' + cluster[1].count + ' trips)').attr('value', cluster[0])
+          if(idx === 1) {
+            option.attr('selected', 'selected');
+          }
+          return option;
+        }));
+
+        showRoute();
+      }
+
+
+      function showRoute() {
+        var start = $('.start-locations').val();
+        var end = $('.end-locations').val();
+
+        var a = _.find(clusters, function(cluster) {
+          return cluster[0] === start;
+        });
+
+        var b = _.find(clusters, function(cluster) {
+          return cluster[0] === end;
+        });
+
+
+        if (a[1] < 5 || b[1] < 5) {
           return alert('Not enough Automatic trips to analyze');
         }
 
-        var commuteTrips = findTripsBewteenClusters(trips, home[0], work[0]);
+        var commuteTrips = findTripsBewteenClusters(trips, a[0], b[0]);
         var commuteSummary = summarizeTrips(commuteTrips);
 
         if (!commuteTrips.length) {
@@ -362,53 +400,57 @@
 
 
         $('.trip-count').text(commuteTrips.length);
-        $('.start-address').text(commuteSummary.homeAddress);
-        $('.end-address').text(commuteSummary.workAddress);
+        $('.start-address').text(commuteSummary.aAddress);
+        $('.end-address').text(commuteSummary.bAddress);
 
-        if (commuteSummary.toWork) {
-          var fastestText = formatSeconds(commuteSummary.toWork.fastest.duration_s);
-          fastestText += ' on ' + formatDate(commuteSummary.toWork.fastest.started_at, commuteSummary.toWork.fastest.start_timezone);
-          fastestText += ' ' + formatTime(commuteSummary.toWork.fastest.started_at, commuteSummary.toWork.fastest.start_timezone);
+        if (commuteSummary.toB) {
+          var fastestText = formatSeconds(commuteSummary.toB.fastest.duration_s);
+          fastestText += ' on ' + formatDate(commuteSummary.toB.fastest.started_at, commuteSummary.toB.fastest.start_timezone);
+          fastestText += ' ' + formatTime(commuteSummary.toB.fastest.started_at, commuteSummary.toB.fastest.start_timezone);
 
-          var slowestText = formatSeconds(commuteSummary.toWork.slowest.duration_s);
-          slowestText += ' on ' + formatDate(commuteSummary.toWork.slowest.started_at, commuteSummary.toWork.slowest.start_timezone);
-          slowestText += ' ' + formatTime(commuteSummary.toWork.slowest.started_at, commuteSummary.toWork.slowest.start_timezone);
+          var slowestText = formatSeconds(commuteSummary.toB.slowest.duration_s);
+          slowestText += ' on ' + formatDate(commuteSummary.toB.slowest.started_at, commuteSummary.toB.slowest.start_timezone);
+          slowestText += ' ' + formatTime(commuteSummary.toB.slowest.started_at, commuteSummary.toB.slowest.start_timezone);
 
-          $('.towork-fastest')
+          $('.to-b-fastest')
             .text(fastestText)
-            .append(getRouteLink(commuteSummary.toWork.fastest));
+            .append(getRouteLink(commuteSummary.toB.fastest));
 
-          $('.towork-slowest')
+          $('.to-b-slowest')
             .text(slowestText)
-            .append(getRouteLink(commuteSummary.toWork.slowest));
+            .append(getRouteLink(commuteSummary.toB.slowest));
 
-          $('.towork-average').text(formatSeconds(commuteSummary.toWork.averageDuration));
+          $('.to-b-average').text(formatSeconds(commuteSummary.toB.averageDuration));
 
-          drawDayofWeekBarChart(commuteSummary.toWork.dayOfWeek, '#towork-dayofweek');
-          drawDepartureTimeBarChart(commuteSummary.toWork.departureTime, '#towork-departuretime');
+          $('.b-address').text(commuteSummary.bAddress);
+
+          drawDayofWeekChart(commuteSummary.toB.dayOfWeek, '#to-b-dayofweek');
+          drawDepartureTimeChart(commuteSummary.toB.departureTime, '#to-b-departuretime');
         }
 
-        if (commuteSummary.toHome) {
-          var fastestText = formatSeconds(commuteSummary.toHome.fastest.duration_s);
-          fastestText += ' on ' + formatDate(commuteSummary.toHome.fastest.started_at, commuteSummary.toHome.fastest.start_timezone);
-          fastestText += ' ' + formatTime(commuteSummary.toHome.fastest.started_at, commuteSummary.toHome.fastest.start_timezone);
+        if (commuteSummary.toA) {
+          var fastestText = formatSeconds(commuteSummary.toA.fastest.duration_s);
+          fastestText += ' on ' + formatDate(commuteSummary.toA.fastest.started_at, commuteSummary.toA.fastest.start_timezone);
+          fastestText += ' ' + formatTime(commuteSummary.toA.fastest.started_at, commuteSummary.toA.fastest.start_timezone);
 
-          var slowestText = formatSeconds(commuteSummary.toHome.slowest.duration_s);
-          slowestText += ' on ' + formatDate(commuteSummary.toHome.slowest.started_at, commuteSummary.toHome.slowest.start_timezone);
-          slowestText += ' ' + formatTime(commuteSummary.toHome.slowest.started_at, commuteSummary.toHome.slowest.start_timezone);
+          var slowestText = formatSeconds(commuteSummary.toA.slowest.duration_s);
+          slowestText += ' on ' + formatDate(commuteSummary.toA.slowest.started_at, commuteSummary.toA.slowest.start_timezone);
+          slowestText += ' ' + formatTime(commuteSummary.toA.slowest.started_at, commuteSummary.toA.slowest.start_timezone);
 
-          $('.tohome-fastest')
+          $('.to-a-fastest')
             .text(fastestText)
-            .append(getRouteLink(commuteSummary.toHome.fastest));
+            .append(getRouteLink(commuteSummary.toA.fastest));
 
-          $('.tohome-slowest')
+          $('.to-a-slowest')
             .text(slowestText)
-            .append(getRouteLink(commuteSummary.toHome.slowest));
+            .append(getRouteLink(commuteSummary.toA.slowest));
 
-          $('.tohome-average').text(formatSeconds(commuteSummary.toHome.averageDuration));
+          $('.to-a-average').text(formatSeconds(commuteSummary.toA.averageDuration));
 
-          drawDayofWeekBarChart(commuteSummary.toHome.dayOfWeek, '#tohome-dayofweek');
-          drawDepartureTimeBarChart(commuteSummary.toHome.departureTime, '#tohome-departuretime');
+          $('.a-address').text(commuteSummary.aAddress);
+
+          drawDayofWeekChart(commuteSummary.toA.dayOfWeek, '#to-a-dayofweek');
+          drawDepartureTimeChart(commuteSummary.toA.departureTime, '#to-a-departuretime');
         }
 
         $('.results').on('click', '.show-route', function(e) {
@@ -417,14 +459,16 @@
           if ($(this).data('shown') !== true) {
             var tripID = $(this).data('trip-id');
 
-            lines.forEach(function(line) {
+            layers.forEach(function(line) {
 
               if (line.tripID === tripID) {
                 line
                   .setStyle(highlightedLineStyle)
                   .bringToFront();
               } else {
-                line.setStyle(lineStyle);
+                if(line.setStyle) {
+                  line.setStyle(lineStyle);
+                }
               }
             });
 
@@ -449,6 +493,11 @@
 
       // On Page Load
       $('.input-daterange').datepicker();
+
+      $('.start-locations, .end-locations').change(function() {
+        showRoute();
+      });
+
 
       $('#filterDates').submit(function(e) {
         e.preventDefault();
