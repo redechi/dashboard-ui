@@ -163,6 +163,12 @@
           if (!summary.slowest || trip.duration_s > summary.slowest.duration_s) {
             summary.slowest = trip;
           }
+          if (!summary.first || moment(trip.started_at).isBefore(summary.first.started_at)) {
+            summary.first = trip;
+          }
+          if (!summary.last || moment(trip.started_at).isAfter(summary.last.started_at)) {
+            summary.last = trip;
+          }
 
           durations.push(trip.duration_s);
         });
@@ -382,6 +388,10 @@
         var summaryText = $('<div>');
         var summaryList = $('<ul>');
         var prefix = 'to-' + type;
+        var tripCountText = summary.tripCount + ' ' + pluralize('trip', summary.tripCount);
+        tripCountText += ' between ' + formatDate(summary.first.started_at, summary.first.start_timezone);
+        tripCountText += ' and ' + formatDate(summary.last.started_at, summary.last.start_timezone);
+
         var fastestText = 'Fastest Trip: ' + formatSeconds(summary.fastest.duration_s);
         fastestText += ' on ' + formatDate(summary.fastest.started_at, summary.fastest.start_timezone);
         fastestText += ' ' + formatTime(summary.fastest.started_at, summary.fastest.start_timezone);
@@ -393,11 +403,11 @@
         var averageText = 'Average Time: ' + formatSeconds(summary.averageDuration);
 
         $('<h3>')
-          .text(address)
+          .text('To ' + address)
           .appendTo(summaryText);
 
         $('<li>')
-          .text(summary.tripCount + ' ' + pluralize('Trip', summary.tripCount))
+          .text(tripCountText)
           .appendTo(summaryList);
 
         $('<li>')
@@ -520,7 +530,11 @@
       }
 
       // On Page Load
-      $('.input-daterange').datepicker();
+      $('.input-daterange').datepicker({
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date()
+      });
 
       $('.start-locations, .end-locations').change(function() {
         showRoute();
