@@ -1,3 +1,5 @@
+'use strict';
+
 function showLoading() {
   $('.loading').fadeIn();
 }
@@ -224,4 +226,15 @@ function calculateDistanceMi(lat1, lon1, lat2, lon2) {
   var a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLon, 2.0);
   var d = radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
   return d;
+}
+
+
+function pluralize(word, count) {
+  var result = word;
+
+  if (count !== 1) {
+    result += 's';
+  }
+
+  return result;
 }

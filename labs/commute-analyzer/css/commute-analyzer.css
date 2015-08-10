@@ -9,9 +9,14 @@
   border-radius: 20px;
 }
 
+.controls {
+  display: none;
+}
+
 .map {
   width: 100%;
   height: 400px;
+  display: none;
 }
 
 .leaflet-top {
@@ -21,10 +26,6 @@
 .results-summary {
   display: none;
   font-weight: bold;
-}
-
-.results {
-  display: none;
 }
 
 .show-route {
