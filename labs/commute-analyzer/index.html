@@ -105,17 +105,29 @@
       }
 
 
+      function formatAddress(address) {
+        var name;
+
+        if(!address) {
+          name = 'Unknown Location';
+        } else {
+          name = address.display_name;
+        }
+        return name;
+      }
+
+
       function clusterTrips(trips) {
         return _.reduce(trips, function(memo, trip) {
           var startCluster = truncateLocation(trip.start_location.lat, trip.start_location.lon);
           var endCluster = truncateLocation(trip.end_location.lat, trip.end_location.lon);
 
           if (!memo[startCluster]) {
-            memo[startCluster] = {count: 0, address: trip.start_address.display_name};
+            memo[startCluster] = {count: 0, address: formatAddress(trip.start_address)};
           }
 
           if (!memo[endCluster]) {
-            memo[endCluster] = {count: 0, address: trip.end_address.display_name};
+            memo[endCluster] = {count: 0, address: formatAddress(trip.end_address)};
           }
 
           memo[startCluster].count += 1;
@@ -204,7 +216,7 @@
           toB.dayOfWeek = summarizeByDayOfWeek(groups.toB);
           toB.departureTime = summarizeByDepartureTime(groups.toB);
 
-          aAddress = groups.toB[0].start_address.display_name;
+          aAddress = formatAddress(groups.toB[0].start_address);
           aLocation = [groups.toB[0].start_location.lat, groups.toB[0].start_location.lon];
         }
 
@@ -212,17 +224,17 @@
           toA.dayOfWeek = summarizeByDayOfWeek(groups.toA);
           toA.departureTime = summarizeByDepartureTime(groups.toA);
 
-          bAddress = groups.toA[0].start_address.display_name;
+          bAddress = formatAddress(groups.toA[0].start_address);
           bLocation = [groups.toA[0].start_location.lat, groups.toA[0].start_location.lon];
         }
 
         if (!aAddress && toA) {
-          aAddress = groups.toA[0].end_address.display_name;
+          aAddress = formatAddress(groups.toA[0].end_address);
           aLocation = [groups.toA[0].end_location.lat, groups.toA[0].end_location.lon];
         }
 
         if (!bAddress && toB) {
-          bAddress = groups.toB[0].end_address.display_name;
+          bAddress = formatAddress(groups.toB[0].end_address);
           bLocation = [groups.toB[0].end_location.lat, groups.toB[0].end_location.lon];
         }
 
