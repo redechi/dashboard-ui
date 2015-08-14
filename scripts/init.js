@@ -30,11 +30,6 @@ require.config({
     nvd3: {
       deps: ['d3'],
       exports: 'nvd3'
-    },
-
-    mixpanel: {
-      deps: ['mixpanel-preinit'],
-      exports: 'mixpanel'
     }
   },
 
@@ -78,9 +73,6 @@ require.config({
     i18nprecompile: '../bower_components/require-handlebars-plugin/hbs/i18nprecompile',
     json2: '../bower_components/require-handlebars-plugin/hbs/json2',
     hbs: '../bower_components/require-handlebars-plugin/hbs',
-
-    /* Mixpanel */
-    mixpanel: '//cdn.mxpnl.com/libs/mixpanel-2.2.min',
 
     /* Google Analytics */
     ga: '//www.google-analytics.com/analytics'
