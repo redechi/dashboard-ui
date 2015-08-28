@@ -1,3 +1,5 @@
+var ga = window.ga;
+
 define([
   'backbone'
 ],
@@ -11,7 +13,7 @@ function( Backbone ) {
         window.ga = _.noop;
       }
 
-      ga('create', 'UA-33317148-4');
+      ga('create', 'UA-33317148-1');
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
     });
