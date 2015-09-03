@@ -1,18 +1,15 @@
-var ga = window.ga;
-
 define([
   'backbone'
 ],
 function( Backbone ) {
   'use strict';
 
+  // Assign google anlaytics to noop initially, in case it is blocked by browser
+  var ga = _.noop;
+
   try {
     // Require google analytics here to handle error if it is blocked by browser
     require(['ga'], function() {
-      if(typeof ga === 'undefined') {
-        window.ga = _.noop;
-      }
-
       ga('create', 'UA-33317148-1');
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
