@@ -21,8 +21,7 @@ function( Backbone, coms ) {
 
   var stagingData = {
     api_host: 'https://api.automatic.co',
-    base_host: 'https://accounts.automatic.co',
-    licenseplus_host: 'https://lplus.automatic.co'
+    base_host: 'https://accounts.automatic.co'
   };
 
 
@@ -53,9 +52,7 @@ function( Backbone, coms ) {
     defaults: {
       client_id: '385be37e93925c8fa7c7',
       api_host: 'https://api.automatic.com',
-      base_host: 'https://accounts.automatic.com',
-      licenseplus_host: 'https://lplus.automatic.com',
-      licenseplus_client_id: '00ab3a161fbe0319f6ce'
+      base_host: 'https://accounts.automatic.com'
     },
 
 

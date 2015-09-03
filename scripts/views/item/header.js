@@ -24,40 +24,20 @@ function( Backbone, coms, HeaderTmpl, user, OverlayLayout, login, cache, analyti
       }
       coms.off('user:change');
       coms.on('user:change', this.render, this);
-
-      // Check if user has licenseplus
-      login.checkIfUserIsCoach();
     },
 
 
     events: {
       'click .whatIsAutomatic': 'whatIsAutomatic',
       'click .buyNow': 'buyNow',
-      'click .support': 'supportLink',
-      'click #licenseplusToggle .toggleContainer': 'showLicensePlus',
-      'click #licenseplusToggle .licenseplusLink': 'showLicensePlus'
+      'click .support': 'supportLink'
     },
 
 
     className: function() {
       return (login.isDemo()) ? 'demo' : 'loggedIn';
     },
-
-
-    templateHelpers: function() {
-      return {
-        licenseplusMenu: cache.fetch('licensePlusProgram', true)
-      };
-    },
-
-
-    showLicensePlus: function(e) {
-      e.preventDefault();
-      if(confirm('License+ has moved to licenseplus.automatic.com. Click "OK" to be redirected.')) {
-        window.location = 'https://licenseplus.automatic.com';
-      }
-    },
-
+    
 
     whatIsAutomatic: function() {
       analytics.trackEvent('what is Automatic', 'Click');
