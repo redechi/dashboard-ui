@@ -199,8 +199,13 @@ function( Backbone, coms, moment, Trip, formatters, filterCollection, settings, 
 
     parse: function(response) {
       return _.map(response.results, function(trip){
-        var vehicleUrl = trip.vehicle.split('/');
-        trip.vehicle_id = vehicleUrl[vehicleUrl.length - 2];
+        if(trip.vehicle) {
+          var vehicleUrl = trip.vehicle.split('/');
+          trip.vehicle_id = vehicleUrl[vehicleUrl.length - 2];
+        } else {
+          trip.vehicle_id = null;
+        }
+
         trip.started_at = moment(trip.started_at).valueOf();
         trip.ended_at = moment(trip.ended_at).valueOf();
         trip.average_mpg = formatters.kmplToMpg(trip.average_kmpl);
