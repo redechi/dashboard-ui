@@ -83,7 +83,7 @@ header {
     background-color: $highlight;
     @include hr-image('../img/graphic_link.png', '../img/graphic_link@2x.png');
     background-repeat: no-repeat;
-    background-position: right 480px bottom;
+    background-position: right 525px bottom;
     padding: 0 30px;
     @include box-shadow(inset 0px -1px 2px 0px rgba(0,0,0,0.10));
 

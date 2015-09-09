@@ -103,7 +103,7 @@
               return false;
             }
 
-            page = results._metadata.next;
+            page = results._metadata ? results._metadata.next : null;
             loading = false;
 
             trips = trips.concat(results.results);

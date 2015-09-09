@@ -10,12 +10,44 @@ function hideLoading() {
 }
 
 
+function makeTripsRecent(trips) {
+  var firstTrip = trips[0];
+  var offset = moment().diff(moment(firstTrip.started_at));
+  var dayOffset = moment.duration(Math.floor(moment.duration(offset).asDays()), 'days');
+
+  return trips.map(function(trip) {
+    trip.started_at = moment(trip.started_at).add(dayOffset, 'days');
+    trip.ended_at = moment(trip.ended_at).add(dayOffset, 'days');
+    return trip;
+  });
+}
+
+
+function prepareDemoTrips(response) {
+  return makeTripsRecent(response.results.map(function(trip) {
+    trip.average_kmpl = (trip.distance_m / 1000) / trip.fuel_volume_l;
+    return trip;
+  }));
+}
+
+
+function fetchDemoTrips(cb) {
+  $.getJSON('/assets/data/trips.json', function(results) {
+    returnTrips(prepareDemoTrips(results), cb);
+  });
+}
+
+
 function fetchAllTrips(cb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = queryParams.accessToken || getCookie('accessToken');
   var ts = sessionStorage.getItem('labs_ts');
   var trips = [];
   var oneHourAgo = Date.now() - (60*60*1000);
+
+  if(queryParams.demo) {
+    return fetchDemoTrips(cb);
+  }
 
   if(!accessToken) {
     alert('To access Automatic Labs, please log in first.');
@@ -57,6 +89,12 @@ function fetchAllTrips(cb) {
 function fetchTripsPage(url, cb, errCb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = queryParams.accessToken || getCookie('accessToken');
+
+  if(queryParams.demo) {
+    return fetchDemoTrips(function(trips) {
+      cb({results: trips});
+    });
+  }
 
   $.ajax({
     url: url,
@@ -191,17 +229,24 @@ function formatAddress(address) {
 
 
 function getQueryParams(qs) {
-  qs = qs.split('+').join(' ');
-
-  var params = {},
-      tokens,
-      re = /[?&]?([^=]+)=([^&]*)/g;
-
-  while((tokens = re.exec(qs)) !== null) {
-    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  var params = {};
+  var parts = qs.substring(1).split('&');
+  for (var i = 0; i < parts.length; i++) {
+    var nv = parts[i].split('=');
+    if (!nv[0]) {
+      continue;
+    }
+    params[nv[0]] = nv[1] || true;
   }
-
   return params;
+}
+
+
+function makeLinksDemo() {
+  var queryParams = getQueryParams(document.location.search);
+  if(queryParams.demo) {
+    $('.automatic-labs').attr('href', '/?demo#labs');
+  }
 }
 
 
@@ -238,3 +283,7 @@ function pluralize(word, count) {
 
   return result;
 }
+
+
+/* On all pages */
+makeLinksDemo();

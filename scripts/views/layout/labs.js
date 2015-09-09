@@ -13,7 +13,11 @@ function(Backbone, regionManager, LabsTmpl, HeaderView, login) {
 
     template: LabsTmpl,
     className: 'labs',
+    model: new Backbone.Model({}),
 
+    onBeforeRender: function() {
+      this.model.set('linkQuery', !login.isLoggedIn ? '?demo' : '');
+    },
 
     onRender: function() {
       regionManager.getRegion('main_header').show(new HeaderView({attributes: {
