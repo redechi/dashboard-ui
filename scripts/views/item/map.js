@@ -388,7 +388,7 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
     calculateTripEvents: function() {
       return this.collection.reduce(function(memo, trip) {
         memo.hardBrakes += trip.get('hard_brakes') || 0;
-        memo.speeding += Math.round(trip.get('duration_over_70_s') / 60, 0) || 0;
+        memo.speeding += trip.get('duration_over_70_s') || 0;
         memo.hardAccels += trip.get('hard_accels') || 0;
 
         return memo;
@@ -408,23 +408,25 @@ function( Backbone, mapbox, coms, MapTmpl, formatters, mapHelpers, analytics ) {
           .text(this.tripEvents.speeding)
           .addClass('none')
           .removeClass('hours days');
-      }else if(this.tripEvents.speeding < 60) {
-        $('.tripEvents  .speeding', this.$el)
-          .text(this.tripEvents.speeding)
-          .removeClass('none days hours');
-      } else if(this.tripEvents.speeding < 5940) {
+      } else if(this.tripEvents.speeding < (60 * 60)) {
+        // less than 1 hour
         $('.tripEvents  .speeding', this.$el)
           .text(Math.round(this.tripEvents.speeding / 60))
+          .removeClass('none days hours');
+      } else if(this.tripEvents.speeding < (5940 * 60)) {
+        // less than 1.5 days
+        $('.tripEvents  .speeding', this.$el)
+          .text(Math.round(this.tripEvents.speeding / (60 * 60)))
           .removeClass('none days')
           .addClass('hours');
       } else {
+        // more than a day
         $('.tripEvents  .speeding', this.$el)
-          .text(Math.round(this.tripEvents.speeding / (60 * 24)))
+          .text(Math.round(this.tripEvents.speeding / (60 * 60 * 24)))
           .removeClass('none hours')
           .addClass('days');
       }
     },
-
 
 
     showTripEvents: function() {
