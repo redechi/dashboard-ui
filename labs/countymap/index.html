@@ -111,6 +111,7 @@
       var d3Path;
       var drag;
       var graphTooltip;
+      var q = queue();
 
       function renderCounties() {
         $('#results').empty();
@@ -303,60 +304,75 @@
       }
 
 
-      function getCounties() {
-        var length = 0;
-        var pathsChunk = [];
-        var maxLength = 10000;
+      function groupPaths() {
+        var pathGroups = [];
 
-        while(length < maxLength) {
-          var path = paths.pop();
-          if(path) {
+        (function getGroup() {
+          var length = 0;
+          var pathGroup = [];
+          var maxLength = 10000;
+
+          while(length < maxLength) {
+            var path = paths.pop();
+            if (path) {
               length += path.length;
-              pathsChunk.push(path);
-          } else {
-            length = maxLength;
+              pathGroup.push(path);
+            } else {
+              length = maxLength;
+            }
           }
-        }
+          pathGroups.push(pathGroup);
 
-        $('.loading .title').text('Processing trips ' + (idx + 1) + '-' + (idx + pathsChunk.length));
-        $('.loading .text').empty();
+          if(paths.length) {
+            getGroup();
+          }
+        })()
+
+        return pathGroups;
+      }
+
+
+      function fetchPaths(pathGroup) {
+        q.defer(function(cb) {
+          $.ajax({
+            url: 'https://1vcb2sxf7h.execute-api.us-east-1.amazonaws.com/prod/getCounty',
+            method: 'POST',
+            data: JSON.stringify(pathGroup),
+            contentType: 'application/json'
+          }).done(function(data) {
+            _.each(data, function(county) {
+              if(!states[county.state]) {
+                states[county.state] = {};
+              }
+              var id = parseInt(county.id, 10).toString();
+              states[county.state][county.county] = id;
+              counties[id] = county;
+            });
+
+            renderCounties();
+          }).fail(function(jqXHR, textStatus, error) {
+            console.error(error);
+          }).always(function() {
+            $('.loading .title').text('Processing trips ' + (idx + 1) + '-' + (idx + pathGroup.length));
+            $('.loading .text').empty();
+            idx += pathGroup.length;
+            cb();
+          });
+        });
+      }
+
+
+      function getCounties() {
         showLoading();
 
-        idx += pathsChunk.length;
+        var pathGroups = groupPaths();
 
-        $.ajax({
-          url: 'https://1vcb2sxf7h.execute-api.us-east-1.amazonaws.com/prod/getCounty',
-          method: 'POST',
-          data: JSON.stringify(pathsChunk),
-          contentType: 'application/json'
-        }).done(function(data) {
-          _.each(data, function(county) {
-            if(!states[county.state]) {
-              states[county.state] = {};
-            }
-            var id = parseInt(county.id, 10).toString();
-            states[county.state][county.county] = id;
-            counties[id] = county;
-          });
+        pathGroups.forEach(fetchPaths);
 
-          renderCounties();
-
-          if (paths.length) {
-            getCounties();
-          } else {
-            summarize();
-            hideLoading();
-          }
-
-        }).fail(function(jqXHR, textStatus, error) {
-          console.error(error);
-
-          if (paths.length) {
-            getCounties();
-          } else {
-            summarize();
-            hideLoading();
-          }
+        q.await(function(e) {
+          console.log(e);
+          summarize();
+          hideLoading();
         });
       }
 
