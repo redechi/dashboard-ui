@@ -310,7 +310,7 @@
         (function getGroup() {
           var length = 0;
           var pathGroup = [];
-          var maxLength = 10000;
+          var maxLength = 5000;
 
           while(length < maxLength) {
             var path = paths.pop();
@@ -335,7 +335,7 @@
       function fetchPaths(pathGroup) {
         q.defer(function(cb) {
           $.ajax({
-            url: 'https://1vcb2sxf7h.execute-api.us-east-1.amazonaws.com/prod/getCounty',
+            url: 'https://tdwplufjxe.execute-api.us-east-1.amazonaws.com/prod/labsGetCounty',
             method: 'POST',
             data: JSON.stringify(pathGroup),
             contentType: 'application/json'
