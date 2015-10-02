@@ -50,13 +50,12 @@
   }
 
   .dateFilterCustom {
-    margin: 8px 0;
-    overflow: hidden;
     display: none;
+    margin: 8px 0;
 
     .input-group {
+      display: inline-block;
       width: 87px;
-      float: left;
 
       label {
         text-transform: uppercase;

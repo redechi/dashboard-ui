@@ -285,8 +285,8 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
           value = filter.get('value'),
           start = value[0],
           end = value[1],
-          newStart = $('.popover .dateFilterValueCustomStart').data('DateTimePicker').getDate().valueOf(),
-          newEnd = moment($('.popover .dateFilterValueCustomEnd').data('DateTimePicker').getDate()).endOf('day').valueOf();
+          newStart = $('.popover .dateFilterValueCustomStart').data('DateTimePicker').date().valueOf(),
+          newEnd = moment($('.popover .dateFilterValueCustomEnd').data('DateTimePicker').date()).endOf('day').valueOf();
 
       $('.popover .dateFilterValueCustomStart').data('DateTimePicker').hide();
       $('.popover .dateFilterValueCustomEnd').data('DateTimePicker').hide();
@@ -310,8 +310,8 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
           startDate = moment(filter.get('trimDate').call(filter, value[0])).startOf('day').toDate(),
           endDate = moment(filter.get('trimDate').call(filter, value[1])).startOf('day').toDate();
 
-      $('.popover .dateFilterValueCustomStart').data('DateTimePicker').setDate(startDate);
-      $('.popover .dateFilterValueCustomEnd').data('DateTimePicker').setDate(endDate);
+      $('.popover .dateFilterValueCustomStart').data('DateTimePicker').date(startDate);
+      $('.popover .dateFilterValueCustomEnd').data('DateTimePicker').date(endDate);
 
       this.deactivateAll();
     },
@@ -438,7 +438,7 @@ function( Backbone, coms, moment, login, FilterView, Filter, filtersCollection, 
         $('.popover .dateFilterCustom input').datetimepicker({
           minDate: new Date(2013, 2, 12),
           maxDate: moment().add(1, 'days').startOf('day').toDate(),
-          pickTime: false
+          format: 'MM/dd/YY'
         });
 
         if(filter.get('valueSelected') === 'custom') {

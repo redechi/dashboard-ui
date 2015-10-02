@@ -11,7 +11,7 @@ function( Backbone, coms, FilterModel, filterList, deparam ) {
   /* filters singleton */
   var Filter = Backbone.Collection.extend({
 
-    model: Filter,
+    model: FilterModel,
 
     initialize: function() {
       this.applyInitialFilters();

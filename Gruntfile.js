@@ -279,6 +279,12 @@ module.exports = function (grunt) {
       }
     },
 
+    modernizr: {
+      dist: {
+        dest: 'dist/bower_components/modernizr/modernizr.js'
+      }
+    },
+
     copy: {
       dist: {
         files: [{
@@ -291,7 +297,7 @@ module.exports = function (grunt) {
             'assets/img/**',
             'assets/fonts/**',
             'bower_components/requirejs/require.js',
-            'bower_components/modernizr/modernizr.js',
+            'bower_components/bootstrap-sass-official/assets/fonts/bootstrap/**',
             'bower_components/fontawesome/fonts/**',
             'bower_components/raven-js/dist/**',
             'labs/**'
@@ -408,6 +414,7 @@ module.exports = function (grunt) {
     'requirejs:localjs',
     'htmlmin',
     'appcache',
+    'modernizr:dist',
     'copy',
     'copy:favicon',
     'compress',
@@ -426,6 +433,7 @@ module.exports = function (grunt) {
     'requirejs:prodjs',
     'htmlmin',
     'appcache',
+    'modernizr:dist',
     'copy',
     'copy:favicon',
     'compress',
