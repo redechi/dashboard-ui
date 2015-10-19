@@ -282,6 +282,9 @@ module.exports = function (grunt) {
     modernizr: {
       dist: {
         dest: 'dist/bower_components/modernizr/modernizr.js'
+      },
+      local: {
+        dest: 'bower_components/modernizr/modernizr.js'
       }
     },
 
@@ -394,6 +397,7 @@ module.exports = function (grunt) {
     'handlebars',
     'compass',
     'appcache',
+    'modernizr:local',
     'connect:devserver',
     'open',
     'watch'
