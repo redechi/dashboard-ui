@@ -16,8 +16,8 @@ define([
 
     appRoutes: {
       '(/)': 'showSummaryLayout',
-      'login(/:token)': 'showLoginLayout',
-      'reset(/:token)': 'showPasswordResetLayout',
+      'login': 'showLoginLayout',
+      'reset': 'showPasswordResetLayout',
       'filter(/)(?:filters)': 'showSummaryLayout',
       'logout': 'logout',
       'connected_apps': 'showAppsLayout',
@@ -33,7 +33,7 @@ define([
 
       var f = function() {
         //check for access tokens on all routes, except login, password reset and demo
-        if(!/^login|^logout|^reset\/?.+/.test(route) && !login.isDemo()) {
+        if(!/^login|^logout|^reset/.test(route) && !login.isDemo()) {
           var accessToken = sessionStorage.getItem('accessToken');
 
           // if no access token, redirect to login

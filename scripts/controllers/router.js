@@ -24,22 +24,22 @@ function( Backbone, coms, regionManager, filtersCollection, SummaryLayout, Login
     },
 
 
-    showLoginLayout: function (token) {
-      var layout = new LoginLayout({token: token});
+    showLoginLayout: function () {
+      var layout = new LoginLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },
 
 
-    showPasswordResetLayout: function (token) {
-      var layout = new PasswordResetLayout({token: token});
+    showPasswordResetLayout: function () {
+      var layout = new PasswordResetLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },
 
 
-    showAppsLayout: function (token) {
-      var layout = new AppsLayout({token: token});
+    showAppsLayout: function () {
+      var layout = new AppsLayout();
       var contentRegion = regionManager.getRegion('main_content');
       contentRegion.show(layout);
     },

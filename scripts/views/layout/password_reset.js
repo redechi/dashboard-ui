@@ -13,17 +13,6 @@ function( Backbone, PasswordResetTmpl, login, settings, analytics ) {
     template: PasswordResetTmpl,
 
 
-    initialize: function() {
-      if(this.options.token && this.options.token.indexOf('email=') !== -1) {
-        var email = this.options.token.replace('email=', '');
-        this.templateHelpers = {
-          email: decodeURIComponent(email)
-        };
-        delete this.options.token;
-      }
-    },
-
-
     events: {
       'submit #passwordResetRequestForm': 'resetPasswordRequest',
       'focus #passwordResetRequestForm input': 'clearError',
@@ -89,51 +78,8 @@ function( Backbone, PasswordResetTmpl, login, settings, analytics ) {
     },
 
 
-    resetPassword: function (e) {
-      var self = this,
-          password = $('#password', e.target).val(),
-          passwordRepeat = $('#passwordRepeat', e.target).val(),
-          match = (password === passwordRepeat),
-          token = this.options.token;
-
-      if(!match) {
-        this.errorAlert('Passwords do not match', false, true);
-      } else if (password.length < 8) {
-        this.errorAlert('Password must be at least 8 characters', false, true);
-      } else {
-        this.clearErrors();
-
-        $.post(
-          settings.get('base_host') + '/password/change/' + token + '/',
-          {password: password},
-          function(data) {
-            if(data && data.success) {
-              self.successAlert('Your password has been successfully reset.<br><a href="#login">Log in</a>');
-            } else {
-              self.errorAlert('Unknown error', false, false);
-            }
-          }
-        ).fail(function(jqXHR, textStatus, error) {
-          if(jqXHR.responseJSON && jqXHR.responseJSON.message) {
-            self.errorAlert(jqXHR.responseJSON.message, false, false);
-          } else {
-            self.errorAlert('Unknown error', false, false);
-          }
-        });
-      }
-
-      return false;
-    },
-
-
     onRender: function() {
-      if(this.options.token) {
-        $('#passwordResetRequestForm', this.$el).hide();
-        $('#passwordResetForm', this.$el).show();
-        analytics.trackEvent('reset password form', 'Show');
-      } else {
-        analytics.trackEvent('reset password request', 'Show');
-      }
+      analytics.trackEvent('reset password request', 'Show');
     }
   });
 });
