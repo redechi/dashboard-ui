@@ -1,5 +1,5 @@
-#map {
-  .map {
+.map {
+  .map-container {
     width: 100%;
     min-height: 270px;
     position: relative;
@@ -38,7 +38,7 @@
     }
   }
 
-  .mapMenu {
+  .map-menu {
     height: 40px;
     border-top: 1px solid $footer_top_line;
     border-bottom: 1px solid $disabled;
@@ -47,14 +47,14 @@
     overflow: hidden;
     position: relative;
 
-    .zoomControl {
+    .zoom-control {
       height: 24px;
       padding: 8px 0;
       float: left;
       @include noSelection;
 
-      .zoomIn,
-      .zoomOut {
+      .zoom-in,
+      .zoom-out {
         float: left;
         width: 29px;
         text-align: center;
@@ -64,11 +64,11 @@
         cursor: pointer;
       }
 
-      .zoomOut {
+      .zoom-out {
         border-left: 1px solid $line_light_gray;
       }
 
-      .autoZoom {
+      .auto-zoom {
         float: left;
         width: 100px;
         border-left: 1px solid $line_light_gray;
@@ -84,7 +84,7 @@
       }
     }
 
-    .mapMenuRight {
+    .map-menu-right {
       width: 340px;
       float: right;
       border-left: 1px solid $line_light_gray;
@@ -99,7 +99,7 @@
         vertical-align: top;
         @include noSelection;
 
-        .showTripEvents {
+        .show-trip-events {
           margin-left: 8px;
           margin-right: 3px;
           font-size: 12px;
@@ -107,7 +107,7 @@
         }
       }
 
-      .tripEvents {
+      .trip-events {
         float: right;
         padding: 7px;
         width: 285px;
@@ -122,14 +122,14 @@
     }
   }
 
-  .hardBrakeIcon {
+  .hard-brake-icon {
     background: #D173EB;
     border-radius: 50%;
     border: 1px solid $white;
     @include box-shadow(0px 1px 0px 0px rgba(0,0,0,0.16));
   }
 
-  .hardAccelIcon {
+  .hard-accel-icon {
     background: #FAD97B;
     border-radius: 50%;
     border: 1px solid $white;
