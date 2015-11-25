@@ -1,0 +1,79 @@
+/* Set bootstrap font defaults */
+$font-family-sans-serif: AvenirNextPro;
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+
+
+@import '~normalize.css/normalize';
+
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
+
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome.scss";
+
+@mixin hr-image($file, $type, $width, $height) {
+  background-image: url($file + '.' + $type);
+
+  @media print,
+        (-webkit-min-device-pixel-ratio: 1.25),
+        (-moz-min-device-pixel-ratio: 5/4),
+        (min-resolution: 120dppx) {
+    background-image: url($file + '@2x.' + $type);
+    background-size: $width $height;
+  }
+}
+
+@mixin noSelection() {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+$main_back: #FAF9F7;
+$header_back: #F5F4F1;
+
+$white: #ffffff;
+$green: #77CB49;
+$red: #F63C39;
+$blue: #5db2ef;
+
+$base_type: #737c81;
+$inactive_type: #BBC8CF;
+$disabled_type: #8D989F;
+$link_type: #2c3032;
+$highlight: #4AB4F0;
+$selected: #227EB9;
+$disabled: #E3E2DE;
+
+$line_gray: #D8D8D8;
+$line_light_gray: #EDECE9;
+$footer_top_line: #D8D7D3;
+$graph_outline: #BBB9B3;
+
+@import "fonts";
+@import "base";
+@import "datepicker";
+@import "popover";
+@import "button";
+@import "inputs";
+@import "alerts";
+@import "menus";
+@import "slider";
+@import "error";
+@import "tablet_warning";
+@import "overlay";
+@import "trip_events";
+@import "header";
+@import "login";
+@import "password_reset";
+@import "map";
+@import "graph";
+@import "trip_list";
+@import "trip_stats";
+@import "single_trip";
+@import "filters";
+@import "apps";
+@import "labs";

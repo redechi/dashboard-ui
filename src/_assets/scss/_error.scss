@@ -1,0 +1,24 @@
+#error {
+  width: 375px;
+  text-align: center;
+  margin-top: 40px;
+
+  h1 {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: $link_type;
+  }
+
+  .bigAlert {
+    @include hr-image('../images/icon_bigalert', 'png', 235px, 144px);
+    background-repeat: no-repeat;
+    background-position: center top;
+    height: 144px;
+    margin: 25px 0;
+  }
+
+   p {
+     margin-bottom: 30px;
+   }
+}

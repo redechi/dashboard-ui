@@ -1,0 +1,137 @@
+header {
+  min-width: 1024px;
+  max-height: 70px;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 1px solid $line_gray;
+  height: 70px;
+  background-color: $highlight;
+  @include hr-image('../images/graphic_link', 'png', 82px, 59px);
+  background-repeat: no-repeat;
+  background-position: right 525px bottom;
+  padding: 0 30px;
+  @include box-shadow(inset 0px -1px 2px 0px rgba(0,0,0,0.10));
+
+  .header-logo {
+    @include hr-image('../images/logo_automatic_blue', 'png', 119px, 33px);
+    background-repeat: no-repeat;
+    width: 183px;
+    height: 33px;
+    float: left;
+    margin: 18px 0;
+    display: inline;
+    vertical-align: middle;
+
+    .demo-tag {
+      float: right;
+      width: 50px;
+      font-size: 12px;
+      color: #B6E1F9;
+      border-radius: 9px;
+      background: rgba(35,128,184,0.35);
+      text-align: center;
+      margin-top: 8px;
+      height: 18px;
+      padding-top: 2px;
+    }
+  }
+
+  .menu {
+    position: absolute;
+    right: 0;
+    top: 0px;
+    padding-right: 30px;
+    margin: 0;
+
+    li {
+      display: inline-block;
+      font-size: 12px;
+      line-height: 16px;
+      padding: 27px 15px;
+
+      &.menu-button {
+        padding: 0;
+
+        a {
+          color: $highlight;
+        }
+      }
+
+      a {
+        color: $white;
+        display: inline-block;
+        font-weight: bold;
+      }
+
+      .first-name {
+        padding-left: 30px;
+        padding-right: 10px;
+      }
+    }
+
+    .btn {
+      width: 200px;
+      margin-left: 20px;
+    }
+  }
+
+  &.logged-in {
+    position: relative;
+    border-bottom: 1px solid $line_gray;
+    height: 70px;
+    background: $header_back;
+    padding: 0 30px;
+    @include box-shadow(0px 1px 0px 0px $white);
+
+    .header-logo {
+      @include hr-image('../images/logo_automatic', 'png', 119px, 33px);
+      background-repeat: no-repeat;
+      width: 119px;
+      height: 33px;
+      float: left;
+      margin: 18px 0;
+      display: inline;
+      vertical-align: middle;
+
+      .demo-tag {
+        display: none;
+      }
+    }
+
+    .menu {
+      li {
+        color: $base_type;
+        max-height: 70px;
+        overflow: hidden;
+
+        a {
+          color: $base_type;
+          display: inline-block;
+          font-weight: bold;
+
+          &:hover {
+            color: $highlight;
+          }
+        }
+
+        &:last-child {
+          padding-right: 0;
+
+          a {
+            color: $link_type;
+
+            &:hover {
+              color: $highlight;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  main {
+    min-width: 0;
+  }
+}

@@ -1,0 +1,125 @@
+.trip-events {
+  .event {
+    width: 33.3%;
+    float: left;
+    color: $white;
+
+    & > div {
+      display: inline-block;
+      text-align: center;
+      width: 25px;
+      height: 25px;
+      float: left;
+      position: relative;
+      line-height: 27px;
+      background-repeat: no-repeat;
+      font-size: 12px;
+
+      &::after {
+        font-size: 10px;
+        line-height: 11px;
+        font-weight: normal;
+        position: absolute;
+        left: 25px;
+        text-align: left;
+        margin-left: 2px;
+        color: $base_type;
+        width: 45px;
+        padding-top: 2px;
+      }
+    }
+  }
+
+  .hard-brakes {
+    @include hr-image('../images/event_nohardbrakes_color', 'png', 25px, 25px);
+
+    &.none {
+      @include hr-image('../images/event_nohardbrakes_green', 'png', 25px, 25px);
+      color: transparent;
+
+      &::after {
+        content: 'No Hard Brakes';
+      }
+    }
+
+    &::after {
+      content: 'Hard Brakes';
+    }
+  }
+
+  .speeding {
+    @include hr-image('../images/event_under70_color', 'png', 25px, 25px);
+
+    &.none {
+      @include hr-image('../images/event_under70_green', 'png', 25px, 25px);
+      color: transparent;
+
+      &::after {
+        content: 'Under\a 70 MPH';
+        white-space: pre;
+      }
+    }
+
+    &::after {
+      content: 'Min Over 70 MPH';
+      width: 45px;
+    }
+
+    &.hours::after {
+      content: 'Hours > 70 MPH';
+    }
+
+    &.days::after {
+      content: 'Days > 70 MPH';
+    }
+  }
+
+  .hard-accels {
+    @include hr-image('../images/event_nohardaccel_color', 'png', 25px, 25px);
+
+    &.none {
+      @include hr-image('../images/event_nohardaccel_green', 'png', 25px, 25px);
+      color: transparent;
+
+      &::after {
+        content: 'No Hard Accels';
+      }
+    }
+
+    &::after {
+      content: 'Hard Accels';
+    }
+  }
+
+  &.grey {
+    .hard-brakes {
+      @include hr-image('../images/event_nohardbrakes_grey', 'png', 25px, 25px);
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../images/event_nohardbrakes_grey_checked', 'png', 25px, 25px);
+        color: transparent;
+      }
+    }
+
+    .speeding {
+      @include hr-image('../images/event_under70_grey', 'png', 25px, 25px);
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../images/event_under70_grey_checked', 'png', 25px, 25px);
+        color: transparent;
+      }
+    }
+
+    .hard-accels {
+      @include hr-image('../images/event_nohardaccel_grey', 'png', 25px, 25px);
+      color: $link_type;
+
+      &.none {
+        @include hr-image('../images/event_nohardaccel_grey_checked', 'png', 25px, 25px);
+        color: transparent;
+      }
+    }
+  }
+}

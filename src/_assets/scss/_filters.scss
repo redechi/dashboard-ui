@@ -1,0 +1,148 @@
+#filters {
+  min-height: 78px;
+  box-sizing: border-box;
+  padding: 25px 30px;
+  border-bottom: 1px solid $line_light_gray;
+  overflow: hidden;
+
+  .filterLabel {
+    font-size: 16px;
+    display: inline-block;
+    margin: 0;
+    vertical-align: -4px;
+  }
+
+  .appliedFilters {
+    margin-right: 100px;
+
+    >li {
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+  }
+
+  .addFilter {
+    display: inline-block;
+    width: 28px;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 12px;
+  }
+
+  .removeFilter {
+    @include hr-image('../images/icon_remove', 'png', 11px, 11px);
+    margin-top: 6px;
+    padding-left: 16px;
+    background-position: left 4px;
+    background-repeat: no-repeat;
+    font-size: 12px;
+    cursor: pointer;
+    padding-top: 2px;
+    color: $link_type;
+
+    &:hover {
+      color: $highlight;
+    }
+  }
+
+  .dateFilterValue.list-select {
+    width: 182px;
+  }
+
+  .dateFilterCustom {
+    display: none;
+    margin: 8px 0;
+
+    .input-group {
+      display: inline-block;
+      width: 87px;
+
+      label {
+        text-transform: uppercase;
+        font-size: 10px;
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        background: $main_back;
+        border: 1px solid $line_light_gray;
+        @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
+        color: $highlight;
+        border-radius: 3px;
+        font-size: 12px;
+        height: inherit;
+        padding: 5px 4px 0px;
+        @include hr-image('../images/icon_calendar', 'png', 15px, 14px);
+        background-repeat: no-repeat;
+        background-position: right 4px center;
+
+        &:focus {
+          @include hr-image('../images/icon_calendar_active', 'png', 15px, 14px);
+        }
+      }
+
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .noMatchingTrips {
+    position: relative;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background: rgba(255,9,5,0.50);
+    font-size: 12px;
+    color: $white;
+    line-height: 30px;
+    height: 30px;
+    text-align: center;
+    right: 0;
+    margin-top: 10px;
+    margin-right: -17px;
+    margin-left: -17px;
+    margin-bottom: -7px;
+    display: none;
+  }
+
+  .btn-filter {
+    margin: 0 10px;
+    display: inline-block;
+  }
+
+  .filterControls {
+    float: right;
+
+    label {
+      padding: 4px 10px 0 0;
+      margin-bottom: 0;
+    }
+
+    li {
+      margin: 0;
+      overflow: hidden;
+      width: 50px;
+      font-size: 12px;
+      vertical-align: top;
+
+      &.undo {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 1px solid rgba(0,0,0,0.10);
+      }
+
+      &.reset {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+
+  .filterList {
+    width: 150px;
+  }
+}
+
+body.noMatchingTrips #filters .noMatchingTrips {
+  display: block;
+}

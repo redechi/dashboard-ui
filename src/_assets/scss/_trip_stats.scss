@@ -1,0 +1,48 @@
+.trip-stats {
+  background-color: $white;
+  border-bottom: 1px solid $line_light_gray;
+  overflow: hidden;
+  padding: 5px 0;
+
+  svg {
+    position: relative;
+    margin: 0 15px 0 10px;
+    top: 3px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .averageScore {
+    font-size: 15px;
+  }
+
+  .stat {
+    display: inline-block;
+    width: 55px;
+    vertical-align: 4px;
+  }
+
+  .value {
+    color: $link_type;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .label {
+    font-size: 10px;
+    color: $base_type;
+    text-transform: uppercase;
+    font-weight: normal;
+    text-align: center;
+    display: block;
+  }
+
+  .alert-grey {
+    margin: 20px 60px;
+    text-align: center;
+  }
+}
+
+.nvtooltip {
+  display: none;
+}

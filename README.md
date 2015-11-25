@@ -1,6 +1,9 @@
-# Automatic Dashboard
+# Automatic-static
 
-[General Wiki](https://phabricator.automatic.co/w/projects/dashboard/)
-
-[Build Instructions](https://phabricator.automatic.co/w/projects/dashboard/build-instructions/)
-
+```
+make setup
+make lint
+make test
+make run
+make watch
+```

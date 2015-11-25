@@ -1,0 +1,261 @@
+.blurry-dash {
+  min-width: 1024px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.login {
+  position: relative;
+  width: 575px;
+  margin: 100px auto 0;
+  background: $white;
+  border-radius: 3px;
+  @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $disabled);
+  margin-bottom: 60px;
+
+  h1 {
+    margin: 0 0 5px;
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  h2 {
+    font-size: 16px;
+    margin: 0;
+    text-align: center;
+  }
+
+  a.login-link {
+    color: $blue;
+
+    &:hover {
+      color: $link_type;
+    }
+  }
+
+  .top-box {
+    padding: 20px 30px;
+    text-align: center;
+
+    .mobile-title {
+      display: none;
+    }
+
+    .btn {
+      margin: 25px auto 15px;
+      font-size: 16px;
+      width: 275px;
+      line-height: 20px;
+      padding-top: 7px;
+    }
+
+    .mobile-block {
+      display: none;
+    }
+  }
+
+  .middle-box {
+    padding: 20px 30px;
+    background: $main_back;
+    overflow: hidden;
+
+    .graphic-link {
+      margin-top: 33px;
+      float: left;
+      width: 128px;
+      height: 143px;
+      background-repeat: no-repeat;
+      @include hr-image('../images/graphic_link2', 'png', 128px, 143px);
+    }
+
+    .feature-list {
+      font-size: 12px;
+      list-style-type: none;
+      margin-top: 20px;
+      width: 275px;
+      float: right;
+
+      li {
+        margin: 7px 0;
+        height: 30px;
+        line-height: 30px;
+        padding-left: 50px;
+        background-repeat: no-repeat;
+      }
+
+      .save-big {
+        @include hr-image('../images/mktg_icon_savebig', 'png', 34px, 24px);
+      }
+      .crash-alert {
+        @include hr-image('../images/mktg_icon_crashalert', 'png', 38px, 30px);
+      }
+      .check-engine-light {
+        @include hr-image('../images/mktg_icon_check', 'png', 36px, 22px);
+      }
+      .map {
+        @include hr-image('../images/mktg_icon_map', 'png', 35px, 27px);
+      }
+    }
+  }
+
+  .bottom-box {
+    padding: 20px 30px;
+    overflow: hidden;
+    @include hr-image('../images/logo_automatic_sm', 'png', 97px, 27px);
+    background-repeat: no-repeat;
+    background-position: 30px center;
+
+    .btn {
+      float: right;
+      line-height: 27px;
+      background-color: transparent;
+      font-weight: normal;
+    }
+  }
+
+  .login-form {
+    padding: 20px 30px 30px;
+    text-align: center;
+
+    .back {
+      position: absolute;
+      top: 26px;
+      left: 30px;
+      background-position: top 4px left;
+      background-repeat: no-repeat;
+      @include hr-image('../images/icon_tripnav_left_active', 'png', 8px, 10px);
+      padding-left: 14px;
+      font-size: 14px;
+
+      &:hover {
+        @include hr-image('../images/icon_tripnav_left_hover', 'png', 8px, 10px);
+      }
+    }
+
+    form {
+      width: 300px;
+      margin: 0 auto;
+      margin-top: 30px;
+      text-align: left;
+
+      label {
+        font-size: 12px;
+        margin-bottom: 10px;
+        font-weight: normal;
+      }
+
+      .stay-signed-in {
+        margin-right: 10px;
+        margin-bottom: 20px;
+      }
+
+      .alert {
+        margin-bottom: 15px;
+      }
+    }
+
+    .forgot-password {
+      margin-top: 20px;
+    }
+  }
+}
+
+@media screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .blurry-dash {
+    min-width: 0;
+    display: none;
+  }
+
+  .login {
+    width: 100%;
+    margin: 0;
+    @include box-shadow(none);
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 20px;
+      line-height: 28px;
+    }
+
+    h2 {
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .top-box {
+      padding: 30px 25px;
+
+      .mobile-title {
+        display: inline;
+      }
+
+      .login-block {
+        display: none;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 20px 0 0;
+      }
+
+      .mobile-block {
+        display: block;
+        padding-top: 189px;
+        @include hr-image('../images/laptop', 'png', 270px, 159px);
+        background-repeat: no-repeat;
+        background-position: center top;
+
+        .btn-ios-link {
+          display: none;
+        }
+
+        .btn-android-link {
+          display: none;
+        }
+      }
+    }
+
+    .middle-box {
+      padding: 30px 25px 13px 25px;
+
+      .graphic-link {
+        background-position: center top;
+        width: 100%;
+      }
+
+      .feature-list {
+        width: 100%;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+    }
+
+    .bottom-box {
+      padding: 0 25px;
+      @include hr-image('../images/logo_automatic', 'png', 119px, 33px);
+      background-color: $main_back;
+      background-position: center 77px;
+      height: 112px;
+
+      .btn {
+        width: 100%;
+        background-color: $header_back;
+      }
+    }
+  }
+
+  .isiPhone .login .top-box .mobile-block,
+  .isAndroid .login .top-box .mobile-block {
+    .btn-learn-more {
+      display: none;
+    }
+
+    .btn-ios-link {
+      display: block;
+    }
+  }
+}
