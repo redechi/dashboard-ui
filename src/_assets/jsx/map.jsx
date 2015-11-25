@@ -1,6 +1,7 @@
 import React from 'react';
-var classNames = require('classnames');
-var map = require('../js/map');
+import classNames from 'classnames';
+
+const map = require('../js/map');
 
 module.exports = class Map extends React.Component {
   constructor(props) {

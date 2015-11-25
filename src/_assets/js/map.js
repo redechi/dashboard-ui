@@ -1,9 +1,9 @@
-var L = require('mapbox.js');
-var _ = require('underscore');
-var polyline = require('polyline');
+import L from 'mapbox.js';
+import _ from 'underscore';
+import polyline from 'polyline';
 
-var formatters = require('./formatters');
-var stats = require('./stats');
+const formatters = require('./formatters');
+const stats = require('./stats');
 
 let map;
 let mapType;
@@ -198,10 +198,10 @@ exports.hideTripEvents = function() {
 function scaleMarkers() {
   let zoom = map.getZoom();
 
-  var normalIcon = getMarkerSizeByZoom(zoom, 'normal');
-  var hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
-  var hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
-  var weight = getPathWidthbyZoom(zoom);
+  let normalIcon = getMarkerSizeByZoom(zoom, 'normal');
+  let hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
+  let hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
+  let weight = getPathWidthbyZoom(zoom);
 
   markersLayer.eachLayer((marker) => {
     if(!marker.options.selected && mapType !== 'single_trip') {
@@ -326,7 +326,7 @@ function buildTripEventsLayer(trips) {
 
   trips.forEach((trip) => {
     if(trip.path) {
-      var decodedPath = polyline.decode(trip.path);
+      let decodedPath = polyline.decode(trip.path);
 
       trip.vehicle_events.forEach((item) => {
         if(item.type === 'hard_brake') {

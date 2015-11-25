@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-var classNames = require('classnames');
-var login = require('../js/login');
+import classNames from 'classnames';
+
+const login = require('../js/login');
 
 module.exports = class Header extends React.Component {
   constructor(props) {

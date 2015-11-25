@@ -1,9 +1,11 @@
 import React from 'react';
-var _ = require('underscore');
-var exportData = require('../js/export_data');
-var formatters = require('../js/formatters');
-var requests = require('../js/requests');
-var stats = require('../js/stats');
+import _ from 'underscore';
+
+const exportData = require('../js/export_data');
+const filters = require('../js/filters');
+const formatters = require('../js/formatters');
+const requests = require('../js/requests');
+const stats = require('../js/stats');
 
 const Filters = require('./filters.jsx');
 const Graph = require('./graph.jsx');

@@ -1,5 +1,8 @@
-var request = require('superagent');
-var login = require('./login');
+import request from 'superagent';
+import _ from 'underscore';
+import moment from 'moment';
+
+const login = require('./login');
 
 exports.getTrips = (cb) => {
   if(login.isLoggedIn()) {

@@ -1,8 +1,9 @@
 import React from 'react';
-var _ = require('underscore');
-var classNames = require('classnames');
-var formatters = require('../js/formatters');
-var moment = require('moment');
+import _ from 'underscore';
+import classNames from 'classnames';
+import moment from 'moment';
+
+const formatters = require('../js/formatters');
 
 module.exports = class Trip extends React.Component {
   constructor(props) {

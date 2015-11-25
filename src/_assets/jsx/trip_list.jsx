@@ -1,8 +1,8 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
-var classNames = require('classnames');
-var _ = require('underscore');
-var moment = require('moment');
+import classNames from 'classnames';
+import _ from 'underscore';
+import moment from 'moment';
 
 const Trip = require('./trip.jsx');
 

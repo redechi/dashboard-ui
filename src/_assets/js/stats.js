@@ -1,5 +1,6 @@
-var moment = require('moment');
-var formatters = require('./formatters');
+import moment from 'moment';
+
+const formatters = require('./formatters');
 
 exports.calculateTotals = function(trips) {
   if(!trips) {
