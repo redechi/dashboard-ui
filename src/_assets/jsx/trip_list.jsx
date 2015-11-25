@@ -6,6 +6,29 @@ var moment = require('moment');
 
 const Trip = require('./trip.jsx');
 
+const sortTypes = [
+  {
+    key: 'started_at',
+    name: 'Time/Date'
+  },
+  {
+    key: 'distance_m',
+    name: 'Distance'
+  },
+  {
+    key: 'average_mpg',
+    name: 'MPG'
+  },
+  {
+    key: 'fuel_cost_usd',
+    name: 'Cost'
+  },
+  {
+    key: 'duration_s',
+    name: 'Duration'
+  }
+];
+
 module.exports = class TripList extends React.Component {
   constructor(props) {
     super(props);
@@ -14,29 +37,6 @@ module.exports = class TripList extends React.Component {
       sortType: 'started_at',
       sortDirection: 'down'
     };
-
-    this.sortTypes = [
-      {
-        key: 'started_at',
-        name: 'Time/Date'
-      },
-      {
-        key: 'distance_m',
-        name: 'Distance'
-      },
-      {
-        key: 'average_mpg',
-        name: 'MPG'
-      },
-      {
-        key: 'fuel_cost_usd',
-        name: 'Cost'
-      },
-      {
-        key: 'duration_s',
-        name: 'Duration'
-      }
-    ];
 
     this.reverseSortDirection = () => {
       this.setState({sortDirection: this.state.sortDirection === 'down' ? 'up' : 'down'});
@@ -72,14 +72,12 @@ module.exports = class TripList extends React.Component {
     });
   }
 
-  getSortTypeName(sortType) {
-    return _.find(this.sortTypes, (item) => item.key === sortType).name;
-  }
-
   render() {
     if(!this.props.trips) {
       return (<div/>);
     }
+
+    let selectedSortType = _.find(sortTypes, (item) => item.key === this.state.sortType);
 
     let trips = this.sortTrips().map((trip, key) => {
       return (
@@ -93,7 +91,7 @@ module.exports = class TripList extends React.Component {
     let sortTypePopover = (
       <Popover id="sortType" title="Sort By" className="popover-sort-type">
         <ul className="list-select animate">
-          {this.sortTypes.map((sortType) => {
+          {sortTypes.map((sortType) => {
             return (
               <li onClick={this.setSortType.bind(null, sortType.key)} key={sortType.key}>
                 {sortType.name}
@@ -123,7 +121,7 @@ module.exports = class TripList extends React.Component {
           <div className="trip-count">{this.props.trips.length} Trips</div>
           <div className={classNames('sort-direction', {'sort-up': this.state.sortDirection === 'up'})} onClick={this.reverseSortDirection}></div>
           <OverlayTrigger placement="bottom" trigger="click" ref="sortTypePopover" overlay={sortTypePopover}>
-            <div className="sort-type">{this.getSortTypeName(this.state.sortType)} <i className="fa fa-angle-down fa-lg"></i></div>
+            <div className="sort-type">{selectedSortType.name} <i className="fa fa-angle-down fa-lg"></i></div>
           </OverlayTrigger>
         </div>
 
