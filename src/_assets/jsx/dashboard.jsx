@@ -3,6 +3,7 @@ var _ = require('underscore');
 var exportData = require('../js/export_data');
 var formatters = require('../js/formatters');
 var requests = require('../js/requests');
+var stats = require('../js/stats');
 
 const Filters = require('./filters.jsx');
 const Graph = require('./graph.jsx');
@@ -78,42 +79,12 @@ module.exports = class Dashboard extends React.Component {
     }
   }
 
-  calculateTotals() {
-    if(!this.state.trips) {
-      return false;
-    }
-
-    let stats = this.state.trips.reduce((memo, trip) => {
-      memo.distance += trip.distance_miles;
-      memo.duration += trip.duration_s;
-      memo.fuel += trip.fuel_volume_gal;
-      memo.cost += trip.fuel_cost_usd;
-      memo.sumScoreEvents += trip.scoreEvents * trip.duration_s;
-      memo.sumscoreSpeeding += trip.scoreSpeeding * trip.duration_s;
-      return memo;
-    }, {distance: 0, duration: 0, fuel: 0, cost: 0, sumScoreEvents: 0, sumScoreSpeeding: 0});
-
-    let scoreEvents = (stats.sumScoreEvents / stats.duration) || 0;
-    let scoreSpeeding = (stats.sumScoreSpeeding / stats.duration) || 0;
-    stats.score = Math.max(0, scoreEvents) + Math.max(0, scoreSpeeding);
-
-    stats.mpg = (stats.distance / stats.fuel) || 0;
-
-    return {
-      distance: formatters.distance(stats.distance),
-      duration: formatters.durationHours(stats.duration),
-      score: formatters.score(stats.score),
-      cost: formatters.costWithUnit(stats.cost),
-      mpg: formatters.averageMPG(stats.mpg)
-    };
-  }
-
   areAllSelected() {
     return _.every(this.state.trips, (trip) => trip.selected);
   }
 
   render() {
-    let totals = this.calculateTotals();
+    let totals = stats.calculateTotals(this.state.trips);
 
     return (
       <div>
