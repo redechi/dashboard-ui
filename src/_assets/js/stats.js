@@ -47,3 +47,20 @@ exports.calculateTotals = function(trips) {
   };
 };
 
+exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {
+  function toRadians(degree) {
+    return (degree * (Math.PI / 180));
+  }
+  const radius = 3959.0; //Earth Radius in mi
+  let radianLat1 = toRadians(lat1);
+  let radianLon1 = toRadians(lon1);
+  let radianLat2 = toRadians(lat2);
+  let radianLon2 = toRadians(lon2);
+  let radianDistanceLat = radianLat1 - radianLat2;
+  let radianDistanceLon = radianLon1 - radianLon2;
+  let sinLat = Math.sin(radianDistanceLat / 2.0);
+  let sinLon = Math.sin(radianDistanceLon / 2.0);
+  let a = Math.pow(sinLat, 2.0) + Math.cos(radianLat1) * Math.cos(radianLat2) * Math.pow(sinLon, 2.0);
+  let d = radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+  return d;
+};

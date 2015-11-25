@@ -108,7 +108,9 @@ module.exports = class Dashboard extends React.Component {
               <Graph
                 trips={this.state.trips}
                 totals={totals} />
-              <Map trips={this.state.trips} />
+              <Map
+                trips={this.state.trips}
+                totals={totals} />
             </div>
           </div>
         </div>
