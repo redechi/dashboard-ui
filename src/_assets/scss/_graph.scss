@@ -1,22 +1,22 @@
-#graphs {
+.graph {
   position: relative;
   height: 226px;
 
-  .graphMenu {
-    .dateRange {
+  .graph-menu {
+    .date-range {
       float: left;
       display: inline-block;
       line-height: 25px;
       margin-top: 10px;
     }
 
-    .graphTypeLabel {
+    .graph-type-label {
       float: left;
       margin-left: 35px;
       margin-top: 12px;
     }
 
-    .graphType {
+    .graph-type {
       float: left;
       margin-left: 8px;
       margin-top: 10px;
@@ -28,18 +28,18 @@
     }
   }
 
-  .graphAverages {
+  .graph-averages {
     float: right;
     position: relative;
 
-    .graphAveragesLabel {
+    .graph-averages-label {
       text-align: right;
       font-size: 12px;
       display: inline-block;
       vertical-align: bottom;
     }
 
-    .graphAveragesValue {
+    .graph-averages-value {
       font-size: 24px;
       display: inline-block;
       color: $link_type;
@@ -48,13 +48,13 @@
       line-height: 21px;
     }
 
-    .graphAveragesUnit {
+    .graph-averages-unit {
       font-size: 12px;
       display: inline-block;
       vertical-align: bottom;
     }
 
-    .graphAveragesBackground {
+    .graph-averages-background {
       font-size: 78px;
       line-height: 70px;
       color: $header_back;
@@ -67,13 +67,13 @@
     }
   }
 
-  .graphTooltipContainer {
+  .graph-tooltip-container {
     position: absolute;
     z-index: 10;
     visibility: hidden;
     pointer-events: none;
 
-    .graphTooltip {
+    .graph-tooltip {
       padding: 15px;
       min-width: 65px;
       height: 76px;
@@ -115,7 +115,7 @@
     }
   }
 
-  .graphContainer {
+  .graph-container {
     white-space: nowrap;
     padding-top: 35px;
 
