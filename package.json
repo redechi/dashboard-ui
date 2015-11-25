@@ -15,6 +15,7 @@
   "dependencies": {
     "classnames": "2.2.0",
     "css-loader": "0.23.0",
+    "d3": "3.5.9",
     "eonasdan-bootstrap-datetimepicker": "4.15.35",
     "filesaverjs": "0.2.1",
     "font-awesome": "4.4.0",

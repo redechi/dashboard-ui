@@ -1,6 +1,8 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
-var _ = require('underscore');
+import _ from 'underscore';
+
+const graph = require('../js/graph');
 
 const graphTypes = [
   {
@@ -92,5 +94,13 @@ module.exports = class Graph extends React.Component {
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    graph.updateGraph(this.props.trips, this.state.graphType);
+  }
+
+  componentDidUpdate() {
+    graph.updateGraph(this.props.trips, this.state.graphType);
   }
 };
