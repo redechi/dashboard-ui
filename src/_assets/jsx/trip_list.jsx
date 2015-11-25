@@ -72,6 +72,10 @@ module.exports = class TripList extends React.Component {
     });
   }
 
+  getTripListHeight() {
+    return this.props.windowHeight - 330;
+  }
+
   render() {
     if(!this.props.trips) {
       return (<div/>);
@@ -126,7 +130,9 @@ module.exports = class TripList extends React.Component {
         </div>
 
         <div className="trips">
-          <ul>{trips}</ul>
+          <ul style={{height: this.getTripListHeight()}}>
+            {trips}
+          </ul>
         </div>
 
         <div className="trips-footer">

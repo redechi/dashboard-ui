@@ -19,7 +19,8 @@ module.exports = class Dashboard extends React.Component {
 
     this.state = {
       allSelected: false,
-      exporting: false
+      exporting: false,
+      windowHeight: window.innerHeight
     };
 
     this.toggleSelect = (tripId) => {
@@ -77,6 +78,10 @@ module.exports = class Dashboard extends React.Component {
         cb(e);
       });
     }
+
+    this.handleResize = () => {
+      this.setState({windowHeight: window.innerHeight});
+    };
   }
 
   areAllSelected() {
@@ -102,7 +107,8 @@ module.exports = class Dashboard extends React.Component {
                 toggleSelect={this.toggleSelect}
                 toggleSelectAll={this.toggleSelectAll}
                 export={this.export}
-                exporting={this.state.exporting} />
+                exporting={this.state.exporting}
+                windowHeight={this.state.windowHeight} />
             </div>
             <div className="left-column">
               <Graph
@@ -110,7 +116,8 @@ module.exports = class Dashboard extends React.Component {
                 totals={totals} />
               <Map
                 trips={this.state.trips}
-                totals={totals} />
+                totals={totals}
+                windowHeight={this.state.windowHeight} />
             </div>
           </div>
         </div>
@@ -119,6 +126,8 @@ module.exports = class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('resize', _.debounce(this.handleResize, 100));
+
     requests.getTrips((e, trips) => {
       if(e) {
         return alert('Unable to fetch trips. Please try again later.');

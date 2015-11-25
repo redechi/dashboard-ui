@@ -21,10 +21,14 @@ module.exports = class Map extends React.Component {
     };
   }
 
+  getMapHeight() {
+    return this.props.windowHeight - 461;
+  }
+
   render() {
     return (
       <div className="map">
-        <div className="map-container" id="overviewMapContainer"></div>
+        <div className="map-container" id="overviewMapContainer" style={{height: this.getMapHeight()}}></div>
         <div className="map-menu">
           <div className="zoom-control">
             <div className="zoom-in" onClick={map.zoomIn}>+</div>
