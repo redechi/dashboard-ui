@@ -29,23 +29,7 @@
     line-height: 12px;
   }
 
-  .remove-filter {
-    @include hr-image('../images/icon_remove', 'png', 11px, 11px);
-    margin-top: 6px;
-    padding-left: 16px;
-    background-position: left 4px;
-    background-repeat: no-repeat;
-    font-size: 12px;
-    cursor: pointer;
-    padding-top: 2px;
-    color: $link_type;
-
-    &:hover {
-      color: $highlight;
-    }
-  }
-
-  .dateFilterValue.list-select {
+  .date-filter-value.list-select {
     width: 182px;
   }
 
@@ -87,7 +71,7 @@
     }
   }
 
-  .noMatchingTrips {
+  .no-matching-trips {
     position: relative;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
@@ -143,6 +127,22 @@
   }
 }
 
-body.noMatchingTrips .filters .noMatchingTrips {
+.remove-filter {
+  @include hr-image('../images/icon_remove', 'png', 11px, 11px);
+  margin-top: 6px;
+  padding-left: 16px;
+  background-position: left 4px;
+  background-repeat: no-repeat;
+  font-size: 12px;
+  cursor: pointer;
+  padding-top: 2px;
+  color: $link_type;
+
+  &:hover {
+    color: $highlight;
+  }
+}
+
+body.no-matching-trips .filters .no-matching-trips {
   display: block;
 }

@@ -73,3 +73,5 @@ exports.litersToGal = (liters) => liters * 0.264172;
 exports.kmplToMpg = (kmpl) => kmpl * 2.35214583;
 
 exports.formatVehicle = (vehicle) => vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : '';
+
+exports.dateRange = (range) => moment(range[0]).format('MMM D - ') + moment(range[1]).format('MMM D, YYYY');

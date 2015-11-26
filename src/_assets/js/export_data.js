@@ -1,6 +1,7 @@
-var formatters = require('./formatters');
-var moment = require('moment');
-var filesaverjs = require('filesaverjs');
+import moment from 'moment';
+import filesaverjs from 'filesaverjs';
+
+const formatters = require('./formatters');
 
 const csvFieldNames = [
   'Vehicle',
@@ -35,10 +36,10 @@ exports.trips = (selectedTrips, cb) => {
 
   //Safari does not support filesaver, so use URL
   if(isSafari()) {
-    var blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
-    coms.trigger('trips:showDownloadExportOverlay', blobUrl);
+    let blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
+    //TODO: show download export overlay
   } else {
-    var blob = new Blob([tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
+    let blob = new Blob([tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
 
     setTimeout(function() {
       let filename = `automatic-trips-${moment().format('YYYY-MM-DD')}.csv`;

@@ -22,7 +22,9 @@ module.exports = class Dashboard extends React.Component {
     this.state = {
       allSelected: false,
       exporting: false,
-      windowHeight: window.innerHeight
+      filters: filters.getFiltersFromQuery(this.props.location.query),
+      windowHeight: window.innerHeight,
+      windowWidth: window.innerWidth
     };
 
     this.toggleSelect = (tripId) => {
@@ -84,6 +86,19 @@ module.exports = class Dashboard extends React.Component {
     this.handleResize = () => {
       this.setState({windowHeight: window.innerHeight});
     };
+
+    this.updateFilter = (filterName, filterValue) => {
+      if(filterValue) {
+        this.state.filters[filterName] = filterValue;
+      } else {
+        delete this.state.filters[filterName];
+      }
+
+      this.setState({
+        filters: this.state.filters,
+        trips: filters.filterTrips(this.state.allTrips, this.state.filters)
+      });
+    };
   }
 
   areAllSelected() {
@@ -97,7 +112,9 @@ module.exports = class Dashboard extends React.Component {
       <div>
         <Header />
         <div>
-          <Filters />
+          <Filters
+            filters={this.state.filters}
+            updateFilter={this.updateFilter} />
           <div>
             <div className="right-column">
               <TripStats
@@ -115,7 +132,9 @@ module.exports = class Dashboard extends React.Component {
             <div className="left-column">
               <Graph
                 trips={this.state.trips}
-                totals={totals} />
+                totals={totals}
+                filters={this.state.filters}
+                windowWidth={this.state.windowWidth} />
               <Map
                 trips={this.state.trips}
                 totals={totals}
@@ -130,12 +149,17 @@ module.exports = class Dashboard extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', _.debounce(this.handleResize, 100));
 
-    requests.getTrips((e, trips) => {
+    requests.getTrips((e, results) => {
       if(e) {
         return alert('Unable to fetch trips. Please try again later.');
       }
+      let allTrips = results.map(formatters.formatTrip);
 
-      this.setState({trips: trips.map(formatters.formatTrip)});
+      this.setState({
+        allTrips: allTrips,
+        trips: filters.filterTrips(allTrips, this.state.filters)
+      });
+
     });
   }
 };
