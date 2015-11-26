@@ -11,7 +11,7 @@ let data;
 let summary
 
 
-exports.updateGraph = function(trips, graphType) {
+exports.updateGraph = function(trips, graphType, graphWidth) {
   if(!trips) {
     return false;
   }
@@ -19,10 +19,9 @@ exports.updateGraph = function(trips, graphType) {
   getGraphData(trips, graphType);
 
   let margin = {top: 35, right: 0, bottom: 60, left: 0};
-  let outerWidth = $('.graph').width();
-  let width = outerWidth - margin.left - margin.right;
+  let width = graphWidth - margin.left - margin.right;
   let height = 185 - margin.top - margin.bottom;
-  let tooltip = $('.graph .graph-container .graph-tooltip-container');
+  let tooltip = document.getElementsByClassName('graph-tooltip-container');
   let binWidth = width / data.length;
   let barWidth = Math.min(145, Math.max(8, (width / data.length - 15)));
   let barRadius = Math.min(barWidth/2, 6);
@@ -244,7 +243,7 @@ exports.updateGraph = function(trips, graphType) {
     .attr('x', (d) => x(d.key))
     .attr('class', (d) => (d.values === 0) ? 'empty' : '')
     .classed('tickLabel', true)
-    .text(_.bind(self.getTickLabel, this));
+    .text(_.bind(getTickLabel, this));
 
   //Month and Year Labels
   if(binSize === 'day') {
@@ -253,14 +252,14 @@ exports.updateGraph = function(trips, graphType) {
       .attr('x', (d) => x(d.key))
       .attr('dx', -barWidth/2)
       .classed('axisLabel', true)
-      .text(_.bind(self.getMonthLabel, this));
+      .text(_.bind(getMonthLabel, this));
   } else if (binSize === 'month') {
     bars.append('text')
       .attr('transform', 'translate(0,' + (height + 45) + ')')
       .attr('x', (d) => x(d.key))
       .attr('dx', -barWidth/2)
       .classed('axisLabel', true)
-      .text(_.bind(self.getYearLabel, this));
+      .text(_.bind(getYearLabel, this));
   }
 };
 
@@ -313,4 +312,37 @@ function getGraphData(trips, graphType) {
     }
     return memo;
   }, {barCount: 0});
+}
+
+function getTickLabel(d) {
+  if(binSize === 'month') {
+    return moment(parseInt(d.key, 10)).format('MMM');
+  } else if(binSize === 'day') {
+    if(data.length <= 60) {
+      return moment(parseInt(d.key, 10)).format('D');
+    } else if(data.length <= 120) {
+      //Only return odd days
+      let day = moment(parseInt(d.key, 10)).format('D');
+      return (day % 2 === 1) ? day : '';
+    }
+  }
+}
+
+function getMonthLabel(d) {
+  let date = moment(parseInt(d.key, 10));
+  let firstDate = _.first(data).key;
+  let lastDate = _.last(data).key;
+
+  if((date.date() === 1 && d.key < lastDate) || (d.key === firstDate && date.date() < 29)) {
+    //only show month label at start of months (if more than one day of that month is shown) and first position
+    return date.format('MMM \'YY');
+  }
+}
+
+function getYearLabel(d) {
+  let date = moment(parseInt(d.key, 10));
+  if(date.month() === 0 || (d.key === data[0].key && date.date() < 29)) {
+    //only show year label at start of years and first position
+    return date.format('YYYY');
+  }
 }

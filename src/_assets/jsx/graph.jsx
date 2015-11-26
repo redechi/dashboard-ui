@@ -53,6 +53,10 @@ module.exports = class Graph extends React.Component {
      return total;
   }
 
+  getGraphWidth() {
+    return this.props.windowWidth - 410;
+  }
+
   render() {
     let graphTypePopover = (
       <Popover id="graphType" title="Choose Metric" className="popover-graph-type">
@@ -97,10 +101,10 @@ module.exports = class Graph extends React.Component {
   }
 
   componentDidMount() {
-    graph.updateGraph(this.props.trips, this.state.graphType);
+    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth());
   }
 
   componentDidUpdate() {
-    graph.updateGraph(this.props.trips, this.state.graphType);
+    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth());
   }
 };

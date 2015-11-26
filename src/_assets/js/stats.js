@@ -65,3 +65,51 @@ exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {
   let d = radius * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
   return d;
 };
+
+exports.sumTrips = function(trips, field) {
+  //Calculate sum or average, depending on field
+  if(field === 'average_mpg') {
+    return getAverageMPG(trips);
+  } else if(field === 'score') {
+    return getAverageScore(trips);
+  } else {
+    return getSum(trips, field);
+  }
+};
+
+function getAverageMPG(trips) {
+  let totals = trips.reduce((memo, trip) => {
+    memo.distance += trip.distance_miles;
+    memo.fuel += trip.fuel_volume_gal;
+    return memo;
+  }, {distance: 0, fuel: 0});
+  return (totals.distance / totals.fuel) || 0;
+}
+
+function getAverageScore(trips) {
+  if(!trips.length) {
+    return 0;
+  }
+
+  let weightedSum = trips.reduce((memo, trip) => {
+    let scoreEvents = trip.score_events;
+    let scoreSpeeding = trip.score_speeding;
+    if (scoreEvents && scoreSpeeding) {
+      memo.scoreEvents += scoreEvents * trip.duration;
+      memo.scoreSpeeding += scoreSpeeding * trip.duration;
+      memo.time += trip.duration;
+    }
+    return memo;
+  }, {time: 0, scoreEvents: 0, scoreSpeeding: 0});
+
+  let scoreEvents = (weightedSum.scoreEvents / weightedSum.time) || 0;
+  let scoreSpeeding = (weightedSum.scoreSpeeding / weightedSum.time) || 0;
+  let score = Math.max(0, scoreEvents) + Math.max(0, scoreSpeeding);
+
+  return Math.min(Math.max(1, score), 100);
+};
+
+
+function getSum(trips, field) {
+  return trips.reduce((memo, trip) => memo + trip[field], 0);
+};
