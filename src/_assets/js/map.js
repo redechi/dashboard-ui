@@ -172,6 +172,8 @@ exports.updateMap = function(trips) {
     if(!speedingLayer.getLayers().length) {
       buildTripEventsLayer(trips);
     }
+
+    fitBounds();
   }
 };
 
@@ -289,6 +291,7 @@ function addTripToMap(trip) {
 
   if(trip.path) {
     let line = L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
+    trip.pathID = line._leaflet_id;
   }
 
   if(trip.start_location) {
@@ -374,4 +377,37 @@ function subPath(startMi, endMi, decodedPath) {
     }
     return memo;
   }, []);
+}
+
+function getBoundsFromTrips(trips) {
+  return trips.reduce((memo, trip) => {
+    let path = pathsLayer.getLayer(trip.pathID);
+    if(path) {
+      let pathBounds = path.getBounds();
+      if(!memo) {
+        memo = pathBounds;
+      } else {
+        memo.extend(pathBounds);
+      }
+    }
+    return memo;
+  }, null);
+}
+
+function zoomTrips() {
+  fitBounds(getBoundsFromTrips(trips) || pathsLayer.getBounds());
+}
+
+function fitBounds(bounds) {
+  let boundsOptions = {
+    padding: [45, 45]
+  };
+
+  map.invalidateSize();
+  if(!bounds) {
+    bounds = pathsLayer.getBounds();
+  }
+  if(bounds.isValid()) {
+    map.fitBounds(bounds, boundsOptions);
+  }
 }
