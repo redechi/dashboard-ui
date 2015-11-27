@@ -117,7 +117,7 @@ exports.getFiltersFromQuery = function(query) {
   if(!query) {
     query = {};
   }
-  
+
   let appliedFilters = {
     vehicle: query.vehicle || _.findWhere(filterList, {key: 'vehicle'}).defaultValue,
     date: query.date || _.findWhere(filterList, {key: 'date'}).defaultValue
@@ -211,7 +211,7 @@ function filterByDistance(trips, distanceFilter) {
 
 function filterByDuration(trips, durationFilter) {
   let [minDuration, maxDuration] = durationFilter.split(',');
-  return _.filter(trips, (trip) => trip.duration >= minDuration && trip.duration <= maxDuration);
+  return _.filter(trips, (trip) => trip.duration_s >= minDuration && trip.duration_s <= maxDuration);
 }
 
 function filterByCost(trips, costFilter) {

@@ -197,6 +197,29 @@ exports.hideTripEvents = function() {
   map.removeLayer(speedingLayer);
 };
 
+exports.getCumulativeDistance = function(decodedPath) {
+  let cumulativeDistance = 0;
+
+  return decodedPath.map((point1, idx) => {
+    if(idx > 0) {
+      let point2 = decodedPath[idx - 1];
+      let distance = stats.calculateDistanceMi(point1[0], point1[1], point2[0], point2[1]);
+      cumulativeDistance += distance;
+    }
+    return cumulativeDistance;
+  });
+};
+
+exports.subPath = function(startMi, endMi, decodedPath, cumulativeDistances) {
+  return _.reduce(cumulativeDistances, (memo, distance1, idx) => {
+    let distance2 = (idx < cumulativeDistances.length - 1) ? cumulativeDistances[idx + 1] : distance1;
+    if(startMi <= distance2 && endMi >= distance1) {
+      memo.push(decodedPath[idx]);
+    }
+    return memo;
+  }, []);
+};
+
 function scaleMarkers() {
   let zoom = map.getZoom();
 
@@ -279,19 +302,48 @@ function addTripToMap(trip) {
   let pathStyle;
   let aIcon;
   let bIcon;
+  let speedingLine = styleLine(zoom, 'speeding');
+  let hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
+  let hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
+
   if(mapType === 'single_trip') {
-    pathStyle = lineStyles.highlightLine(zoom);
-    aIcon = icons.aLargeIcon;
-    bIcon = icons.bLargeIcon;
+    pathStyle = styleLine(zoom, 'highlight');
+    aIcon = icons.aHighlightedIcon;
+    bIcon = icons.bHighlightedIcon;
+  } else if (trip.selected) {
+    pathStyle = styleLine(zoom, 'selected');
+    aIcon = icons.aSelectedIcon;
+    bIcon = icons.bSelectedIcon;
+  } else if (trip.highlighted) {
+    pathStyle = styleLine(zoom, 'highlight');
+    aIcon = icons.aHighlightedIcon;
+    bIcon = icons.bHighlightedIcon;
   } else {
-    pathStyle = lineStyles.styleLine(zoom);
-    aIcon = icons.mainIconSmall;
-    bIcon = icons.mainIconSmall;
+    pathStyle = styleLine(zoom);
+    aIcon = getMarkerSizeByZoom(zoom, 'normal');
+    bIcon = getMarkerSizeByZoom(zoom, 'normal');
   }
 
   if(trip.path) {
     let line = L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
     trip.pathID = line._leaflet_id;
+
+    trip.vehicle_events.forEach((item) => {
+      if(item.type === 'hard_brake') {
+        hardBrakesLayer.addLayer(L.marker(
+          [item.lat, item.lon],
+          {icon: hardBrakeIcon, id: trip.id}
+        ));
+      } else if(item.type === 'hard_accel') {
+        hardAccelsLayer.addLayer(L.marker(
+          [item.lat, item.lon],
+          {icon: hardAccelIcon, id: trip.id}
+        ));
+      } else if(item.type === 'speeding') {
+        let lineOptions = _.extend({id: trip.id}, speedingLine);
+        speedingLayer.addLayer(L.polyline(item.path, lineOptions));
+      }
+    });
   }
 
   if(trip.start_location) {
@@ -300,6 +352,7 @@ function addTripToMap(trip) {
       type: 'start',
       id: trip.id
     };
+
     let startMarker = L.marker(
       [trip.start_location.lat, trip.start_location.lon],
       options
@@ -312,7 +365,10 @@ function addTripToMap(trip) {
       type: 'end',
       id: trip.id
     };
-    let endMarker = L.marker([trip.end_location.lat, trip.end_location.lon], options).addTo(markersLayer);
+    let endMarker = L.marker(
+      [trip.end_location.lat, trip.end_location.lon],
+      options
+    ).addTo(markersLayer);
   }
 }
 
@@ -321,62 +377,32 @@ function clearMap() {
   markersLayer.clearLayers();
 }
 
-function buildTripEventsLayer(trips) {
-  let zoom = map.getZoom();
-  let speedingLine = lineStyles.speedingLine(zoom);
-  let hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
-  let hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
-
-  trips.forEach((trip) => {
-    if(trip.path) {
-      let decodedPath = polyline.decode(trip.path);
-
-      trip.vehicle_events.forEach((item) => {
-        if(item.type === 'hard_brake') {
-          hardBrakesLayer.addLayer(L.marker(
-            [item.lat, item.lon],
-            {icon: hardBrakeIcon, id: trip.id}
-          ));
-        } else if(item.type === 'hard_accel') {
-          hardAccelsLayer.addLayer(L.marker(
-            [item.lat, item.lon],
-            {icon: hardAccelIcon, id: trip.id}
-          ));
-        } else if(item.type === 'speeding') {
-          let start = formatters.metersToMiles(item.start_distance_m);
-          let end = formatters.metersToMiles(item.end_distance_m);
-          let speedingPath = subPath(start, end, decodedPath);
-          let lineOptions = _.extend({id: trip.id}, speedingLine);
-          speedingLayer.addLayer(L.polyline(speedingPath, lineOptions));
-        }
-      });
-    }
-  });
-}
-
-function getCumulativeDistance(decodedPath) {
-  let cumulativeDistance = 0;
-
-  return decodedPath.map((point1, idx) => {
-    if(idx > 0) {
-      let point2 = decodedPath[idx - 1];
-      let distance = stats.calculateDistanceMi(point1[0], point1[1], point2[0], point2[1]);
-      cumulativeDistance += distance;
-    }
-    return cumulativeDistance;
-  });
-}
-
-function subPath(startMi, endMi, decodedPath) {
-  let distances = getCumulativeDistance(decodedPath);
-
-  return _.reduce(distances, (memo, distance1, idx) => {
-    let distance2 = (idx < distances.length - 1) ? distances[idx + 1] : distance1;
-    if(startMi <= distance2 && endMi >= distance1) {
-      memo.push(decodedPath[idx]);
-    }
-    return memo;
-  }, []);
+function styleLine(zoom, lineType) {
+  if(lineType === 'highlight') {
+    return {
+      opacity: 1,
+      color: '#5DBEF5',
+      weight: Math.max(4, getPathWidthbyZoom(zoom))
+    };
+  } else if(lineType === 'selected') {
+    return {
+      opacity: 1,
+      color: '#297FB8',
+      weight: Math.max(4, getPathWidthbyZoom(zoom))
+    };
+  } else if(lineType === 'speeding') {
+    return {
+      opacity: 1,
+      color: '#F5A623',
+      weight: Math.max(4, getPathWidthbyZoom(zoom))
+    };
+  } else {
+    return {
+      color: '#737c81',
+      opacity: 0.4,
+      weight: getPathWidthbyZoom(zoom)
+    };
+  }
 }
 
 function getBoundsFromTrips(trips) {
