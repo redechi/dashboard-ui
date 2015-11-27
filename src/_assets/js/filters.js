@@ -114,6 +114,10 @@ const filterList = [
 
 
 exports.getFiltersFromQuery = function(query) {
+  if(!query) {
+    query = {};
+  }
+  
   let appliedFilters = {
     vehicle: query.vehicle || _.findWhere(filterList, {key: 'vehicle'}).defaultValue,
     date: query.date || _.findWhere(filterList, {key: 'date'}).defaultValue

@@ -94,13 +94,29 @@ module.exports = class Dashboard extends React.Component {
         delete this.state.filters[filterName];
       }
 
-      this.setState({
-        filters: this.state.filters,
-        trips: filters.filterTrips(this.state.allTrips, this.state.filters)
-      });
-
-      this.props.history.pushState(null, this.props.location.pathname, this.state.filters);
+      this.setFilters(this.state.filters);
     };
+
+    this.resetFilters = () => {
+      this.setFilters(filters.getFiltersFromQuery());
+    };
+
+    this.undoFilter = () => {
+      this.props.history.goBack();
+
+      // wait for goBack() to fire before updating filters
+      setTimeout(() => {
+        this.setFilters(filters.getFiltersFromQuery(this.props.location.query));
+      }, 50);
+    }
+  }
+
+  setFilters(newFilters) {
+    this.setState({
+      filters: newFilters,
+      trips: filters.filterTrips(this.state.allTrips, newFilters)
+    });
+    this.props.history.pushState(null, this.props.location.pathname, newFilters);
   }
 
   areAllSelected() {
@@ -116,7 +132,9 @@ module.exports = class Dashboard extends React.Component {
         <div>
           <Filters
             filters={this.state.filters}
-            updateFilter={this.updateFilter} />
+            updateFilter={this.updateFilter}
+            resetFilters={this.resetFilters}
+            undoFilter={this.undoFilter} />
           <div>
             <div className="right-column">
               <TripStats

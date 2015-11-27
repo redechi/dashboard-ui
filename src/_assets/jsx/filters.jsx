@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import _ from 'underscore';
+import classNames from 'classnames';
 
 const filters = require('../js/filters.js');
 
@@ -10,14 +11,27 @@ module.exports = class Filters extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      undoCount: 0
+    };
+
     this.addFilter = (filter) => {
       this.props.updateFilter(filter, filters.getFilter(filter).defaultValue);
       this.refs.filterTypePopover.hide();
-    }
+      this.setState({undoCount: this.state.undoCount + 1});
+    };
 
     this.removeFilter = (filter) => {
       this.props.updateFilter(filter, null);
       this.refs.filterTypePopover.hide();
+      this.setState({undoCount: this.state.undoCount + 1});
+    };
+
+    this.undoFilter = () => {
+      if(this.state.undoCount > 0) {
+        this.setState({undoCount: this.state.undoCount - 1});
+        this.props.undoFilter();
+      }
     }
   }
 
@@ -61,8 +75,16 @@ module.exports = class Filters extends React.Component {
       <div className="filters">
         <ul className="filter-controls">
           <label>Filters:</label>
-          <li className="undo btn btn-filter disabled">Undo</li>
-          <li className="reset btn btn-filter">Reset</li>
+          <li
+            className={classNames('undo', 'btn', 'btn-filter', {disabled: this.state.undoCount < 1})}
+            onClick={this.undoFilter}>
+            Undo
+          </li>
+          <li
+            className="reset btn btn-filter"
+            onClick={this.props.resetFilters}>
+            Reset
+          </li>
         </ul>
 
         <ul className="applied-filters">
