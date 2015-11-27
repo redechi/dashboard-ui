@@ -1,0 +1,312 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Hyperlapse | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <link href="css/hyperlapse.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="text"></div>
+    </div>
+    <div id="trips" class="wrapper">
+      <h1>Hyperlapse Generator</h1>
+      <p>Select a trip below to generate a hyperlapse. It can take up to a minute for the imagery to download and be compiled.</p>
+
+      <label>Number of images in hyperlapse (time to generate): </label>
+      <select id="maxPoints">
+        <option value="10">10 (5 seconds)</option>
+        <option value="50">50 (10 seconds)</option>
+        <option value="100">100 (20 seconds)</option>
+        <option value="200" selected>200 (40 seconds)</option>
+        <option value="500">500 (2 minutes)</option>
+      </select>
+
+    </div>
+
+    <div id="pano" class="pano">
+      <div class="pano-title"></div>
+      <div class="btn btn-lg btn-default btn-share"><i class="fa fa-share"></i> Share <input type="text" class="share-url" readonly></div>
+      <div class="btn btn-lg btn-default btn-pause"><i class="fa fa-pause"></i> Pause</div>
+      <div class="btn btn-lg btn-default btn-play"><i class="fa fa-play"></i> Play</div>
+      <div class="btn btn-lg btn-default btn-close"><i class="fa fa-arrow-left"></i> Back</div>
+      <div id="panomap" class="panomap"></div>
+    </div>
+    <a href="/#labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+    <script src="js/GSVPano.js"></script>
+    <script src="js/Hyperlapse.js"></script>
+
+    <script type='text/template' id='tripTemplate'>
+      <div class="trip">
+        <div class="times">
+          <div class="end-time">{{ended_at_date}}<br>{{ended_at_time}}</div>
+          <div class="duration">{{duration}}</div>
+          <div class="start-time">{{started_at_date}}<br>{{started_at_time}}</div>
+          <div class="trip-line">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        <div class="locations">
+          <div class="end-address">{{end_address.cleaned}}</div>
+          <div class="trip-stats">
+            <div class="distance">{{distance}}</div>
+            <div class="mpg">{{average_mpg}}</div>
+            <div class="fuel-cost">{{fuel_cost_usd}}</div>
+          </div>
+          <div class="start-address">{{start_address.cleaned}}</div>
+        </div>
+        <button class="btn btn-blue btn-lg btn-hyperlapse" data-trip-id="{{id}}"><i class="fa fa-video-camera"></i> Generate Hyperlapse</button>
+      </div>
+    </script>
+
+    <script src="../common/js/main.js"></script>
+    <script src="../common/js/maps.js"></script>
+
+    <script>
+      _.templateSettings = {
+        interpolate : /\{\{(.+?)\}\}/g
+      };
+
+      var tripTemplate = _.template($('#tripTemplate').html());
+      var hyperlapse;
+      var trips = [];
+      var trip;
+      var map;
+      var marker;
+      var generating = false;
+      var loading = false;
+      var page = 'https://api.automatic.com/trip/?limit=10&page=1';
+
+      function loadTripsFromServer() {
+        if(this.shouldLoad()) {
+          loading = true;
+
+          fetchTripsPage(page, function(results) {
+            if(!results || !results.results) {
+              page = null;
+              return false;
+            }
+
+            page = results._metadata ? results._metadata.next : null;
+            loading = false;
+
+            trips = trips.concat(results.results);
+
+            results.results.forEach(function(trip) {
+              _.extend(trip, {
+                started_at_time: formatTime(trip.started_at, trip.start_timezone),
+                started_at_date: formatDate(trip.started_at, trip.start_timezone),
+                ended_at_time: formatTime(trip.ended_at, trip.end_timezone),
+                ended_at_date: formatDate(trip.ended_at, trip.end_timezone),
+                duration: formatDuration(trip.duration_s),
+                start_address: formatAddress(trip.start_address),
+                end_address: formatAddress(trip.end_address),
+                distance: metersToMiles(trip.distance_m).toFixed(),
+                average_mpg: kmplToMpg(trip.average_kmpl).toFixed(1),
+                fuel_cost_usd: (trip.fuel_cost_usd || 0).toFixed(2)
+              });
+
+              $('#trips').append($(tripTemplate(trip)).data('trip', trip));
+            });
+          }, function(jqXHR) {
+            loading = false;
+          });
+        }
+      }
+
+      function shouldLoad() {
+        return loading !== true && page && $(window).scrollTop() + $(window).height() >= $('body').height() - 70;
+      }
+
+      function generateHyperlapse(trip) {
+        if(!trip.path) {
+          return alert('Unable to generate hyperlapse for trips with no path');
+        }
+
+        if(generating) {
+          return false;
+        } else {
+          generating = true;
+        }
+
+        var pointCount = 1;
+
+        showLoading();
+        $('.loading .text').text('');
+      	hyperlapse = new Hyperlapse(document.getElementById('pano'), {
+      		zoom: 1,
+      		elevation: 50,
+          fov: 120,
+          millis: 200,
+          width: $(window).width(),
+          height: $(window).height(),
+          max_points: parseInt($('#maxPoints').val(), 10)
+      	});
+
+      	hyperlapse.onError = function(e) {
+      		console.log(e);
+          generating = false;
+      	};
+
+      	hyperlapse.onRouteComplete = function(e) {
+      		hyperlapse.load();
+      	};
+
+        hyperlapse.onRouteProgress = function(e) {
+          pointCount += 1;
+        };
+
+        hyperlapse.onLoadProgress = function(e) {
+          $('.loading .text').text('Images ' + e.position + '/' + pointCount);
+        };
+
+      	hyperlapse.onLoadComplete = function(e) {
+      		hyperlapse.play();
+          $('#pano').fadeIn();
+          hideLoading();
+          drawPanoMap(trip);
+          setShareUrl(trip);
+          $('.pano-title').text('Hyperlapse from ' + trip.start_address.cleaned + ' to ' + trip.end_address.cleaned + ' - ' + metersToMiles(trip.distance_m).toFixed() + ' miles');
+          generating = false;
+      	};
+
+        hyperlapse.onFrame = function(e) {
+          marker.setLatLng(L.latLng(
+            e.point.location.lat(),
+            e.point.location.lng()
+          ));
+        };
+
+      	hyperlapse.generate({trip: trip});
+      }
+
+
+      function stopHyperlapse() {
+        hyperlapse.pause();
+        $('#pano').fadeOut();
+        $('#pano canvas').remove();
+      }
+
+
+      function pauseHyperlapse() {
+        hyperlapse.pause();
+        $('.btn-pause').hide();
+        $('.btn-play').show();
+      }
+
+
+      function playHyperlapse() {
+        hyperlapse.play();
+        $('.btn-play').hide();
+        $('.btn-pause').show();
+      }
+
+
+      function drawPanoMap(trip) {
+        if(map) {
+          map.remove();
+        }
+
+        map = L.mapbox.map('panomap', 'automatic.h5kpm228', {zoomControl: false});
+
+        var points = L.GeoJSON.decodeLine(trip.path);
+
+        var line = L.polyline(points, {
+          color: '#08b1d5',
+          opacity: 0.9
+        }).addTo(map);
+
+        marker = L.circleMarker(points[0], {
+          radius: 8,
+          fill: true,
+          fillColor: '#08b1d5',
+          fillOpacity: 0.5,
+          color: '#06819c'
+        });
+
+        map.fitBounds(line.getBounds(), {padding: [10, 10]});
+
+        // Disable drag and zoom handlers.
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+
+        marker.addTo(map);
+      }
+
+      function setShareUrl(trip) {
+        var params = {
+          path: trip.path,
+          start_address: trip.start_address.cleaned,
+          end_address: trip.end_address.cleaned,
+          distance_m: trip.distance_m,
+          max_points: parseInt($('#maxPoints').val(), 10)
+        };
+
+        var shareURL = 'https://dashboard.automatic.com/labs/hyperlapse/share.html?' + $.param(params);
+
+        $('.share-url').val(shareURL);
+      }
+
+      $('#trips').on('click', '.btn-hyperlapse', function() {
+        var tripId = $(this).data('trip-id');
+
+        var trip = _.findWhere(trips, {id: tripId});
+
+        if(!trip) {
+          return alert('Unable to generate Hyperlapse');
+        }
+
+        generateHyperlapse(trip);
+      });
+
+      $('.btn-share').click(function() {
+        $('.share-url').animate({width: 'toggle'}, 500);
+      });
+
+      $('.share-url').click(function(e) {
+        e.stopPropagation();
+        $('.share-url').select();
+      });
+
+      $('.btn-close').click(stopHyperlapse);
+
+      $('.btn-pause').click(pauseHyperlapse);
+
+      $('.btn-play').click(playHyperlapse);
+
+
+      //load initial trips
+      loadTripsFromServer();
+      window.addEventListener('scroll', loadTripsFromServer);
+
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

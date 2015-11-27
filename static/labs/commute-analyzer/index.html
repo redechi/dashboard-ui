@@ -1,0 +1,587 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Commute Analyzer | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/metrics-graphics/2.6.0/metricsgraphics.css" rel="stylesheet" />
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <link href="css/commute-analyzer.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="text"></div>
+    </div>
+    <div class="wrapper">
+      <h1>Commute Analyzer</h1>
+      <div class="note"><strong>Note:</strong> This analysis will not work well if you don't have a regular commute pattern, if your work and home are very close together or if you don't yet have very many trips recorded with Automatic.
+      </div>
+      <div class="controls">
+        <form id="filterDates">
+          <h4>Limit to Trips within Date Range</h4>
+          <div class="input-daterange">
+            <input type="text" name="startDate" />
+            <span>to</span>
+            <input type="text" name="endDate" />
+          </div>
+
+          <input type="submit" value="Filter Trips">
+        </form>
+        <div class="locations">
+          <h4>Select Locations</h4>
+          <div class="location">
+            <label>Start Location</label>
+            <select class="start-locations"></select>
+          </div>
+          <div class="location">
+            <label>End Location</label>
+            <select class="end-locations"></select>
+          </div>
+        </div>
+      </div>
+      <div class="results-summary">
+        <h4><span class="trip-count"></span> trips found between <span class="start-address"></span> and <span class="end-address"></span>.</h4>
+      </div>
+      <div id="commutemap" class="map"></div>
+      <div id="results" class="results"></div>
+    </div>
+
+    <a href="/#labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/metrics-graphics/2.6.0/metricsgraphics.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script src="../common/js/main.js"></script>
+    <script src="../common/js/maps.js"></script>
+
+    <script>
+      var trips;
+      var map;
+      var lineStyle = {color: '#b84329', opacity: 0.6, weight: 2};
+      var highlightedLineStyle = {color: '#f90700', opacity: 1, weight: 6};
+      var markerStyle = {'marker-size': 'large', 'marker-color': '#f78e13'};
+      var bounds;
+      var layers = [];
+      var clusters;
+
+      function formatSeconds(s) {
+        if (!s) {
+          return '';
+        }
+
+        return moment.duration(s, 'seconds').asMinutes().toFixed(1) + ' minutes';
+      }
+
+
+      function truncateLocation(lat, lon) {
+        return Math.round(lat *100) / 100 + ',' + Math.round(lon *100) / 100;
+      }
+
+
+      function formatAddress(address) {
+        var name;
+
+        if(!address || !address.display_name) {
+          name = 'Unknown Location';
+        } else {
+          name = address.display_name;
+        }
+
+        return name;
+      }
+
+
+      function clusterTrips(trips) {
+        return _.reduce(trips, function(memo, trip) {
+          var startCluster = truncateLocation(trip.start_location.lat, trip.start_location.lon);
+          var endCluster = truncateLocation(trip.end_location.lat, trip.end_location.lon);
+
+          // Create cluster if it doesn't exist
+          if (!memo[startCluster]) {
+            memo[startCluster] = {count: 0, address: formatAddress(trip.start_address)};
+          }
+
+          if (!memo[endCluster]) {
+            memo[endCluster] = {count: 0, address: formatAddress(trip.end_address)};
+          }
+
+          // If cluster doesn't have an address, add one
+          if (memo[startCluster].address === 'Unknown Location') {
+            memo[startCluster].address = formatAddress(trip.start_address);
+          }
+
+          if (memo[endCluster].address === 'Unknown Location') {
+            memo[endCluster].address = formatAddress(trip.end_address);
+          }
+
+          memo[startCluster].count += 1;
+          memo[endCluster].count += 1;
+
+          return memo;
+        }, {});
+      }
+
+
+      function findTripsBewteenClusters(trips, cluster1, cluster2) {
+        return _.filter(trips, function(trip) {
+          var startCluster = truncateLocation(trip.start_location.lat, trip.start_location.lon);
+          var endCluster = truncateLocation(trip.end_location.lat, trip.end_location.lon);
+
+          if (cluster1 === startCluster && cluster2 === endCluster) {
+            trip.type = 'toB';
+            return true;
+          } else if (cluster1 === endCluster && cluster2 === startCluster) {
+            trip.type = 'toA';
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }
+
+
+      function summarizeGroup(trips) {
+        var summary = {
+          tripCount: trips.length
+        };
+        var durations = [];
+
+        trips.forEach(function(trip) {
+          if (!summary.fastest || trip.duration_s < summary.fastest.duration_s) {
+            summary.fastest = trip;
+          }
+          if (!summary.slowest || trip.duration_s > summary.slowest.duration_s) {
+            summary.slowest = trip;
+          }
+          if (!summary.first || moment(trip.started_at).isBefore(summary.first.started_at)) {
+            summary.first = trip;
+          }
+          if (!summary.last || moment(trip.started_at).isAfter(summary.last.started_at)) {
+            summary.last = trip;
+          }
+
+          durations.push(trip.duration_s);
+        });
+        summary.averageDuration = _.reduce(durations, function(memo, duration) { return memo + duration; }, 0) / durations.length;
+
+        return summary;
+      }
+
+
+      function summarizeByDayOfWeek(trips) {
+        var daysOfWeek = _.groupBy(trips, function(trip) {
+          return formatDayOfWeek(trip.started_at, trip.start_timezone);
+        });
+
+        return _.reduce(daysOfWeek, function(memo, dayTrips, dayOfWeek) {
+          memo[dayOfWeek] = summarizeGroup(dayTrips);
+          return memo;
+        }, {});
+      }
+
+
+      function summarizeByDepartureTime(trips) {
+        var departureTime = _.groupBy(trips, function(trip) {
+          //break into 15 minute bins
+          return Math.floor((moment(trip.started_at).format('H') * 4) + (moment(trip.started_at).format('m') / 15));
+        });
+
+        return _.reduce(departureTime, function(memo, binTrips, binName) {
+          memo[binName] = summarizeGroup(binTrips);
+          return memo;
+        }, {});
+      }
+
+
+      function summarizeTrips(trips) {
+        var groups = _.groupBy(trips, 'type');
+        var summary = {
+          toB: groups.toB ? summarizeGroup(groups.toB) : null,
+          toA: groups.toA ? summarizeGroup(groups.toA) : null,
+        };
+
+        if (summary.toB) {
+          summary.toB.dayOfWeek = summarizeByDayOfWeek(groups.toB);
+          summary.toB.departureTime = summarizeByDepartureTime(groups.toB);
+
+          summary.aAddress = formatAddress(groups.toB[0].start_address);
+          summary.aLocation = [groups.toB[0].start_location.lat, groups.toB[0].start_location.lon];
+        }
+
+        if (summary.toA) {
+          summary.toA.dayOfWeek = summarizeByDayOfWeek(groups.toA);
+          summary.toA.departureTime = summarizeByDepartureTime(groups.toA);
+
+          summary.bAddress = formatAddress(groups.toA[0].start_address);
+          summary.bLocation = [groups.toA[0].start_location.lat, groups.toA[0].start_location.lon];
+        }
+
+        if (!summary.aAddress && summary.toA) {
+          summary.aAddress = formatAddress(groups.toA[0].end_address);
+          summary.aLocation = [groups.toA[0].end_location.lat, groups.toA[0].end_location.lon];
+        }
+
+        if (!summary.bAddress && summary.toB) {
+          summary.bAddress = formatAddress(groups.toB[0].end_address);
+          summary.bLocation = [groups.toB[0].end_location.lat, groups.toB[0].end_location.lon];
+        }
+
+        return summary;
+      }
+
+
+      function getRouteLink(trip) {
+        var text;
+        if (trip.path) {
+          text = '<a href="#" class="show-route" data-trip-id="' + trip.id + '">Show Route</a>'
+        } else {
+          text = '<a class="show-route" data-trip-id="' + trip.id + '">No path available</a>';
+        }
+        return text;
+      }
+
+
+      function drawDayofWeekChart(data, target) {
+        var barData = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(function(day) {
+
+          return {
+            label: day,
+            value: data[day] ? moment.duration(data[day].averageDuration, 'seconds').asMinutes() : 0
+          }
+        });
+
+        MG.data_graphic({
+            title: 'Average Commute Duration by Day of Week (minutes)',
+            data: barData,
+            chart_type: 'bar',
+            bar_orientation: 'vertical',
+            y_accessor: 'value',
+            x_accessor: 'label',
+            width: 700,
+            height: 250,
+            left: 100,
+            animate_on_load: true,
+            target: target,
+            y_extended_ticks: true,
+            y_label: 'Minutes',
+            mouseover: function(d, i) {
+              d3.select(target + ' svg .mg-active-datapoint')
+                .text(d.label + ':  ' + d.value.toFixed(1) + ' min');
+            }
+        });
+      }
+
+
+      function drawDepartureTimeChart(data, target) {
+        var chartData = _.map(data, function(data, bin) {
+          var d = moment().startOf('day').add(bin * 15, 'minutes');
+          return {
+            date: d.toDate(),
+            value: moment.duration(data.averageDuration, 'seconds').asMinutes()
+          }
+        });
+
+        MG.data_graphic({
+          title: 'Commute Duration by Departure Time (minutes)',
+          data: chartData,
+          interpolate: 'basic',
+          width: 700,
+          height: 300,
+          area: false,
+          left: 100,
+          bottom: 70,
+          animate_on_load: true,
+          target: target,
+          y_extended_ticks: true,
+          x_label: 'Departure Time',
+          y_label: 'Minutes',
+          markers: [{
+            date: moment().startOf('day').add(12, 'hours').toDate(),
+            label: 'noon'
+          }],
+          mouseover: function(d, i) {
+            var prefix = d3.formatPrefix(d.value);
+            var time = moment(d.date).format('h:mm A') + '-' + moment(d.date).add(15, 'minutes').format('h:mm A');
+            d3.select(target + ' svg .mg-active-datapoint')
+              .text(time + ':   ' + prefix.scale(d.value).toFixed(1) + prefix.symbol + ' min');
+          }
+        });
+      }
+
+
+      function drawTrips(trips, summary) {
+        if(!map) {
+          map = L.mapbox.map('commutemap', 'automatic.lm09hkd2');
+        }
+
+        layers.forEach(function(line) {
+          map.removeLayer(line);
+        });
+        bounds = null;
+
+        trips.forEach(function(trip) {
+          if (trip.path) {
+            var points = L.GeoJSON.decodeLine(trip.path);
+            var line = L.polyline(points, lineStyle);
+
+            line.tripID = trip.id;
+
+            line.addTo(map);
+            layers.push(line);
+
+            if (!bounds) {
+              bounds = L.latLngBounds(line.getBounds());
+            } else {
+              bounds.extend(line.getBounds());
+            }
+          }
+        });
+
+        var aMarker = L.marker(summary.aLocation, {
+          icon: L.mapbox.marker.icon(markerStyle)
+        }).bindPopup(summary.aAddress).addTo(map);
+        layers.push(aMarker);
+
+        var bMarker = L.marker(summary.bLocation, {
+          icon: L.mapbox.marker.icon(markerStyle)
+        }).bindPopup(summary.bAddress).addTo(map);
+        layers.push(bMarker);
+      }
+
+
+      function processTrips(trips) {
+        clusters = _.sortBy(_.pairs(clusterTrips(trips)), function(cluster) {
+          return -cluster[1].count;
+        });
+
+        if (clusters.length < 2) {
+          return alert('Not enough Automatic trips to analyze');
+        }
+
+        $('.start-locations').append(clusters.slice(0, 10).map(function(cluster) {
+          return $('<option>').text(cluster[1].address + ' (' + cluster[1].count + ' trips)').attr('value', cluster[0]);
+        }));
+
+        $('.end-locations').append(clusters.slice(0, 10).map(function(cluster, idx) {
+          var option = $('<option>').text(cluster[1].address + ' (' + cluster[1].count + ' trips)').attr('value', cluster[0])
+          if(idx === 1) {
+            option.attr('selected', 'selected');
+          }
+          return option;
+        }));
+
+        showRoute();
+      }
+
+
+      function showSummary(summary, address, type) {
+        var summaryText = $('<div>');
+        var summaryList = $('<ul>');
+        var prefix = 'to-' + type;
+        var tripCountText = summary.tripCount + ' ' + pluralize('trip', summary.tripCount);
+        tripCountText += ' between ' + formatDate(summary.first.started_at, summary.first.start_timezone);
+        tripCountText += ' and ' + formatDate(summary.last.started_at, summary.last.start_timezone);
+
+        var fastestText = 'Fastest Trip: ' + formatSeconds(summary.fastest.duration_s);
+        fastestText += ' on ' + formatDate(summary.fastest.started_at, summary.fastest.start_timezone);
+        fastestText += ' ' + formatTime(summary.fastest.started_at, summary.fastest.start_timezone);
+
+        var slowestText = 'Slowest Trip: ' + formatSeconds(summary.slowest.duration_s);
+        slowestText += ' on ' + formatDate(summary.slowest.started_at, summary.slowest.start_timezone);
+        slowestText += ' ' + formatTime(summary.slowest.started_at, summary.slowest.start_timezone);
+
+        var averageText = 'Average Time: ' + formatSeconds(summary.averageDuration);
+
+        $('<h3>')
+          .text('To ' + address)
+          .appendTo(summaryText);
+
+        $('<li>')
+          .text(tripCountText)
+          .appendTo(summaryList);
+
+        $('<li>')
+          .text(fastestText)
+          .append(getRouteLink(summary.fastest))
+          .appendTo(summaryList);
+
+        $('<li>')
+          .text(slowestText)
+          .append(getRouteLink(summary.slowest))
+          .appendTo(summaryList);
+
+        $('<li>')
+          .text(averageText)
+          .appendTo(summaryList);
+
+        summaryList.appendTo(summaryText);
+
+        $('<div>')
+          .attr('id', prefix + '-dayofweek')
+          .appendTo(summaryText);
+
+        $('<div>')
+          .attr('id', prefix + '-departuretime')
+          .appendTo(summaryText);
+
+        $('#results').append(summaryText);
+
+        if (summary.tripCount > 1) {
+          drawDayofWeekChart(summary.dayOfWeek, '#' + prefix + '-dayofweek');
+          drawDepartureTimeChart(summary.departureTime, '#' + prefix + '-departuretime');
+        }
+      }
+
+
+      function showRoute() {
+        var start = $('.start-locations').val();
+        var end = $('.end-locations').val();
+
+        var a = _.find(clusters, function(cluster) {
+          return cluster[0] === start;
+        });
+
+        var b = _.find(clusters, function(cluster) {
+          return cluster[0] === end;
+        });
+
+
+        if (a[1] < 5 || b[1] < 5) {
+          return alert('Not enough Automatic trips to analyze');
+        }
+
+        var commuteTrips = findTripsBewteenClusters(trips, a[0], b[0]);
+        var commuteSummary = summarizeTrips(commuteTrips);
+
+        if (!commuteTrips.length) {
+          return alert('Not enough Automatic trips to analyze')
+        }
+
+        $('.results-summary, .controls, .map').show();
+
+        drawTrips(commuteTrips, commuteSummary);
+
+        if (bounds) {
+          map.fitBounds(bounds);
+        }
+
+        $('.trip-count').text(commuteTrips.length);
+        $('.start-address').text(commuteSummary.aAddress);
+        $('.end-address').text(commuteSummary.bAddress);
+
+        $('#results').empty();
+
+        if (commuteSummary.toB) {
+          showSummary(commuteSummary.toB, commuteSummary.bAddress, 'b');
+        }
+
+        if (commuteSummary.toA) {
+          showSummary(commuteSummary.toA, commuteSummary.aAddress, 'a');
+        }
+
+        $('.results').on('click', '.show-route', function(e) {
+          e.preventDefault();
+
+          if ($(this).data('shown') !== true) {
+            var tripID = $(this).data('trip-id');
+
+            layers.forEach(function(line) {
+
+              if (line.tripID === tripID) {
+                line
+                  .setStyle(highlightedLineStyle)
+                  .bringToFront();
+              } else {
+                if (line.setStyle) {
+                  line.setStyle(lineStyle);
+                }
+              }
+            });
+
+            $('.show-route')
+              .text('Show Route')
+              .data('shown', false);
+
+            $(this)
+              .text('Hide Route')
+              .data('shown', true);
+          } else {
+            $(this)
+              .text('Show Route')
+              .data('shown', false);
+
+            layers.forEach(function(line) {
+              if (line.setStyle) {
+                line.setStyle(lineStyle);
+              }
+            });
+          }
+        });
+      }
+
+      // On Page Load
+      $('.input-daterange').datepicker({
+        autoclose: true,
+        clearBtn: true,
+        endDate: new Date()
+      });
+
+      $('.start-locations, .end-locations').change(function() {
+        showRoute();
+      });
+
+
+      $('#filterDates').submit(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var startDate = $('[name="startDate"]', this).val();
+        var endDate = $('[name="endDate"]', this).val();
+
+        if(!trips) {
+          return false;
+        }
+
+        var filteredTrips = _.filter(trips, function(trip) {
+          var accept = true;
+          if(startDate && moment(trip.started_at).isBefore(startDate)) {
+            accept = false;
+          }
+
+          if(endDate && moment(trip.started_at).isAfter(endDate)) {
+            accept = false;
+          }
+
+          return accept;
+        });
+
+        processTrips(filteredTrips);
+      });
+
+      fetchAllTrips(function(data) {
+        trips = data;
+        processTrips(trips);
+      });
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-4', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

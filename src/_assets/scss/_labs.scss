@@ -5,12 +5,12 @@
   box-sizing: border-box;
   padding: 25px 30px;
 
-  .pageTitle {
+  .page-title {
     font-size: 18px;
     margin: 0 0 15px;
   }
 
-  .labsList {
+  .labs-list {
     li {
       border-top: 1px solid $line_light_gray;
       clear: both;
@@ -20,17 +20,17 @@
         border-bottom: 1px solid $line_light_gray;
       }
 
-      .labsLink {
+      .labs-link {
         padding: 15px 10px;
         display: block;
         overflow: hidden;
       }
 
-      .labsLink:hover  {
+      .labs-link:hover  {
         background: $header_back;
       }
 
-      .labsIcon {
+      .labs-icon {
         width: 80px;
         height: 80px;
         float: left;
@@ -43,12 +43,12 @@
         }
       }
 
-      .labsTitle {
+      .labs-title {
         font-size: 16px;
         margin: 10px 0 0 95px;
       }
 
-      .labsDescription {
+      .labs-description {
         margin: 10px 0 0 95px;
       }
     }

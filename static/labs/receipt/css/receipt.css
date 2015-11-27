@@ -1,0 +1,204 @@
+.wrapper {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.trip {
+  overflow: hidden;
+  background: #F4F4F4;
+  margin: 25px 0;
+  padding: 10px 15px;
+  color: #777;
+}
+
+.trip:hover {
+  background: #e3e3e3;
+}
+
+.trip .times {
+  width: 75px;
+  float: left;
+  font-size: 12px;
+  padding: 0 35px 0 0;
+  position: relative;
+  text-align: right;
+}
+
+.trip .duration {
+  margin-top: 17px;
+  font-weight: bold;
+}
+
+.trip .start-time {
+  margin-top: 20px;
+}
+
+.trip .trip-line {
+  position: absolute;
+  width: 6px;
+  height: 110px;
+  background-color: #08b1d5;
+  right: 0px;
+  top: 6px;
+}
+
+.trip .trip-line div {
+  width: 18px;
+  height: 18px;
+  background-color: #08b1d5;
+  border-radius: 9px;
+  margin-left: -6px;
+}
+
+.trip .trip-line div:first-child {
+  margin-top: -3px;
+}
+
+.trip .trip-line div:last-child {
+  position: absolute;
+  bottom: 0;
+}
+
+.trip .locations {
+  float: left;
+  width: 390px;
+  padding-left: 20px;
+}
+
+.trip .start-address,
+.trip .end-address {
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.trip .trip-stats {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 7px 15px;
+  margin: 5px 0;
+  overflow: hidden;
+}
+
+.trip .distance {
+  width: 29%;
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.trip .distance::after {
+  content: ' MILES';
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.trip .mpg {
+  width: 33%;
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.trip .mpg::after {
+  content: ' MPG';
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.trip .fuel-cost {
+  width: 37%;
+  float: left;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.trip .fuel-cost::before {
+  content: '$';
+  font-size: 14px;
+  font-weight: normal;
+  padding-right: 4px;
+  vertical-align: 9px;
+}
+
+.trip .fuel-cost::after {
+  content: ' FUEL';
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.btn-receipt {
+  margin-top: 36px;
+  float: right;
+  background:
+}
+
+.modal {
+  display: none;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.modal .modal-dialog {
+  width: 560px;
+  height: 600px;
+  padding: 10px;
+  margin: 30px auto;
+  position: relative;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+.modal .receipt-image {
+  width: 100%;
+}
+
+.modal .close {
+  background-color: #737c81;
+  border-radius: 12px;
+  border: 0;
+  color: #ffffff;
+  font-weight: normal;
+  height: 24px;
+  line-height: 24px;
+  opacity: 0.65;
+  position: absolute;
+  right: -12px;
+  top: -12px;
+  width: 24px;
+  font-size: 25px;
+  text-shadow: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.modal .close:hover {
+  background-color: #2c3032;
+  opacity: 0.5;
+}
+
+.buttons {
+  margin: 0 auto;
+  display: block;
+  width: 275px;
+}
+
+.buttons .btn:first-child {
+  margin-right: 20px;
+}
+
+.buttons .btn {
+  width: 100px;
+}
