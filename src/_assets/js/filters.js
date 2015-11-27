@@ -139,7 +139,7 @@ exports.getFiltersFromQuery = function(query) {
 
 exports.getFilter = function(filter) {
   return _.findWhere(filterList, {key: filter});
-}
+};
 
 exports.getRemainingFilters = function(filters) {
   return _.reject(filterList, (filter) => !!filters[filter.key]);

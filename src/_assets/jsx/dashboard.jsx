@@ -98,6 +98,8 @@ module.exports = class Dashboard extends React.Component {
         filters: this.state.filters,
         trips: filters.filterTrips(this.state.allTrips, this.state.filters)
       });
+
+      this.props.history.pushState(null, this.props.location.pathname, this.state.filters);
     };
   }
 
