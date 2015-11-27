@@ -2,6 +2,8 @@ import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import _ from 'underscore';
 
+const filters = require('../js/filters');
+const formatters = require('../js/formatters');
 const graph = require('../js/graph');
 
 const graphTypes = [
@@ -46,15 +48,13 @@ module.exports = class Graph extends React.Component {
     };
   }
 
-  calculateAverage() {
-    let total = this.props.totals[this.state.graphType];
-
-     //TODO: divide total by bins except for score and mpg
-     return total;
-  }
-
   getGraphWidth() {
     return this.props.windowWidth - 410;
+  }
+
+  updateGraph() {
+    let dateRange = filters.getDateRange(this.props.filters);
+    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth(), dateRange);
   }
 
   render() {
@@ -77,7 +77,7 @@ module.exports = class Graph extends React.Component {
     return (
       <div className="graph">
         <div className="graph-menu">
-          <div className="date-range"></div>
+          <div className="date-range">{formatters.dateRange(filters.getDateRange(this.props.filters))}</div>
           <div className="graph-type-label">Graph</div>
           <OverlayTrigger placement="bottom" trigger="click" ref="graphTypePopover" overlay={graphTypePopover}>
             <div className="graph-type" data-toggle="popover">
@@ -88,23 +88,23 @@ module.exports = class Graph extends React.Component {
 
         <div className="graph-averages">
           <div className="graph-averages-label">Your average</div>
-          <div className="graph-averages-value">{this.calculateAverage()}</div>
+          <div className="graph-averages-value" id="graphAverage"></div>
           <div className="graph-averages-unit">{selectedGraphType.unit}</div>
           <div className="graph-averages-background">{selectedGraphType.unit}</div>
         </div>
 
         <div className="graph-container">
-          <div className="graph-tooltip-container"><div className="graph-tooltip"></div></div>
+          <div className="graph-tooltip" id="graphTooltip"></div>
         </div>
       </div>
     );
   }
 
   componentDidMount() {
-    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth());
+    this.updateGraph();
   }
 
   componentDidUpdate() {
-    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth());
+    this.updateGraph();
   }
 };

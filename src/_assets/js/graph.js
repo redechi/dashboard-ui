@@ -5,38 +5,44 @@ import moment from 'moment';
 const formatters = require('./formatters');
 const stats = require('./stats');
 
-let binSize;
-let bins = {};
-let data;
-let summary
+var binSize;
+var bins;
+var data;
 
 
-exports.updateGraph = function(trips, graphType, graphWidth) {
+exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   if(!trips) {
     return false;
   }
 
-  getGraphData(trips, graphType);
+  //Calculate bin size and graph data
+  binSize = calculateBinSize(dateRange);
+  bins = calculateBins(dateRange, binSize);
+  data = calculateGraphData(trips, graphType, dateRange);
+  let summary = calculateGraphSummary(trips, graphType);
 
   let margin = {top: 35, right: 0, bottom: 60, left: 0};
   let width = graphWidth - margin.left - margin.right;
   let height = 185 - margin.top - margin.bottom;
-  let tooltip = document.getElementsByClassName('graph-tooltip-container');
+  let tooltip = document.getElementById('graphTooltip');
   let binWidth = width / data.length;
   let barWidth = Math.min(145, Math.max(8, (width / data.length - 15)));
   let barRadius = Math.min(barWidth/2, 6);
   let minBarHeight = 15;
 
   //remove any existing graph
-  d3.select('.graphs .graph-container svg').remove();
+  d3.select('.graph .graph-container svg').remove();
 
   //If no data, no graph
   if(!data || !data.length) {
     return;
   }
 
+  //Update averages
+  document.getElementById('graphAverage').innerText = summary.average;
+
   //Initialize SVG
-  let svg = d3.select('#graphs .graphContainer').append('svg')
+  let svg = d3.select('.graph .graph-container').append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
       .classed(graphType, true)
@@ -53,7 +59,7 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
 
   let y = d3.scale.linear()
       .range([height, 0])
-      .domain([0, d3.max(data, (d) => d.values)]);
+      .domain([0, d3.max(data, (d) => d.value)]);
 
   //axes
   let yAxis = d3.svg.axis()
@@ -72,45 +78,41 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
     .data(data)
     .enter().append('g')
       .attr('class', 'bar')
-      .attr('y', (d) => y(d.values))
+      .attr('y', (d) => y(d.value))
       .attr('x', (d) => x(d.key));
 
   function generateTooltip(d) {
-    let tooltip = '<div class="arrow"></div>';
-    tooltip += '<div class="date">' + formatters.formatDateForGraphLabel(binSize, parseInt(d.key, 10)) + '</div>';
-    tooltip += '<div class="value">' + formatters.formatForGraphLabel(graphType, d.values) + '</div>';
-    return tooltip;
+    let div = '<div class="graph-tooltip-container"><div class="arrow"></div>';
+    div += '<div class="date">' + formatGraphLabelDate(parseInt(d.key, 10)) + '</div>';
+    div += '<div class="value">' + formatGraphLabelValue(d.value, graphType) + '</div></div>';
+    return div;
   }
 
   function barMouseover(d) {
-    if(d.values === 0) {
+    if(d.value === 0) {
       return;
     }
 
     let startDate = parseInt(d.key, 10);
     let endDate = moment(startDate).endOf(binSize).valueOf();
     let magicNumber = 19;
-    let top = y(d.values) < (height - minBarHeight) ? (y(d.values) - magicNumber) : (y(d.values) - magicNumber - minBarHeight);
+    let top = y(d.value) < (height - minBarHeight) ? (y(d.value) - magicNumber) : (y(d.value) - magicNumber - minBarHeight);
 
-    tooltip
-      .css({
-        top: top + 'px',
-        left: x(d.key) + 'px',
-        visibility: 'visible'
-      })
-      .find('.graphTooltip')
-        .html(generateTooltip(d));
+    tooltip.style.top = `${top}px`;
+    tooltip.style.left = `${x(d.key)}px`;
+    tooltip.style.visibility = 'visible';
+    tooltip.innerHTML = generateTooltip(d);
   }
 
   function barMouseout(d) {
-    if(d.values === 0) {
+    if(d.value === 0) {
       return;
     }
 
     let startDate = parseInt(d.key, 10);
     let endDate = moment(startDate).endOf(binSize).valueOf();
 
-    tooltip.css('visibility', 'hidden');
+    tooltip.style.visibility = 'hidden';
   }
 
   //draw background separately from border to allow missing bottom border
@@ -151,68 +153,68 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
     .on('mouseout', barMouseout)
     .attr('class', 'barBackground')
     .attr('d', (d) => {
-      if(d.values > 0) {
-        return topRoundedRectBackground(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
+      if(d.value > 0) {
+        return topRoundedRectBackground(x(d.key) - (barWidth/2), y(d.value), barWidth, height - y(d.value), barRadius);
       }
     });
 
   bars.append('path')
     .on('mouseover', barMouseover)
     .on('mouseout', barMouseout)
-    .attr('class', 'barOutline')
+    .attr('class', 'bar-outline')
     .attr('d', (d) => {
-      if(d.values > 0) {
-        return topRoundedRectBorder(x(d.key) - (barWidth/2), y(d.values), barWidth, height - y(d.values), barRadius);
+      if(d.value > 0) {
+        return topRoundedRectBorder(x(d.key) - (barWidth/2), y(d.value), barWidth, height - y(d.value), barRadius);
       }
     })
     .style('stroke', (d) => {
       //color each outline by score
       if(graphType === 'score') {
-        return formatters.scoreColor(d.values);
+        return formatters.scoreColor(d.value);
       }
     });
 
 
   //styles for min and max
   if(summary.barCount > 2) {
-    let maxBar = this.getBarByKey(summary.max.key);
+    let maxBar = getBarByKey(summary.max.key);
 
     maxBar
       .classed('max', true)
       .append('text')
         .attr('x', (d) => x(d.key))
-        .attr('y', (d) => y(d.values))
+        .attr('y', (d) => y(d.value))
         .attr('dy', '-1.75em')
         .text('MAX')
         .attr('text-anchor', 'middle')
-        .attr('class', 'barLabel');
+        .attr('class', 'bar-label');
 
     maxBar
       .append('text')
         .attr('x', (d) => x(d.key))
-        .attr('y', (d) => y(d.values))
+        .attr('y', (d) => y(d.value))
         .attr('dy', '-0.55em')
-        .text((d) => formatters.formatForGraphLabel(graphType, d.values))
+        .text((d) => formatGraphLabelValue(d.value, graphType))
         .attr('text-anchor', 'middle');
 
-    let minBar = this.getBarByKey(summary.min.key);
+    let minBar = getBarByKey(summary.min.key);
 
     minBar
       .classed('min', true)
       .append('text')
         .attr('x', (d) => x(d.key))
-        .attr('y', (d) => y(d.values))
+        .attr('y', (d) => y(d.value))
         .attr('dy', '-1.75em')
         .text('MIN')
         .attr('text-anchor', 'middle')
-        .attr('class', 'barLabel');
+        .attr('class', 'bar-label');
 
     minBar
       .append('text')
         .attr('x', (d) => x(d.key))
-        .attr('y', (d) => y(d.values))
+        .attr('y', (d) => y(d.value))
         .attr('dy', '-0.55em')
-        .text((d) => formatters.formatForGraphLabel(graphType, d.values))
+        .text((d) => formatGraphLabelValue(d.value, graphType))
         .attr('text-anchor', 'middle');
   }
 
@@ -227,7 +229,7 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
       .attr('y2', height);
 
 
-  //X Axis box to hide small values of graph
+  //X Axis box to hide small value of graph
   svg.append('g')
     .attr('class', 'x axis background')
     .append('rect')
@@ -241,7 +243,7 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
   bars.append('text')
     .attr('transform', 'translate(0,' + (height + 20) + ')')
     .attr('x', (d) => x(d.key))
-    .attr('class', (d) => (d.values === 0) ? 'empty' : '')
+    .attr('class', (d) => (d.value === 0) ? 'empty' : '')
     .classed('tickLabel', true)
     .text(_.bind(getTickLabel, this));
 
@@ -263,28 +265,21 @@ exports.updateGraph = function(trips, graphType, graphWidth) {
   }
 };
 
+function calculateAverage(trips, graphType) {
+  if(!trips) {
+    return;
+  }
 
-function getGraphData(trips, graphType) {
-  //TODO: connect to filters
-  let dateRange = [1414825200000, 1448440274038];
-  let date = dateRange[0];
-
-  //Calculate bin size
-  let days = moment.duration(dateRange[1] - dateRange[0]).asDays();
-
-  if(days <= 42) {
-    //use days as bin
-    binSize = 'day';
+  let average;
+  if(graphType === 'mpg' || graphType === 'score') {
+    average = stats.sumTrips(trips, graphType);
   } else {
-    //use months as bin
-    binSize = 'month';
+    average = stats.sumTrips(trips, graphType) / _.size(bins);
   }
+  return formatGraphLabelValue(average, graphType);
+}
 
-  while(date < dateRange[1]) {
-    bins[moment(date).startOf(binSize).valueOf()] = [];
-    date = moment(date).add(1, binSize + 's').valueOf();
-  }
-
+function calculateGraphData(trips, graphType, dateRange) {
   //group trips into bins
   trips.forEach((trip) => {
     let bin = moment(trip.started_at).startOf(binSize).valueOf();
@@ -294,24 +289,53 @@ function getGraphData(trips, graphType) {
   });
 
   //Combine trips into one number
-  data = _.map(bins, (trips, key) => ({
+  return _.map(bins, (binTrips, key) => ({
     key: key,
-    values: stats.sumTrips(trips, graphType)
+    value: stats.sumTrips(binTrips, graphType)
   }));
+}
 
+function calculateGraphSummary(trips, graphType) {
   //Calculate Min and Max and Empty bins
-  summary = _.reduce(data, (memo, bar) => {
-    if ((!memo.max || bar.values >= memo.max.values) && bar.values > 0) {
+  let summary = _.reduce(data, (memo, bar) => {
+    if ((!memo.max || bar.value >= memo.max.value) && bar.value > 0) {
       memo.max = bar;
     }
-    if ((!memo.min || bar.values <= memo.min.values) && bar.values > 0) {
+    if ((!memo.min || bar.value <= memo.min.value) && bar.value > 0) {
       memo.min = bar;
     }
-    if (bar.values > 0) {
+    if (bar.value > 0) {
       memo.barCount++;
     }
     return memo;
   }, {barCount: 0});
+
+  summary.average = calculateAverage(trips, graphType);
+
+  return summary;
+}
+
+function calculateBinSize(dateRange) {
+  let days = moment.duration(dateRange[1] - dateRange[0]).asDays();
+
+  if(days <= 42) {
+    //use days as bin
+    return 'day';
+  } else {
+    //use months as bin
+    return 'month';
+  }
+}
+
+function calculateBins(dateRange, binSize) {
+  let binDate = dateRange[0];
+  let bins = {};
+
+  while(binDate < dateRange[1]) {
+    bins[moment(binDate).startOf(binSize).valueOf()] = [];
+    binDate = moment(binDate).add(1, binSize).valueOf();
+  }
+  return bins;
 }
 
 function getTickLabel(d) {
@@ -344,5 +368,33 @@ function getYearLabel(d) {
   if(date.month() === 0 || (d.key === data[0].key && date.date() < 29)) {
     //only show year label at start of years and first position
     return date.format('YYYY');
+  }
+}
+
+function getBarByKey(key) {
+  return d3.select('.graph .graph-container svg')
+    .selectAll('.bar')
+      .filter((d) => d.key === key);
+}
+
+function formatGraphLabelDate(date) {
+  if(binSize === 'day') {
+    return moment(date).format('MMM D');
+  } else if(binSize === 'month') {
+    return moment(date).format('MMM YYYY');
+  }
+}
+
+function formatGraphLabelValue(value, graphType) {
+  if(graphType === 'cost') {
+    return formatters.costWithUnit(value);
+  } else if (graphType === 'score') {
+    return formatters.score(value);
+  } else if (graphType === 'duration') {
+    return formatters.durationMinutes(value);
+  } else if (graphType === 'mpg') {
+    return formatters.averageMPG(value);
+  } else if (graphType === 'distance') {
+    return formatters.distance(value);
   }
 }

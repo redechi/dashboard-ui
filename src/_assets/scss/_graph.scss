@@ -36,6 +36,7 @@
       text-align: right;
       font-size: 12px;
       display: inline-block;
+      padding-right: 5px;
       vertical-align: bottom;
     }
 
@@ -44,6 +45,7 @@
       display: inline-block;
       color: $link_type;
       vertical-align: bottom;
+      padding-right: 5px;
       padding-top: 10px;
       line-height: 21px;
     }
@@ -67,13 +69,13 @@
     }
   }
 
-  .graph-tooltip-container {
+  .graph-tooltip {
     position: absolute;
     z-index: 10;
     visibility: hidden;
     pointer-events: none;
 
-    .graph-tooltip {
+    .graph-tooltip-container {
       padding: 15px;
       min-width: 65px;
       height: 76px;
@@ -132,7 +134,7 @@
         fill: $white;
       }
 
-      path.barOutline {
+      path.bar-outline {
         stroke: $graph_outline;
         fill: transparent;
         //shape-rendering: crispEdges;
@@ -151,7 +153,7 @@
         fill: #297FB8;
       }
 
-      &.selected path.barOutline {
+      &.selected path.bar-outline {
         stroke: #297FB8;
       }
 
@@ -160,8 +162,8 @@
         fill: #82C9F1;
       }
 
-      &:hover path.barOutline,
-      &.highlighted path.barOutline {
+      &:hover path.bar-outline,
+      &.highlighted path.bar-outline {
         stroke: #3FA6E0;
       }
 
@@ -189,38 +191,38 @@
       }
     }
 
-    .average_mpg {
+    .mpg {
       .max {
-        path.barOutline {
+        path.bar-outline {
           stroke: $green;
         }
 
-        .barLabel {
+        .bar-label {
           fill: $green;
         }
       }
 
       .min {
-        path.barOutline {
+        path.bar-outline {
           stroke: $red;
         }
 
-        .barLabel {
+        .bar-label {
           fill: $red;
         }
       }
     }
 
-    .fuel_cost_usd,
-    .distance_miles,
+    .cost,
+    .distance,
     .duration {
       .max,
       .min {
-        path.barOutline {
+        path.bar-outline {
           stroke: $base_type;
         }
 
-        .barLabel {
+        .bar-label {
           fill: $base_type;
         }
       }

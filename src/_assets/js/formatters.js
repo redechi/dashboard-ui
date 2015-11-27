@@ -56,7 +56,14 @@ exports.durationHours = (seconds) => {
   return `${hours}:${minutes}`;
 };
 
-exports.durationMinutes = (seconds) => moment.duration(seconds, 'seconds').asMinutes().toFixed();
+exports.durationMinutes = (seconds) => {
+  let minutes = moment.duration(seconds, 'seconds').asMinutes();
+  if (Math.round(minutes) >= 100) {
+    return minutes.toFixed();
+  } else {
+    return (minutes || 0).toFixed(1);
+  }
+}
 
 exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
 
@@ -75,3 +82,21 @@ exports.kmplToMpg = (kmpl) => kmpl * 2.35214583;
 exports.formatVehicle = (vehicle) => vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : '';
 
 exports.dateRange = (range) => moment(range[0]).format('MMM D - ') + moment(range[1]).format('MMM D, YYYY');
+
+exports.scoreColor = (score) => {
+  if (score < 20) {
+    return 'rgb(252, 59, 47)';
+  } else if (score < 40) {
+    return 'rgb(253, 104, 43)';
+  } else if (score < 60) {
+    return 'rgb(253, 148, 38)';
+  } else if (score < 80) {
+    return 'rgb(254, 204, 47)';
+  } else if (score < 90) {
+    return 'rgb(183, 205, 55)';
+  } else if (score < 100) {
+    return 'rgb(148, 206, 59)';
+  } else if (score === 100) {
+    return 'rgb(112, 206, 63)';
+  }
+};

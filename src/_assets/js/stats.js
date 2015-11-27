@@ -68,12 +68,16 @@ exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {
 
 exports.sumTrips = function(trips, field) {
   //Calculate sum or average, depending on field
-  if(field === 'average_mpg') {
-    return getAverageMPG(trips);
-  } else if(field === 'score') {
+  if(field === 'cost') {
+    return getSum(trips, 'fuel_cost_usd');
+  } else if (field === 'score') {
     return getAverageScore(trips);
-  } else {
-    return getSum(trips, field);
+  } else if (field === 'duration') {
+    return getSum(trips, 'duration_s');
+  } else if (field === 'mpg') {
+    return getAverageMPG(trips);
+  } else if (field === 'distance') {
+    return getSum(trips, 'distance_miles');
   }
 };
 
@@ -92,12 +96,10 @@ function getAverageScore(trips) {
   }
 
   let weightedSum = trips.reduce((memo, trip) => {
-    let scoreEvents = trip.score_events;
-    let scoreSpeeding = trip.score_speeding;
-    if (scoreEvents && scoreSpeeding) {
-      memo.scoreEvents += scoreEvents * trip.duration;
-      memo.scoreSpeeding += scoreSpeeding * trip.duration;
-      memo.time += trip.duration;
+    if (trip.score_events && trip.score_speeding) {
+      memo.scoreEvents += trip.score_events * trip.duration_s;
+      memo.scoreSpeeding += trip.score_speeding * trip.duration_s;
+      memo.time += trip.duration_s;
     }
     return memo;
   }, {time: 0, scoreEvents: 0, scoreSpeeding: 0});
