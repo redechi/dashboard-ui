@@ -1,14 +1,15 @@
 import _ from 'underscore';
+import classNames from 'classnames';
 import d3 from 'd3';
 import moment from 'moment';
 
 const formatters = require('./formatters');
+const highlight = require('./highlight');
 const stats = require('./stats');
 
 var binSize;
 var bins;
 var data;
-
 
 exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   if(!trips) {
@@ -77,7 +78,9 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   let bars = svg.selectAll('.bar')
     .data(data)
     .enter().append('g')
-      .attr('class', 'bar')
+      .on('mouseenter', barMouseenter)
+      .on('mouseleave', barMouseleave)
+      .attr('class', (d) => classNames('bar', {selected: d.selected}))
       .attr('y', (d) => y(d.value))
       .attr('x', (d) => x(d.key));
 
@@ -88,13 +91,13 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
     return div;
   }
 
-  function barMouseover(d) {
+  function barMouseenter(d) {
     if(d.value === 0) {
       return;
     }
 
     let startDate = parseInt(d.key, 10);
-    let endDate = moment(startDate).endOf(binSize).valueOf();
+    let hoveredBin = bins[startDate];
     let magicNumber = 19;
     let top = y(d.value) < (height - minBarHeight) ? (y(d.value) - magicNumber) : (y(d.value) - magicNumber - minBarHeight);
 
@@ -102,17 +105,16 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
     tooltip.style.left = `${x(d.key)}px`;
     tooltip.style.visibility = 'visible';
     tooltip.innerHTML = generateTooltip(d);
+
+    if(hoveredBin) {
+      highlight.highlightTrips(hoveredBin.trips);
+    }
   }
 
-  function barMouseout(d) {
-    if(d.value === 0) {
-      return;
-    }
-
-    let startDate = parseInt(d.key, 10);
-    let endDate = moment(startDate).endOf(binSize).valueOf();
-
+  function barMouseleave(d) {
     tooltip.style.visibility = 'hidden';
+
+    highlight.unhighlightTrips();
   }
 
   //draw background separately from border to allow missing bottom border
@@ -139,8 +141,6 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
 
   //invisible bar to make tooltip hovering easier
   bars.append('rect')
-    .on('mouseover', barMouseover)
-    .on('mouseout', barMouseout)
     .attr('class', 'invisibleHover')
     .attr('x', (d) => x(d.key) - (barWidth/2))
     .attr('y', height - minBarHeight)
@@ -149,9 +149,7 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
 
 
   bars.append('path')
-    .on('mouseover', barMouseover)
-    .on('mouseout', barMouseout)
-    .attr('class', 'barBackground')
+    .attr('class', 'bar-background')
     .attr('d', (d) => {
       if(d.value > 0) {
         return topRoundedRectBackground(x(d.key) - (barWidth/2), y(d.value), barWidth, height - y(d.value), barRadius);
@@ -159,8 +157,6 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
     });
 
   bars.append('path')
-    .on('mouseover', barMouseover)
-    .on('mouseout', barMouseout)
     .attr('class', 'bar-outline')
     .attr('d', (d) => {
       if(d.value > 0) {
@@ -265,6 +261,20 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   }
 };
 
+exports.highlightTrips = function(trips) {
+  trips.forEach(trip => {
+    let key = moment(trip.started_at).startOf(binSize).valueOf();
+    getBarByKey(key.toString()).classed('highlighted', true);
+  });
+};
+
+exports.unhighlightTrips = function(trips) {
+  trips.forEach(trip => {
+    let key = moment(trip.started_at).startOf(binSize).valueOf();
+    getBarByKey(key.toString()).classed('highlighted', false);
+  });
+};
+
 function calculateAverage(trips, graphType) {
   if(!trips) {
     return;
@@ -282,16 +292,20 @@ function calculateAverage(trips, graphType) {
 function calculateGraphData(trips, graphType, dateRange) {
   //group trips into bins
   trips.forEach((trip) => {
-    let bin = moment(trip.started_at).startOf(binSize).valueOf();
-    if(bins[bin]) {
-      bins[bin].push(trip);
+    let bin = bins[moment(trip.started_at).startOf(binSize).valueOf()];
+    if(bin) {
+      bin.trips.push(trip);
+      if(trip.selected) {
+        bin.selected = true;
+      }
     }
   });
 
   //Combine trips into one number
-  return _.map(bins, (binTrips, key) => ({
+  return _.map(bins, (bin, key) => ({
     key: key,
-    value: stats.sumTrips(binTrips, graphType)
+    value: stats.sumTrips(bin.trips, graphType),
+    selected: bin.selected
   }));
 }
 
@@ -332,7 +346,11 @@ function calculateBins(dateRange, binSize) {
   let bins = {};
 
   while(binDate < dateRange[1]) {
-    bins[moment(binDate).startOf(binSize).valueOf()] = [];
+    let bin = moment(binDate).startOf(binSize).valueOf()
+    bins[bin] = {
+      trips: [],
+      bin: bin
+    };
     binDate = moment(binDate).add(1, binSize).valueOf();
   }
   return bins;
@@ -374,7 +392,7 @@ function getYearLabel(d) {
 function getBarByKey(key) {
   return d3.select('.graph .graph-container svg')
     .selectAll('.bar')
-      .filter((d) => d.key === key);
+      .filter(d => d.key === key);
 }
 
 function formatGraphLabelDate(date) {

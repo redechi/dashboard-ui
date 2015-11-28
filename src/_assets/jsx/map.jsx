@@ -72,11 +72,11 @@ module.exports = class Map extends React.Component {
 
   componentDidMount() {
     map.createMap();
-    map.updateMap(this.props.trips);
+    map.updateMap(this.props.trips, this.props.toggleSelect);
     this.toggleTripEvents();
   }
 
   componentDidUpdate() {
-    map.updateMap(this.props.trips);
+    map.updateMap(this.props.trips, this.props.toggleSelect);
   }
 };

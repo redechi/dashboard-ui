@@ -130,7 +130,7 @@
     }
 
     g.bar {
-      path.barBackground {
+      path.bar-background {
         fill: $white;
       }
 
@@ -149,7 +149,7 @@
         cursor: auto;
       }
 
-      &.selected path.barBackground {
+      &.selected path.bar-background {
         fill: #297FB8;
       }
 
@@ -157,8 +157,8 @@
         stroke: #297FB8;
       }
 
-      &:hover path.barBackground,
-      &.highlighted path.barBackground {
+      &:hover path.bar-background,
+      &.highlighted path.bar-background {
         fill: #82C9F1;
       }
 

@@ -3,6 +3,7 @@ import _ from 'underscore';
 import polyline from 'polyline';
 
 const formatters = require('./formatters');
+const highlight = require('./highlight');
 const stats = require('./stats');
 
 let map;
@@ -38,7 +39,7 @@ const icons = {
     popupAnchor: [0,-28]
   }),
 
-  aIcon: L.icon({
+  aHighlightedIcon: L.icon({
     iconUrl: '/_assets/images/map_pin_a.png',
     iconRetinaUrl: '/_assets/images/map_pin_a@2x.png',
     iconSize: [17, 28],
@@ -46,7 +47,7 @@ const icons = {
     popupAnchor: [0,-28]
   }),
 
-  bIcon: L.icon({
+  bHighlightedIcon: L.icon({
     iconUrl: '/_assets/images/map_pin_b.png',
     iconRetinaUrl: '/_assets/images/map_pin_b@2x.png',
     iconSize: [17, 28],
@@ -117,32 +118,6 @@ const icons = {
   })
 };
 
-const lineStyles = {
-  styleLine: (zoom) => ({
-    color: '#737c81',
-    opacity: 0.4,
-    weight: getPathWidthbyZoom(zoom)
-  }),
-
-  highlightLine: (zoom) => ({
-    opacity: 1,
-    color: '#5DBEF5',
-    weight: Math.max(4, getPathWidthbyZoom(zoom))
-  }),
-
-  selectedLine: (zoom) => ({
-    opacity: 1,
-    color: '#297FB8',
-    weight: Math.max(4, getPathWidthbyZoom(zoom))
-  }),
-
-  speedingLine: (zoom) => ({
-    opacity: 1,
-    color: '#F5A623',
-    weight: Math.max(4, getPathWidthbyZoom(zoom))
-  })
-}
-
 exports.createMap = function(type) {
   mapType = type;
   L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
@@ -163,18 +138,96 @@ exports.createMap = function(type) {
   map.addLayer(pathsLayer);
 };
 
-exports.updateMap = function(trips) {
-  clearMap();
-  if(trips) {
-    trips.forEach(addTripToMap);
+exports.updateMap = function(trips, toggleSelect) {
+  if(!trips) {
+    return;
+  }
 
-    // If speeding layer is empty, calculate tripEvents layers (expensive)
-    if(!speedingLayer.getLayers().length) {
-      buildTripEventsLayer(trips);
+  let zoom = map.getZoom();
+  let pathStyle;
+  let aIcon;
+  let bIcon;
+  let speedingLine = styleLine(zoom, 'speeding');
+  let hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
+  let hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
+
+  clearMap();
+
+  trips.forEach(trip => {
+    if(mapType === 'single_trip') {
+      pathStyle = styleLine(zoom, 'highlight');
+      aIcon = icons.aHighlightedIcon;
+      bIcon = icons.bHighlightedIcon;
+    } else if (trip.selected) {
+      pathStyle = styleLine(zoom, 'selected');
+      aIcon = icons.aSelectedIcon;
+      bIcon = icons.bSelectedIcon;
+    } else {
+      pathStyle = styleLine(zoom);
+      aIcon = getMarkerSizeByZoom(zoom, 'normal');
+      bIcon = getMarkerSizeByZoom(zoom, 'normal');
     }
 
-    fitBounds();
-  }
+    if(trip.path) {
+      let line = L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
+      trip.pathID = line._leaflet_id;
+
+
+      line.on('click', () => {
+        toggleSelect(trip.id);
+      })
+      .on('mouseover', () => {
+        highlight.highlightTrips([trip]);
+      })
+      .on('mouseout', () => {
+        highlight.unhighlightTrips();
+      });
+
+      trip.vehicle_events.forEach((item) => {
+        if(item.type === 'hard_brake') {
+          hardBrakesLayer.addLayer(L.marker(
+            [item.lat, item.lon],
+            {icon: hardBrakeIcon, id: trip.id}
+          ));
+        } else if(item.type === 'hard_accel') {
+          hardAccelsLayer.addLayer(L.marker(
+            [item.lat, item.lon],
+            {icon: hardAccelIcon, id: trip.id}
+          ));
+        } else if(item.type === 'speeding') {
+          let lineOptions = _.extend({id: trip.id}, speedingLine);
+          speedingLayer.addLayer(L.polyline(item.path, lineOptions));
+        }
+      });
+    }
+
+    if(trip.start_location) {
+      let options = {
+        icon: aIcon,
+        type: 'start',
+        id: trip.id
+      };
+
+      let startMarker = L.marker(
+        [trip.start_location.lat, trip.start_location.lon],
+        options
+      ).addTo(markersLayer);
+    }
+
+    if(trip.end_location) {
+      let options = {
+        icon: bIcon,
+        type: 'end',
+        id: trip.id
+      };
+      let endMarker = L.marker(
+        [trip.end_location.lat, trip.end_location.lon],
+        options
+      ).addTo(markersLayer);
+    }
+  });
+
+  fitBounds();
 };
 
 exports.zoomIn = function() {
@@ -297,81 +350,6 @@ function getPathWidthbyZoom(zoom) {
   }
 }
 
-function addTripToMap(trip) {
-  let zoom = map.getZoom();
-  let pathStyle;
-  let aIcon;
-  let bIcon;
-  let speedingLine = styleLine(zoom, 'speeding');
-  let hardBrakeIcon = getMarkerSizeByZoom(zoom, 'hardBrake');
-  let hardAccelIcon = getMarkerSizeByZoom(zoom, 'hardAccel');
-
-  if(mapType === 'single_trip') {
-    pathStyle = styleLine(zoom, 'highlight');
-    aIcon = icons.aHighlightedIcon;
-    bIcon = icons.bHighlightedIcon;
-  } else if (trip.selected) {
-    pathStyle = styleLine(zoom, 'selected');
-    aIcon = icons.aSelectedIcon;
-    bIcon = icons.bSelectedIcon;
-  } else if (trip.highlighted) {
-    pathStyle = styleLine(zoom, 'highlight');
-    aIcon = icons.aHighlightedIcon;
-    bIcon = icons.bHighlightedIcon;
-  } else {
-    pathStyle = styleLine(zoom);
-    aIcon = getMarkerSizeByZoom(zoom, 'normal');
-    bIcon = getMarkerSizeByZoom(zoom, 'normal');
-  }
-
-  if(trip.path) {
-    let line = L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
-    trip.pathID = line._leaflet_id;
-
-    trip.vehicle_events.forEach((item) => {
-      if(item.type === 'hard_brake') {
-        hardBrakesLayer.addLayer(L.marker(
-          [item.lat, item.lon],
-          {icon: hardBrakeIcon, id: trip.id}
-        ));
-      } else if(item.type === 'hard_accel') {
-        hardAccelsLayer.addLayer(L.marker(
-          [item.lat, item.lon],
-          {icon: hardAccelIcon, id: trip.id}
-        ));
-      } else if(item.type === 'speeding') {
-        let lineOptions = _.extend({id: trip.id}, speedingLine);
-        speedingLayer.addLayer(L.polyline(item.path, lineOptions));
-      }
-    });
-  }
-
-  if(trip.start_location) {
-    let options = {
-      icon: aIcon,
-      type: 'start',
-      id: trip.id
-    };
-
-    let startMarker = L.marker(
-      [trip.start_location.lat, trip.start_location.lon],
-      options
-    ).addTo(markersLayer);
-  }
-
-  if(trip.end_location) {
-    let options = {
-      icon: bIcon,
-      type: 'end',
-      id: trip.id
-    };
-    let endMarker = L.marker(
-      [trip.end_location.lat, trip.end_location.lon],
-      options
-    ).addTo(markersLayer);
-  }
-}
-
 function clearMap() {
   pathsLayer.clearLayers();
   markersLayer.clearLayers();
@@ -436,4 +414,64 @@ function fitBounds(bounds) {
   if(bounds.isValid()) {
     map.fitBounds(bounds, boundsOptions);
   }
+}
+
+exports.highlightTrips = function(trips) {
+  trips.forEach(trip => {
+    let path = pathsLayer.getLayer(trip.pathID);
+    let startMarker = markersLayer.getLayer(trip.startMarkerID);
+    let endMarker = markersLayer.getLayer(trip.endMarkerID);
+
+    if(path) {
+      path
+        .bringToFront()
+        .setStyle(styleLine(map.getZoom(), 'highlight'));
+    }
+
+    if(startMarker) {
+      startMarker.setIcon(icons.aHighlightedIcon);
+    }
+
+    if(endMarker) {
+      endMarker.setIcon(icons.bHighlightedIcon);
+    }
+  });
+}
+
+exports.unhighlightTrips = function(trips) {
+  let zoom = map.getZoom();
+  let pathStyle;
+  let aIcon;
+  let bIcon;
+
+  trips.forEach(trip => {
+    let path = pathsLayer.getLayer(trip.pathID);
+    let startMarker = markersLayer.getLayer(trip.startMarkerID);
+    let endMarker = markersLayer.getLayer(trip.endMarkerID);
+
+
+    if (trip.selected) {
+      pathStyle = styleLine(zoom, 'selected');
+      aIcon = icons.aSelectedIcon;
+      bIcon = icons.bSelectedIcon;
+    } else {
+      pathStyle = styleLine(zoom);
+      aIcon = getMarkerSizeByZoom(zoom, 'normal');
+      bIcon = getMarkerSizeByZoom(zoom, 'normal');
+    }
+
+    if(path) {
+      path
+        .bringToFront()
+        .setStyle(pathStyle);
+    }
+
+    if(startMarker) {
+      startMarker.setIcon(aIcon);
+    }
+
+    if(endMarker) {
+      endMarker.setIcon(bIcon);
+    }
+  });
 }

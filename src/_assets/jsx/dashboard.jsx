@@ -158,7 +158,8 @@ module.exports = class Dashboard extends React.Component {
               <Map
                 trips={this.state.trips}
                 totals={totals}
-                windowHeight={this.state.windowHeight} />
+                windowHeight={this.state.windowHeight}
+                toggleSelect={this.toggleSelect} />
             </div>
           </div>
         </div>

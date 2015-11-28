@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 const formatters = require('../js/formatters');
+const highlight = require('../js/highlight');
 
 module.exports = class Trip extends React.Component {
   constructor(props) {
@@ -25,7 +26,11 @@ module.exports = class Trip extends React.Component {
     }
 
     return (
-      <li className={classNames({selected: trip.selected})}>
+      <li
+        id={trip.id}
+        className={classNames({selected: trip.selected})}
+        onMouseEnter={highlight.highlightTrips.bind(null, [trip])}
+        onMouseLeave={highlight.unhighlightTrips}>
         <div className="time-box">
           <div className="end-time">
             {moment(trip.ended_at).format('h:mm a').toUpperCase()}
