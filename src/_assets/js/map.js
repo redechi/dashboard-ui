@@ -212,6 +212,7 @@ exports.updateMap = function(trips, toggleSelect) {
         [trip.start_location.lat, trip.start_location.lon],
         options
       ).addTo(markersLayer);
+      trip.startMarkerID = startMarker._leaflet_id;
     }
 
     if(trip.end_location) {
@@ -224,6 +225,7 @@ exports.updateMap = function(trips, toggleSelect) {
         [trip.end_location.lat, trip.end_location.lon],
         options
       ).addTo(markersLayer);
+      trip.endMarkerID = endMarker._leaflet_id;
     }
   });
 
