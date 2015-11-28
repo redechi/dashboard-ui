@@ -64,7 +64,7 @@ module.exports = class Filters extends React.Component {
         filterType={key}
         updateFilter={this.updateFilter}
         showPopover={this.state.showPopover}
-        maximums={this.props.maximums} />
+        ranges={this.props.ranges} />
     });
 
     let addFilterControl;

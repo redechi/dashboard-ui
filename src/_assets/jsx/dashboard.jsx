@@ -25,7 +25,8 @@ module.exports = class Dashboard extends React.Component {
       filters: filters.getFiltersFromQuery(this.props.location.query),
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
-      vehicles: []
+      vehicles: [],
+      ranges: stats.calculateRanges()
     };
 
     this.toggleSelect = (tripId) => {
@@ -137,7 +138,7 @@ module.exports = class Dashboard extends React.Component {
             updateFilter={this.updateFilter}
             resetFilters={this.resetFilters}
             undoFilter={this.undoFilter}
-            maximums={this.state.maximums} />
+            ranges={this.state.ranges} />
           <div>
             <div className="right-column">
               <TripStats
@@ -183,7 +184,7 @@ module.exports = class Dashboard extends React.Component {
         allTrips: allTrips,
         trips: filters.filterTrips(allTrips, this.state.filters),
         vehicles: vehicles,
-        maximums: stats.calculateMaxiumums(allTrips)
+        ranges: stats.calculateRanges(allTrips)
       });
 
     });

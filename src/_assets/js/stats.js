@@ -49,26 +49,41 @@ exports.calculateTotals = function(trips) {
   };
 };
 
-exports.calculateMaxiumums = function(trips) {
+exports.calculateRanges = function(trips) {
   if(!trips) {
     return {
-      distance: 100,
-      duration: 100,
-      cost: 100,
-      time: 24
+      distance: [0, 100],
+      duration: [0, 100],
+      cost: [0, 100],
+      time: [0, 24],
+      date: [1363071600000, moment().endOf('day').valueOf()]
     };
   }
 
   return trips.reduce((memo, trip) => {
-    memo.distance = Math.max(memo.distance, Math.ceil(trip.distance_miles));
-    memo.duration = Math.max(memo.duration, Math.ceil(trip.duration_s));
-    memo.cost = Math.max(memo.cost, Math.ceil(trip.fuel_cost_usd));
+    memo.distance = [
+      Math.min(memo.distance[0], Math.floor(trip.distance_miles)),
+      Math.max(memo.distance[1], Math.ceil(trip.distance_miles))
+    ];
+    memo.duration = [
+      Math.min(memo.duration[0], Math.floor(trip.duration_s)),
+      Math.max(memo.duration[1], Math.ceil(trip.duration_s))
+    ];
+    memo.cost = [
+      Math.min(memo.cost[0], Math.floor(trip.fuel_cost_usd)),
+      Math.max(memo.cost[1], Math.ceil(trip.fuel_cost_usd))
+    ];
+    memo.date = [
+      Math.min(memo.date[0], moment(trip.started_at).valueOf()),
+      Math.max(memo.date[1], moment(trip.started_at).valueOf())
+    ];
     return memo;
   }, {
-    distance: 0,
-    duration: 0,
-    cost: 0,
-    time: 24
+    distance: [Infinity, 0],
+    duration: [Infinity, 0],
+    cost: [Infinity, 0],
+    time: [0, 24],
+    date: [moment().endOf('day').valueOf(), 1363071600000]
   });
 };
 
