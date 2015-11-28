@@ -1,18 +1,36 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
+import classNames from 'classnames';
 
 const filters = require('../js/filters');
+const formatters = require('../js/formatters');
 
 module.exports = class Filters extends React.Component {
   constructor(props) {
     super(props);
+
+    this.formatVehicleMenuItem = (vehicle, key) => (
+      <li
+        onClick={this.updateFilter.bind(null, vehicle.id)}
+        className={classNames({selected: this.props.value === vehicle.id})}
+        key={key} >
+        {formatters.formatVehicle(vehicle)} <i></i>
+      </li>
+    );
+
+    this.updateFilter = (value) => {
+      this.props.updateFilter(this.props.filterType, value);
+      if(this.refs[`${this.props.filterType}Popover`]) {
+        this.refs[`${this.props.filterType}Popover`].hide();
+      }
+    }
   }
 
   render() {
     let filter = filters.getFilter(this.props.filterType);
 
     let removeLink = (
-      <div className="remove-filter" onClick={this.props.removeFilter.bind(null, this.props.filterType)}>
+      <div className="remove-filter" onClick={this.updateFilter.bind(null, null)}>
         Remove filter
       </div>
     )
@@ -21,12 +39,12 @@ module.exports = class Filters extends React.Component {
       date: (
         <Popover id="date" title="Select Date Range" className="popover-date">
           <ul className="date-filter-value list-select animate">
-            <li data-value="thisWeek">this week <i></i></li>
-            <li data-value="thisMonth">this month <i></i></li>
-            <li data-value="last30Days" className="selected">in the last 30 days <i></i></li>
-            <li data-value="thisYear">this year <i></i></li>
-            <li data-value="allTime">all time <i></i></li>
-            <li data-value="custom">custom <i></i></li>
+            <li>this week <i></i></li>
+            <li>this month <i></i></li>
+            <li>in the last 30 days <i></i></li>
+            <li>this year <i></i></li>
+            <li>all time <i></i></li>
+            <li>custom <i></i></li>
           </ul>
           <div className="dateFilterCustom">
             <div className="input-group">
@@ -43,8 +61,12 @@ module.exports = class Filters extends React.Component {
       vehicle: (
         <Popover id="vehicle" title="Select Vehicle" className="popover-vehicle">
           <ul className="list-select animate">
-            <li data-value="all">All my vehicles <i></i></li>
-            <li className="hide" data-value="other">Other vehicle(s) <i></i></li>
+            <li
+              className={classNames({selected: this.props.value === 'all'})}
+              onClick={this.updateFilter.bind(null, 'all')}>
+              All my vehicles <i></i>
+            </li>
+            {this.props.vehicles.map(this.formatVehicleMenuItem)}
           </ul>
         </Popover>
       ),
@@ -84,7 +106,7 @@ module.exports = class Filters extends React.Component {
         <div className="filter-label">{filter.label}</div>
         <OverlayTrigger placement="bottom" trigger="click" ref={`${this.props.filterType}Popover`} overlay={popovers[this.props.filterType]}>
           <div className="btn btn-filter btn-popover">
-            <span className="btn-text">{filter.valueText(this.props.value)}</span> <i className="fa fa-angle-down fa-lg"></i>
+            <span className="btn-text">{filter.valueText(this.props.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
           </div>
         </OverlayTrigger>
       </li>

@@ -27,34 +27,40 @@ exports.address = (address) => {
   return formattedAddress || address.display_name || 'Unknown Address';
 };
 
-exports.formatTrip = trip => ({
-  id: trip.id,
-  vehicle: trip.vehicle,
-  started_at: trip.started_at,
-  ended_at: trip.ended_at,
-  start_address: trip.start_address,
-  end_address: trip.end_address,
-  start_location: trip.start_location,
-  end_location: trip.end_location,
-  start_time_zone: trip.start_time_zone,
-  end_time_zone: trip.end_time_zone,
-  path: trip.path,
-  duration_s: trip.duration_s,
-  distance_miles: metersToMiles(trip.distance_m),
-  fuel_volume_gal: litersToGal(trip.fuel_volume_l),
-  fuel_cost_usd: trip.fuel_cost_usd,
-  average_mpg: kmplToMpg(trip.average_kmpl),
-  hard_accels: trip.hard_accels,
-  hard_brakes: trip.hard_brakes,
-  duration_over_70_s: trip.duration_over_70_s,
-  duration_over_75_s: trip.duration_over_75_s,
-  duration_over_80_s: trip.duration_over_80_s,
-  score_events: trip.score_events,
-  score_speeding: trip.score_speeding,
-  vehicle_events: formatVehicleEvents(trip.vehicle_events, trip.path),
-  tags: trip.tags,
-  selected: false
-});
+exports.formatTrip = (trip, vehicles) => {
+  let vehicle = _.findWhere(vehicles, {url: trip.vehicle});
+  return {
+    id: trip.id,
+    vehicle: {
+      display_name: exports.formatVehicle(vehicle),
+      id: vehicle ? vehicle.id : null
+    },
+    started_at: trip.started_at,
+    ended_at: trip.ended_at,
+    start_address: trip.start_address,
+    end_address: trip.end_address,
+    start_location: trip.start_location,
+    end_location: trip.end_location,
+    start_time_zone: trip.start_time_zone,
+    end_time_zone: trip.end_time_zone,
+    path: trip.path,
+    duration_s: trip.duration_s,
+    distance_miles: metersToMiles(trip.distance_m),
+    fuel_volume_gal: litersToGal(trip.fuel_volume_l),
+    fuel_cost_usd: trip.fuel_cost_usd,
+    average_mpg: kmplToMpg(trip.average_kmpl),
+    hard_accels: trip.hard_accels,
+    hard_brakes: trip.hard_brakes,
+    duration_over_70_s: trip.duration_over_70_s,
+    duration_over_75_s: trip.duration_over_75_s,
+    duration_over_80_s: trip.duration_over_80_s,
+    score_events: trip.score_events,
+    score_speeding: trip.score_speeding,
+    vehicle_events: formatVehicleEvents(trip.vehicle_events, trip.path),
+    tags: trip.tags,
+    selected: false
+  };
+};
 
 exports.distance = (distanceMiles) => {
   if (Math.round(distanceMiles) >= 100) {
@@ -110,7 +116,7 @@ function kmplToMpg(kmpl) {
   return kmpl * 2.35214583;
 }
 
-exports.formatVehicle = (vehicle) => vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : '';
+exports.formatVehicle = vehicle => vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : '';
 
 exports.dateRange = (range) => moment(range[0]).format('MMM D - ') + moment(range[1]).format('MMM D, YYYY');
 

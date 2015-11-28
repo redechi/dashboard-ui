@@ -83,7 +83,7 @@ function csvEscape(item) {
 
 function tripToArray(trip) {
   return [
-    trip.vehicle,
+    trip.vehicle.display_name,
     trip.start_address ? trip.start_address.name : '',
     formatters.formatTime(trip.started_at, trip.start_time_zone, 'YYYY-MM-DD h:mm A'),
     trip.end_address ? trip.end_address.name : '',

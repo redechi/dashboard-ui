@@ -9,15 +9,13 @@ const filterList = [
     name: 'vehicle',
     label: 'Show trips from',
     defaultValue: 'all',
-    valueText: (value) => {
+    valueText: (value, vehicles) => {
       if(value === 'all') {
         return 'all my vehicles';
       } else if(value === 'other') {
         return 'other vehicle(s)';
       } else {
-        // TODO: get vehicle name
-        let vehicle = vehiclesCollection.get(this.get('value'));
-        return (vehicle) ? vehicle.get('display_name') : 'Unknown';
+        return formatters.formatVehicle(_.find(vehicles, {id: value}));
       }
     }
   },
@@ -197,9 +195,9 @@ function filterByVehicle(trips, vehicleFilter) {
     if(vehicleFilter === 'all') {
       return true;
     } else if(vehicleFilter === 'other') {
-      return (trip.vehicle === undefined);
+      return (trip.vehicle.id === null);
     } else {
-      return (vehicleFilter === trip.vehicle_id);
+      return (vehicleFilter === trip.vehicle.id);
     }
   });
 }

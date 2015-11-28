@@ -133,6 +133,7 @@ module.exports = class Dashboard extends React.Component {
         <div>
           <Filters
             filters={this.state.filters}
+            vehicles={this.state.vehicles}
             updateFilter={this.updateFilter}
             resetFilters={this.resetFilters}
             undoFilter={this.undoFilter} />
