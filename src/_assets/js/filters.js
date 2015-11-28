@@ -48,7 +48,7 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(parseInt(min, 10) === 0 && max === 'Infinity') {
+      if(min === '0' && max === 'Infinity') {
         return 'all distances';
       } else {
         return `between ${min} - ${max} miles`;
@@ -62,10 +62,10 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(parseInt(min, 10) === 0 && max === 'Infinity') {
+      if(min === '0' && max === 'Infinity') {
         return 'all durations';
       } else {
-        return `between ${min} - ${max} minutes`;
+        return `between ${Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes())} - ${Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes())} minutes`;
       }
     }
   },
@@ -76,10 +76,10 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(parseInt(min, 10) === 0 && max === 'Infinity') {
+      if(min === '0' && max === 'Infinity') {
         return 'all costs';
       } else {
-        return `between ${formatters.costWithUnit(min)} - ${ormatters.costWithUnit(max)}`;
+        return `between ${formatters.costWithUnit(parseFloat(min))} - ${formatters.costWithUnit(parseFloat(max))}`;
       }
     }
   },
@@ -87,10 +87,10 @@ const filterList = [
     key: 'time',
     name: 'time of day',
     label: 'and',
-    defaultValue: '0,Infinity',
+    defaultValue: '0,24',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(parseInt(min, 10) === 0 && parseInt(max, 10) === 24) {
+      if(min === '0' && max === '24') {
         return 'all times of day';
       } else {
         let minValue = formatters.formatTime(moment(min, 'hours').valueOf(), null, 'h A');

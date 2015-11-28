@@ -98,7 +98,7 @@ exports.durationMinutes = (seconds) => {
 
 exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
 
-exports.costWithUnit = (fuelCost) => '$' + ((fuelCost) ? fuelCost : 0).toFixed(2);
+exports.costWithUnit = (fuelCost) => '$' + (fuelCost || 0).toFixed(2);
 
 exports.averageMPG = (mpg) => mpg ? mpg.toFixed(1) : 0;
 

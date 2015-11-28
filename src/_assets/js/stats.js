@@ -44,8 +44,32 @@ exports.calculateTotals = function(trips) {
     mpg: formatters.averageMPG(totals.mpg),
     hardBrakes: totals.hardBrakes,
     hardAccels: totals.hardAccels,
-    speedingMinutes: moment.duration(totals.speedingSeconds, 'seconds').asMinutes().toFixed()
+    speedingMinutes: moment.duration(totals.speedingSeconds, 'seconds').asMinutes().toFixed(),
+    maximums: totals.maximums
   };
+};
+
+exports.calculateMaxiumums = function(trips) {
+  if(!trips) {
+    return {
+      distance: 100,
+      duration: 100,
+      cost: 100,
+      time: 24
+    };
+  }
+
+  return trips.reduce((memo, trip) => {
+    memo.distance = Math.max(memo.distance, Math.ceil(trip.distance_miles));
+    memo.duration = Math.max(memo.duration, Math.ceil(trip.duration_s));
+    memo.cost = Math.max(memo.cost, Math.ceil(trip.fuel_cost_usd));
+    return memo;
+  }, {
+    distance: 0,
+    duration: 0,
+    cost: 0,
+    time: 24
+  });
 };
 
 exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {

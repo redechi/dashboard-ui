@@ -1,6 +1,8 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
+import _ from 'underscore';
 import classNames from 'classnames';
+import Slider from 'bootstrap-slider';
 
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
@@ -8,6 +10,10 @@ const formatters = require('../js/formatters');
 module.exports = class Filters extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      value: this.props.value
+    };
 
     this.formatVehicleMenuItem = (vehicle, key) => (
       <li
@@ -22,6 +28,29 @@ module.exports = class Filters extends React.Component {
       this.props.updateFilter(this.props.filterType, value);
       if(this.refs[`${this.props.filterType}Popover`]) {
         this.refs[`${this.props.filterType}Popover`].hide();
+      }
+    }
+
+    this.preparePopover = () => {
+      let filter = filters.getFilter(this.props.filterType);
+
+      if(_.contains(['distance', 'duration', 'cost', 'time'], this.props.filterType)) {
+        let min = 0;
+        let max = this.props.maximums[this.props.filterType];
+        let value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max))
+        var slider = new Slider(`.popover-${this.props.filterType} input.slider`, {
+          min: min,
+          max: max,
+          value: value,
+          tooltip: 'hide'
+        })
+        .on('change', (results) => {
+          this.setState({value: results.newValue.join(',')});
+        })
+        .on('slideStop', (newValue) => {
+          this.setState({value: newValue.join(',')});
+          this.updateFilter(newValue.join(','));
+        });
       }
     }
   }
@@ -104,9 +133,14 @@ module.exports = class Filters extends React.Component {
     return (
       <li>
         <div className="filter-label">{filter.label}</div>
-        <OverlayTrigger placement="bottom" trigger="click" ref={`${this.props.filterType}Popover`} overlay={popovers[this.props.filterType]}>
+        <OverlayTrigger
+          placement="bottom"
+          trigger="click"
+          ref={`${this.props.filterType}Popover`}
+          overlay={popovers[this.props.filterType]}
+          onEntered={this.preparePopover}>
           <div className="btn btn-filter btn-popover">
-            <span className="btn-text">{filter.valueText(this.props.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
+            <span className="btn-text">{filter.valueText(this.state.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
           </div>
         </OverlayTrigger>
       </li>

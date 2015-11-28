@@ -136,7 +136,8 @@ module.exports = class Dashboard extends React.Component {
             vehicles={this.state.vehicles}
             updateFilter={this.updateFilter}
             resetFilters={this.resetFilters}
-            undoFilter={this.undoFilter} />
+            undoFilter={this.undoFilter}
+            maximums={this.state.maximums} />
           <div>
             <div className="right-column">
               <TripStats
@@ -181,7 +182,8 @@ module.exports = class Dashboard extends React.Component {
       this.setState({
         allTrips: allTrips,
         trips: filters.filterTrips(allTrips, this.state.filters),
-        vehicles: vehicles
+        vehicles: vehicles,
+        maximums: stats.calculateMaxiumums(allTrips)
       });
 
     });

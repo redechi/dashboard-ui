@@ -18,14 +18,18 @@ module.exports = class Filters extends React.Component {
 
     this.updateFilter = (filterName, filterValue) => {
       this.props.updateFilter(filterName, filterValue);
-      this.refs.filterTypePopover.hide();
+      if(this.refs.filterTypePopover) {
+        this.refs.filterTypePopover.hide();
+      }
       this.setState({undoCount: this.state.undoCount + 1});
     };
 
     this.addFilter = filterName => {
       let defaultValue = filters.getFilter(filterName).defaultValue
       this.props.updateFilter(filterName, defaultValue);
-      this.refs.filterTypePopover.hide();
+      if(this.refs.filterTypePopover) {
+        this.refs.filterTypePopover.hide();
+      }
       this.setState({undoCount: this.state.undoCount + 1});
     }
 
@@ -59,7 +63,8 @@ module.exports = class Filters extends React.Component {
         vehicles={this.props.vehicles}
         filterType={key}
         updateFilter={this.updateFilter}
-        showPopover={this.state.showPopover} />
+        showPopover={this.state.showPopover}
+        maximums={this.props.maximums} />
     });
 
     let addFilterControl;
