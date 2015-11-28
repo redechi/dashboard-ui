@@ -24,7 +24,8 @@ module.exports = class Dashboard extends React.Component {
       exporting: false,
       filters: filters.getFiltersFromQuery(this.props.location.query),
       windowHeight: window.innerHeight,
-      windowWidth: window.innerWidth
+      windowWidth: window.innerWidth,
+      vehicles: []
     };
 
     this.toggleSelect = (tripId) => {
@@ -170,15 +171,16 @@ module.exports = class Dashboard extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', _.debounce(this.handleResize, 100));
 
-    requests.getTrips((e, results) => {
+    requests.getData((e, trips, vehicles) => {
       if(e) {
-        return alert('Unable to fetch trips. Please try again later.');
+        return alert('Unable to fetch data. Please try again later.');
       }
-      let allTrips = results.map(formatters.formatTrip);
+      let allTrips = trips.map(trip => formatters.formatTrip(trip, vehicles));
 
       this.setState({
         allTrips: allTrips,
-        trips: filters.filterTrips(allTrips, this.state.filters)
+        trips: filters.filterTrips(allTrips, this.state.filters),
+        vehicles: vehicles
       });
 
     });

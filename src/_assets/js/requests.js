@@ -4,26 +4,39 @@ import moment from 'moment';
 
 const login = require('./login');
 
-exports.getTrips = (cb) => {
+exports.getData = (cb) => {
   if(login.isLoggedIn()) {
+    //TODO: get logged in data
     cb();
   } else {
     // Demo Trips
-    request
-      .get('/data/trips.json')
-      .set('Accept', 'application/json')
-      .end(function(e, response){
-        if(e) {
-          return cb(e);
-        }
-        if(!response.body || !response.body.results) {
-          return cb(new Error('No trip results returned'));
-        }
+    fetchDemoData('/data/trips.json', (e, trips) => {
+      if(e) return cb(e);
 
-        return cb(null, prepDemoTrips(response.body.results));
+      fetchDemoData('/data/vehicles.json', (e, vehicles) => {
+        if(e) return cb(e);
+
+        cb(null, prepDemoTrips(trips), _.sortBy(vehicles, 'make'));
       });
+    });
   }
 };
+
+function fetchDemoData(fileName, cb) {
+  request
+    .get(fileName)
+    .set('Accept', 'application/json')
+    .end(function(e, response){
+      if(e) {
+        return cb(e);
+      }
+      if(!response.body || !response.body.results) {
+        return cb(new Error('No results returned'));
+      }
+
+      return cb(null, response.body.results);
+    });
+}
 
 function prepDemoTrips(trips) {
   // Make all demo trips recent

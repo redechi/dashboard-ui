@@ -82,11 +82,8 @@ function csvEscape(item) {
 }
 
 function tripToArray(trip) {
-  //TODO: get vehicle
-  let vehicle = trip.vehicle;
-
   return [
-    formatters.formatVehicle(vehicle),
+    trip.vehicle,
     trip.start_address ? trip.start_address.name : '',
     formatters.formatTime(trip.started_at, trip.start_time_zone, 'YYYY-MM-DD h:mm A'),
     trip.end_address ? trip.end_address.name : '',
