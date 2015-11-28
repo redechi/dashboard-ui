@@ -12,7 +12,8 @@ module.exports = class Filters extends React.Component {
     super(props);
 
     this.state = {
-      undoCount: 0
+      undoCount: 0,
+      showPopover: false
     };
 
     this.updateFilter = (filterName, filterValue) => {
@@ -20,6 +21,13 @@ module.exports = class Filters extends React.Component {
       this.refs.filterTypePopover.hide();
       this.setState({undoCount: this.state.undoCount + 1});
     };
+
+    this.addFilter = filterName => {
+      let defaultValue = filters.getFilter(filterName).defaultValue
+      this.props.updateFilter(filterName, defaultValue);
+      this.refs.filterTypePopover.hide();
+      this.setState({undoCount: this.state.undoCount + 1});
+    }
 
     this.undoFilter = () => {
       if(this.state.undoCount > 0) {
@@ -35,7 +43,7 @@ module.exports = class Filters extends React.Component {
         <ul className="list-select animate">
           {filters.getRemainingFilters(this.props.filters).map((filterType) => {
             return (
-              <li onClick={this.updateFilter.bind(null, filterType.key, filters.getFilter(filterType.key).defaultValue)} key={filterType.key}>
+              <li onClick={this.addFilter.bind(null, filterType.key)} key={filterType.key}>
                 {filterType.name}
               </li>
             )
@@ -50,7 +58,8 @@ module.exports = class Filters extends React.Component {
         value={value}
         vehicles={this.props.vehicles}
         filterType={key}
-        updateFilter={this.updateFilter} />
+        updateFilter={this.updateFilter}
+        showPopover={this.state.showPopover} />
     });
 
     let addFilterControl;
@@ -88,5 +97,9 @@ module.exports = class Filters extends React.Component {
         </ul>
       </div>
     );
+  }
+
+  componentDidMount() {
+    this.setState({showPopover: true});
   }
 };

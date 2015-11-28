@@ -112,4 +112,11 @@ module.exports = class Filters extends React.Component {
       </li>
     );
   }
+
+  componentDidMount() {
+    // only show popovers on filter add after initial filters applied
+    if(this.props.showPopover) {
+      this.refs[`${this.props.filterType}Popover`].show();
+    }
+  }
 }
