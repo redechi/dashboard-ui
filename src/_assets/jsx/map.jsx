@@ -27,7 +27,7 @@ module.exports = class Map extends React.Component {
   }
 
   getMapHeight() {
-    return this.props.windowHeight - 461;
+    return this.props.windowHeight - this.props.filterHeight - 367;
   }
 
   render() {

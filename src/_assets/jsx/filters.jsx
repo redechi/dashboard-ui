@@ -81,7 +81,7 @@ module.exports = class Filters extends React.Component {
     }
 
     return (
-      <div className="filters">
+      <div className="filters" id="filters">
         <ul className="filter-controls">
           <label>Filters:</label>
           <li

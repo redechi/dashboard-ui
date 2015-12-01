@@ -25,6 +25,7 @@ module.exports = class Dashboard extends React.Component {
       filters: filters.getFiltersFromQuery(this.props.location.query),
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
+      filterHeight: 94,
       vehicles: [],
       ranges: stats.calculateRanges()
     };
@@ -86,7 +87,10 @@ module.exports = class Dashboard extends React.Component {
     }
 
     this.handleResize = () => {
-      this.setState({windowHeight: window.innerHeight});
+      this.setState({
+        windowHeight: window.innerHeight,
+        filterHeight: document.getElementById('filters').offsetHeight
+      });
     };
 
     this.updateFilter = (filterName, filterValue) => {
@@ -119,6 +123,10 @@ module.exports = class Dashboard extends React.Component {
       trips: filters.filterTrips(this.state.allTrips, newFilters)
     });
     this.props.history.pushState(null, this.props.location.pathname, newFilters);
+
+    setTimeout(() => {
+      this.handleResize();
+    }, 100);
   }
 
   areAllSelected() {
@@ -151,7 +159,8 @@ module.exports = class Dashboard extends React.Component {
                 toggleSelectAll={this.toggleSelectAll}
                 export={this.export}
                 exporting={this.state.exporting}
-                windowHeight={this.state.windowHeight} />
+                windowHeight={this.state.windowHeight}
+                filterHeight={this.state.filterHeight} />
             </div>
             <div className="left-column">
               <Graph
@@ -163,6 +172,7 @@ module.exports = class Dashboard extends React.Component {
                 trips={this.state.trips}
                 totals={totals}
                 windowHeight={this.state.windowHeight}
+                filterHeight={this.state.filterHeight}
                 toggleSelect={this.toggleSelect} />
             </div>
           </div>
