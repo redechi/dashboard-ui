@@ -70,10 +70,9 @@ module.exports = class Dashboard extends React.Component {
       if(exportType === 'selected') {
         trips = _.filter(this.state.trips, (trip) => trip.selected);
       } else if (exportType === 'tripList') {
-        // TODO: apply filtered trips
         trips = this.state.trips;
       } else if (exportType === 'all') {
-        trips = this.state.trips;
+        trips = this.state.allTrips;
       }
 
       if (!trips || !trips.length) {

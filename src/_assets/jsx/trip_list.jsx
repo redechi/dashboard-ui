@@ -145,7 +145,7 @@ module.exports = class TripList extends React.Component {
       </Popover>
     );
 
-    let selectedTripCount = _.size(_.filter(this.props.trips, (trip) => this.selected));
+    let selectedTripCount = _.size(_.filter(this.props.trips, (trip) => trip.selected));
 
     let exportPopover = (
       <Popover id="export" title="Export trips to .csv" className="popover-export">
