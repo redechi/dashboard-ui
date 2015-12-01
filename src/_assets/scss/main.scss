@@ -1,11 +1,9 @@
+@import '~normalize.css/normalize';
+
 /* Set bootstrap font defaults */
 $font-family-sans-serif: AvenirNextPro;
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-
-@import '~normalize.css/normalize';
-
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "~eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build.scss";
 
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
