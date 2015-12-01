@@ -76,8 +76,8 @@ module.exports = class Trip extends React.Component {
               </div>
             </div>
             <div className="event">
-              <div className={classNames('speeding', {none: trip.duration_over_70_min === 0})}>
-                {trip.duration_over_70_min}
+              <div className={classNames('speeding', {none: trip.duration_over_70_s === 0})}>
+                {formatters.durationMinutes(trip.duration_over_70_s)}
               </div>
             </div>
             <div className="event">

@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
+const formatters = require('../js/formatters');
 const map = require('../js/trip_modal_map');
 
 module.exports = class Map extends React.Component {
@@ -47,8 +48,8 @@ module.exports = class Map extends React.Component {
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('speeding', {none: this.props.trip.duration_over_70_min === 0})}>
-                  {this.props.trip.duration_over_70_min}
+                <div className={classNames('speeding', {none: this.props.trip.duration_over_70_s === 0})}>
+                  {formatters.durationMinutes(this.props.trip.duration_over_70_s)}
                 </div>
               </div>
               <div className="event">
