@@ -1,115 +1,38 @@
-/* Overrides styles form Bootstrap Datepicker */
+/* Overrides styles for datepicker */
 
-.bootstrap-datetimepicker-widget {
-  width: inherit;
-}
+.datepicker {
+  color: $base_type;
+  border: 0;
+  @include box-shadow(0px 0px 2px 0px rgba(0,0,0,0.15));
 
-.bootstrap-datetimepicker-widget table tr td,
-.bootstrap-datetimepicker-widget table tr th {
-  width: 24px;
-  height: 24px;
-  border-radius: 3px;
-}
-.bootstrap-datetimepicker-widget table tr td.day {
-  color: $link_type;
-  width: 24px;
-  height: 24px;
-}
-.bootstrap-datetimepicker-widget table tr td.day.old {
-  color: $inactive_type;
-}
-.bootstrap-datetimepicker-widget table tr td.active:hover,
-.bootstrap-datetimepicker-widget table tr td.active:hover:hover,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:hover,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:hover,
-.bootstrap-datetimepicker-widget table tr td.active:focus,
-.bootstrap-datetimepicker-widget table tr td.active:hover:focus,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:focus,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:focus,
-.bootstrap-datetimepicker-widget table tr td.active:active,
-.bootstrap-datetimepicker-widget table tr td.active:hover:active,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:active,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:hover:active,
-.bootstrap-datetimepicker-widget table tr td.active.active,
-.bootstrap-datetimepicker-widget table tr td.active:hover.active,
-.bootstrap-datetimepicker-widget table tr td.active.disabled.active,
-.bootstrap-datetimepicker-widget table tr td.active.disabled:hover.active,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active:hover,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active.disabled,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td.active.disabled:hover {
-  background-color: $highlight;
-  border-color: none;
-  color: $white;
-}
-.bootstrap-datetimepicker-widget table tr td span.active:hover,
-.bootstrap-datetimepicker-widget table tr td span.active:hover:hover,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:hover,
-.bootstrap-datetimepicker-widget table tr td span.active:focus,
-.bootstrap-datetimepicker-widget table tr td span.active:hover:focus,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:focus,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:focus,
-.bootstrap-datetimepicker-widget table tr td span.active:active,
-.bootstrap-datetimepicker-widget table tr td span.active:hover:active,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:active,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover:active,
-.bootstrap-datetimepicker-widget table tr td span.active.active,
-.bootstrap-datetimepicker-widget table tr td span.active:hover.active,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled.active,
-.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover.active,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active:hover,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled,
-.open .dropdown-toggle.bootstrap-datetimepicker-widget table tr td span.active.disabled:hover {
-  color: $white;
-  background-color: $highlight;
-  border-color: none;
-}
-.bootstrap-datetimepicker-widget.dropdown-menu {
-  border: none;
-  -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
-  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
-  font-size: 11px;
-  color: inherit;
-
-  &.bottom {
-    border-top: 2px solid $blue;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-
-    &:before {
-      border: none;
-    }
-
-    &:after {
-      border-bottom-color: $blue;
-      border-width: 10px;
-      top: -10px;
-    }
+  .datepicker__header {
+    background: $header_back;
+    border-bottom: 0;
   }
 
-  &.top {
-    border-bottom: 2px solid $blue;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
+  .datepicker__day {
+    color: $base_type;
+  }
 
-    &:before {
-      border-top-color: $blue;
-      border-width: 10px;
-      bottom: -10px;
-    }
+  .datepicker__current-month {
+    color: $base_type;
+  }
 
-    &:after {
-      border: none;
-    }
+  .datepicker__day--selected {
+    background-color: $highlight;
+    color: $white;
+  }
+
+  .datepicker__navigation--previous {
+    border-right-color: $highlight;
+  }
+
+  .datepicker__navigation--next {
+    border-left-color: $highlight;
   }
 }
-.bootstrap-datetimepicker-widget.dropdown-menu th,
-.bootstrap-datetimepicker-widget.dropdown-menu td {
-  padding: 2px 5px;
+
+.tether-element-attached-top .datepicker__triangle:before,
+.tether-element-attached-bottom .datepicker__triangle:before {
+  border: 0;
 }

@@ -8,6 +8,8 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
 
+@import "~react-datepicker/dist/react-datepicker";
+
 @mixin hr-image($file, $type, $width, $height) {
   background-image: url($file + '.' + $type);
 

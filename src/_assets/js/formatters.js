@@ -118,9 +118,9 @@ function kmplToMpg(kmpl) {
 
 exports.formatVehicle = vehicle => vehicle ? `${vehicle.year} ${vehicle.make} ${vehicle.model}` : '';
 
-exports.dateRange = (range) => moment(range[0]).format('MMM D - ') + moment(range[1]).format('MMM D, YYYY');
+exports.dateRange = range => moment(range[0]).format('MMM D - ') + moment(range[1]).format('MMM D, YYYY');
 
-exports.scoreColor = (score) => {
+exports.scoreColor = score => {
   if (score < 20) {
     return 'rgb(252, 59, 47)';
   } else if (score < 40) {

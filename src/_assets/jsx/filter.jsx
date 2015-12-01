@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
 import _ from 'underscore';
 import classNames from 'classnames';
 import moment from 'moment';
@@ -19,8 +20,17 @@ module.exports = class Filters extends React.Component {
     this.updateFilter = (value) => {
       this.setState({value: value});
       this.props.updateFilter(this.props.filterType, value);
+
+      let filterValueComponents = (value || '').split(',');
       if(this.refs[`${this.props.filterType}Popover`]) {
-        this.refs[`${this.props.filterType}Popover`].hide();
+        if(this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
+          this.refs[`${this.props.filterType}Popover`].hide();
+          if(this.props.filterType === 'date') {
+            document.getElementById('dateFilterCustom').style.display = 'none';
+          }
+        }
+      } else {
+        document.getElementById('dateFilterCustom').style.display = 'block';
       }
     };
 
@@ -44,6 +54,22 @@ module.exports = class Filters extends React.Component {
           this.updateFilter(newValue.join(','));
         });
       }
+    };
+
+    this.handleStartDateChange = (startDate) => {
+      let filter = filters.getFilter(this.props.filterType);
+      let filterValueComponents = this.state.value.split(',');
+
+      filterValueComponents[0] = startDate.valueOf();
+      this.updateFilter(filterValueComponents.join(','));
+    };
+
+    this.handleEndDateChange = (endDate) => {
+      let filter = filters.getFilter(this.props.filterType);
+      let filterValueComponents = this.state.value.split(',');
+
+      filterValueComponents[1] = endDate.valueOf();
+      this.updateFilter(filterValueComponents.join(','));
     };
   }
 
@@ -71,6 +97,7 @@ module.exports = class Filters extends React.Component {
 
   render() {
     let filter = filters.getFilter(this.props.filterType);
+    let filterValueComponents = this.state.value.split(',');
 
     let removeLink = (
       <div className="remove-filter" onClick={this.updateFilter.bind(null, null)}>
@@ -101,7 +128,7 @@ module.exports = class Filters extends React.Component {
       },
       {
         name: 'custom',
-        value: `${this.props.ranges.date[0]},${moment().endOf('day').valueOf()},custom`
+        value: `${filterValueComponents[0]},${filterValueComponents[1]},custom`
       }
     ];
 
@@ -111,14 +138,22 @@ module.exports = class Filters extends React.Component {
           <ul className="date-filter-value list-select animate">
             {dateFilterOptions.map(this.formatDateMenuItem.bind(this))}
           </ul>
-          <div className="dateFilterCustom">
+          <div className="date-filter-custom" id="dateFilterCustom" style={{display: (filterValueComponents[2] === 'custom') ? 'block' : 'none'}}>
             <div className="input-group">
               <label>From</label>
-              <input type="text" className="form-control" data-date-format="MM/DD/YY" />
+              <DatePicker
+                selected={moment(parseInt(filterValueComponents[0], 10))}
+                onChange={this.handleStartDateChange}
+                dateFormat="MM/DD/YY"
+                className="datepicker__input form-control" />
             </div>
             <div className="input-group">
               <label>To</label>
-              <input type="text" className="form-control" data-date-format="MM/DD/YY" />
+              <DatePicker
+                selected={moment(parseInt(filterValueComponents[1], 10))}
+                onChange={this.handleEndDateChange}
+                dateFormat="MM/DD/YY"
+                className="datepicker__input form-control" />
             </div>
           </div>
         </Popover>

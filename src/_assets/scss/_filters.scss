@@ -30,48 +30,6 @@
     line-height: 12px;
   }
 
-  .date-filter-value.list-select {
-    width: 182px;
-  }
-
-  .dateFilterCustom {
-    display: none;
-    margin: 8px 0;
-
-    .input-group {
-      display: inline-block;
-      width: 87px;
-
-      label {
-        text-transform: uppercase;
-        font-size: 10px;
-        margin-bottom: 0;
-      }
-
-      .form-control {
-        background: $main_back;
-        border: 1px solid $line_light_gray;
-        @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
-        color: $highlight;
-        border-radius: 3px;
-        font-size: 12px;
-        height: inherit;
-        padding: 5px 4px 0px;
-        @include hr-image('../images/icon_calendar', 'png', 15px, 14px);
-        background-repeat: no-repeat;
-        background-position: right 4px center;
-
-        &:focus {
-          @include hr-image('../images/icon_calendar_active', 'png', 15px, 14px);
-        }
-      }
-
-      &:first-child {
-        margin-right: 8px;
-      }
-    }
-  }
-
   .no-matching-trips {
     position: relative;
     border-bottom-right-radius: 3px;
@@ -141,6 +99,49 @@
 
   &:hover {
     color: $highlight;
+  }
+}
+
+.popover-date {
+  .date-filter-value.list-select {
+    width: 182px;
+  }
+
+  .date-filter-custom {
+    margin: 8px 0;
+
+    .input-group {
+      display: inline-block;
+      width: 87px;
+
+      label {
+        text-transform: uppercase;
+        font-size: 10px;
+        margin-bottom: 0;
+      }
+
+      .form-control {
+        background: $main_back;
+        border: 1px solid $line_light_gray;
+        @include box-shadow(inset 0px 2px 0px 0px #FAF9F7);
+        color: $highlight;
+        border-radius: 3px;
+        font-size: 12px;
+        height: inherit;
+        padding: 5px 4px 0px;
+        @include hr-image('../images/icon_calendar', 'png', 15px, 14px);
+        background-repeat: no-repeat;
+        background-position: right 4px center;
+
+        &:focus {
+          @include hr-image('../images/icon_calendar_active', 'png', 15px, 14px);
+        }
+      }
+
+      &:first-child {
+        margin-right: 8px;
+      }
+    }
   }
 }
 

@@ -31,14 +31,14 @@ module.exports = class Filters extends React.Component {
         this.refs.filterTypePopover.hide();
       }
       this.setState({undoCount: this.state.undoCount + 1});
-    }
+    };
 
     this.undoFilter = () => {
       if(this.state.undoCount > 0) {
         this.setState({undoCount: this.state.undoCount - 1});
         this.props.undoFilter();
       }
-    }
+    };
   }
 
   render() {
@@ -50,11 +50,11 @@ module.exports = class Filters extends React.Component {
               <li onClick={this.addFilter.bind(null, filterType.key)} key={filterType.key}>
                 {filterType.name}
               </li>
-            )
+            );
           })}
         </ul>
       </Popover>
-    )
+    );
 
     let appliedFilters = _.map(this.props.filters, (value, key) => {
       return <Filter
@@ -77,7 +77,7 @@ module.exports = class Filters extends React.Component {
             <div title="Add Filter" className="add-filter btn btn-filter btn-popover">+</div>
           </OverlayTrigger>
         </li>
-      )
+      );
     }
 
     return (

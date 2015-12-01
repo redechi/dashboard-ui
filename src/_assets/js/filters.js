@@ -35,7 +35,7 @@ const filterList = [
         custom: 'custom'
       };
       if(option === 'custom' || !option) {
-        return formatters.dateRange(value);
+        return formatters.dateRange([parseInt(startDate, 10), parseInt(endDate, 10)]);
       } else {
         return options[option];
       }
