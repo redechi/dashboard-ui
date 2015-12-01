@@ -21,7 +21,7 @@ module.exports = class Trip extends React.Component {
 
     if(_.contains(trip.tags, 'business')) {
       businessTag = (
-        <div className="tagged-business" title="Tagged as business trip">Tagged Business</div>
+        <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
       );
     }
 
@@ -30,7 +30,8 @@ module.exports = class Trip extends React.Component {
         id={trip.id}
         className={classNames({selected: trip.selected})}
         onMouseEnter={highlight.highlightTrips.bind(null, [trip])}
-        onMouseLeave={highlight.unhighlightTrips}>
+        onMouseLeave={highlight.unhighlightTrips}
+        onClick={this.props.showModal.bind(null, trip)}>
         <div className="time-box">
           <div className="end-time">
             {moment(trip.ended_at).format('h:mm a').toUpperCase()}

@@ -2,7 +2,7 @@ import _ from 'underscore';
 import moment from 'moment';
 import polyline from 'polyline';
 
-const map = require('./map');
+const mapHelpers = require('./map_helpers');
 
 
 exports.address = (address) => {
@@ -144,13 +144,13 @@ function formatVehicleEvents(events, tripPath) {
   // Only decode path if needed, once per trip
   if(_.some(events, item => item.type === 'speeding')) {
     decodedPath = polyline.decode(tripPath);
-    cumulativeDistances = map.getCumulativeDistance(decodedPath);
+    cumulativeDistances = mapHelpers.getCumulativeDistance(decodedPath);
   }
   return events.map(item => {
     if(item.type === 'speeding') {
       let start = metersToMiles(item.start_distance_m);
       let end = metersToMiles(item.end_distance_m);
-      item.path = map.subPath(start, end, decodedPath, cumulativeDistances);
+      item.path = mapHelpers.subPath(start, end, decodedPath, cumulativeDistances);
     }
     return item;
   });

@@ -1,0 +1,43 @@
+.modal-dialog {
+  .modal-content {
+    @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $disabled);
+    background-color: $white;
+    border: 0;
+  }
+
+  .close {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background-color: $disabled_type;
+    border-radius: 12px;
+    opacity: 0.8;
+    text-indent: -9999px;
+    @include hr-image('../images/icon_close_x', 'png', 10px, 10px);
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &:hover,
+    &:focus {
+      background-color: $link_type;
+    }
+  }
+}
+
+.modal-backdrop {
+  background-color: rgb(249, 248, 246);
+
+  &.in {
+    opacity: 0.85;
+  }
+}
+
+.trip-modal .modal-dialog {
+  width: 690px;
+
+  .modal-body {
+    padding: 10px 10px 0 10px;
+  }
+}

@@ -1,9 +1,12 @@
 import React from 'react';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
+import { Modal, Popover, OverlayTrigger } from 'react-bootstrap';
 import classNames from 'classnames';
 import _ from 'underscore';
 import moment from 'moment';
 
+const formatters = require('../js/formatters');
+
+const ModalMap = require('./trip_modal_map.jsx');
 const Trip = require('./trip.jsx');
 
 const sortTypes = [
@@ -35,7 +38,9 @@ module.exports = class TripList extends React.Component {
 
     this.state = {
       sortType: 'started_at',
-      sortDirection: 'down'
+      sortDirection: 'down',
+      showModal: false,
+      modalTrip: {}
     };
 
     this.reverseSortDirection = () => {
@@ -53,6 +58,35 @@ module.exports = class TripList extends React.Component {
       }
       this.refs.exportPopover.hide();
     };
+
+    this.showModal = (trip) => {
+      this.setState({
+        showModal: true,
+        modalTrip: trip
+      });
+    };
+
+    this.hideModal = () => {
+      this.setState({showModal: false});
+    };
+
+    this.showPreviousTrip = () => {
+      let currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
+      if(currentIndex < this.props.trips.length - 1) {
+        this.setState({
+          modalTrip: this.props.trips[currentIndex + 1]
+        });
+      }
+    }
+
+    this.showNextTrip = () => {
+      let currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
+      if(currentIndex > 0) {
+        this.setState({
+          modalTrip: this.props.trips[currentIndex - 1]
+        });
+      }
+    }
   }
 
   sortTrips() {
@@ -76,6 +110,10 @@ module.exports = class TripList extends React.Component {
     return this.props.windowHeight - 330;
   }
 
+  getModalTripIndex() {
+    return this.props.trips.length - _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
+  }
+
   render() {
     if(!this.props.trips) {
       return (<div/>);
@@ -88,6 +126,7 @@ module.exports = class TripList extends React.Component {
         <Trip
           trip={trip}
           toggleSelect={this.props.toggleSelect}
+          showModal={this.showModal}
           key={key}/>
       );
     });
@@ -118,6 +157,13 @@ module.exports = class TripList extends React.Component {
       </Popover>
     );
 
+    let businessTag;
+    if(this.state.modalTrip && _.contains(this.state.modalTrip.tags, 'business')) {
+      businessTag = (
+        <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
+      );
+    }
+
     return (
       <div>
         <div className="trip-stats"></div>
@@ -143,6 +189,51 @@ module.exports = class TripList extends React.Component {
             <div className={classNames('export', {active: this.props.exporting})}><i></i> Export</div>
           </OverlayTrigger>
         </div>
+
+        <Modal show={this.state.showModal} onHide={this.hideModal} className="trip-modal">
+          <Modal.Body>
+            <div className="close" onClick={this.hideModal}>x</div>
+            <div className="trip-navigation">
+              <div className="prev-trip" onClick={this.showPreviousTrip}>Previous Trip</div>
+              <span className="title">
+                Trip {this.getModalTripIndex()} of {this.props.trips.length}
+              </span>
+              <div className="next-trip" onClick={this.showNextTrip}>Next</div>
+            </div>
+            <div className="trip-details">
+              <div className="trip-header">
+                <div className="start">
+                  <div className="time">{moment(this.state.modalTrip.started_at).format('h:mm A, MMM D, YYYY')}</div>
+                  <div className="location">{this.state.modalTrip.start_address ? this.state.modalTrip.start_address.display_name : 'Unknown Address'}</div>
+                </div>
+                <div className="end">
+                  <div className="time">{moment(this.state.modalTrip.ended_at).format('h:mm A')}</div>
+                  <div className="location">{this.state.modalTrip.end_address ? this.state.modalTrip.end_address.display_name : 'Unknown Address'}</div>
+                </div>
+              </div>
+              <div className="trip-stats">
+                <div className="stat distance">
+                  <div className="value">{formatters.distance(this.state.modalTrip.distance_miles)}</div>
+                  <label>Miles</label>
+                </div>
+                <div className="stat mpg">
+                  <div className="value">{formatters.averageMPG(this.state.modalTrip.average_mpg)}</div>
+                  <label>MPG</label>
+                </div>
+                <div className="stat cost">
+                  <div className="value">{formatters.cost(this.state.modalTrip.fuel_cost_usd)}</div>
+                  <label>Fuel</label>
+                </div>
+                <div className={classNames('duration', 'stat', {hours: this.state.modalTrip.duration_s >= (60 * 60)})}>
+                    <div className="value">{formatters.duration(this.state.modalTrip.duration_s)}</div>
+                    <label>{this.state.modalTrip.duration_s >= (60 * 60) ? 'Hours' : 'Minutes'}</label>
+                </div>
+              </div>
+              {businessTag}
+            </div>
+            <ModalMap trip={this.state.modalTrip} />
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
