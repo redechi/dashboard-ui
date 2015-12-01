@@ -12,6 +12,7 @@ let markersLayer;
 let hardBrakesLayer;
 let hardAccelsLayer;
 let speedingLayer;
+let autozoom;
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
 
@@ -115,6 +116,10 @@ exports.updateMap = function(trips, toggleSelect) {
   fitBounds();
 };
 
+exports.setAutozoom = function(value) {
+  autozoom = value;
+};
+
 exports.zoomIn = function() {
   map.zoomIn();
 };
@@ -189,7 +194,7 @@ function getBoundsFromTrips(trips) {
   }, null);
 }
 
-function zoomTrips() {
+function zoomTrips(trips) {
   fitBounds(getBoundsFromTrips(trips) || pathsLayer.getBounds());
 }
 
@@ -232,6 +237,10 @@ exports.highlightTrips = function(trips) {
       endMarker.setIcon(bIcon);
     }
   });
+
+  if(autozoom) {
+    zoomTrips(trips);
+  }
 }
 
 exports.unhighlightTrips = function(trips) {
@@ -269,4 +278,8 @@ exports.unhighlightTrips = function(trips) {
       endMarker.setIcon(bIcon);
     }
   });
+
+  if(autozoom) {
+    fitBounds();
+  }
 }

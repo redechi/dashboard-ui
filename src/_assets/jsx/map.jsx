@@ -20,6 +20,10 @@ module.exports = class Map extends React.Component {
 
       this.setState({showTripEvents: this.refs.showTripEvents.checked});
     };
+
+    this.toggleAutozoom = () => {
+      map.setAutozoom(this.refs.autoZoom.checked);
+    };
   }
 
   getMapHeight() {
@@ -35,7 +39,7 @@ module.exports = class Map extends React.Component {
             <div className="zoom-in" onClick={map.zoomIn}>+</div>
             <div className="zoom-out" onClick={map.zoomOut}>&mdash;</div>
             <div className="auto-zoom">
-              <label><input type="checkbox" /> Auto zoom</label>
+              <label><input type="checkbox" ref="autoZoom" onChange={this.toggleAutozoom} /> Auto zoom</label>
             </div>
           </div>
           <div className="map-menu-right">
