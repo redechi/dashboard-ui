@@ -113,6 +113,10 @@ exports.updateMap = function(trips, toggleSelect) {
     }
   });
 
+  if(speedingLayer.getLayers().length) {
+    speedingLayer.bringToFront();
+  }
+
   fitBounds();
 };
 
@@ -237,6 +241,10 @@ exports.highlightTrips = function(trips) {
       endMarker.setIcon(bIcon);
     }
   });
+
+  if(speedingLayer.getLayers().length) {
+    speedingLayer.bringToFront();
+  }
 
   if(autozoom) {
     zoomTrips(trips);
