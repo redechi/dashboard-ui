@@ -4,10 +4,6 @@ body {
   background: $main_back;
 }
 
-body.summary {
-  overflow: hidden;
-}
-
 h1,
 h2,
 h3,
@@ -50,7 +46,7 @@ a {
   }
 }
 
-main {
+.main {
   min-width: 1024px;
   min-height: 625px;
   margin-bottom: 30px;
@@ -114,19 +110,8 @@ main {
   z-index: 500;
 }
 
-
-#automaticVersion {
-  position: absolute;
-  right: 30px;
-  font-size: 10px;
-  color: #F3F3F2;
-  z-index: -1;
-  margin-top: -20px;
-}
-
-
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  main {
+  .main {
     min-width: 0;
     min-height: 0;
   }

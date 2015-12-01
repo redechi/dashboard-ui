@@ -129,7 +129,7 @@ module.exports = class Dashboard extends React.Component {
     let totals = stats.calculateTotals(this.state.trips);
 
     return (
-      <div>
+      <div className="main">
         <Header />
         <div>
           <Filters
