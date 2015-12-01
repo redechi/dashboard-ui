@@ -10,8 +10,7 @@ function makeWebpackConfig() {
 
   const VENDOR_MODULES = [
     'jquery',
-    'react',
-    'eonasdan-bootstrap-datetimepicker'
+    'react'
   ];
 
   webpackConfig.context = path.resolve(__dirname, '../../src');
