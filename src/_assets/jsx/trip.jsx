@@ -13,6 +13,13 @@ module.exports = class Trip extends React.Component {
     this.handleSelectChange = () => {
       this.props.toggleSelect(this.props.trip.id);
     };
+
+    this.showModal = (e) => {
+      // Allow clicking on checkbox to select trip
+      if(e.target.className !== 'trip-select') {
+        this.props.showModal(this.props.trip);
+      }
+    };
   }
 
   render() {
@@ -31,7 +38,7 @@ module.exports = class Trip extends React.Component {
         className={classNames({selected: trip.selected})}
         onMouseEnter={highlight.highlightTrips.bind(null, [trip])}
         onMouseLeave={highlight.unhighlightTrips}
-        onClick={this.props.showModal.bind(null, trip)}>
+        onClick={this.showModal}>
         <div className="time-box">
           <div className="end-time">
             {moment(trip.ended_at).format('h:mm a').toUpperCase()}
