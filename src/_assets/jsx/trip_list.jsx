@@ -40,7 +40,9 @@ module.exports = class TripList extends React.Component {
       sortType: 'started_at',
       sortDirection: 'down',
       showModal: false,
-      modalTrip: {}
+      exporting: false,
+      modalTrip: {},
+      showExportModal: false
     };
 
     this.reverseSortDirection = () => {
@@ -52,11 +54,23 @@ module.exports = class TripList extends React.Component {
       this.setState({sortType: sortType});
     };
 
-    this.exportDone = (e) => {
-      if(e && e === 'not_supported') {
-        alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
-      }
-      this.refs.exportPopover.hide();
+    this.export = (type) => {
+      this.setState({exporting: true});
+      this.props.export(type, (e, blobUrl) => {
+        this.setState({exporting: false});
+        if(e && e === 'not_supported') {
+          alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
+        }
+
+        if(blobUrl) {
+          this.setState({
+            showExportModal: true,
+            blobUrl: blobUrl
+          });
+        }
+
+        this.refs.exportPopover.hide();
+      });
     };
 
     this.showModal = (trip) => {
@@ -68,6 +82,10 @@ module.exports = class TripList extends React.Component {
 
     this.hideModal = () => {
       this.setState({showModal: false});
+    };
+
+    this.hideExportModal = () => {
+      this.setState({showExportModal: false});
     };
 
     this.showPreviousTrip = () => {
@@ -150,9 +168,9 @@ module.exports = class TripList extends React.Component {
     let exportPopover = (
       <Popover id="export" title="Export trips to .csv" className="popover-export">
         <ul className="list-select animate">
-          <li onClick={this.props.export.bind(null, 'selected', this.exportDone)}>Export selected trips ({selectedTripCount})</li>
-          <li onClick={this.props.export.bind(null, 'tripList', this.exportDone)}>Export trips currently in trip list ({this.props.trips.length})</li>
-          <li onClick={this.props.export.bind(null, 'all', this.exportDone)}>Export all trips</li>
+          <li onClick={this.export.bind(null, 'selected')}>Export selected trips ({selectedTripCount})</li>
+          <li onClick={this.export.bind(null, 'tripList')}>Export trips currently in trip list ({this.props.trips.length})</li>
+          <li onClick={this.export.bind(null, 'all')}>Export all trips</li>
         </ul>
       </Popover>
     );
@@ -232,6 +250,18 @@ module.exports = class TripList extends React.Component {
               {businessTag}
             </div>
             <ModalMap trip={this.state.modalTrip} />
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={this.state.showExportModal} onHide={this.hideExportModal} className="export-modal">
+          <Modal.Body>
+            <div className="close" onClick={this.hideExportModal}>x</div>
+            <div>
+              <h2>Export trips to .CSV</h2>
+              <div className="csv-icon"></div>
+              <p>Your trips will be downloaded as a file called "Unknown". To open it, you will need to rename it and add the ".csv" extension.</p>
+              <a className="btn btn-blue btn-close" href={this.state.blobUrl} onClick={this.hideExportModal}>Download now</a>
+            </div>
           </Modal.Body>
         </Modal>
       </div>

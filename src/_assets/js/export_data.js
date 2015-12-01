@@ -37,7 +37,7 @@ exports.trips = (selectedTrips, cb) => {
   //Safari does not support filesaver, so use URL
   if(isSafari()) {
     let blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
-    //TODO: show download export overlay
+    cb(null, blobUrl);
   } else {
     let blob = new Blob([tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
 

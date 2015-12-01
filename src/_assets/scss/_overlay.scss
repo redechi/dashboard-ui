@@ -1,11 +1,5 @@
 #overlay{
   #overlayContent {
-    h2 {
-      margin: 0;
-      font-size: 16px;
-      color: $link_type;
-    }
-
     .bigAlert {
       @include hr-image('../images/icon_bigalert', 'png', 235px, 144px);
       background-repeat: no-repeat;
@@ -16,14 +10,6 @@
 
     .noTripsIcon {
       @include hr-image('../images/icon_notrips', 'png', 80px, 80px);
-      width: 80px;
-      height: 80px;
-      float: left;
-      margin-right: 20px;
-    }
-
-    .csvIcon {
-      @include hr-image('../images/icon_csv', 'png', 80px, 80px);
       width: 80px;
       height: 80px;
       float: left;
@@ -87,24 +73,6 @@
 
       .btn-blue {
         margin-top: 35px;
-      }
-    }
-
-    &.downloadExport {
-      display: block;
-      width: 380px;
-      height: inherit;
-      top: 106px;
-      margin-left: -190px;
-
-      h2 {
-        margin-bottom: 20px;
-      }
-
-      p {
-        text-align: left;
-        padding-top: 5px;
-        padding-bottom: 15px;
       }
     }
 

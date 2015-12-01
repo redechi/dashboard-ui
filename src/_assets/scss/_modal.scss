@@ -1,4 +1,10 @@
 .modal-dialog {
+  h2 {
+    margin: 0;
+    font-size: 16px;
+    color: $link_type;
+  }
+
   .modal-content {
     @include box-shadow(0px 1px 2px 0px rgba(0,0,0,0.15), 0px 1px 0px 0px $disabled);
     background-color: $white;
@@ -39,5 +45,29 @@
 
   .modal-body {
     padding: 10px 10px 0 10px;
+  }
+}
+
+.export-modal {
+  .modal-dialog {
+    width: 380px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+  }
+
+  p {
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 15px;
+  }
+  
+  .csv-icon {
+    @include hr-image('../images/icon_csv', 'png', 80px, 80px);
+    width: 80px;
+    height: 80px;
+    float: left;
+    margin-right: 20px;
   }
 }

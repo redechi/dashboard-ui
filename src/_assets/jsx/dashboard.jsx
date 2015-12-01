@@ -21,7 +21,6 @@ module.exports = class Dashboard extends React.Component {
 
     this.state = {
       allSelected: false,
-      exporting: false,
       filters: filters.getFiltersFromQuery(this.props.location.query),
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
@@ -60,15 +59,9 @@ module.exports = class Dashboard extends React.Component {
     }
 
     this.export = (exportType, cb) => {
-      if(this.state.exporting) {
-        return;
-      }
-
-      this.setState({exporting: true});
-
       let trips;
       if(exportType === 'selected') {
-        trips = _.filter(this.state.trips, (trip) => trip.selected);
+        trips = _.filter(this.state.trips, trip => trip.selected);
       } else if (exportType === 'tripList') {
         trips = this.state.trips;
       } else if (exportType === 'all') {
@@ -79,10 +72,7 @@ module.exports = class Dashboard extends React.Component {
         return alert('Please Select at least one trip');
       }
 
-      exportData.trips(trips, (e) => {
-        this.setState({exporting: false});
-        cb(e);
-      });
+      exportData.trips(trips, cb);
     }
 
     this.handleResize = () => {
@@ -157,7 +147,6 @@ module.exports = class Dashboard extends React.Component {
                 toggleSelect={this.toggleSelect}
                 toggleSelectAll={this.toggleSelectAll}
                 export={this.export}
-                exporting={this.state.exporting}
                 windowHeight={this.state.windowHeight}
                 filterHeight={this.state.filterHeight} />
             </div>
