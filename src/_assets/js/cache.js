@@ -1,12 +1,17 @@
-exports.setItem= function(key, value) {
+exports.setItem = function(key, value, persist) {
   if(typeof value === 'object') {
     value = JSON.stringify(value);
   }
-  localStorage.setItem(key, value);
+  if(persist) {
+    localStorage.setItem(key, value);
+  } else {
+    sessionStorage.setItem(key, value);
+  }
+
 };
 
 exports.getItem= function(key) {
-  let value = localStorage.getItem(key);
+  let value = localStorage.getItem(key) || sessionStorage.getItem(key);
   try {
     return JSON.parse(value);
   } catch(e) {
@@ -16,4 +21,5 @@ exports.getItem= function(key) {
 
 exports.clear = function() {
   localStorage.clear();
+  sessionStorage.clear();
 };

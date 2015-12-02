@@ -15,7 +15,7 @@ exports.accessToken = function() {
   return accessToken;
 };
 
-exports.login = function(username, password, cb) {
+exports.login = function(username, password, staySignedIn, cb) {
   if(!username) {
     return cb(new Error('no_username'));
   }
@@ -43,7 +43,7 @@ exports.login = function(username, password, cb) {
 
       accessToken = response.body.access_token;
 
-      cache.setItem('accessToken', accessToken);
+      cache.setItem('accessToken', accessToken, staySignedIn);
 
       return cb();
     });

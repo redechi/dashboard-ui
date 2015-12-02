@@ -25,8 +25,7 @@ module.exports = class Login extends React.Component {
     this.login = (event) => {
       event.preventDefault();
       this.setState({alert: 'Logging in'});
-
-      login.login(this.refs.username.value, this.refs.password.value, (e) => {
+      login.login(this.refs.username.value, this.refs.password.value, this.refs.staySignedIn.checked, (e) => {
         if(e) {
           console.error(e);
           if(e && e.message === 'no_username') {
