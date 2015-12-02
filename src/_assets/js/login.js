@@ -4,6 +4,7 @@ const cache = require('./cache');
 
 
 const clientId = '385be37e93925c8fa7c7'
+const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://accounts.automatic.com': 'https://accounts.automatic.co';
 let accessToken = cache.getItem('accessToken');
 
 exports.isLoggedIn = function() {
@@ -24,7 +25,7 @@ exports.login = function(username, password, cb) {
   }
 
   request
-    .post('https://accounts.automatic.com/oauth/access_token/')
+    .post(`${apiUrl}/oauth/access_token/`)
     .send(`username=${username}`)
     .send(`password=${password}`)
     .send(`client_id=${clientId}`)

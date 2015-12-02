@@ -4,6 +4,8 @@ import moment from 'moment';
 
 const login = require('./login');
 
+const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://api.automatic.com': 'https://api.automatic.co';
+
 exports.getData = (cb) => {
   if(login.isLoggedIn()) {
     fetchData('trip/', (e, trips) => {
@@ -59,7 +61,7 @@ function prepDemoTrips(trips) {
 
 function fetchData(endpoint, cb) {
   request
-    .get(`https://api.automatic.com/${endpoint}`)
+    .get(`${apiUrl}/${endpoint}`)
     .query({limit: 250, page: 1})
     .set('Authorization', `bearer ${login.accessToken()}`)
     .end(function(e, response){
