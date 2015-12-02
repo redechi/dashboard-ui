@@ -142,12 +142,12 @@ function formatVehicleEvents(events, tripPath) {
   let decodedPath;
   let cumulativeDistances;
   // Only decode path if needed, once per trip
-  if(_.some(events, item => item.type === 'speeding')) {
+  if(_.some(events, item => item.type === 'speeding') && tripPath) {
     decodedPath = polyline.decode(tripPath);
     cumulativeDistances = mapHelpers.getCumulativeDistance(decodedPath);
   }
   return events.map(item => {
-    if(item.type === 'speeding') {
+    if(item.type === 'speeding' && tripPath) {
       let start = metersToMiles(item.start_distance_m);
       let end = metersToMiles(item.end_distance_m);
       item.path = mapHelpers.subPath(start, end, decodedPath, cumulativeDistances);
