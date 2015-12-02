@@ -6,13 +6,22 @@ const Dashboard = require('./dashboard.jsx');
 const Home = require('./home.jsx');
 const Labs = require('./labs.jsx');
 const NoMatch = require('./nomatch.jsx');
+const UnsupportedBrowser = require('./unsupported_browser.jsx');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  isBrowserSupported() {
+    return Modernizr.svg && Modernizr.cors && window.location.search.indexOf('unsupported') === -1;
+  }
+
   render() {
+    if(!this.isBrowserSupported()) {
+      return <UnsupportedBrowser />;
+    }
+
     return (
       <div>
         {React.cloneElement(this.props.children)}
