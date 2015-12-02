@@ -148,7 +148,7 @@ exports.getRemainingFilters = function(filters) {
 }
 
 exports.filterTrips = function(trips, filters) {
-  let filteredTrips = trips;
+  let filteredTrips = trips || [];
   filteredTrips = filterByDate(filteredTrips, filters.date);
   filteredTrips = filterByVehicle(filteredTrips, filters.vehicle);
   if(filters.distance) {
