@@ -1,12 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import { Modal } from 'react-bootstrap';
 
 const login = require('../js/login');
 
 module.exports = class Header extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      showSupportModal: false
+    }
+
+    this.showSupportModal = () => {
+      this.setState({showSupportModal: true});
+
+      GSFN.loadWidget(7392, {containerId: 'getsat-widget-7392'});
+    }
+
+    this.hideSupportModal = () => {
+      this.setState({showSupportModal: false});
+    }
   }
 
   render() {
@@ -19,18 +34,24 @@ module.exports = class Header extends React.Component {
             <Link to="/">Summary</Link>
           </li>
           <li>
-            <Link to="connected_apps">Apps</Link>
+            <Link to="/connected_apps">Apps</Link>
           </li>
           <li>
-            <Link to="labs">Labs</Link>
+            <Link to="/labs">Labs</Link>
           </li>
           <li className="support">
-            <a href="#">Support</a>
+            <a onClick={this.showSupportModal}>Support</a>
           </li>
           <li>
             <span className="first-name"></span>
             <Link to="logout">Log out</Link>
           </li>
+          <Modal show={this.state.showSupportModal} onHide={this.hideSupportModal} className="support-modal">
+            <Modal.Body>
+              <div className="close" onClick={this.hideSupportModal}>x</div>
+              <div id="getsat-widget-7392"></div>
+            </Modal.Body>
+          </Modal>
         </ul>
       );
     } else {
@@ -40,10 +61,10 @@ module.exports = class Header extends React.Component {
             <a href="https://www.automatic.com">What is Automatic?</a>
           </li>
           <li>
-            <Link to="labs">Labs</Link>
+            <Link to="/labs">Labs</Link>
           </li>
           <li>
-            <a to="/">Log In</a>
+            <Link to="/">Log In</Link>
           </li>
           <li className="menu-button">
             <a href="https://store.automatic.com" className="btn btn-white">Buy Now $99.95</a>

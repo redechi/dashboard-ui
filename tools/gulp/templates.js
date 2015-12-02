@@ -23,6 +23,7 @@ function buildNunjuckTemplates() {
     .pipe(gulpif(settings.DEV_HOT_RELOAD, plumber()))
     .pipe(data(() => ({
       jsPaths: settings.DEV_HOT_RELOAD ? [
+        'https://loader.engage.gsfn.us/loader.js',
         `${settings.DEV_WEBPACK_BASE_URL}/vendors.js`,
         `${settings.DEV_WEBPACK_BASE_URL}/main.js`
       ] : [

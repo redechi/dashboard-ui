@@ -62,12 +62,25 @@
     padding-top: 5px;
     padding-bottom: 15px;
   }
-  
+
   .csv-icon {
     @include hr-image('../images/icon_csv', 'png', 80px, 80px);
     width: 80px;
     height: 80px;
     float: left;
     margin-right: 20px;
+  }
+}
+
+.support-modal {
+  .modal-dialog {
+    width: 700px;
+    height: 535px;
+  }
+
+
+  #getsat-widget-7392 {
+    height: 513px;
+    overflow-y: scroll;
   }
 }
