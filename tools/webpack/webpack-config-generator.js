@@ -2,6 +2,7 @@ import path from 'path';
 
 import { optimize } from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import ModernizrWebpackPlugin from 'modernizr-webpack-plugin';
 
 import settings from '../../settings.js';
 
@@ -80,6 +81,7 @@ function makeWebpackConfig() {
 
   webpackConfig.plugins = [
     new optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+    new ModernizrWebpackPlugin({'feature-detects': ['cors', 'svg']}),
     ...(settings.DEV_HOT_RELOAD ? [] : [
       new ExtractTextPlugin('[name].css'),
       new optimize.UglifyJsPlugin()
