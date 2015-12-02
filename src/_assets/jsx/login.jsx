@@ -24,6 +24,8 @@ module.exports = class Login extends React.Component {
 
     this.login = (event) => {
       event.preventDefault();
+      this.setState({alert: 'Logging in'});
+
       login.login(this.refs.username.value, this.refs.password.value, (e) => {
         if(e) {
           console.error(e);
