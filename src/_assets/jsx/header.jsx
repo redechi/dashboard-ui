@@ -44,7 +44,7 @@ module.exports = class Header extends React.Component {
           </li>
           <li>
             <span className="first-name"></span>
-            <Link to="logout">Log out</Link>
+            <Link to="/" onClick={login.logout}>Log out</Link>
           </li>
           <Modal show={this.state.showSupportModal} onHide={this.hideSupportModal} className="support-modal">
             <Modal.Body>

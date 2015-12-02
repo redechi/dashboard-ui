@@ -47,3 +47,8 @@ exports.login = function(username, password, cb) {
       return cb();
     });
 };
+
+exports.logout = function() {
+  accessToken = undefined;
+  cache.clear();
+};
