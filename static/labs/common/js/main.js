@@ -40,7 +40,7 @@ function fetchDemoTrips(cb) {
 
 function fetchAllTrips(cb) {
   var queryParams = getQueryParams(document.location.search);
-  var accessToken = queryParams.accessToken || getCookie('accessToken');
+  var accessToken = queryParams.accessToken || localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
   var ts = sessionStorage.getItem('labs_ts');
   var trips = [];
   var oneHourAgo = Date.now() - (60*60*1000);
@@ -88,7 +88,7 @@ function fetchAllTrips(cb) {
 
 function fetchTripsPage(url, cb, errCb) {
   var queryParams = getQueryParams(document.location.search);
-  var accessToken = queryParams.accessToken || getCookie('accessToken');
+  var accessToken = queryParams.accessToken || localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
 
   if(queryParams.demo) {
     return fetchDemoTrips(function(trips) {
@@ -247,11 +247,6 @@ function makeLinksDemo() {
   if(queryParams.demo) {
     $('.automatic-labs').attr('href', '/?demo#labs');
   }
-}
-
-
-function getCookie(key) {
-  return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
 }
 
 
