@@ -34,7 +34,7 @@ module.exports = class Header extends React.Component {
             <Link to="/">Summary</Link>
           </li>
           <li>
-            <Link to="/connected_apps">Apps</Link>
+            <Link to="/connected-apps">Apps</Link>
           </li>
           <li>
             <Link to="/labs">Labs</Link>

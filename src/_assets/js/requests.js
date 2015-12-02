@@ -31,6 +31,29 @@ exports.getData = (cb) => {
   }
 };
 
+exports.getApps = (cb) => {
+  request
+    .get(`${apiUrl}/v1/access_token`)
+    .set('Authorization', `bearer ${login.accessToken()}`)
+    .end(function(e, response){
+      if(e) {
+        return cb(e);
+      }
+      if(!response.body) {
+        return cb(new Error('No results returned'));
+      }
+
+      return cb(null, response.body);
+    });
+};
+
+exports.disconnectApp = (appId, cb) => {
+  request
+    .del(`${apiUrl}/v1/access_token/${appId}`)
+    .set('Authorization', `bearer ${login.accessToken()}`)
+    .end(cb);
+};
+
 function fetchDemoData(fileName, cb) {
   request
     .get(fileName)
