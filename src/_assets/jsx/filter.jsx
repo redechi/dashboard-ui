@@ -13,12 +13,7 @@ module.exports = class Filters extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      value: this.props.value
-    };
-
     this.updateFilter = (value) => {
-      this.setState({value: value});
       this.props.updateFilter(this.props.filterType, value);
 
       let filterValueComponents = (value || '').split(',');
@@ -58,7 +53,7 @@ module.exports = class Filters extends React.Component {
 
     this.handleStartDateChange = (startDate) => {
       let filter = filters.getFilter(this.props.filterType);
-      let filterValueComponents = this.state.value.split(',');
+      let filterValueComponents = this.props.value.split(',');
 
       filterValueComponents[0] = startDate.valueOf();
       this.updateFilter(filterValueComponents.join(','));
@@ -66,7 +61,7 @@ module.exports = class Filters extends React.Component {
 
     this.handleEndDateChange = (endDate) => {
       let filter = filters.getFilter(this.props.filterType);
-      let filterValueComponents = this.state.value.split(',');
+      let filterValueComponents = this.props.value.split(',');
 
       filterValueComponents[1] = endDate.valueOf();
       this.updateFilter(filterValueComponents.join(','));
@@ -97,7 +92,7 @@ module.exports = class Filters extends React.Component {
 
   render() {
     let filter = filters.getFilter(this.props.filterType);
-    let filterValueComponents = this.state.value.split(',');
+    let filterValueComponents = this.props.value.split(',');
 
     let removeLink = (
       <div className="remove-filter" onClick={this.updateFilter.bind(null, null)}>
@@ -211,7 +206,7 @@ module.exports = class Filters extends React.Component {
           overlay={popovers[this.props.filterType]}
           onEntered={this.preparePopover}>
           <div className="btn btn-filter btn-popover">
-            <span className="btn-text">{filter.valueText(this.state.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
+            <span className="btn-text">{filter.valueText(this.props.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
           </div>
         </OverlayTrigger>
       </li>
