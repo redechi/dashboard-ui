@@ -119,7 +119,7 @@ module.exports = class Filters extends React.Component {
       },
       {
         name: 'all time',
-        value: `${this.props.ranges.date[0]},${moment().endOf('day').valueOf()},allTime`
+        value: `1363071600000,${moment().endOf('day').valueOf()},allTime`
       },
       {
         name: 'custom',

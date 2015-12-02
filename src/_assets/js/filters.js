@@ -170,11 +170,6 @@ exports.filterTrips = function(trips, filters) {
   return filteredTrips;
 }
 
-exports.getDateRange = function(filters) {
-  let [startDate, endDate] = filters.date.split(',');
-  return [parseInt(startDate, 10), parseInt(endDate, 10)];
-}
-
 function filterByDate(trips, dateFilter) {
   let [startDate, endDate] = dateFilter.split(',');
   let startIndex = findSortedIndexByDate(trips, parseInt(startDate, 10));

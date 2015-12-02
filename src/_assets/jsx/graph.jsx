@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import _ from 'underscore';
+import moment from 'moment';
 
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
@@ -52,9 +53,18 @@ module.exports = class Graph extends React.Component {
     return this.props.windowWidth - 410;
   }
 
+  getGraphDateRange() {
+    let dateRangeComponents = this.props.filters.date.split(',');
+    let dateRange = [parseInt(dateRangeComponents[0], 10), parseInt(dateRangeComponents[1], 10)];
+    let firstTrip = _.last(this.props.trips);
+    if(dateRangeComponents[2] === 'allTime' && firstTrip) {
+      dateRange[0] = moment(firstTrip.started_at).startOf('day');
+    }
+    return dateRange;
+  }
+
   updateGraph() {
-    let dateRange = filters.getDateRange(this.props.filters);
-    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth(), dateRange);
+    graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth(), this.getGraphDateRange());
   }
 
   render() {
@@ -77,7 +87,7 @@ module.exports = class Graph extends React.Component {
     return (
       <div className="graph">
         <div className="graph-menu">
-          <div className="date-range">{formatters.dateRange(filters.getDateRange(this.props.filters))}</div>
+          <div className="date-range">{formatters.dateRange(this.getGraphDateRange())}</div>
           <div className="graph-type-label">Graph</div>
           <OverlayTrigger placement="bottom" trigger="click" ref="graphTypePopover" overlay={graphTypePopover}>
             <div className="graph-type" data-toggle="popover">
