@@ -17,11 +17,11 @@ module.exports = class Home extends React.Component {
   render() {
     if (login.isLoggedIn()) {
       return (
-        <Dashboard />
+        <Dashboard {...this.props} />
       );
     } else {
       return (
-        <Login showDashboard={this.showDashboard} />
+        <Login {...this.props} showDashboard={this.showDashboard} />
       );
     }
   }

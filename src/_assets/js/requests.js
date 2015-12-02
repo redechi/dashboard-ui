@@ -34,7 +34,6 @@ function fetchDemoData(fileName, cb) {
     .get(fileName)
     .set('Accept', 'application/json')
     .end(function(e, response){
-      console.log(response);
       if(e) {
         return cb(e);
       }

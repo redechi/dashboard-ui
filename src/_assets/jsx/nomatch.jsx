@@ -5,6 +5,10 @@ const Header = require('./header.jsx');
 
 
 module.exports = class NoMatch extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  
   render() {
     return (
       <div className="main">
