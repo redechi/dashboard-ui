@@ -1,4 +1,4 @@
-#error {
+.no-match {
   width: 375px;
   text-align: center;
   margin-top: 40px;
@@ -10,7 +10,7 @@
     color: $link_type;
   }
 
-  .bigAlert {
+  .big-alert {
     @include hr-image('../images/icon_bigalert', 'png', 235px, 144px);
     background-repeat: no-repeat;
     background-position: center top;
@@ -18,7 +18,7 @@
     margin: 25px 0;
   }
 
-   p {
-     margin-bottom: 30px;
-   }
+  p {
+    margin-bottom: 30px;
+  }
 }
