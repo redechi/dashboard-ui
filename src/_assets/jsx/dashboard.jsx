@@ -21,7 +21,7 @@ module.exports = class Dashboard extends React.Component {
 
     this.state = {
       allSelected: false,
-      filters: filters.getFiltersFromQuery(this.props.location.query),
+      filters: filters.getFiltersFromQuery(this.props.location ? this.props.location.query : {}),
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
       filterHeight: 94,

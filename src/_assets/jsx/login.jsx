@@ -1,5 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
+import classNames from 'classnames';
+import _ from 'underscore';
+
+const login = require('../js/login');
+
 
 module.exports = class Login extends React.Component {
   constructor(props) {
@@ -9,16 +14,55 @@ module.exports = class Login extends React.Component {
       panel: 'intro'
     };
 
-    this.toggleLoginPanel = (e) => {
-      e.preventDefault();
+    this.toggleLoginPanel = (event) => {
+      event.preventDefault();
 
       this.setState({
         panel: this.state.panel === 'intro' ? 'login' : 'intro'
       });
     };
+
+    this.login = (event) => {
+      event.preventDefault();
+      login.login(this.refs.username.value, this.refs.password.value, (e) => {
+        if(e) {
+          console.error(e);
+          if(e && e.message === 'no_username') {
+            this.setState({
+              alert: 'No email address provided',
+              errorFields: ['username']
+            });
+          } else if(e && e.message === 'no_password') {
+            this.setState({
+              alert: 'No password provided',
+              errorFields: ['password']
+            });
+          } else if(e && e.message === 'invalid_credentials') {
+            this.setState({
+              alert: 'Invalid email or password',
+              errorFields: ['username', 'password']
+            });
+          } else {
+            this.setState({alert: 'Unknown error'});
+          }
+        }
+
+        // user is successfully logged in
+        this.props.showDashboard();
+      });
+    };
   }
 
   render() {
+    let alert;
+    if(this.state.alert) {
+      alert = (
+        <ul className="alert alert-grey" role="alert">
+          <li>{this.state.alert}</li>
+        </ul>
+      );
+    };
+
     let panel;
     if (this.state.panel === 'intro') {
       panel = (
@@ -26,7 +70,7 @@ module.exports = class Login extends React.Component {
           <div className="top-box">
             <h1>Explore your trips and driving data<span className="mobile-title"> on the web</span>.</h1>
             <div className="login-block">
-              <Link to="demo" className="btn btn-blue btn-block">Try the demo</Link>
+              <Link to="/demo" className="btn btn-blue btn-block">Try the demo</Link>
               <p>Have an Automatic app account?  <a href="#" className="login-link" onClick={this.toggleLoginPanel}>Log In</a></p>
             </div>
             <div className="mobile-block">
@@ -58,16 +102,16 @@ module.exports = class Login extends React.Component {
           <h1>Log in</h1>
           <p>Use your Automatic app account</p>
           <a href="#" className="back" onClick={this.toggleLoginPanel}>Back</a>
-          <form role="form">
-            <div className="form-group">
-              <input type="text" className="form-control" name="username" placeholder="Email Address" spellcheck="false" />
+          <form role="form" onSubmit={this.login}>
+            <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'username')})}>
+              <input type="text" className="form-control" ref="username" placeholder="Email Address" spellCheck="false" />
             </div>
-            <div className="form-group">
-              <input type="password" className="form-control" name="password" placeholder="Password" />
+            <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'password')})}>
+              <input type="password" className="form-control" ref="password" placeholder="Password" />
             </div>
-            <ul className="alert alert-grey invisible" role="alert"></ul>
+            {alert}
             <div className="form-group">
-              <label><input type="checkbox" checked name="staySignedIn" className="stay-signed-in" /> Keep me signed in</label>
+              <label><input type="checkbox" defaultChecked={true} ref="staySignedIn" className="stay-signed-in" /> Keep me signed in</label>
             </div>
             <button type="submit" className="btn btn-blue btn-block">Login</button>
           </form>

@@ -6,8 +6,15 @@ const login = require('./login');
 
 exports.getData = (cb) => {
   if(login.isLoggedIn()) {
-    //TODO: get logged in data
-    cb();
+    fetchData('trip/', (e, trips) => {
+      if(e) return cb(e);
+
+      fetchData('vehicle/', (e, vehicles) => {
+        if(e) return cb(e);
+
+        cb(null, trips, _.sortBy(vehicles, 'make'));
+      });
+    });
   } else {
     // Demo Trips
     fetchDemoData('/data/trips.json', (e, trips) => {
@@ -27,6 +34,7 @@ function fetchDemoData(fileName, cb) {
     .get(fileName)
     .set('Accept', 'application/json')
     .end(function(e, response){
+      console.log(response);
       if(e) {
         return cb(e);
       }
@@ -48,4 +56,21 @@ function prepDemoTrips(trips) {
     trip.ended_at = moment(trip.ended_at).add(dayOffset, 'days').toISOString();
     return trip;
   });
+}
+
+function fetchData(endpoint, cb) {
+  request
+    .get(`https://api.automatic.com/${endpoint}`)
+    .query({limit: 250, page: 1})
+    .set('Authorization', `bearer ${login.accessToken()}`)
+    .end(function(e, response){
+      if(e) {
+        return cb(e);
+      }
+      if(!response.body || !response.body.results) {
+        return cb(new Error('No results returned'));
+      }
+
+      return cb(null, response.body.results);
+    });
 }

@@ -141,7 +141,7 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
 
   //invisible bar to make tooltip hovering easier
   bars.append('rect')
-    .attr('class', 'invisibleHover')
+    .attr('class', 'invisible-hover')
     .attr('x', (d) => x(d.key) - (barWidth/2))
     .attr('y', height - minBarHeight)
     .attr('width', barWidth)
