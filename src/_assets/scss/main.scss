@@ -1,4 +1,4 @@
-@import '~normalize.css/normalize';
+@import "~normalize.css/normalize";
 
 /* Set bootstrap font defaults */
 $font-family-sans-serif: AvenirNextPro;
@@ -9,6 +9,8 @@ $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
 
 @import "~react-datepicker/dist/react-datepicker";
+
+@import "~bootstrap-slider/css/bootstrap-slider";
 
 @mixin hr-image($file, $type, $width, $height) {
   background-image: url($file + '.' + $type);
