@@ -85,6 +85,21 @@
   }
 }
 
+.loading-modal {
+  .modal-dialog {
+    margin-top: 200px;
+    width: 271px;
+
+    .modal-body {
+      background: url('../images/loader@2x.gif') left 30px center no-repeat;
+      background-size: 80px 33px;
+      font-size: 14px;
+      height: 93px;
+      padding: 25px 10px 10px 130px;
+    }
+  }
+}
+
 .unsupported-browser {
   margin: 0 auto;
   text-align: center;

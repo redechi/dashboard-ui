@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
 import moment from 'moment';
+import { Modal } from 'react-bootstrap';
 
 const exportData = require('../js/export_data');
 const filters = require('../js/filters');
@@ -30,6 +31,8 @@ module.exports = class Dashboard extends React.Component {
       vehicles: [],
       ranges: stats.calculateRanges(),
       tripRequestMinDate: moment().valueOf(),
+      showLoadingModal: true,
+      loadingProgressText: ''
     };
 
     this.toggleSelect = (tripId) => {
@@ -110,7 +113,12 @@ module.exports = class Dashboard extends React.Component {
       setTimeout(() => {
         this.setFilters(filters.getFiltersFromQuery(this.props.location.query));
       }, 50);
-    }
+    };
+
+    this.updateLoadingProgress = (progress, total) => {
+      console.log(progress);
+      this.setState({loadingProgressText: `${progress} of ${total} trips`});
+    };
   }
 
   setFilters(newFilters) {
@@ -135,7 +143,7 @@ module.exports = class Dashboard extends React.Component {
 
     if(startDate < this.state.tripRequestMinDate) {
       this.setState({showLoadingModal: true});
-      requests.getTrips(startDate, this.state.tripRequestMinDate, (e, trips, vehicles) => {
+      requests.getTrips(startDate, this.state.tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
         if(e) {
           return alert('Unable to fetch data. Please try again later.');
         }
@@ -147,6 +155,8 @@ module.exports = class Dashboard extends React.Component {
           vehicles: vehicles,
           ranges: stats.calculateRanges(allTrips),
           tripRequestMinDate: startDate,
+          showLoadingModal: false,
+          loadingProgressText: ''
         });
       });
     }
@@ -195,7 +205,12 @@ module.exports = class Dashboard extends React.Component {
             </div>
           </div>
         </div>
-        
+        <Modal show={this.state.showLoadingModal} className="loading-modal">
+          <Modal.Body>
+            <div>Loading trips&hellip;</div>
+            <div className="loading-progress">{this.state.loadingProgressText}</div>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }

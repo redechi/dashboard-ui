@@ -6,16 +6,16 @@ const login = require('./login');
 
 const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://api.automatic.com': 'https://api.automatic.co';
 
-exports.getTrips = (startDate, endDate, cb) => {
+exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
   if(login.isLoggedIn()) {
-    fetchData('vehicle/', null, (e, vehicles) => {
+    fetchData('vehicle/', null, null, (e, vehicles) => {
       if(e) return cb(e);
 
       fetchData('trip/', {
         started_at__gte: (startDate / 1000),
         ended_at__lte: (endDate / 1000),
         limit: 250
-      }, (e, trips) => {
+      }, loadingProgress, (e, trips) => {
         if(e) return cb(e);
 
         cb(null, trips, _.sortBy(vehicles, 'make'));
@@ -86,7 +86,7 @@ function prepDemoTrips(trips) {
   });
 }
 
-function fetchData(endpoint, query, cb) {
+function fetchData(endpoint, query, loadingProgress, cb) {
   let results = [];
   makeRequest(endpoint, query, cb);
 
@@ -106,6 +106,10 @@ function fetchData(endpoint, query, cb) {
         results = results.concat(response.body.results);
 
         if(response.body._metadata.next) {
+          if(loadingProgress) {
+            loadingProgress(results.length, response.body._metadata.count);
+          }
+
           if(query.page) {
             query.page += 1;
           } else {
