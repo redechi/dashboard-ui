@@ -32,7 +32,7 @@ function prepareDemoTrips(response) {
 
 
 function fetchDemoTrips(cb) {
-  $.getJSON('/assets/data/trips.json', function(results) {
+  $.getJSON('/data/trips.json', function(results) {
     returnTrips(prepareDemoTrips(results), cb);
   });
 }
@@ -50,8 +50,7 @@ function fetchAllTrips(cb) {
   }
 
   if(!accessToken) {
-    alert('To access Automatic Labs, please log in first.');
-    window.location = '/#logout';
+    return promptForLogin();
   }
 
   function handleTripResults(results) {
@@ -96,6 +95,10 @@ function fetchTripsPage(url, cb, errCb) {
     });
   }
 
+  if(!accessToken) {
+    promptForLogin();
+  }
+
   $.ajax({
     url: url,
     headers: {
@@ -111,6 +114,12 @@ function returnTrips(trips, cb) {
   cacheTrips(trips);
   hideLoading();
   cb(trips);
+}
+
+
+function promptForLogin() {
+  alert('To access Automatic Labs, please log in first.');
+  window.location = '/';
 }
 
 
