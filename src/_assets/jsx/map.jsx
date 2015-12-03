@@ -27,7 +27,8 @@ module.exports = class Map extends React.Component {
   }
 
   getMapHeight() {
-    return this.props.windowHeight - this.props.filterHeight - 367;
+    let verticalPadding = 367;
+    return this.props.windowHeight - this.props.filterHeight - verticalPadding;
   }
 
   render() {

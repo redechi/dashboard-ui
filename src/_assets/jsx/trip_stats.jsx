@@ -74,7 +74,7 @@ module.exports = class TripStats extends React.Component {
       .delay(transitionsDelay)
       .ease('elastic');
 
-    var arcs = chart.selectAll('g')
+    let arcs = chart.selectAll('g')
       .data(pie)
       .enter()
       .append('g');

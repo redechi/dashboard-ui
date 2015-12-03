@@ -50,7 +50,9 @@ module.exports = class Graph extends React.Component {
   }
 
   getGraphWidth() {
-    return this.props.windowWidth - 410;
+    let minWidth = 614;
+    let horizontalPadding = 425;
+    return Math.max(this.props.windowWidth - horizontalPadding, minWidth);
   }
 
   getGraphDateRange() {

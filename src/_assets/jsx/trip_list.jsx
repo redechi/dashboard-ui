@@ -125,7 +125,8 @@ module.exports = class TripList extends React.Component {
   }
 
   getTripListHeight() {
-    return this.props.windowHeight - this.props.filterHeight - 233;
+    let verticalPadding = 233
+    return this.props.windowHeight - this.props.filterHeight - verticalPadding;
   }
 
   getModalTripIndex() {

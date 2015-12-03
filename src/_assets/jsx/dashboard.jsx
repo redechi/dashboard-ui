@@ -62,7 +62,7 @@ module.exports = class Dashboard extends React.Component {
           }
         )});
       }
-    }
+    };
 
     this.export = (exportType, cb) => {
       let trips;
@@ -79,11 +79,12 @@ module.exports = class Dashboard extends React.Component {
       }
 
       exportData.trips(trips, cb);
-    }
+    };
 
     this.handleResize = () => {
       this.setState({
         windowHeight: window.innerHeight,
+        windowWidth: window.innerWidth,
         filterHeight: document.getElementById('filters').offsetHeight
       });
     };

@@ -36,7 +36,7 @@ module.exports = class Filters extends React.Component {
         let min = this.props.ranges[this.props.filterType][0];
         let max = this.props.ranges[this.props.filterType][1];
         let value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max))
-        var slider = new Slider(`.popover-${this.props.filterType} input.slider`, {
+        let slider = new Slider(`.popover-${this.props.filterType} input.slider`, {
           min: min,
           max: max,
           value: value,

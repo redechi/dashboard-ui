@@ -7,9 +7,9 @@ const formatters = require('./formatters');
 const highlight = require('./highlight');
 const stats = require('./stats');
 
-var binSize;
-var bins;
-var data;
+let binSize;
+let bins;
+let data;
 
 exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   if(!trips) {
