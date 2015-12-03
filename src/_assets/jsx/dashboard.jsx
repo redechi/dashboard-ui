@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
+import moment from 'moment';
 
 const exportData = require('../js/export_data');
 const filters = require('../js/filters');
@@ -21,12 +22,14 @@ module.exports = class Dashboard extends React.Component {
 
     this.state = {
       allSelected: false,
+      allTrips: [],
       filters: filters.getFiltersFromQuery(this.props.location ? this.props.location.query : {}),
       windowHeight: window.innerHeight,
       windowWidth: window.innerWidth,
       filterHeight: 94,
       vehicles: [],
-      ranges: stats.calculateRanges()
+      ranges: stats.calculateRanges(),
+      tripRequestMinDate: moment().valueOf(),
     };
 
     this.toggleSelect = (tripId) => {
@@ -89,6 +92,10 @@ module.exports = class Dashboard extends React.Component {
         delete this.state.filters[filterName];
       }
 
+      if(filterName === 'date') {
+        this.getTrips();
+      }
+
       this.setFilters(this.state.filters);
     };
 
@@ -120,6 +127,29 @@ module.exports = class Dashboard extends React.Component {
 
   areAllSelected() {
     return _.every(this.state.trips, (trip) => trip.selected);
+  }
+
+  getTrips() {
+    let dateFilterComponents = this.state.filters.date.split(',');
+    let startDate = parseInt(dateFilterComponents[0], 10);
+
+    if(startDate < this.state.tripRequestMinDate) {
+      this.setState({showLoadingModal: true});
+      requests.getTrips(startDate, this.state.tripRequestMinDate, (e, trips, vehicles) => {
+        if(e) {
+          return alert('Unable to fetch data. Please try again later.');
+        }
+        let allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
+
+        this.setState({
+          allTrips: allTrips,
+          trips: filters.filterTrips(allTrips, this.state.filters),
+          vehicles: vehicles,
+          ranges: stats.calculateRanges(allTrips),
+          tripRequestMinDate: startDate,
+        });
+      });
+    }
   }
 
   render() {
@@ -165,6 +195,7 @@ module.exports = class Dashboard extends React.Component {
             </div>
           </div>
         </div>
+        
       </div>
     );
   }
@@ -172,19 +203,6 @@ module.exports = class Dashboard extends React.Component {
   componentDidMount() {
     window.addEventListener('resize', _.debounce(this.handleResize, 100));
 
-    requests.getData((e, trips, vehicles) => {
-      if(e) {
-        return alert('Unable to fetch data. Please try again later.');
-      }
-      let allTrips = trips.map(trip => formatters.formatTrip(trip, vehicles));
-
-      this.setState({
-        allTrips: allTrips,
-        trips: filters.filterTrips(allTrips, this.state.filters),
-        vehicles: vehicles,
-        ranges: stats.calculateRanges(allTrips)
-      });
-
-    });
+    this.getTrips();
   }
 };

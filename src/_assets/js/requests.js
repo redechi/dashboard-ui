@@ -6,12 +6,16 @@ const login = require('./login');
 
 const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://api.automatic.com': 'https://api.automatic.co';
 
-exports.getData = (cb) => {
+exports.getTrips = (startDate, endDate, cb) => {
   if(login.isLoggedIn()) {
-    fetchData('trip/', (e, trips) => {
+    fetchData('vehicle/', null, (e, vehicles) => {
       if(e) return cb(e);
 
-      fetchData('vehicle/', (e, vehicles) => {
+      fetchData('trip/', {
+        started_at__gte: (startDate / 1000),
+        ended_at__lte: (endDate / 1000),
+        limit: 250
+      }, (e, trips) => {
         if(e) return cb(e);
 
         cb(null, trips, _.sortBy(vehicles, 'make'));
@@ -19,10 +23,10 @@ exports.getData = (cb) => {
     });
   } else {
     // Demo Trips
-    fetchDemoData('/data/trips.json', (e, trips) => {
+    fetchDemoData('/data/vehicles.json', (e, vehicles) => {
       if(e) return cb(e);
 
-      fetchDemoData('/data/vehicles.json', (e, vehicles) => {
+      fetchDemoData('/data/trips.json', (e, trips) => {
         if(e) return cb(e);
 
         cb(null, prepDemoTrips(trips), _.sortBy(vehicles, 'make'));
@@ -82,19 +86,35 @@ function prepDemoTrips(trips) {
   });
 }
 
-function fetchData(endpoint, cb) {
-  request
-    .get(`${apiUrl}/${endpoint}`)
-    .query({limit: 250, page: 1})
-    .set('Authorization', `bearer ${login.accessToken()}`)
-    .end(function(e, response){
-      if(e) {
-        return cb(e);
-      }
-      if(!response.body || !response.body.results) {
-        return cb(new Error('No results returned'));
-      }
+function fetchData(endpoint, query, cb) {
+  let results = [];
+  makeRequest(endpoint, query, cb);
 
-      return cb(null, response.body.results);
-    });
+  function makeRequest(endpoint, query, cb) {
+    request
+      .get(`${apiUrl}/${endpoint}`)
+      .query({...query})
+      .set('Authorization', `bearer ${login.accessToken()}`)
+      .end(function(e, response){
+        if(e) {
+          return cb(e);
+        }
+        if(!response.body || !response.body.results) {
+          return cb(new Error('No results returned'));
+        }
+
+        results = results.concat(response.body.results);
+
+        if(response.body._metadata.next) {
+          if(query.page) {
+            query.page += 1;
+          } else {
+            query.page = 2;
+          }
+          makeRequest(endpoint, query, cb);
+        } else {
+          cb(null, results);
+        }
+      });
+  }
 }
