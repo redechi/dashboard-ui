@@ -254,7 +254,7 @@ function getQueryParams(qs) {
 function makeLinksDemo() {
   var queryParams = getQueryParams(document.location.search);
   if(queryParams.demo) {
-    $('.automatic-labs').attr('href', '/?demo#labs');
+    $('.automatic-labs').attr('href', '/?demo#/labs');
   }
 }
 
