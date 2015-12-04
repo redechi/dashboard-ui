@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import { Modal } from 'react-bootstrap';
 
 const login = require('../js/login');
+const requests = require('../js/requests');
+
 
 module.exports = class Header extends React.Component {
   constructor(props) {
@@ -21,6 +23,21 @@ module.exports = class Header extends React.Component {
 
     this.hideSupportModal = () => {
       this.setState({showSupportModal: false});
+    }
+  }
+
+  getUser() {
+    if(login.isLoggedIn()) {
+      if(!this.state.firstName) {
+        requests.getUser((e, user) => {
+          if(e) {
+            return;
+          }
+          this.setState({firstName: user.first_name});
+        });
+      }
+    } else if(this.state.firstName) {
+      this.setState({firstName: undefined});
     }
   }
 
@@ -48,7 +65,7 @@ module.exports = class Header extends React.Component {
             <a onClick={this.showSupportModal}>Support</a>
           </li>
           <li>
-            <span className="first-name">{this.props.firstName}</span>
+            <span className="first-name">{this.state.firstName}</span>
             <Link to="/" onClick={login.logout}>Log out</Link>
           </li>
           <Modal show={this.state.showSupportModal} onHide={this.hideSupportModal} className="support-modal">
@@ -88,5 +105,13 @@ module.exports = class Header extends React.Component {
         {menu}
       </header>
     );
+  }
+
+  componentDidMount() {
+    this.getUser();
+  }
+
+  componentDidUpdate() {
+    this.getUser();
   }
 };

@@ -58,6 +58,18 @@ exports.disconnectApp = (appId, cb) => {
     .end(cb);
 };
 
+exports.getUser = (cb) => {
+  request
+    .get(`${apiUrl}/user/me/`)
+    .set('Authorization', `bearer ${login.accessToken()}`)
+    .end((e, response) => {
+      if(e) {
+        return cb(e);
+      }
+      return cb(null, response.body);
+    });
+};
+
 function fetchDemoData(fileName, cb) {
   request
     .get(fileName)
