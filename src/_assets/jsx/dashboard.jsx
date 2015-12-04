@@ -6,6 +6,7 @@ import { Modal } from 'react-bootstrap';
 const exportData = require('../js/export_data');
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
+const login = require('../js/login');
 const requests = require('../js/requests');
 const stats = require('../js/stats');
 
@@ -139,6 +140,11 @@ module.exports = class Dashboard extends React.Component {
   }
 
   getTrips() {
+    // if demo mode and trips are already loaded, skip
+    if(!login.isLoggedIn() && this.state.allTrips.length) {
+      return;
+    }
+
     let dateFilterComponents = this.state.filters.date.split(',');
     let startDate = parseInt(dateFilterComponents[0], 10);
 

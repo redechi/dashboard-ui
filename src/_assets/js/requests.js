@@ -39,7 +39,7 @@ exports.getApps = (cb) => {
   request
     .get(`${apiUrl}/v1/access_token`)
     .set('Authorization', `bearer ${login.accessToken()}`)
-    .end(function(e, response){
+    .end((e, response) => {
       if(e) {
         return cb(e);
       }
@@ -62,7 +62,7 @@ function fetchDemoData(fileName, cb) {
   request
     .get(fileName)
     .set('Accept', 'application/json')
-    .end(function(e, response){
+    .end((e, response) => {
       if(e) {
         return cb(e);
       }
