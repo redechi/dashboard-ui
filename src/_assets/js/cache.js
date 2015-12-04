@@ -10,7 +10,7 @@ exports.setItem = function(key, value, persist) {
 
 };
 
-exports.getItem= function(key) {
+exports.getItem = function(key) {
   let value = localStorage.getItem(key) || sessionStorage.getItem(key);
   try {
     return JSON.parse(value);

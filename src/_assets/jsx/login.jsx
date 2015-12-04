@@ -50,7 +50,7 @@ module.exports = class Login extends React.Component {
         }
 
         // user is successfully logged in
-        this.props.showDashboard();
+        this.props.refreshApp();
       });
     };
   }

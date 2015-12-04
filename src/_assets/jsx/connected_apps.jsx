@@ -1,10 +1,9 @@
 import React from 'react';
 import _ from 'underscore';
 
-const Header = require('./header.jsx');
-
 const login = require('../js/login');
 const requests = require('../js/requests');
+
 
 class App extends React.Component {
   constructor(props) {
@@ -74,7 +73,6 @@ module.exports = class ConnectedApps extends React.Component {
     }
     return (
       <div className="main">
-        <Header />
         <div className="connected-apps">
           <h1 className="page-title">Connected Apps</h1>
           <ul className="app-list">

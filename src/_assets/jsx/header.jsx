@@ -11,7 +11,7 @@ module.exports = class Header extends React.Component {
 
     this.state = {
       showSupportModal: false
-    }
+    };
 
     this.showSupportModal = () => {
       this.setState({showSupportModal: true});
@@ -25,6 +25,11 @@ module.exports = class Header extends React.Component {
   }
 
   render() {
+    // Don't show header on login page
+    if(!login.isLoggedIn() && this.props.location && this.props.location.pathname === '/') {
+      return (<div></div>);
+    }
+
     let menu;
 
     if(login.isLoggedIn()) {
@@ -43,7 +48,7 @@ module.exports = class Header extends React.Component {
             <a onClick={this.showSupportModal}>Support</a>
           </li>
           <li>
-            <span className="first-name"></span>
+            <span className="first-name">{this.props.firstName}</span>
             <Link to="/" onClick={login.logout}>Log out</Link>
           </li>
           <Modal show={this.state.showSupportModal} onHide={this.hideSupportModal} className="support-modal">

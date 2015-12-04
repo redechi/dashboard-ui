@@ -1,18 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const Header = require('./header.jsx');
-
 
 module.exports = class NoMatch extends React.Component {
   constructor(props) {
     super(props);
   }
-  
+
   render() {
     return (
       <div className="main">
-        <Header />
         <div className="container no-match">
           <h1>This page cannot be found.</h1>
           <div className="big-alert"></div>

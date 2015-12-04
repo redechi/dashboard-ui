@@ -41,12 +41,12 @@ exports.trips = (selectedTrips, cb) => {
   } else {
     let blob = new Blob([tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
 
-    setTimeout(function() {
+    setTimeout(() => {
       let filename = `automatic-trips-${moment().format('YYYY-MM-DD')}.csv`;
       //fix for firefox on callback - needs a timeout
       filesaverjs.saveAs(blob, filename);
       cb();
-    }.bind(this), 500);
+    }, 500);
   }
 };
 

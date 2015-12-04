@@ -12,7 +12,6 @@ const stats = require('../js/stats');
 
 const Filters = require('./filters.jsx');
 const Graph = require('./graph.jsx');
-const Header = require('./header.jsx');
 const Map = require('./map.jsx');
 const TripList = require('./trip_list.jsx');
 const TripStats = require('./trip_stats.jsx');
@@ -174,7 +173,6 @@ module.exports = class Dashboard extends React.Component {
 
     return (
       <div className="main">
-        <Header />
         <div>
           <Filters
             filters={this.state.filters}

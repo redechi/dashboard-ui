@@ -31,7 +31,7 @@ exports.login = function(username, password, staySignedIn, cb) {
     .send(`client_id=${clientId}`)
     .send('grant_type=password')
     .send('scope=scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic scope:behavior')
-    .end(function(e, response){
+    .end((e, response) => {
       if(e && response.body && response.body.error) {
         e.message = response.body.error
         return cb(e);

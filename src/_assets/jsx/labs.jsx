@@ -2,8 +2,6 @@ import React from 'react';
 
 const login = require('../js/login');
 
-const Header = require('./header.jsx');
-
 
 class Lab extends React.Component {
   constructor(props) {
@@ -85,7 +83,6 @@ module.exports = class Labs extends React.Component {
 
     return (
       <div className="main">
-        <Header />
         <div className="labs">
           <h1 className="page-title">Automatic Labs</h1>
           <p>Automatic Labs is a place where you can play with experimental visualizations, tools, and apps that aren't ready for primetime yet. As we work on them, we can't promise they won't change, break, or disappear. We also can't provide technical support for any of these experiments. Check them out!</p>
