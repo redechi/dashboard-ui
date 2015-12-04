@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import _ from 'underscore';
 
 const login = require('../js/login');
+const mobile = require('../js/mobile');
 
 
 module.exports = class Login extends React.Component {
@@ -66,6 +67,19 @@ module.exports = class Login extends React.Component {
 
     let panel;
     if (this.state.panel === 'intro') {
+      let appLinkText = 'Learn more about Automatic';
+      let appLink = 'https://automatic.com';
+      let appCheckFunction = _.noop;
+      if(mobile.isAndroid()) {
+        appLinkText = 'Open the Automatic app';
+        appLink = 'automatic://goto?id=insights_screen';
+        appCheckFunction = mobile.androidAppCheck;
+      } else if(mobile.isIOS()) {
+        appLinkText = 'Open the Automatic app';
+        appLink = 'com.automatic://';
+        appCheckFunction = mobile.iOSAppCheck;
+      }
+
       panel = (
         <div>
           <div className="top-box">
@@ -76,9 +90,7 @@ module.exports = class Login extends React.Component {
             </div>
             <div className="mobile-block">
               <p>Currently, our dashboard is designed for use in desktop web browsers.  For the best experience on your phone, use our Android or iPhone app.</p>
-              <a href="com.automatic://" className="btn btn-blue btn-ios-link">Open the Automatic app</a>
-              <a href="automatic://goto?id=insights_screen" className="btn btn-blue btn-android-link">Open the Automatic app</a>
-              <a href="http://automatic.com" className="btn btn-blue btn-learn-more">Learn more about Automatic</a>
+              <a href={appLink} className="btn btn-blue" onClick={appCheckFunction}>{appLinkText}</a>
             </div>
           </div>
 
