@@ -129,7 +129,7 @@ module.exports = class Login extends React.Component {
             <button type="submit" className="btn btn-blue btn-block">Login</button>
           </form>
           <div className="forgot-password">
-            <p>Forgot your password? <a href="#reset">Reset it</a></p>
+            <p>Forgot your password? <Link to="/reset">Reset it</Link></p>
             <a href="mailto:support@automatic.com">Need help?</a>
           </div>
         </div>

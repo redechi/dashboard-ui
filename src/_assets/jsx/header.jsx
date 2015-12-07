@@ -42,8 +42,8 @@ module.exports = class Header extends React.Component {
   }
 
   render() {
-    // Don't show header on login page
-    if(!login.isLoggedIn() && this.props.location && this.props.location.pathname === '/') {
+    // Don't show header on login page or reset page
+    if(!login.isLoggedIn() && this.props.location && (this.props.location.pathname === '/' || this.props.location.pathname === '/reset')) {
       return (<div></div>);
     }
 

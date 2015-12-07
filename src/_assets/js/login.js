@@ -53,3 +53,20 @@ exports.logout = function() {
   accessToken = undefined;
   cache.clear();
 };
+
+exports.reset = function(username, cb) {
+  request
+    .post(`${apiUrl}/password/reset_email/`)
+    .send(`email=${username}`)
+    .end((e, response) => {
+      if(e) {
+        cb(e);
+      } else if(!response.body) {
+        cb(new Error('Unknown Error'));
+      } else if(response.body.error) {
+        cb(new Error(response.body.error));
+      } else {
+        cb();
+      }
+    });
+};
