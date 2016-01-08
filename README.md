@@ -16,6 +16,11 @@ This project is based on [Automatic Static](https://github.com/Automatic/Automat
     make run
     make watch
 
+## Running locally
+
+    make watch
+
+Open localhost:5000 in your browser
 
 ### Staging
 

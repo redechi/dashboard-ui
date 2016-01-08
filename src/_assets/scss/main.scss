@@ -10,7 +10,7 @@ $fa-font-path: "~font-awesome/fonts";
 
 @import "~react-datepicker/dist/react-datepicker";
 
-@import "~bootstrap-slider/css/bootstrap-slider";
+@import "~bootstrap-slider/dist/css/bootstrap-slider";
 
 @mixin hr-image($file, $type, $width, $height) {
   background-image: url($file + '.' + $type);
