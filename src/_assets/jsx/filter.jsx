@@ -1,7 +1,7 @@
 import React from 'react';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
-import _ from 'underscore';
+import _ from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
 import Slider from 'bootstrap-slider';

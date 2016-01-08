@@ -1,5 +1,5 @@
 import request from 'superagent';
-import _ from 'underscore';
+import _ from 'lodash';
 import moment from 'moment';
 
 const login = require('./login');

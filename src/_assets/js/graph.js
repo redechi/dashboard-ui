@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import _ from 'lodash';
 import classNames from 'classnames';
 import d3 from 'd3';
 import moment from 'moment';

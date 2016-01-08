@@ -1,5 +1,5 @@
 import L from 'mapbox.js';
-import _ from 'underscore';
+import _ from 'lodash';
 import polyline from 'polyline';
 
 const formatters = require('./formatters');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const login = require('../js/login');
 const mobile = require('../js/mobile');

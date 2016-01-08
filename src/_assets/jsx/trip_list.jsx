@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Popover, OverlayTrigger } from 'react-bootstrap';
 import classNames from 'classnames';
-import _ from 'underscore';
+import _ from 'lodash';
 import moment from 'moment';
 
 const formatters = require('../js/formatters');

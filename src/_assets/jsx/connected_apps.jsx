@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'underscore';
+import _ from 'lodash';
 
 const login = require('../js/login');
 const requests = require('../js/requests');
