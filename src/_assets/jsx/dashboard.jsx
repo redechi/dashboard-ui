@@ -221,8 +221,12 @@ module.exports = class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('resize', _.debounce(this.handleResize, 100));
+    window.addEventListener('resize', this.handleResize);
 
     this.getTrips();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
   }
 };
