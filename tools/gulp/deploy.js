@@ -1,25 +1,46 @@
 import { isEmpty } from 'lodash';
 import gulp from 'gulp';
-import ghPages from 'gulp-gh-pages';
+import awspublish from 'gulp-awspublish';
+import merge from 'merge-stream';
+import parallelize from 'concurrent-transform';
 
 import settings from '../../settings.js';
 
-function deployGithub() {
-  if (isEmpty(settings.DEPLOY_GITHUB_REMOTE_URL)) {
-    throw new Error('Missing DEPLOY_GITHUB_REMOTE_URL when attempting to deploy to github pages');
+function deployAWS() {
+  if (isEmpty(settings.AWS_ACCESS_KEY_ID)) {
+    throw new Error('Missing AWS_ACCESS_KEY_ID when attempting to deploy to AWS');
   }
 
-  return gulp.src('dist/**')
-    .pipe(ghPages({
-      remoteUrl: settings.DEPLOY_GITHUB_REMOTE_URL
-    }));
+  if (isEmpty(settings.AWS_SECRET_ACCESS_KEY)) {
+    throw new Error('Missing AWS_SECRET_ACCESS_KEY when attempting to deploy to AWS');
+  }
+
+  if (isEmpty(settings.AWS_BUCKET)) {
+    throw new Error('Missing AWS_BUCKET when attempting to deploy to AWS');
+  }
+
+  var publisher = awspublish.create({
+    params: {
+      Bucket: settings.AWS_BUCKET
+    },
+    accessKeyId: settings.AWS_ACCESS_KEY_ID,
+    secretAccessKey: settings.AWS_SECRET_ACCESS_KEY
+  });
+
+  var gzip = gulp.src('./dist/**/data/*.*').pipe(awspublish.gzip());
+  var plain = gulp.src(['./dist/**/*.*', '!./dist/**/data/*.*']);
+
+  return merge(gzip, plain)
+    .pipe(parallelize(publisher.publish(), 30))
+    .pipe(publisher.sync())
+    .pipe(awspublish.reporter());
 }
 
 function deploy() {
   let deployStream;
   switch (settings.DEPLOY_TARGET) {
-  case 'github':
-    deployStream = deployGithub();
+  case 'aws':
+    deployStream = deployAWS();
     break;
   default:
     throw new Error('Invalid deploy target');
