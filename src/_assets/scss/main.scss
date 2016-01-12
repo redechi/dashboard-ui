@@ -7,6 +7,11 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 
 $fa-font-path: "~font-awesome/fonts";
 @import "~font-awesome/scss/font-awesome.scss";
+/* Fix for font-awesome whitespace escape */
+.fa {
+  font: normal normal normal 14px/1 FontAwesome;
+}
+
 
 @import "~react-datepicker/dist/react-datepicker";
 
