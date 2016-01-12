@@ -1,3 +1,7 @@
+body {
+  height: auto;
+}
+
 .wrapper {
   width: 700px;
   margin: 0 auto;
@@ -17,6 +21,7 @@
   width: 100%;
   height: 400px;
   display: none;
+  margin-bottom: 15px;
 }
 
 .leaflet-top {
@@ -25,7 +30,7 @@
 
 .results-summary {
   display: none;
-  font-weight: bold;
+  padding-bottom: 20px;
 }
 
 .show-route {
@@ -54,14 +59,22 @@
 
 .input-daterange input {
   width: 75px;
-}
-
-.datepicker.dropdown-menu {
-  margin-top: 26px;
+  font-size: 12px;
+  padding: 7px 8px;
+  color: #333;
+  vertical-align: middle;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
 }
 
 .locations {
   overflow: hidden;
+  padding-bottom: 20px;
 }
 
 .locations h4 {
@@ -75,4 +88,9 @@
 
 .location select {
   width: 200px;
+}
+
+.location label {
+  font-weight: bold;
+  padding-right: 5px;
 }

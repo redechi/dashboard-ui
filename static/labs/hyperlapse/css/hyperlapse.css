@@ -175,16 +175,14 @@
   left: 10px;
 }
 
-.pano .btn-share {
+.share-container {
+  clear: both;
+  padding: 15px;
   position: absolute;
-  top: 10px;
-  right: 150px;
-}
-
-.pano .share-url {
-  width: 350px;
-  display: none;
-  margin-left: 10px;
+  bottom: 10px;
+  left: 128px;
+  background: rgba(255, 255, 255, .8);
+  border-radius: 6px;
 }
 
 .pano .btn-pause {

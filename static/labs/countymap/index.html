@@ -6,6 +6,18 @@
     <title>County Driving Map | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta property="og:title" content="Driving County Map | Automatic"/>
+    <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/countymap.png"/>
+    <meta property="og:site_name" content="Automatic"/>
+    <meta property="og:description" content="How many US Counties have I driven to?"/>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@automatic">
+    <meta name="twitter:title" content="Driving County Map | Automatic">
+    <meta name="twitter:description" content="How many US Counties have I driven to?">
+    <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/countymap.png">
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="../common/css/style.css" rel="stylesheet" />
     <style>
       .wrapper {
@@ -20,11 +32,11 @@
         padding: 5px 8px;
       }
 
-      .map-info h1 {
-        margin: 0;
+      .demo .map-info {
+        top: 50px;
       }
 
-      .map-info h3 {
+      .map-info h1 {
         margin: 0;
       }
 
@@ -78,23 +90,39 @@
     </style>
   </head>
   <body>
+    <a class="btn-logout" href="/#logout">Log out</a>
     <div class="loading">
       <div class="title">Loading...</div>
-      <div class="text"></div>
+      <div class="progress"></div>
     </div>
     <div class="map-info">
-      <h1>County Driving Map</h1>
-      <h3>Collect them all!</h3>
+      <h1 class="labs-title">County Driving Map</h1>
+      <div class="labs-tagline">By Automatic Labs</div>
+      <div>
+        <b>Collect them all!</b>
+      </div>
     </div>
+    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=countymap">Log in</a> to view your Automatic driving history.</div>
     <div id="countymap" class="map"></div>
     <div class="wrapper">
       <div id="results"></div>
+      <div class="share-container hidden" id="shareContainer">
+        <div id="shareTitle" class="share-title hidden">Share this Map</div>
+        <input id="shareUrl" class="share-url" readonly>
+        <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share this map</a>
+        <div class="share-buttons hidden">
+          <p>Anyone with this link can see this map, which includes <b>all</b> trips you've ever taken with Automatic.</p>
+          <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+          <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+          <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+        </div>
+      </div>
     </div>
     <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
@@ -102,8 +130,10 @@
     <script src="../common/js/main.js"></script>
 
     <script>
-      var states = {};
-      var counties = {};
+      var data = {
+        states: {},
+        counties: {}
+      };
       var idx = 0;
       var paths;
       var container;
@@ -118,11 +148,11 @@
 
         var stateContainer = $('<div>').addClass('states');
 
-        _.keys(states).sort().forEach(function(state) {
+        _.keys(data.states).sort().forEach(function(state) {
           var container = $('<div>').addClass('state');
           $('<h3>').text(state).appendTo(container);
 
-          $(container).append(_.keys(states[state]).sort().map(function(county) {
+          $(container).append(_.keys(data.states[state]).sort().map(function(county) {
             return $('<div>').text(county);
           }));
 
@@ -137,14 +167,14 @@
       function summarize() {
         var totalCounties = 3232;
         var totalStates = 50;
-        var stateCount = _.size(states);
-        var countyCount = _.reduce(states, function(memo, counties) {
+        var stateCount = _.size(data.states);
+        var countyCount = _.reduce(data.states, function(memo, counties) {
           return memo += _.size(counties);
         }, 0);
         $('<small>').html('<sup>*</sup> or county equivalents').prependTo('#results');
         $('<p>').html('You have driven to ' + countyCount + ' of ' + totalCounties + ' US Counties<sup>*</sup> and ' + stateCount + ' of ' + totalStates + ' US States').prependTo('#results');
+        hideLoading();
       }
-
 
       function drawMap() {
         var width = $(window).width(),
@@ -191,7 +221,7 @@
           .attr('d', d3Path)
           .call(drag)
           .on('mouseover', function(d) {
-            var county = counties[d.id];
+            var county = data.counties[d.id];
 
             if(county) {
               graphTooltip.attr('class', 'graph-tooltip');
@@ -294,15 +324,13 @@
         }
       }
 
-
       function updateMap() {
-        _.each(states, function(state) {
+        _.each(data.states, function(state) {
           _.each(state, function(id) {
             $('[data-county="' + id + '"]').attr('class', 'visited county');
           });
         });
       }
-
 
       function groupPaths() {
         var pathGroups = [];
@@ -331,7 +359,6 @@
         return pathGroups;
       }
 
-
       function fetchPaths(pathGroup) {
         q.defer(function(cb) {
           $.ajax({
@@ -339,14 +366,14 @@
             method: 'POST',
             data: JSON.stringify(pathGroup),
             contentType: 'application/json'
-          }).done(function(data) {
-            _.each(data, function(county) {
-              if(!states[county.state]) {
-                states[county.state] = {};
+          }).done(function(results) {
+            _.each(results, function(county) {
+              if(!data.states[county.state]) {
+                data.states[county.state] = {};
               }
               var id = parseInt(county.id, 10).toString();
-              states[county.state][county.county] = id;
-              counties[id] = county;
+              data.states[county.state][county.county] = id;
+              data.counties[id] = county;
             });
 
             renderCounties();
@@ -354,40 +381,99 @@
             console.error(error);
           }).always(function() {
             $('.loading .title').text('Processing trips ' + (idx + 1) + '-' + (idx + pathGroup.length));
-            $('.loading .text').empty();
+            $('.loading .progress').empty();
             idx += pathGroup.length;
             cb();
           });
         });
       }
 
+      $('#share').click(function(e) {
+        e.preventDefault();
 
-      function getCounties() {
-        showLoading();
+        $('#share').html(generateSpinner());
+        saveShareData(data, function(e, shareUrlSlug) {
+          if(e) {
+            return alert(e);
+          }
 
-        var pathGroups = groupPaths();
+          var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
+          showShareOptions(shareURL);
+        });
+      });
 
-        pathGroups.forEach(fetchPaths);
+      $('#shareUrl').focus(function() {
+        $(this).select();
+      });
 
-        q.await(function(e) {
-          console.log(e);
-          summarize();
-          hideLoading();
+      function showShareOptions(shareURL) {
+        $('#shareUrl')
+          .val(shareURL)
+          .animate({width: 'toggle'}, 350)
+          .select();
+        $('#share').animate({width: 'toggle'}, 350);
+        $('#shareTitle').slideDown();
+        $('.share-buttons').slideDown();
+
+        var emailShareURL = formatEmailShare('My County Driving Map', 'I\'ve driven through ' + _.size(data.counties) + ' counties and ' + _.size(data.states) + ' states.', shareURL);
+        var twitterShareURL = formatTwitterShare('I\'ve driven through ' + _.size(data.counties) + ' counties and ' + _.size(data.states) + ' states.', shareURL);
+        var facebookShareURL = formatFacebookShare(shareURL);
+
+        $('.btn-email').attr('href', emailShareURL);
+        $('.btn-twitter').attr('href', twitterShareURL);
+        $('.btn-facebook').attr('href', facebookShareURL);
+
+        sessionStorage.setItem('countymapShareURL', shareURL);
+      }
+
+      function getUserData() {
+        fetchAllTrips(function(trips) {
+          if(!trips || !trips.length) {
+            return alert('You have no trips');
+          }
+
+          showLoading();
+
+          drawMap();
+
+          paths = _.compact(_.pluck(trips, 'path'));
+
+          groupPaths().forEach(fetchPaths);
+
+          q.await(function(e) {
+            if(e) {
+              console.log(e);
+            }
+
+            summarize();
+          });
+        }, function(progress) {
+          $('.loading .progress').text(progress);
         });
       }
 
+      var queryParams = getQueryParams(document.location.search);
+      if(queryParams.share) {
+        getShareData(queryParams.share, function(e, result) {
+          if(e) {
+            return alert(e);
+          }
 
-      fetchAllTrips(function(trips) {
-        if(!trips || !trips.length) {
-          return alert('You have no trips');
+          data = result;
+          drawMap();
+          renderCounties();
+          summarize();
+        });
+      } else {
+        getUserData();
+        if(!queryParams.demo) {
+          $('#shareContainer').show();
+
+          if(sessionStorage.getItem('countymapShareURL')) {
+            showShareOptions(sessionStorage.getItem('countymapShareURL'));
+          }
         }
-
-        drawMap();
-
-        paths = _.compact(_.pluck(trips, 'path'));
-
-        getCounties();
-      });
+      }
     </script>
 
     <script>
@@ -396,7 +482,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-33317148-4', 'auto');
+      ga('create', 'UA-33317148-1', 'auto');
       ga('send', 'pageview');
     </script>
   </body>

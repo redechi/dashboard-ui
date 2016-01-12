@@ -3,18 +3,29 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Hyperlapse | Automatic Labs</title>
+    <title>Driving Hyperlapse | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.css" rel="stylesheet" />
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <meta property="og:title" content="Driving Hyperlapse | Automatic"/>
+    <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/hyperlapse.png"/>
+    <meta property="og:site_name" content="Automatic"/>
+    <meta property="og:description" content="A hyperlase of my driving. Re-live my trip with a Google Streetview stitched time-lapse video."/>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@automatic">
+    <meta name="twitter:title" content="Driving Hyperlapse | Automatic">
+    <meta name="twitter:description" content="A hyperlase of my driving. Re-live my trip with a Google Streetview stitched time-lapse video.">
+    <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/hyperlapse.png">
+
+    <link href="https://api.tiles.mapbox.com/mapbox.js/v2.2.3/mapbox.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/hyperlapse.css" rel="stylesheet" />
   </head>
   <body>
     <div class="loading">
       <div class="title">Loading...</div>
-      <div class="text"></div>
+      <div class="progress"></div>
     </div>
     <div id="trips" class="wrapper">
       <h1 class="page-title">Hyperlapse</h1>
@@ -31,31 +42,36 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.js"></script>
-    <script src="https://api.tiles.mapbox.com/mapbox.js/v2.1.9/mapbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
 
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=geometry"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
     <script src="js/GSVPano.js"></script>
     <script src="js/Hyperlapse.js"></script>
 
+    <script src="../common/js/polyline.js"></script>
     <script src="../common/js/main.js"></script>
     <script src="../common/js/maps.js"></script>
 
     <script>
-      var trip = getQueryParams(document.location.search);
       var map;
       var hyperlapse;
       var marker;
+      var data;
 
-
-      function generateHyperlapse(trip) {
-        if(!trip.path) {
+      function generateHyperlapse() {
+        if(!data.path) {
           return alert('Unable to generate hyperlapse for trips with no path');
         }
 
-        if(!trip.distance_m) {
+        if(!data.distance_m) {
           return alert('Unable to generate hyperlapse for trips with no distance');
+        }
+
+        if (data.start_address && data.end_address) {
+          document.title = 'Hyperlapse from ' + data.start_address + ' to ' + data.end_address;
+          $('.page-title, .pano-title-share').text('Hyperlapse from ' + data.start_address + ' to ' + data.end_address + ' - ' + metersToMiles(data.distance_m).toFixed() + ' miles');
         }
 
         var pointCount = 1;
@@ -68,7 +84,7 @@
           millis: 200,
           width: $(window).width(),
           height: $(window).height(),
-          max_points: trip.max_points || 200
+          max_points: data.max_points || 200
       	});
 
       	hyperlapse.onError = function(e) {
@@ -82,19 +98,19 @@
         hyperlapse.onRouteProgress = function(e) {
           pointCount += 1;
           $('.loading .title').text('Finding Route...');
-          $('.loading .text').text('Point ' + pointCount + '/200');
+          $('.loading .progress').text('Point ' + pointCount + '/200');
         };
 
         hyperlapse.onLoadProgress = function(e) {
           $('.loading .title').text('Generating ');
-          $('.loading .text').text('Panorama ' + e.position + '/' + pointCount);
+          $('.loading .progress').text('Panorama ' + e.position + '/' + pointCount);
         };
 
       	hyperlapse.onLoadComplete = function(e) {
       		hyperlapse.play();
           $('#pano').fadeIn();
           hideLoading();
-          drawPanoMap(trip);
+          drawPanoMap(data);
       	};
 
         hyperlapse.onFrame = function(e) {
@@ -104,9 +120,8 @@
           ));
         };
 
-      	hyperlapse.generate({trip: trip});
+      	hyperlapse.generate({trip: data});
       }
-
 
       function pauseHyperlapse() {
         hyperlapse.pause();
@@ -114,18 +129,16 @@
         $('.btn-play').show();
       }
 
-
       function playHyperlapse() {
         hyperlapse.play();
         $('.btn-play').hide();
         $('.btn-pause').show();
       }
 
-
       function drawPanoMap(trip) {
         map = L.mapbox.map('panomap', 'automatic.h5kpm228', {zoomControl: false});
 
-        var points = L.GeoJSON.decodeLine(trip.path);
+        var points = polyline.decode(trip.path);
 
         var line = L.polyline(points, {
           color: '#08b1d5',
@@ -155,13 +168,20 @@
 
       $('.btn-play').click(playHyperlapse);
 
-      if (trip.start_address && trip.end_address) {
-        document.title = 'Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address;
-        $('.page-title, .pano-title-share').text('Hyperlapse from ' + trip.start_address + ' to ' + trip.end_address + ' - ' + metersToMiles(trip.distance_m).toFixed() + ' miles');
-      }
+      var queryParams = getQueryParams(document.location.search);
+      if(queryParams.share) {
+        getShareData(queryParams.share, function(e, result) {
+          if(e) {
+            return alert(e);
+          }
 
-      //load hyperlapse
-      generateHyperlapse(trip);
+          data = result;
+
+          generateHyperlapse();
+        });
+      } else {
+        alert('Invalid share');
+      }
     </script>
 
     <script>
@@ -170,7 +190,7 @@
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-33317148-4', 'auto');
+      ga('create', 'UA-33317148-1', 'auto');
       ga('send', 'pageview');
     </script>
   </body>

@@ -13,8 +13,8 @@ class Lab extends React.Component {
 
     return (
       <li>
-        <a href={`/labs/${this.props.lab.name}/index.html${demoParam}`} className="labs-link">
-          <img src={`/_assets/images/labs/${this.props.lab.image}`} className="labs-icon" />
+        <a href={`/labs/${this.props.lab.name}/${`index`}.html${demoParam}`} className="labs-link">
+          <img src={this.props.lab.image} className="labs-icon" />
           <h3 className="labs-title">{this.props.lab.title}</h3>
           <div className="labs-description">{this.props.lab.description}</div>
         </a>
@@ -26,60 +26,64 @@ class Lab extends React.Component {
 
 module.exports = class Labs extends React.Component {
   render() {
-    let isLoggedIn = login.isLoggedIn();
-
     let labs = [
       {
+        name: 'year-in-review',
+        image: '/_assets/images/labs/year-in-review.gif',
+        title: '2015 Year In Review',
+        description: 'A summary of your driving in 2015.'
+      },
+      {
         name: 'hyperlapse',
-        image: 'hyperlapse.gif',
+        image: '/_assets/images/labs/hyperlapse.gif',
         title: 'Hyperlapse Generator',
         description: 'Re-live any of your past drives with Google Streetview imagery of the route stitched into a time-lapse video.'
       },
       {
         name: 'heatmap',
-        image: 'heatmap.png',
+        image: '/_assets/images/labs/heatmap.png',
         title: 'Heatmap',
         description: 'Each place you\'ve gone with Automatic shown as a heatmap.'
       },
       {
         name: 'nightmap',
-        image: 'nightmap.png',
+        image: '/_assets/images/labs/nightmap.png',
         title: 'Trip Line Map',
         description: 'All of your driving ever overlaid on a minimial, nighttime map. Simple and beautiful.'
       },
       {
         name: 'countymap',
-        image: 'countymap.png',
+        image: '/_assets/images/labs/countymap.png',
         title: 'County Driving Map',
         description: 'A map of all US counties and states that you have driven to. Collect them all!'
       },
       {
         name: 'carbon',
-        image: 'carbon.png',
+        image: '/_assets/images/labs/carbon.png',
         title: 'Carbon Calculator',
         description: 'Estimate your carbon footprint, Automatically.'
       },
       {
         name: 'commute-analyzer',
-        image: 'commute-analyzer.png',
+        image: '/_assets/images/labs/commute-analyzer.png',
         title: 'Commute Analyzer',
         description: 'Break down your commute duration by direction, day of week and departure time.'
       },
       {
         name: 'receipt',
-        image: 'receipt.png',
+        image: '/_assets/images/labs/receipt.png',
         title: 'Trip Receipts',
         description: 'Download or print a receipt with a map for any trip you\'ve taken with Automatic.'
       },
       {
         name: 'relocate',
-        image: 'relocate.png',
+        image: '/_assets/images/labs/relocate.png',
         title: 'Relocate your commute',
         description: 'Map your current commute patterns on top of a different city. See your daily drives along the canals of Venice or the beaches of Rio.'
       }
     ];
 
-    let labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={isLoggedIn} />);
+    let labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={login.isLoggedIn()} />);
 
     return (
       <div className="main">

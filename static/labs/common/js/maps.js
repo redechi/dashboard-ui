@@ -1,39 +1,105 @@
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IkV6ZFdvQmsifQ.SDDOhAsgorCNf8T0ejWKmA';
 
-L.extend(L.GeoJSON, {
-  // This function is from Google's polyline utility.
-  // Borrowed from: http://facstaff.unca.edu/mcmcclur/GoogleMaps/EncodePolyline/decode.js
-  decodeLine: function (encoded) {
-    var len = encoded.length;
-    var index = 0;
-    var array = [];
-    var lat = 0;
-    var lng = 0;
+function getSamplingTolerance(points) {
+  var granularity = 200;
+  var firstPoint = _.first(points);
+  var lastPoint = _.last(points);
+  var deltaX = firstPoint[0] - lastPoint[0];
+  var deltaY = firstPoint[1] - lastPoint[1];
+  var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+  return distance / granularity;
+}
 
-    while (index < len) {
-      var b;
-      var shift = 0;
-      var result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      var dlat = ((result & 1) ? ~(result >> 1) : (result >> 1));
-      lat += dlat;
+function simplifyEncodedPolyline(encodedPolyline) {
+  var points = polyline.decode(encodedPolyline);
+  var latLonPoints = _.map(points, function(point) {
+    return { x: point[0], y: point[1] };
+  });
+  var tolerance = getSamplingTolerance(points);
+  var highQuality = false;
+  var downSampledPoints = simplify(latLonPoints, tolerance, highQuality);
+  downSampledPoints = _.map(downSampledPoints, function(point) {
+    return [point.x, point.y];
+  });
+  return polyline.encode(downSampledPoints);
+}
 
-      shift = 0;
-      result = 0;
-      do {
-        b = encoded.charCodeAt(index++) - 63;
-        result |= (b & 0x1f) << shift;
-        shift += 5;
-      } while (b >= 0x20);
-      var dlng = ((result & 1) ? ~(result >> 1) : (result >> 1));
-      lng += dlng;
+function constructMapboxStaticUrl(encodedPolylines, params) {
+  params = _.defaults(params || {}, {
+    format: 'png256',
+    width: 720,
+    height: 300
+  });
 
-      array.push([lat * 1e-5, lng * 1e-5]);
-    }
-    return array;
+  var formattedPolylines = _.map(encodedPolylines, function(pl) {
+    return 'path(' + simplifyEncodedPolyline(pl) + ')';
+  });
+  formattedPolylines = formattedPolylines.join(',');
+  var overlay = encodeURIComponent(formattedPolylines);
+  var mapID = 'mapbox.streets';
+  var accessToken = encodeURIComponent(L.mapbox.accessToken);
+  var url = mapID + '/' + overlay + '/auto/' + params.width + 'x' + params.height + '.' + params.format + '/?access_token=' + accessToken;
+  url = 'https://api.mapbox.com/v4/' + url;
+  return url;
+}
+
+
+function getStaticMap(encodedPolylines, params) {
+  if (_.isEmpty(encodedPolylines)) {
+    return null;
   }
-});
+
+  /**
+   * Iterate through the encodedPolylines, sorted by its length, and attempt to construct the
+   * static map url. The final url will be the one fitting the largest number of polylines, while
+   * still being under the maximum character limit of 4096
+   */
+  var memoPolylines = [];
+  var MAPBOX_STATIC_URL_MAX_NUM_CHAR = 4096;
+  var memoUrl = null;
+  var sortedPolylines = (_.sortBy(encodedPolylines, function(pl) { return pl.length; })).reverse();
+  _.each(sortedPolylines, function(pl) {
+    var continueIteration = true;
+    var newPolylines = [].concat(memoPolylines).concat(pl);
+    var newUrl = constructMapboxStaticUrl(newPolylines, params);
+    if (newUrl.length >= MAPBOX_STATIC_URL_MAX_NUM_CHAR) {
+      continueIteration = false;
+    } else {
+      memoPolylines = newPolylines;
+      memoUrl = newUrl;
+    }
+
+    return continueIteration;
+  });
+  return memoUrl;
+}
+
+function drawTripMap(trip, map) {
+  var lineStyle = {color: '#b84329', opacity: 0.6, weight: 4};
+  var markerStyle = {'marker-size': 'small', 'marker-color': '#f78e13'};
+
+  if(trip.path) {
+    var points = polyline.decode(trip.path);
+    var line = L.polyline(points, lineStyle);
+
+    line.addTo(map);
+
+    var bounds = L.latLngBounds(line.getBounds());
+    map.fitBounds(bounds, {padding: [20, 20]});
+  }
+
+  var startAddress = trip.start_address ? trip.start_address.display_name : 'Unknown';
+  var endAddress = trip.end_address ? trip.end_address.display_name : 'Unknown';
+
+  L.marker([trip.start_location.lat, trip.start_location.lon], {
+    icon: L.mapbox.marker.icon(markerStyle)
+  }).bindPopup(startAddress).addTo(map);
+
+  L.marker([trip.end_location.lat, trip.end_location.lon], {
+    icon: L.mapbox.marker.icon(markerStyle)
+  }).bindPopup(endAddress).addTo(map);
+
+  new L.Control.Zoom({ position: 'topright' }).addTo(map);
+
+  map.scrollWheelZoom.disable();
+}

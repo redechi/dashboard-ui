@@ -1,0 +1,546 @@
+body {
+  background: #20202D;
+  color: #ffffff;
+}
+
+a {
+  color: #44cbc4;
+}
+
+.wrapper {
+  padding: 0 15px;
+}
+
+#results {
+  display: none;
+}
+
+.alert {
+  display: none;
+}
+
+.year-in-review-header {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.year-in-review-header h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.year-in-review-header .year-in-review-menu {
+  display: none;
+}
+
+.container-title {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.container {
+  position: relative;
+  overflow: hidden;
+  min-height: 306px;
+}
+
+.container-whole {
+  height: 306px;
+  padding: 20px 15px;
+}
+
+.container-half {
+  overflow: hidden;
+  height: 306px;
+  box-sizing: border-box;
+  padding: 20px 15px;
+}
+
+.container-graph {
+  padding: 10px 0;
+}
+
+.large-number {
+  text-align: center;
+  font-size: 83px;
+  line-height: 120px;
+  font-weight: bold;
+  padding-top: 40px;
+}
+
+.large-number-label {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.large-number-fact {
+  font-size: 16px;
+  text-align: center;
+}
+
+.large-list {
+  text-align: center;
+  padding-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.user-info {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.intro-text {
+  display: none;
+  text-align: center;
+}
+
+.share-intro-text {
+  display: none;
+  text-align: center;
+}
+
+.short-bar {
+  width: 225px;
+  margin: 20px auto;
+  border: none;
+  height: 1px;
+  background-color: #ffffff;
+}
+
+.username {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.first-trip-date {
+  padding-bottom: 18px;
+  text-align: center;
+}
+
+.year-control {
+  display: none;
+}
+
+.year-control-wrapper {
+  position: relative;
+  margin: 20px 0;
+  font-size: 26px;
+  display: inline-block;
+}
+
+.year-control-wrapper:after {
+  color: #ffffff;
+  content: "▾";
+  font-size: .8em;
+  padding: 14px 8px;
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+  top: 8px;
+}
+
+.year-control select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  border-radius: 0;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 26px;
+  margin: 0;
+  outline: 0;
+  padding: 20px 50px 20px 20px
+}
+
+.share-container {
+  text-align: center;
+  padding-top: 40px;
+}
+
+.share-container .btn-share {
+  margin: 0 auto;
+  display: block;
+  width: 156px;
+}
+
+.share-title {
+  font-size: 24px;
+}
+
+.share-buttons {
+  text-align: center;
+  padding: 10px 0 0;
+}
+
+.modal .modal-dialog h3 {
+  text-align: center;
+}
+
+.review-buttons {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.review-buttons .btn {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.container-icon {
+  width: 80px;
+  height: 80px;
+  background-size: 80px 80px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.graph {
+  height: 100%;
+}
+
+.mg-histogram .axis text,
+.mg-x-axis text,
+.mg-y-axis text {
+  font-size: 0.6rem;
+}
+
+.duration-container {
+  background: #2b8351;
+}
+
+.duration-container .container-icon {
+  background-image: url('../img/year-in-review-icon-clock@1x.png');
+}
+
+.duration-container .container-half:first-child {
+  background: url('../img/year-in-review-bg-time-on-road.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.duration-container .mg-histogram .axis text,
+.duration-container .mg-x-axis text,
+.duration-container .mg-y-axis text,
+.duration-container .mg-chart-title,
+.duration-container .mg-active-datapoint {
+  fill: #ffffff;
+}
+
+.duration-container .mg-x-axis line,
+.duration-container .mg-y-axis line {
+  stroke: #ffffff;
+}
+
+.distance-container {
+  background: url('../img/year-in-review-bg-total-miles.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.distance-container .container-icon {
+  background-image: url('../img/year-in-review-icon-odometer@1x.png');
+}
+
+.longest-trip-container {
+  color: #2c3032;
+}
+
+.longest-trip-container .container-half {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.longest-trip-container .map {
+  width: 100%;
+  height: 306px;
+}
+
+.longest-trip-container .container-icon {
+  background-image: url('../img/year-in-review-icon-location@1x.png')
+}
+
+.states-container {
+  background: url('../img/year-in-review-bg-states.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.states-container .container-icon {
+  background-image: url('../img/year-in-review-icon-map@1x.png');
+}
+
+.weekday-container {
+  background: #fcfa0f;
+  color: #2c3032;
+}
+
+.weekday-container .container-icon {
+  background-image: url('../img/year-in-review-icon-coffee@1x.png');
+}
+
+.weekday-container .mg-x-axis line,
+.weekday-container .mg-y-axis line {
+  stroke: #000000;
+}
+
+.co2-container {
+  background: url('../img/year-in-review-bg-co2.jpg') center center no-repeat;
+  background-size: cover;
+}
+
+.co2-container .container-icon {
+  background-image: url('../img/year-in-review-icon-tree@1x.png');
+}
+
+.cost-container {
+  background: #67b369;
+  color: #2c3032;
+}
+
+.cost-container .container-icon {
+  background-image: url('../img/year-in-review-icon-dollar-drip@1x.png');
+}
+
+.cost-container .mg-x-axis line,
+.cost-container .mg-y-axis line {
+  stroke: #000000;
+}
+
+.mpg-container {
+  background: #1c5529;
+}
+
+.mpg-container .container-icon {
+  background-image: url('../img/year-in-review-icon-gas-pump@1x.png');
+}
+
+.mpg-container .mg-histogram .axis text,
+.mpg-container .mg-x-axis text,
+.mpg-container .mg-y-axis text,
+.mpg-container .mg-chart-title,
+.mpg-container .mg-active-datapoint {
+  fill: #ffffff;
+}
+
+
+.mpg-container .mg-x-axis line,
+.mpg-container .mg-y-axis line {
+  stroke: #ffffff;
+}
+
+.automatic-labs.bottom {
+  display: none;
+}
+
+.learn-more {
+  display: none;
+  margin: 40px 20px;
+  text-align: center;
+}
+
+@media screen and (min-width: 360px) {
+  .mg-histogram .axis text,
+  .mg-x-axis text,
+  .mg-y-axis text {
+    font-size: 0.7rem;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .modal .modal-dialog {
+    height: 217px;
+  }
+
+  .review-buttons .btn {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .wrapper {
+    width: 800px;
+    margin: 0 auto;
+  }
+
+  .year-in-review-header {
+    margin-top: 0;
+  }
+
+  .year-in-review-header h1 {
+    font-size: 68px;
+  }
+
+  .year-in-review-header .year-in-review-menu {
+    display: block;
+    margin: 0 auto;
+    height: 260px;
+  }
+
+  .year-in-review-header .year-in-review-menu a {
+    background-position: center top 205px;
+    background-repeat: no-repeat;
+    background-size: 35px 25px;
+    display: inline-block;
+    text-indent: -9999px;
+    width: 60px;
+    height: 240px;
+    -webkit-transition: height 0.4s;
+    -moz-transition: height 0.4s;
+    -ms-transition: height 0.4s;
+    -o-transition: height 0.4s;
+    transition: height 0.4s;
+  }
+
+  .year-in-review-header .year-in-review-menu a:hover {
+    height: 260px;
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(1) {
+    background-color: #663340;
+    background-image: url('../img/year-in-review-icon-mini-clock@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(2) {
+    background-color: #55AF40;
+    background-image: url('../img/year-in-review-icon-mini-odometer@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(3) {
+    background-color: #368937;
+    background-image: url('../img/year-in-review-icon-mini-location@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(4) {
+    background-color: #AB8F3B;
+    background-image: url('../img/year-in-review-icon-mini-map@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(5) {
+    background-color: #4C3728;
+    background-image: url('../img/year-in-review-icon-mini-coffee@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(6) {
+    background-color: #2E5256;
+    background-image: url('../img/year-in-review-icon-mini-tree@1x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(7) {
+    background-color: #398682;
+    background-image: url('../img/year-in-review-icon-mini-gas-pump@1x.png');
+  }
+
+  .container-title {
+    padding-top: 0;
+    text-align: left;
+  }
+
+  .container-whole {
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .container-half {
+    padding: 20px;
+    width: 50%;
+    float: left;
+  }
+
+  .large-number {
+    font-size: 150px;
+    line-height: 135px;
+    padding-top: 20px;
+  }
+
+  .large-number-label {
+    font-size: 32px;
+  }
+
+  .share-buttons {
+    padding: 10px;
+  }
+
+  .automatic-labs.bottom {
+    display: block;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .mg-histogram .axis text,
+  .mg-x-axis text,
+  .mg-y-axis text {
+    font-size: 0.9rem;
+  }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dppx) {
+  .duration-container .container-icon {
+    background-image: url('../img/year-in-review-icon-clock@2x.png');
+  }
+
+  .distance-container .container-icon {
+    background-image: url('../img/year-in-review-icon-odometer@2x.png');
+  }
+
+  .longest-trip-container .container-icon {
+    background-image: url('../img/year-in-review-icon-location@2x.png')
+  }
+
+  .states-container .container-icon {
+    background-image: url('../img/year-in-review-icon-map@2x.png');
+  }
+
+  .weekday-container .container-icon {
+    background-image: url('../img/year-in-review-icon-coffee@2x.png');
+  }
+
+  .co2-container .container-icon {
+    background-image: url('../img/year-in-review-icon-tree@2x.png');
+  }
+
+  .cost-container .container-icon {
+    background-image: url('../img/year-in-review-icon-dollar-drip@2x.png');
+  }
+
+  .mpg-container .container-icon {
+    background-image: url('../img/year-in-review-icon-gas-pump@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(1) {
+    background-image: url('../img/year-in-review-icon-mini-clock@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(2) {
+    background-image: url('../img/year-in-review-icon-mini-odometer@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(3) {
+    background-image: url('../img/year-in-review-icon-mini-location@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(4) {
+    background-image: url('../img/year-in-review-icon-mini-map@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(5) {
+    background-image: url('../img/year-in-review-icon-mini-coffee@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(6) {
+    background-image: url('../img/year-in-review-icon-mini-tree@2x.png');
+  }
+
+  .year-in-review-header .year-in-review-menu a:nth-child(7) {
+    background-image: url('../img/year-in-review-icon-mini-gas-pump@2x.png');
+  }
+}
