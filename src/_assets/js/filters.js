@@ -3,6 +3,8 @@ import moment from 'moment';
 
 const formatters = require('./formatters');
 
+const endOfDay = moment().endOf('day').valueOf();
+const thirtyDaysAgo = moment().endOf('day').subtract(29, 'days').startOf('day').valueOf();
 const filterList = [
   {
     key: 'vehicle',
@@ -10,9 +12,9 @@ const filterList = [
     label: 'Show trips from',
     defaultValue: 'all',
     valueText: (value, vehicles) => {
-      if(value === 'all') {
+      if (value === 'all') {
         return 'all my vehicles';
-      } else if(value === 'other') {
+      } else if (value === 'other') {
         return 'other vehicle(s)';
       } else {
         return formatters.formatVehicle(_.find(vehicles, {id: value}));
@@ -23,7 +25,7 @@ const filterList = [
     key: 'date',
     name: 'date of trip',
     label: 'driven',
-    defaultValue: `${moment().endOf('day').subtract(29, 'days').startOf('day').valueOf()},${moment().endOf('day').valueOf()},last30Days`,
+    defaultValue: `${thirtyDaysAgo},${endOfDay},last30Days`,
     valueText: (value) => {
       let [startDate, endDate, option] = value.split(',');
       let options = {
@@ -34,7 +36,7 @@ const filterList = [
         allTime: 'all time',
         custom: 'custom'
       };
-      if(option === 'custom' || !option) {
+      if (option === 'custom' || !option) {
         return formatters.dateRange([parseInt(startDate, 10), parseInt(endDate, 10)]);
       } else {
         return options[option];
@@ -48,7 +50,7 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(min === '0' && max === 'Infinity') {
+      if (min === '0' && max === 'Infinity') {
         return 'all distances';
       } else {
         return `between ${min} - ${max} miles`;
@@ -62,10 +64,12 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(min === '0' && max === 'Infinity') {
+      if (min === '0' && max === 'Infinity') {
         return 'all durations';
       } else {
-        return `between ${Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes())} - ${Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes())} minutes`;
+        let formattedMin = Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes());
+        let formattedMax = Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes());
+        return `between ${formattedMin} - ${formattedMax} minutes`;
       }
     }
   },
@@ -76,7 +80,7 @@ const filterList = [
     defaultValue: '0,Infinity',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(min === '0' && max === 'Infinity') {
+      if (min === '0' && max === 'Infinity') {
         return 'all costs';
       } else {
         return `between ${formatters.costWithUnit(parseFloat(min))} - ${formatters.costWithUnit(parseFloat(max))}`;
@@ -90,11 +94,11 @@ const filterList = [
     defaultValue: '0,24',
     valueText: (value) => {
       let [min, max] = value.split(',');
-      if(min === '0' && max === '24') {
+      if (min === '0' && max === '24') {
         return 'all times of day';
       } else {
         let minValue = formatters.formatTime(moment(min, 'hours').valueOf(), null, 'h A');
-        let maxValue = formatters.formatTime(moment(max, 'hours').valueOf(), null, 'h A')
+        let maxValue = formatters.formatTime(moment(max, 'hours').valueOf(), null, 'h A');
         return `between ${minValue} - ${maxValue}`;
       }
     }
@@ -110,9 +114,8 @@ const filterList = [
   }
 ];
 
-
 exports.getFiltersFromQuery = function(query) {
-  if(!query) {
+  if (!query) {
     query = {};
   }
 
@@ -121,21 +124,26 @@ exports.getFiltersFromQuery = function(query) {
     date: query.date || _.findWhere(filterList, {key: 'date'}).defaultValue
   };
 
-  if(query.distance) {
+  if (query.distance) {
     appliedFilters.distance = query.distance;
   }
-  if(query.duration) {
+
+  if (query.duration) {
     appliedFilters.duration = query.duration;
   }
-  if(query.cost) {
+
+  if (query.cost) {
     appliedFilters.cost = query.cost;
   }
-  if(query.time) {
+
+  if (query.time) {
     appliedFilters.time = query.time;
   }
-  if(query.businessTag) {
+
+  if (query.businessTag) {
     appliedFilters.businessTag = query.businessTag;
   }
+
   return appliedFilters;
 };
 
@@ -145,30 +153,34 @@ exports.getFilter = function(filter) {
 
 exports.getRemainingFilters = function(filters) {
   return _.reject(filterList, (filter) => !!filters[filter.key]);
-}
+};
 
 exports.filterTrips = function(trips, filters) {
   let filteredTrips = trips || [];
   filteredTrips = filterByDate(filteredTrips, filters.date);
   filteredTrips = filterByVehicle(filteredTrips, filters.vehicle);
-  if(filters.distance) {
+  if (filters.distance) {
     filteredTrips = filterByDistance(filteredTrips, filters.distance);
   }
-  if(filters.duration) {
+
+  if (filters.duration) {
     filteredTrips = filterByDuration(filteredTrips, filters.duration);
   }
-  if(filters.cost) {
+
+  if (filters.cost) {
     filteredTrips = filterByCost(filteredTrips, filters.cost);
   }
-  if(filters.time) {
+
+  if (filters.time) {
     filteredTrips = filterByTime(filteredTrips, filters.time);
   }
-  if(filters.businessTag) {
+
+  if (filters.businessTag) {
     filteredTrips = filterByBusinessTag(filteredTrips, filters.businessTag);
   }
 
   return filteredTrips;
-}
+};
 
 function filterByDate(trips, dateFilter) {
   let [startDate, endDate] = dateFilter.split(',');
@@ -179,17 +191,18 @@ function filterByDate(trips, dateFilter) {
 
 function findSortedIndexByDate(trips, date) {
   let searchTrip = {started_at: date};
+
   //binary search since trips are already sorted by date
   return _.sortedIndex(trips, searchTrip, (trip) => {
-    return -moment(trip.started_at).valueOf()
+    return -moment(trip.started_at).valueOf();
   });
 }
 
 function filterByVehicle(trips, vehicleFilter) {
   return _.filter(trips, (trip) => {
-    if(vehicleFilter === 'all') {
+    if (vehicleFilter === 'all') {
       return true;
-    } else if(vehicleFilter === 'other') {
+    } else if (vehicleFilter === 'other') {
       return (trip.vehicle.id === null);
     } else {
       return (vehicleFilter === trip.vehicle.id);

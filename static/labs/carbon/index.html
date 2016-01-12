@@ -129,7 +129,7 @@
 
         $('#share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -186,7 +186,7 @@
         function addTree() {
           i += 1;
 
-          if(i < treeCount) {
+          if (i < treeCount) {
             $('.trees').append('<span>&#127795;</span>');
           } else {
             $('.trees').append('<span style="width: ' + ((treeCount % 1) * 70) +  'px;">&#127795;</span>');
@@ -199,7 +199,7 @@
 
       function getUserData() {
         fetchAllTrips(function(results) {
-          if(!results.length) {
+          if (!results.length) {
             $('.calculations').text('You have not taken any trips yet').show();
           }
 
@@ -224,9 +224,9 @@
       $('.fuelType').change(renderData);
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -235,10 +235,10 @@
         });
       } else {
         getUserData();
-        if(!queryParams.demo) {
+        if (!queryParams.demo) {
           $('#shareContainer').show();
 
-          if(sessionStorage.getItem('carbonShareURL')) {
+          if (sessionStorage.getItem('carbonShareURL')) {
             showShareOptions(sessionStorage.getItem('carbonShareURL'));
           }
         }

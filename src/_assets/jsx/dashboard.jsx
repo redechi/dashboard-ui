@@ -16,7 +16,6 @@ const Map = require('./map.jsx');
 const TripList = require('./trip_list.jsx');
 const TripStats = require('./trip_stats.jsx');
 
-
 module.exports = class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +44,7 @@ module.exports = class Dashboard extends React.Component {
     };
 
     this.toggleSelectAll = () => {
-      if(this.areAllSelected()) {
+      if (this.areAllSelected()) {
         this.setState({
           allSelected: false,
           trips: this.state.trips.map((trip) => {
@@ -66,7 +65,7 @@ module.exports = class Dashboard extends React.Component {
 
     this.export = (exportType, cb) => {
       let trips;
-      if(exportType === 'selected') {
+      if (exportType === 'selected') {
         trips = _.filter(this.state.trips, trip => trip.selected);
       } else if (exportType === 'tripList') {
         trips = this.state.trips;
@@ -90,13 +89,13 @@ module.exports = class Dashboard extends React.Component {
     };
 
     this.updateFilter = (filterName, filterValue) => {
-      if(filterValue) {
+      if (filterValue) {
         this.state.filters[filterName] = filterValue;
       } else {
         delete this.state.filters[filterName];
       }
 
-      if(filterName === 'date') {
+      if (filterName === 'date') {
         this.getTrips();
       }
 
@@ -140,19 +139,20 @@ module.exports = class Dashboard extends React.Component {
 
   getTrips() {
     // if demo mode and trips are already loaded, skip
-    if(!login.isLoggedIn() && this.state.allTrips.length) {
+    if (!login.isLoggedIn() && this.state.allTrips.length) {
       return;
     }
 
     let dateFilterComponents = this.state.filters.date.split(',');
     let startDate = parseInt(dateFilterComponents[0], 10);
 
-    if(startDate < this.state.tripRequestMinDate) {
+    if (startDate < this.state.tripRequestMinDate) {
       this.setState({showLoadingModal: true});
       requests.getTrips(startDate, this.state.tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
-        if(e) {
+        if (e) {
           return alert('Unable to fetch data. Please try again later.');
         }
+
         let allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
 
         this.setState({

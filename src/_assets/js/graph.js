@@ -12,7 +12,7 @@ let bins;
 let data;
 
 exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
-  if(!trips) {
+  if (!trips) {
     return false;
   }
 
@@ -28,14 +28,14 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   let tooltip = document.getElementById('graphTooltip');
   let binWidth = width / data.length;
   let barWidth = Math.min(145, Math.max(8, (width / data.length - 15)));
-  let barRadius = Math.min(barWidth/2, 6);
+  let barRadius = Math.min(barWidth / 2, 6);
   let minBarHeight = 15;
 
   //remove any existing graph
   d3.select('.graph .graph-container svg').remove();
 
   //If no data, no graph
-  if(!data || !data.length) {
+  if (!data || !data.length) {
     return;
   }
 
@@ -92,21 +92,22 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   }
 
   function barMouseenter(d) {
-    if(d.value === 0) {
+    if (d.value === 0) {
       return;
     }
 
     let startDate = parseInt(d.key, 10);
     let hoveredBin = bins[startDate];
     let magicNumber = 19;
-    let top = y(d.value) < (height - minBarHeight) ? (y(d.value) - magicNumber) : (y(d.value) - magicNumber - minBarHeight);
+    let yVal = y(d.value);
+    let top = yVal < (height - minBarHeight) ? (yVal - magicNumber) : (yVal - magicNumber - minBarHeight);
 
     tooltip.style.top = `${top}px`;
     tooltip.style.left = `${x(d.key)}px`;
     tooltip.style.visibility = 'visible';
     tooltip.innerHTML = generateTooltip(d);
 
-    if(hoveredBin) {
+    if (hoveredBin) {
       highlight.highlightTrips(hoveredBin.trips);
     }
   }
@@ -142,37 +143,37 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
   //invisible bar to make tooltip hovering easier
   bars.append('rect')
     .attr('class', 'invisible-hover')
-    .attr('x', (d) => x(d.key) - (barWidth/2))
+    .attr('x', (d) => x(d.key) - (barWidth / 2))
     .attr('y', height - minBarHeight)
     .attr('width', barWidth)
     .attr('height', minBarHeight);
 
-
   bars.append('path')
     .attr('class', 'bar-background')
     .attr('d', (d) => {
-      if(d.value > 0) {
-        return topRoundedRectBackground(x(d.key) - (barWidth/2), y(d.value), barWidth, height - y(d.value), barRadius);
+      if (d.value > 0) {
+        let yVal = y(d.value);
+        return topRoundedRectBackground(x(d.key) - (barWidth / 2), yVal, barWidth, height - yVal, barRadius);
       }
     });
 
   bars.append('path')
     .attr('class', 'bar-outline')
     .attr('d', (d) => {
-      if(d.value > 0) {
-        return topRoundedRectBorder(x(d.key) - (barWidth/2), y(d.value), barWidth, height - y(d.value), barRadius);
+      if (d.value > 0) {
+        let yVal = y(d.value);
+        return topRoundedRectBorder(x(d.key) - (barWidth / 2), yVal, barWidth, height - yVal, barRadius);
       }
     })
     .style('stroke', (d) => {
       //color each outline by score
-      if(graphType === 'score') {
+      if (graphType === 'score') {
         return formatters.scoreColor(d.value);
       }
     });
 
-
   //styles for min and max
-  if(summary.barCount > 2) {
+  if (summary.barCount > 2) {
     let maxBar = getBarByKey(summary.max.key);
 
     maxBar
@@ -214,7 +215,6 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
         .attr('text-anchor', 'middle');
   }
 
-
   //X Axis line
   svg.append('g')
     .attr('class', 'x axis')
@@ -223,7 +223,6 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
       .attr('y1', height)
       .attr('x2', width)
       .attr('y2', height);
-
 
   //X Axis box to hide small value of graph
   svg.append('g')
@@ -234,7 +233,6 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
       .attr('width', width)
       .attr('height', 8);
 
-
   //X Axis labels
   bars.append('text')
     .attr('transform', 'translate(0,' + (height + 20) + ')')
@@ -244,18 +242,18 @@ exports.updateGraph = function(trips, graphType, graphWidth, dateRange) {
     .text(_.bind(getTickLabel, this));
 
   //Month and Year Labels
-  if(binSize === 'day') {
+  if (binSize === 'day') {
     bars.append('text')
       .attr('transform', 'translate(0,' + (height + 40) + ')')
       .attr('x', (d) => x(d.key))
-      .attr('dx', -barWidth/2)
+      .attr('dx', -barWidth / 2)
       .classed('axisLabel', true)
       .text(_.bind(getMonthLabel, this));
   } else if (binSize === 'month') {
     bars.append('text')
       .attr('transform', 'translate(0,' + (height + 45) + ')')
       .attr('x', (d) => x(d.key))
-      .attr('dx', -barWidth/2)
+      .attr('dx', -barWidth / 2)
       .classed('axisLabel', true)
       .text(_.bind(getYearLabel, this));
   }
@@ -276,16 +274,17 @@ exports.unhighlightTrips = function(trips) {
 };
 
 function calculateAverage(trips, graphType) {
-  if(!trips) {
+  if (!trips) {
     return;
   }
 
   let average;
-  if(graphType === 'mpg' || graphType === 'score') {
+  if (graphType === 'mpg' || graphType === 'score') {
     average = stats.sumTrips(trips, graphType);
   } else {
     average = stats.sumTrips(trips, graphType) / _.size(bins);
   }
+
   return formatGraphLabelValue(average, graphType);
 }
 
@@ -293,9 +292,9 @@ function calculateGraphData(trips, graphType, dateRange) {
   //group trips into bins
   trips.forEach((trip) => {
     let bin = bins[moment(trip.started_at).startOf(binSize).valueOf()];
-    if(bin) {
+    if (bin) {
       bin.trips.push(trip);
-      if(trip.selected) {
+      if (trip.selected) {
         bin.selected = true;
       }
     }
@@ -315,12 +314,15 @@ function calculateGraphSummary(trips, graphType) {
     if ((!memo.max || bar.value >= memo.max.value) && bar.value > 0) {
       memo.max = bar;
     }
+
     if ((!memo.min || bar.value <= memo.min.value) && bar.value > 0) {
       memo.min = bar;
     }
+
     if (bar.value > 0) {
       memo.barCount++;
     }
+
     return memo;
   }, {barCount: 0});
 
@@ -332,7 +334,7 @@ function calculateGraphSummary(trips, graphType) {
 function calculateBinSize(dateRange) {
   let days = moment.duration(dateRange[1] - dateRange[0]).asDays();
 
-  if(days <= 42) {
+  if (days <= 42) {
     //use days as bin
     return 'day';
   } else {
@@ -345,24 +347,25 @@ function calculateBins(dateRange, binSize) {
   let binDate = dateRange[0];
   let bins = {};
 
-  while(binDate < dateRange[1]) {
-    let bin = moment(binDate).startOf(binSize).valueOf()
+  while (binDate < dateRange[1]) {
+    let bin = moment(binDate).startOf(binSize).valueOf();
     bins[bin] = {
       trips: [],
       bin: bin
     };
     binDate = moment(binDate).add(1, binSize).valueOf();
   }
+
   return bins;
 }
 
 function getTickLabel(d) {
-  if(binSize === 'month') {
+  if (binSize === 'month') {
     return moment(parseInt(d.key, 10)).format('MMM');
-  } else if(binSize === 'day') {
-    if(data.length <= 60) {
+  } else if (binSize === 'day') {
+    if (data.length <= 60) {
       return moment(parseInt(d.key, 10)).format('D');
-    } else if(data.length <= 120) {
+    } else if (data.length <= 120) {
       //Only return odd days
       let day = moment(parseInt(d.key, 10)).format('D');
       return (day % 2 === 1) ? day : '';
@@ -375,7 +378,7 @@ function getMonthLabel(d) {
   let firstDate = _.first(data).key;
   let lastDate = _.last(data).key;
 
-  if((date.date() === 1 && d.key < lastDate) || (d.key === firstDate && date.date() < 29)) {
+  if ((date.date() === 1 && d.key < lastDate) || (d.key === firstDate && date.date() < 29)) {
     //only show month label at start of months (if more than one day of that month is shown) and first position
     return date.format('MMM \'YY');
   }
@@ -383,7 +386,7 @@ function getMonthLabel(d) {
 
 function getYearLabel(d) {
   let date = moment(parseInt(d.key, 10));
-  if(date.month() === 0 || (d.key === data[0].key && date.date() < 29)) {
+  if (date.month() === 0 || (d.key === data[0].key && date.date() < 29)) {
     //only show year label at start of years and first position
     return date.format('YYYY');
   }
@@ -396,15 +399,15 @@ function getBarByKey(key) {
 }
 
 function formatGraphLabelDate(date) {
-  if(binSize === 'day') {
+  if (binSize === 'day') {
     return moment(date).format('MMM D');
-  } else if(binSize === 'month') {
+  } else if (binSize === 'month') {
     return moment(date).format('MMM YYYY');
   }
 }
 
 function formatGraphLabelValue(value, graphType) {
-  if(graphType === 'cost') {
+  if (graphType === 'cost') {
     return formatters.costWithUnit(value);
   } else if (graphType === 'score') {
     return formatters.score(value);

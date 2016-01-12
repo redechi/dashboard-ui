@@ -2,7 +2,6 @@ import React from 'react';
 
 const login = require('../js/login');
 
-
 class Lab extends React.Component {
   constructor(props) {
     super(props);
@@ -23,9 +22,9 @@ class Lab extends React.Component {
   }
 }
 
-
 module.exports = class Labs extends React.Component {
   render() {
+    // jscs:disable maximumLineLength
     let labs = [
       {
         name: 'year-in-review',
@@ -83,13 +82,21 @@ module.exports = class Labs extends React.Component {
       }
     ];
 
+    // jscs:enable maximumLineLength
+
     let labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={login.isLoggedIn()} />);
 
     return (
       <div className="main">
         <div className="labs">
           <h1 className="page-title">Automatic Labs</h1>
-          <p>Automatic Labs is a place where you can play with experimental visualizations, tools, and apps that aren't ready for primetime yet. As we work on them, we can't promise they won't change, break, or disappear. We also can't provide technical support for any of these experiments. Check them out!</p>
+          <p>
+            Automatic Labs is a place where you can play with experimental visualizations, tools,
+            and apps that aren't ready for primetime yet.
+            As we work on them, we can't promise they won't change, break, or disappear.
+            We also can't provide technical support for any of these experiments.
+            Check them out!
+          </p>
           <ul className="labs-list">
             {labsList}
           </ul>

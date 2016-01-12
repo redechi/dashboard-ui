@@ -15,12 +15,14 @@ function simplifyEncodedPolyline(encodedPolyline) {
   var latLonPoints = _.map(points, function(point) {
     return { x: point[0], y: point[1] };
   });
+
   var tolerance = getSamplingTolerance(points);
   var highQuality = false;
   var downSampledPoints = simplify(latLonPoints, tolerance, highQuality);
   downSampledPoints = _.map(downSampledPoints, function(point) {
     return [point.x, point.y];
   });
+
   return polyline.encode(downSampledPoints);
 }
 
@@ -34,15 +36,14 @@ function constructMapboxStaticUrl(encodedPolylines, params) {
   var formattedPolylines = _.map(encodedPolylines, function(pl) {
     return 'path(' + simplifyEncodedPolyline(pl) + ')';
   });
+
   formattedPolylines = formattedPolylines.join(',');
   var overlay = encodeURIComponent(formattedPolylines);
   var mapID = 'mapbox.streets';
-  var accessToken = encodeURIComponent(L.mapbox.accessToken);
-  var url = mapID + '/' + overlay + '/auto/' + params.width + 'x' + params.height + '.' + params.format + '/?access_token=' + accessToken;
-  url = 'https://api.mapbox.com/v4/' + url;
+  var url = mapID + '/' + overlay + '/auto/' + params.width + 'x' + params.height + '.' + params.format;
+  url = 'https://api.mapbox.com/v4/' + url + '/?access_token=' + encodeURIComponent(L.mapbox.accessToken);
   return url;
 }
-
 
 function getStaticMap(encodedPolylines, params) {
   if (_.isEmpty(encodedPolylines)) {
@@ -71,6 +72,7 @@ function getStaticMap(encodedPolylines, params) {
 
     return continueIteration;
   });
+
   return memoUrl;
 }
 
@@ -78,7 +80,7 @@ function drawTripMap(trip, map) {
   var lineStyle = {color: '#b84329', opacity: 0.6, weight: 4};
   var markerStyle = {'marker-size': 'small', 'marker-color': '#f78e13'};
 
-  if(trip.path) {
+  if (trip.path) {
     var points = polyline.decode(trip.path);
     var line = L.polyline(points, lineStyle);
 

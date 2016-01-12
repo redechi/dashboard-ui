@@ -5,7 +5,6 @@ import polyline from 'polyline';
 const highlight = require('./highlight');
 const mapHelpers = require('./map_helpers');
 
-
 let map;
 let pathsLayer;
 let markersLayer;
@@ -31,7 +30,7 @@ exports.createMap = function() {
 };
 
 exports.updateMap = function(trips, toggleSelect) {
-  if(!trips) {
+  if (!trips) {
     return;
   }
 
@@ -56,7 +55,7 @@ exports.updateMap = function(trips, toggleSelect) {
       bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
     }
 
-    if(trip.path) {
+    if (trip.path) {
       let line = L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
       trip.pathID = line._leaflet_id;
 
@@ -71,24 +70,24 @@ exports.updateMap = function(trips, toggleSelect) {
       });
 
       trip.vehicle_events.forEach((item) => {
-        if(item.type === 'hard_brake') {
+        if (item.type === 'hard_brake') {
           hardBrakesLayer.addLayer(L.marker(
             [item.lat, item.lon],
             {icon: hardBrakeIcon, id: trip.id}
           ));
-        } else if(item.type === 'hard_accel') {
+        } else if (item.type === 'hard_accel') {
           hardAccelsLayer.addLayer(L.marker(
             [item.lat, item.lon],
             {icon: hardAccelIcon, id: trip.id}
           ));
-        } else if(item.type === 'speeding') {
+        } else if (item.type === 'speeding') {
           let lineOptions = _.extend({id: trip.id}, speedingLine);
           speedingLayer.addLayer(L.polyline(item.path, lineOptions));
         }
       });
     }
 
-    if(trip.start_location) {
+    if (trip.start_location) {
       let startMarker = L.marker(
         [trip.start_location.lat, trip.start_location.lon],
         {
@@ -100,7 +99,7 @@ exports.updateMap = function(trips, toggleSelect) {
       trip.startMarkerID = startMarker._leaflet_id;
     }
 
-    if(trip.end_location) {
+    if (trip.end_location) {
       let endMarker = L.marker(
         [trip.end_location.lat, trip.end_location.lon],
         {
@@ -113,7 +112,7 @@ exports.updateMap = function(trips, toggleSelect) {
     }
   });
 
-  if(speedingLayer.getLayers().length) {
+  if (speedingLayer.getLayers().length) {
     speedingLayer.bringToFront();
   }
 
@@ -153,7 +152,7 @@ function scaleMarkers() {
   let weight = mapHelpers.getPathWidthbyZoom(zoom);
 
   markersLayer.eachLayer((marker) => {
-    if(!marker.options.selected) {
+    if (!marker.options.selected) {
       marker.setIcon(normalIcon);
     }
   });
@@ -186,14 +185,15 @@ function clearMap() {
 function getBoundsFromTrips(trips) {
   return trips.reduce((memo, trip) => {
     let path = pathsLayer.getLayer(trip.pathID);
-    if(path) {
+    if (path) {
       let pathBounds = path.getBounds();
-      if(!memo) {
+      if (!memo) {
         memo = pathBounds;
       } else {
         memo.extend(pathBounds);
       }
     }
+
     return memo;
   }, null);
 }
@@ -208,10 +208,11 @@ function fitBounds(bounds) {
   };
 
   map.invalidateSize();
-  if(!bounds) {
+  if (!bounds) {
     bounds = pathsLayer.getBounds();
   }
-  if(bounds.isValid()) {
+
+  if (bounds.isValid()) {
     map.fitBounds(bounds, boundsOptions);
   }
 }
@@ -220,36 +221,36 @@ exports.highlightTrips = function(trips) {
   let zoom = map.getZoom();
   let pathStyle = mapHelpers.styleLine(zoom, 'highlight');
   let aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aHighlightedIcon');
-  let bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bHighlightedIcon')
+  let bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bHighlightedIcon');
 
   trips.forEach(trip => {
     let path = pathsLayer.getLayer(trip.pathID);
     let startMarker = markersLayer.getLayer(trip.startMarkerID);
     let endMarker = markersLayer.getLayer(trip.endMarkerID);
 
-    if(path) {
+    if (path) {
       path
         .bringToFront()
         .setStyle(pathStyle);
     }
 
-    if(startMarker) {
+    if (startMarker) {
       startMarker.setIcon(aIcon);
     }
 
-    if(endMarker) {
+    if (endMarker) {
       endMarker.setIcon(bIcon);
     }
   });
 
-  if(speedingLayer.getLayers().length) {
+  if (speedingLayer.getLayers().length) {
     speedingLayer.bringToFront();
   }
 
-  if(autozoom) {
+  if (autozoom) {
     zoomTrips(trips);
   }
-}
+};
 
 exports.unhighlightTrips = function(trips) {
   let zoom = map.getZoom();
@@ -272,22 +273,22 @@ exports.unhighlightTrips = function(trips) {
       bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
     }
 
-    if(path) {
+    if (path) {
       path
         .bringToFront()
         .setStyle(pathStyle);
     }
 
-    if(startMarker) {
+    if (startMarker) {
       startMarker.setIcon(aIcon);
     }
 
-    if(endMarker) {
+    if (endMarker) {
       endMarker.setIcon(bIcon);
     }
   });
 
-  if(autozoom) {
+  if (autozoom) {
     fitBounds();
   }
-}
+};

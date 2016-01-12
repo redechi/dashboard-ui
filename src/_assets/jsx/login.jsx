@@ -6,7 +6,6 @@ import _ from 'lodash';
 const login = require('../js/login');
 const mobile = require('../js/mobile');
 
-
 module.exports = class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -27,19 +26,19 @@ module.exports = class Login extends React.Component {
       event.preventDefault();
       this.setState({alert: 'Logging in'});
       login.login(this.refs.username.value, this.refs.password.value, this.refs.staySignedIn.checked, (e) => {
-        if(e) {
+        if (e) {
           console.error(e);
-          if(e && e.message === 'no_username') {
+          if (e && e.message === 'no_username') {
             this.setState({
               alert: 'No email address provided',
               errorFields: ['username']
             });
-          } else if(e && e.message === 'no_password') {
+          } else if (e && e.message === 'no_password') {
             this.setState({
               alert: 'No password provided',
               errorFields: ['password']
             });
-          } else if(e && e.message === 'invalid_credentials') {
+          } else if (e && e.message === 'invalid_credentials') {
             this.setState({
               alert: 'Invalid email or password',
               errorFields: ['username', 'password']
@@ -57,7 +56,7 @@ module.exports = class Login extends React.Component {
 
   render() {
     let alert;
-    if(this.state.alert) {
+    if (this.state.alert) {
       alert = (
         <ul className="alert alert-grey" role="alert">
           <li>{this.state.alert}</li>
@@ -70,11 +69,11 @@ module.exports = class Login extends React.Component {
       let appLinkText = 'Learn more about Automatic';
       let appLink = 'https://automatic.com';
       let appCheckFunction = _.noop;
-      if(mobile.isAndroid()) {
+      if (mobile.isAndroid()) {
         appLinkText = 'Open the Automatic app';
         appLink = 'automatic://goto?id=insights_screen';
         appCheckFunction = mobile.androidAppCheck;
-      } else if(mobile.isIOS()) {
+      } else if (mobile.isIOS()) {
         appLinkText = 'Open the Automatic app';
         appLink = 'com.automatic://';
         appCheckFunction = mobile.iOSAppCheck;
@@ -86,10 +85,16 @@ module.exports = class Login extends React.Component {
             <h1>Explore your trips and driving data<span className="mobile-title"> on the web</span>.</h1>
             <div className="login-block">
               <Link to="/demo" className="btn btn-blue btn-block">Try the demo</Link>
-              <p>Have an Automatic app account?  <a href="#" className="login-link" onClick={this.toggleLoginPanel}>Log In</a></p>
+              <p>
+                Have an Automatic app account?
+                <a href="#" className="login-link" onClick={this.toggleLoginPanel}>Log In</a>
+              </p>
             </div>
             <div className="mobile-block">
-              <p>Currently, our dashboard is designed for use in desktop web browsers.  For the best experience on your phone, use our Android or iPhone app.</p>
+              <p>
+                Currently, our dashboard is designed for use in desktop web browsers.
+                For the best experience on your phone, use our Android or iPhone app.
+              </p>
               <a href={appLink} className="btn btn-blue" onClick={appCheckFunction}>{appLinkText}</a>
             </div>
           </div>
@@ -117,14 +122,25 @@ module.exports = class Login extends React.Component {
           <a href="#" className="back" onClick={this.toggleLoginPanel}>Back</a>
           <form role="form" onSubmit={this.login}>
             <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'username')})}>
-              <input type="text" className="form-control" ref="username" placeholder="Email Address" spellCheck="false" />
+              <input
+                type="text"
+                className="form-control"
+                ref="username"
+                placeholder="Email Address"
+                spellCheck="false" />
             </div>
             <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'password')})}>
               <input type="password" className="form-control" ref="password" placeholder="Password" />
             </div>
             {alert}
             <div className="form-group">
-              <label><input type="checkbox" defaultChecked={true} ref="staySignedIn" className="stay-signed-in" /> Keep me signed in</label>
+              <label>
+                <input
+                  type="checkbox"
+                  defaultChecked={true}
+                  ref="staySignedIn"
+                  className="stay-signed-in" /> Keep me signed in
+              </label>
             </div>
             <button type="submit" className="btn btn-blue btn-block">Login</button>
           </form>

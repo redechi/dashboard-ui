@@ -1,3 +1,5 @@
+/* jscs: disable */
+
 /**
  * @overview Hyperlapse.js - JavaScript hyper-lapse utility for Google Street View.
  * @author Peter Nitsch
@@ -218,10 +220,10 @@ var Hyperlapse = function(container, params) {
 
 		_h_points[_point_index].image = canvas;
 
-		if(++_point_index != _h_points.length) {
+		if (++_point_index != _h_points.length) {
 			handleLoadProgress( {position:_point_index} );
 
-			if(!_cancel_load) {
+			if (!_cancel_load) {
 				_loader.composePanorama( _h_points[_point_index].pano_id );
 			} else {
 				handleLoadCanceled( {} );
@@ -279,9 +281,9 @@ var Hyperlapse = function(container, params) {
 			elevations[i] = _h_points[i].location;
 		}
 
-		if(_use_elevation) {
+		if (_use_elevation) {
 			getElevation(elevations, function(results){
-				if(results) {
+				if (results) {
 					for(i=0; i<_h_points.length; i++) {
 						_h_points[i].elevation = results[i].elevation;
 					}
@@ -326,7 +328,7 @@ var Hyperlapse = function(container, params) {
 
 				handleRouteProgress( {point: hp} );
 
-				if(count == _raw_points.length) {
+				if (count == _raw_points.length) {
 					handleRouteComplete( {response: response, points: _h_points} );
 				}
 			});
@@ -340,7 +342,7 @@ var Hyperlapse = function(container, params) {
 			if (status == google.maps.ElevationStatus.OK) {
 				callback(results);
 			} else {
-				if(status == google.maps.ElevationStatus.OVER_QUERY_LIMIT) {
+				if (status == google.maps.ElevationStatus.OVER_QUERY_LIMIT) {
 					console.log("Over elevation query limit.");
 				}
 				_use_elevation = false;
@@ -350,7 +352,7 @@ var Hyperlapse = function(container, params) {
 	};
 
 	var handleDirectionsRoute = function(response) {
-		if(!_is_playing) {
+		if (!_is_playing) {
 
 			var route = response.routes[0];
 			var path = route.overview_path;
@@ -369,30 +371,30 @@ var Hyperlapse = function(container, params) {
 			var a, b;
 
 			for(i=0; i<path.length; i++) {
-				if(i+1 < path.length) {
+				if (i+1 < path.length) {
 
 					a = path[i];
 					b = path[i+1];
 					d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
 
-					if(r > 0 && r < d) {
+					if (r > 0 && r < d) {
 						a = pointOnLine(r/d, a, b);
 						d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
 						_raw_points.push(a);
 
 						r = 0;
-					} else if(r > 0 && r > d) {
+					} else if (r > 0 && r > d) {
 						r -= d;
 					}
 
-					if(r === 0) {
+					if (r === 0) {
 						var segs = Math.floor(d/_d);
 
-						if(segs > 0) {
+						if (segs > 0) {
 							for(var j=0; j<segs; j++) {
 								var t = j/segs;
 
-								if( t>0 || (t+i)===0  ) { // not start point
+								if ( t>0 || (t+i)===0  ) { // not start point
 									var way = pointOnLine(t, a, b);
 									_raw_points.push(way);
 								}
@@ -419,7 +421,7 @@ var Hyperlapse = function(container, params) {
 
 
 	var handleTrip = function(trip) {
-		if(!_is_playing) {
+		if (!_is_playing) {
 
 			var path = google.maps.geometry.encoding.decodePath(trip.path);
 
@@ -433,30 +435,30 @@ var Hyperlapse = function(container, params) {
 			var a, b;
 
 			for(var i=0; i<path.length; i++) {
-				if(i+1 < path.length) {
+				if (i+1 < path.length) {
 
 					a = path[i];
 					b = path[i+1];
 					d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
 
-					if(r > 0 && r < d) {
+					if (r > 0 && r < d) {
 						a = pointOnLine(r/d, a, b);
 						d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
 						_raw_points.push(a);
 
 						r = 0;
-					} else if(r > 0 && r > d) {
+					} else if (r > 0 && r > d) {
 						r -= d;
 					}
 
-					if(r === 0) {
+					if (r === 0) {
 						var segs = Math.floor(d/_d);
 
-						if(segs > 0) {
+						if (segs > 0) {
 							for(var j=0; j<segs; j++) {
 								var t = j/segs;
 
-								if( t>0 || (t+i)===0  ) { // not start point
+								if ( t>0 || (t+i)===0  ) { // not start point
 									var way = pointOnLine(t, a, b);
 									_raw_points.push(way);
 								}
@@ -489,13 +491,13 @@ var Hyperlapse = function(container, params) {
 		_origin_heading = _h_points[_point_index].heading;
 		_origin_pitch = _h_points[_point_index].pitch;
 
-		// if(self.use_lookat)
+		// if (self.use_lookat)
 		// 	_lookat_heading = google.maps.geometry.spherical.computeHeading( _h_points[_point_index].location, self.lookat );
 
 		var nextPoint = (_h_points.length > (_point_index + 1)) ? _h_points[_point_index + 1] : _h_points[_point_index];
 		_lookat_heading = google.maps.geometry.spherical.computeHeading( _h_points[_point_index].location, nextPoint.location );
 
-		if(_h_points[_point_index].elevation != -1 ) {
+		if (_h_points[_point_index].elevation != -1 ) {
 			var e = _h_points[_point_index].elevation - self.elevation_offset;
 			var d = google.maps.geometry.spherical.computeDistanceBetween( _h_points[_point_index].location, self.lookat );
 			var dif = _lookat_elevation - e;
@@ -510,7 +512,7 @@ var Hyperlapse = function(container, params) {
 	};
 
 	var render = function() {
-		if(!_is_loading && self.length()>0) {
+		if (!_is_loading && self.length()>0) {
 			var t = _point_index/(self.length());
 
 			var o_x = self.position.x + (self.offset.x * t);
@@ -534,7 +536,7 @@ var Hyperlapse = function(container, params) {
 			_camera.lookAt( _camera.target );
 			_camera.rotation.z -= o_z;
 
-			if(self.use_rotation_comp) {
+			if (self.use_rotation_comp) {
 				_camera.rotation.z -= self.rotation_comp.toRad();
 			}
 			_mesh.rotation.z = _origin_pitch.toRad();
@@ -549,12 +551,12 @@ var Hyperlapse = function(container, params) {
 		_ctime = Date.now();
 		_dtime += _ctime - ptime;
 
-		if(_point_index === 0 && _has_started) {
+		if (_point_index === 0 && _has_started) {
 			ntime = self.millis + loopDelay;
 		}
 
-		if(_dtime >= ntime) {
-			if(_is_playing) {
+		if (_dtime >= ntime) {
+			if (_is_playing) {
 				loop();
 				_has_started = true;
 			}
@@ -568,7 +570,7 @@ var Hyperlapse = function(container, params) {
 	// animates the playhead forward
 	var loop = function() {
 		drawMaterial();
-		if(++_point_index == _h_points.length) {
+		if (++_point_index == _h_points.length) {
 			_point_index = 0;
 		}
 	};
@@ -690,16 +692,16 @@ var Hyperlapse = function(container, params) {
 	this.setLookat = function(point, call_service, callback) {
 		self.lookat = point;
 
-		if(_use_elevation && call_service) {
+		if (_use_elevation && call_service) {
 			var e = getElevation([self.lookat], function(results){
-				if(results) {
+				if (results) {
 					_lookat_elevation = results[0].elevation;
 				}
 
-				if(callback && callback.apply) callback();
+				if (callback && callback.apply) callback();
 			});
 		} else {
-			if(callback && callback.apply) callback();
+			if (callback && callback.apply) callback();
 		}
 
 	};
@@ -757,7 +759,7 @@ var Hyperlapse = function(container, params) {
 	 */
 	this.generate = function( params ) {
 
-		if(!_is_loading) {
+		if (!_is_loading) {
 			_is_loading = true;
 			self.reset();
 
@@ -765,9 +767,9 @@ var Hyperlapse = function(container, params) {
 			_distance_between_points = p.distance_between_points || _distance_between_points;
 			_max_points = p.max_points || _max_points;
 
-			if(p.route) {
+			if (p.route) {
 				handleDirectionsRoute(p.route);
-			} if(p.trip) {
+			} if (p.trip) {
 				handleTrip(p.trip);
 			} else {
 				console.log("No route provided.");
@@ -789,7 +791,7 @@ var Hyperlapse = function(container, params) {
 	 * @fires Hyperlapse#onLoadCanceled
 	 */
 	this.cancel = function() {
-		if(_is_loading) {
+		if (_is_loading) {
 			_cancel_load = true;
 		}
 	};
@@ -806,7 +808,7 @@ var Hyperlapse = function(container, params) {
 	 * @fires Hyperlapse#onPlay
 	 */
 	this.play = function() {
-		if(!_is_loading) {
+		if (!_is_loading) {
 			_is_playing = true;
 			handlePlay({});
 		}
@@ -828,7 +830,7 @@ var Hyperlapse = function(container, params) {
 	this.next = function() {
 		self.pause();
 
-		if(_point_index+1 != _h_points.length) {
+		if (_point_index+1 != _h_points.length) {
 			_point_index++;
 			drawMaterial();
 		}
@@ -841,7 +843,7 @@ var Hyperlapse = function(container, params) {
 	this.prev = function() {
 		self.pause();
 
-		if(_point_index-1 !== 0) {
+		if (_point_index-1 !== 0) {
 			_point_index--;
 			drawMaterial();
 		}

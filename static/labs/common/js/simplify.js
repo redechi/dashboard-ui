@@ -1,3 +1,5 @@
+/* jscs: disable */
+
 /*
  (c) 2013, Vladimir Agafonkin
  Simplify.js, a high-performance JS polyline simplification library

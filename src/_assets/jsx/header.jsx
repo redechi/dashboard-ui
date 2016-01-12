@@ -6,7 +6,6 @@ import { Modal } from 'react-bootstrap';
 const login = require('../js/login');
 const requests = require('../js/requests');
 
-
 module.exports = class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -19,37 +18,42 @@ module.exports = class Header extends React.Component {
       this.setState({showSupportModal: true});
 
       GSFN.loadWidget(7392, {containerId: 'getsat-widget-7392'});
-    }
+    };
 
     this.hideSupportModal = () => {
       this.setState({showSupportModal: false});
-    }
+    };
   }
 
   getUser() {
-    if(login.isLoggedIn()) {
-      if(!this.state.firstName) {
+    if (login.isLoggedIn()) {
+      if (!this.state.firstName) {
         requests.getUser((e, user) => {
-          if(e) {
+          if (e) {
             return;
           }
+
           this.setState({firstName: user.first_name});
         });
       }
-    } else if(this.state.firstName) {
+    } else if (this.state.firstName) {
       this.setState({firstName: undefined});
     }
   }
 
+  isExcludedPage() {
+    return this.props.location.pathname === '/' || this.props.location.pathname === '/reset';
+  }
+
   render() {
     // Don't show header on login page or reset page
-    if(!login.isLoggedIn() && this.props.location && (this.props.location.pathname === '/' || this.props.location.pathname === '/reset')) {
+    if (!login.isLoggedIn() && this.props.location && this.isExcludedPage()) {
       return (<div></div>);
     }
 
     let menu;
 
-    if(login.isLoggedIn()) {
+    if (login.isLoggedIn()) {
       menu = (
         <ul className="menu">
           <li>

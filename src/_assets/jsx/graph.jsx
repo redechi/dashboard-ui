@@ -59,9 +59,10 @@ module.exports = class Graph extends React.Component {
     let dateRangeComponents = this.props.filters.date.split(',');
     let dateRange = [parseInt(dateRangeComponents[0], 10), parseInt(dateRangeComponents[1], 10)];
     let firstTrip = _.last(this.props.trips);
-    if(dateRangeComponents[2] === 'allTime' && firstTrip) {
+    if (dateRangeComponents[2] === 'allTime' && firstTrip) {
       dateRange[0] = moment(firstTrip.started_at).startOf('day');
     }
+
     return dateRange;
   }
 
@@ -78,11 +79,11 @@ module.exports = class Graph extends React.Component {
               <li onClick={this.setGraphType.bind(null, graphType.key)} key={graphType.key}>
                 {graphType.name}
               </li>
-            )
+            );
           })}
         </ul>
       </Popover>
-    )
+    );
 
     let selectedGraphType = _.find(graphTypes, (item) => item.key === this.state.graphType);
 

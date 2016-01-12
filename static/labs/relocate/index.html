@@ -156,7 +156,7 @@
 
         $('#share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -243,7 +243,7 @@
         var bounds;
         var lines = [];
 
-        if(data.city) {
+        if (data.city) {
           $('#city').val(data.city);
           mapToCity();
         } else {
@@ -263,7 +263,7 @@
           var city = $('#city').val();
           var cityLocation = city.split(',');
 
-          if(!city) {
+          if (!city) {
             return false;
           }
 
@@ -333,9 +333,9 @@
 
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 

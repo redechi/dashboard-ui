@@ -13,7 +13,7 @@ module.exports = class Map extends React.Component {
     };
 
     this.toggleTripEvents = () => {
-      if(this.refs.showTripEvents.checked) {
+      if (this.refs.showTripEvents.checked) {
         map.showTripEvents();
       } else {
         map.hideTripEvents();

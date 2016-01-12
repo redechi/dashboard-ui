@@ -17,10 +17,10 @@ module.exports = class Filters extends React.Component {
       this.props.updateFilter(this.props.filterType, value);
 
       let filterValueComponents = (value || '').split(',');
-      if(this.refs[`${this.props.filterType}Popover`]) {
-        if(this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
+      if (this.refs[`${this.props.filterType}Popover`]) {
+        if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
           this.refs[`${this.props.filterType}Popover`].hide();
-          if(this.props.filterType === 'date') {
+          if (this.props.filterType === 'date') {
             document.getElementById('dateFilterCustom').style.display = 'none';
           }
         }
@@ -32,10 +32,10 @@ module.exports = class Filters extends React.Component {
     this.preparePopover = () => {
       let filter = filters.getFilter(this.props.filterType);
 
-      if(_.contains(['distance', 'duration', 'cost', 'time'], this.props.filterType)) {
+      if (_.contains(['distance', 'duration', 'cost', 'time'], this.props.filterType)) {
         let min = this.props.ranges[this.props.filterType][0];
         let max = this.props.ranges[this.props.filterType][1];
-        let value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max))
+        let value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max));
         let slider = new Slider(`.popover-${this.props.filterType} input.slider`, {
           min: min,
           max: max,
@@ -100,6 +100,8 @@ module.exports = class Filters extends React.Component {
       </div>
     );
 
+    let endOfDay = moment().endOf('day').valueOf();
+
     let dateFilterOptions = [
       {
         name: 'this week',
@@ -111,15 +113,15 @@ module.exports = class Filters extends React.Component {
       },
       {
         name: 'in the last 30 days',
-        value: `${moment().endOf('day').subtract(29, 'days').startOf('day').valueOf()},${moment().endOf('day').valueOf()},last30Days`
+        value: `${moment().endOf('day').subtract(29, 'days').startOf('day').valueOf()},${endOfDay},last30Days`
       },
       {
         name: 'this year',
-        value: `${moment().startOf('year').valueOf()},${moment().endOf('day').valueOf()},thisYear`
+        value: `${moment().startOf('year').valueOf()},${endOfDay},thisYear`
       },
       {
         name: 'all time',
-        value: `1363071600000,${moment().endOf('day').valueOf()},allTime`
+        value: `1363071600000,${endOfDay},allTime`
       },
       {
         name: 'custom',
@@ -133,7 +135,10 @@ module.exports = class Filters extends React.Component {
           <ul className="date-filter-value list-select animate">
             {dateFilterOptions.map(this.formatDateMenuItem.bind(this))}
           </ul>
-          <div className="date-filter-custom" id="dateFilterCustom" style={{display: (filterValueComponents[2] === 'custom') ? 'block' : 'none'}}>
+          <div
+            className="date-filter-custom"
+            id="dateFilterCustom"
+            style={{display: (filterValueComponents[2] === 'custom') ? 'block' : 'none'}}>
             <div className="input-group">
               <label>From</label>
               <DatePicker
@@ -206,7 +211,9 @@ module.exports = class Filters extends React.Component {
           overlay={popovers[this.props.filterType]}
           onEntered={this.preparePopover}>
           <div className="btn btn-filter btn-popover">
-            <span className="btn-text">{filter.valueText(this.props.value, this.props.vehicles)}</span> <i className="fa fa-angle-down fa-lg"></i>
+            <span className="btn-text">
+              {filter.valueText(this.props.value, this.props.vehicles)}
+            </span> <i className="fa fa-angle-down fa-lg"></i>
           </div>
         </OverlayTrigger>
       </li>
@@ -215,8 +222,8 @@ module.exports = class Filters extends React.Component {
 
   componentDidMount() {
     // only show popovers on filter add after initial filters applied
-    if(this.props.showPopover) {
+    if (this.props.showPopover) {
       this.refs[`${this.props.filterType}Popover`].show();
     }
   }
-}
+};

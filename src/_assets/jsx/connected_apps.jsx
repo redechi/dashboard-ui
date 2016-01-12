@@ -4,15 +4,14 @@ import _ from 'lodash';
 const login = require('../js/login');
 const requests = require('../js/requests');
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.disconnectApp = () => {
-      if(confirm(`Are you sure you want to disconnect ${this.props.app.name}?`)) {
+      if (confirm(`Are you sure you want to disconnect ${this.props.app.name}?`)) {
         requests.disconnectApp(this.props.app.id, (e) => {
-          if(e) {
+          if (e) {
             return alert('Unable to disconnect app. Please try again later.');
           }
 
@@ -38,7 +37,6 @@ class App extends React.Component {
   }
 }
 
-
 module.exports = class ConnectedApps extends React.Component {
   constructor(props) {
     super(props);
@@ -56,11 +54,11 @@ module.exports = class ConnectedApps extends React.Component {
 
   render() {
     let appList;
-    if(this.state.loading) {
+    if (this.state.loading) {
       appList = (
         <div className="loading">Loading...</div>
       );
-    } else if(!this.state.apps.length) {
+    } else if (!this.state.apps.length) {
       appList = (
         <div className="no-apps">
           You have not connected any apps yet.
@@ -71,6 +69,7 @@ module.exports = class ConnectedApps extends React.Component {
         <App app={app} key={key} disconnectApp={this.disconnectApp} />
       ));
     }
+
     return (
       <div className="main">
         <div className="connected-apps">
@@ -87,14 +86,14 @@ module.exports = class ConnectedApps extends React.Component {
   }
 
   componentWillMount() {
-    if(!login.isLoggedIn()) {
+    if (!login.isLoggedIn()) {
       window.location = '/';
     }
   }
 
   componentDidMount() {
     requests.getApps((e, apps) => {
-      if(e) {
+      if (e) {
         return alert('Unable to fetch data. Please try again later.');
       }
 

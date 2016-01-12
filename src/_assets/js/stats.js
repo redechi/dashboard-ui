@@ -3,10 +3,11 @@ import moment from 'moment';
 const formatters = require('./formatters');
 
 exports.calculateTotals = function(trips) {
-  if(!trips) {
+  if (!trips) {
     return false;
   }
 
+  // jscs:disable requirePaddingNewLinesAfterBlocks
   let totals = trips.reduce((memo, trip) => {
     memo.distance += trip.distance_miles;
     memo.duration += trip.duration_s;
@@ -30,6 +31,8 @@ exports.calculateTotals = function(trips) {
     speedingSeconds: 0
   });
 
+  // jscs:enable requirePaddingNewLinesAfterBlocks
+
   let scoreEvents = (totals.sumScoreEvents / totals.duration) || 0;
   let scoreSpeeding = (totals.sumScoreSpeeding / totals.duration) || 0;
   totals.score = Math.max(0, scoreEvents) + Math.max(0, scoreSpeeding);
@@ -50,7 +53,7 @@ exports.calculateTotals = function(trips) {
 };
 
 exports.calculateRanges = function(trips) {
-  if(!trips) {
+  if (!trips) {
     return {
       distance: [0, 100],
       duration: [0, 100],
@@ -60,6 +63,7 @@ exports.calculateRanges = function(trips) {
     };
   }
 
+  // jscs:disable requirePaddingNewLinesAfterBlocks
   return trips.reduce((memo, trip) => {
     memo.distance = [
       Math.min(memo.distance[0], Math.floor(trip.distance_miles)),
@@ -85,12 +89,15 @@ exports.calculateRanges = function(trips) {
     time: [0, 24],
     date: [moment().endOf('day').valueOf(), 1363071600000]
   });
+
+  // jscs:enable requirePaddingNewLinesAfterBlocks
 };
 
 exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {
   function toRadians(degree) {
     return (degree * (Math.PI / 180));
   }
+
   const radius = 3959.0; //Earth Radius in mi
   let radianLat1 = toRadians(lat1);
   let radianLon1 = toRadians(lon1);
@@ -107,7 +114,7 @@ exports.calculateDistanceMi = function(lat1, lon1, lat2, lon2) {
 
 exports.sumTrips = function(trips, field) {
   //Calculate sum or average, depending on field
-  if(field === 'cost') {
+  if (field === 'cost') {
     return getSum(trips, 'fuel_cost_usd');
   } else if (field === 'score') {
     return getAverageScore(trips);
@@ -130,7 +137,7 @@ function getAverageMPG(trips) {
 }
 
 function getAverageScore(trips) {
-  if(!trips.length) {
+  if (!trips.length) {
     return 0;
   }
 
@@ -140,6 +147,7 @@ function getAverageScore(trips) {
       memo.scoreSpeeding += trip.score_speeding * trip.duration_s;
       memo.time += trip.duration_s;
     }
+
     return memo;
   }, {time: 0, scoreEvents: 0, scoreSpeeding: 0});
 
@@ -149,7 +157,6 @@ function getAverageScore(trips) {
 
   return Math.min(Math.max(1, score), 100);
 };
-
 
 function getSum(trips, field) {
   return trips.reduce((memo, trip) => memo + trip[field], 0);

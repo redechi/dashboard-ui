@@ -12,5 +12,6 @@
   "disallowTrailingComma": true,
   "requireTrailingComma": null,
   "requireCamelCaseOrUpperCaseIdentifiers": null,
+  "requireSpacesInsideObjectBrackets": null,
   "validateQuoteMarks": null
 }

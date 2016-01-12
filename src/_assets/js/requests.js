@@ -4,19 +4,21 @@ import moment from 'moment';
 
 const login = require('./login');
 
-const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://api.automatic.com': 'https://api.automatic.co';
+const isStaging = window.location.search.indexOf('staging') !== -1;
+
+const apiUrl = isStaging ? 'https://api.automatic.co' : 'https://api.automatic.com';
 
 exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
-  if(login.isLoggedIn()) {
+  if (login.isLoggedIn()) {
     fetchData('vehicle/', null, null, (e, vehicles) => {
-      if(e) return cb(e);
+      if (e) return cb(e);
 
       fetchData('trip/', {
         started_at__gte: (startDate / 1000),
         ended_at__lte: (endDate / 1000),
         limit: 250
       }, loadingProgress, (e, trips) => {
-        if(e) return cb(e);
+        if (e) return cb(e);
 
         cb(null, trips, _.sortBy(vehicles, 'make'));
       });
@@ -24,10 +26,10 @@ exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
   } else {
     // Demo Trips
     fetchDemoData('/data/vehicles.json', (e, vehicles) => {
-      if(e) return cb(e);
+      if (e) return cb(e);
 
       fetchDemoData('/data/trips.json', (e, trips) => {
-        if(e) return cb(e);
+        if (e) return cb(e);
 
         cb(null, prepDemoTrips(trips), _.sortBy(vehicles, 'make'));
       });
@@ -40,10 +42,11 @@ exports.getApps = (cb) => {
     .get(`${apiUrl}/v1/access_token`)
     .set('Authorization', `bearer ${login.accessToken()}`)
     .end((e, response) => {
-      if(e) {
+      if (e) {
         return cb(e);
       }
-      if(!response.body) {
+
+      if (!response.body) {
         return cb(new Error('No results returned'));
       }
 
@@ -63,9 +66,10 @@ exports.getUser = (cb) => {
     .get(`${apiUrl}/user/me/`)
     .set('Authorization', `bearer ${login.accessToken()}`)
     .end((e, response) => {
-      if(e) {
+      if (e) {
         return cb(e);
       }
+
       return cb(null, response.body);
     });
 };
@@ -75,10 +79,11 @@ function fetchDemoData(fileName, cb) {
     .get(fileName)
     .set('Accept', 'application/json')
     .end((e, response) => {
-      if(e) {
+      if (e) {
         return cb(e);
       }
-      if(!response.body || !response.body.results) {
+
+      if (!response.body || !response.body.results) {
         return cb(new Error('No results returned'));
       }
 
@@ -107,26 +112,28 @@ function fetchData(endpoint, query, loadingProgress, cb) {
       .get(`${apiUrl}/${endpoint}`)
       .query({...query})
       .set('Authorization', `bearer ${login.accessToken()}`)
-      .end(function(e, response){
-        if(e) {
+      .end((e, response) => {
+        if (e) {
           return cb(e);
         }
-        if(!response.body || !response.body.results) {
+
+        if (!response.body || !response.body.results) {
           return cb(new Error('No results returned'));
         }
 
         results = results.concat(response.body.results);
 
-        if(response.body._metadata.next) {
-          if(loadingProgress) {
+        if (response.body._metadata.next) {
+          if (loadingProgress) {
             loadingProgress(results.length, response.body._metadata.count);
           }
 
-          if(query.page) {
+          if (query.page) {
             query.page += 1;
           } else {
             query.page = 2;
           }
+
           makeRequest(endpoint, query, cb);
         } else {
           cb(null, results);

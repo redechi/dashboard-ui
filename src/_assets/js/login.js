@@ -2,9 +2,18 @@ import request from 'superagent';
 
 const cache = require('./cache');
 
-
-const clientId = '385be37e93925c8fa7c7'
-const apiUrl = window.location.search.indexOf('staging') === -1 ? 'https://accounts.automatic.com': 'https://accounts.automatic.co';
+const clientId = '385be37e93925c8fa7c7';
+const scopes = [
+  'scope:trip',
+  'scope:location',
+  'scope:vehicle:profile',
+  'scope:vehicle:events',
+  'scope:user:profile',
+  'scope:automatic',
+  'scope:behavior'
+];
+const isStaging = window.location.search.indexOf('staging') !== -1;
+const apiUrl = isStaging ? 'https://accounts.automatic.co' : 'https://accounts.automatic.com';
 let accessToken = cache.getItem('accessToken');
 
 exports.isLoggedIn = function() {
@@ -16,11 +25,11 @@ exports.accessToken = function() {
 };
 
 exports.login = function(username, password, staySignedIn, cb) {
-  if(!username) {
+  if (!username) {
     return cb(new Error('no_username'));
   }
 
-  if(!password) {
+  if (!password) {
     return cb(new Error('no_password'));
   }
 
@@ -30,14 +39,14 @@ exports.login = function(username, password, staySignedIn, cb) {
     .send(`password=${password}`)
     .send(`client_id=${clientId}`)
     .send('grant_type=password')
-    .send('scope=scope:trip scope:location scope:vehicle:profile scope:vehicle:events scope:user:profile scope:automatic scope:behavior')
+    .send(`scope=${scopes.join(' ')}`)
     .end((e, response) => {
-      if(e && response.body && response.body.error) {
-        e.message = response.body.error
+      if (e && response.body && response.body.error) {
+        e.message = response.body.error;
         return cb(e);
-      } else if(!response || !response.body.access_token) {
+      } else if (!response || !response.body.access_token) {
         return cb(new Error('no_access_token'));
-      } else if(e) {
+      } else if (e) {
         return cb(e);
       }
 
@@ -59,11 +68,11 @@ exports.reset = function(username, cb) {
     .post(`${apiUrl}/password/reset_email/`)
     .send(`email=${username}`)
     .end((e, response) => {
-      if(e) {
+      if (e) {
         cb(e);
-      } else if(!response.body) {
+      } else if (!response.body) {
         cb(new Error('Unknown Error'));
-      } else if(response.body.error) {
+      } else if (response.body.error) {
         cb(new Error(response.body.error));
       } else {
         cb();

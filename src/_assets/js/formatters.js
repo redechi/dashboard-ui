@@ -4,23 +4,26 @@ import polyline from 'polyline';
 
 const mapHelpers = require('./map_helpers');
 
-
 exports.address = (address) => {
   let formattedAddress = '';
 
-  if(address.street_number) {
+  if (address.street_number) {
     formattedAddress += address.street_number + ' ';
   }
-  if(address.street_name) {
+
+  if (address.street_name) {
     formattedAddress += address.street_name + ', ';
   }
-  if(address.city) {
+
+  if (address.city) {
     formattedAddress += address.city;
   }
-  if(address.city && address.state) {
+
+  if (address.city && address.state) {
     formattedAddress += ', ';
   }
-  if(address.state) {
+
+  if (address.state) {
     formattedAddress += address.state;
   }
 
@@ -73,12 +76,14 @@ exports.distance = (distanceMiles) => {
 exports.formatTime = (time, timezone, format) => {
   try {
     return moment(time).tz(timezone).format(format);
-  } catch(e) {
+  } catch (e) {
     return moment(time).format(format);
   }
 };
 
-exports.duration = (seconds) => (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
+exports.duration = (seconds) => {
+  return (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
+};
 
 exports.durationHours = (seconds) => {
   let duration = moment.duration(seconds, 'seconds');
@@ -94,7 +99,7 @@ exports.durationMinutes = (seconds) => {
   } else {
     return (minutes || 0).toFixed(1);
   }
-}
+};
 
 exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
 
@@ -141,17 +146,20 @@ exports.scoreColor = score => {
 function formatVehicleEvents(events, tripPath) {
   let decodedPath;
   let cumulativeDistances;
+
   // Only decode path if needed, once per trip
-  if(_.some(events, item => item.type === 'speeding') && tripPath) {
+  if (_.some(events, item => item.type === 'speeding') && tripPath) {
     decodedPath = polyline.decode(tripPath);
     cumulativeDistances = mapHelpers.getCumulativeDistance(decodedPath);
   }
+
   return events.map(item => {
-    if(item.type === 'speeding' && tripPath) {
+    if (item.type === 'speeding' && tripPath) {
       let start = metersToMiles(item.start_distance_m);
       let end = metersToMiles(item.end_distance_m);
       item.path = mapHelpers.subPath(start, end, decodedPath, cumulativeDistances);
     }
+
     return item;
   });
 }

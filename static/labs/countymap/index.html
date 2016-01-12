@@ -223,7 +223,7 @@
           .on('mouseover', function(d) {
             var county = data.counties[d.id];
 
-            if(county) {
+            if (county) {
               graphTooltip.attr('class', 'graph-tooltip');
 
               d3.select(this).transition().duration(100).style('opacity', 1);
@@ -351,7 +351,7 @@
           }
           pathGroups.push(pathGroup);
 
-          if(paths.length) {
+          if (paths.length) {
             getGroup();
           }
         })()
@@ -368,7 +368,7 @@
             contentType: 'application/json'
           }).done(function(results) {
             _.each(results, function(county) {
-              if(!data.states[county.state]) {
+              if (!data.states[county.state]) {
                 data.states[county.state] = {};
               }
               var id = parseInt(county.id, 10).toString();
@@ -393,7 +393,7 @@
 
         $('#share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -428,7 +428,7 @@
 
       function getUserData() {
         fetchAllTrips(function(trips) {
-          if(!trips || !trips.length) {
+          if (!trips || !trips.length) {
             return alert('You have no trips');
           }
 
@@ -441,7 +441,7 @@
           groupPaths().forEach(fetchPaths);
 
           q.await(function(e) {
-            if(e) {
+            if (e) {
               console.log(e);
             }
 
@@ -453,9 +453,9 @@
       }
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -466,10 +466,10 @@
         });
       } else {
         getUserData();
-        if(!queryParams.demo) {
+        if (!queryParams.demo) {
           $('#shareContainer').show();
 
-          if(sessionStorage.getItem('countymapShareURL')) {
+          if (sessionStorage.getItem('countymapShareURL')) {
             showShareOptions(sessionStorage.getItem('countymapShareURL'));
           }
         }

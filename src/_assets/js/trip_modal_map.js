@@ -30,7 +30,7 @@ exports.createMap = function() {
 };
 
 exports.updateMap = function(trip) {
-  if(!trip) {
+  if (!trip) {
     return;
   }
 
@@ -44,28 +44,28 @@ exports.updateMap = function(trip) {
 
   clearMap();
 
-  if(trip.path) {
+  if (trip.path) {
     L.polyline(polyline.decode(trip.path), pathStyle).addTo(pathsLayer);
 
     trip.vehicle_events.forEach((item) => {
-      if(item.type === 'hard_brake') {
+      if (item.type === 'hard_brake') {
         hardBrakesLayer.addLayer(L.marker(
           [item.lat, item.lon],
           {icon: hardBrakeIcon, id: trip.id}
         ));
-      } else if(item.type === 'hard_accel') {
+      } else if (item.type === 'hard_accel') {
         hardAccelsLayer.addLayer(L.marker(
           [item.lat, item.lon],
           {icon: hardAccelIcon, id: trip.id}
         ));
-      } else if(item.type === 'speeding') {
+      } else if (item.type === 'speeding') {
         let lineOptions = _.extend({id: trip.id}, speedingLine);
         speedingLayer.addLayer(L.polyline(item.path, lineOptions));
       }
     });
   }
 
-  if(trip.start_location) {
+  if (trip.start_location) {
     L.marker(
       [trip.start_location.lat, trip.start_location.lon],
       {
@@ -76,7 +76,7 @@ exports.updateMap = function(trip) {
     ).addTo(markersLayer);
   }
 
-  if(trip.end_location) {
+  if (trip.end_location) {
     L.marker(
       [trip.end_location.lat, trip.end_location.lon],
       {
@@ -149,10 +149,11 @@ function fitBounds(bounds) {
   };
 
   map.invalidateSize();
-  if(!bounds) {
+  if (!bounds) {
     bounds = pathsLayer.getBounds();
   }
-  if(bounds.isValid()) {
+
+  if (bounds.isValid()) {
     map.fitBounds(bounds, boundsOptions);
   }
 }

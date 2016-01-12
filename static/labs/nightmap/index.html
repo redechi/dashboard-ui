@@ -119,7 +119,7 @@
 
         $('#share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -158,7 +158,7 @@
 
           line.addTo(map);
 
-          if(!bounds) {
+          if (!bounds) {
             bounds = L.latLngBounds(line.getBounds());
           } else {
             bounds.extend(line.getBounds());
@@ -173,7 +173,7 @@
       function getUserData() {
         fetchAllTrips(function(trips) {
           trips.forEach(function(trip) {
-            if(trip.path) {
+            if (trip.path) {
               data.paths.push(trip.path);
             }
 
@@ -186,9 +186,9 @@
       }
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -197,10 +197,10 @@
         });
       } else {
         getUserData();
-        if(!queryParams.demo) {
+        if (!queryParams.demo) {
           $('#shareContainer').show();
 
-          if(sessionStorage.getItem('nightmapShareURL')) {
+          if (sessionStorage.getItem('nightmapShareURL')) {
             showShareOptions(sessionStorage.getItem('nightmapShareURL'));
           }
         }

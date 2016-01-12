@@ -16,7 +16,7 @@ module.exports = class Trip extends React.Component {
 
     this.showModal = (e) => {
       // Allow clicking on checkbox to select trip
-      if(e.target.className !== 'trip-select') {
+      if (e.target.className !== 'trip-select') {
         this.props.showModal(this.props.trip);
       }
     };
@@ -26,7 +26,7 @@ module.exports = class Trip extends React.Component {
     let trip = this.props.trip;
     let businessTag;
 
-    if(_.contains(trip.tags, 'business')) {
+    if (_.contains(trip.tags, 'business')) {
       businessTag = (
         <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
       );

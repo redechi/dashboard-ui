@@ -4,7 +4,6 @@ import _ from 'lodash';
 
 const login = require('../js/login');
 
-
 module.exports = class Reset extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +15,7 @@ module.exports = class Reset extends React.Component {
     this.handleResetSubmit = (event) => {
       event.preventDefault();
 
-      if(!this.refs.username.value) {
+      if (!this.refs.username.value) {
         this.setState({
           alert: 'Please enter an email address',
           errorFields: ['username']
@@ -28,7 +27,7 @@ module.exports = class Reset extends React.Component {
         });
         login.reset(this.refs.username.value, (e) => {
           console.log(e);
-          if(e) {
+          if (e) {
             this.setState({
               alert: e.message,
               errorFields: ['username']
@@ -42,10 +41,11 @@ module.exports = class Reset extends React.Component {
       }
     };
   }
+
   render() {
     let alert;
 
-    if(this.state.alert) {
+    if (this.state.alert) {
       alert = (
         <div className="alert alert-grey">{this.state.alert}</div>
       );

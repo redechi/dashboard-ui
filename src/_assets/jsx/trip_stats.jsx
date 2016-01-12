@@ -94,9 +94,9 @@ module.exports = class TripStats extends React.Component {
   }
 
   render() {
-    if(!this.props.trips) {
+    if (!this.props.trips) {
       return (<div />);
-    } else if(!this.props.trips.length) {
+    } else if (!this.props.trips.length) {
       return (
         <div className="trip-stats no-trips">
           <div className="alert-grey">No trips match these criteria</div>
@@ -137,7 +137,7 @@ module.exports = class TripStats extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.totals.score !== prevProps.totals.score) {
+    if (this.props.totals.score !== prevProps.totals.score) {
       this.scorePieChart();
     }
   }

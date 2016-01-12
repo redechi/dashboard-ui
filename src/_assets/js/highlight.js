@@ -10,7 +10,7 @@ exports.highlightTrips = function(trips) {
     document.getElementById(trip.id).classList.add('highlighted');
   });
   highlightedTrips = highlightedTrips.concat(trips);
-}
+};
 
 exports.unhighlightTrips = function() {
   map.unhighlightTrips(highlightedTrips);
@@ -19,4 +19,4 @@ exports.unhighlightTrips = function() {
     document.getElementById(trip.id).classList.remove('highlighted');
   });
   highlightedTrips = [];
-}
+};

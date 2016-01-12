@@ -110,11 +110,11 @@
       var page = 'https://api.automatic.com/trip/?limit=10&page=1';
 
       function loadTripsFromServer() {
-        if(this.shouldLoad()) {
+        if (this.shouldLoad()) {
           loading = true;
 
           fetchTripsPage(page, function(results) {
-            if(!results || !results.results) {
+            if (!results || !results.results) {
               page = null;
               return false;
             }
@@ -151,11 +151,11 @@
       }
 
       function generateHyperlapse(data) {
-        if(!data.path) {
+        if (!data.path) {
           return alert('Unable to generate hyperlapse for trips with no path');
         }
 
-        if(generating) {
+        if (generating) {
           return false;
         } else {
           generating = true;
@@ -230,7 +230,7 @@
       }
 
       function drawPanoMap(trip) {
-        if(map) {
+        if (map) {
           map.remove();
         }
 
@@ -288,7 +288,7 @@
         $('#share').html(generateSpinner());
 
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -306,7 +306,7 @@
 
         var trip = _.findWhere(trips, {id: tripId});
 
-        if(!trip) {
+        if (!trip) {
           return alert('Unable to generate Hyperlapse');
         }
 
@@ -331,7 +331,7 @@
       loadTripsFromServer();
 
       var queryParams = getQueryParams(document.location.search);
-      if(!queryParams.demo) {
+      if (!queryParams.demo) {
         $('#shareContainer').show();
       }
 

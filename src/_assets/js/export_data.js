@@ -30,12 +30,12 @@ const csvFieldNames = [
 ];
 
 exports.trips = (selectedTrips, cb) => {
-  if(!exportIsSupported()) {
+  if (!exportIsSupported()) {
     cb(new Error('not_supported'));
   }
 
   //Safari does not support filesaver, so use URL
-  if(isSafari()) {
+  if (isSafari()) {
     let blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
     cb(null, blobUrl);
   } else {
@@ -43,6 +43,7 @@ exports.trips = (selectedTrips, cb) => {
 
     setTimeout(() => {
       let filename = `automatic-trips-${moment().format('YYYY-MM-DD')}.csv`;
+
       //fix for firefox on callback - needs a timeout
       filesaverjs.saveAs(blob, filename);
       cb();
@@ -78,6 +79,7 @@ function csvEscape(item) {
   } else {
     escapedItem = `"${item}"`;
   }
+
   return escapedItem;
 }
 

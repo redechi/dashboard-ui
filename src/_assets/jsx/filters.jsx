@@ -18,23 +18,25 @@ module.exports = class Filters extends React.Component {
 
     this.updateFilter = (filterName, filterValue) => {
       this.props.updateFilter(filterName, filterValue);
-      if(this.refs.filterTypePopover) {
+      if (this.refs.filterTypePopover) {
         this.refs.filterTypePopover.hide();
       }
+
       this.setState({undoCount: this.state.undoCount + 1});
     };
 
     this.addFilter = filterName => {
-      let defaultValue = filters.getFilter(filterName).defaultValue
+      let defaultValue = filters.getFilter(filterName).defaultValue;
       this.props.updateFilter(filterName, defaultValue);
-      if(this.refs.filterTypePopover) {
+      if (this.refs.filterTypePopover) {
         this.refs.filterTypePopover.hide();
       }
+
       this.setState({undoCount: this.state.undoCount + 1});
     };
 
     this.undoFilter = () => {
-      if(this.state.undoCount > 0) {
+      if (this.state.undoCount > 0) {
         this.setState({undoCount: this.state.undoCount - 1});
         this.props.undoFilter();
       }
@@ -57,19 +59,21 @@ module.exports = class Filters extends React.Component {
     );
 
     let appliedFilters = _.map(this.props.filters, (value, key) => {
-      return <Filter
-        key={key}
-        value={value}
-        vehicles={this.props.vehicles}
-        filterType={key}
-        updateFilter={this.updateFilter}
-        showPopover={this.state.showPopover}
-        ranges={this.props.ranges} />
+      return (
+        <Filter
+          key={key}
+          value={value}
+          vehicles={this.props.vehicles}
+          filterType={key}
+          updateFilter={this.updateFilter}
+          showPopover={this.state.showPopover}
+          ranges={this.props.ranges} />
+      );
     });
 
     let addFilterControl;
 
-    if(filters.getRemainingFilters(this.props.filters).length) {
+    if (filters.getRemainingFilters(this.props.filters).length) {
       addFilterControl = (
         <li>
           <div className="filter-label">and</div>

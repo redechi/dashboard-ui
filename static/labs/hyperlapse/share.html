@@ -61,11 +61,11 @@
       var data;
 
       function generateHyperlapse() {
-        if(!data.path) {
+        if (!data.path) {
           return alert('Unable to generate hyperlapse for trips with no path');
         }
 
-        if(!data.distance_m) {
+        if (!data.distance_m) {
           return alert('Unable to generate hyperlapse for trips with no distance');
         }
 
@@ -169,9 +169,9 @@
       $('.btn-play').click(playHyperlapse);
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 

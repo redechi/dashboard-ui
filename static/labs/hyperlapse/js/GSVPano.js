@@ -1,3 +1,5 @@
+/* jscs: disable */
+
 var GSVPANO = GSVPANO || {};
 GSVPANO.PanoLoader = function (parameters) {
 
@@ -100,7 +102,7 @@ GSVPANO.PanoLoader = function (parameters) {
 		var self = this;
 		_panoClient.getPanoramaByLocation(location, 50, function (result, status) {
 			if (status === google.maps.StreetViewStatus.OK) {
-				if( self.onPanoramaData ) self.onPanoramaData( result );
+				if ( self.onPanoramaData ) self.onPanoramaData( result );
 				rotation = result.tiles.centerHeading * Math.PI / 180.0;
 				pitch = result.tiles.originPitch;
 				copyright = result.copyright;
@@ -113,7 +115,7 @@ GSVPANO.PanoLoader = function (parameters) {
 				self.id = _panoId;
 				callback();
 			} else {
-				if( self.onNoPanoramaData ) self.onNoPanoramaData( status );
+				if ( self.onNoPanoramaData ) self.onNoPanoramaData( status );
 				self.throwError('Could not retrieve panorama for the following reason: ' + status);
 				callback();
 			}

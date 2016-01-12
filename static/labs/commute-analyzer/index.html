@@ -110,7 +110,7 @@
       function formatAddress(address) {
         var name;
 
-        if(!address || !address.display_name) {
+        if (!address || !address.display_name) {
           name = 'Unknown Location';
         } else {
           name = address.display_name;
@@ -339,7 +339,7 @@
 
 
       function drawTrips(group, summary) {
-        if(!map) {
+        if (!map) {
           map = L.mapbox.map('commutemap', 'automatic.lm09hkd2');
         }
 
@@ -393,7 +393,7 @@
 
         $('.end-locations').html(clusters.slice(0, 10).map(function(cluster, idx) {
           var option = $('<option>').text(cluster[1].address + ' (' + cluster[1].count + ' trips)').attr('value', cluster[0])
-          if(idx === 1) {
+          if (idx === 1) {
             option.attr('selected', 'selected');
           }
           return option;
@@ -571,17 +571,17 @@
         var startDate = $('[name="startDate"]', this).val();
         var endDate = $('[name="endDate"]', this).val();
 
-        if(!trips) {
+        if (!trips) {
           return false;
         }
 
         filteredTrips = _.filter(trips, function(trip) {
           var accept = true;
-          if(startDate && moment(trip.started_at).isBefore(moment(startDate, 'MM/DD/YYYY'))) {
+          if (startDate && moment(trip.started_at).isBefore(moment(startDate, 'MM/DD/YYYY'))) {
             accept = false;
           }
 
-          if(endDate && moment(trip.started_at).isAfter(moment(endDate, 'MM/DD/YYYY'))) {
+          if (endDate && moment(trip.started_at).isAfter(moment(endDate, 'MM/DD/YYYY'))) {
             accept = false;
           }
 

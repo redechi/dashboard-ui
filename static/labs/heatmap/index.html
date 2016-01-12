@@ -122,7 +122,7 @@
 
         $('#share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -157,7 +157,7 @@
 
       function renderData() {
         data.forEach(function(point) {
-          if(!bounds) {
+          if (!bounds) {
             bounds = L.latLngBounds([point, point]);
           } else {
             bounds.extend(point);
@@ -173,7 +173,7 @@
       function getUserData() {
         fetchAllTrips(function(trips) {
           trips.forEach(function(trip) {
-            if(trip.end_location && trip.end_location.lat && trip.end_location.lon) {
+            if (trip.end_location && trip.end_location.lat && trip.end_location.lon) {
               data.push([trip.end_location.lat, trip.end_location.lon]);
             }
           });
@@ -185,9 +185,9 @@
       }
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -196,10 +196,10 @@
         });
       } else {
         getUserData();
-        if(!queryParams.demo) {
+        if (!queryParams.demo) {
           $('#shareContainer').show();
 
-          if(sessionStorage.getItem('heatmapShareURL')) {
+          if (sessionStorage.getItem('heatmapShareURL')) {
             showShareOptions(sessionStorage.getItem('heatmapShareURL'));
           }
         }

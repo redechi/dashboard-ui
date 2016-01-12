@@ -219,7 +219,7 @@
 
         $('.btn-share').html(generateSpinner());
         saveShareData(data, function(e, shareUrlSlug) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -294,19 +294,19 @@
         });
 
         var stats = _.reduce(trips, function(memo, trip) {
-          if(!memo.longest || memo.longest.distance_m < trip.distance_m) {
+          if (!memo.longest || memo.longest.distance_m < trip.distance_m) {
             memo.longest = trip;
           }
-          if(trip.start_address && trip.start_address.state && trip.start_address.state !== 'Unknown') {
+          if (trip.start_address && trip.start_address.state && trip.start_address.state !== 'Unknown') {
             var stateName = getStateName(trip.start_address.state);
-            if(stateName) {
+            if (stateName) {
               memo.states[stateName] = true;
             }
 
           }
-          if(trip.end_address && trip.end_address.state && trip.end_address.state !== 'Unknown') {
+          if (trip.end_address && trip.end_address.state && trip.end_address.state !== 'Unknown') {
             var stateName = getStateName(trip.end_address.state);
-            if(stateName) {
+            if (stateName) {
               memo.states[stateName] = true;
             }
           }
@@ -327,17 +327,17 @@
       }
 
       function renderData() {
-        if(queryParams.share) {
+        if (queryParams.share) {
           $('.username').text(data.username + '\'s ' + data.year + ' Year in Review');
         } else {
           $('.username').text(data.username);
         }
 
-        if(data.stats.firstTripStart) {
+        if (data.stats.firstTripStart) {
           $('.first-trip-date').text('First drove with Automatic on ' + moment(data.stats.firstTripStart).format('MM/DD/YYYY'));
         }
 
-        if(!queryParams.share && !$('.year-control').is(':visible') && moment(data.stats.firstTripStart).year() < currentYear) {
+        if (!queryParams.share && !$('.year-control').is(':visible') && moment(data.stats.firstTripStart).year() < currentYear) {
           $('#year').html(_.range(currentYear, moment(data.stats.firstTripStart).year() - 1, -1).map(function(year) {
             return $('<option>').attr('value', year).text(year)
           }));
@@ -358,7 +358,7 @@
         $('#states').text(_.size(data.stats.states));
         $('#stateList').html(data.stats.states.sort().join(', '));
 
-        if(data.weekdayData.length) {
+        if (data.weekdayData.length) {
           var durationWeekdayHoursPerDay = _.reduce(data.weekdayData, function(memo, day) { return memo += day.duration; }, 0) / data.weekdayData.length;
           var AVERAGE_HOURS_OF_WEEKDAY_SLEEP = 7.7;
           $('#durationWeekdayHours').html(durationWeekdayHoursPerDay.toFixed(1));
@@ -381,7 +381,7 @@
         $('#co2Tree').text((co2 / tree).toFixed(1));
 
 
-        if(map) {
+        if (map) {
           map.remove();
         }
         map = L.mapbox.map('longestTripMap', 'automatic.idonii25', {zoomControl: false});
@@ -390,7 +390,7 @@
 
         drawGraphs();
 
-        if(sessionStorage.getItem(data.year + 'ShareURL')) {
+        if (sessionStorage.getItem(data.year + 'ShareURL')) {
           showShareOptions(sessionStorage.getItem(data.year + 'ShareURL'));
         } else {
           hideShareOptions();
@@ -514,7 +514,7 @@
 
         converted.mpg = converted.distance / converted.fuel_volume;
 
-        if(converted.mpg > 100) {
+        if (converted.mpg > 100) {
           converted.mpg = undefined;
         }
 
@@ -534,7 +534,7 @@
             return moment(trip.started_at).year() === year;
           });
 
-          if(!trips.length) {
+          if (!trips.length) {
             $('.alert').text('You have not taken any trips in ' + year + '.').show();
           }
 
@@ -559,11 +559,11 @@
       }
 
       var queryParams = getQueryParams(document.location.search);
-      if(queryParams.share) {
+      if (queryParams.share) {
         showLoading();
 
         getShareData(queryParams.share, function(e, result) {
-          if(e) {
+          if (e) {
             return alert(e);
           }
 
@@ -575,7 +575,7 @@
       } else {
         // get `currentYear` by default
         getUserReport(currentYear);
-        if(!queryParams.demo) {
+        if (!queryParams.demo) {
           $('.share-container').show();
           $('.intro-text').show();
         }

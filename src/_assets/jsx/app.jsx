@@ -25,7 +25,7 @@ class App extends React.Component {
   }
 
   render() {
-    if(!this.isBrowserSupported()) {
+    if (!this.isBrowserSupported()) {
       return <UnsupportedBrowser />;
     }
 
@@ -37,7 +37,6 @@ class App extends React.Component {
     );
   }
 }
-
 
 render((
   <Router>

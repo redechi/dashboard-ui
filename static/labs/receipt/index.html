@@ -81,11 +81,11 @@
       var page = 'https://api.automatic.com/trip/?limit=10&page=1';
 
       function loadTripsFromServer() {
-        if(this.shouldLoad()) {
+        if (this.shouldLoad()) {
           loading = true;
 
           fetchTripsPage(page, function(results) {
-            if(!results || !results.results) {
+            if (!results || !results.results) {
               page = null;
               return false;
             }
@@ -127,7 +127,7 @@
 
         var trip = _.findWhere(trips, {id: tripId});
 
-        if(!trip) {
+        if (!trip) {
           return alert('Unable to generate Receipt');
         }
 
