@@ -87,7 +87,7 @@ module.exports = class Login extends React.Component {
               <Link to="/demo" className="btn btn-blue btn-block">Try the demo</Link>
               <p>
                 Have an Automatic app account?
-                <a href="#" className="login-link" onClick={this.toggleLoginPanel}>Log In</a>
+                &nbsp;<a href="#" className="login-link" onClick={this.toggleLoginPanel}>Log In</a>
               </p>
             </div>
             <div className="mobile-block">
