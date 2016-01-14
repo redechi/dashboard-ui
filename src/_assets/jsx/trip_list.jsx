@@ -81,10 +81,12 @@ module.exports = class TripList extends React.Component {
       });
     };
 
-    this.showModal = (trip) => {
+    this.showModal = (tripToShow) => {
+      const currentIndex = _.findIndex(this.props.trips, trip => trip.id === tripToShow.id);
       this.setState({
         showModal: true,
-        modalTrip: trip
+        modalTrip: tripToShow,
+        modalTripIndex: this.props.trips.length - currentIndex
       });
     };
 
@@ -101,19 +103,21 @@ module.exports = class TripList extends React.Component {
     };
 
     this.showPreviousTrip = () => {
-      let currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
+      const currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
       if (currentIndex < this.props.trips.length - 1) {
         this.setState({
-          modalTrip: this.props.trips[currentIndex + 1]
+          modalTrip: this.props.trips[currentIndex + 1],
+          modalTripIndex: this.props.trips.length - (currentIndex + 1)
         });
       }
     };
 
     this.showNextTrip = () => {
-      let currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
+      const currentIndex = _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
       if (currentIndex > 0) {
         this.setState({
-          modalTrip: this.props.trips[currentIndex - 1]
+          modalTrip: this.props.trips[currentIndex - 1],
+          modalTripIndex: this.props.trips.length - (currentIndex - 1)
         });
       }
     };
@@ -139,10 +143,6 @@ module.exports = class TripList extends React.Component {
   getTripListHeight() {
     let verticalPadding = 233;
     return this.props.windowHeight - this.props.filterHeight - verticalPadding;
-  }
-
-  getModalTripIndex() {
-    return this.props.trips.length - _.findIndex(this.props.trips, trip => trip.id === this.state.modalTrip.id);
   }
 
   render() {
@@ -194,14 +194,14 @@ module.exports = class TripList extends React.Component {
       </Popover>
     );
 
+    const trip = this.state.modalTrip;
+
     let businessTag;
-    if (this.state.modalTrip && _.contains(this.state.modalTrip.tags, 'business')) {
+    if (trip && _.contains(trip.tags, 'business')) {
       businessTag = (
         <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
       );
     }
-
-    let trip = this.state.modalTrip;
 
     return (
       <div>
@@ -235,11 +235,15 @@ module.exports = class TripList extends React.Component {
           <Modal.Body>
             <div className="close" onClick={this.hideModal}>x</div>
             <div className="trip-navigation">
-              <div className="prev-trip" onClick={this.showPreviousTrip}>Previous Trip</div>
+              <div
+                className={classNames('prev-trip', { hidden: this.state.modalTripIndex <= 1 })}
+                onClick={this.showPreviousTrip}>Previous Trip</div>
               <span className="title">
-                Trip {this.getModalTripIndex()} of {this.props.trips.length}
+                Trip {this.state.modalTripIndex} of {this.props.trips.length}
               </span>
-              <div className="next-trip" onClick={this.showNextTrip}>Next</div>
+              <div
+                className={classNames('next-trip', { hidden: this.state.modalTripIndex >= this.props.trips.length })}
+                onClick={this.showNextTrip}>Next Trip</div>
             </div>
             <div className="trip-details">
               <div className="trip-header">
