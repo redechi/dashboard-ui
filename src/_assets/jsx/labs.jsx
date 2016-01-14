@@ -28,7 +28,7 @@ module.exports = class Labs extends React.Component {
     let labs = [
       {
         name: 'year-in-review',
-        image: '/_assets/images/labs/year-in-review.gif',
+        image: '/_assets/images/labs/year-in-review.png',
         title: '2015 Year In Review',
         description: 'A summary of your driving in 2015.'
       },
