@@ -1,4 +1,5 @@
 /* jscs: disable */
+/* eslint-disable */
 
 /**
  * @overview Hyperlapse.js - JavaScript hyper-lapse utility for Google Street View.

@@ -1,4 +1,4 @@
-exports.setItem = function(key, value, persist) {
+exports.setItem = function setItem(key, value, persist) {
   if (typeof value === 'object') {
     value = JSON.stringify(value);
   }
@@ -10,8 +10,8 @@ exports.setItem = function(key, value, persist) {
   }
 };
 
-exports.getItem = function(key) {
-  let value = localStorage.getItem(key) || sessionStorage.getItem(key);
+exports.getItem = function getItem(key) {
+  const value = localStorage.getItem(key) || sessionStorage.getItem(key);
   try {
     return JSON.parse(value);
   } catch (e) {
@@ -19,7 +19,7 @@ exports.getItem = function(key) {
   }
 };
 
-exports.clear = function() {
+exports.clear = function clear() {
   localStorage.clear();
   sessionStorage.clear();
 };

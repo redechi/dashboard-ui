@@ -19,7 +19,9 @@ module.exports = class Map extends React.Component {
         map.hideTripEvents();
       }
 
-      this.setState({showTripEvents: this.refs.showTripEvents.checked});
+      this.setState({
+        showTripEvents: this.refs.showTripEvents.checked
+      });
     };
   }
 
@@ -41,19 +43,19 @@ module.exports = class Map extends React.Component {
                 onChange={this.toggleTripEvents}
                 defaultChecked={true} /> View
             </label>
-            <div className={classNames('trip-events', {grey: !this.state.showTripEvents})}>
+            <div className={classNames('trip-events', { grey: !this.state.showTripEvents })}>
               <div className="event">
-                <div className={classNames('hard-brakes', {none: this.props.trip.hard_brakes === 0})}>
+                <div className={classNames('hard-brakes', { none: this.props.trip.hard_brakes === 0 })}>
                   {this.props.trip.hard_brakes}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('speeding', {none: this.props.trip.duration_over_70_s === 0})}>
+                <div className={classNames('speeding', { none: this.props.trip.duration_over_70_s === 0 })}>
                   {formatters.durationMinutes(this.props.trip.duration_over_70_s)}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('hard-accels', {none: this.props.trip.hard_accels === 0})}>
+                <div className={classNames('hard-accels', { none: this.props.trip.hard_accels === 0 })}>
                   {this.props.trip.hard_accels}
                 </div>
               </div>

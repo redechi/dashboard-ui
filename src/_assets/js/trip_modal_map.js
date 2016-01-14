@@ -2,9 +2,7 @@ import L from 'mapbox.js';
 import _ from 'lodash';
 import polyline from 'polyline';
 
-const formatters = require('./formatters');
 const mapHelpers = require('./map_helpers');
-const stats = require('./stats');
 
 let map;
 let pathsLayer;
@@ -15,7 +13,53 @@ let speedingLayer;
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
 
-exports.createMap = function() {
+function scaleMarkers() {
+  const zoom = map.getZoom();
+  const hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardBrake');
+  const hardAccelIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardAccel');
+  const weight = mapHelpers.getPathWidthbyZoom(zoom);
+
+  pathsLayer.eachLayer((path) => {
+    path.setStyle({ weight });
+  });
+
+  speedingLayer.eachLayer((path) => {
+    path.setStyle({ weight });
+  });
+
+  hardBrakesLayer.eachLayer((marker) => {
+    marker.setIcon(hardBrakeIcon);
+  });
+
+  hardAccelsLayer.eachLayer((marker) => {
+    marker.setIcon(hardAccelIcon);
+  });
+}
+
+function clearMap() {
+  pathsLayer.clearLayers();
+  markersLayer.clearLayers();
+  hardBrakesLayer.clearLayers();
+  hardAccelsLayer.clearLayers();
+  speedingLayer.clearLayers();
+}
+
+function fitBounds(bounds) {
+  const boundsOptions = {
+    padding: [45, 45]
+  };
+
+  map.invalidateSize();
+  if (!bounds) {
+    bounds = pathsLayer.getBounds();
+  }
+
+  if (bounds.isValid()) {
+    map.fitBounds(bounds, boundsOptions);
+  }
+}
+
+exports.createMap = function createMap() {
   map = mapHelpers.createMap('modalMapContainer');
   pathsLayer = L.mapbox.featureLayer();
   markersLayer = L.mapbox.featureLayer();
@@ -29,18 +73,18 @@ exports.createMap = function() {
   map.addLayer(pathsLayer);
 };
 
-exports.updateMap = function(trip) {
+exports.updateMap = function updateMap(trip) {
   if (!trip) {
     return;
   }
 
-  let zoom = map.getZoom();
-  let pathStyle = mapHelpers.styleLine(zoom, 'highlight');
-  let aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aHighlightedIcon');
-  let bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bHighlightedIcon');
-  let speedingLine = mapHelpers.styleLine(zoom, 'speeding');
-  let hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardBrake');
-  let hardAccelIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardAccel');
+  const zoom = map.getZoom();
+  const pathStyle = mapHelpers.styleLine(zoom, 'highlight');
+  const aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aHighlightedIcon');
+  const bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bHighlightedIcon');
+  const speedingLine = mapHelpers.styleLine(zoom, 'speeding');
+  const hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardBrake');
+  const hardAccelIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardAccel');
 
   clearMap();
 
@@ -51,15 +95,15 @@ exports.updateMap = function(trip) {
       if (item.type === 'hard_brake') {
         hardBrakesLayer.addLayer(L.marker(
           [item.lat, item.lon],
-          {icon: hardBrakeIcon, id: trip.id}
+          { icon: hardBrakeIcon, id: trip.id }
         ));
       } else if (item.type === 'hard_accel') {
         hardAccelsLayer.addLayer(L.marker(
           [item.lat, item.lon],
-          {icon: hardAccelIcon, id: trip.id}
+          { icon: hardAccelIcon, id: trip.id }
         ));
       } else if (item.type === 'speeding') {
-        let lineOptions = _.extend({id: trip.id}, speedingLine);
+        const lineOptions = _.extend({ id: trip.id }, speedingLine);
         speedingLayer.addLayer(L.polyline(item.path, lineOptions));
       }
     });
@@ -90,70 +134,22 @@ exports.updateMap = function(trip) {
   fitBounds();
 };
 
-exports.zoomIn = function() {
+exports.zoomIn = function zoomIn() {
   map.zoomIn();
 };
 
-exports.zoomOut = function() {
+exports.zoomOut = function zoomOut() {
   map.zoomOut();
 };
 
-exports.showTripEvents = function() {
+exports.showTripEvents = function showTripEvents() {
   map.addLayer(speedingLayer);
   map.addLayer(hardBrakesLayer);
   map.addLayer(hardAccelsLayer);
 };
 
-exports.hideTripEvents = function() {
+exports.hideTripEvents = function hideTripEvents() {
   map.removeLayer(hardBrakesLayer);
   map.removeLayer(hardAccelsLayer);
   map.removeLayer(speedingLayer);
 };
-
-function scaleMarkers() {
-  let zoom = map.getZoom();
-
-  let normalIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
-  let hardBrakeIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardBrake');
-  let hardAccelIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardAccel');
-  let weight = mapHelpers.getPathWidthbyZoom(zoom);
-
-  pathsLayer.eachLayer((path) => {
-    path.setStyle({weight: weight});
-  });
-
-  speedingLayer.eachLayer((path) => {
-    path.setStyle({weight: weight});
-  });
-
-  hardBrakesLayer.eachLayer((marker) => {
-    marker.setIcon(hardBrakeIcon);
-  });
-
-  hardAccelsLayer.eachLayer((marker) => {
-    marker.setIcon(hardAccelIcon);
-  });
-}
-
-function clearMap() {
-  pathsLayer.clearLayers();
-  markersLayer.clearLayers();
-  hardBrakesLayer.clearLayers();
-  hardAccelsLayer.clearLayers();
-  speedingLayer.clearLayers();
-}
-
-function fitBounds(bounds) {
-  let boundsOptions = {
-    padding: [45, 45]
-  };
-
-  map.invalidateSize();
-  if (!bounds) {
-    bounds = pathsLayer.getBounds();
-  }
-
-  if (bounds.isValid()) {
-    map.fitBounds(bounds, boundsOptions);
-  }
-}

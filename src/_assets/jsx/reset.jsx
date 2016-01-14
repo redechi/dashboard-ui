@@ -55,7 +55,7 @@ module.exports = class Reset extends React.Component {
       <form onSubmit={this.handleResetSubmit} className="reset">
         <h1>Forgot your password?</h1>
         <p>If you can’t remember your password, you can reset it by entering your email address.</p>
-        <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'username')})}>
+        <div className={classNames('form-group', { 'has-error': _.contains(this.state.errorFields, 'username') })}>
           <input type="email" className="form-control" ref="username" placeholder="Email Address" spellCheck="false" />
         </div>
         {alert}

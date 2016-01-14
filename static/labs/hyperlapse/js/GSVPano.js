@@ -1,4 +1,5 @@
 /* jscs: disable */
+/* eslint-disable */
 
 var GSVPANO = GSVPANO || {};
 GSVPANO.PanoLoader = function (parameters) {

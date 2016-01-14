@@ -18,7 +18,9 @@ module.exports = class Map extends React.Component {
         map.hideTripEvents();
       }
 
-      this.setState({showTripEvents: this.refs.showTripEvents.checked});
+      this.setState({
+        showTripEvents: this.refs.showTripEvents.checked
+      });
     };
 
     this.toggleAutozoom = () => {
@@ -34,7 +36,7 @@ module.exports = class Map extends React.Component {
   render() {
     return (
       <div className="map">
-        <div className="map-container" id="overviewMapContainer" style={{height: this.getMapHeight()}}></div>
+        <div className="map-container" id="overviewMapContainer" style={{ height: this.getMapHeight() }}></div>
         <div className="map-menu">
           <div className="zoom-control">
             <div className="zoom-in" onClick={map.zoomIn}>+</div>
@@ -52,19 +54,19 @@ module.exports = class Map extends React.Component {
                 onChange={this.toggleTripEvents}
                 defaultChecked={true} /> View
             </label>
-            <div className={classNames('trip-events', {grey: !this.state.showTripEvents})}>
+            <div className={classNames('trip-events', { grey: !this.state.showTripEvents })}>
               <div className="event">
-                <div className={classNames('hard-brakes', {none: this.props.totals.hardBrakes === 0})}>
+                <div className={classNames('hard-brakes', { none: this.props.totals.hardBrakes === 0 })}>
                   {this.props.totals.hardBrakes}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('speeding', {none: this.props.totals.speedingMinutes === 0})}>
+                <div className={classNames('speeding', { none: this.props.totals.speedingMinutes === 0 })}>
                   {this.props.totals.speedingMinutes}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('hard-accels', {none: this.props.totals.hardAccels === 0})}>
+                <div className={classNames('hard-accels', { none: this.props.totals.hardAccels === 0 })}>
                   {this.props.totals.hardAccels}
                 </div>
               </div>

@@ -29,58 +29,20 @@ const csvFieldNames = [
   'Tags'
 ];
 
-exports.trips = (selectedTrips, cb) => {
-  if (!exportIsSupported()) {
-    cb(new Error('not_supported'));
-  }
-
-  //Safari does not support filesaver, so use URL
-  if (isSafari()) {
-    let blobUrl = "data:application/x-download;charset=utf-8," + encodeURIComponent(this.tripsToCSV(selectedTrips));
-    cb(null, blobUrl);
-  } else {
-    let blob = new Blob([tripsToCSV(selectedTrips)], {type: "text/csv;charset=utf-8"});
-
-    setTimeout(() => {
-      let filename = `automatic-trips-${moment().format('YYYY-MM-DD')}.csv`;
-
-      //fix for firefox on callback - needs a timeout
-      filesaverjs.saveAs(blob, filename);
-      cb();
-    }, 500);
-  }
-};
-
 function exportIsSupported() {
-  //check for export support
+  // check for export support
   let exportSupported = false;
   try {
     exportSupported = !!new Blob;
-  } catch (e) {}
+  } catch (e) {
+    console.error(e);
+  }
 
   return exportSupported;
 }
 
 function isSafari() {
   return navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1;
-}
-
-function tripsToCSV(trips) {
-  let tripsArray = trips.map(tripToArray);
-  tripsArray.unshift(csvFieldNames);
-
-  return tripsArray.map((row) => row.map(csvEscape).join(',')).join('\n');
-}
-
-function csvEscape(item) {
-  let escapedItem;
-  if (item && item.indexOf && (item.indexOf(',') !== -1 || item.indexOf('"') !== -1)) {
-    escapedItem = `"${item.replace(/"/g, '""')}"`;
-  } else {
-    escapedItem = `"${item}"`;
-  }
-
-  return escapedItem;
 }
 
 function tripToArray(trip) {
@@ -110,3 +72,43 @@ function tripToArray(trip) {
     trip.tags.join(',')
   ];
 }
+
+function csvEscape(item) {
+  let escapedItem;
+  if (item && item.indexOf && (item.indexOf(',') !== -1 || item.indexOf('"') !== -1)) {
+    escapedItem = `"${item.replace(/"/g, '""')}"`;
+  } else {
+    escapedItem = `"${item}"`;
+  }
+
+  return escapedItem;
+}
+
+function tripsToCSV(trips) {
+  const tripsArray = trips.map(tripToArray);
+  tripsArray.unshift(csvFieldNames);
+
+  return tripsArray.map((row) => row.map(csvEscape).join(',')).join('\n');
+}
+
+exports.trips = (selectedTrips, cb) => {
+  if (!exportIsSupported()) {
+    cb(new Error('not_supported'));
+  }
+
+  // Safari does not support filesaver, so use URL
+  if (isSafari()) {
+    const blobUrl = 'data:application/x-download;charset=utf-8,' + encodeURIComponent(this.tripsToCSV(selectedTrips));
+    cb(null, blobUrl);
+  } else {
+    const blob = new Blob([tripsToCSV(selectedTrips)], { type: 'text/csv;charset=utf-8' });
+
+    setTimeout(() => {
+      const filename = `automatic-trips-${moment().format('YYYY-MM-DD')}.csv`;
+
+      // fix for firefox on callback - needs a timeout
+      filesaverjs.saveAs(blob, filename);
+      cb();
+    }, 500);
+  }
+};

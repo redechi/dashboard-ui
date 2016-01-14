@@ -81,7 +81,7 @@ function makeWebpackConfig() {
 
   webpackConfig.plugins = [
     new optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
-    new ModernizrWebpackPlugin({'feature-detects': ['cors', 'svg']}),
+    new ModernizrWebpackPlugin({ 'feature-detects': ['cors', 'svg'] }),
     ...(settings.DEV_HOT_RELOAD ? [] : [
       new ExtractTextPlugin('[name].css'),
       new optimize.UglifyJsPlugin()

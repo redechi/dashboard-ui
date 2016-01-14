@@ -24,7 +24,9 @@ module.exports = class Login extends React.Component {
 
     this.login = (event) => {
       event.preventDefault();
-      this.setState({alert: 'Logging in'});
+      this.setState({
+        alert: 'Logging in'
+      });
       login.login(this.refs.username.value, this.refs.password.value, this.refs.staySignedIn.checked, (e) => {
         if (e) {
           console.error(e);
@@ -44,7 +46,9 @@ module.exports = class Login extends React.Component {
               errorFields: ['username', 'password']
             });
           } else {
-            this.setState({alert: 'Unknown error'});
+            this.setState({
+              alert: 'Unknown error'
+            });
           }
         }
 
@@ -121,7 +125,7 @@ module.exports = class Login extends React.Component {
           <p>Use your Automatic app account</p>
           <a href="#" className="back" onClick={this.toggleLoginPanel}>Back</a>
           <form role="form" onSubmit={this.login}>
-            <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'username')})}>
+            <div className={classNames('form-group', { 'has-error': _.contains(this.state.errorFields, 'username') })}>
               <input
                 type="text"
                 className="form-control"
@@ -129,7 +133,7 @@ module.exports = class Login extends React.Component {
                 placeholder="Email Address"
                 spellCheck="false" />
             </div>
-            <div className={classNames('form-group', {'has-error': _.contains(this.state.errorFields, 'password')})}>
+            <div className={classNames('form-group', { 'has-error': _.contains(this.state.errorFields, 'password') })}>
               <input type="password" className="form-control" ref="password" placeholder="Password" />
             </div>
             {alert}

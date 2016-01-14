@@ -1,3 +1,6 @@
+/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top:0 */
+/* global L, _, $, polyline, simplify */
+
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IkV6ZFdvQmsifQ.SDDOhAsgorCNf8T0ejWKmA';
 
 function getSamplingTolerance(points) {
@@ -27,7 +30,7 @@ function simplifyEncodedPolyline(encodedPolyline) {
 }
 
 function constructMapboxStaticUrl(encodedPolylines, params) {
-  params = _.defaults(params || {}, {
+  var fullparams = _.defaults(params || {}, {
     format: 'png256',
     width: 720,
     height: 300
@@ -37,10 +40,9 @@ function constructMapboxStaticUrl(encodedPolylines, params) {
     return 'path(' + simplifyEncodedPolyline(pl) + ')';
   });
 
-  formattedPolylines = formattedPolylines.join(',');
-  var overlay = encodeURIComponent(formattedPolylines);
+  var overlay = encodeURIComponent(formattedPolylines.join(','));
   var mapID = 'mapbox.streets';
-  var url = mapID + '/' + overlay + '/auto/' + params.width + 'x' + params.height + '.' + params.format;
+  var url = mapID + '/' + overlay + '/auto/' + fullparams.width + 'x' + fullparams.height + '.' + fullparams.format;
   url = 'https://api.mapbox.com/v4/' + url + '/?access_token=' + encodeURIComponent(L.mapbox.accessToken);
   return url;
 }
@@ -77,8 +79,14 @@ function getStaticMap(encodedPolylines, params) {
 }
 
 function drawTripMap(trip, map) {
-  var lineStyle = {color: '#b84329', opacity: 0.6, weight: 4};
-  var markerStyle = {'marker-size': 'small', 'marker-color': '#f78e13'};
+  var lineStyle = {
+    color: '#b84329',
+    opacity: 0.6, weight: 4
+  };
+  var markerStyle = {
+    'marker-size': 'small',
+    'marker-color': '#f78e13'
+  };
 
   if (trip.path) {
     var points = polyline.decode(trip.path);
@@ -87,7 +95,7 @@ function drawTripMap(trip, map) {
     line.addTo(map);
 
     var bounds = L.latLngBounds(line.getBounds());
-    map.fitBounds(bounds, {padding: [20, 20]});
+    map.fitBounds(bounds, { padding: [20, 20] });
   }
 
   var startAddress = trip.start_address ? trip.start_address.display_name : 'Unknown';

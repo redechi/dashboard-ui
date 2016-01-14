@@ -19,7 +19,7 @@ function deployAWS() {
     throw new Error('Missing AWS_BUCKET when attempting to deploy to AWS');
   }
 
-  var publisher = awspublish.create({
+  const publisher = awspublish.create({
     params: {
       Bucket: settings.AWS_BUCKET
     },
@@ -27,8 +27,8 @@ function deployAWS() {
     secretAccessKey: settings.AWS_SECRET_ACCESS_KEY
   });
 
-  var gzip = gulp.src('./dist/**/data/*.*').pipe(awspublish.gzip());
-  var plain = gulp.src(['./dist/**/*.*', '!./dist/**/data/*.*']);
+  const gzip = gulp.src('./dist/**/data/*.*').pipe(awspublish.gzip());
+  const plain = gulp.src(['./dist/**/*.*', '!./dist/**/data/*.*']);
 
   return merge(gzip, plain)
     .pipe(parallelize(publisher.publish(), 30))
@@ -39,11 +39,11 @@ function deployAWS() {
 function deploy() {
   let deployStream;
   switch (settings.DEPLOY_TARGET) {
-  case 'aws':
-    deployStream = deployAWS();
-    break;
-  default:
-    throw new Error('Invalid deploy target');
+    case 'aws':
+      deployStream = deployAWS();
+      break;
+    default:
+      throw new Error('Invalid deploy target');
   }
 
   return deployStream;

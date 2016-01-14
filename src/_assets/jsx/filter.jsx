@@ -43,7 +43,9 @@ module.exports = class Filters extends React.Component {
           tooltip: 'hide'
         })
         .on('change', (results) => {
-          this.setState({value: results.newValue.join(',')});
+          this.setState({
+            value: results.newValue.join(',')
+          });
         })
         .on('slideStop', (newValue) => {
           this.updateFilter(newValue.join(','));
@@ -72,7 +74,7 @@ module.exports = class Filters extends React.Component {
     return (
       <li
         onClick={this.updateFilter.bind(null, vehicle.id)}
-        className={classNames({selected: this.props.value === vehicle.id})}
+        className={classNames({ selected: this.props.value === vehicle.id })}
         key={key} >
         {formatters.formatVehicle(vehicle)} <i></i>
       </li>
@@ -83,7 +85,7 @@ module.exports = class Filters extends React.Component {
     return (
       <li
         onClick={this.updateFilter.bind(null, option.value)}
-        className={classNames({selected: this.props.value === option.value})}
+        className={classNames({ selected: this.props.value === option.value })}
         key={key} >
         {option.name} <i></i>
       </li>
@@ -138,7 +140,7 @@ module.exports = class Filters extends React.Component {
           <div
             className="date-filter-custom"
             id="dateFilterCustom"
-            style={{display: (filterValueComponents[2] === 'custom') ? 'block' : 'none'}}>
+            style={{ display: (filterValueComponents[2] === 'custom') ? 'block' : 'none' }}>
             <div className="input-group">
               <label>From</label>
               <DatePicker
@@ -162,7 +164,7 @@ module.exports = class Filters extends React.Component {
         <Popover id="vehicle" title="Select Vehicle" className="popover-vehicle">
           <ul className="list-select animate">
             <li
-              className={classNames({selected: this.props.value === 'all'})}
+              className={classNames({ selected: this.props.value === 'all' })}
               onClick={this.updateFilter.bind(null, 'all')}>
               All my vehicles <i></i>
             </li>

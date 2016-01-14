@@ -16,15 +16,15 @@ const isStaging = window.location.search.indexOf('staging') !== -1;
 const apiUrl = isStaging ? 'https://accounts.automatic.co' : 'https://accounts.automatic.com';
 let accessToken = cache.getItem('accessToken');
 
-exports.isLoggedIn = function() {
+exports.isLoggedIn = function isLoggedIn() {
   return !!accessToken;
 };
 
-exports.accessToken = function() {
+exports.getAccessToken = function getAccessToken() {
   return accessToken;
 };
 
-exports.login = function(username, password, staySignedIn, cb) {
+exports.login = function login(username, password, staySignedIn, cb) {
   if (!username) {
     return cb(new Error('no_username'));
   }
@@ -58,12 +58,12 @@ exports.login = function(username, password, staySignedIn, cb) {
     });
 };
 
-exports.logout = function() {
+exports.logout = function logout() {
   accessToken = undefined;
   cache.clear();
 };
 
-exports.reset = function(username, cb) {
+exports.reset = function reset(username, cb) {
   request
     .post(`${apiUrl}/password/reset_email/`)
     .send(`email=${username}`)

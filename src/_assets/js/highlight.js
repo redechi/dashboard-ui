@@ -3,7 +3,7 @@ const map = require('./map');
 
 let highlightedTrips = [];
 
-exports.highlightTrips = function(trips) {
+exports.highlightTrips = function highlightTrips(trips) {
   map.highlightTrips(trips);
   graph.highlightTrips(trips);
   trips.forEach(trip => {
@@ -12,7 +12,7 @@ exports.highlightTrips = function(trips) {
   highlightedTrips = highlightedTrips.concat(trips);
 };
 
-exports.unhighlightTrips = function() {
+exports.unhighlightTrips = function unhighlightTrips() {
   map.unhighlightTrips(highlightedTrips);
   graph.unhighlightTrips(highlightedTrips);
   highlightedTrips.forEach(trip => {

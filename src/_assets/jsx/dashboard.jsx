@@ -35,7 +35,7 @@ module.exports = class Dashboard extends React.Component {
     };
 
     this.toggleSelect = (tripId) => {
-      let trip = _.findWhere(this.state.trips, {id: tripId});
+      let trip = _.findWhere(this.state.trips, { id: tripId });
       trip.selected = !trip.selected;
       this.setState({
         allSelected: this.areAllSelected(),
@@ -58,8 +58,8 @@ module.exports = class Dashboard extends React.Component {
           trips: this.state.trips.map((trip) => {
             trip.selected = true;
             return trip;
-          }
-        )});
+          })
+        });
       }
     };
 
@@ -117,7 +117,9 @@ module.exports = class Dashboard extends React.Component {
 
     this.updateLoadingProgress = (progress, total) => {
       console.log(progress);
-      this.setState({loadingProgressText: `${progress} of ${total} trips`});
+      this.setState({
+        loadingProgressText: `${progress} of ${total} trips`
+      });
     };
   }
 
@@ -147,7 +149,9 @@ module.exports = class Dashboard extends React.Component {
     let startDate = parseInt(dateFilterComponents[0], 10);
 
     if (startDate < this.state.tripRequestMinDate) {
-      this.setState({showLoadingModal: true});
+      this.setState({
+        showLoadingModal: true
+      });
       requests.getTrips(startDate, this.state.tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
         if (e) {
           return alert('Unable to fetch data. Please try again later.');

@@ -15,13 +15,17 @@ module.exports = class Header extends React.Component {
     };
 
     this.showSupportModal = () => {
-      this.setState({showSupportModal: true});
+      this.setState({
+        showSupportModal: true
+      });
 
-      GSFN.loadWidget(7392, {containerId: 'getsat-widget-7392'});
+      GSFN.loadWidget(7392, { containerId: 'getsat-widget-7392' });
     };
 
     this.hideSupportModal = () => {
-      this.setState({showSupportModal: false});
+      this.setState({
+        showSupportModal: false
+      });
     };
   }
 
@@ -33,11 +37,15 @@ module.exports = class Header extends React.Component {
             return;
           }
 
-          this.setState({firstName: user.first_name});
+          this.setState({
+            firstName: user.first_name
+          });
         });
       }
     } else if (this.state.firstName) {
-      this.setState({firstName: undefined});
+      this.setState({
+        firstName: undefined
+      });
     }
   }
 
@@ -100,7 +108,7 @@ module.exports = class Header extends React.Component {
     }
 
     return (
-      <header className={classNames({'logged-in': login.isLoggedIn()})}>
+      <header className={classNames({ 'logged-in': login.isLoggedIn() })}>
         <Link to="/">
           <div className="header-logo">
             <div className="demo-tag">demo</div>

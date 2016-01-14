@@ -16,9 +16,9 @@ const filterList = [
         return 'all my vehicles';
       } else if (value === 'other') {
         return 'other vehicle(s)';
-      } else {
-        return formatters.formatVehicle(_.find(vehicles, {id: value}));
       }
+
+      return formatters.formatVehicle(_.find(vehicles, { id: value }));
     }
   },
   {
@@ -27,8 +27,8 @@ const filterList = [
     label: 'driven',
     defaultValue: `${thirtyDaysAgo},${endOfDay},last30Days`,
     valueText: (value) => {
-      let [startDate, endDate, option] = value.split(',');
-      let options = {
+      const [startDate, endDate, option] = value.split(',');
+      const options = {
         thisWeek: 'this week',
         thisMonth: 'this month',
         last30Days: 'in the last 30 days',
@@ -38,9 +38,9 @@ const filterList = [
       };
       if (option === 'custom' || !option) {
         return formatters.dateRange([parseInt(startDate, 10), parseInt(endDate, 10)]);
-      } else {
-        return options[option];
       }
+
+      return options[option];
     }
   },
   {
@@ -49,12 +49,12 @@ const filterList = [
     label: 'and',
     defaultValue: '0,Infinity',
     valueText: (value) => {
-      let [min, max] = value.split(',');
+      const [min, max] = value.split(',');
       if (min === '0' && max === 'Infinity') {
         return 'all distances';
-      } else {
-        return `between ${min} - ${max} miles`;
       }
+
+      return `between ${min} - ${max} miles`;
     }
   },
   {
@@ -63,14 +63,14 @@ const filterList = [
     label: 'and',
     defaultValue: '0,Infinity',
     valueText: (value) => {
-      let [min, max] = value.split(',');
+      const [min, max] = value.split(',');
       if (min === '0' && max === 'Infinity') {
         return 'all durations';
-      } else {
-        let formattedMin = Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes());
-        let formattedMax = Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes());
-        return `between ${formattedMin} - ${formattedMax} minutes`;
       }
+
+      const formattedMin = Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes());
+      const formattedMax = Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes());
+      return `between ${formattedMin} - ${formattedMax} minutes`;
     }
   },
   {
@@ -79,12 +79,12 @@ const filterList = [
     label: 'and',
     defaultValue: '0,Infinity',
     valueText: (value) => {
-      let [min, max] = value.split(',');
+      const [min, max] = value.split(',');
       if (min === '0' && max === 'Infinity') {
         return 'all costs';
-      } else {
-        return `between ${formatters.costWithUnit(parseFloat(min))} - ${formatters.costWithUnit(parseFloat(max))}`;
       }
+
+      return `between ${formatters.costWithUnit(parseFloat(min))} - ${formatters.costWithUnit(parseFloat(max))}`;
     }
   },
   {
@@ -93,14 +93,14 @@ const filterList = [
     label: 'and',
     defaultValue: '0,24',
     valueText: (value) => {
-      let [min, max] = value.split(',');
+      const [min, max] = value.split(',');
       if (min === '0' && max === '24') {
         return 'all times of day';
-      } else {
-        let minValue = formatters.formatTime(moment(min, 'hours').valueOf(), null, 'h A');
-        let maxValue = formatters.formatTime(moment(max, 'hours').valueOf(), null, 'h A');
-        return `between ${minValue} - ${maxValue}`;
       }
+
+      const minValue = formatters.formatTime(moment(min, 'hours').valueOf(), null, 'h A');
+      const maxValue = formatters.formatTime(moment(max, 'hours').valueOf(), null, 'h A');
+      return `between ${minValue} - ${maxValue}`;
     }
   },
   {
@@ -108,20 +108,74 @@ const filterList = [
     name: 'tagged as business trip',
     label: 'and',
     defaultValue: 'true',
-    valueText: (value) => {
+    valueText: () => {
       return 'tagged as business trip';
     }
   }
 ];
 
-exports.getFiltersFromQuery = function(query) {
+function findSortedIndexByDate(trips, date) {
+  const searchTrip = { started_at: date };
+
+  // binary search since trips are already sorted by date
+  return _.sortedIndex(trips, searchTrip, (trip) => {
+    return -moment(trip.started_at).valueOf();
+  });
+}
+
+function filterByDate(trips, dateFilter) {
+  const [startDate, endDate] = dateFilter.split(',');
+  const startIndex = findSortedIndexByDate(trips, parseInt(startDate, 10));
+  const endIndex = findSortedIndexByDate(trips, parseInt(endDate, 10));
+  return trips.slice(endIndex, startIndex);
+}
+
+function filterByVehicle(trips, vehicleFilter) {
+  return _.filter(trips, (trip) => {
+    if (vehicleFilter === 'all') {
+      return true;
+    } else if (vehicleFilter === 'other') {
+      return (trip.vehicle.id === null);
+    }
+
+    return (vehicleFilter === trip.vehicle.id);
+  });
+}
+
+function filterByDistance(trips, distanceFilter) {
+  const [minDistance, maxDistance] = distanceFilter.split(',');
+  return _.filter(trips, (trip) => trip.distance_miles >= minDistance && trip.distance_miles <= maxDistance);
+}
+
+function filterByDuration(trips, durationFilter) {
+  const [minDuration, maxDuration] = durationFilter.split(',');
+  return _.filter(trips, (trip) => trip.duration_s >= minDuration && trip.duration_s <= maxDuration);
+}
+
+function filterByCost(trips, costFilter) {
+  const [minCost, maxCost] = costFilter.split(',');
+  return _.filter(trips, (trip) => trip.fuel_cost_usd >= minCost && trip.fuel_cost_usd <= maxCost);
+}
+
+function filterByTime(trips, timeFilter) {
+  const [minHour, maxHour] = timeFilter.split(',');
+  return _.filter(trips, (trip) => {
+    return moment(trip.started_at).hour() >= minHour && moment(trip.ended_at).hour() <= maxHour;
+  });
+}
+
+function filterByBusinessTag(trips) {
+  return _.filter(trips, (trip) => _.contains(trip.tags, 'business'));
+}
+
+exports.getFiltersFromQuery = function getFiltersFromQuery(query) {
   if (!query) {
     query = {};
   }
 
-  let appliedFilters = {
-    vehicle: query.vehicle || _.findWhere(filterList, {key: 'vehicle'}).defaultValue,
-    date: query.date || _.findWhere(filterList, {key: 'date'}).defaultValue
+  const appliedFilters = {
+    vehicle: query.vehicle || _.findWhere(filterList, { key: 'vehicle' }).defaultValue,
+    date: query.date || _.findWhere(filterList, { key: 'date' }).defaultValue
   };
 
   if (query.distance) {
@@ -147,15 +201,15 @@ exports.getFiltersFromQuery = function(query) {
   return appliedFilters;
 };
 
-exports.getFilter = function(filter) {
-  return _.findWhere(filterList, {key: filter});
+exports.getFilter = function getFilter(filter) {
+  return _.findWhere(filterList, { key: filter });
 };
 
-exports.getRemainingFilters = function(filters) {
+exports.getRemainingFilters = function getRemainingFilters(filters) {
   return _.reject(filterList, (filter) => !!filters[filter.key]);
 };
 
-exports.filterTrips = function(trips, filters) {
+exports.filterTrips = function filterTrips(trips, filters) {
   let filteredTrips = trips || [];
   filteredTrips = filterByDate(filteredTrips, filters.date);
   filteredTrips = filterByVehicle(filteredTrips, filters.vehicle);
@@ -181,57 +235,3 @@ exports.filterTrips = function(trips, filters) {
 
   return filteredTrips;
 };
-
-function filterByDate(trips, dateFilter) {
-  let [startDate, endDate] = dateFilter.split(',');
-  let startIndex = findSortedIndexByDate(trips, parseInt(startDate, 10));
-  let endIndex = findSortedIndexByDate(trips, parseInt(endDate, 10));
-  return trips.slice(endIndex, startIndex);
-}
-
-function findSortedIndexByDate(trips, date) {
-  let searchTrip = {started_at: date};
-
-  //binary search since trips are already sorted by date
-  return _.sortedIndex(trips, searchTrip, (trip) => {
-    return -moment(trip.started_at).valueOf();
-  });
-}
-
-function filterByVehicle(trips, vehicleFilter) {
-  return _.filter(trips, (trip) => {
-    if (vehicleFilter === 'all') {
-      return true;
-    } else if (vehicleFilter === 'other') {
-      return (trip.vehicle.id === null);
-    } else {
-      return (vehicleFilter === trip.vehicle.id);
-    }
-  });
-}
-
-function filterByDistance(trips, distanceFilter) {
-  let [minDistance, maxDistance] = distanceFilter.split(',');
-  return _.filter(trips, (trip) => trip.distance_miles >= minDistance && trip.distance_miles <= maxDistance);
-}
-
-function filterByDuration(trips, durationFilter) {
-  let [minDuration, maxDuration] = durationFilter.split(',');
-  return _.filter(trips, (trip) => trip.duration_s >= minDuration && trip.duration_s <= maxDuration);
-}
-
-function filterByCost(trips, costFilter) {
-  let [minCost, maxCost] = costFilter.split(',');
-  return _.filter(trips, (trip) => trip.fuel_cost_usd >= minCost && trip.fuel_cost_usd <= maxCost);
-}
-
-function filterByTime(trips, timeFilter) {
-  let [minHour, maxHour] = timeFilter.split(',');
-  return _.filter(trips, (trip) => {
-    return moment(trip.started_at).hour() >= minHour && moment(trip.ended_at).hour() <= maxHour;
-  });
-}
-
-function filterByBusinessTag(trips, businessTagFilter) {
-  return _.filter(trips, (trip) => _.contains(trip.tags, 'business'));
-}

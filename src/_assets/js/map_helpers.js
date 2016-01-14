@@ -107,8 +107,8 @@ const icons = {
   })
 };
 
-exports.createMap = function(container) {
-  let map = L.mapbox.map(container, 'automatic.idonii25', {
+exports.createMap = function createMap(container) {
+  const map = L.mapbox.map(container, 'automatic.idonii25', {
     zoomControl: false,
     attributionControl: false
   });
@@ -121,95 +121,104 @@ exports.createMap = function(container) {
   return map;
 };
 
-exports.getPathWidthbyZoom = function(zoom) {
+exports.getPathWidthbyZoom = function getPathWidthbyZoom(zoom) {
+  let width;
   if (zoom <= 8) {
-    return 2;
+    width = 2;
   } else if (zoom === 9 || zoom === 10) {
-    return 3;
+    width = 3;
   } else if (zoom === 11 || zoom === 12 || zoom === 13) {
-    return 4;
+    width = 4;
   } else if (zoom === 14) {
-    return 6;
+    width = 6;
   } else if (zoom === 15) {
-    return 10;
+    width = 10;
   } else if (zoom === 16) {
-    return 12;
+    width = 12;
   } else {
-    return 12;
+    width = 12;
   }
+
+  return width;
 };
 
-exports.getMarkerSizeByZoom = function(zoom, type) {
+exports.getMarkerSizeByZoom = function getMarkerSizeByZoom(zoom, type) {
+  let icon;
   if (type === 'normal') {
     if (zoom >= 15) {
-      return icons.mainIconLarge;
+      icon = icons.mainIconLarge;
     } else if (zoom >= 12) {
-      return icons.mainIconMedium;
+      icon = icons.mainIconMedium;
     } else {
-      return icons.mainIconSmall;
+      icon = icons.mainIconSmall;
     }
   } else if (type === 'hardBrake') {
     if (zoom >= 15) {
-      return icons.hardBrakeIconLarge;
+      icon = icons.hardBrakeIconLarge;
     } else if (zoom >= 12) {
-      return icons.hardBrakeIconMedium;
+      icon = icons.hardBrakeIconMedium;
     } else {
-      return icons.hardBrakeIconSmall;
+      icon = icons.hardBrakeIconSmall;
     }
   } else if (type === 'hardAccel') {
     if (zoom >= 15) {
-      return icons.hardAccelIconLarge;
+      icon = icons.hardAccelIconLarge;
     } else if (zoom >= 12) {
-      return icons.hardAccelIconMedium;
+      icon = icons.hardAccelIconMedium;
     } else {
-      return icons.hardAccelIconSmall;
+      icon = icons.hardAccelIconSmall;
     }
   } else if (type === 'aSelectedIcon') {
-    return icons.aSelectedIcon;
+    icon = icons.aSelectedIcon;
   } else if (type === 'bSelectedIcon') {
-    return icons.bSelectedIcon;
+    icon = icons.bSelectedIcon;
   } else if (type === 'aHighlightedIcon') {
-    return icons.aHighlightedIcon;
+    icon = icons.aHighlightedIcon;
   } else if (type === 'bHighlightedIcon') {
-    return icons.bHighlightedIcon;
+    icon = icons.bHighlightedIcon;
   }
+
+  return icon;
 };
 
-exports.styleLine = function(zoom, lineType) {
+exports.styleLine = function styleLine(zoom, lineType) {
+  let style;
   if (lineType === 'highlight') {
-    return {
+    style = {
       opacity: 1,
       color: '#5DBEF5',
       weight: Math.max(4, exports.getPathWidthbyZoom(zoom))
     };
   } else if (lineType === 'selected') {
-    return {
+    style = {
       opacity: 1,
       color: '#297FB8',
       weight: Math.max(4, exports.getPathWidthbyZoom(zoom))
     };
   } else if (lineType === 'speeding') {
-    return {
+    style = {
       opacity: 1,
       color: '#F5A623',
       weight: Math.max(4, exports.getPathWidthbyZoom(zoom))
     };
   } else {
-    return {
+    style = {
       color: '#737c81',
       opacity: 0.4,
       weight: exports.getPathWidthbyZoom(zoom)
     };
   }
+
+  return style;
 };
 
-exports.getCumulativeDistance = function(decodedPath) {
+exports.getCumulativeDistance = function getCumulativeDistance(decodedPath) {
   let cumulativeDistance = 0;
 
   return decodedPath.map((point1, idx) => {
     if (idx > 0) {
-      let point2 = decodedPath[idx - 1];
-      let distance = stats.calculateDistanceMi(point1[0], point1[1], point2[0], point2[1]);
+      const point2 = decodedPath[idx - 1];
+      const distance = stats.calculateDistanceMi(point1[0], point1[1], point2[0], point2[1]);
       cumulativeDistance += distance;
     }
 
@@ -217,9 +226,9 @@ exports.getCumulativeDistance = function(decodedPath) {
   });
 };
 
-exports.subPath = function(startMi, endMi, decodedPath, cumulativeDistances) {
+exports.subPath = function subPath(startMi, endMi, decodedPath, cumulativeDistances) {
   return _.reduce(cumulativeDistances, (memo, distance1, idx) => {
-    let distance2 = (idx < cumulativeDistances.length - 1) ? cumulativeDistances[idx + 1] : distance1;
+    const distance2 = (idx < cumulativeDistances.length - 1) ? cumulativeDistances[idx + 1] : distance1;
     if (startMi <= distance2 && endMi >= distance1) {
       memo.push(decodedPath[idx]);
     }

@@ -4,111 +4,6 @@ import polyline from 'polyline';
 
 const mapHelpers = require('./map_helpers');
 
-exports.address = (address) => {
-  let formattedAddress = '';
-
-  if (address.street_number) {
-    formattedAddress += address.street_number + ' ';
-  }
-
-  if (address.street_name) {
-    formattedAddress += address.street_name + ', ';
-  }
-
-  if (address.city) {
-    formattedAddress += address.city;
-  }
-
-  if (address.city && address.state) {
-    formattedAddress += ', ';
-  }
-
-  if (address.state) {
-    formattedAddress += address.state;
-  }
-
-  return formattedAddress || address.display_name || 'Unknown Address';
-};
-
-exports.formatTrip = (trip, vehicles) => {
-  let vehicle = _.findWhere(vehicles, {url: trip.vehicle});
-  return {
-    id: trip.id,
-    vehicle: {
-      display_name: exports.formatVehicle(vehicle),
-      id: vehicle ? vehicle.id : null
-    },
-    started_at: trip.started_at,
-    ended_at: trip.ended_at,
-    start_address: trip.start_address,
-    end_address: trip.end_address,
-    start_location: trip.start_location,
-    end_location: trip.end_location,
-    start_time_zone: trip.start_time_zone,
-    end_time_zone: trip.end_time_zone,
-    path: trip.path,
-    duration_s: trip.duration_s,
-    distance_miles: metersToMiles(trip.distance_m),
-    fuel_volume_gal: litersToGal(trip.fuel_volume_l),
-    fuel_cost_usd: trip.fuel_cost_usd,
-    average_mpg: kmplToMpg(trip.average_kmpl),
-    hard_accels: trip.hard_accels,
-    hard_brakes: trip.hard_brakes,
-    duration_over_70_s: trip.duration_over_70_s,
-    duration_over_75_s: trip.duration_over_75_s,
-    duration_over_80_s: trip.duration_over_80_s,
-    score_events: trip.score_events,
-    score_speeding: trip.score_speeding,
-    vehicle_events: formatVehicleEvents(trip.vehicle_events, trip.path),
-    tags: trip.tags,
-    selected: false
-  };
-};
-
-exports.distance = (distanceMiles) => {
-  if (Math.round(distanceMiles) >= 100) {
-    return distanceMiles.toFixed();
-  } else {
-    return distanceMiles ? distanceMiles.toFixed(1) : '';
-  }
-};
-
-exports.formatTime = (time, timezone, format) => {
-  try {
-    return moment(time).tz(timezone).format(format);
-  } catch (e) {
-    return moment(time).format(format);
-  }
-};
-
-exports.duration = (seconds) => {
-  return (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
-};
-
-exports.durationHours = (seconds) => {
-  let duration = moment.duration(seconds, 'seconds');
-  let hours = Math.floor(duration.asHours());
-  let minutes = moment(duration.minutes(), 'm').format('mm');
-  return `${hours}:${minutes}`;
-};
-
-exports.durationMinutes = (seconds) => {
-  let minutes = moment.duration(seconds, 'seconds').asMinutes();
-  if (Math.round(minutes) >= 100) {
-    return minutes.toFixed();
-  } else {
-    return (minutes || 0).toFixed(1);
-  }
-};
-
-exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
-
-exports.costWithUnit = (fuelCost) => '$' + (fuelCost || 0).toFixed(2);
-
-exports.averageMPG = (mpg) => mpg ? mpg.toFixed(1) : 0;
-
-exports.score = (score) => Math.round(score) || undefined;
-
 function metersToMiles(m) {
   return m / 1609.34;
 }
@@ -155,11 +50,116 @@ function formatVehicleEvents(events, tripPath) {
 
   return events.map(item => {
     if (item.type === 'speeding' && tripPath) {
-      let start = metersToMiles(item.start_distance_m);
-      let end = metersToMiles(item.end_distance_m);
+      const start = metersToMiles(item.start_distance_m);
+      const end = metersToMiles(item.end_distance_m);
       item.path = mapHelpers.subPath(start, end, decodedPath, cumulativeDistances);
     }
 
     return item;
   });
 }
+
+exports.address = (address) => {
+  let formattedAddress = '';
+
+  if (address.street_number) {
+    formattedAddress += address.street_number + ' ';
+  }
+
+  if (address.street_name) {
+    formattedAddress += address.street_name + ', ';
+  }
+
+  if (address.city) {
+    formattedAddress += address.city;
+  }
+
+  if (address.city && address.state) {
+    formattedAddress += ', ';
+  }
+
+  if (address.state) {
+    formattedAddress += address.state;
+  }
+
+  return formattedAddress || address.display_name || 'Unknown Address';
+};
+
+exports.formatTrip = (trip, vehicles) => {
+  const vehicle = _.findWhere(vehicles, { url: trip.vehicle });
+  return {
+    id: trip.id,
+    vehicle: {
+      display_name: exports.formatVehicle(vehicle),
+      id: vehicle ? vehicle.id : null
+    },
+    started_at: trip.started_at,
+    ended_at: trip.ended_at,
+    start_address: trip.start_address,
+    end_address: trip.end_address,
+    start_location: trip.start_location,
+    end_location: trip.end_location,
+    start_time_zone: trip.start_time_zone,
+    end_time_zone: trip.end_time_zone,
+    path: trip.path,
+    duration_s: trip.duration_s,
+    distance_miles: metersToMiles(trip.distance_m),
+    fuel_volume_gal: litersToGal(trip.fuel_volume_l),
+    fuel_cost_usd: trip.fuel_cost_usd,
+    average_mpg: kmplToMpg(trip.average_kmpl),
+    hard_accels: trip.hard_accels,
+    hard_brakes: trip.hard_brakes,
+    duration_over_70_s: trip.duration_over_70_s,
+    duration_over_75_s: trip.duration_over_75_s,
+    duration_over_80_s: trip.duration_over_80_s,
+    score_events: trip.score_events,
+    score_speeding: trip.score_speeding,
+    vehicle_events: formatVehicleEvents(trip.vehicle_events, trip.path),
+    tags: trip.tags,
+    selected: false
+  };
+};
+
+exports.distance = (distanceMiles) => {
+  if (Math.round(distanceMiles) >= 100) {
+    return distanceMiles.toFixed();
+  }
+
+  return distanceMiles ? distanceMiles.toFixed(1) : '';
+};
+
+exports.formatTime = (time, timezone, format) => {
+  try {
+    return moment(time).tz(timezone).format(format);
+  } catch (e) {
+    return moment(time).format(format);
+  }
+};
+
+exports.duration = (seconds) => {
+  return (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
+};
+
+exports.durationHours = (seconds) => {
+  const duration = moment.duration(seconds, 'seconds');
+  const hours = Math.floor(duration.asHours());
+  const minutes = moment(duration.minutes(), 'm').format('mm');
+  return `${hours}:${minutes}`;
+};
+
+exports.durationMinutes = (seconds) => {
+  const minutes = moment.duration(seconds, 'seconds').asMinutes();
+  if (Math.round(minutes) >= 100) {
+    return minutes.toFixed();
+  }
+
+  return (minutes || 0).toFixed(1);
+};
+
+exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
+
+exports.costWithUnit = (fuelCost) => '$' + (fuelCost || 0).toFixed(2);
+
+exports.averageMPG = (mpg) => mpg ? mpg.toFixed(1) : 0;
+
+exports.score = (score) => Math.round(score) || undefined;

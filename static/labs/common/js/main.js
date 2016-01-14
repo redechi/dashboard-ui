@@ -1,10 +1,13 @@
+/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top: 0, object-shorthand: 0 */
+/* global _, $, moment */
+
 'use strict';
 
 var shareAPIUrl = 'https://automatic-share.herokuapp.com';
 
-//Polyfill for window.location.origin in IE
+// Polyfill for window.location.origin in IE
 if (!window.location.origin) {
-  let port = window.location.port ? ':' + window.location.port : '';
+  var port = window.location.port ? ':' + window.location.port : '';
   window.location.origin = window.location.protocol + '//' + window.location.hostname + port;
 }
 
@@ -17,13 +20,16 @@ function hideLoading() {
 }
 
 function getCookie(key) {
-  // jscs:disable
+  /* jscs: disable */
+  /* eslint-disable */
   return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
-  // jscs:enable
+  /* jscs: enable */
+  /* eslint-enable */
 }
 
 function setCookie(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-  // jscs:disable
+  /* jscs: disable */
+  /* eslint-disable */
   if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
   var sExpires = '';
   if (vEnd) {
@@ -43,7 +49,23 @@ function setCookie(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
   document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '');
 
   return true;
-  // jscs:enable
+  /* jscs: enable */
+  /* eslint-enable */
+}
+
+function getQueryParams(qs) {
+  var params = {};
+  var parts = qs.substring(1).split('&');
+  for (var i = 0; i < parts.length; i++) {
+    var nv = parts[i].split('=');
+    if (!nv[0]) {
+      continue;
+    }
+
+    params[nv[0]] = nv[1] || true;
+  }
+
+  return params;
 }
 
 function makeTripsRecent(trips) {
@@ -87,80 +109,21 @@ function redirectToLogin() {
   window.location = $('.login-link').attr('href');
 }
 
-function fetchAllTrips(cb, progressCb) {
-  var queryParams = getQueryParams(document.location.search);
-  var accessToken = getAccessToken();
-  var ts = sessionStorage.getItem('labs_ts');
-  var trips = [];
-  var oneHourAgo = Date.now() - (60 * 60 * 1000);
-
-  if (queryParams.demo) {
-    $('.loading').show();
-    return fetchDemoTrips(cb);
-  }
-
-  if (!accessToken) {
-    redirectToLogin();
-    return;
-  }
-
-  function handleTripResults(results) {
-    if (results && results.results) {
-      trips = trips.concat(results.results);
-
-      if (results._metadata.next) {
-        var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
-        progressCb(trips.length + ' of ' + count + ' trips');
-        fetchTripsPage(results._metadata.next, handleTripResults, handleTripError);
-      } else {
-        returnTrips(trips, cb);
-      }
-    }
-  }
-
-  function handleTripError(jqXHR, textStatus, errorThrown) {
-    console.error(errorThrown);
-    returnTrips(trips, cb);
-  }
-
-  if (!ts || ts < oneHourAgo) {
-    showLoading();
-    fetchTripsPage('https://api.automatic.com/trip/?limit=250&page=1', handleTripResults, handleTripError);
-  } else {
-    trips = getCachedTrips();
-    cb(trips);
+function cacheVehicles(vehicles) {
+  try {
+    sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
+    sessionStorage.setItem('labs_vehicles_ts', Date.now());
+  } catch (e) {
+    sessionStorage.clear();
   }
 }
 
-function fetchTripsPage(url, cb, errCb) {
-  var queryParams = getQueryParams(document.location.search);
-  var accessToken = getAccessToken();
-
-  if (queryParams.demo) {
-    return fetchDemoTrips(function(trips) {
-      cb({results: trips});
-    });
+function cacheTrip(trip) {
+  try {
+    sessionStorage.setItem('labs_' + trip.id, JSON.stringify(_.omit(trip, 'vehicle_events')));
+  } catch (e) {
+    sessionStorage.clear();
   }
-
-  if (!accessToken) {
-    redirectToLogin();
-    return;
-  }
-
-  $.ajax({
-    url: url,
-    headers: {
-      Authorization: 'bearer ' + accessToken
-    }
-  })
-  .done(cb)
-  .fail(errCb);
-}
-
-function returnTrips(trips, cb) {
-  cacheTrips(trips);
-  hideLoading();
-  cb(trips);
 }
 
 function cacheTrips(trips) {
@@ -177,11 +140,94 @@ function cacheTrips(trips) {
   });
 }
 
-function cacheTrip(trip) {
-  try {
-    sessionStorage.setItem('labs_' + trip.id, JSON.stringify(_.omit(trip, 'vehicle_events')));
-  } catch (e) {
-    sessionStorage.clear();
+function getCachedTrips(tripId) {
+  if (tripId) {
+    // get specific cached trip
+    return JSON.parse(sessionStorage.getItem('labs_' + tripId) || '{}');
+  }
+
+  // get all cached trips
+  var order = JSON.parse(sessionStorage.getItem('labs_order') || '[]');
+  return order.map(function(id) { return JSON.parse(sessionStorage.getItem('labs_' + id) || {}); });
+}
+
+function getCachedVehicles() {
+  return JSON.parse(sessionStorage.getItem('labs_vehicles') || '[]');
+}
+
+function returnTrips(trips, cb) {
+  cacheTrips(trips);
+  hideLoading();
+  cb(trips);
+}
+
+function fetchTripsPage(url, cb, errCb) {
+  var queryParams = getQueryParams(document.location.search);
+  var accessToken = getAccessToken();
+
+  if (queryParams.demo) {
+    return fetchDemoTrips(function(trips) {
+      cb({ results: trips });
+    });
+  }
+
+  if (!accessToken) {
+    redirectToLogin();
+    return false;
+  }
+
+  $.ajax({
+    url: url,
+    headers: {
+      Authorization: 'bearer ' + accessToken
+    }
+  })
+  .done(cb)
+  .fail(errCb);
+}
+
+function fetchAllTrips(cb, progressCb) {
+  var queryParams = getQueryParams(document.location.search);
+  var accessToken = getAccessToken();
+  var ts = sessionStorage.getItem('labs_ts');
+  var trips = [];
+  var oneHourAgo = Date.now() - (60 * 60 * 1000);
+
+  if (queryParams.demo) {
+    $('.loading').show();
+    return fetchDemoTrips(cb);
+  }
+
+  if (!accessToken) {
+    redirectToLogin();
+    return false;
+  }
+
+  function handleTripError(jqXHR, textStatus, errorThrown) {
+    console.error(errorThrown);
+    returnTrips(trips, cb);
+  }
+
+  function handleTripResults(results) {
+    if (results && results.results) {
+      trips = trips.concat(results.results);
+
+      if (results._metadata.next) {
+        var count = (results && results._metadata && results._metadata.count) ? results._metadata.count : '';
+        progressCb(trips.length + ' of ' + count + ' trips');
+        fetchTripsPage(results._metadata.next, handleTripResults, handleTripError);
+      } else {
+        returnTrips(trips, cb);
+      }
+    }
+  }
+
+  if (!ts || ts < oneHourAgo) {
+    showLoading();
+    fetchTripsPage('https://api.automatic.com/trip/?limit=250&page=1', handleTripResults, handleTripError);
+  } else {
+    trips = getCachedTrips();
+    cb(trips);
   }
 }
 
@@ -197,7 +243,7 @@ function fetchVehicles(cb) {
 
   if (!accessToken) {
     redirectToLogin();
-    return;
+    return false;
   }
 
   if (!ts || ts < oneHourAgo) {
@@ -222,30 +268,6 @@ function fetchVehicles(cb) {
   }
 }
 
-function cacheVehicles(vehicles) {
-  try {
-    sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
-    sessionStorage.setItem('labs_vehicles_ts', Date.now());
-  } catch (e) {
-    sessionStorage.clear();
-  }
-}
-
-function getCachedTrips(trip_id) {
-  if (trip_id) {
-    // get specific cached trip
-    return JSON.parse(sessionStorage.getItem('labs_' + trip_id) || '{}');
-  } else {
-    // get all cached trips
-    var order = JSON.parse(sessionStorage.getItem('labs_order') || '[]');
-    return order.map(function(trip_id) { return JSON.parse(sessionStorage.getItem('labs_' + trip_id) || {}); });
-  }
-}
-
-function getCachedVehicles() {
-  return JSON.parse(sessionStorage.getItem('labs_vehicles') || '[]');
-}
-
 function fetchUser(cb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = getAccessToken();
@@ -259,7 +281,7 @@ function fetchUser(cb) {
 
   if (!accessToken) {
     redirectToLogin();
-    return;
+    return false;
   }
 
   $.ajax({
@@ -335,21 +357,6 @@ function formatAddress(address) {
   return address;
 }
 
-function getQueryParams(qs) {
-  var params = {};
-  var parts = qs.substring(1).split('&');
-  for (var i = 0; i < parts.length; i++) {
-    var nv = parts[i].split('=');
-    if (!nv[0]) {
-      continue;
-    }
-
-    params[nv[0]] = nv[1] || true;
-  }
-
-  return params;
-}
-
 function formatForDemo() {
   var queryParams = getQueryParams(document.location.search);
   if (queryParams.demo) {
@@ -371,7 +378,7 @@ function calculateDistanceMi(lat1, lon1, lat2, lon2) {
     return (degree * (Math.PI / 180));
   }
 
-  var radius = 3959.0; //Earth Radius in mi
+  var radius = 3959.0; // Earth Radius in mi
   var radianLat1 = toRadians(lat1);
   var radianLon1 = toRadians(lon1);
   var radianLat2 = toRadians(lat2);

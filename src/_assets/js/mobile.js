@@ -1,41 +1,42 @@
 import moment from 'moment';
 
-exports.isAndroid = function() {
+exports.isAndroid = function isAndroid() {
   return /Android/i.test(navigator.userAgent);
 };
 
-exports.isIOS = function() {
+exports.isIOS = function isIOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 };
 
-exports.iOSAppCheck = function(e) {
-  //wait a bit, if user doesn't have app ask if they would like to download it.
+exports.iOSAppCheck = function iOSAppCheck(e) {
+  // wait a bit, if user doesn't have app ask if they would like to download it.
   document.location = e.target.href;
-  let time = moment();
+  const time = moment();
   setTimeout(() => {
     if (moment().diff(time) < 400) {
+      /* eslint-disable no-alert */
       if (confirm('You do not seem to have Automatic installed. Would you like to download it from the app store?')) {
         document.location = 'https://itunes.apple.com/us/app/automatic/id596594365?mt=8';
       }
+      /* eslint-enable no-alert */
     }
   }, 300);
 };
 
-exports.androidAppCheck = function(e) {
-  // jscs:disable maximumLineLength
-  //from http://stackoverflow.com/questions/7231085/how-to-fall-back-to-marketplace-when-android-custom-url-scheme-not-handled
-  // jscs:enable maximumLineLength
-  let custom = 'automatic://goto?id=insights_screen';
-  let alt = 'http://play.google.com/store/apps/details?id=com.automatic';
-  let g_intent = 'intent://scan/#Intent;scheme=automatic;package=com.automatic;end';
+exports.androidAppCheck = function androidAppCheck(e) {
+  // from http://stackoverflow.com/
+  // questions/7231085/how-to-fall-back-to-marketplace-when-android-custom-url-scheme-not-handled
+  const custom = 'automatic://goto?id=insights_screen';
+  const alt = 'http://play.google.com/store/apps/details?id=com.automatic';
+  const gIntent = 'intent://scan/#Intent;scheme=automatic;package=com.automatic;end';
   let timer;
   let heartbeat;
-  let iframe_timer;
+  let iframeTimer;
 
   function clearTimers() {
     clearTimeout(timer);
     clearTimeout(heartbeat);
-    clearTimeout(iframe_timer);
+    clearTimeout(iframeTimer);
   }
 
   function intervalHeartbeat() {
@@ -45,7 +46,7 @@ exports.androidAppCheck = function(e) {
   }
 
   function tryIframeApproach() {
-    var iframe = document.createElement('iframe');
+    const iframe = document.createElement('iframe');
     iframe.style.border = 'none';
     iframe.style.width = '1px';
     iframe.style.height = '1px';
@@ -65,16 +66,16 @@ exports.androidAppCheck = function(e) {
   }
 
   function useIntent() {
-    document.location = g_intent;
+    document.location = gIntent;
   }
 
-  function launch_app_or_alt_url() {
+  function launchAppOrAltUrl() {
     heartbeat = setInterval(intervalHeartbeat, 200);
     if (navigator.userAgent.match(/Chrome/)) {
       useIntent();
     } else if (navigator.userAgent.match(/Firefox/)) {
       tryWebkitApproach();
-      iframe_timer = setTimeout(() => {
+      iframeTimer = setTimeout(() => {
         tryIframeApproach();
       }, 1500);
     } else {
@@ -82,6 +83,6 @@ exports.androidAppCheck = function(e) {
     }
   }
 
-  launch_app_or_alt_url();
+  launchAppOrAltUrl();
   e.preventDefault();
 };

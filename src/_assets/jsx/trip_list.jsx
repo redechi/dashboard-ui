@@ -46,18 +46,26 @@ module.exports = class TripList extends React.Component {
     };
 
     this.reverseSortDirection = () => {
-      this.setState({sortDirection: this.state.sortDirection === 'down' ? 'up' : 'down'});
+      this.setState({
+        sortDirection: this.state.sortDirection === 'down' ? 'up' : 'down'
+      });
     };
 
     this.setSortType = (sortType) => {
       this.refs.sortTypePopover.hide();
-      this.setState({sortType: sortType});
+      this.setState({
+        sortType: sortType
+      });
     };
 
     this.export = (type) => {
-      this.setState({exporting: true});
+      this.setState({
+        exporting: true
+      });
       this.props.export(type, (e, blobUrl) => {
-        this.setState({exporting: false});
+        this.setState({
+          exporting: false
+        });
         if (e && e === 'not_supported') {
           alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
         }
@@ -81,11 +89,15 @@ module.exports = class TripList extends React.Component {
     };
 
     this.hideModal = () => {
-      this.setState({showModal: false});
+      this.setState({
+        showModal: false
+      });
     };
 
     this.hideExportModal = () => {
-      this.setState({showExportModal: false});
+      this.setState({
+        showExportModal: false
+      });
     };
 
     this.showPreviousTrip = () => {
@@ -197,7 +209,7 @@ module.exports = class TripList extends React.Component {
         <div className="trips-header">
           <div className="trip-count">{this.props.trips.length} Trips</div>
           <div
-            className={classNames('sort-direction', {'sort-up': this.state.sortDirection === 'up'})}
+            className={classNames('sort-direction', { 'sort-up': this.state.sortDirection === 'up' })}
             onClick={this.reverseSortDirection}></div>
           <OverlayTrigger placement="bottom" trigger="click" ref="sortTypePopover" overlay={sortTypePopover}>
             <div className="sort-type">{selectedSortType.name} <i className="fa fa-angle-down fa-lg"></i></div>
@@ -205,7 +217,7 @@ module.exports = class TripList extends React.Component {
         </div>
 
         <div className="trips">
-          <ul style={{height: this.getTripListHeight()}}>
+          <ul style={{ height: this.getTripListHeight() }}>
             {trips}
           </ul>
         </div>
@@ -215,7 +227,7 @@ module.exports = class TripList extends React.Component {
             {this.props.allSelected ? 'Deselect all' : 'Select all'}
           </div>
           <OverlayTrigger placement="top" trigger="click" ref="exportPopover" overlay={exportPopover}>
-            <div className={classNames('export', {active: this.props.exporting})}><i></i> Export</div>
+            <div className={classNames('export', { active: this.props.exporting })}><i></i> Export</div>
           </OverlayTrigger>
         </div>
 
@@ -261,7 +273,7 @@ module.exports = class TripList extends React.Component {
                   <div className="value">{formatters.cost(trip.fuel_cost_usd)}</div>
                   <label>Fuel</label>
                 </div>
-                <div className={classNames('duration', 'stat', {hours: trip.duration_s >= (60 * 60)})}>
+                <div className={classNames('duration', 'stat', { hours: trip.duration_s >= (60 * 60) })}>
                     <div className="value">{formatters.duration(trip.duration_s)}</div>
                     <label>{trip.duration_s >= (60 * 60) ? 'Hours' : 'Minutes'}</label>
                 </div>

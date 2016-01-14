@@ -32,7 +32,7 @@ class App extends React.Component {
     return (
       <div>
         <Header {...this.props} />
-        {React.cloneElement(this.props.children, {refreshApp: this.refreshApp})}
+        {React.cloneElement(this.props.children, { refreshApp: this.refreshApp })}
       </div>
     );
   }

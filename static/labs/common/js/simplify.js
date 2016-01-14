@@ -1,4 +1,5 @@
 /* jscs: disable */
+/* eslint-disable */
 
 /*
  (c) 2013, Vladimir Agafonkin

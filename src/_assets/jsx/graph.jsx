@@ -45,7 +45,9 @@ module.exports = class Graph extends React.Component {
 
     this.setGraphType = (graphType) => {
       this.refs.graphTypePopover.hide();
-      this.setState({graphType: graphType});
+      this.setState({
+        graphType: graphType
+      });
     };
   }
 

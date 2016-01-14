@@ -35,7 +35,7 @@ module.exports = class Trip extends React.Component {
     return (
       <li
         id={trip.id}
-        className={classNames({selected: trip.selected})}
+        className={classNames({ selected: trip.selected })}
         onMouseEnter={highlight.highlightTrips.bind(null, [trip])}
         onMouseLeave={highlight.unhighlightTrips}
         onClick={this.showModal}>
@@ -71,24 +71,24 @@ module.exports = class Trip extends React.Component {
             <div className="cost stat">
               {formatters.cost(trip.fuel_cost_usd)}
             </div>
-            <div className={classNames('duration', 'stat', {hours: trip.duration_s >= (60 * 60)})}>
+            <div className={classNames('duration', 'stat', { hours: trip.duration_s >= (60 * 60) })}>
               {formatters.duration(trip.duration_s)}
             </div>
           </div>
 
           <div className="trip-events">
             <div className="event">
-              <div className={classNames('hard-brakes', {none: trip.hard_brakes === 0})}>
+              <div className={classNames('hard-brakes', { none: trip.hard_brakes === 0 })}>
                 {trip.hard_brakes}
               </div>
             </div>
             <div className="event">
-              <div className={classNames('speeding', {none: trip.duration_over_70_s === 0})}>
+              <div className={classNames('speeding', { none: trip.duration_over_70_s === 0 })}>
                 {formatters.durationMinutes(trip.duration_over_70_s)}
               </div>
             </div>
             <div className="event">
-              <div className={classNames('hard-accels', {none: trip.hard_accels === 0})}>
+              <div className={classNames('hard-accels', { none: trip.hard_accels === 0 })}>
                 {trip.hard_accels}
               </div>
             </div>

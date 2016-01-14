@@ -22,7 +22,9 @@ module.exports = class Filters extends React.Component {
         this.refs.filterTypePopover.hide();
       }
 
-      this.setState({undoCount: this.state.undoCount + 1});
+      this.setState({
+        undoCount: this.state.undoCount + 1
+      });
     };
 
     this.addFilter = filterName => {
@@ -32,12 +34,16 @@ module.exports = class Filters extends React.Component {
         this.refs.filterTypePopover.hide();
       }
 
-      this.setState({undoCount: this.state.undoCount + 1});
+      this.setState({
+        undoCount: this.state.undoCount + 1
+      });
     };
 
     this.undoFilter = () => {
       if (this.state.undoCount > 0) {
-        this.setState({undoCount: this.state.undoCount - 1});
+        this.setState({
+          undoCount: this.state.undoCount - 1
+        });
         this.props.undoFilter();
       }
     };
@@ -89,7 +95,7 @@ module.exports = class Filters extends React.Component {
         <ul className="filter-controls">
           <label>Filters:</label>
           <li
-            className={classNames('undo', 'btn', 'btn-filter', {disabled: this.state.undoCount < 1})}
+            className={classNames('undo', 'btn', 'btn-filter', { disabled: this.state.undoCount < 1 })}
             onClick={this.undoFilter}>
             Undo
           </li>
@@ -109,6 +115,8 @@ module.exports = class Filters extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({showPopover: true});
+    this.setState({
+      showPopover: true
+    });
   }
 };

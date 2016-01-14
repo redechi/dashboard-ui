@@ -48,7 +48,7 @@ module.exports = class ConnectedApps extends React.Component {
 
     this.disconnectApp = (appId) => {
       let apps = _.reject(this.state.apps, app => app.id === appId);
-      this.setState({apps: apps});
+      this.setState({ apps: apps });
     };
   }
 

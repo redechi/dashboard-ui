@@ -10,7 +10,7 @@ module.exports = class TripStats extends React.Component {
   scorePieChart() {
     let score = this.props.totals.score;
     let scoreColor = formatters.scoreColor(this.props.totals.score);
-    let data = [{value: score}];
+    let data = [{ value: score }];
 
     let w = 40;
     let h = 40;
