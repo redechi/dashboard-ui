@@ -53,7 +53,7 @@ function tripToArray(trip) {
     trip.end_address ? trip.end_address.name : '',
     formatters.formatTime(trip.ended_at, trip.end_time_zone, 'YYYY-MM-DD h:mm A'),
     trip.distance_miles.toFixed(2) || 0,
-    moment.duration('seconds', trip.duration_s).asMinutes().toFixed(2) || 0,
+    moment.duration(trip.duration_s, 'seconds').asMinutes().toFixed(2) || 0,
     trip.fuel_cost_usd,
     trip.average_mpg.toFixed(2) || 0,
     trip.fuel_volume_gal.toFixed(2) || 0,
