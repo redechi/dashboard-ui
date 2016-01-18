@@ -1,6 +1,6 @@
 import React from 'react';
 
-module.exports = class UnsupportedBrowser extends React.Component {
+class UnsupportedBrowser extends React.Component {
   render() {
     return (
       <div className="unsupported-browser">
@@ -18,4 +18,6 @@ module.exports = class UnsupportedBrowser extends React.Component {
       </div>
     );
   }
-};
+}
+
+module.exports = UnsupportedBrowser;

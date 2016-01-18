@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 const map = require('../js/map');
 
-module.exports = class Map extends React.Component {
+class Map extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,12 +28,24 @@ module.exports = class Map extends React.Component {
     };
   }
 
+  componentDidMount() {
+    map.createMap();
+    map.updateMap(this.props.trips);
+    this.toggleTripEvents();
+  }
+
+  componentDidUpdate() {
+    map.updateMap(this.props.trips);
+  }
+
   getMapHeight() {
-    let verticalPadding = 367;
+    const verticalPadding = 367;
     return this.props.windowHeight - this.props.filterHeight - verticalPadding;
   }
 
   render() {
+    const totals = this.props.totals || {};
+
     return (
       <div className="map">
         <div className="map-container" id="overviewMapContainer" style={{ height: this.getMapHeight() }}></div>
@@ -52,22 +64,23 @@ module.exports = class Map extends React.Component {
                 className="show-trip-events"
                 ref="showTripEvents"
                 onChange={this.toggleTripEvents}
-                defaultChecked={true} /> View
+                defaultChecked="true"
+              /> View
             </label>
             <div className={classNames('trip-events', { grey: !this.state.showTripEvents })}>
               <div className="event">
-                <div className={classNames('hard-brakes', { none: this.props.totals.hardBrakes === 0 })}>
-                  {this.props.totals.hardBrakes}
+                <div className={classNames('hard-brakes', { none: totals.hardBrakes === 0 })}>
+                  {totals.hardBrakes}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('speeding', { none: this.props.totals.speedingMinutes === 0 })}>
-                  {this.props.totals.speedingMinutes}
+                <div className={classNames('speeding', { none: totals.speedingMinutes === 0 })}>
+                  {totals.speedingMinutes}
                 </div>
               </div>
               <div className="event">
-                <div className={classNames('hard-accels', { none: this.props.totals.hardAccels === 0 })}>
-                  {this.props.totals.hardAccels}
+                <div className={classNames('hard-accels', { none: totals.hardAccels === 0 })}>
+                  {totals.hardAccels}
                 </div>
               </div>
             </div>
@@ -76,14 +89,12 @@ module.exports = class Map extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    map.createMap();
-    map.updateMap(this.props.trips, this.props.toggleSelect);
-    this.toggleTripEvents();
-  }
-
-  componentDidUpdate() {
-    map.updateMap(this.props.trips, this.props.toggleSelect);
-  }
+}
+Map.propTypes = {
+  filterHeight: React.PropTypes.number,
+  totals: React.PropTypes.object,
+  trips: React.PropTypes.array,
+  windowHeight: React.PropTypes.number
 };
+
+module.exports = Map;

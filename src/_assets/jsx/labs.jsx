@@ -2,89 +2,90 @@ import React from 'react';
 
 const login = require('../js/login');
 
-class Lab extends React.Component {
-  constructor(props) {
-    super(props);
+/* jscs:disable maximumLineLength */
+/* eslint-disable max-len */
+const labs = [
+  {
+    name: 'year-in-review',
+    image: '/_assets/images/labs/year-in-review.png',
+    title: '2015 Year In Review',
+    description: 'A summary of your driving in 2015.'
+  },
+  {
+    name: 'hyperlapse',
+    image: '/_assets/images/labs/hyperlapse.gif',
+    title: 'Hyperlapse Generator',
+    description: 'Re-live any of your past drives with Google Streetview imagery of the route stitched into a time-lapse video.'
+  },
+  {
+    name: 'heatmap',
+    image: '/_assets/images/labs/heatmap.png',
+    title: 'Heatmap',
+    description: 'Each place you\'ve gone with Automatic shown as a heatmap.'
+  },
+  {
+    name: 'nightmap',
+    image: '/_assets/images/labs/nightmap.png',
+    title: 'Trip Line Map',
+    description: 'All of your driving ever overlaid on a minimial, nighttime map. Simple and beautiful.'
+  },
+  {
+    name: 'countymap',
+    image: '/_assets/images/labs/countymap.png',
+    title: 'County Driving Map',
+    description: 'A map of all US counties and states that you have driven to. Collect them all!'
+  },
+  {
+    name: 'carbon',
+    image: '/_assets/images/labs/carbon.png',
+    title: 'Carbon Calculator',
+    description: 'Estimate your carbon footprint, Automatically.'
+  },
+  {
+    name: 'commute-analyzer',
+    image: '/_assets/images/labs/commute-analyzer.png',
+    title: 'Commute Analyzer',
+    description: 'Break down your commute duration by direction, day of week and departure time.'
+  },
+  {
+    name: 'receipt',
+    image: '/_assets/images/labs/receipt.png',
+    title: 'Trip Receipts',
+    description: 'Download or print a receipt with a map for any trip you\'ve taken with Automatic.'
+  },
+  {
+    name: 'relocate',
+    image: '/_assets/images/labs/relocate.png',
+    title: 'Relocate your commute',
+    description: 'Map your current commute patterns on top of a different city. See your daily drives along the canals of Venice or the beaches of Rio.'
   }
+];
 
-  render() {
-    let demoParam = this.props.isLoggedIn ? '' : '?demo';
+/* eslint-enable max-len */
+/* jscs:enable maximumLineLength */
 
-    return (
-      <li>
-        <a href={`/labs/${this.props.lab.name}/${`index`}.html${demoParam}`} className="labs-link">
-          <img src={this.props.lab.image} className="labs-icon" />
-          <h3 className="labs-title">{this.props.lab.title}</h3>
-          <div className="labs-description">{this.props.lab.description}</div>
-        </a>
-      </li>
-    );
-  }
+function Lab(props) {
+  const demoParam = props.isLoggedIn ? '' : '?demo';
+
+  return (
+    <li>
+      <a href={`/labs/${props.lab.name}/${`index`}.html${demoParam}`} className="labs-link">
+        <img src={props.lab.image} className="labs-icon" />
+        <h3 className="labs-title">{props.lab.title}</h3>
+        <div className="labs-description">{props.lab.description}</div>
+      </a>
+    </li>
+  );
 }
 
-module.exports = class Labs extends React.Component {
+Lab.propTypes = {
+  isLoggedIn: React.PropTypes.boolean,
+  lab: React.PropTypes.object.isRequired
+};
+
+class Labs extends React.Component {
   render() {
-    // jscs:disable maximumLineLength
-    let labs = [
-      {
-        name: 'year-in-review',
-        image: '/_assets/images/labs/year-in-review.png',
-        title: '2015 Year In Review',
-        description: 'A summary of your driving in 2015.'
-      },
-      {
-        name: 'hyperlapse',
-        image: '/_assets/images/labs/hyperlapse.gif',
-        title: 'Hyperlapse Generator',
-        description: 'Re-live any of your past drives with Google Streetview imagery of the route stitched into a time-lapse video.'
-      },
-      {
-        name: 'heatmap',
-        image: '/_assets/images/labs/heatmap.png',
-        title: 'Heatmap',
-        description: 'Each place you\'ve gone with Automatic shown as a heatmap.'
-      },
-      {
-        name: 'nightmap',
-        image: '/_assets/images/labs/nightmap.png',
-        title: 'Trip Line Map',
-        description: 'All of your driving ever overlaid on a minimial, nighttime map. Simple and beautiful.'
-      },
-      {
-        name: 'countymap',
-        image: '/_assets/images/labs/countymap.png',
-        title: 'County Driving Map',
-        description: 'A map of all US counties and states that you have driven to. Collect them all!'
-      },
-      {
-        name: 'carbon',
-        image: '/_assets/images/labs/carbon.png',
-        title: 'Carbon Calculator',
-        description: 'Estimate your carbon footprint, Automatically.'
-      },
-      {
-        name: 'commute-analyzer',
-        image: '/_assets/images/labs/commute-analyzer.png',
-        title: 'Commute Analyzer',
-        description: 'Break down your commute duration by direction, day of week and departure time.'
-      },
-      {
-        name: 'receipt',
-        image: '/_assets/images/labs/receipt.png',
-        title: 'Trip Receipts',
-        description: 'Download or print a receipt with a map for any trip you\'ve taken with Automatic.'
-      },
-      {
-        name: 'relocate',
-        image: '/_assets/images/labs/relocate.png',
-        title: 'Relocate your commute',
-        description: 'Map your current commute patterns on top of a different city. See your daily drives along the canals of Venice or the beaches of Rio.'
-      }
-    ];
-
-    // jscs:enable maximumLineLength
-
-    let labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={login.isLoggedIn()} />);
+    const labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={login.isLoggedIn()} />);
 
     return (
       <div className="main">
@@ -104,4 +105,6 @@ module.exports = class Labs extends React.Component {
       </div>
     );
   }
-};
+}
+
+module.exports = Labs;

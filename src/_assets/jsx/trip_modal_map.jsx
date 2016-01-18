@@ -4,7 +4,7 @@ import classNames from 'classnames';
 const formatters = require('../js/formatters');
 const map = require('../js/trip_modal_map');
 
-module.exports = class Map extends React.Component {
+class TripModalMap extends React.Component {
   constructor(props) {
     super(props);
 
@@ -25,6 +25,16 @@ module.exports = class Map extends React.Component {
     };
   }
 
+  componentDidMount() {
+    map.createMap();
+    map.updateMap(this.props.trip);
+    this.toggleTripEvents();
+  }
+
+  componentDidUpdate() {
+    map.updateMap(this.props.trip);
+  }
+
   render() {
     return (
       <div className="map">
@@ -41,7 +51,8 @@ module.exports = class Map extends React.Component {
                 className="show-trip-events"
                 ref="showTripEvents"
                 onChange={this.toggleTripEvents}
-                defaultChecked={true} /> View
+                defaultChecked="true"
+              /> View
             </label>
             <div className={classNames('trip-events', { grey: !this.state.showTripEvents })}>
               <div className="event">
@@ -65,14 +76,9 @@ module.exports = class Map extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    map.createMap();
-    map.updateMap(this.props.trip);
-    this.toggleTripEvents();
-  }
-
-  componentDidUpdate() {
-    map.updateMap(this.props.trip);
-  }
+}
+TripModalMap.propTypes = {
+  trip: React.PropTypes.object.isRequired
 };
+
+module.exports = TripModalMap;

@@ -30,7 +30,10 @@ const {
   DEV_WEBPACK_SERVER_PORT: '8081',
   DEPLOY_TARGET: 'aws',
   SITE_URL: '/',
-  SITE_BASE_PATH: '/'
+  SITE_BASE_PATH: '/',
+  AWS_ACCESS_KEY_ID: '06TDHGMFC4ACQ61V2782',
+  AWS_SECRET_ACCESS_KEY: 'Anydq9lMpNiflEbn3GX6EwoScX+gcpik4RcDbkH8',
+  AWS_BUCKET: 'automatictest'
 });
 
 const IS_PROD = any([

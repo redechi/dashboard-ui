@@ -4,8 +4,12 @@ import classNames from 'classnames';
 import _ from 'lodash';
 import moment from 'moment';
 
+const alert = require('../js/alert');
+const exportData = require('../js/export_data');
 const formatters = require('../js/formatters');
+const select = require('../js/select');
 
+const ListItem = require('./list_item.jsx');
 const ModalMap = require('./trip_modal_map.jsx');
 const Trip = require('./trip.jsx');
 
@@ -32,7 +36,7 @@ const sortTypes = [
   }
 ];
 
-module.exports = class TripList extends React.Component {
+class TripList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +46,8 @@ module.exports = class TripList extends React.Component {
       showModal: false,
       exporting: false,
       modalTrip: {},
-      showExportModal: false
+      showExportModal: false,
+      selectionControlText: 'Select all'
     };
 
     this.reverseSortDirection = () => {
@@ -53,16 +58,29 @@ module.exports = class TripList extends React.Component {
 
     this.setSortType = (sortType) => {
       this.refs.sortTypePopover.hide();
-      this.setState({
-        sortType: sortType
-      });
+      this.setState({ sortType });
     };
 
     this.export = (type) => {
       this.setState({
         exporting: true
       });
-      this.props.export(type, (e, blobUrl) => {
+
+      let trips;
+      if (type === 'selected') {
+        const selectedTripIds = select.getSelected();
+        trips = _.filter(this.props.trips, trip => _.contains(selectedTripIds, trip.id));
+      } else if (type === 'tripList') {
+        trips = this.props.trips;
+      } else if (type === 'all') {
+        trips = this.state.allTrips;
+      }
+
+      if (!trips || !trips.length) {
+        return alert('Please Select at least one trip');
+      }
+
+      exportData.trips(trips, (e, blobUrl) => {
         this.setState({
           exporting: false
         });
@@ -73,7 +91,7 @@ module.exports = class TripList extends React.Component {
         if (blobUrl) {
           this.setState({
             showExportModal: true,
-            blobUrl: blobUrl
+            blobUrl
           });
         }
 
@@ -121,11 +139,30 @@ module.exports = class TripList extends React.Component {
         });
       }
     };
+
+    this.toggleSelectAll = () => {
+      if (select.areAllSelected()) {
+        select.deselectTrips(this.props.trips);
+        this.setState({
+          selectionControlText: 'Select all'
+        });
+      } else {
+        select.selectTrips(this.props.trips);
+        this.setState({
+          selectionControlText: 'Deselect all'
+        });
+      }
+    };
+  }
+
+  getTripListHeight() {
+    const verticalPadding = 233;
+    return this.props.windowHeight - this.props.filterHeight - verticalPadding;
   }
 
   sortTrips() {
     return _.sortBy(this.props.trips, (trip) => {
-      let direction = this.state.sortDirection === 'down' ? -1 : 1;
+      const direction = this.state.sortDirection === 'down' ? -1 : 1;
       if (this.state.sortType === 'started_at') {
         return moment(trip.started_at).valueOf() * direction;
       } else if (this.state.sortType === 'distance_m') {
@@ -140,56 +177,50 @@ module.exports = class TripList extends React.Component {
     });
   }
 
-  getTripListHeight() {
-    let verticalPadding = 233;
-    return this.props.windowHeight - this.props.filterHeight - verticalPadding;
-  }
-
   render() {
     if (!this.props.trips) {
       return (<div/>);
     }
 
-    let selectedSortType = _.find(sortTypes, (item) => item.key === this.state.sortType);
+    const selectedSortType = _.find(sortTypes, (item) => item.key === this.state.sortType);
 
-    let trips = this.sortTrips().map((trip, key) => {
+    const trips = this.sortTrips().map((trip, key) => {
       return (
-        <Trip
-          trip={trip}
-          toggleSelect={this.props.toggleSelect}
-          showModal={this.showModal}
-          key={key}/>
+        <Trip trip={trip} showModal={this.showModal} key={key}/>
       );
     });
 
-    let sortTypePopover = (
+    const sortTypePopover = (
       <Popover id="sortType" title="Sort By" className="popover-sort-type">
         <ul className="list-select animate">
-          {sortTypes.map((sortType) => {
-            return (
-              <li onClick={this.setSortType.bind(null, sortType.key)} key={sortType.key}>
-                {sortType.name}
-              </li>
-            );
-          })}
+          {sortTypes.map(sortType =>
+            <ListItem key={sortType.key} item={sortType} onItemClick={this.setSortType} />
+          )}
         </ul>
       </Popover>
     );
 
-    let selectedTripCount = _.size(_.filter(this.props.trips, (trip) => trip.selected));
+    const exportPopoverOptions = [
+      {
+        key: 'selected',
+        name: 'Export selected trips'
+      },
+      {
+        key: 'tripList',
+        name: `Export trips currently in trip list (${this.props.trips.length})`
+      },
+      {
+        key: 'all',
+        name: 'Export all trips'
+      }
+    ];
 
-    let exportPopover = (
+    const exportPopover = (
       <Popover id="export" title="Export trips to .csv" className="popover-export">
         <ul className="list-select animate">
-          <li onClick={this.export.bind(null, 'selected')}>
-            Export selected trips ({selectedTripCount})
-          </li>
-          <li onClick={this.export.bind(null, 'tripList')}>
-            Export trips currently in trip list ({this.props.trips.length})
-          </li>
-          <li onClick={this.export.bind(null, 'all')}>
-            Export all trips
-          </li>
+          {exportPopoverOptions.map(option =>
+            <ListItem key={option.key} item={option} onItemClick={this.export} />
+          )}
         </ul>
       </Popover>
     );
@@ -210,7 +241,8 @@ module.exports = class TripList extends React.Component {
           <div className="trip-count">{this.props.trips.length} Trips</div>
           <div
             className={classNames('sort-direction', { 'sort-up': this.state.sortDirection === 'up' })}
-            onClick={this.reverseSortDirection}></div>
+            onClick={this.reverseSortDirection}
+          ></div>
           <OverlayTrigger placement="bottom" trigger="click" ref="sortTypePopover" overlay={sortTypePopover}>
             <div className="sort-type">{selectedSortType.name} <i className="fa fa-angle-down fa-lg"></i></div>
           </OverlayTrigger>
@@ -223,9 +255,7 @@ module.exports = class TripList extends React.Component {
         </div>
 
         <div className="trips-footer">
-          <div className="selection-control" onClick={this.props.toggleSelectAll}>
-            {this.props.allSelected ? 'Deselect all' : 'Select all'}
-          </div>
+          <div className="selection-control" onClick={this.toggleSelectAll}>{this.state.selectionControlText}</div>
           <OverlayTrigger placement="top" trigger="click" ref="exportPopover" overlay={exportPopover}>
             <div className={classNames('export', { active: this.props.exporting })}><i></i> Export</div>
           </OverlayTrigger>
@@ -237,13 +267,15 @@ module.exports = class TripList extends React.Component {
             <div className="trip-navigation">
               <div
                 className={classNames('prev-trip', { hidden: this.state.modalTripIndex <= 1 })}
-                onClick={this.showPreviousTrip}>Previous Trip</div>
+                onClick={this.showPreviousTrip}
+              >Previous Trip</div>
               <span className="title">
                 Trip {this.state.modalTripIndex} of {this.props.trips.length}
               </span>
               <div
                 className={classNames('next-trip', { hidden: this.state.modalTripIndex >= this.props.trips.length })}
-                onClick={this.showNextTrip}>Next Trip</div>
+                onClick={this.showNextTrip}
+              >Next Trip</div>
             </div>
             <div className="trip-details">
               <div className="trip-header">
@@ -301,11 +333,20 @@ module.exports = class TripList extends React.Component {
               <a
                 className="btn btn-blue btn-close"
                 href={this.state.blobUrl}
-                onClick={this.hideExportModal}>Download now</a>
+                onClick={this.hideExportModal}
+              >Download now</a>
             </div>
           </Modal.Body>
         </Modal>
       </div>
     );
   }
+}
+TripList.propTypes = {
+  exporting: React.PropTypes.bool,
+  filterHeight: React.PropTypes.number,
+  trips: React.PropTypes.array,
+  windowHeight: React.PropTypes.number
 };
+
+module.exports = TripList;

@@ -1,9 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import { Modal } from 'react-bootstrap';
 
-const exportData = require('../js/export_data');
+const alert = require('../js/alert');
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
 const login = require('../js/login');
@@ -16,12 +15,11 @@ const Map = require('./map.jsx');
 const TripList = require('./trip_list.jsx');
 const TripStats = require('./trip_stats.jsx');
 
-module.exports = class Dashboard extends React.Component {
+class Dashboard extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      allSelected: false,
       allTrips: [],
       filters: filters.getFiltersFromQuery(this.props.location ? this.props.location.query : {}),
       windowHeight: window.innerHeight,
@@ -32,52 +30,6 @@ module.exports = class Dashboard extends React.Component {
       tripRequestMinDate: moment().valueOf(),
       showLoadingModal: true,
       loadingProgressText: ''
-    };
-
-    this.toggleSelect = (tripId) => {
-      let trip = _.findWhere(this.state.trips, { id: tripId });
-      trip.selected = !trip.selected;
-      this.setState({
-        allSelected: this.areAllSelected(),
-        trips: this.state.trips
-      });
-    };
-
-    this.toggleSelectAll = () => {
-      if (this.areAllSelected()) {
-        this.setState({
-          allSelected: false,
-          trips: this.state.trips.map((trip) => {
-            trip.selected = false;
-            return trip;
-          })
-        });
-      } else {
-        this.setState({
-          allSelected: true,
-          trips: this.state.trips.map((trip) => {
-            trip.selected = true;
-            return trip;
-          })
-        });
-      }
-    };
-
-    this.export = (exportType, cb) => {
-      let trips;
-      if (exportType === 'selected') {
-        trips = _.filter(this.state.trips, trip => trip.selected);
-      } else if (exportType === 'tripList') {
-        trips = this.state.trips;
-      } else if (exportType === 'all') {
-        trips = this.state.allTrips;
-      }
-
-      if (!trips || !trips.length) {
-        return alert('Please Select at least one trip');
-      }
-
-      exportData.trips(trips, cb);
     };
 
     this.handleResize = () => {
@@ -123,6 +75,16 @@ module.exports = class Dashboard extends React.Component {
     };
   }
 
+  componentDidMount() {
+    window.addEventListener('resize', this.handleResize);
+
+    this.getTrips();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  }
+
   setFilters(newFilters) {
     this.setState({
       filters: newFilters,
@@ -135,18 +97,14 @@ module.exports = class Dashboard extends React.Component {
     }, 100);
   }
 
-  areAllSelected() {
-    return _.every(this.state.trips, (trip) => trip.selected);
-  }
-
   getTrips() {
     // if demo mode and trips are already loaded, skip
     if (!login.isLoggedIn() && this.state.allTrips.length) {
       return;
     }
 
-    let dateFilterComponents = this.state.filters.date.split(',');
-    let startDate = parseInt(dateFilterComponents[0], 10);
+    const dateFilterComponents = this.state.filters.date.split(',');
+    const startDate = parseInt(dateFilterComponents[0], 10);
 
     if (startDate < this.state.tripRequestMinDate) {
       this.setState({
@@ -157,12 +115,12 @@ module.exports = class Dashboard extends React.Component {
           return alert('Unable to fetch data. Please try again later.');
         }
 
-        let allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
+        const allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
 
         this.setState({
-          allTrips: allTrips,
+          allTrips,
           trips: filters.filterTrips(allTrips, this.state.filters),
-          vehicles: vehicles,
+          vehicles,
           ranges: stats.calculateRanges(allTrips),
           tripRequestMinDate: startDate,
           showLoadingModal: false,
@@ -173,7 +131,7 @@ module.exports = class Dashboard extends React.Component {
   }
 
   render() {
-    let totals = stats.calculateTotals(this.state.trips);
+    const totals = stats.calculateTotals(this.state.trips);
 
     return (
       <div className="main">
@@ -184,33 +142,33 @@ module.exports = class Dashboard extends React.Component {
             updateFilter={this.updateFilter}
             resetFilters={this.resetFilters}
             undoFilter={this.undoFilter}
-            ranges={this.state.ranges} />
+            ranges={this.state.ranges}
+          />
           <div>
             <div className="right-column">
               <TripStats
                 trips={this.state.trips}
-                totals={totals} />
+                totals={totals}
+              />
               <TripList
                 trips={this.state.trips}
-                allSelected={this.state.allSelected}
-                toggleSelect={this.toggleSelect}
-                toggleSelectAll={this.toggleSelectAll}
-                export={this.export}
                 windowHeight={this.state.windowHeight}
-                filterHeight={this.state.filterHeight} />
+                filterHeight={this.state.filterHeight}
+              />
             </div>
             <div className="left-column">
               <Graph
                 trips={this.state.trips}
                 totals={totals}
                 filters={this.state.filters}
-                windowWidth={this.state.windowWidth} />
+                windowWidth={this.state.windowWidth}
+              />
               <Map
                 trips={this.state.trips}
                 totals={totals}
                 windowHeight={this.state.windowHeight}
                 filterHeight={this.state.filterHeight}
-                toggleSelect={this.toggleSelect} />
+              />
             </div>
           </div>
         </div>
@@ -223,14 +181,10 @@ module.exports = class Dashboard extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    window.addEventListener('resize', this.handleResize);
-
-    this.getTrips();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize);
-  }
+}
+Dashboard.propTypes = {
+  location: React.PropTypes.object.isRequired,
+  history: React.PropTypes.object
 };
+
+module.exports = Dashboard;

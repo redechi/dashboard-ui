@@ -5,13 +5,14 @@ import moment from 'moment';
 
 const formatters = require('../js/formatters');
 const highlight = require('../js/highlight');
+const select = require('../js/select');
 
-module.exports = class Trip extends React.Component {
+class Trip extends React.Component {
   constructor(props) {
     super(props);
 
     this.handleSelectChange = () => {
-      this.props.toggleSelect(this.props.trip.id);
+      select.toggleSelect(this.props.trip);
     };
 
     this.showModal = (e) => {
@@ -20,10 +21,18 @@ module.exports = class Trip extends React.Component {
         this.props.showModal(this.props.trip);
       }
     };
+
+    this.highlightTrips = () => {
+      highlight.highlightTrips([this.props.trip]);
+    };
+
+    this.unhighlightTrips = () => {
+      highlight.unhighlightTrips();
+    };
   }
 
   render() {
-    let trip = this.props.trip;
+    const trip = this.props.trip;
     let businessTag;
 
     if (_.contains(trip.tags, 'business')) {
@@ -35,10 +44,10 @@ module.exports = class Trip extends React.Component {
     return (
       <li
         id={trip.id}
-        className={classNames({ selected: trip.selected })}
-        onMouseEnter={highlight.highlightTrips.bind(null, [trip])}
-        onMouseLeave={highlight.unhighlightTrips}
-        onClick={this.showModal}>
+        onMouseEnter={this.highlightTrips}
+        onMouseLeave={this.unhighlightTrips}
+        onClick={this.showModal}
+      >
         <div className="time-box">
           <div className="end-time">
             {moment(trip.ended_at).format('h:mm a').toUpperCase()}
@@ -100,8 +109,14 @@ module.exports = class Trip extends React.Component {
           {businessTag}
         </div>
 
-        <input type="checkbox" className="trip-select" onChange={this.handleSelectChange} checked={trip.selected} />
+        <input type="checkbox" className="trip-select" onChange={this.handleSelectChange} />
       </li>
     );
   }
+}
+Trip.propTypes = {
+  trip: React.PropTypes.object.isRequired,
+  showModal: React.PropTypes.func.isRequired
 };
+
+module.exports = Trip;

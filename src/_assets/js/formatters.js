@@ -115,8 +115,7 @@ exports.formatTrip = (trip, vehicles) => {
     score_events: trip.score_events,
     score_speeding: trip.score_speeding,
     vehicle_events: formatVehicleEvents(trip.vehicle_events, trip.path),
-    tags: trip.tags,
-    selected: false
+    tags: trip.tags
   };
 };
 

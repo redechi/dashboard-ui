@@ -6,7 +6,7 @@ import _ from 'lodash';
 const login = require('../js/login');
 const mobile = require('../js/mobile');
 
-module.exports = class Login extends React.Component {
+class Login extends React.Component {
   constructor(props) {
     super(props);
 
@@ -66,7 +66,7 @@ module.exports = class Login extends React.Component {
           <li>{this.state.alert}</li>
         </ul>
       );
-    };
+    }
 
     let panel;
     if (this.state.panel === 'intro') {
@@ -131,7 +131,8 @@ module.exports = class Login extends React.Component {
                 className="form-control"
                 ref="username"
                 placeholder="Email Address"
-                spellCheck="false" />
+                spellCheck="false"
+              />
             </div>
             <div className={classNames('form-group', { 'has-error': _.contains(this.state.errorFields, 'password') })}>
               <input type="password" className="form-control" ref="password" placeholder="Password" />
@@ -141,9 +142,10 @@ module.exports = class Login extends React.Component {
               <label>
                 <input
                   type="checkbox"
-                  defaultChecked={true}
+                  defaultChecked="true"
                   ref="staySignedIn"
-                  className="stay-signed-in" /> Keep me signed in
+                  className="stay-signed-in"
+                /> Keep me signed in
               </label>
             </div>
             <button type="submit" className="btn btn-blue btn-block">Login</button>
@@ -165,4 +167,9 @@ module.exports = class Login extends React.Component {
       </div>
     );
   }
+}
+Login.propTypes = {
+  refreshApp: React.PropTypes.func.isRequired
 };
+
+module.exports = Login;

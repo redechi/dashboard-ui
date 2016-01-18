@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 const login = require('../js/login');
 const requests = require('../js/requests');
 
-module.exports = class Header extends React.Component {
+class Header extends React.Component {
   constructor(props) {
     super(props);
 
@@ -27,6 +27,14 @@ module.exports = class Header extends React.Component {
         showSupportModal: false
       });
     };
+  }
+
+  componentDidMount() {
+    this.getUser();
+  }
+
+  componentDidUpdate() {
+    this.getUser();
   }
 
   getUser() {
@@ -118,12 +126,9 @@ module.exports = class Header extends React.Component {
       </header>
     );
   }
-
-  componentDidMount() {
-    this.getUser();
-  }
-
-  componentDidUpdate() {
-    this.getUser();
-  }
+}
+Header.propTypes = {
+  location: React.PropTypes.object
 };
+
+module.exports = Header;

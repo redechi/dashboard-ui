@@ -4,6 +4,7 @@ import polyline from 'polyline';
 
 const highlight = require('./highlight');
 const mapHelpers = require('./map_helpers');
+const select = require('./select');
 
 let map;
 let pathsLayer;
@@ -12,6 +13,7 @@ let hardBrakesLayer;
 let hardAccelsLayer;
 let speedingLayer;
 let autozoom;
+let selectedTripIds = [];
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
 
@@ -82,7 +84,7 @@ exports.createMap = function createMap() {
   map.addLayer(pathsLayer);
 };
 
-exports.updateMap = function updateMap(trips, toggleSelect) {
+exports.updateMap = function updateMap(trips) {
   if (!trips) {
     return;
   }
@@ -98,7 +100,7 @@ exports.updateMap = function updateMap(trips, toggleSelect) {
   clearMap();
 
   trips.forEach(trip => {
-    if (trip.selected) {
+    if (_.contains(selectedTripIds, trip.id)) {
       pathStyle = mapHelpers.styleLine(zoom, 'selected');
       aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aSelectedIcon');
       bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bSelectedIcon');
@@ -113,7 +115,7 @@ exports.updateMap = function updateMap(trips, toggleSelect) {
       trip.pathID = line._leaflet_id;
 
       line.on('click', () => {
-        toggleSelect(trip.id);
+        select.toggleSelect(trip);
       })
       .on('mouseover', () => {
         highlight.highlightTrips([trip]);
@@ -262,7 +264,7 @@ exports.unhighlightTrips = function unhighlightTrips(trips) {
     const startMarker = markersLayer.getLayer(trip.startMarkerID);
     const endMarker = markersLayer.getLayer(trip.endMarkerID);
 
-    if (trip.selected) {
+    if (_.contains(selectedTripIds, trip.id)) {
       pathStyle = mapHelpers.styleLine(zoom, 'selected');
       aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aSelectedIcon');
       bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bSelectedIcon');
@@ -271,6 +273,76 @@ exports.unhighlightTrips = function unhighlightTrips(trips) {
       aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
       bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
     }
+
+    if (path) {
+      path
+        .bringToFront()
+        .setStyle(pathStyle);
+    }
+
+    if (startMarker) {
+      startMarker.setIcon(aIcon);
+    }
+
+    if (endMarker) {
+      endMarker.setIcon(bIcon);
+    }
+  });
+
+  if (autozoom) {
+    fitBounds();
+  }
+};
+
+exports.selectTrips = function selectTrips(trips) {
+  selectedTripIds = _.union(selectedTripIds, _.pluck(trips, 'id'));
+
+  const zoom = map.getZoom();
+  const pathStyle = mapHelpers.styleLine(zoom, 'selected');
+  const aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aSelectedIcon');
+  const bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'bSelectedIcon');
+
+  trips.forEach(trip => {
+    const path = pathsLayer.getLayer(trip.pathID);
+    const startMarker = markersLayer.getLayer(trip.startMarkerID);
+    const endMarker = markersLayer.getLayer(trip.endMarkerID);
+
+    if (path) {
+      path
+        .bringToFront()
+        .setStyle(pathStyle);
+    }
+
+    if (startMarker) {
+      startMarker.setIcon(aIcon);
+    }
+
+    if (endMarker) {
+      endMarker.setIcon(bIcon);
+    }
+  });
+
+  if (speedingLayer.getLayers().length) {
+    speedingLayer.bringToFront();
+  }
+
+  if (autozoom) {
+    zoomTrips(trips);
+  }
+};
+
+exports.deselectTrips = function deselectTrips(trips) {
+  selectedTripIds = _.difference(selectedTripIds, _.pluck(trips, 'id'));
+
+  const zoom = map.getZoom();
+  const pathStyle = mapHelpers.styleLine(zoom);
+  const aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
+  const bIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'normal');
+
+  trips.forEach(trip => {
+    const path = pathsLayer.getLayer(trip.pathID);
+    const startMarker = markersLayer.getLayer(trip.startMarkerID);
+    const endMarker = markersLayer.getLayer(trip.endMarkerID);
 
     if (path) {
       path

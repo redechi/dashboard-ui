@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import classNames from 'classnames';
 import d3 from 'd3';
 import moment from 'moment';
 
@@ -137,17 +136,13 @@ function calculateGraphData(trips, graphType) {
     const bin = bins[moment(trip.started_at).startOf(binSize).valueOf()];
     if (bin) {
       bin.trips.push(trip);
-      if (trip.selected) {
-        bin.selected = true;
-      }
     }
   });
 
   // Combine trips into one number
   return _.map(bins, (bin, key) => ({
     key,
-    value: stats.sumTrips(bin.trips, graphType),
-    selected: bin.selected
+    value: stats.sumTrips(bin.trips, graphType)
   }));
 }
 
@@ -286,7 +281,7 @@ exports.updateGraph = function updateGraph(trips, graphType, graphWidth, dateRan
     .enter().append('g')
       .on('mouseenter', barMouseenter)
       .on('mouseleave', barMouseleave)
-      .attr('class', (d) => classNames('bar', { selected: d.selected }))
+      .attr('class', 'bar')
       .attr('y', (d) => y(d.value))
       .attr('x', (d) => x(d.key));
 
@@ -421,5 +416,19 @@ exports.unhighlightTrips = function unhighlightTrips(trips) {
   trips.forEach(trip => {
     const key = moment(trip.started_at).startOf(binSize).valueOf();
     getBarByKey(key.toString()).classed('highlighted', false);
+  });
+};
+
+exports.selectTrips = function selectTrips(trips) {
+  trips.forEach(trip => {
+    const key = moment(trip.started_at).startOf(binSize).valueOf();
+    getBarByKey(key.toString()).classed('selected', true);
+  });
+};
+
+exports.deselectTrips = function deselectTrips(trips) {
+  trips.forEach(trip => {
+    const key = moment(trip.started_at).startOf(binSize).valueOf();
+    getBarByKey(key.toString()).classed('selected', false);
   });
 };

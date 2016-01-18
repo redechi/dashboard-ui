@@ -11,14 +11,17 @@ module.exports = class Home extends React.Component {
   }
 
   render() {
+    let content;
     if (login.isLoggedIn()) {
-      return (
+      content = (
         <Dashboard {...this.props} />
       );
     } else {
-      return (
+      content = (
         <Login {...this.props} />
       );
     }
+
+    return content;
   }
 };

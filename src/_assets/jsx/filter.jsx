@@ -9,14 +9,14 @@ import Slider from 'bootstrap-slider';
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
 
-module.exports = class Filters extends React.Component {
+class Filter extends React.Component {
   constructor(props) {
     super(props);
 
     this.updateFilter = (value) => {
       this.props.updateFilter(this.props.filterType, value);
 
-      let filterValueComponents = (value || '').split(',');
+      const filterValueComponents = (value || '').split(',');
       if (this.refs[`${this.props.filterType}Popover`]) {
         if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
           this.refs[`${this.props.filterType}Popover`].hide();
@@ -30,16 +30,15 @@ module.exports = class Filters extends React.Component {
     };
 
     this.preparePopover = () => {
-      let filter = filters.getFilter(this.props.filterType);
-
       if (_.contains(['distance', 'duration', 'cost', 'time'], this.props.filterType)) {
-        let min = this.props.ranges[this.props.filterType][0];
-        let max = this.props.ranges[this.props.filterType][1];
-        let value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max));
-        let slider = new Slider(`.popover-${this.props.filterType} input.slider`, {
-          min: min,
-          max: max,
-          value: value,
+        const min = this.props.ranges[this.props.filterType][0];
+        const max = this.props.ranges[this.props.filterType][1];
+        const value = this.props.value.split(',').map(d => Math.min(Math.max(d, min), max));
+
+        new Slider(`.popover-${this.props.filterType} input.slider`, {
+          min,
+          max,
+          value,
           tooltip: 'hide'
         })
         .on('change', (results) => {
@@ -54,20 +53,25 @@ module.exports = class Filters extends React.Component {
     };
 
     this.handleStartDateChange = (startDate) => {
-      let filter = filters.getFilter(this.props.filterType);
-      let filterValueComponents = this.props.value.split(',');
+      const filterValueComponents = this.props.value.split(',');
 
       filterValueComponents[0] = startDate.valueOf();
       this.updateFilter(filterValueComponents.join(','));
     };
 
     this.handleEndDateChange = (endDate) => {
-      let filter = filters.getFilter(this.props.filterType);
-      let filterValueComponents = this.props.value.split(',');
+      const filterValueComponents = this.props.value.split(',');
 
       filterValueComponents[1] = endDate.valueOf();
       this.updateFilter(filterValueComponents.join(','));
     };
+  }
+
+  componentDidMount() {
+    // only show popovers on filter add after initial filters applied
+    if (this.props.showPopover) {
+      this.refs[`${this.props.filterType}Popover`].show();
+    }
   }
 
   formatVehicleMenuItem(vehicle, key) {
@@ -75,7 +79,8 @@ module.exports = class Filters extends React.Component {
       <li
         onClick={this.updateFilter.bind(null, vehicle.id)}
         className={classNames({ selected: this.props.value === vehicle.id })}
-        key={key} >
+        key={key}
+      >
         {formatters.formatVehicle(vehicle)} <i></i>
       </li>
     );
@@ -86,25 +91,26 @@ module.exports = class Filters extends React.Component {
       <li
         onClick={this.updateFilter.bind(null, option.value)}
         className={classNames({ selected: this.props.value === option.value })}
-        key={key} >
+        key={key}
+      >
         {option.name} <i></i>
       </li>
     );
   }
 
   render() {
-    let filter = filters.getFilter(this.props.filterType);
-    let filterValueComponents = this.props.value.split(',');
+    const filter = filters.getFilter(this.props.filterType);
+    const filterValueComponents = this.props.value.split(',');
 
-    let removeLink = (
+    const removeLink = (
       <div className="remove-filter" onClick={this.updateFilter.bind(null, null)}>
         Remove filter
       </div>
     );
 
-    let endOfDay = moment().endOf('day').valueOf();
+    const endOfDay = moment().endOf('day').valueOf();
 
-    let dateFilterOptions = [
+    const dateFilterOptions = [
       {
         name: 'this week',
         value: `${moment().startOf('week').valueOf()},${moment().endOf('week').valueOf()},thisWeek`
@@ -131,7 +137,7 @@ module.exports = class Filters extends React.Component {
       }
     ];
 
-    let popovers = {
+    const popovers = {
       date: (
         <Popover id="date" title="Select Date Range" className="popover-date">
           <ul className="date-filter-value list-select animate">
@@ -140,14 +146,16 @@ module.exports = class Filters extends React.Component {
           <div
             className="date-filter-custom"
             id="dateFilterCustom"
-            style={{ display: (filterValueComponents[2] === 'custom') ? 'block' : 'none' }}>
+            style={{ display: (filterValueComponents[2] === 'custom') ? 'block' : 'none' }}
+          >
             <div className="input-group">
               <label>From</label>
               <DatePicker
                 selected={moment(parseInt(filterValueComponents[0], 10))}
                 onChange={this.handleStartDateChange}
                 dateFormat="MM/DD/YY"
-                className="datepicker__input form-control" />
+                className="datepicker__input form-control"
+              />
             </div>
             <div className="input-group">
               <label>To</label>
@@ -155,7 +163,8 @@ module.exports = class Filters extends React.Component {
                 selected={moment(parseInt(filterValueComponents[1], 10))}
                 onChange={this.handleEndDateChange}
                 dateFormat="MM/DD/YY"
-                className="datepicker__input form-control" />
+                className="datepicker__input form-control"
+              />
             </div>
           </div>
         </Popover>
@@ -165,7 +174,8 @@ module.exports = class Filters extends React.Component {
           <ul className="list-select animate">
             <li
               className={classNames({ selected: this.props.value === 'all' })}
-              onClick={this.updateFilter.bind(null, 'all')}>
+              onClick={this.updateFilter.bind(null, 'all')}
+            >
               All my vehicles <i></i>
             </li>
             {this.props.vehicles.map(this.formatVehicleMenuItem.bind(this))}
@@ -211,7 +221,8 @@ module.exports = class Filters extends React.Component {
           trigger="click"
           ref={`${this.props.filterType}Popover`}
           overlay={popovers[this.props.filterType]}
-          onEntered={this.preparePopover}>
+          onEntered={this.preparePopover}
+        >
           <div className="btn btn-filter btn-popover">
             <span className="btn-text">
               {filter.valueText(this.props.value, this.props.vehicles)}
@@ -221,11 +232,14 @@ module.exports = class Filters extends React.Component {
       </li>
     );
   }
-
-  componentDidMount() {
-    // only show popovers on filter add after initial filters applied
-    if (this.props.showPopover) {
-      this.refs[`${this.props.filterType}Popover`].show();
-    }
-  }
+}
+Filter.propTypes = {
+  filterType: React.PropTypes.string,
+  ranges: React.PropTypes.object,
+  showPopover: React.PropTypes.bool,
+  updateFilter: React.PropTypes.func.isRequired,
+  value: React.PropTypes.string,
+  vehicles: React.PropTypes.array
 };
+
+module.exports = Filter;

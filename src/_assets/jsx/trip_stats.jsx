@@ -1,41 +1,51 @@
 import React from 'react';
+import d3 from 'd3';
 
 const formatters = require('../js/formatters');
 
-module.exports = class TripStats extends React.Component {
+class TripStats extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  componentDidMount() {
+    this.scorePieChart();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.totals && prevProps.totals && this.props.totals.score !== prevProps.totals.score) {
+      this.scorePieChart();
+    }
+  }
+
   scorePieChart() {
-    let score = this.props.totals.score;
-    let scoreColor = formatters.scoreColor(this.props.totals.score);
-    let data = [{ value: score }];
+    const totals = this.props.totals || {};
+    const score = totals.score;
+    const scoreColor = formatters.scoreColor(totals.score);
+    const data = [{ value: score }];
 
-    let w = 40;
-    let h = 40;
-    let r = 18;
-    let innerRadius = 17;
-    let transitionsDuration = 1000;
-    let transitionsDelay = 250;
+    const w = 40;
+    const h = 40;
+    const r = 18;
+    const innerRadius = 17;
+    const transitionsDuration = 1000;
+    const transitionsDelay = 250;
 
-    //remove old chart
+    // remove old chart
     d3.select('#score-chart svg').remove();
 
-    let svg = d3.select('#score-chart').append('svg');
+    const svg = d3.select('#score-chart').append('svg');
 
-    let rScale = d3.scale.linear().domain([0, 100]).range([0, 2 * Math.PI]);
-
-    let arc = d3.svg.arc()
+    const arc = d3.svg.arc()
       .outerRadius(r + 0.8)
       .innerRadius(innerRadius);
 
-    let pie = d3.layout.pie()
+    const pie = d3.layout.pie()
       .value(d => d.value);
 
-    function arcTween(transition, newAngle) {
+    function arcTween(transition) {
       transition.attrTween('d', (d) => {
-        let interpolate = d3.interpolate(0, 360 * (d.value / 100) * Math.PI / 180);
+        const interpolate = d3.interpolate(0, 360 * (d.value / 100) * Math.PI / 180);
 
         return (t) => {
           d.endAngle = interpolate(t);
@@ -44,7 +54,7 @@ module.exports = class TripStats extends React.Component {
       });
     }
 
-    let chart = svg
+    const chart = svg
       .data([data])
       .attr('width', w)
       .attr('height', h)
@@ -74,7 +84,7 @@ module.exports = class TripStats extends React.Component {
       .delay(transitionsDelay)
       .ease('elastic');
 
-    let arcs = chart.selectAll('g')
+    const arcs = chart.selectAll('g')
       .data(pie)
       .enter()
       .append('g');
@@ -102,43 +112,40 @@ module.exports = class TripStats extends React.Component {
           <div className="alert-grey">No trips match these criteria</div>
         </div>
       );
-    } else {
-      let scoreColor = formatters.scoreColor(this.props.totals.score);
+    }
+    const totals = this.props.totals || {};
+    const scoreColor = formatters.scoreColor(totals.score);
 
-      return (
-        <div className="trip-stats" style={{
-            borderBottomColor: scoreColor,
-            boxShadow: `inset 0px -2px 3px 0px rgba(${scoreColor.replace(/[^\d,]/g, '')}, 0.3)`
-          }}>
-          <div className="score-chart" id="score-chart"></div>
-          <div className="stat distance">
-            <div className="value">{this.props.totals.distance}</div>
-            <div className="label">Miles</div>
-          </div>
-          <div className="stat mpg active">
-            <div className="value">{this.props.totals.mpg}</div>
-            <div className="label">MPG</div>
-          </div>
-          <div className="stat cost">
-            <div className="value">{this.props.totals.cost}</div>
-            <div className="label">Fuel</div>
-          </div>
-          <div className="stat duration">
-            <div className="value">{this.props.totals.duration}</div>
-            <div className="label">Hours</div>
-          </div>
+    return (
+      <div className="trip-stats" style={{
+        borderBottomColor: scoreColor,
+        boxShadow: `inset 0px -2px 3px 0px rgba(${scoreColor.replace(/[^\d,]/g, '')}, 0.3)`
+      }}
+      >
+        <div className="score-chart" id="score-chart"></div>
+        <div className="stat distance">
+          <div className="value">{totals.distance}</div>
+          <div className="label">Miles</div>
         </div>
-      );
-    }
+        <div className="stat mpg active">
+          <div className="value">{totals.mpg}</div>
+          <div className="label">MPG</div>
+        </div>
+        <div className="stat cost">
+          <div className="value">{totals.cost}</div>
+          <div className="label">Fuel</div>
+        </div>
+        <div className="stat duration">
+          <div className="value">{totals.duration}</div>
+          <div className="label">Hours</div>
+        </div>
+      </div>
+    );
   }
-
-  componentDidMount() {
-    this.scorePieChart();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.totals.score !== prevProps.totals.score) {
-      this.scorePieChart();
-    }
-  }
+}
+TripStats.propTypes = {
+  totals: React.PropTypes.object,
+  trips: React.PropTypes.array
 };
+
+module.exports = TripStats;

@@ -52,7 +52,7 @@ function getSum(trips, field) {
 
 exports.calculateTotals = function calculateTotals(trips) {
   if (!trips) {
-    return false;
+    return undefined;
   }
 
   // jscs:disable requirePaddingNewLinesAfterBlocks

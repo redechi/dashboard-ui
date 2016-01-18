@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-module.exports = class NoMatch extends React.Component {
+class NoMatch extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -18,4 +18,6 @@ module.exports = class NoMatch extends React.Component {
       </div>
     );
   }
-};
+}
+
+module.exports = NoMatch;

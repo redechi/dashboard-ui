@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const login = require('../js/login');
 
-module.exports = class Reset extends React.Component {
+class Reset extends React.Component {
   constructor(props) {
     super(props);
 
@@ -63,4 +63,6 @@ module.exports = class Reset extends React.Component {
       </form>
     );
   }
-};
+}
+
+module.exports = Reset;

@@ -6,8 +6,9 @@ import classNames from 'classnames';
 const filters = require('../js/filters.js');
 
 const Filter = require('./filter.jsx');
+const ListItem = require('./list_item.jsx');
 
-module.exports = class Filters extends React.Component {
+class Filters extends React.Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +29,7 @@ module.exports = class Filters extends React.Component {
     };
 
     this.addFilter = filterName => {
-      let defaultValue = filters.getFilter(filterName).defaultValue;
+      const defaultValue = filters.getFilter(filterName).defaultValue;
       this.props.updateFilter(filterName, defaultValue);
       if (this.refs.filterTypePopover) {
         this.refs.filterTypePopover.hide();
@@ -49,22 +50,24 @@ module.exports = class Filters extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({
+      showPopover: true
+    });
+  }
+
   render() {
-    let filterTypePopover = (
+    const filterTypePopover = (
       <Popover id="filterType" title="Add Filter" className="popover-filter-type">
         <ul className="list-select animate">
-          {filters.getRemainingFilters(this.props.filters).map((filterType) => {
-            return (
-              <li onClick={this.addFilter.bind(null, filterType.key)} key={filterType.key}>
-                {filterType.name}
-              </li>
-            );
-          })}
+          {filters.getRemainingFilters(this.props.filters).map(filterType =>
+            <ListItem onItemClick={this.addFilter} key={filterType.key} item={filterType} />
+          )}
         </ul>
       </Popover>
     );
 
-    let appliedFilters = _.map(this.props.filters, (value, key) => {
+    const appliedFilters = _.map(this.props.filters, (value, key) => {
       return (
         <Filter
           key={key}
@@ -73,7 +76,8 @@ module.exports = class Filters extends React.Component {
           filterType={key}
           updateFilter={this.updateFilter}
           showPopover={this.state.showPopover}
-          ranges={this.props.ranges} />
+          ranges={this.props.ranges}
+        />
       );
     });
 
@@ -96,12 +100,14 @@ module.exports = class Filters extends React.Component {
           <label>Filters:</label>
           <li
             className={classNames('undo', 'btn', 'btn-filter', { disabled: this.state.undoCount < 1 })}
-            onClick={this.undoFilter}>
+            onClick={this.undoFilter}
+          >
             Undo
           </li>
           <li
             className="reset btn btn-filter"
-            onClick={this.props.resetFilters}>
+            onClick={this.props.resetFilters}
+          >
             Reset
           </li>
         </ul>
@@ -113,10 +119,14 @@ module.exports = class Filters extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    this.setState({
-      showPopover: true
-    });
-  }
+}
+Filters.propTypes = {
+  filters: React.PropTypes.object.isRequired,
+  ranges: React.PropTypes.object,
+  resetFilters: React.PropTypes.func.isRequired,
+  undoFilter: React.PropTypes.func.isRequired,
+  updateFilter: React.PropTypes.func.isRequired,
+  vehicles: React.PropTypes.array.isRequired
 };
+
+module.exports = Filters;

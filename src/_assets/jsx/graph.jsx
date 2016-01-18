@@ -3,9 +3,10 @@ import { Popover, OverlayTrigger } from 'react-bootstrap';
 import _ from 'lodash';
 import moment from 'moment';
 
-const filters = require('../js/filters');
 const formatters = require('../js/formatters');
 const graph = require('../js/graph');
+
+const ListItem = require('./list_item.jsx');
 
 const graphTypes = [
   {
@@ -35,7 +36,7 @@ const graphTypes = [
   }
 ];
 
-module.exports = class Graph extends React.Component {
+class Graph extends React.Component {
   constructor(props) {
     super(props);
 
@@ -45,49 +46,51 @@ module.exports = class Graph extends React.Component {
 
     this.setGraphType = (graphType) => {
       this.refs.graphTypePopover.hide();
-      this.setState({
-        graphType: graphType
-      });
+      this.setState({ graphType });
     };
   }
 
+  componentDidMount() {
+    this.updateGraph();
+  }
+
+  componentDidUpdate() {
+    this.updateGraph();
+  }
+
   getGraphWidth() {
-    let minWidth = 614;
-    let horizontalPadding = 425;
+    const minWidth = 614;
+    const horizontalPadding = 425;
     return Math.max(this.props.windowWidth - horizontalPadding, minWidth);
   }
 
-  getGraphDateRange() {
-    let dateRangeComponents = this.props.filters.date.split(',');
-    let dateRange = [parseInt(dateRangeComponents[0], 10), parseInt(dateRangeComponents[1], 10)];
-    let firstTrip = _.last(this.props.trips);
-    if (dateRangeComponents[2] === 'allTime' && firstTrip) {
-      dateRange[0] = moment(firstTrip.started_at).startOf('day');
-    }
+    getGraphDateRange() {
+      const dateRangeComponents = this.props.filters.date.split(',');
+      const dateRange = [parseInt(dateRangeComponents[0], 10), parseInt(dateRangeComponents[1], 10)];
+      const firstTrip = _.last(this.props.trips);
+      if (dateRangeComponents[2] === 'allTime' && firstTrip) {
+        dateRange[0] = moment(firstTrip.started_at).startOf('day');
+      }
 
-    return dateRange;
-  }
+      return dateRange;
+    }
 
   updateGraph() {
     graph.updateGraph(this.props.trips, this.state.graphType, this.getGraphWidth(), this.getGraphDateRange());
   }
 
   render() {
-    let graphTypePopover = (
+    const graphTypePopover = (
       <Popover id="graphType" title="Choose Metric" className="popover-graph-type">
         <ul className="list-select">
-          {graphTypes.map((graphType) => {
-            return (
-              <li onClick={this.setGraphType.bind(null, graphType.key)} key={graphType.key}>
-                {graphType.name}
-              </li>
-            );
-          })}
+          {graphTypes.map(graphType =>
+            <ListItem onItemClick={this.setGraphType} key={graphType.key} item={graphType} />
+          )}
         </ul>
       </Popover>
     );
 
-    let selectedGraphType = _.find(graphTypes, (item) => item.key === this.state.graphType);
+    const selectedGraphType = _.find(graphTypes, (item) => item.key === this.state.graphType);
 
     return (
       <div className="graph">
@@ -114,12 +117,11 @@ module.exports = class Graph extends React.Component {
       </div>
     );
   }
-
-  componentDidMount() {
-    this.updateGraph();
-  }
-
-  componentDidUpdate() {
-    this.updateGraph();
-  }
+}
+Graph.propTypes = {
+  filters: React.PropTypes.object,
+  trips: React.PropTypes.array,
+  windowWidth: React.PropTypes.number
 };
+
+module.exports = Graph;
