@@ -13,7 +13,7 @@ class TripStats extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.totals && prevProps.totals && this.props.totals.score !== prevProps.totals.score) {
+    if (!prevProps.totals || (this.props.totals && this.props.totals.score !== prevProps.totals.score)) {
       this.scorePieChart();
     }
   }
