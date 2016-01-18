@@ -19,7 +19,7 @@ const sortTypes = [
     name: 'Time/Date'
   },
   {
-    key: 'distance_m',
+    key: 'distance_miles',
     name: 'Distance'
   },
   {
@@ -165,8 +165,8 @@ class TripList extends React.Component {
       const direction = this.state.sortDirection === 'down' ? -1 : 1;
       if (this.state.sortType === 'started_at') {
         return moment(trip.started_at).valueOf() * direction;
-      } else if (this.state.sortType === 'distance_m') {
-        return trip.distance_m * direction;
+      } else if (this.state.sortType === 'distance_miles') {
+        return trip.distance_miles * direction;
       } else if (this.state.sortType === 'average_mpg') {
         return trip.average_mpg * direction;
       } else if (this.state.sortType === 'fuel_cost_usd') {
