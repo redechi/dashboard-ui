@@ -29,6 +29,10 @@ class Filters extends React.Component {
     };
 
     this.addFilter = filterName => {
+      this.setState({
+        showPopover: true
+      });
+
       const defaultValue = filters.getFilter(filterName).defaultValue;
       this.props.updateFilter(filterName, defaultValue);
       if (this.refs.filterTypePopover) {
@@ -48,12 +52,6 @@ class Filters extends React.Component {
         this.props.undoFilter();
       }
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      showPopover: true
-    });
   }
 
   render() {
