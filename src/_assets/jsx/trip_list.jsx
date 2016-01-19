@@ -66,37 +66,16 @@ class TripList extends React.Component {
         exporting: true
       });
 
-      let trips;
       if (type === 'selected') {
         const selectedTripIds = select.getSelected();
-        trips = _.filter(this.props.trips, trip => _.contains(selectedTripIds, trip.id));
+        this.downloadTrips(_.filter(this.props.trips, trip => _.contains(selectedTripIds, trip.id)));
       } else if (type === 'tripList') {
-        trips = this.props.trips;
+        this.downloadTrips(this.props.trips);
       } else if (type === 'all') {
-        trips = this.state.allTrips;
-      }
-
-      if (!trips || !trips.length) {
-        return alert('Please Select at least one trip');
-      }
-
-      exportData.trips(trips, (e, blobUrl) => {
-        this.setState({
-          exporting: false
+        this.props.getTrips(1363071600000, () => {
+          this.downloadTrips(this.props.allTrips);
         });
-        if (e && e === 'not_supported') {
-          alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
-        }
-
-        if (blobUrl) {
-          this.setState({
-            showExportModal: true,
-            blobUrl
-          });
-        }
-
-        this.refs.exportPopover.hide();
-      });
+      }
     };
 
     this.showModal = (tripToShow) => {
@@ -158,6 +137,30 @@ class TripList extends React.Component {
   getTripListHeight() {
     const verticalPadding = 233;
     return this.props.windowHeight - this.props.filterHeight - verticalPadding;
+  }
+
+  downloadTrips(trips) {
+    if (!trips || !trips.length) {
+      return alert('Please Select at least one trip');
+    }
+
+    exportData.trips(trips, (e, blobUrl) => {
+      this.setState({
+        exporting: false
+      });
+      if (e && e === 'not_supported') {
+        alert('Export is not supported in your browser. Please try again with IE10+, Chrome, Firefox or Safari.');
+      }
+
+      if (blobUrl) {
+        this.setState({
+          showExportModal: true,
+          blobUrl
+        });
+      }
+
+      this.refs.exportPopover.hide();
+    });
   }
 
   sortTrips() {
@@ -343,8 +346,10 @@ class TripList extends React.Component {
   }
 }
 TripList.propTypes = {
+  allTrips: React.PropTypes.array,
   exporting: React.PropTypes.bool,
   filterHeight: React.PropTypes.number,
+  getTrips: React.PropTypes.func.isRequired,
   trips: React.PropTypes.array,
   windowHeight: React.PropTypes.number
 };

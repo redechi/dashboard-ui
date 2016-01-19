@@ -48,7 +48,14 @@ class Dashboard extends React.Component {
       }
 
       if (filterName === 'date') {
-        this.getTrips();
+        const dateFilterComponents = this.state.filters.date.split(',');
+        const startDate = parseInt(dateFilterComponents[0], 10);
+        this.getTrips(startDate, () => {
+          this.setState({
+            trips: filters.filterTrips(this.state.allTrips, this.state.filters),
+            ranges: stats.calculateRanges(this.state.allTrips)
+          });
+        });
       }
 
       this.setFilters(this.state.filters);
@@ -68,17 +75,55 @@ class Dashboard extends React.Component {
     };
 
     this.updateLoadingProgress = (progress, total) => {
-      console.log(progress);
       this.setState({
         loadingProgressText: `${progress} of ${total} trips`
       });
+    };
+
+    this.getTrips = (startDate, cb) => {
+      // if demo mode and trips are already loaded, skip
+      if (!login.isLoggedIn() && this.state.allTrips.length) {
+        return;
+      }
+
+      const tripRequestMinDate = this.state.tripRequestMinDate;
+
+      if (startDate < tripRequestMinDate) {
+        this.setState({
+          showLoadingModal: true
+        });
+        requests.getTrips(startDate, tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
+          if (e) {
+            return alert('Unable to fetch data. Please try again later.');
+          }
+
+          const allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
+
+          this.setState({
+            allTrips,
+            vehicles,
+            tripRequestMinDate: startDate,
+            showLoadingModal: false,
+            loadingProgressText: ''
+          }, cb);
+        });
+      } else {
+        cb();
+      }
     };
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.handleResize);
 
-    this.getTrips();
+    const dateFilterComponents = this.state.filters.date.split(',');
+    const startDate = parseInt(dateFilterComponents[0], 10);
+    this.getTrips(startDate, () => {
+      this.setState({
+        trips: filters.filterTrips(this.state.allTrips, this.state.filters),
+        ranges: stats.calculateRanges(this.state.allTrips)
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -90,44 +135,12 @@ class Dashboard extends React.Component {
       filters: newFilters,
       trips: filters.filterTrips(this.state.allTrips, newFilters)
     });
+
     this.props.history.pushState(null, this.props.location.pathname, newFilters);
 
     setTimeout(() => {
       this.handleResize();
     }, 100);
-  }
-
-  getTrips() {
-    // if demo mode and trips are already loaded, skip
-    if (!login.isLoggedIn() && this.state.allTrips.length) {
-      return;
-    }
-
-    const dateFilterComponents = this.state.filters.date.split(',');
-    const startDate = parseInt(dateFilterComponents[0], 10);
-
-    if (startDate < this.state.tripRequestMinDate) {
-      this.setState({
-        showLoadingModal: true
-      });
-      requests.getTrips(startDate, this.state.tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
-        if (e) {
-          return alert('Unable to fetch data. Please try again later.');
-        }
-
-        const allTrips = this.state.allTrips.concat(trips.map(trip => formatters.formatTrip(trip, vehicles)));
-
-        this.setState({
-          allTrips,
-          trips: filters.filterTrips(allTrips, this.state.filters),
-          vehicles,
-          ranges: stats.calculateRanges(allTrips),
-          tripRequestMinDate: startDate,
-          showLoadingModal: false,
-          loadingProgressText: ''
-        });
-      });
-    }
   }
 
   render() {
@@ -151,9 +164,11 @@ class Dashboard extends React.Component {
                 totals={totals}
               />
               <TripList
+                allTrips={this.state.allTrips}
                 trips={this.state.trips}
                 windowHeight={this.state.windowHeight}
                 filterHeight={this.state.filterHeight}
+                getTrips={this.getTrips}
               />
             </div>
             <div className="left-column">
