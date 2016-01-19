@@ -36,14 +36,14 @@ function makeWebpackConfig() {
       {
         test: /\.css$/,
         loader: settings.DEV_HOT_RELOAD ?
-          'style!css!cssnext' :
-          ExtractTextPlugin.extract('style', 'css!cssnext')
+          'style!css!postcss' :
+          ExtractTextPlugin.extract('style', 'css!postcss')
       },
       {
         test: /\.scss$/,
         loader: settings.DEV_HOT_RELOAD ?
-          'style!css!cssnext!sass' :
-          ExtractTextPlugin.extract('style', 'css!cssnext!sass')
+          'style!css!postcss!sass' :
+          ExtractTextPlugin.extract('style', 'css!postcss!sass')
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -75,9 +75,6 @@ function makeWebpackConfig() {
       }
     ]
   };
-
-  const AUTO_PREFIXER_BROWSERS = 'last 2 versions';
-  webpackConfig.cssnext = { browsers: AUTO_PREFIXER_BROWSERS };
 
   webpackConfig.plugins = [
     new optimize.CommonsChunkPlugin('vendors', 'vendors.js'),

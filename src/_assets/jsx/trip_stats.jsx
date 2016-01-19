@@ -113,6 +113,7 @@ class TripStats extends React.Component {
         </div>
       );
     }
+
     const totals = this.props.totals || {};
     const scoreColor = formatters.scoreColor(totals.score);
 
