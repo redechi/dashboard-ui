@@ -1,26 +1,43 @@
 # Automatic Dashboard
 
-This repo powers [dashboard.automatic.com](dashboard.automatic.com) as well as [Automatic Labs](dashboard.automatic.com/#/labs).
+This repo powers [dashboard.automatic.com](https://dashboard.automatic.com) as well as [Automatic Labs](https://dashboard.automatic.com/#/labs).
 
 It is built with React and React Router.
 
 Automatic Labs is static HTML/CSS/JS.
 
-## Setup
-
 This project is based on [Automatic Static](https://github.com/Automatic/Automatic-static).
 
+## Setup
+
     make setup
+
+## Linting and testing
+
     make lint
     make test
-    make run
-    make watch
 
 ## Running locally
+
+    make run
+
+To watch for changes, run
 
     make watch
 
 Open localhost:5000 in your browser
+
+## Building
+
+    make build
+
+## Labs
+
+Labs are completely separate from the rest of Dashboard, and don't have any dependencies from the react dashboard app.
+
+Labs files are completely located inside of `static/labs` and don't require anything outside of it.
+
+The page that lists all of the labs at [dashboard.automatic.com/#/labs](https://dashboard.automatic.com/#/labs) is part of the dashboard React app.
 
 ### Staging
 
