@@ -3,6 +3,11 @@
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IkV6ZFdvQmsifQ.SDDOhAsgorCNf8T0ejWKmA';
 
+/**
+ * Get Sampling Tolerance
+ * @param {array} points - Array of points along a polyline
+ * @return {number} sampling tolerance
+ */
 function getSamplingTolerance(points) {
   var granularity = 200;
   var firstPoint = _.first(points);
@@ -13,6 +18,11 @@ function getSamplingTolerance(points) {
   return distance / granularity;
 }
 
+/**
+ * Simplify an encoded polyline
+ * @param {string} encodedPolyline - Encoded polyline to simplify
+ * @return {string} simplified encoded polyline
+ */
 function simplifyEncodedPolyline(encodedPolyline) {
   var points = polyline.decode(encodedPolyline);
   var latLonPoints = _.map(points, function(point) {
@@ -29,6 +39,12 @@ function simplifyEncodedPolyline(encodedPolyline) {
   return polyline.encode(downSampledPoints);
 }
 
+/**
+ * Create a mapbox static map URL from a set of polylines
+ * @param {array} encodedPolylines - Array of encoded polylines
+ * @param {object} params (optional) - static map params
+ * @return {string} static map URL
+ */
 function constructMapboxStaticUrl(encodedPolylines, params) {
   var fullparams = _.defaults(params || {}, {
     format: 'png256',
@@ -47,6 +63,13 @@ function constructMapboxStaticUrl(encodedPolylines, params) {
   return url;
 }
 
+/**
+ * Create a mapbox static map URL from a set of encoded polylines, keeping
+ * within the max character limit
+ * @param {array} encodedPolylines - Array of encoded polylines
+ * @param {object} params (optional) - static map params
+ * @return {string} static map URL
+ */
 function getStaticMap(encodedPolylines, params) {
   if (_.isEmpty(encodedPolylines)) {
     return null;
@@ -78,6 +101,11 @@ function getStaticMap(encodedPolylines, params) {
   return memoUrl;
 }
 
+/**
+ * Draw a map of Automatic trip
+ * @param {object} trip - Automatic trip to map
+ * @param {object} map - Instantiated mapbox map
+ */
 function drawTripMap(trip, map) {
   var lineStyle = {
     color: '#b84329',

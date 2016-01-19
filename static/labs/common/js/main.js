@@ -5,20 +5,33 @@
 
 var shareAPIUrl = 'https://automatic-share.herokuapp.com';
 
-// Polyfill for window.location.origin in IE
+/**
+ * Polyfill for window.location.origin in IE
+ */
 if (!window.location.origin) {
   var port = window.location.port ? ':' + window.location.port : '';
   window.location.origin = window.location.protocol + '//' + window.location.hostname + port;
 }
 
+/**
+ * Show loading div
+ */
 function showLoading() {
   $('.loading').fadeIn();
 }
 
+/**
+ * Hide loading div
+ */
 function hideLoading() {
   $('.loading').fadeOut('fast');
 }
 
+/**
+ * Get a cookie
+ * @param {string} key - the key of the cookie to get
+ * @return {string} decoded cookie value
+ */
 function getCookie(key) {
   /* jscs: disable */
   /* eslint-disable */
@@ -27,6 +40,16 @@ function getCookie(key) {
   /* eslint-enable */
 }
 
+/**
+ * Set a cookie
+ * @param {string} sKey - key of the cookie to set
+ * @param {string} sValue - value of the cookie to set
+ * @param {date} vEnd - expiration date
+ * @param {string} sPath - path
+ * @param {string} sDomain - domain
+ * @param {boolean} bSecure - whether or not the cookie is secure
+ * @return {boolean} success or failure
+ */
 function setCookie(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
   /* jscs: disable */
   /* eslint-disable */
@@ -53,6 +76,11 @@ function setCookie(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
   /* eslint-enable */
 }
 
+/**
+ * Decode query params from a query string
+ * @param {string} qs - an encoded querystring
+ * @return {object} decoded query params
+ */
 function getQueryParams(qs) {
   var params = {};
   var parts = qs.substring(1).split('&');
@@ -68,6 +96,12 @@ function getQueryParams(qs) {
   return params;
 }
 
+/**
+ * Shift the dates on an array of trips so that the most recent trip happened
+ * yesterday, keeping the same time between all trips
+ * @param {array} trips - an array of trips
+ * @return {array} an array of trips with dates shifted
+ */
 function makeTripsRecent(trips) {
   var firstTrip = trips[0];
   var offset = moment().diff(moment(firstTrip.started_at));
@@ -80,6 +114,11 @@ function makeTripsRecent(trips) {
   });
 }
 
+/**
+ * Format demo trips so they look like real trips
+ * @param {array} trips - an array of demo trips
+ * @return {array} an array of trips with formatted properly
+ */
 function prepareDemoTrips(response) {
   return makeTripsRecent(response.results.map(function(trip) {
     trip.average_kmpl = (trip.distance_m / 1000) / trip.fuel_volume_l;
@@ -87,6 +126,10 @@ function prepareDemoTrips(response) {
   }));
 }
 
+/**
+ * Fetch demo trips from static json
+ * @param {function} cb - callback when trips are fetched
+ */
 function fetchDemoTrips(cb) {
   $.getJSON('/data/trips.json', function(results) {
     hideLoading();
@@ -94,10 +137,18 @@ function fetchDemoTrips(cb) {
   });
 }
 
+/**
+ * Fetch demo vehicles from static json
+ * @param {function} cb - callback when vehicles are fetched
+ */
 function fetchDemoVehicles(cb) {
   $.getJSON('/data/vehicles.json', cb);
 }
 
+/**
+ * Get the access token of the logged in user
+ * @return {string} access token
+ */
 function getAccessToken() {
   var queryParams = getQueryParams(document.location.search);
   var accessTokenFromSession = sessionStorage.getItem('accessToken');
@@ -105,10 +156,17 @@ function getAccessToken() {
   return queryParams.accessToken || accessTokenFromSession || accessTokenFromCookie;
 }
 
+/**
+ * Redirect the browser to the login page
+ */
 function redirectToLogin() {
   window.location = $('.login-link').attr('href');
 }
 
+/**
+ * Cache the users vehicles in session storage
+ * @param {array} vehicles - an array of vehicles to cache
+ */
 function cacheVehicles(vehicles) {
   try {
     sessionStorage.setItem('labs_vehicles', JSON.stringify(vehicles));
@@ -118,6 +176,10 @@ function cacheVehicles(vehicles) {
   }
 }
 
+/**
+ * Cache a trip in session storage
+ * @param {object} trip - a trip to cache
+ */
 function cacheTrip(trip) {
   try {
     sessionStorage.setItem('labs_' + trip.id, JSON.stringify(_.omit(trip, 'vehicle_events')));
@@ -126,6 +188,10 @@ function cacheTrip(trip) {
   }
 }
 
+/**
+ * Cache a users trips in session storage
+ * @param {array} trips - an array of trips to cache
+ */
 function cacheTrips(trips) {
   var order = _.pluck(trips, 'id');
   try {
@@ -140,6 +206,11 @@ function cacheTrips(trips) {
   });
 }
 
+/**
+ * Get cached trips from session storage
+ * @param {string} tripId (optional) - the id of the trip to fetch
+ * @return {object or array} an array of trips or single trip object
+ */
 function getCachedTrips(tripId) {
   if (tripId) {
     // get specific cached trip
@@ -151,16 +222,31 @@ function getCachedTrips(tripId) {
   return order.map(function(id) { return JSON.parse(sessionStorage.getItem('labs_' + id) || {}); });
 }
 
+/**
+ * Get cached vehicles from session storage
+ * @return {array} an array of vehicles
+ */
 function getCachedVehicles() {
   return JSON.parse(sessionStorage.getItem('labs_vehicles') || '[]');
 }
 
+/**
+ * Handler for when trips are ready
+ * @param {array} trips - an array of trips
+ * @param {function} cb - callback
+ */
 function returnTrips(trips, cb) {
   cacheTrips(trips);
   hideLoading();
   cb(trips);
 }
 
+/**
+ * Fetch one page of trips
+ * @param {string} url - an API url to request
+ * @param {function} cb - callback for successful fetch
+ * @param {function} errCb - a callback for if there is an error
+ */
 function fetchTripsPage(url, cb, errCb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = getAccessToken();
@@ -186,6 +272,12 @@ function fetchTripsPage(url, cb, errCb) {
   .fail(errCb);
 }
 
+/**
+ * Fetch all trips
+ * @param {function} cb - callback for successful fetch
+ * @param {function} progress - a callback to be called after each page request
+ * with the status of the fetching process
+ */
 function fetchAllTrips(cb, progressCb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = getAccessToken();
@@ -231,6 +323,10 @@ function fetchAllTrips(cb, progressCb) {
   }
 }
 
+/**
+ * Fetch all vehicles
+ * @param {function} cb - callback for successful fetch
+ */
 function fetchVehicles(cb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = getAccessToken();
@@ -268,6 +364,10 @@ function fetchVehicles(cb) {
   }
 }
 
+/**
+ * Fetch user information
+ * @param {function} cb - callback for successful fetch
+ */
 function fetchUser(cb) {
   var queryParams = getQueryParams(document.location.search);
   var accessToken = getAccessToken();
@@ -297,25 +397,51 @@ function fetchUser(cb) {
   });
 }
 
+/**
+ * Convert meters to miles
+ * @param {float} m - meters
+ * @return {float} miles
+ */
 function metersToMiles(m) {
   // converts meters to miles
   return m / 1609.34;
 }
 
+/**
+ * Convert liters to gallons
+ * @param {number} l - liters
+ * @return {number} gallons
+ */
 function litersToGallons(l) {
   return l * 0.264172;
 }
 
+/**
+ * Convert kmpl to mpg
+ * @param {number} kmpl - km per liter
+ * @return {number} mpg
+ */
 function kmplToMpg(kmpl) {
   return kmpl * 2.35214583;
 }
 
+/**
+ * Format a number with thousands commas
+ * @param {number} x - number to format
+ * @return {number} formatted number
+ */
 function formatNumber(x) {
   var parts = x.toString().split('.');
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
 }
 
+/**
+ * Format a date with a timezaone
+ * @param {string or number} time - epoch time or ISO 8601 time
+ * @param {string} timezone - Timezone, like "America/Los_Angeles"
+ * @return {string} formatted date
+ */
 function formatDate(time, timezone) {
   try {
     return moment(time).tz(timezone).format('MMM D, YYYY');
@@ -324,6 +450,12 @@ function formatDate(time, timezone) {
   }
 }
 
+/**
+ * Format a time with a timezaone
+ * @param {string or number} time - epoch time or ISO 8601 time
+ * @param {string} timezone - Timezone, like "America/Los_Angeles"
+ * @return {string} formatted time
+ */
 function formatTime(time, timezone) {
   try {
     return moment(time).tz(timezone).format('h:mm A');
@@ -332,6 +464,12 @@ function formatTime(time, timezone) {
   }
 }
 
+/**
+ * Get day of the week from a date with a timezaone
+ * @param {string or number} time - epoch time or ISO 8601 time
+ * @param {string} timezone - Timezone, like "America/Los_Angeles"
+ * @return {string} Day of the week like "friday"
+ */
 function formatDayOfWeek(time, timezone) {
   try {
     return moment(time).tz(timezone).format('dddd');
@@ -340,6 +478,11 @@ function formatDayOfWeek(time, timezone) {
   }
 }
 
+/**
+ * Format a duration into hours and minutes
+ * @param {number} seconds - duration in seconds
+ * @return {string} Formatted duration like "1 h 32 min"
+ */
 function formatDuration(s) {
   var duration = moment.duration(s, 'seconds');
   var hours = (duration.asHours() >= 1) ? Math.floor(duration.asHours()) + ' h ' : '';
@@ -347,6 +490,11 @@ function formatDuration(s) {
   return hours + minutes;
 }
 
+/**
+ * Format an address
+ * @param {object} address - an address from an Automatic trip
+ * @return {string} Formatted address
+ */
 function formatAddress(address) {
   if (!address) {
     address = {};
@@ -357,6 +505,9 @@ function formatAddress(address) {
   return address;
 }
 
+/**
+ * Format a labs page for demo mode
+ */
 function formatForDemo() {
   var queryParams = getQueryParams(document.location.search);
   if (queryParams.demo) {
@@ -366,6 +517,9 @@ function formatForDemo() {
   }
 }
 
+/**
+ * Show the logout link on a demo page if a user is logged in
+ */
 function showLoginLink() {
   var accessToken = getAccessToken();
   if (accessToken) {
@@ -373,6 +527,14 @@ function showLoginLink() {
   }
 }
 
+/**
+ * Calculate the distance in miles between two coordinates
+ * @param {number} lat1 - latitude 1
+ * @param {number} lon1 - longitude 1
+ * @param {number} lat2 - latitude 2
+ * @param {number} lng2 - longitude 2
+ * @return {number} distance in miles between the two coordinates
+ */
 function calculateDistanceMi(lat1, lon1, lat2, lon2) {
   function toRadians(degree) {
     return (degree * (Math.PI / 180));
@@ -392,6 +554,11 @@ function calculateDistanceMi(lat1, lon1, lat2, lon2) {
   return d;
 }
 
+/**
+ * Get the full state name from abbreviation
+ * @param {string} stateAbbrev - state Abbreviation
+ * @return {string} Full name of state, if found
+ */
 function getStateName(stateAbbrev) {
   var stateCodes = {
     AL: 'Alabama',
@@ -458,6 +625,12 @@ function getStateName(stateAbbrev) {
   return stateCodes[stateAbbrev];
 }
 
+/**
+ * Pluralize a word based on count
+ * @param {string} word - word to pluralize
+ * @param {integer} count - count of things
+ * @return {string} pluralized word
+ */
 function pluralize(word, count) {
   var result = word;
 
@@ -468,6 +641,10 @@ function pluralize(word, count) {
   return result;
 }
 
+/**
+ * Create a div with spinner classes
+ * @return {div} jquery object containing classed divs
+ */
 function generateSpinner() {
   return $('<div>')
     .addClass('spinner center')
@@ -476,6 +653,11 @@ function generateSpinner() {
     }));
 }
 
+/**
+ * Save share data to share server. User must be logged in
+ * @param {object} data - object of data to share
+ * @param {function} cb - callback for when data is shared
+ */
 function saveShareData(data, cb) {
   var accessToken = getAccessToken();
 
@@ -496,6 +678,11 @@ function saveShareData(data, cb) {
   });
 }
 
+/**
+ * Get share data from share server
+ * @param {string} slug - slug of data to retreive
+ * @param {function} cb - callback for when data is retreived
+ */
 function getShareData(slug, cb) {
   $.getJSON(shareAPIUrl + '/' + slug).done(function(result) {
     cb(null, result);
@@ -504,20 +691,38 @@ function getShareData(slug, cb) {
   });
 }
 
+/**
+ * Format a mailto link
+ * @param {string} subject - subject line of email
+ * @param {string} body - body of email
+ * @param {string} shareURL - URL to be shared
+ * @return {string} formatted mailto link
+ */
 function formatEmailShare(subject, body, shareURL) {
   body += ' ' + shareURL;
   return 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 }
 
+/**
+ * Format a twitter share intent URL
+ * @param {string} text - text to tweet
+ * @param {string} shareURL - URL to be shared
+ * @return {string} formatted twitter share intent URL
+ */
 function formatTwitterShare(text, shareURL) {
   text += ' ' + shareURL;
   return 'https://twitter.com/intent/tweet?&text=' + encodeURIComponent(text) + '&tw_p=tweetbutton&via=automatic';
 }
 
+/**
+ * Format a facebook share URL
+ * @param {string} shareURL - URL to be shared
+ * @return {string} formatted facebook share URL
+ */
 function formatFacebookShare(shareURL) {
   return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareURL);
 }
 
-/* On all pages */
+/* On all pages, call the following functions on page load */
 formatForDemo();
 showLoginLink();
