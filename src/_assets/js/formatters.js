@@ -59,31 +59,17 @@ function formatVehicleEvents(events, tripPath) {
   });
 }
 
-exports.address = (address) => {
-  let formattedAddress = '';
-
-  if (address.street_number) {
-    formattedAddress += address.street_number + ' ';
+function formatAddress(address) {
+  if (!address) {
+    address = {};
   }
 
-  if (address.street_name) {
-    formattedAddress += address.street_name + ', ';
+  if (!address.display_name) {
+    address.display_name = 'Unknown Address';
   }
 
-  if (address.city) {
-    formattedAddress += address.city;
-  }
-
-  if (address.city && address.state) {
-    formattedAddress += ', ';
-  }
-
-  if (address.state) {
-    formattedAddress += address.state;
-  }
-
-  return formattedAddress || address.display_name || 'Unknown Address';
-};
+  return address;
+}
 
 exports.formatTrip = (trip, vehicles) => {
   const vehicle = _.findWhere(vehicles, { url: trip.vehicle });
@@ -95,8 +81,8 @@ exports.formatTrip = (trip, vehicles) => {
     },
     started_at: trip.started_at,
     ended_at: trip.ended_at,
-    start_address: trip.start_address,
-    end_address: trip.end_address,
+    start_address: formatAddress(trip.start_address),
+    end_address: formatAddress(trip.end_address),
     start_location: trip.start_location,
     end_location: trip.end_location,
     start_time_zone: trip.start_time_zone,
