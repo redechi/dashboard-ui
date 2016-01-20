@@ -35,11 +35,11 @@ exports.login = function login(username, password, staySignedIn, cb) {
 
   request
     .post(`${apiUrl}/oauth/access_token/`)
-    .send(`username=${username}`)
-    .send(`password=${password}`)
+    .send(`username=${encodeURIComponent(username)}`)
+    .send(`password=${encodeURIComponent(password)}`)
     .send(`client_id=${clientId}`)
     .send('grant_type=password')
-    .send(`scope=${scopes.join(' ')}`)
+    .send(`scope=${encodeURIComponent(scopes.join(' '))}`)
     .end((e, response) => {
       if (e && response.body && response.body.error) {
         e.message = response.body.error;
@@ -66,7 +66,7 @@ exports.logout = function logout() {
 exports.reset = function reset(username, cb) {
   request
     .post(`${apiUrl}/password/reset_email/`)
-    .send(`email=${username}`)
+    .send(`email=${encodeURIComponent(username)}`)
     .end((e, response) => {
       if (e) {
         cb(e);
