@@ -89,7 +89,7 @@
       <h1 class="labs-title">Relocate Your Commute</h1>
       <div class="labs-tagline">By Automatic Labs</div>
     </div>
-    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=relocate">Log in</a> to view your Automatic driving history.</div>
+    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
     <div id="relocatemap" class="map"></div>
     <div class="toolbar">
       <h3>Relocate your commute to:</h3>
@@ -331,6 +331,9 @@
         });
       }
 
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('relocate');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {

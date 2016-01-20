@@ -76,7 +76,7 @@
       <div class="title">Loading...</div>
       <div class="progress"></div>
     </div>
-    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=nightmap">Log in</a> to view your Automatic driving history.</div>
+    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
     <div id="nightmap" class="map"></div>
     <div class="map-info">
       <h1 class="labs-title">Trip Line Map</h1>
@@ -184,6 +184,10 @@
           $('.loading .progress').text(progress);
         });
       }
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('nightmap');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {

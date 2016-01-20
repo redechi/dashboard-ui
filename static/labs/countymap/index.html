@@ -102,7 +102,7 @@
         <b>Collect them all!</b>
       </div>
     </div>
-    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=countymap">Log in</a> to view your Automatic driving history.</div>
+    <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
     <div id="countymap" class="map"></div>
     <div class="wrapper">
       <div id="results"></div>
@@ -451,6 +451,10 @@
           $('.loading .progress').text(progress);
         });
       }
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('countymap');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {

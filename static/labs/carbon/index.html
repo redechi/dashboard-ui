@@ -73,7 +73,7 @@
         <h1 class="labs-title">Carbon Calculator</h1>
         <div class="labs-tagline">By Automatic Labs</div>
       </div>
-      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=carbon">Log in</a> to view your Automatic driving history.</div>
+      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
       <div class="controls">
         Fuel Type:
         <select class="fuelType">
@@ -222,6 +222,10 @@
       }
 
       $('.fuelType').change(renderData);
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('carbon');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {

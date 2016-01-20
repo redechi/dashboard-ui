@@ -43,7 +43,7 @@
           </a>
         </div>
         <h1>A Year At the Wheel</h1>
-        <div class="alert-demo">This is sample data from a demo account. <a class="login-link" href="/labs/login/index.html?lab=year-in-review">Log in</a> to view your Automatic driving history.</div>
+        <div class="alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
         <div class="intro-text">
           Welcome to your driving data Year in Review.<br>
           We hope you'll find this summary interesting and insightful.<br>
@@ -51,7 +51,7 @@
         </div>
         <div class="share-intro-text">
           Generate your very own Year in Review report of your driving data.<br>
-          Just <a class="login-link" href="/labs/login/index.html?lab=year-in-review">log in with your Automatic account</a> to view and share.<br>
+          Just <a class="login-link" href="#">log in with your Automatic account</a> to view and share.<br>
           Not an Automatic user? <a href="https://automatic.com">LEARN MORE</a>
         </div>
         <hr class="short-bar">
@@ -557,6 +557,10 @@
       function sanitizeTrip(trip) {
         return _.pick(trip, 'path', 'date', 'start_address', 'end_address', 'start_location', 'end_location', 'started_at', 'distance_m');
       }
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('year-in-review');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {

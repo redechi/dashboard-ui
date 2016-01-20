@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="../common/css/style.css" rel="stylesheet" />
-    <link href="../login/css/login.css" rel="stylesheet" />
+    <link href="css/login.css" rel="stylesheet" />
   </head>
   <body>
-    <img src="/assets/img/blurrydash@2x.jpg" id="blurrydash">
+    <img src="img/blurrydash@2x.jpg" id="blurrydash">
     <div id="loginPage">
       <h1>Log in</h1>
       <div>Use your Automatic app account</div>
@@ -74,7 +74,8 @@
 
               var queryParams = getQueryParams(document.location.search);
               if (queryParams.lab) {
-                window.location = '/labs/' + queryParams.lab + '/index.html';
+                // split URL so it doesn't get md5ed
+                window.location = '/labs/' + queryParams.lab + '/index' + '.html';
               }
             }
           })

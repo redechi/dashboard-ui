@@ -168,6 +168,7 @@
 
       $('.btn-play').click(playHyperlapse);
 
+      /* On Page Load */
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {
         getShareData(queryParams.share, function(e, result) {

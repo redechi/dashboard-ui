@@ -519,8 +519,11 @@ function formatForDemo() {
 
 /**
  * Show the logout link on a demo page if a user is logged in
+ * @param {string} labName - slug of lab to link to
  */
-function showLoginLink() {
+function showLoginLink(labName) {
+  $('.login-link').attr('href', '../login/index.html?lab=' + labName);
+
   var accessToken = getAccessToken();
   if (accessToken) {
     $('.btn-logout').show();
@@ -722,7 +725,3 @@ function formatTwitterShare(text, shareURL) {
 function formatFacebookShare(shareURL) {
   return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareURL);
 }
-
-/* On all pages, call the following functions on page load */
-formatForDemo();
-showLoginLink();
