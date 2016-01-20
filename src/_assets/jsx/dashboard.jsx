@@ -81,9 +81,9 @@ class Dashboard extends React.Component {
     };
 
     this.getTrips = (startDate, cb) => {
-      // if demo mode and trips are already loaded, skip
+      // if demo mode and trips are already loaded, send them
       if (!login.isLoggedIn() && this.state.allTrips.length) {
-        return;
+        return cb();
       }
 
       const tripRequestMinDate = this.state.tripRequestMinDate;
