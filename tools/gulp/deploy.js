@@ -32,7 +32,6 @@ function deployAWS() {
 
   return merge(gzip, plain)
     .pipe(parallelize(publisher.publish(), 30))
-    .pipe(publisher.sync())
     .pipe(awspublish.reporter());
 }
 
