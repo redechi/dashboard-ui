@@ -7,6 +7,7 @@ const Dashboard = require('./dashboard.jsx');
 const Header = require('./header.jsx');
 const Home = require('./home.jsx');
 const Labs = require('./labs.jsx');
+const Logout = require('./logout.jsx');
 const NoMatch = require('./nomatch.jsx');
 const Reset = require('./reset.jsx');
 const UnsupportedBrowser = require('./unsupported_browser.jsx');
@@ -49,6 +50,7 @@ render((
       <Route path="labs" component={Labs}/>
       <Route path="connected-apps" component={ConnectedApps}/>
       <Route path="reset" component={Reset}/>
+      <Route path="logout" component={Logout}/>
       <Route path="*" component={NoMatch}/>
     </Route>
   </Router>
