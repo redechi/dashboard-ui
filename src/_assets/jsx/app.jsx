@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 const ConnectedApps = require('./connected_apps.jsx');
 const Dashboard = require('./dashboard.jsx');
@@ -43,7 +43,7 @@ App.propTypes = {
 };
 
 render((
-  <Router>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
       <Route path="demo" component={Dashboard}/>
