@@ -33,6 +33,7 @@
     "superagent": "1.7.0"
   },
   "devDependencies": {
+    "autoprefixer": "6.3.1",
     "babel": "6.3.26",
     "babel-cli": "6.4.0",
     "babel-core": "6.4.0",
@@ -77,6 +78,7 @@
     "node-emoji": "1.0.4",
     "node-sass": "3.4.2",
     "postcss-loader": "0.8.0",
+    "precss": "1.4.0",
     "protractor": "3.0.0",
     "rx": "4.0.7",
     "sass-loader": "3.1.2",

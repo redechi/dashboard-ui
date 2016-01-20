@@ -1,8 +1,10 @@
-import path from 'path';
-
+import autoprefixer from 'autoprefixer';
 import { optimize } from 'webpack';
+import path from 'path';
+import precss from 'precss';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ModernizrWebpackPlugin from 'modernizr-webpack-plugin';
+
 
 import settings from '../../settings.js';
 
@@ -74,6 +76,10 @@ function makeWebpackConfig() {
         loader: 'json'
       }
     ]
+  };
+
+  webpackConfig.postcss = () => {
+    return [autoprefixer, precss];
   };
 
   webpackConfig.plugins = [
