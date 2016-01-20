@@ -18,7 +18,7 @@
     "d3": "3.5.12",
     "filesaverjs": "0.2.1",
     "font-awesome": "4.5.0",
-    "history": "2.0.0-rc2",
+    "history": "1.17.0",
     "jquery": "2.2.0",
     "lodash": "3.10.1",
     "mapbox.js": "2.2.4",
@@ -29,7 +29,7 @@
     "react-bootstrap": "0.28.2",
     "react-datepicker": "0.18.0",
     "react-dom": "0.14.6",
-    "react-router": "2.0.0-rc5",
+    "react-router": "1.0.3",
     "superagent": "1.7.0"
   },
   "devDependencies": {

@@ -79,7 +79,7 @@ function Lab(props) {
 }
 
 Lab.propTypes = {
-  isLoggedIn: React.PropTypes.boolean,
+  isLoggedIn: React.PropTypes.bool,
   lab: React.PropTypes.object.isRequired
 };
 
