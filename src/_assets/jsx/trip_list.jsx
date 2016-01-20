@@ -45,7 +45,6 @@ class TripList extends React.Component {
       sortDirection: 'down',
       showModal: false,
       exporting: false,
-      modalTrip: {},
       showExportModal: false,
       selectionControlText: 'Select all'
     };
@@ -228,7 +227,7 @@ class TripList extends React.Component {
       </Popover>
     );
 
-    const trip = this.state.modalTrip;
+    const trip = this.state.modalTrip || this.props.trips[0];
 
     let businessTag;
     if (trip && _.contains(trip.tags, 'business')) {
@@ -287,7 +286,7 @@ class TripList extends React.Component {
                     {moment(trip.started_at).format('h:mm A, MMM D, YYYY')}
                   </div>
                   <div className="location">
-                    {trip.start_address ? trip.start_address.display_name : 'Unknown Address'}
+                    {trip.start_address.display_name}
                   </div>
                 </div>
                 <div className="end">
@@ -295,7 +294,7 @@ class TripList extends React.Component {
                     {moment(trip.ended_at).format('h:mm A')}
                   </div>
                   <div className="location">
-                    {trip.end_address ? trip.end_address.display_name : 'Unknown Address'}
+                    {trip.end_address.display_name}
                   </div>
                 </div>
               </div>

@@ -67,7 +67,7 @@ class Trip extends React.Component {
 
         <div className="trip-details">
           <div className="location">
-            {trip.end_address ? trip.end_address.display_name : 'Unknown Address'}
+            {trip.end_address.display_name}
           </div>
 
           <div className="middle-box">
@@ -104,7 +104,7 @@ class Trip extends React.Component {
           </div>
 
           <div className="location">
-            {trip.start_address ? trip.start_address.display_name : 'Unknown Address'}
+            {trip.start_address.display_name}
           </div>
           {businessTag}
         </div>
