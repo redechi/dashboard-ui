@@ -89,6 +89,7 @@
 
 
     .trip-stats {
+      border-bottom: 0;
       padding: 10px;
       float: left;
       width: 500px;
@@ -141,6 +142,7 @@
 
   .map {
     .map-container {
+      border-top: 1px solid $footer_top_line;
       height: 400px;
     }
 
