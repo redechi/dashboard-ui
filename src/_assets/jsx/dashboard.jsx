@@ -80,6 +80,12 @@ class Dashboard extends React.Component {
       });
     };
 
+    this.closeNoTripsModal = () => {
+      this.setState({
+        showNoTripsModal: false
+      });
+    };
+
     this.getTrips = (startDate, cb) => {
       // if demo mode and trips are already loaded, send them
       if (!login.isLoggedIn() && this.state.allTrips.length) {
@@ -119,6 +125,16 @@ class Dashboard extends React.Component {
     const dateFilterComponents = this.state.filters.date.split(',');
     const startDate = parseInt(dateFilterComponents[0], 10);
     this.getTrips(startDate, () => {
+      if (!this.state.allTrips.length) {
+        requests.userHasNoTrips((e, userHasNoTrips) => {
+          if (userHasNoTrips) {
+            this.setState({
+              showNoTripsModal: true
+            });
+          }
+        });
+      }
+
       this.setState({
         trips: filters.filterTrips(this.state.allTrips, this.state.filters),
         ranges: stats.calculateRanges(this.state.allTrips)
@@ -191,6 +207,16 @@ class Dashboard extends React.Component {
           <Modal.Body>
             <div>Loading trips&hellip;</div>
             <div className="loading-progress">{this.state.loadingProgressText}</div>
+          </Modal.Body>
+        </Modal>
+        <Modal show={this.state.showNoTripsModal} className="notrips-modal">
+          <Modal.Body>
+            <h2>You haven't taken any trips yet.</h2>
+            <div className="notrips-text">
+              Once you start driving with Automatic, your trips and drive data will be available here to explore.
+              Use our <a href="https://www.automatic.com/app">mobile app</a> to get started.
+            </div>
+            <div className="btn btn-blue btn-close" onClick={this.closeNoTripsModal}>OK</div>
           </Modal.Body>
         </Modal>
       </div>

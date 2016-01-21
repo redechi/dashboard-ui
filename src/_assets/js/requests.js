@@ -77,6 +77,24 @@ function fetchData(endpoint, query, loadingProgress, cb) {
   makeRequest(endpoint, query, cb);
 }
 
+exports.userHasNoTrips = (cb) => {
+  request
+    .get(`${apiUrl}/trip/`)
+    .query({ limit: 1 })
+    .set('Authorization', `bearer ${login.getAccessToken()}`)
+    .end((e, response) => {
+      if (e) {
+        return cb(e);
+      }
+
+      if (!response.body || !response.body.results) {
+        return cb(new Error('No results returned'));
+      }
+
+      cb(null, !response.body.results.length);
+    });
+};
+
 exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
   if (login.isLoggedIn()) {
     fetchData('vehicle/', null, null, (e, vehicles) => {

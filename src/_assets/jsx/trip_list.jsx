@@ -180,8 +180,8 @@ class TripList extends React.Component {
   }
 
   render() {
-    if (!this.props.trips) {
-      return (<div/>);
+    if (!this.props.trips || !this.props.trips.length) {
+      return (<div />);
     }
 
     const selectedSortType = _.find(sortTypes, (item) => item.key === this.state.sortType);

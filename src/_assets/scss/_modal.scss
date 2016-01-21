@@ -111,3 +111,25 @@
     padding: 15px 4px 0;
   }
 }
+
+.notrips-modal {
+  .modal-dialog {
+    margin-top: 100px;
+
+    .modal-content {
+      @include hr-image('../images/icon_notrips', 'png', 80px, 80px);
+      background-repeat: no-repeat;
+      background-position: left 20px top 45px;
+
+      .notrips-text {
+        padding: 30px 15px 30px 120px;
+      }
+
+      .btn-close {
+        margin: 0 auto;
+        display: block;
+        width: 150px;
+      }
+    }
+  }
+}
