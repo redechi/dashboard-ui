@@ -52,6 +52,7 @@ function fitBounds(bounds) {
   map.invalidateSize();
   if (!bounds) {
     bounds = pathsLayer.getBounds();
+    bounds.extend(markersLayer.getBounds());
   }
 
   if (bounds.isValid()) {
