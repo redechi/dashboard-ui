@@ -13,6 +13,8 @@ class Filter extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {};
+
     this.updateFilter = (value) => {
       this.props.updateFilter(this.props.filterType, value);
 
@@ -48,6 +50,9 @@ class Filter extends React.Component {
         })
         .on('slideStop', (newValue) => {
           this.updateFilter(newValue.join(','));
+          this.setState({
+            value: undefined
+          });
         });
       }
     };
@@ -225,7 +230,7 @@ class Filter extends React.Component {
         >
           <div className="btn btn-filter btn-popover">
             <span className="btn-text">
-              {filter.valueText(this.props.value, this.props.vehicles)}
+              {filter.valueText(this.state.value || this.props.value, this.props.vehicles)}
             </span> <i className="fa fa-angle-down fa-lg"></i>
           </div>
         </OverlayTrigger>
