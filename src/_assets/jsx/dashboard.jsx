@@ -51,9 +51,10 @@ class Dashboard extends React.Component {
         const dateFilterComponents = this.state.filters.date.split(',');
         const startDate = parseInt(dateFilterComponents[0], 10);
         this.getTrips(startDate, () => {
+          const trips = filters.filterTrips(this.state.allTrips, this.state.filters);
           this.setState({
-            trips: filters.filterTrips(this.state.allTrips, this.state.filters),
-            ranges: stats.calculateRanges(this.state.allTrips)
+            trips,
+            ranges: stats.calculateRanges(trips)
           });
         });
       }
