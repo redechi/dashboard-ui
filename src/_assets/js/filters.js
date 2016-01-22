@@ -69,7 +69,7 @@ const filterList = [
       }
 
       const formattedMin = Math.floor(moment.duration(parseInt(min, 10), 'seconds').asMinutes());
-      const formattedMax = Math.ceil(moment.duration(parseInt(max, 10), 'second').asMinutes());
+      const formattedMax = Math.ceil(moment.duration(parseInt(max, 10), 'seconds').asMinutes());
       return `between ${formattedMin} - ${formattedMax} minutes`;
     }
   },
@@ -121,13 +121,6 @@ function findSortedIndexByDate(trips, date) {
   return _.sortedIndex(trips, searchTrip, (trip) => {
     return -moment(trip.started_at).valueOf();
   });
-}
-
-function filterByDate(trips, dateFilter) {
-  const [startDate, endDate] = dateFilter.split(',');
-  const startIndex = findSortedIndexByDate(trips, parseInt(startDate, 10));
-  const endIndex = findSortedIndexByDate(trips, parseInt(endDate, 10));
-  return trips.slice(endIndex, startIndex);
 }
 
 function filterByVehicle(trips, vehicleFilter) {
@@ -209,9 +202,16 @@ exports.getRemainingFilters = function getRemainingFilters(filters) {
   return _.reject(filterList, (filter) => !!filters[filter.key]);
 };
 
+exports.filterByDate = function filterByDate(trips, dateFilter) {
+  const [startDate, endDate] = dateFilter.split(',');
+  const startIndex = findSortedIndexByDate(trips, parseInt(startDate, 10));
+  const endIndex = findSortedIndexByDate(trips, parseInt(endDate, 10));
+  return trips.slice(endIndex, startIndex);
+};
+
 exports.filterTrips = function filterTrips(trips, filters) {
   let filteredTrips = trips || [];
-  filteredTrips = filterByDate(filteredTrips, filters.date);
+  filteredTrips = exports.filterByDate(filteredTrips, filters.date);
   filteredTrips = filterByVehicle(filteredTrips, filters.vehicle);
   if (filters.distance) {
     filteredTrips = filterByDistance(filteredTrips, filters.distance);
