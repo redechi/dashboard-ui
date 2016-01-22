@@ -11,7 +11,8 @@ function buildFingerprint() {
       'favicon.ico',
       'sitemap.xml',
       '.html',
-      '.txt'
+      '.txt',
+      'main'
     ]
   });
   return gulp.src('dist/**')
