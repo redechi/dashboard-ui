@@ -59,7 +59,12 @@ class Filters extends React.Component {
       <Popover id="filterType" title="Add Filter" className="popover-filter-type">
         <ul className="list-select animate">
           {filters.getRemainingFilters(this.props.filters).map(filterType =>
-            <ListItem onItemClick={this.addFilter} key={filterType.key} item={filterType} />
+            <ListItem
+              onItemClick={this.addFilter}
+              key={filterType.key}
+              value={filterType.key}
+              name={filterType.name}
+            />
           )}
         </ul>
       </Popover>

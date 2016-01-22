@@ -1,25 +1,29 @@
 import React from 'react';
 
+import classNames from 'classnames';
+
 class ListItem extends React.Component {
   constructor(props) {
     super(props);
 
     this._onClick = () => {
-      this.props.onItemClick(this.props.item.key);
+      this.props.onItemClick(this.props.value);
     };
   }
 
   render() {
     return (
-      <li onClick={this._onClick}>
-        {this.props.item.name}
+      <li onClick={this._onClick} className={classNames({ selected: this.props.selected })}>
+        {this.props.name}
       </li>
     );
   }
 }
 ListItem.propTypes = {
   onItemClick: React.PropTypes.func.isRequired,
-  item: React.PropTypes.object
+  name: React.PropTypes.string,
+  value: React.PropTypes.string,
+  selected: React.PropTypes.bool
 };
 
 module.exports = ListItem;

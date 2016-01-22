@@ -15,23 +15,23 @@ const Trip = require('./trip.jsx');
 
 const sortTypes = [
   {
-    key: 'started_at',
+    value: 'started_at',
     name: 'Time/Date'
   },
   {
-    key: 'distance_miles',
+    value: 'distance_miles',
     name: 'Distance'
   },
   {
-    key: 'average_mpg',
+    value: 'average_mpg',
     name: 'MPG'
   },
   {
-    key: 'fuel_cost_usd',
+    value: 'fuel_cost_usd',
     name: 'Cost'
   },
   {
-    key: 'duration_s',
+    value: 'duration_s',
     name: 'Duration'
   }
 ];
@@ -184,7 +184,7 @@ class TripList extends React.Component {
       return (<div />);
     }
 
-    const selectedSortType = _.find(sortTypes, (item) => item.key === this.state.sortType);
+    const selectedSortType = _.find(sortTypes, (item) => item.value === this.state.sortType);
 
     const trips = this.sortTrips().map((trip, key) => {
       return (
@@ -196,7 +196,12 @@ class TripList extends React.Component {
       <Popover id="sortType" title="Sort By" className="popover-sort-type">
         <ul className="list-select animate">
           {sortTypes.map(sortType =>
-            <ListItem key={sortType.key} item={sortType} onItemClick={this.setSortType} />
+            <ListItem
+              key={sortType.value}
+              value={sortType.value}
+              name={sortType.name}
+              onItemClick={this.setSortType}
+            />
           )}
         </ul>
       </Popover>
@@ -204,15 +209,15 @@ class TripList extends React.Component {
 
     const exportPopoverOptions = [
       {
-        key: 'selected',
+        value: 'selected',
         name: 'Export selected trips'
       },
       {
-        key: 'tripList',
+        value: 'tripList',
         name: `Export trips currently in trip list (${this.props.trips.length})`
       },
       {
-        key: 'all',
+        value: 'all',
         name: 'Export all trips'
       }
     ];
@@ -221,7 +226,12 @@ class TripList extends React.Component {
       <Popover id="export" title="Export trips to .csv" className="popover-export">
         <ul className="list-select animate">
           {exportPopoverOptions.map(option =>
-            <ListItem key={option.key} item={option} onItemClick={this.export} />
+            <ListItem
+              key={option.value}
+              value={option.value}
+              name={option.name}
+              onItemClick={this.export}
+            />
           )}
         </ul>
       </Popover>

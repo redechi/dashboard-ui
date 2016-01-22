@@ -5,7 +5,6 @@ import precss from 'precss';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ModernizrWebpackPlugin from 'modernizr-webpack-plugin';
 
-
 import settings from '../../settings.js';
 
 function makeWebpackConfig() {

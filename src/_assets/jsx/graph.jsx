@@ -10,27 +10,27 @@ const ListItem = require('./list_item.jsx');
 
 const graphTypes = [
   {
-    key: 'mpg',
+    value: 'mpg',
     name: 'MPG',
     unit: 'MPG'
   },
   {
-    key: 'cost',
+    value: 'cost',
     name: 'Cost',
     unit: 'FUEL'
   },
   {
-    key: 'score',
+    value: 'score',
     name: 'Score',
     unit: '/100'
   },
   {
-    key: 'distance',
+    value: 'distance',
     name: 'Distance',
     unit: 'MILES'
   },
   {
-    key: 'duration',
+    value: 'duration',
     name: 'Duration',
     unit: 'MIN'
   }
@@ -84,13 +84,18 @@ class Graph extends React.Component {
       <Popover id="graphType" title="Choose Metric" className="popover-graph-type">
         <ul className="list-select">
           {graphTypes.map(graphType =>
-            <ListItem onItemClick={this.setGraphType} key={graphType.key} item={graphType} />
+            <ListItem
+              onItemClick={this.setGraphType}
+              key={graphType.value}
+              value={graphType.value}
+              name={graphType.name}
+            />
           )}
         </ul>
       </Popover>
     );
 
-    const selectedGraphType = _.find(graphTypes, (item) => item.key === this.state.graphType);
+    const selectedGraphType = _.find(graphTypes, (item) => item.value === this.state.graphType);
 
     return (
       <div className="graph">

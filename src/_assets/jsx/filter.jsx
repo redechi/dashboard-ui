@@ -9,6 +9,8 @@ import Slider from 'bootstrap-slider';
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
 
+const ListItem = require('./list_item.jsx');
+
 class Filter extends React.Component {
   constructor(props) {
     super(props);
@@ -79,28 +81,9 @@ class Filter extends React.Component {
     }
   }
 
-  formatVehicleMenuItem(vehicle, key) {
-    return (
-      <li
-        onClick={this.updateFilter.bind(null, vehicle.id)}
-        className={classNames({ selected: this.props.value === vehicle.id })}
-        key={key}
-      >
-        {formatters.formatVehicle(vehicle)} <i></i>
-      </li>
-    );
-  }
-
-  formatDateMenuItem(option, key) {
-    return (
-      <li
-        onClick={this.updateFilter.bind(null, option.value)}
-        className={classNames({ selected: this.props.value === option.value })}
-        key={key}
-      >
-        {option.name} <i></i>
-      </li>
-    );
+  formatVehicleMenuItem(vehicle) {
+    vehicle.name = formatters.formatVehicle(vehicle);
+    return vehicle;
   }
 
   render() {
@@ -146,7 +129,15 @@ class Filter extends React.Component {
       date: (
         <Popover id="date" title="Select Date Range" className="popover-date">
           <ul className="date-filter-value list-select animate">
-            {dateFilterOptions.map(this.formatDateMenuItem.bind(this))}
+            {dateFilterOptions.map((dateFilter) =>
+              <ListItem
+                onItemClick={this.updateFilter}
+                key={dateFilter.value}
+                value={dateFilter.value}
+                name={dateFilter.name}
+                selected={this.props.value === dateFilter.value}
+              />
+            )}
           </ul>
           <div
             className="date-filter-custom"
@@ -183,7 +174,15 @@ class Filter extends React.Component {
             >
               All my vehicles <i></i>
             </li>
-            {this.props.vehicles.map(this.formatVehicleMenuItem.bind(this))}
+            {this.props.vehicles.map(this.formatVehicleMenuItem).map((vehicleMenuItem) =>
+              <ListItem
+                onItemClick={this.updateFilter}
+                key={vehicleMenuItem.id}
+                value={vehicleMenuItem.id}
+                name={vehicleMenuItem.name}
+                selected={this.props.value === vehicleMenuItem.id}
+              />
+            )}
           </ul>
         </Popover>
       ),
