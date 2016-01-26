@@ -60,7 +60,7 @@ class Graph extends React.Component {
 
   getGraphWidth() {
     const minWidth = 614;
-    const horizontalPadding = 425;
+    const horizontalPadding = 410;
     return Math.max(this.props.windowWidth - horizontalPadding, minWidth);
   }
 
