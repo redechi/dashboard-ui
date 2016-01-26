@@ -1,5 +1,5 @@
 /* eslint no-alert: 0 */
 
-module.exports = alertText => {
-  alert(alertText);
+module.exports = confirmText => {
+  return confirm(confirmText);
 };
