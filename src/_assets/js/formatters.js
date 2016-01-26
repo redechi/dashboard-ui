@@ -110,7 +110,7 @@ exports.distance = (distanceMiles) => {
     return distanceMiles.toFixed();
   }
 
-  return distanceMiles ? distanceMiles.toFixed(1) : '';
+  return distanceMiles ? distanceMiles.toFixed(1) : 0;
 };
 
 exports.formatTime = (time, timezone, format) => {
@@ -147,4 +147,4 @@ exports.costWithUnit = (fuelCost) => '$' + (fuelCost || 0).toFixed(2);
 
 exports.averageMPG = (mpg) => mpg ? mpg.toFixed(1) : 0;
 
-exports.score = (score) => Math.round(score) || undefined;
+exports.score = (score) => Math.round(score) || 0;
