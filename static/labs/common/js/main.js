@@ -151,7 +151,7 @@ function fetchDemoVehicles(cb) {
  */
 function getAccessToken() {
   var queryParams = getQueryParams(document.location.search);
-  var accessTokenFromSession = sessionStorage.getItem('accessToken');
+  var accessTokenFromSession = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
   var accessTokenFromCookie = getCookie('accessToken');
   return queryParams.accessToken || accessTokenFromSession || accessTokenFromCookie;
 }
@@ -160,7 +160,7 @@ function getAccessToken() {
  * Redirect the browser to the login page
  */
 function redirectToLogin() {
-  window.location = $('.login-link').attr('href');
+  window.location = $('.login-link').attr('href') || '../login/index.html';
 }
 
 /**

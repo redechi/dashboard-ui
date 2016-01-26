@@ -7,75 +7,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker-standalone.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     <link href="../common/css/style.css" rel="stylesheet" />
-    <style>
-      .wrapper {
-        width: 700px;
-        margin: 0 auto;
-      }
-
-      .day {
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 15px;
-        background: #f6f6f6;
-      }
-
-      .day h2 {
-        margin: 0;
-      }
-
-      .stat {
-        display: inline-block;
-        padding: 5px 10px 10px;
-      }
-
-      .map {
-        height: 300px;
-      }
-    </style>
-
+    <link href="css/timeline.css" rel="stylesheet" />
   </head>
   <body>
-    <a class="btn-logout" href="/#/logout">Log out</a>
-    <div class="wrapper">
-      <div>
-        <h1 class="labs-title">Timeline</h1>
-        <div class="labs-tagline">By Automatic Labs</div>
+    <nav id="menu" class="slideout-menu">
+      <ul class="vehicle-select">
+      </ul>
+      <ul>
+        <li>
+          <a href="#" class="add-photo">Add a Photo</a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <main id="panel" class="panel">
+      <div class="top-bar">
+        <div class="top-bar-title"></div>
       </div>
-      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
-      <label>Vehicle:</label>
-      <select id="vehicleSelect">
-        <option>Select Vehicle</option>
-      </select>
-      <div id="days"></div>
+      <div id="timeline" class="timeline"></div>
+    </main>
+
+    <div class="modal add-record-modal">
+      <div class="modal-dialog">
+        <div class="close">×</div>
+        <div class="modal-content">
+          <h3>Add a photo to your timeline</h3>
+          <p>Enter a photo URL, description and date.</p>
+          <div class="form-group">
+            <label>Photo URL</label>
+            <input type="text" id="photoUrl" placeholder="http://myphoto.com" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="photoDescription" placeholder="My awesome picture" />
+          </div>
+          <div class="form-group">
+            <label>Created Date</label>
+            <input type="text" id="photoDate" />
+          </div>
+          <div class="form-group form-group-submit">
+            <div class="btn btn-blue btn-save">Save</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+    <div class="modal-overlay"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js"></script>
     <script src="https://api.tiles.mapbox.com/mapbox.js/v2.2.3/mapbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/async/1.5.2/async.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideout/0.1.11/slideout.min.js"></script>
 
     <script type='text/template' id='dayTemplate'>
-      <div class="day">
-        <h2>{{moment(datetime).format('MMM, D, YYYY')}}</h2>
-        <div class="stat">
-          Trips: <b>{{items[0].title}}</b>
-        </div>
-        <div class="stat">
-          Fuel Efficiency: <b>{{items[0].average_fuel_efficiency}}</b>
-        </div>
-        <div class="stat">
-          Distance: <b>{{items[0].total_distance}}</b>
-        </div>
-        <div class="stat">
-          Duration: <b>{{items[0].total_duration}}</b>
+      <div class="day item">
+        <div class="top-date">{{moment(datetime).format('MMM D, YYYY')}}</div>
+        <h2>{{items[0].title}}</h2>
+        <div class="trip-stats">
+          <div class="stat">
+            <div class="stat-label">Distance</div>
+            <div class="stat-value">{{items[0].total_distance}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Duration</div>
+            <div class="stat-value">{{items[0].total_duration}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Cost</div>
+            <div class="stat-value">{{items[0].total_cost}}</div>
+          </div>
         </div>
         <div class="map">
-          <img src="{{items[0].map_url}}"></div>
+          <img src="{{items[0].map_url}}" class="map-image">
+        </div>
+      </div>
+    </script>
+
+    <script type='text/template' id='photoTemplate'>
+      <div class="record item record-photo">
+        <div class="top-date">{{moment(created_at).format('MMM D, YYYY')}}</div>
+        <h2>{{data.photoDescription}}</h2>
+        <img src="{{data.photoUrl}}" class="photo">
       </div>
     </script>
 
@@ -89,45 +108,208 @@
         interpolate : /\{\{(.+?)\}\}/g
       };
 
-      /* On Page Load */
-      formatForDemo();
-      showLoginLink('timeline');
+      var viewserverAPI = 'https://view.automatic.com';
+      var recordsAPI = 'https://records-service-prod.herokuapp.com';
+      var accessToken = getAccessToken();
 
-      fetchVehicles(function(vehicles) {
-        vehicles.forEach(function(vehicle) {
-          $('#vehicleSelect').append($('<option>').attr('value', vehicle.id).text(vehicle.display_name));
-        });
+      var dayTemplate = _.template($('#dayTemplate').html());
+      var photoTemplate = _.template($('#photoTemplate').html());
+      var vehicles;
+      var selectedVehicleId;
+
+      /* On Page Load */
+      $('#photoDate').datetimepicker({
+        icons: {
+          time: 'fa fa-clock-o',
+          date: 'fa fa-calendar',
+          up: 'fa fa-arrow-up',
+          down: 'fa fa-arrow-down',
+          next: 'fa fa-arrow-right',
+          previous: 'fa fa-arrow-left'
+        }
       });
 
-      $('#vehicleSelect').change(function() {
-        var accessToken = getAccessToken();
-        var vehicleId = $('#vehicleSelect').val();
+      var slideout = new Slideout({
+        panel: document.getElementById('panel'),
+        menu: document.getElementById('menu'),
+        padding: 256,
+        tolerance: 70
+      });
 
-        $('#days').empty();
+      fetchVehicles(function(results) {
+        vehicles = results;
+        vehicles.forEach(function(vehicle) {
+          $('.vehicle-select').append($('<li>').append($('<a>').attr('href', '#').data('vehicleId', vehicle.id).text(vehicle.display_name)));
+        });
+
+        fetchItems(_.first(vehicles).id);
+      });
+
+      $('.slideout-menu').click(function() {
+        slideout.close();
+      });
+
+      $('.vehicle-select li a').click(function(e) {
+        e.preventDefault();
+        var vehicleId = $(e.target).data('vehicleId');
+        fetchItems(vehicleId);
+      });
+
+      $('.add-photo').click(function() {
+        $('.add-record-modal, .modal-overlay').fadeIn();
+      });
+
+      $('.modal .close').click(function() {
+        $('.modal, .modal-overlay').fadeOut();
+      });
+
+      $('.btn-save').click(function(e) {
+        e.preventDefault();
+
+        var photoUrl = $('#photoUrl').val();
+        var photoDescription = $('#photoDescription').val();
+        var photoDate = $('#photoDate').data('DateTimePicker').date();
+
+        if(!photoUrl) {
+          return alert('Please enter a photo URL');
+        }
+
+        if(!photoDate) {
+          return alert('Please enter a date and time for this photo');
+        }
+
+        var record = {
+          vehicle_id: selectedVehicleId,
+          created_at: photoDate.toISOString(),
+          data: {
+            photoDescription: photoDescription,
+            photoUrl: photoUrl,
+            type: 'photo'
+          }
+        };
 
         $.ajax({
-          url: 'https://view.automatic.com/vehicle/' + vehicleId + '/timeline/',
+          method: 'POST',
+          url: recordsAPI + '/timeline_event',
           headers: {
             Authorization: 'bearer ' + accessToken
+          },
+          data: record,
+          success: function(response) {
+            $('.modal, .modal-overlay').fadeOut();
+            fetchItems(selectedVehicleId);
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error(errorThrown);
+            $('.modal, .modal-overlay').fadeOut();
           }
-        })
-        .done(function(results) {
-          results.results.forEach(function(result) {
-            var encodedPolylines = _.compact(_.pluck(result.items[0].trips, 'path'));
-            result.items[0].map_url = getStaticMap(encodedPolylines, {width: 678});
-            var dayTemplate = _.template($('#dayTemplate').html());
-
-            $('#days').append($(dayTemplate(result)));
-          });
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.error(errorThrown);
-          var selectedVehicle = $('#vehicleSelect option:selected').text();
-          alert('Unable to fetch timeline for ' + selectedVehicle);
         });
       });
 
+      function fetchItems(vehicleId) {
+        selectedVehicleId = vehicleId;
+        var vehicle = _.findWhere(vehicles, {id: vehicleId});
 
+        setTitle(vehicle.display_name);
+
+        $('#timeline').empty();
+
+        async.parallel([
+          getDays,
+          getRecords
+        ], function(err, results) {
+          if(err) {
+            console.log(err);
+            return alert('Unable to fetch results');
+          }
+
+          renderTimeline(_.flatten(results, true));
+        });
+
+        function getDays(cb) {
+          $.ajax({
+            url: viewserverAPI + '/vehicle/' + vehicleId + '/timeline/',
+            headers: {
+              Authorization: 'bearer ' + accessToken
+            }
+          })
+          .done(function(results) {
+            var days = results.results.map(function(item) {
+              return item;
+            });
+            cb(null, days);
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error(errorThrown);
+            cb(errorThrown);
+          });
+        }
+
+        function getRecords(cb) {
+          $.ajax({
+            url: recordsAPI + '/timeline_event',
+            headers: {
+              Authorization: 'bearer ' + accessToken
+            }
+          })
+          .done(function(results) {
+            var records = _.where(results.results, { vehicle_id: vehicleId }).map(function(record) {
+              record.type = 'record:record';
+              record.datetime = record.created_at;
+              return record;
+            });
+            cb(null, records);
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error(errorThrown);
+            cb(errorThrown);
+          });
+        }
+      }
+
+      function renderTimeline(items) {
+        var divs = _.compact(sortItemsByDate(items).map(function(item) {
+          if(item.type === 'record:day-group') {
+            return renderDay(item);
+          } else if(item.type === 'record:record') {
+            return renderRecord(item);
+          }
+        }));
+
+        if(!divs.length) {
+          return $('#timeline').append($('<div class="item nothing">Nothing found for this vehicle</div>'));
+        }
+
+        $('#timeline').append(divs);
+      }
+
+      function renderDay(day) {
+        var encodedPolylines = _.compact(_.pluck(day.items[0].trips, 'path'));
+        day.items[0].map_url = getStaticMap(encodedPolylines, {width: 678});
+        console.log(day);
+        return $(dayTemplate(day));
+      }
+
+      function renderRecord(record) {
+        if(!record.data || !record.data.type) {
+          return null;
+        }
+
+        if(record.data.type === 'photo') {
+          console.log(record);
+          return $(photoTemplate(record));
+        }
+      }
+
+      function sortItemsByDate(items) {
+        return _.sortBy(items, function(item) {
+          return -moment(item.datetime).valueOf();
+        });
+      }
+
+      function setTitle(title) {
+        $('.top-bar-title').text(title);
+      }
     </script>
 
     <script>
