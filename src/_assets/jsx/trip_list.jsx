@@ -7,6 +7,7 @@ import moment from 'moment';
 const alert = require('../js/alert');
 const exportData = require('../js/export_data');
 const formatters = require('../js/formatters');
+const highlight = require('../js/highlight');
 const select = require('../js/select');
 
 const ListItem = require('./list_item.jsx');
@@ -130,6 +131,10 @@ class TripList extends React.Component {
           selectionControlText: 'Deselect all'
         });
       }
+    };
+
+    this.unhighlightTrips = () => {
+      highlight.unhighlightTrips(true);
     };
   }
 
@@ -261,7 +266,10 @@ class TripList extends React.Component {
         </div>
 
         <div className="trips">
-          <ul style={{ height: this.getTripListHeight() }}>
+          <ul
+            style={{ height: this.getTripListHeight() }}
+            onMouseLeave={this.unhighlightTrips}
+          >
             {trips}
           </ul>
         </div>
