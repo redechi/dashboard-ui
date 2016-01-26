@@ -24,8 +24,10 @@ function scaleMarkers() {
   const hardAccelIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'hardAccel');
   const weight = mapHelpers.getPathWidthbyZoom(zoom);
 
+  const highlightedTripIds = _.pluck(highlight.getHighlightedTrips(), 'id');
+
   markersLayer.eachLayer((marker) => {
-    if (!marker.options.selected) {
+    if (!_.conatins(selectedTripIds, marker.options.id) && !_.contains(highlightedTripIds, marker.options.id)) {
       marker.setIcon(normalIcon);
     }
   });

@@ -20,3 +20,7 @@ exports.unhighlightTrips = function unhighlightTrips(zoomTrip) {
   });
   highlightedTrips = [];
 };
+
+exports.getHighlightedTrips = function getHighlightedTrips() {
+  return highlightedTrips;
+};
