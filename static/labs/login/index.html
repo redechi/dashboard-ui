@@ -70,12 +70,18 @@
             if (data && data.access_token) {
               var expires = staySignedIn ? data.expires_in : undefined;
               setCookie('accessToken', data.access_token, expires, '/');
-              sessionStorage.setItem('accessToken', data.access_token);
+              if (staySignedIn) {
+                localStorage.setItem('accessToken', data.access_token);
+              } else {
+                sessionStorage.setItem('accessToken', data.access_token);
+              }
 
               var queryParams = getQueryParams(document.location.search);
               if (queryParams.lab) {
                 // split URL so it doesn't get md5ed
                 window.location = '/labs/' + queryParams.lab + '/index' + '.html';
+              } else {
+                window.location = '/#/labs';
               }
             }
           })
