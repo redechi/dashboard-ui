@@ -34,6 +34,7 @@ function prepDemoTrips(trips) {
   return trips.map((trip) => {
     trip.started_at = moment(trip.started_at).add(dayOffset, 'days').toISOString();
     trip.ended_at = moment(trip.ended_at).add(dayOffset, 'days').toISOString();
+    trip.average_kmpl = (trip.distance_m / 1000) / trip.fuel_volume_l;
     return trip;
   });
 }
