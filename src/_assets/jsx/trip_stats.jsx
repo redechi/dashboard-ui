@@ -87,7 +87,8 @@ class TripStats extends React.Component {
     const arcs = chart.selectAll('g')
       .data(pie)
       .enter()
-      .append('g');
+      .append('g')
+      .attr('transform', 'rotate(180)');
 
     arcs
       .append('path')
