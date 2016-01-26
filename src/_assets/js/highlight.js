@@ -3,8 +3,8 @@ const map = require('./map');
 
 let highlightedTrips = [];
 
-exports.highlightTrips = function highlightTrips(trips) {
-  map.highlightTrips(trips);
+exports.highlightTrips = function highlightTrips(trips, zoomTrip) {
+  map.highlightTrips(trips, zoomTrip);
   graph.highlightTrips(trips);
   trips.forEach(trip => {
     document.getElementById(trip.id).classList.add('highlighted');
@@ -12,8 +12,8 @@ exports.highlightTrips = function highlightTrips(trips) {
   highlightedTrips = highlightedTrips.concat(trips);
 };
 
-exports.unhighlightTrips = function unhighlightTrips() {
-  map.unhighlightTrips(highlightedTrips);
+exports.unhighlightTrips = function unhighlightTrips(zoomTrip) {
+  map.unhighlightTrips(highlightedTrips, zoomTrip);
   graph.unhighlightTrips(highlightedTrips);
   highlightedTrips.forEach(trip => {
     document.getElementById(trip.id).classList.remove('highlighted');

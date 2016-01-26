@@ -23,11 +23,11 @@ class Trip extends React.Component {
     };
 
     this.highlightTrips = () => {
-      highlight.highlightTrips([this.props.trip]);
+      highlight.highlightTrips([this.props.trip], true);
     };
 
     this.unhighlightTrips = () => {
-      highlight.unhighlightTrips();
+      highlight.unhighlightTrips(true);
     };
   }
 

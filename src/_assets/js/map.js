@@ -12,7 +12,7 @@ let markersLayer;
 let hardBrakesLayer;
 let hardAccelsLayer;
 let speedingLayer;
-let autozoom;
+let autozoomEnabled;
 let selectedTripIds = [];
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IlVGb0RHOTgifQ.uMNDoXZe6UI7NVUkDHJgSQ';
@@ -175,7 +175,7 @@ exports.updateMap = function updateMap(trips) {
 };
 
 exports.setAutozoom = function setAutozoom(value) {
-  autozoom = value;
+  autozoomEnabled = value;
 };
 
 exports.zoomIn = function zoomIn() {
@@ -218,7 +218,7 @@ function zoomTrips(trips) {
   fitBounds(getBoundsFromTrips(trips) || pathsLayer.getBounds());
 }
 
-exports.highlightTrips = function highlightTrips(trips) {
+exports.highlightTrips = function highlightTrips(trips, zoomTrip) {
   const zoom = map.getZoom();
   const pathStyle = mapHelpers.styleLine(zoom, 'highlight');
   const aIcon = mapHelpers.getMarkerSizeByZoom(zoom, 'aHighlightedIcon');
@@ -248,12 +248,12 @@ exports.highlightTrips = function highlightTrips(trips) {
     speedingLayer.bringToFront();
   }
 
-  if (autozoom) {
+  if (autozoomEnabled && zoomTrip) {
     zoomTrips(trips);
   }
 };
 
-exports.unhighlightTrips = function unhighlightTrips(trips) {
+exports.unhighlightTrips = function unhighlightTrips(trips, zoomTrip) {
   const zoom = map.getZoom();
   let pathStyle;
   let aIcon;
@@ -289,7 +289,7 @@ exports.unhighlightTrips = function unhighlightTrips(trips) {
     }
   });
 
-  if (autozoom) {
+  if (autozoomEnabled && zoomTrip) {
     fitBounds();
   }
 };
@@ -326,7 +326,7 @@ exports.selectTrips = function selectTrips(trips) {
     speedingLayer.bringToFront();
   }
 
-  if (autozoom) {
+  if (autozoomEnabled) {
     zoomTrips(trips);
   }
 };
@@ -359,7 +359,7 @@ exports.deselectTrips = function deselectTrips(trips) {
     }
   });
 
-  if (autozoom) {
+  if (autozoomEnabled) {
     fitBounds();
   }
 };
