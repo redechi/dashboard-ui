@@ -6,7 +6,7 @@
   padding: 25px 30px;
 
   .app-list {
-    min-height: 200px;
+    min-height: 100px;
     padding: 0;
 
     .loading {
@@ -15,7 +15,6 @@
     }
 
     .no-apps {
-      display: none;
       height: 60px;
     }
 
