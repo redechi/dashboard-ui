@@ -226,6 +226,7 @@ class Filter extends React.Component {
           ref={`${this.props.filterType}Popover`}
           overlay={popovers[this.props.filterType]}
           onEntered={this.preparePopover}
+          rootClose={true}
         >
           <div className="btn btn-filter btn-popover">
             <span className="btn-text">

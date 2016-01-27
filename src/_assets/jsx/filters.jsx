@@ -90,7 +90,13 @@ class Filters extends React.Component {
       addFilterControl = (
         <li>
           <div className="filter-label">and</div>
-          <OverlayTrigger placement="bottom" trigger="click" ref="filterTypePopover" overlay={filterTypePopover}>
+          <OverlayTrigger
+            placement="bottom"
+            trigger="click"
+            ref="filterTypePopover"
+            overlay={filterTypePopover}
+            rootClose={true}
+          >
             <div title="Add Filter" className="add-filter btn btn-filter btn-popover">+</div>
           </OverlayTrigger>
         </li>

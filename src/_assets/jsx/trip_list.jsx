@@ -253,7 +253,13 @@ class TripList extends React.Component {
             className={classNames('sort-direction', { 'sort-up': this.state.sortDirection === 'up' })}
             onClick={this.reverseSortDirection}
           ></div>
-          <OverlayTrigger placement="bottom" trigger="click" ref="sortTypePopover" overlay={sortTypePopover}>
+          <OverlayTrigger
+            placement="bottom"
+            trigger="click"
+            ref="sortTypePopover"
+            overlay={sortTypePopover}
+            rootClose={true}
+          >
             <div className="sort-type">{selectedSortType.name} <i className="fa fa-angle-down fa-lg"></i></div>
           </OverlayTrigger>
         </div>
@@ -269,7 +275,13 @@ class TripList extends React.Component {
 
         <div className="trips-footer">
           <div className="selection-control" onClick={this.toggleSelectAll} id="selectionControl">Select All</div>
-          <OverlayTrigger placement="top" trigger="click" ref="exportPopover" overlay={exportPopover}>
+          <OverlayTrigger
+            placement="top"
+            trigger="click"
+            ref="exportPopover"
+            overlay={exportPopover}
+            rootClose={true}
+          >
             <div className={classNames('export', { active: this.props.exporting })}><i></i> Export</div>
           </OverlayTrigger>
         </div>

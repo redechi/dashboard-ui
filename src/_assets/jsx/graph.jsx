@@ -102,7 +102,13 @@ class Graph extends React.Component {
         <div className="graph-menu">
           <div className="date-range">{formatters.dateRange(this.getGraphDateRange())}</div>
           <div className="graph-type-label">Graph</div>
-          <OverlayTrigger placement="bottom" trigger="click" ref="graphTypePopover" overlay={graphTypePopover}>
+          <OverlayTrigger
+            placement="bottom"
+            trigger="click"
+            ref="graphTypePopover"
+            overlay={graphTypePopover}
+            rootClose={true}
+          >
             <div className="graph-type" data-toggle="popover">
               {selectedGraphType.name} <i className="fa fa-angle-down fa-lg"></i>
             </div>
