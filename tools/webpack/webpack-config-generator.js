@@ -77,9 +77,7 @@ function makeWebpackConfig() {
     ]
   };
 
-  webpackConfig.postcss = () => {
-    return [autoprefixer, precss];
-  };
+  webpackConfig.postcss = () => [autoprefixer, precss];
 
   webpackConfig.plugins = [
     new optimize.CommonsChunkPlugin('vendors', 'vendors.js'),

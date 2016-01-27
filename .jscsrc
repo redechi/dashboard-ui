@@ -12,5 +12,14 @@
   "disallowTrailingComma": true,
   "requireTrailingComma": null,
   "requireCamelCaseOrUpperCaseIdentifiers": null,
-  "validateQuoteMarks": null
+  "validateQuoteMarks": null,
+  "disallowSpacesInFunctionDeclaration": {
+    "beforeOpeningRoundBrace": true
+  },
+  "requireSpacesInFunctionDeclaration": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "requireSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningCurlyBrace": true
+  }
 }

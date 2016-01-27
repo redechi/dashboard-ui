@@ -56,9 +56,7 @@ exports.areAllSelected = function areAllSelected() {
     return false;
   }
 
-  return _.every(boxes, (box) => {
-    return box.checked;
-  });
+  return _.every(boxes, (box) => box.checked);
 };
 
 exports.getSelected = function getSelected() {

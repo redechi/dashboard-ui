@@ -98,7 +98,7 @@ exports.trips = (selectedTrips, cb) => {
 
   // Safari does not support filesaver, so use URL
   if (isSafari()) {
-    const blobUrl = 'data:application/x-download;charset=utf-8,' + encodeURIComponent(this.tripsToCSV(selectedTrips));
+    const blobUrl = `data:application/x-download;charset=utf-8,${encodeURIComponent(this.tripsToCSV(selectedTrips))}`;
     cb(null, blobUrl);
   } else {
     const blob = new Blob([tripsToCSV(selectedTrips)], { type: 'text/csv;charset=utf-8' });

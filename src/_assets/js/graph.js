@@ -215,13 +215,13 @@ exports.updateGraph = function updateGraph(trips, graphType, graphWidth, dateRan
       .attr('height', height + margin.top + margin.bottom)
       .classed(graphType, true)
       .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        .attr('transform', `translate(${margin.left},${margin.top})`);
 
   // scales
   const x = d3.scale.linear()
       .range([0, width - (binWidth / 2)])
       .domain([
-        parseInt(d3.min(data, (d) => d.key), 10) - moment.duration(0.5, binSize + 's').valueOf(),
+        parseInt(d3.min(data, (d) => d.key), 10) - moment.duration(0.5, `${binSize}s`).valueOf(),
         parseInt(d3.max(data, (d) => d.key), 10)
       ]);
 
@@ -243,8 +243,8 @@ exports.updateGraph = function updateGraph(trips, graphType, graphWidth, dateRan
 
   function generateTooltip(d) {
     let div = '<div class="graph-tooltip-container"><div class="arrow"></div>';
-    div += '<div class="date">' + formatGraphLabelDate(parseInt(d.key, 10)) + '</div>';
-    div += '<div class="value">' + formatGraphLabelValue(d.value, graphType) + '</div></div>';
+    div += `<div class="date">${formatGraphLabelDate(parseInt(d.key, 10))}</div>`;
+    div += `<div class="value">${formatGraphLabelValue(d.value, graphType)}</div></div>`;
     return div;
   }
 
@@ -381,7 +381,7 @@ exports.updateGraph = function updateGraph(trips, graphType, graphWidth, dateRan
 
   // X Axis labels
   bars.append('text')
-    .attr('transform', 'translate(0,' + (height + 20) + ')')
+    .attr('transform', `translate(0,${height + 20})`)
     .attr('x', (d) => x(d.key))
     .attr('class', (d) => (d.value === 0) ? 'empty' : '')
     .classed('tickLabel', true)
@@ -390,14 +390,14 @@ exports.updateGraph = function updateGraph(trips, graphType, graphWidth, dateRan
   // Month and Year Labels
   if (binSize === 'day') {
     bars.append('text')
-      .attr('transform', 'translate(0,' + (height + 40) + ')')
+      .attr('transform', `translate(0,${height + 40})`)
       .attr('x', (d) => x(d.key))
       .attr('dx', -barWidth / 2)
       .classed('axisLabel', true)
       .text(_.bind(getMonthLabel, this));
   } else if (binSize === 'month') {
     bars.append('text')
-      .attr('transform', 'translate(0,' + (height + 45) + ')')
+      .attr('transform', `translate(0,${height + 45})`)
       .attr('x', (d) => x(d.key))
       .attr('dx', -barWidth / 2)
       .classed('axisLabel', true)

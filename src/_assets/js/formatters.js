@@ -121,9 +121,8 @@ exports.formatTime = (time, timezone, format) => {
   }
 };
 
-exports.duration = (seconds) => {
-  return (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
-};
+exports.duration = (seconds) =>
+  (seconds >= 60 * 60) ? exports.durationHours(seconds) : exports.durationMinutes(seconds);
 
 exports.durationHours = (seconds) => {
   const duration = moment.duration(seconds, 'seconds');
@@ -143,7 +142,7 @@ exports.durationMinutes = (seconds) => {
 
 exports.cost = (fuelCost) => (fuelCost || 0).toFixed(2);
 
-exports.costWithUnit = (fuelCost) => '$' + (fuelCost || 0).toFixed(2);
+exports.costWithUnit = (fuelCost) => `$${(fuelCost || 0).toFixed(2)}`;
 
 exports.averageMPG = (mpg) => mpg ? mpg.toFixed(1) : 0;
 

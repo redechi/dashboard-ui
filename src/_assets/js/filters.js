@@ -108,9 +108,7 @@ const filterList = [
     name: 'tagged as business trip',
     label: 'and',
     defaultValue: 'true',
-    valueText: () => {
-      return 'tagged as business trip';
-    }
+    valueText: () => 'tagged as business trip'
   }
 ];
 
@@ -118,9 +116,9 @@ function findSortedIndexByDate(trips, date) {
   const searchTrip = { started_at: date };
 
   // binary search since trips are already sorted by date
-  return _.sortedIndex(trips, searchTrip, (trip) => {
-    return -moment(trip.started_at).valueOf();
-  });
+  return _.sortedIndex(trips, searchTrip, (trip) =>
+    -moment(trip.started_at).valueOf()
+  );
 }
 
 function filterByVehicle(trips, vehicleFilter) {
@@ -152,9 +150,9 @@ function filterByCost(trips, costFilter) {
 
 function filterByTime(trips, timeFilter) {
   const [minHour, maxHour] = timeFilter.split(',');
-  return _.filter(trips, (trip) => {
-    return moment(trip.started_at).hour() >= minHour && moment(trip.ended_at).hour() <= maxHour;
-  });
+  return _.filter(trips, (trip) =>
+    moment(trip.started_at).hour() >= minHour && moment(trip.ended_at).hour() <= maxHour
+  );
 }
 
 function filterByBusinessTag(trips) {
