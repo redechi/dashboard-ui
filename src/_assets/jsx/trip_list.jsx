@@ -326,7 +326,7 @@ class TripList extends React.Component {
                   <label>MPG</label>
                 </div>
                 <div className="stat cost">
-                  <div className="value">{formatters.cost(trip.fuel_cost_usd)}</div>
+                  <div className="value">${formatters.cost(trip.fuel_cost_usd)}</div>
                   <label>Fuel</label>
                 </div>
                 <div className={classNames('duration', 'stat', { hours: trip.duration_s >= (60 * 60) })}>
