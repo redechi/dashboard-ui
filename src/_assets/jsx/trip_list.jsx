@@ -279,14 +279,14 @@ class TripList extends React.Component {
             <div className="close" onClick={this.hideModal}>x</div>
             <div className="trip-navigation">
               <div
-                className={classNames('prev-trip', { hidden: this.state.modalTripIndex <= 1 })}
+                className={classNames('prev-trip', { disabled: this.state.modalTripIndex <= 1 })}
                 onClick={this.showPreviousTrip}
               >Previous Trip</div>
               <span className="title">
                 Trip {this.state.modalTripIndex} of {this.props.trips.length}
               </span>
               <div
-                className={classNames('next-trip', { hidden: this.state.modalTripIndex >= this.props.trips.length })}
+                className={classNames('next-trip', { disabled: this.state.modalTripIndex >= this.props.trips.length })}
                 onClick={this.showNextTrip}
               >Next Trip</div>
             </div>
