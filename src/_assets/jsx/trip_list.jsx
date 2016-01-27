@@ -6,13 +6,13 @@ import moment from 'moment';
 
 const alert = require('../js/alert');
 const exportData = require('../js/export_data');
-const formatters = require('../js/formatters');
 const highlight = require('../js/highlight');
 const select = require('../js/select');
 
 const ListItem = require('./list_item.jsx');
-const ModalMap = require('./trip_modal_map.jsx');
 const Trip = require('./trip.jsx');
+const TripModal = require('./trip_modal.jsx');
+const TripStats = require('./trip_stats.jsx');
 
 const sortTypes = [
   {
@@ -44,7 +44,7 @@ class TripList extends React.Component {
     this.state = {
       sortType: 'started_at',
       sortDirection: 'down',
-      showModal: false,
+      showTripModal: false,
       exporting: false,
       showExportModal: false
     };
@@ -77,18 +77,18 @@ class TripList extends React.Component {
       }
     };
 
-    this.showModal = (tripToShow) => {
+    this.showTripModal = (tripToShow) => {
       const currentIndex = _.findIndex(this.props.trips, trip => trip.id === tripToShow.id);
       this.setState({
-        showModal: true,
+        showTripModal: true,
         modalTrip: tripToShow,
         modalTripIndex: this.props.trips.length - currentIndex
       });
     };
 
-    this.hideModal = () => {
+    this.hideTripModal = () => {
       this.setState({
-        showModal: false
+        showTripModal: false
       });
     };
 
@@ -178,7 +178,7 @@ class TripList extends React.Component {
   }
 
   render() {
-    if (!this.props.trips || !this.props.trips.length) {
+    if (!this.props.trips) {
       return (<div />);
     }
 
@@ -186,7 +186,7 @@ class TripList extends React.Component {
 
     const trips = this.sortTrips().map((trip, key) => {
       return (
-        <Trip trip={trip} showModal={this.showModal} key={key} />
+        <Trip trip={trip} showTripModal={this.showTripModal} key={key} />
       );
     });
 
@@ -235,19 +235,24 @@ class TripList extends React.Component {
       </Popover>
     );
 
-    const trip = this.state.modalTrip || this.props.trips[0];
-    const tripSpansDay = moment(trip.started_at).dayOfYear() === moment(trip.ended_at).dayOfYear();
-
-    let businessTag;
-    if (trip && _.contains(trip.tags, 'business')) {
-      businessTag = (
-        <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
-      );
+    let tripModal;
+    if (this.state.modalTrip) {
+      tripModal = (
+        <TripModal
+          trip={this.state.modalTrip}
+          hideTripModal={this.hideTripModal}
+          showTripModal={this.state.showTripModal}
+          modalTripIndex={this.state.modalTripIndex}
+          tripCount={this.props.trips.length}
+          showNextTrip={this.showNextTrip}
+          showPreviousTrip={this.showPreviousTrip}
+        />
+    );
     }
 
     return (
       <div>
-        <div className="trip-stats"></div>
+        <TripStats totals={this.props.totals} />
         <div className="trips-header">
           <div className="trip-count">{this.props.trips.length} Trips</div>
           <div
@@ -287,64 +292,7 @@ class TripList extends React.Component {
           </OverlayTrigger>
         </div>
 
-        <Modal show={this.state.showModal} onHide={this.hideModal} className="trip-modal">
-          <Modal.Body>
-            <div className="close" onClick={this.hideModal}>x</div>
-            <div className="trip-navigation">
-              <div
-                className={classNames('prev-trip', { disabled: this.state.modalTripIndex <= 1 })}
-                onClick={this.showPreviousTrip}
-              >Previous Trip</div>
-              <span className="title">
-                Trip {this.state.modalTripIndex} of {this.props.trips.length}
-              </span>
-              <div
-                className={classNames('next-trip', { disabled: this.state.modalTripIndex >= this.props.trips.length })}
-                onClick={this.showNextTrip}
-              >Next Trip</div>
-            </div>
-            <div className="trip-details">
-              <div className="trip-header">
-                <div className="start">
-                  <div className="time">
-                    {moment(trip.started_at).format('h:mm A, MMM D, YYYY')}
-                  </div>
-                  <div className="location">
-                    {trip.start_address.display_name}
-                  </div>
-                </div>
-                <div className="end">
-                  <div className="time">
-                    {moment(trip.ended_at).format(tripSpansDay ? 'h:mm A, MMM D, YYYY' : 'h:mm A')}
-                  </div>
-                  <div className="location">
-                    {trip.end_address.display_name}
-                  </div>
-                </div>
-              </div>
-              <div className="trip-stats">
-                <div className="stat distance">
-                  <div className="value">{formatters.distance(trip.distance_miles)}</div>
-                  <label>Miles</label>
-                </div>
-                <div className="stat mpg">
-                  <div className="value">{formatters.averageMPG(trip.average_mpg)}</div>
-                  <label>MPG</label>
-                </div>
-                <div className="stat cost">
-                  <div className="value">{formatters.costWithUnit(trip.fuel_cost_usd)}</div>
-                  <label>Fuel</label>
-                </div>
-                <div className={classNames('duration', 'stat', { hours: trip.duration_s >= (60 * 60) })}>
-                    <div className="value">{formatters.duration(trip.duration_s)}</div>
-                    <label>{trip.duration_s >= (60 * 60) ? 'Hours' : 'Minutes'}</label>
-                </div>
-              </div>
-              {businessTag}
-            </div>
-            <ModalMap trip={trip} />
-          </Modal.Body>
-        </Modal>
+        {tripModal}
 
         <Modal show={this.state.showExportModal} onHide={this.hideExportModal} className="export-modal">
           <Modal.Body>
@@ -374,6 +322,7 @@ TripList.propTypes = {
   filterHeight: React.PropTypes.number,
   getTrips: React.PropTypes.func.isRequired,
   trips: React.PropTypes.array,
+  totals: React.PropTypes.object,
   windowHeight: React.PropTypes.number
 };
 

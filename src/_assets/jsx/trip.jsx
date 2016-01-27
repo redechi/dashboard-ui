@@ -15,10 +15,10 @@ class Trip extends React.Component {
       select.toggleSelect(this.props.trip);
     };
 
-    this.showModal = (e) => {
+    this.showTripModal = (e) => {
       // Allow clicking on checkbox to select trip
       if (e.target.className !== 'trip-select') {
-        this.props.showModal(this.props.trip);
+        this.props.showTripModal(this.props.trip);
       }
     };
 
@@ -46,7 +46,7 @@ class Trip extends React.Component {
         id={trip.id}
         onMouseEnter={this.highlightTrips}
         onMouseLeave={this.unhighlightTrips}
-        onClick={this.showModal}
+        onClick={this.showTripModal}
       >
         <div className="time-box">
           <div className="end-time">
@@ -116,7 +116,7 @@ class Trip extends React.Component {
 }
 Trip.propTypes = {
   trip: React.PropTypes.object.isRequired,
-  showModal: React.PropTypes.func.isRequired
+  showTripModal: React.PropTypes.func.isRequired
 };
 
 module.exports = Trip;

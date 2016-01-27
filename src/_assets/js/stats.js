@@ -96,7 +96,8 @@ exports.calculateTotals = function calculateTotals(trips) {
     hardBrakes: totals.hardBrakes,
     hardAccels: totals.hardAccels,
     speedingMinutes: moment.duration(totals.speedingSeconds, 'seconds').asMinutes().toFixed(),
-    maximums: totals.maximums
+    maximums: totals.maximums,
+    count: trips.length
   };
 };
 

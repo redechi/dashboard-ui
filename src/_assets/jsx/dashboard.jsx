@@ -14,7 +14,6 @@ const Filters = require('./filters.jsx');
 const Graph = require('./graph.jsx');
 const Map = require('./map.jsx');
 const TripList = require('./trip_list.jsx');
-const TripStats = require('./trip_stats.jsx');
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -186,13 +185,10 @@ class Dashboard extends React.Component {
           />
           <div>
             <div className="right-column">
-              <TripStats
-                trips={this.state.trips}
-                totals={totals}
-              />
               <TripList
                 allTrips={this.state.allTrips}
                 trips={this.state.trips}
+                totals={totals}
                 windowHeight={this.state.windowHeight}
                 filterHeight={this.state.filterHeight}
                 getTrips={this.getTrips}

@@ -105,9 +105,7 @@ class TripStats extends React.Component {
   }
 
   render() {
-    if (!this.props.trips) {
-      return (<div />);
-    } else if (!this.props.trips.length) {
+    if (!this.props.totals || this.props.totals.count === 0) {
       return (
         <div className="trip-stats no-trips">
           <div className="alert-grey">No trips match these criteria</div>
@@ -146,8 +144,7 @@ class TripStats extends React.Component {
   }
 }
 TripStats.propTypes = {
-  totals: React.PropTypes.object,
-  trips: React.PropTypes.array
+  totals: React.PropTypes.object
 };
 
 module.exports = TripStats;
