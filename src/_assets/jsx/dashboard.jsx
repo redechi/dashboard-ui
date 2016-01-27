@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import { Modal } from 'react-bootstrap';
 
 const alert = require('../js/alert');
@@ -56,6 +57,15 @@ class Dashboard extends React.Component {
             trips: filters.filterTrips(filteredTripsByDate, this.state.filters),
             ranges: stats.calculateRanges(filteredTripsByDate)
           });
+
+          // set start date to users oldest trip if `allTime` is selected
+          if (dateFilterComponents[2] === 'allTime') {
+            dateFilterComponents[0] = moment(_.last(filteredTripsByDate).started_at).valueOf();
+            this.state.filters.date = dateFilterComponents.join(',');
+            this.setState({
+              filters: this.state.filters
+            });
+          }
         });
       }
 
