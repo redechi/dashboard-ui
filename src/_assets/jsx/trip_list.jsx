@@ -236,6 +236,7 @@ class TripList extends React.Component {
     );
 
     const trip = this.state.modalTrip || this.props.trips[0];
+    const tripSpansDay = moment(trip.started_at).dayOfYear() === moment(trip.ended_at).dayOfYear();
 
     let businessTag;
     if (trip && _.contains(trip.tags, 'business')) {
@@ -314,7 +315,7 @@ class TripList extends React.Component {
                 </div>
                 <div className="end">
                   <div className="time">
-                    {moment(trip.ended_at).format('h:mm A')}
+                    {moment(trip.ended_at).format(tripSpansDay ? 'h:mm A, MMM D, YYYY' : 'h:mm A')}
                   </div>
                   <div className="location">
                     {trip.end_address.display_name}

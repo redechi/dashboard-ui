@@ -53,7 +53,7 @@ class Trip extends React.Component {
             {moment(trip.ended_at).format('h:mm a').toUpperCase()}
           </div>
           <div>
-            {moment(trip.started_at).calendar()}
+            {moment(trip.ended_at).calendar()}
           </div>
           <div className="start-time">
             {moment(trip.started_at).format('h:mm a').toUpperCase()}
