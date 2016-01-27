@@ -5,6 +5,14 @@ const map = require('./map');
 
 let selectedTrips = [];
 
+function setSelectAllText() {
+  if (exports.areAllSelected()) {
+    document.getElementById('selectionControl').innerText = 'Deselect all';
+  } else {
+    document.getElementById('selectionControl').innerText = 'Select all';
+  }
+}
+
 exports.selectTrips = function selectTrips(trips) {
   map.selectTrips(trips);
   graph.selectTrips(trips);
@@ -16,6 +24,7 @@ exports.selectTrips = function selectTrips(trips) {
     }
   });
   selectedTrips = selectedTrips.concat(trips);
+  setSelectAllText();
 };
 
 exports.deselectTrips = function deselectTrips(trips) {
@@ -29,6 +38,7 @@ exports.deselectTrips = function deselectTrips(trips) {
     }
   });
   selectedTrips = _.difference(selectedTrips, trips);
+  setSelectAllText();
 };
 
 exports.toggleSelect = function toggleSelect(trip) {

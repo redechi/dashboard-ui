@@ -27,7 +27,7 @@ function scaleMarkers() {
   const highlightedTripIds = _.pluck(highlight.getHighlightedTrips(), 'id');
 
   markersLayer.eachLayer((marker) => {
-    if (!_.conatins(selectedTripIds, marker.options.id) && !_.contains(highlightedTripIds, marker.options.id)) {
+    if (!_.contains(selectedTripIds, marker.options.id) && !_.contains(highlightedTripIds, marker.options.id)) {
       marker.setIcon(normalIcon);
     }
   });

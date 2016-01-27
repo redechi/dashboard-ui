@@ -46,8 +46,7 @@ class TripList extends React.Component {
       sortDirection: 'down',
       showModal: false,
       exporting: false,
-      showExportModal: false,
-      selectionControlText: 'Select all'
+      showExportModal: false
     };
 
     this.reverseSortDirection = () => {
@@ -122,14 +121,8 @@ class TripList extends React.Component {
     this.toggleSelectAll = () => {
       if (select.areAllSelected()) {
         select.deselectTrips(this.props.trips);
-        this.setState({
-          selectionControlText: 'Select all'
-        });
       } else {
         select.selectTrips(this.props.trips);
-        this.setState({
-          selectionControlText: 'Deselect all'
-        });
       }
     };
 
@@ -193,7 +186,7 @@ class TripList extends React.Component {
 
     const trips = this.sortTrips().map((trip, key) => {
       return (
-        <Trip trip={trip} showModal={this.showModal} key={key}/>
+        <Trip trip={trip} showModal={this.showModal} key={key} />
       );
     });
 
@@ -275,7 +268,7 @@ class TripList extends React.Component {
         </div>
 
         <div className="trips-footer">
-          <div className="selection-control" onClick={this.toggleSelectAll}>{this.state.selectionControlText}</div>
+          <div className="selection-control" onClick={this.toggleSelectAll} id="selectionControl">Select All</div>
           <OverlayTrigger placement="top" trigger="click" ref="exportPopover" overlay={exportPopover}>
             <div className={classNames('export', { active: this.props.exporting })}><i></i> Export</div>
           </OverlayTrigger>
