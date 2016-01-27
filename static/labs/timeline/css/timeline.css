@@ -11,14 +11,88 @@ body {
 
 .top-bar {
   height: 50px;
-  background: #ffffff url("../img/automatic-logo.png") left 12px center no-repeat;
+  position: fixed;
+  width: 100%;
+  background: #ffffff;
+  border-bottom: 1px solid #CACACA;
+}
+
+.top-bar-icon {
+  background: url("../img/automatic-logo.png") 0 0 no-repeat;
   background-size: 26px 30px;
+  position: absolute;
+  height: 30px;
+  width: 26px;
+  left: 12px;
+  top: 12px;
 }
 
 .top-bar-title {
   line-height: 50px;
   font-weight: bold;
   text-align: center;
+}
+
+.bottom-bar {
+  height: 50px;
+  position: fixed;
+  width: 100%;
+  background: #ffffff;
+  bottom: 0;
+}
+
+.bottom-bar-item {
+  width: 25%;
+  float: left;
+  text-align: center;
+  padding-top: 32px;
+  font-size: 11px;
+  color: #7A7A7A;
+  cursor: pointer;
+}
+
+.bottom-bar-item.active {
+  color: #04C0FE;
+}
+
+.bottom-bar-item.activity {
+  background: url('../img/icon-activity.png') center top 5px no-repeat;
+  background-size: 27px 27px;
+}
+
+.bottom-bar-item.activity.active {
+  background-image: url("../img/icon-activity-active.png");
+}
+
+.bottom-bar-item.health {
+  background: url('../img/icon-health.png') center top 5px no-repeat;
+  background-size: 26px 26px;
+}
+
+.bottom-bar-item.health.active {
+  background-image: url("../img/icon-health-active.png");
+}
+
+.bottom-bar-item.insights {
+  background: url('../img/icon-insights.png') center top 5px no-repeat;
+  background-size: 25px 25px;
+}
+
+.bottom-bar-item.insights.active {
+  background-image: url("../img/icon-insights-active.png");
+}
+
+.bottom-bar-item.glovebox {
+  background: url('../img/icon-glovebox.png') center top 5px no-repeat;
+  background-size: 26px 26px;
+}
+
+.bottom-bar-item.glovebox.active {
+  background-image: url("../img/icon-glovebox-active.png");
+}
+
+.timeline {
+  padding-top: 50px;
 }
 
 .item {
@@ -163,12 +237,44 @@ body {
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dppx) {
-  .top-bar {
+  .top-bar-icon {
     background-image: url("../img/automatic-logo@2x.png");
   }
 
   .slideout-menu {
     background-image: url("../img/automatic-logo-text.png");
+  }
+
+  .bottom-bar-item.activity {
+    background-image: url("../img/icon-activity@2x.png");
+  }
+
+  .bottom-bar-item.activity.active {
+    background-image: url("../img/icon-activity-active@2x.png");
+  }
+
+  .bottom-bar-item.health {
+    background-image: url("../img/icon-health@2x.png");
+  }
+
+  .bottom-bar-item.health.active {
+    background-image: url("../img/icon-health-active@2x.png");
+  }
+
+  .bottom-bar-item.insights {
+    background-image: url("../img/icon-insights@2x.png");
+  }
+
+  .bottom-bar-item.insights.active {
+    background-image: url("../img/icon-insights-active@2x.png");
+  }
+
+  .bottom-bar-item.glovebox {
+    background-image: url("../img/icon-glovebox@2x.png");
+  }
+
+  .bottom-bar-item.glovebox.active {
+    background-image: url("../img/icon-glovebox-active@2x.png");
   }
 }
 

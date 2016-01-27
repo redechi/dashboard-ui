@@ -26,9 +26,16 @@
 
     <main id="panel" class="panel">
       <div class="top-bar">
+        <div class="top-bar-icon"></div>
         <div class="top-bar-title"></div>
       </div>
       <div id="timeline" class="timeline"></div>
+      <div class="bottom-bar">
+        <div class="bottom-bar-item activity active">Activity</div>
+        <div class="bottom-bar-item health">Health</div>
+        <div class="bottom-bar-item insights">Insights</div>
+        <div class="bottom-bar-item glovebox">Glovebox</div>
+      </div>
     </main>
 
     <div class="modal add-record-modal">
@@ -145,11 +152,15 @@
         fetchItems(_.first(vehicles).id);
       });
 
+      $('.top-bar-icon').click(function() {
+        slideout.toggle();
+      });
+
       $('.slideout-menu').click(function() {
         slideout.close();
       });
 
-      $('.vehicle-select li a').click(function(e) {
+      $('.vehicle-select').on('click', 'li a', function(e) {
         e.preventDefault();
         var vehicleId = $(e.target).data('vehicleId');
         fetchItems(vehicleId);
