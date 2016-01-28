@@ -11,6 +11,7 @@ var accessToken = getAccessToken();
 
 var dayTemplate = _.template($('#dayTemplate').html());
 var photoTemplate = _.template($('#photoTemplate').html());
+var itemTemplate = _.template($('#itemTemplate').html());
 var vehicles;
 var selectedVehicleId;
 
@@ -55,8 +56,10 @@ function sortItemsByDate(items) {
   });
 }
 
-function setTitle(title) {
-  $('.top-bar-title').text(title);
+function setTitle() {
+  var vehicle = _.findWhere(vehicles, { id: selectedVehicleId });
+
+  $('.top-bar-title').text(vehicle.display_name);
 }
 
 function renderActivity(items) {
@@ -75,17 +78,12 @@ function renderActivity(items) {
   $('#contentBox').append(divs);
 }
 
-function fetchItems(vehicleId) {
-  selectedVehicleId = vehicleId;
-  var vehicle = _.findWhere(vehicles, { id: vehicleId });
-
-  setTitle(vehicle.display_name);
-
+function fetchActivity() {
   $('#contentBox').empty();
 
   function getDays(cb) {
     $.ajax({
-      url: viewserverAPI + '/vehicle/' + vehicleId + '/timeline/',
+      url: viewserverAPI + '/vehicle/' + selectedVehicleId + '/timeline/',
       headers: {
         Authorization: 'bearer ' + accessToken
       }
@@ -110,7 +108,7 @@ function fetchItems(vehicleId) {
       }
     })
     .done(function(results) {
-      var records = _.where(results.results, { vehicle_id: vehicleId }).map(function(record) {
+      var records = _.where(results.results, { vehicle_id: selectedVehicleId }).map(function(record) {
         record.type = 'record:record';
         record.datetime = record.created_at;
         return record;
@@ -136,15 +134,155 @@ function fetchItems(vehicleId) {
   });
 }
 
+function formatItem(item) {
+  return _.extend({
+    title: null,
+    value: null,
+    details: null,
+    problem: null,
+    image: null
+  }, item);
+}
+
+function renderItems(items) {
+  $('#contentBox').empty();
+
+  var divs = items.map(function(item) {
+    return $(itemTemplate(formatItem(item)));
+  });
+
+  $('#contentBox').append(divs);
+}
+
+function fetchHealth() {
+  var healthItems = [
+    {
+      type: 'fuel',
+      title: 'Fuel',
+      value: '30 miles remaining',
+      details: '1.2 gallons',
+      problem: true
+    },
+    {
+      type: 'check-engine-light',
+      title: 'Check Engine Light',
+      value: 'No issues detected',
+      details: 'Since ' + moment().format('MMM D, YYYY at h:mm a')
+    },
+    {
+      type: 'recalls',
+      title: 'Recalls',
+      value: '2 recalls issued',
+      details: 'Free repair available',
+      problem: true
+    },
+    {
+      type: 'battery',
+      title: 'Battery',
+      value: 'Healthy Battery',
+      details: 'Voltage range normal'
+    },
+    {
+      type: 'smog-check',
+      title: 'Smog Check',
+      value: 'Up-to-date',
+      details: 'Next smog check due in 11 months'
+    },
+    {
+      type: 'tires',
+      title: 'Tires',
+      value: 'Rotation due in 2 months',
+      details: moment().add(2, 'months').format('MMM D, YYYY')
+    },
+    {
+      type: 'oil',
+      title: 'Oil',
+      value: 'Oil change due in 1 week',
+      details: moment().add(1, 'weeks').format('MMM D, YYYY')
+    }
+  ];
+
+  renderItems(healthItems);
+}
+
+function fetchInsights() {
+  var insightsItems = [
+    {
+      type: 'weekly-drive-score',
+      title: 'Weekly Drive Score',
+      image: 'img/insights/weekly-drive-score.png'
+    },
+    {
+      type: 'commute-analyzer',
+      title: 'Commute Analyzer',
+      image: 'img/insights/commute-analyzer.png'
+    },
+    {
+      type: 'car-comparison',
+      title: 'Car Comparison',
+      value: 'Top Pick: Mazda 6',
+      details: 'The car with the lowest total cost of ownership in the same class as your Focus.'
+    },
+    {
+      type: 'fuel-efficiency-trends',
+      title: 'Fuel Efficiency Trends',
+      value: '24.5 MPG',
+      details: 'This week',
+      image: 'img/insights/fuel-efficiency-trends.png'
+    }
+  ];
+
+  renderItems(insightsItems);
+}
+
+function fetchGlovebox() {
+  var gloveboxItems = [
+    {
+      type: 'insurance',
+      title: 'Insurance',
+      value: 'Policy Number',
+      details: '23193871029U8'
+    },
+    {
+      type: 'authorized-drivers',
+      title: 'Authorized Drivers',
+      value: '1 Authorized driver',
+      details: 'John Smith'
+    },
+    {
+      type: 'drivers-license',
+      title: 'Driver\'s License',
+      value: 'Add Your License',
+      details: 'Scan your license for safe keeping and get reminders when to renew it.'
+    },
+    {
+      type: 'manufacturer-information',
+      title: 'Manufacturer Information',
+      value: '2006 Ford Focus',
+      details: '4-Door Hatchback'
+    },
+    {
+      type: 'adapter',
+      title: 'Adapter',
+      value: '2nd Generation Adapter',
+      details: 'Last connected: 5 hours ago'
+    }
+  ];
+
+  renderItems(gloveboxItems);
+}
+
 fetchVehicles(function(results) {
-  vehicles = results;
+  vehicles = _.sortBy(results, 'model');
   vehicles.forEach(function(vehicle) {
-    $('.vehicle-select')
+    $('.vehicle-menu')
       .append($('<li>')
         .append($('<a>').attr('href', '#').data('vehicleId', vehicle.id).text(vehicle.display_name)));
   });
 
-  fetchItems(_.first(vehicles).id);
+  selectedVehicleId = _.first(vehicles).id;
+  setTitle();
+  fetchActivity();
 });
 
 $('.top-bar-icon').click(function() {
@@ -155,10 +293,27 @@ $('.slideout-menu').click(function() {
   slideout.close();
 });
 
-$('.vehicle-select').on('click', 'li a', function(e) {
+$('.vehicle-menu').on('click', 'li a', function(e) {
   e.preventDefault();
-  var vehicleId = $(e.target).data('vehicleId');
-  fetchItems(vehicleId);
+  selectedVehicleId = $(e.target).data('vehicleId');
+  setTitle();
+  fetchActivity();
+});
+
+$('.bottom-bar-item').click(function() {
+  $(this).addClass('active')
+    .siblings().removeClass('active');
+  var option = $(this).data('option');
+
+  if (option === 'activity') {
+    fetchActivity();
+  } else if (option === 'health') {
+    fetchHealth();
+  } else if (option === 'insights') {
+    fetchInsights();
+  } else if (option === 'glovebox') {
+    fetchGlovebox();
+  }
 });
 
 $('.add-photo').click(function() {
@@ -203,7 +358,7 @@ $('.btn-save').click(function(e) {
     data: record,
     success: function(response) {
       $('.modal, .modal-overlay').fadeOut();
-      fetchItems(selectedVehicleId);
+      fetchActivity();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       console.error(errorThrown);

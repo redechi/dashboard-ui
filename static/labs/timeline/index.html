@@ -14,13 +14,85 @@
   </head>
   <body>
     <nav id="menu" class="slideout-menu">
-      <ul class="vehicle-select">
+      <div class="automatic-logo-text"></div>
+      <ul class="vehicle-menu">
       </ul>
-      <ul>
+      <ul class="feature-menu">
+        <li>
+          <a href="#" class="aaa">AAA</a>
+        </li>
+        <li>
+          <a href="#" class="auto-trader">Auto Trader</a>
+        </li>
+        <li>
+          <a href="#" class="crash-alert">Crash alert</a>
+        </li>
+        <li>
+          <a href="#" class="expense-reporter">Expense Reporter</a>
+        </li>
+        <li>
+          <a href="#" class="experian-driver-score">Experian Driver Score</a>
+        </li>
+        <li>
+          <a href="#" class="ford-of-san-francisco">Ford of San Francisco</a>
+        </li>
+        <li>
+          <a href="#" class="gas-locator">Gas Locator</a>
+        </li>
+        <li>
+          <a href="#" class="gas-rewards-by-shell">Gas Rewards by Shell</a>
+        </li>
+        <li>
+          <a href="#" class="liberty-mutual-ubi">Liberty Mutual UBI</a>
+        </li>
+        <li>
+          <a href="#" class="pay-by-phone">PaybyPhone</a>
+        </li>
         <li>
           <a href="#" class="add-photo">Add a Photo</a>
         </li>
-
+      </ul>
+      <ul class="app-menu">
+        <li>
+          <a href="https://glympse.com" class="glympse">Glympse</a>
+        </li>
+        <li>
+          <a href="https://ifttt.com" class="ifttt">IFTTT</a>
+        </li>
+        <li>
+          <a href="https://nest.automatic.com" class="nest">Nest Thermostat</a>
+        </li>
+        <li>
+          <a href="http://spotangels.com" class="spotangels">SpotAngels</a>
+        </li>
+        <li>
+          <a href="#" class="terrapass">Terrapass</a>
+        </li>
+        <li>
+          <a href="#" class="tile">Tile</a>
+        </li>
+        <li>
+          <a href="https://automatic.com/apps" class="add-apps">Add more apps</a>
+        </li>
+      </ul>
+      <ul class="user-menu">
+        <li>
+          <a href="#" class="profile">Profile</a>
+        </li>
+        <li>
+          <a href="https://community.automatic.com" class="support">Support</a>
+        </li>
+        <li>
+          <a href="#" class="settings">Settings</a>
+        </li>
+      </ul>
+      <ul class="automatic-menu">
+        <li>
+          <a href="#" class="add-vehicle">Add new vehicle</a>
+        </li>
+        <li>
+          <a href="https://store.automatic.com" class="buy-adapter">Buy Adapter</a>
+        </li>
       </ul>
     </nav>
 
@@ -31,10 +103,10 @@
       </div>
       <div id="contentBox" class="content-box"></div>
       <div class="bottom-bar">
-        <div class="bottom-bar-item activity active">Activity</div>
-        <div class="bottom-bar-item health">Health</div>
-        <div class="bottom-bar-item insights">Insights</div>
-        <div class="bottom-bar-item glovebox">Glovebox</div>
+        <div class="bottom-bar-item activity active" data-option="activity">Activity</div>
+        <div class="bottom-bar-item health" data-option="health">Health</div>
+        <div class="bottom-bar-item insights" data-option="insights">Insights</div>
+        <div class="bottom-bar-item glovebox" data-option="glovebox">Glovebox</div>
       </div>
     </main>
 
@@ -102,6 +174,15 @@
         <div class="top-date">{{moment(created_at).format('MMM D, YYYY')}}</div>
         <h2>{{data.photoDescription}}</h2>
         <img src="{{data.photoUrl}}" class="photo">
+      </div>
+    </script>
+
+    <script type='text/template' id='itemTemplate'>
+      <div class="item {{type}} {{problem ? 'problem' : ''}}">
+        <div class="item-title">{{title}}</div>
+        <h2>{{value}}</h2>
+        <div class="details">{{details}}</div>
+        {{image ? '<img src="' + image + '" class="insights-image" />' : '' }}
       </div>
     </script>
 
