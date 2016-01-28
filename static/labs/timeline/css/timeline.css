@@ -91,7 +91,7 @@ body {
   background-image: url("../img/icon-glovebox-active.png");
 }
 
-.timeline {
+.content-box {
   padding-top: 50px;
 }
 
@@ -290,5 +290,15 @@ only screen and (min-resolution: 192dppx) {
 
   .btn-hamburger {
     display: none;
+  }
+
+  .top-bar {
+    padding-right: 256px;
+    box-sizing: border-box;
+  }
+
+  .bottom-bar {
+    padding-right: 256px;
+    box-sizing: border-box;
   }
 }
