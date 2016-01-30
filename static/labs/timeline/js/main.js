@@ -151,7 +151,9 @@ function renderItems(items) {
     return $(itemTemplate(formatItem(item)));
   });
 
-  $('#contentBox').append(divs);
+  _.defer(function() {
+    $('#contentBox').append(divs);
+  });
 }
 
 function fetchHealth() {
