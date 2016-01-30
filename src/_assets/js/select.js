@@ -7,9 +7,9 @@ let selectedTrips = [];
 
 function setSelectAllText() {
   if (exports.areAllSelected()) {
-    document.getElementById('selectionControl').innerText = 'Deselect all';
+    document.getElementById('selectionControl').textContent = 'Deselect all';
   } else {
-    document.getElementById('selectionControl').innerText = 'Select all';
+    document.getElementById('selectionControl').textContent = 'Select all';
   }
 }
 
