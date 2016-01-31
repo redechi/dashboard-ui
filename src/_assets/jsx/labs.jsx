@@ -88,7 +88,7 @@ class Labs extends React.Component {
     const labsList = labs.map((lab, key) => <Lab key={key} lab={lab} isLoggedIn={login.isLoggedIn()} />);
 
     return (
-      <div className="main">
+      <div className="main-container">
         <div className="labs">
           <h1 className="page-title">Automatic Labs</h1>
           <p>

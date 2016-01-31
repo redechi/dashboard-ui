@@ -173,7 +173,7 @@ class Dashboard extends React.Component {
     const totals = stats.calculateTotals(this.state.trips);
 
     return (
-      <div className="main">
+      <div className="main-container">
         <div>
           <Filters
             filters={this.state.filters}

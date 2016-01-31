@@ -46,7 +46,7 @@ a {
   }
 }
 
-.main {
+.main-container {
   min-width: 1024px;
   min-height: 625px;
   margin-bottom: 30px;
@@ -111,7 +111,7 @@ a {
 }
 
 @media screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  .main {
+  .main-container {
     min-width: 0;
     min-height: 0;
   }

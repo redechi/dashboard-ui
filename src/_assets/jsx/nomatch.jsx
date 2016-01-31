@@ -8,7 +8,7 @@ class NoMatch extends React.Component {
 
   render() {
     return (
-      <div className="main">
+      <div className="main-container">
         <div className="container no-match">
           <h1>This page cannot be found.</h1>
           <div className="big-alert"></div>

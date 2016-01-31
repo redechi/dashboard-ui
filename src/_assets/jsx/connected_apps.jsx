@@ -60,7 +60,7 @@ class ConnectedApps extends React.Component {
     }
 
     return (
-      <div className="main">
+      <div className="main-container">
         <div className="connected-apps">
           <h1 className="page-title">Connected Apps</h1>
           <ul className="app-list">

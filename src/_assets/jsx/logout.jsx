@@ -14,7 +14,7 @@ class Logout extends React.Component {
 
   render() {
     return (
-      <div className="main">
+      <div className="main-container">
         <div className="container">
           <h1>Logging out</h1>
         </div>
