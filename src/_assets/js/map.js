@@ -291,6 +291,10 @@ exports.unhighlightTrips = function unhighlightTrips(trips, zoomTrip) {
     }
   });
 
+  if (speedingLayer.getLayers().length) {
+    speedingLayer.bringToFront();
+  }
+
   if (autozoomEnabled && zoomTrip) {
     fitBounds();
   }
