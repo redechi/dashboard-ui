@@ -15,21 +15,27 @@ class Filter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      rootClose: true
+    };
 
     this.updateFilter = (value) => {
       this.props.updateFilter(this.props.filterType, value);
 
       const filterValueComponents = (value || '').split(',');
       if (this.refs[`${this.props.filterType}Popover`]) {
-        if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
-          this.refs[`${this.props.filterType}Popover`].hide();
-          if (this.props.filterType === 'date') {
-            document.getElementById('dateFilterCustom').style.display = 'none';
+        if (this.props.filterType === 'date' || this.props.filterType === 'vehicle') {
+          if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
+            this.setState({
+              rootClose: true
+            });
+            this.refs[`${this.props.filterType}Popover`].hide();
+          } else {
+            this.setState({
+              rootClose: false
+            });
           }
         }
-      } else {
-        document.getElementById('dateFilterCustom').style.display = 'block';
       }
     };
 
@@ -141,7 +147,6 @@ class Filter extends React.Component {
           </ul>
           <div
             className="date-filter-custom"
-            id="dateFilterCustom"
             style={{ display: (filterValueComponents[2] === 'custom') ? 'block' : 'none' }}
           >
             <div className="input-group">
@@ -226,7 +231,7 @@ class Filter extends React.Component {
           ref={`${this.props.filterType}Popover`}
           overlay={popovers[this.props.filterType]}
           onEntered={this.preparePopover}
-          rootClose={true}
+          rootClose={this.state.rootClose}
         >
           <div className="btn btn-filter btn-popover">
             <span className="btn-text">
