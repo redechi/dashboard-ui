@@ -40,7 +40,7 @@ class Dashboard extends React.Component {
       });
     };
 
-    this.updateFilter = (filterName, filterValue) => {
+    this.updateFilter = (filterName, filterValue, cb) => {
       if (filterValue) {
         this.state.filters[filterName] = filterValue;
       } else {
@@ -68,7 +68,7 @@ class Dashboard extends React.Component {
         });
       }
 
-      this.setFilters(this.state.filters);
+      this.setFilters(this.state.filters, cb);
     };
 
     this.resetFilters = () => {
@@ -156,13 +156,19 @@ class Dashboard extends React.Component {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  setFilters(newFilters) {
+  setFilters(newFilters, cb) {
+    const newTrips = filters.filterTrips(this.state.allTrips, newFilters);
     this.setState({
       filters: newFilters,
-      trips: filters.filterTrips(this.state.allTrips, newFilters)
+      trips: newTrips
     });
 
     this.props.history.pushState(null, this.props.location.pathname, newFilters);
+
+    if(cb) {
+      const noMatchingTrips = !newTrips.length;
+      cb(noMatchingTrips);
+    }
 
     setTimeout(() => {
       this.handleResize();

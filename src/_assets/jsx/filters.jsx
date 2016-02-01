@@ -17,8 +17,8 @@ class Filters extends React.Component {
       showPopover: false
     };
 
-    this.updateFilter = (filterName, filterValue) => {
-      this.props.updateFilter(filterName, filterValue);
+    this.updateFilter = (filterName, filterValue, cb) => {
+      this.props.updateFilter(filterName, filterValue, cb);
       if (this.refs.filterTypePopover) {
         this.refs.filterTypePopover.hide();
       }

@@ -20,23 +20,29 @@ class Filter extends React.Component {
     };
 
     this.updateFilter = (value) => {
-      this.props.updateFilter(this.props.filterType, value);
+      this.props.updateFilter(this.props.filterType, value, (noMatchingTrips) => {
+        this.setState({
+          noMatchingTrips
+        });
 
-      const filterValueComponents = (value || '').split(',');
-      if (this.refs[`${this.props.filterType}Popover`]) {
-        if (this.props.filterType === 'date' || this.props.filterType === 'vehicle') {
-          if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
-            this.setState({
-              rootClose: true
-            });
-            this.refs[`${this.props.filterType}Popover`].hide();
-          } else {
-            this.setState({
-              rootClose: false
-            });
+        const filterValueComponents = (value || '').split(',');
+        if (this.refs[`${this.props.filterType}Popover`]) {
+          if (this.props.filterType === 'date' || this.props.filterType === 'vehicle') {
+            if (this.props.filterType !== 'date' || filterValueComponents[2] !== 'custom') {
+              this.setState({
+                rootClose: true
+              });
+              if (!noMatchingTrips) {
+                this.refs[`${this.props.filterType}Popover`].hide();
+              }
+            } else {
+              this.setState({
+                rootClose: false
+              });
+            }
           }
         }
-      }
+      });
     };
 
     this.preparePopover = () => {
@@ -168,6 +174,9 @@ class Filter extends React.Component {
               />
             </div>
           </div>
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       vehicle: (
@@ -189,35 +198,53 @@ class Filter extends React.Component {
               />
             )}
           </ul>
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       distance: (
         <Popover id="distance" title="Choose Distance Range" className="popover-distance">
           <input className="slider" />
           {removeLink}
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       duration: (
         <Popover id="duration" title="Choose Duration Range" className="popover-duration">
           <input className="slider" />
           {removeLink}
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       cost: (
         <Popover id="cost" title="Choose Cost Range" className="popover-cost">
           <input className="slider" />
           {removeLink}
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       time: (
         <Popover id="time" title="Choose Time of Day Range" className="popover-time">
           <input className="slider" />
           {removeLink}
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       ),
       businessTag: (
         <Popover id="businessTag" title="" className="popover-business-tag">
           {removeLink}
+          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+            No matching trips
+          </div>
         </Popover>
       )
     };
