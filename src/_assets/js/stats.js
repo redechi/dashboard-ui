@@ -95,7 +95,7 @@ exports.calculateTotals = function calculateTotals(trips) {
     mpg: formatters.averageMPG(totals.mpg),
     hardBrakes: totals.hardBrakes,
     hardAccels: totals.hardAccels,
-    speedingMinutes: moment.duration(totals.speedingSeconds, 'seconds').asMinutes().toFixed(),
+    speedingMinutes: Math.round(moment.duration(totals.speedingSeconds, 'seconds').asMinutes()),
     maximums: totals.maximums,
     count: trips.length
   };
