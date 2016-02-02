@@ -20,11 +20,7 @@ class Filter extends React.Component {
     };
 
     this.updateFilter = (value) => {
-      this.props.updateFilter(this.props.filterType, value, (noMatchingTrips) => {
-        this.setState({
-          noMatchingTrips
-        });
-
+      this.props.updateFilter(this.props.filterType, value, (dontClosePopover) => {
         const filterValueComponents = (value || '').split(',');
         if (this.refs[`${this.props.filterType}Popover`]) {
           if (this.props.filterType === 'date' || this.props.filterType === 'vehicle') {
@@ -32,7 +28,7 @@ class Filter extends React.Component {
               this.setState({
                 rootClose: true
               });
-              if (!noMatchingTrips) {
+              if (!dontClosePopover) {
                 this.refs[`${this.props.filterType}Popover`].hide();
               }
             } else {
@@ -174,7 +170,7 @@ class Filter extends React.Component {
               />
             </div>
           </div>
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -198,7 +194,7 @@ class Filter extends React.Component {
               />
             )}
           </ul>
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -207,7 +203,7 @@ class Filter extends React.Component {
         <Popover id="distance" title="Choose Distance Range" className="popover-distance">
           <input className="slider" />
           {removeLink}
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -216,7 +212,7 @@ class Filter extends React.Component {
         <Popover id="duration" title="Choose Duration Range" className="popover-duration">
           <input className="slider" />
           {removeLink}
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -225,7 +221,7 @@ class Filter extends React.Component {
         <Popover id="cost" title="Choose Cost Range" className="popover-cost">
           <input className="slider" />
           {removeLink}
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -234,7 +230,7 @@ class Filter extends React.Component {
         <Popover id="time" title="Choose Time of Day Range" className="popover-time">
           <input className="slider" />
           {removeLink}
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>
@@ -242,7 +238,7 @@ class Filter extends React.Component {
       businessTag: (
         <Popover id="businessTag" title="" className="popover-business-tag">
           {removeLink}
-          <div className={classNames('no-matching-trips', { hide: !this.state.noMatchingTrips })}>
+          <div className={classNames('no-matching-trips', { hide: !this.props.noMatchingTrips })}>
             No matching trips
           </div>
         </Popover>

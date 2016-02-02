@@ -80,6 +80,7 @@ class Filters extends React.Component {
           updateFilter={this.updateFilter}
           showPopover={this.state.showPopover}
           ranges={this.props.ranges}
+          noMatchingTrips={this.props.noMatchingTrips}
         />
       );
     });
@@ -133,6 +134,7 @@ Filters.propTypes = {
   filters: React.PropTypes.object.isRequired,
   ranges: React.PropTypes.object,
   resetFilters: React.PropTypes.func.isRequired,
+  noMatchingTrips: React.PropTypes.bool,
   undoFilter: React.PropTypes.func.isRequired,
   updateFilter: React.PropTypes.func.isRequired,
   vehicles: React.PropTypes.array.isRequired

@@ -65,10 +65,11 @@ class Dashboard extends React.Component {
               filters: this.state.filters
             });
           }
+          this.setFilters(this.state.filters, cb);
         });
+      } else {
+        this.setFilters(this.state.filters, cb);
       }
-
-      this.setFilters(this.state.filters, cb);
     };
 
     this.resetFilters = () => {
@@ -158,15 +159,16 @@ class Dashboard extends React.Component {
 
   setFilters(newFilters, cb) {
     const newTrips = filters.filterTrips(this.state.allTrips, newFilters);
+    const noMatchingTrips = !newTrips.length;
     this.setState({
       filters: newFilters,
+      noMatchingTrips,
       trips: newTrips
     });
 
     this.props.history.pushState(null, this.props.location.pathname, newFilters);
 
-    if(cb) {
-      const noMatchingTrips = !newTrips.length;
+    if (cb) {
       cb(noMatchingTrips);
     }
 
@@ -185,6 +187,7 @@ class Dashboard extends React.Component {
             filters={this.state.filters}
             vehicles={this.state.vehicles}
             updateFilter={this.updateFilter}
+            noMatchingTrips={this.state.noMatchingTrips}
             resetFilters={this.resetFilters}
             undoFilter={this.undoFilter}
             ranges={this.state.ranges}
