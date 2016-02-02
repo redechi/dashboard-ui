@@ -251,7 +251,9 @@ exports.highlightTrips = function highlightTrips(trips, zoomTrip) {
   }
 
   if (autozoomEnabled && zoomTrip) {
-    zoomTrips(trips);
+    _.defer(() => {
+      zoomTrips(trips);
+    });
   }
 };
 
