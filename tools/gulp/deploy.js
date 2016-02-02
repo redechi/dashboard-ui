@@ -3,10 +3,11 @@ import gulp from 'gulp';
 import awspublish from 'gulp-awspublish';
 import merge from 'merge-stream';
 import parallelize from 'concurrent-transform';
+const exec = require('child_process').exec;
 
 import settings from '../../settings.js';
 
-function deployAWS() {
+function syncToAWS() {
   if (isEmpty(settings.AWS_ACCESS_KEY_ID)) {
     throw new Error('Missing AWS_ACCESS_KEY_ID when attempting to deploy to AWS');
   }
@@ -39,17 +40,26 @@ function deployAWS() {
     .pipe(awspublish.reporter());
 }
 
-function deploy() {
-  let deployStream;
-  switch (settings.DEPLOY_TARGET) {
-    case 'aws':
-      deployStream = deployAWS();
-      break;
-    default:
-      throw new Error('Invalid deploy target');
-  }
-
-  return deployStream;
+function copyToAWS(cb) {
+  exec('aws s3 cp "s3://$AWS_BUCKET_STAGE/$BUILD_ID" "s3://$AWS_BUCKET_PROD" --region="$AWS_REGION" --exclude "data/*" --recursive --metadata-directive REPLACE --cache-control "max-age=300"', (error, stdout, stderr) => {
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+    exec('aws s3 cp "s3://$AWS_BUCKET_STAGE/$BUILD_ID/data" "s3://$AWS_BUCKET_PROD/data" --region="$AWS_REGION" --recursive --metadata-directive REPLACE --content-encoding "gzip" --cache-control "max-age=300"', (error, stdout, stderr) => {
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+      cb();
+    });
+  });
 }
 
-gulp.task('deploy:target', deploy);
+function copyToBuildFolder(cb) {
+  exec('aws s3 cp "s3://$AWS_BUCKET/" "s3://$AWS_BUCKET/$BUILD_ID" --region "$AWS_REGION" --recursive --exclude "[0123456789]*"', (error, stdout, stderr) => {
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+    cb();
+  });
+}
+
+gulp.task('deploy:syncToAWS', syncToAWS);
+gulp.task('deploy:copyToBuildFolder', copyToBuildFolder);
+gulp.task('deploy:copyToAWS', copyToAWS);

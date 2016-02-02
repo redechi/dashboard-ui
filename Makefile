@@ -40,8 +40,11 @@ test: info test_unit
 
 test_full: info test_unit test_e2e
 
-deploy: build
-	@$(GULP) deploy
+deploy_staging: setup build
+	@$(GULP) deploy:staging
+
+deploy_production:
+	@$(GULP) deploy:production
 
 clean:
 	@rm -rf dist/**

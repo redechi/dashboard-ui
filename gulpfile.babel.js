@@ -18,10 +18,16 @@ const WATCH_PIPELINE = [
   'images:watch'
 ];
 
-const DEPLOY_PIPELINE = [
-  'deploy:target'
+const DEPLOY_STAGING_PIPELINE = [
+  'deploy:syncToAWS',
+  'deploy:copyToBuildFolder'
+];
+
+const DEPLOY_PRODUCTION_PIPELINE = [
+  'deploy:copyToAWS'
 ];
 
 gulp.task('build', gulp.series(...BUILD_PIPELINE));
 gulp.task('watch', gulp.series(...BUILD_PIPELINE, gulp.parallel(...WATCH_PIPELINE)));
-gulp.task('deploy', gulp.series(...DEPLOY_PIPELINE));
+gulp.task('deploy:staging', gulp.series(...DEPLOY_STAGING_PIPELINE));
+gulp.task('deploy:production', gulp.series(...DEPLOY_PRODUCTION_PIPELINE));
