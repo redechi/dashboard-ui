@@ -27,11 +27,15 @@ function deployAWS() {
     secretAccessKey: settings.AWS_SECRET_ACCESS_KEY
   });
 
+  const headers = {
+    'Cache-Control': 'max-age=10,public'
+  };
+
   const gzip = gulp.src('./dist/**/data/*.*').pipe(awspublish.gzip());
   const plain = gulp.src(['./dist/**/*.*', '!./dist/**/data/*.*']);
 
   return merge(gzip, plain)
-    .pipe(parallelize(publisher.publish(), 30))
+    .pipe(parallelize(publisher.publish(headers), 30))
     .pipe(awspublish.reporter());
 }
 
