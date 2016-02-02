@@ -5,72 +5,72 @@ const stats = require('./stats');
 
 const icons = {
   mainIconSmall: L.icon({
-    iconUrl: '/_assets/images/map_pin.png',
-    iconRetinaUrl: '/_assets/images/map_pin@2x.png',
+    iconUrl: '_assets/images/map_pin.png',
+    iconRetinaUrl: '_assets/images/map_pin@2x.png',
     iconSize: [8, 8],
     iconAnchor: [6, 6],
     popupAnchor: [0, -28]
   }),
 
   mainIconMedium: L.icon({
-    iconUrl: '/_assets/images/map_pin.png',
-    iconRetinaUrl: '/_assets/images/map_pin@2x.png',
+    iconUrl: '_assets/images/map_pin.png',
+    iconRetinaUrl: '_assets/images/map_pin@2x.png',
     iconSize: [12, 12],
     iconAnchor: [6, 6],
     popupAnchor: [0, -28]
   }),
 
   mainIconLarge: L.icon({
-    iconUrl: '/_assets/images/map_pin.png',
-    iconRetinaUrl: '/_assets/images/map_pin@2x.png',
+    iconUrl: '_assets/images/map_pin.png',
+    iconRetinaUrl: '_assets/images/map_pin@2x.png',
     iconSize: [18, 18],
     iconAnchor: [6, 6],
     popupAnchor: [0, -28]
   }),
 
   aHighlightedIcon: L.icon({
-    iconUrl: '/_assets/images/map_pin_a.png',
-    iconRetinaUrl: '/_assets/images/map_pin_a@2x.png',
+    iconUrl: '_assets/images/map_pin_a.png',
+    iconRetinaUrl: '_assets/images/map_pin_a@2x.png',
     iconSize: [17, 28],
     iconAnchor: [8, 28],
     popupAnchor: [0, -28]
   }),
 
   bHighlightedIcon: L.icon({
-    iconUrl: '/_assets/images/map_pin_b.png',
-    iconRetinaUrl: '/_assets/images/map_pin_b@2x.png',
+    iconUrl: '_assets/images/map_pin_b.png',
+    iconRetinaUrl: '_assets/images/map_pin_b@2x.png',
     iconSize: [17, 28],
     iconAnchor: [8, 28],
     popupAnchor: [0, -28]
   }),
 
   aSelectedIcon: L.icon({
-    iconUrl: '/_assets/images/map_pin_a_selected.png',
-    iconRetinaUrl: '/_assets/images/map_pin_a_selected@2x.png',
+    iconUrl: '_assets/images/map_pin_a_selected.png',
+    iconRetinaUrl: '_assets/images/map_pin_a_selected@2x.png',
     iconSize: [17, 28],
     iconAnchor: [8, 28],
     popupAnchor: [0, -28]
   }),
 
   bSelectedIcon: L.icon({
-    iconUrl: '/_assets/images/map_pin_b_selected.png',
-    iconRetinaUrl: '/_assets/images/map_pin_b_selected@2x.png',
+    iconUrl: '_assets/images/map_pin_b_selected.png',
+    iconRetinaUrl: '_assets/images/map_pin_b_selected@2x.png',
     iconSize: [17, 28],
     iconAnchor: [8, 28],
     popupAnchor: [0, -28]
   }),
 
   aLargeIcon: L.icon({
-    iconUrl: '/_assets/images/tripview_map_a.png',
-    iconRetinaUrl: '/_assets/images/tripview_map_a@2x.png',
+    iconUrl: '_assets/images/tripview_map_a.png',
+    iconRetinaUrl: '_assets/images/tripview_map_a@2x.png',
     iconSize: [30, 43],
     iconAnchor: [15, 43],
     popupAnchor: [0, -43]
   }),
 
   bLargeIcon: L.icon({
-    iconUrl: '/_assets/images/tripview_map_b.png',
-    iconRetinaUrl: '/_assets/images/tripview_map_b@2x.png',
+    iconUrl: '_assets/images/tripview_map_b.png',
+    iconRetinaUrl: '_assets/images/tripview_map_b@2x.png',
     iconSize: [30, 43],
     iconAnchor: [15, 43],
     popupAnchor: [0, -43]
