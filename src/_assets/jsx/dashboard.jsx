@@ -65,6 +65,7 @@ class Dashboard extends React.Component {
               filters: this.state.filters
             });
           }
+
           this.setFilters(this.state.filters, cb);
         });
       } else {

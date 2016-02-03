@@ -92,6 +92,7 @@ function fetchActivity() {
       var days = results.results.map(function(item) {
         return item;
       });
+
       cb(null, days);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -113,6 +114,7 @@ function fetchActivity() {
         record.datetime = record.created_at;
         return record;
       });
+
       cb(null, records);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
@@ -351,6 +353,7 @@ $('.btn-save').click(function(e) {
     }
   };
 
+  // jscs:disable requirePaddingNewLinesAfterBlocks
   $.ajax({
     method: 'POST',
     url: recordsAPI + '/timeline_event',
@@ -367,4 +370,6 @@ $('.btn-save').click(function(e) {
       $('.modal, .modal-overlay').fadeOut();
     }
   });
+
+  // jscs:enable requirePaddingNewLinesAfterBlocks
 });

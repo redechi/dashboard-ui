@@ -72,6 +72,7 @@ function formatGraphLabelDate(date) {
 }
 
 function topRoundedRectBackground(x, y, width, height, radius) {
+  /* eslint-disable prefer-template */
   return 'M' + (x + radius) + ',' + y
        + 'h' + (width - (2 * radius))
        + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
@@ -80,9 +81,11 @@ function topRoundedRectBackground(x, y, width, height, radius) {
        + 'v' + (radius - height)
        + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius)
        + 'z';
+  /* eslint-enable prefer-template */
 }
 
 function topRoundedRectBorder(x, y, width, height, radius) {
+  /* eslint-disable prefer-template */
   return 'M' + (x + radius) + ',' + y
        + 'h' + (width - (2 * radius))
        + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
@@ -90,6 +93,7 @@ function topRoundedRectBorder(x, y, width, height, radius) {
        + 'm' + (-width) + ',' + 0
        + 'v' + (radius - height)
        + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius);
+  /* eslint-enable prefer-template */
 }
 
 function calculateAverage(trips, graphType) {
