@@ -32,13 +32,13 @@ class Dashboard extends React.Component {
       loadingProgressText: ''
     };
 
-    this.handleResize = () => {
+    this.handleResize = _.debounce(() => {
       this.setState({
         windowHeight: window.innerHeight,
         windowWidth: window.innerWidth,
         filterHeight: document.getElementById('filters').offsetHeight
       });
-    };
+    }, 100);
 
     this.updateFilter = (filterName, filterValue, cb) => {
       if (filterValue) {
