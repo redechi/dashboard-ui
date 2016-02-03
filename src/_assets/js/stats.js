@@ -14,7 +14,7 @@ function getAverageMPG(trips) {
   });
 
   // jscs:enable requirePaddingNewLinesAfterBlocks
-  return (totals.distance / totals.fuel) || 0;
+  return Math.min((totals.distance / totals.fuel) || 0, 100);
 }
 
 function getAverageScore(trips) {
@@ -84,8 +84,7 @@ exports.calculateTotals = function calculateTotals(trips) {
   const scoreEvents = (totals.sumScoreEvents / totals.duration) || 0;
   const scoreSpeeding = (totals.sumScoreSpeeding / totals.duration) || 0;
   totals.score = Math.max(0, scoreEvents) + Math.max(0, scoreSpeeding);
-
-  totals.mpg = (totals.distance / totals.fuel) || 0;
+  totals.mpg = Math.min((totals.distance / totals.fuel) || 0, 100);
 
   return {
     distance: formatters.distance(totals.distance),
