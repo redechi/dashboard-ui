@@ -104,7 +104,7 @@ function makeWebpackConfig() {
     }
   };
 
-  webpackConfig.devtool = settings.IS_PROD ? 'source-map' : 'cheap-module-eval-source-map';
+  webpackConfig.devtool = settings.IS_JENKINS ? 'source-map' : 'cheap-module-eval-source-map';
 
   return webpackConfig;
 }

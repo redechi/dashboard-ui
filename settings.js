@@ -13,6 +13,7 @@ const {
   NODE_ENV,
   CI,
   TRAVIS,
+  JENKINS,
   DEV_HOST,
   DEV_PORT,
   DEV_WEBPACK_SERVER_PORT,
@@ -40,6 +41,8 @@ const IS_PROD = any([
   CI === 'true'
 ]);
 
+const IS_JENKINS = JENKINS === 'true';
+
 const IS_TRAVIS = TRAVIS === 'true';
 
 const IS_LOCAL = !IS_PROD;
@@ -55,6 +58,7 @@ export default {
   IS_PROD,
   IS_LOCAL,
   IS_TRAVIS,
+  IS_JENKINS,
   DEV_HOST,
   DEV_PORT,
   DEV_WEBPACK_SERVER_PORT,
