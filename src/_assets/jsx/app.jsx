@@ -42,16 +42,18 @@ App.propTypes = {
   children: React.PropTypes.object
 };
 
-render((
-  <Router history={hashHistory}>
-    <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
-      <Route path="demo" component={Dashboard}/>
-      <Route path="labs" component={Labs}/>
-      <Route path="connected-apps" component={ConnectedApps}/>
-      <Route path="reset" component={Reset}/>
-      <Route path="logout" component={Logout}/>
-      <Route path="*" component={NoMatch}/>
-    </Route>
-  </Router>
-), document.getElementById('app'));
+if (document.getElementById('app')) {
+  render((
+    <Router history={hashHistory}>
+      <Route path="/" component={App}>
+        <IndexRoute component={Home}/>
+        <Route path="demo" component={Dashboard}/>
+        <Route path="labs" component={Labs}/>
+        <Route path="connected-apps" component={ConnectedApps}/>
+        <Route path="reset" component={Reset}/>
+        <Route path="logout" component={Logout}/>
+        <Route path="*" component={NoMatch}/>
+      </Route>
+    </Router>
+  ), document.getElementById('app'));
+}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% set pageTitle = "Not found" %}
+
+{% block content %}
+  <div class="main-container">
+    <div class="container no-match">
+      <h1>This page cannot be found.</h1>
+      <div class="big-alert"></div>
+      <p>Oops! The address you have entered is incorrect or the page no longer exists.</p>
+      <a href="/" class="btn btn-blue">Go to the Dashboard</a>
+    </div>
+  </div>
+{% endblock %}
