@@ -1,11 +1,15 @@
 import moment from 'moment';
 
 exports.isAndroid = function isAndroid() {
-  return /Android/i.test(navigator.userAgent);
+  return /android/i.test(navigator.userAgent.toLowerCase());
 };
 
 exports.isIOS = function isIOS() {
-  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  return /iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+};
+
+exports.isTablet = function isTablet() {
+  return /ipad|android|android 3.0|xoom|sch-i800|playbook|tablet|kindle/i.test(navigator.userAgent.toLowerCase());
 };
 
 exports.iOSAppCheck = function iOSAppCheck(e) {

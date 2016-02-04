@@ -4,9 +4,11 @@ import _ from 'lodash';
 import { Modal } from 'react-bootstrap';
 
 const alert = require('../js/alert');
+const cache = require('../js/cache');
 const filters = require('../js/filters');
 const formatters = require('../js/formatters');
 const login = require('../js/login');
+const mobile = require('../js/mobile');
 const requests = require('../js/requests');
 const stats = require('../js/stats');
 
@@ -98,6 +100,14 @@ class Dashboard extends React.Component {
       });
     };
 
+    this.closeTabletWarningModal = () => {
+      this.setState({
+        showTabletWarningModal: false
+      });
+
+      cache.setItem('tabletWarningShown', 'true');
+    };
+
     this.getTrips = (startDate, cb) => {
       // if demo mode and trips are already loaded, send them
       if (!login.isLoggedIn() && this.state.allTrips.length) {
@@ -129,6 +139,15 @@ class Dashboard extends React.Component {
         cb();
       }
     };
+  }
+
+  componentWillMount() {
+    // show tablet warning modal if it hasn't already been closed
+    if (mobile.isTablet() && !cache.getItem('tabletWarningShown') && this.state.showTabletWarningModal !== false) {
+      this.setState({
+        showTabletWarningModal: true
+      });
+    }
   }
 
   componentDidMount() {
@@ -234,6 +253,15 @@ class Dashboard extends React.Component {
               Use our <a href="https://www.automatic.com/app">mobile app</a> to get started.
             </div>
             <div className="btn btn-blue btn-close" onClick={this.closeNoTripsModal}>OK</div>
+          </Modal.Body>
+        </Modal>
+        <Modal show={this.state.showTabletWarningModal} className="tabletwarning-modal">
+          <Modal.Body>
+            <div className="btn btn-blue btn-close" onClick={this.closeTabletWarningModal}>OK</div>
+            <div className="tabletwarning-text">
+              Our dashboard isn't tuned for tablets just yet.
+              You may notice some performance issues that don't affect desktop browsers.
+            </div>
           </Modal.Body>
         </Modal>
       </div>

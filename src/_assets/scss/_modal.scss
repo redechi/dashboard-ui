@@ -141,3 +141,21 @@
     }
   }
 }
+
+.tabletwarning-modal {
+  .modal-body {
+    @include hr-image('../images/icon_warning_small', 'png', 27px, 27px);
+    background-repeat: no-repeat;
+    background-position: center left 30px;
+
+    .tabletwarning-text {
+      padding-left: 65px;
+    }
+
+    .btn-close {
+      float: right;
+      display: inline-block;
+      margin-top: 5px;
+    }
+  }
+}
