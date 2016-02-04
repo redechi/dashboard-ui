@@ -1,0 +1,73 @@
+.wrapper {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.chart text {
+  fill: #8e8e8e;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 24px;
+  text-anchor: middle;
+}
+
+.chart rect {
+  fill: transparent;
+}
+
+.bar {
+  fill: #bbc2c4;
+}
+
+.axis path {
+  fill: white;
+}
+
+.axis-label {
+  font-size: 28px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+.chart .axis text {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.line {
+	stroke: #8e8e8e;
+	fill: none;
+	stroke-width: 4;
+}
+
+rect.median {
+  fill: #f7f5f4;
+}
+
+text.median-label {
+  font-size: 26px;
+}
+
+line.median-line {
+  stroke: #cecece;
+  stroke-width: 4;
+  fill: none;
+}
+
+.flag line {
+  stroke-width: 8;
+  fill: none;
+}
+
+.flag text {
+  fill: #ffffff;
+}
+
+.flag .flag-label {
+  font-size: 22px;
+}
+
+.flag .flag-value {
+  font-size: 44px;
+  font-weight: bold;
+  text-anchor: middle;
+}

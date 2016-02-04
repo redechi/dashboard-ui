@@ -1,0 +1,481 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Battery Voltage | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <link href="css/battery.css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <a class="btn-logout" href="/#/logout">Log out</a>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="progress"></div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="labs-title">Battery Voltage</h1>
+        <div class="labs-tagline">By Automatic Labs</div>
+      </div>
+      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+
+      <div id="batteryHistogram"></div>
+      <div id="batteryLineGraph"></div>
+    </div>
+
+    <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
+
+    <script src="../common/js/main.js"></script>
+
+    <script>
+      var colors = [
+        '#EE582E',
+        '#F67D30',
+        '#FB9631',
+        '#FEA732',
+        '#FEB731',
+        '#FCC92F',
+        '#D5CF29',
+        '#A7D623',
+        '#77DE1C',
+        '#49E325',
+        '#2DDF4E',
+        '#19E160',
+        '#14E778',
+        '#24E9C7',
+        '#50DBEC',
+        '#44C9E1',
+        '#38DEFF',
+        '#2AC6E6',
+        '#02CBF5',
+        '#00D9FF',
+      ];
+
+      function drawBatteryHistogram(graph) {
+        var margin = {
+          top: 150,
+          right: 0,
+          bottom: 120,
+          left: 40
+        };
+
+        var histogramData = _.findWhere(graph.data, {name: 'batteryHistogram'});
+        var flagData = _.findWhere(graph.data, {name: 'user'});
+
+        histogramData.range_high = _.last(histogramData.data)[0];
+        histogramData.range_low = _.first(histogramData.data)[0];
+
+        var width = 800 - margin.left - margin.right;
+        var height = 460 - margin.top - margin.bottom;
+        var maxBarWidth = 100;
+
+        function getColor(value) {
+          var range = parseInt(histogramData.range_high, 10) - parseInt(histogramData.range_low, 10);
+          var colorIdx = Math.round(((value - histogramData.range_low) / range) * (colors.length - 1));
+          return colors[colorIdx];
+        }
+
+        function createFlag() {
+          var horizontalPercent = (flagData.data[0] - histogramData.range_low) / (histogramData.range_high - histogramData.range_low);
+          var direction = (horizontalPercent < 0.66) ? 'right' : 'left';
+
+          return {
+            direction: direction,
+            width: 100,
+            height: 60,
+            flagOffset: (direction === 'left') ? - 100 : 0,
+            color: getColor(flagData.data[0]),
+            horizontalOffset: x(flagData.data[0]) + x.rangeBand() / 2,
+            verticalOffset: -120,
+            value: flagData.data[0]
+          };
+        }
+
+        function getTicks() {
+          var valueCount = parseInt(histogramData.range_high, 10) - parseInt(histogramData.range_low, 10) + 1;
+          var interval = Math.ceil(valueCount / 20);
+          return _.reduce(_.range(histogramData.range_low, (histogramData.range_high + 1)), function(memo, value) {
+            if(value % interval === 0) {
+              memo.push(value);
+            }
+            return memo;
+          }, []);
+        }
+
+        function wrap(text, width) {
+          var words = text.text().split(/\s+/).reverse();
+          var word;
+          var line = [];
+          var lineNumber = 0;
+          var lineHeight = 1.3; // ems
+          var x = text.attr("x");
+          var y = text.attr("y");
+          var dy = 0;
+          var tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+
+          while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(" "));
+            if (tspan.node().getComputedTextLength() > width) {
+              line.pop();
+              tspan.text(line.join(" "));
+              line = [word];
+              tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+            }
+          }
+        }
+
+        function roundedRectangle(x, y, width, height, radius) {
+          return 'M' + (x + radius) + ',' + y
+               + 'h' + (width - (2 * radius))
+               + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
+               + 'v' + (height - radius)
+               + 'h' + (-width)
+               + 'v' + (radius - height)
+               + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius)
+               + 'z';
+        }
+
+        // Create base svg
+        var mountNode = d3.select('#batteryHistogram');
+        var svg = mountNode.append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        var x = d3.scale.ordinal()
+            .rangeRoundBands([0, width], 0.4, 0);
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        // X Axis
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickValues(getTicks());
+
+        x.domain(histogramData.data.map(function(d) { return d[0]; }));
+        y.domain([0, d3.max(histogramData.data, function(d) { return d[1]; })]);
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + (height + 2) + ")")
+            .call(xAxis);
+
+        svg.selectAll(".x.axis text")
+            .style({fill: function(d) { return getColor(d); }});
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(" + (width / 2) +"," + (height + 70) + ")")
+            .text(graph.x_axis_label);
+
+        // Chart Bars
+
+        var barWidth = Math.min.apply(null, [x.rangeBand(), maxBarWidth]);
+        var bars = svg.selectAll(".bar")
+            .data(histogramData.data)
+          .enter().append('path')
+            .attr('class', 'bar')
+            .attr('d', function(d) {
+              var barRadius = Math.min(barWidth / 2, height - y(d[1]));
+              return roundedRectangle(x(d[0]), y(d[1]), barWidth, height - y(d[1]), barRadius);
+            });
+
+        // Chart line
+
+        var line = d3.svg.line()
+          .interpolate("basis")
+          .x(function(d) { return x(d[0]) + x.rangeBand() / 2; })
+          .y(function(d) { return y(d[1]); });
+
+        svg.append("path")
+        	.datum(histogramData.data)
+        	.attr("class","line")
+        	.attr("d", line);
+
+        // User Flag
+
+        var flag = createFlag();
+
+        var svgFlag = svg.append("g")
+            .attr("class", "flag user-flag")
+            .attr("transform", "translate(" + flag.horizontalOffset + "," + flag.verticalOffset + ")");
+
+        svgFlag.append("line")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", 0)
+            .attr("y2", height + -flag.verticalOffset)
+            .style({stroke: flag.color});
+
+        svgFlag.append("rect")
+            .attr("x", flag.flagOffset)
+            .attr("width", flag.width)
+            .attr("height", flag.height)
+            .style({fill: flag.color});
+
+        svgFlag.append("text")
+            .attr("class", "flag-label")
+            .attr("x", flag.width / 2 + flag.flagOffset)
+            .attr("y", 30)
+            .text(flag.label)
+            .call(wrap, flag.width - 20);
+
+        svgFlag.append("text")
+            .attr("class", "flag-value")
+            .attr("x", flag.width / 2 + flag.flagOffset)
+            .attr("y", flag.height - 15)
+            .text(flag.value);
+      }
+
+      function drawBatteryLineGraph(graph) {
+        var margin = {
+          top: 20,
+          right: 0,
+          bottom: 120,
+          left: 60
+        };
+
+        var startVoltage = _.findWhere(graph.data, {name: 'startVoltage'});
+        var endVoltage = _.findWhere(graph.data, {name: 'endVoltage'});
+
+        var width = 800 - margin.left - margin.right;
+        var height = 400 - margin.top - margin.bottom;
+
+
+        // Create base svg
+        var mountNode = d3.select('#batteryLineGraph');
+        var svg = mountNode.append('svg')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        var x = d3.scale.ordinal()
+            .rangeRoundBands([0, width], 0.4, 0);
+
+        var y = d3.scale.linear()
+            .range([height, 0]);
+
+        // y Axis
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+        var allValues = startVoltage.data.concat(endVoltage.data);
+
+        x.domain(allValues.map(function(d) { return d[0]; }));
+        y.domain([0, d3.max(allValues, function(d) { return d[1]; })]);
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(10,0)")
+            .call(yAxis);
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(" + (width / 2) +"," + (height + 40) + ")")
+            .text(graph.x_axis_label);
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-40," + (height / 2) + ")rotate(270)")
+            .text(graph.y_axis_label);
+
+        var line = d3.svg.line()
+          .interpolate("basis")
+          .x(function(d) { return x(d[0]); })
+          .y(function(d) { return y(d[1]); });
+
+        svg.selectAll(".line")
+            .data([startVoltage.data, endVoltage.data])
+          .enter().append("path")
+            .attr("class", "line")
+            .attr("d", line);
+      }
+
+      function renderGraphs(data) {
+        drawBatteryHistogram(data.batteryHistogram);
+        drawBatteryLineGraph(data.batteryLineGraph);
+      }
+
+      function loadBatteryInfo() {
+        var batteryHistogram = {
+          data: [
+            {
+              name: 'batteryHistogram',
+              type: 'bars',
+              data: [
+                [ 15, 0 ],
+                [ 16, 0 ],
+                [ 17, 0 ],
+                [ 18, 0.001 ],
+                [ 19, 0.001 ],
+                [ 20, 0.002 ],
+                [ 21, 0.003 ],
+                [ 22, 0.004 ],
+                [ 23, 0.006 ],
+                [ 24, 0.008 ],
+                [ 25, 0.014 ],
+                [ 26, 0.018 ],
+                [ 27, 0.024 ],
+                [ 28, 0.028 ],
+                [ 29, 0.032 ],
+                [ 30, 0.04 ],
+                [ 31, 0.053 ],
+                [ 32, 0.066 ],
+                [ 33, 0.077 ],
+                [ 34, 0.085 ],
+                [ 35, 0.096 ],
+                [ 36, 0.089 ],
+                [ 37, 0.078 ],
+                [ 38, 0.066 ],
+                [ 39, 0.05 ],
+                [ 40, 0.037 ],
+                [ 41, 0.032 ],
+                [ 42, 0.024 ],
+                [ 43, 0.019 ],
+                [ 44, 0.012 ],
+                [ 45, 0.01 ],
+                [ 46, 0.009 ],
+                [ 47, 0.007 ],
+                [ 48, 0.004 ],
+                [ 49, 0.001 ]
+              ]
+            },
+            {
+              name: 'user',
+              type: 'point',
+              data: [ 38, 0 ]
+            }
+          ],
+          x_axis_label: 'Voltage'
+        };
+
+        var batteryLineGraph = {
+          data: [
+            {
+              name: 'startVoltage',
+              type: 'line',
+              data: [
+                [ 15, 0 ],
+                [ 16, 0 ],
+                [ 17, 0 ],
+                [ 18, 0.001 ],
+                [ 19, 0.001 ],
+                [ 20, 0.002 ],
+                [ 21, 0.003 ],
+                [ 22, 0.004 ],
+                [ 23, 0.006 ],
+                [ 24, 0.008 ],
+                [ 25, 0.014 ],
+                [ 26, 0.018 ],
+                [ 27, 0.024 ],
+                [ 28, 0.028 ],
+                [ 29, 0.032 ],
+                [ 30, 0.04 ],
+                [ 31, 0.053 ],
+                [ 32, 0.066 ],
+                [ 33, 0.077 ],
+                [ 34, 0.085 ],
+                [ 35, 0.096 ],
+                [ 36, 0.089 ],
+                [ 37, 0.078 ],
+                [ 38, 0.066 ],
+                [ 39, 0.05 ],
+                [ 40, 0.037 ],
+                [ 41, 0.032 ],
+                [ 42, 0.024 ],
+                [ 43, 0.019 ],
+                [ 44, 0.012 ],
+                [ 45, 0.01 ],
+                [ 46, 0.009 ],
+                [ 47, 0.007 ],
+                [ 48, 0.004 ],
+                [ 49, 0.001 ]
+              ]
+            },
+            {
+              name: 'endVoltage',
+              type: 'line',
+              data: [
+                [ 15, 0 ],
+                [ 16, 0 ],
+                [ 17, 0 ],
+                [ 18, 0.001 ],
+                [ 19, 0.001 ],
+                [ 20, 0.002 ],
+                [ 21, 0.003 ],
+                [ 22, 0.004 ],
+                [ 23, 0.006 ],
+                [ 24, 0.008 ],
+                [ 25, 0.014 ],
+                [ 26, 0.018 ],
+                [ 27, 0.024 ],
+                [ 28, 0.028 ],
+                [ 29, 0.032 ],
+                [ 30, 0.04 ],
+                [ 31, 0.053 ],
+                [ 32, 0.066 ],
+                [ 33, 0.2 ],
+                [ 34, 0.085 ],
+                [ 35, 0.096 ],
+                [ 36, 0.4 ],
+                [ 37, 0.078 ],
+                [ 38, 0.066 ],
+                [ 39, 0.05 ],
+                [ 40, 0.037 ],
+                [ 41, 0.032 ],
+                [ 42, 0.024 ],
+                [ 43, 0.019 ],
+                [ 44, 0.012 ],
+                [ 45, 0.01 ],
+                [ 46, 0.009 ],
+                [ 47, 0.007 ],
+                [ 48, 0.004 ],
+                [ 49, 0.001 ]
+              ]
+            },
+          ],
+          x_axis_label: 'Time',
+          y_axis_label: 'Voltage'
+        };
+
+        renderGraphs({
+          batteryHistogram: batteryHistogram,
+          batteryLineGraph: batteryLineGraph
+        });
+      }
+
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('battery');
+
+      loadBatteryInfo();
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
