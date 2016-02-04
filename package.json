@@ -25,6 +25,7 @@
     "moment": "2.11.1",
     "normalize.css": "3.0.3",
     "polyline": "0.2.0",
+    "raven-js": "2.1.0",
     "react": "0.14.7",
     "react-bootstrap": "0.28.2",
     "react-datepicker": "0.19.0",
