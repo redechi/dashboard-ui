@@ -28,10 +28,7 @@ const {
   DEV_PORT: '5000',
   DEV_WEBPACK_SERVER_PORT: '8081',
   SITE_URL: '/',
-  SITE_BASE_PATH: '/',
-  AWS_ACCESS_KEY_ID: '06TDHGMFC4ACQ61V2782',
-  AWS_SECRET_ACCESS_KEY: 'Anydq9lMpNiflEbn3GX6EwoScX+gcpik4RcDbkH8',
-  AWS_BUCKET: 'automatictest'
+  SITE_BASE_PATH: '/'
 });
 
 const IS_PROD = any([
