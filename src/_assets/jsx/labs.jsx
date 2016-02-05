@@ -69,7 +69,7 @@ function Lab(props) {
 
   return (
     <li>
-      <a href={`/labs/${props.lab.name}/${`index`}.html${demoParam}`} className="labs-link">
+      <a href={`/labs/${props.lab.name}/index.html${demoParam}`} className="labs-link">
         <img src={props.lab.image} className="labs-icon" />
         <h3 className="labs-title">{props.lab.title}</h3>
         <div className="labs-description">{props.lab.description}</div>

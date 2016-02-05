@@ -13,6 +13,9 @@ function buildFingerprint() {
       '.html',
       '.txt',
       'main'
+    ],
+    dontUpdateReference: [
+      '.html'
     ]
   });
   return gulp.src('dist/**')
