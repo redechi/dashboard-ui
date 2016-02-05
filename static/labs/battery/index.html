@@ -6,6 +6,17 @@
     <title>Battery Voltage | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+      <meta property="og:title" content="Battery Voltage | Automatic"/>
+      <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/battery.png"/>
+      <meta property="og:site_name" content="Automatic"/>
+      <meta property="og:description" content="Analysis of my vehicle's battery voltage."/>
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:site" content="@automatic">
+      <meta name="twitter:title" content="Battery Voltage | Automatic">
+      <meta name="twitter:description" content="Analysis of my vehicle's battery voltag.">
+      <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/battery.png">
+
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/battery.css" rel="stylesheet" />
 
@@ -25,6 +36,18 @@
 
       <div id="batteryHistogram"></div>
       <div id="batteryLineGraph"></div>
+
+      <div class="share-container hidden" id="shareContainer">
+        <div id="shareTitle" class="share-title hidden">Share this Report</div>
+        <input id="shareUrl" class="share-url" readonly>
+        <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share this report</a>
+        <div class="share-buttons hidden">
+          <p>Anyone with this link can see this map, which includes <b>all</b> trips you've ever taken with Automatic.</p>
+          <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+          <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+          <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+        </div>
+      </div>
     </div>
 
     <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
@@ -36,6 +59,7 @@
     <script src="../common/js/main.js"></script>
 
     <script>
+      var data;
       var colors = [
         '#EE582E',
         '#F67D30',
@@ -58,6 +82,44 @@
         '#02CBF5',
         '#00D9FF',
       ];
+
+      $('#share').click(function(e) {
+        e.preventDefault();
+
+        $('#share').html(generateSpinner());
+        saveShareData(data, function(e, shareUrlSlug) {
+          if (e) {
+            return alert(e);
+          }
+
+          var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
+          showShareOptions(shareURL);
+        });
+      });
+
+      $('#shareUrl').focus(function() {
+        $(this).select();
+      });
+
+      function showShareOptions(shareURL) {
+        $('#shareUrl')
+          .val(shareURL)
+          .animate({width: 'toggle'}, 350)
+          .select();
+        $('#share').animate({width: 'toggle'}, 350);
+        $('#shareTitle').slideDown();
+        $('.share-buttons').slideDown();
+
+        var emailShareURL = formatEmailShare('My Vehicle\'s Battery Voltage', 'A heatmap of my driving.', shareURL);
+        var twitterShareURL = formatTwitterShare('A heatmap of my driving.', shareURL);
+        var facebookShareURL = formatFacebookShare(shareURL);
+
+        $('.btn-email').attr('href', emailShareURL);
+        $('.btn-twitter').attr('href', twitterShareURL);
+        $('.btn-facebook').attr('href', facebookShareURL);
+
+        sessionStorage.setItem('batteryShareURL', shareURL);
+      }
 
       function drawBatteryHistogram(graph) {
         var margin = {
@@ -307,12 +369,12 @@
             .attr("d", line);
       }
 
-      function renderGraphs(data) {
+      function renderData() {
         drawBatteryHistogram(data.batteryHistogram);
         drawBatteryLineGraph(data.batteryLineGraph);
       }
 
-      function loadBatteryInfo() {
+      function getUserData() {
         var batteryHistogram = {
           data: [
             {
@@ -454,18 +516,38 @@
           y_axis_label: 'Voltage'
         };
 
-        renderGraphs({
+        data = {
           batteryHistogram: batteryHistogram,
           batteryLineGraph: batteryLineGraph
-        });
-      }
+        };
 
+        renderData();
+      }
 
       /* On Page Load */
       formatForDemo();
       showLoginLink('battery');
 
-      loadBatteryInfo();
+      var queryParams = getQueryParams(document.location.search);
+      if (queryParams.share) {
+        getShareData(queryParams.share, function(e, result) {
+          if (e) {
+            return alert(e);
+          }
+
+          data = result;
+          renderData();
+        });
+      } else {
+        getUserData();
+        if (!queryParams.demo) {
+          $('#shareContainer').show();
+
+          if (sessionStorage.getItem('batteryShareURL')) {
+            showShareOptions(sessionStorage.getItem('batteryShareURL'));
+          }
+        }
+      }
     </script>
 
     <script>
