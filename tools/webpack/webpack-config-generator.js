@@ -48,27 +48,27 @@ function makeWebpackConfig() {
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=font-[name].[hash].[ext]'
       },
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        loader: 'file-loader?name=font-[name].[hash].[ext]'
       },
       {
         test: /\.png$/,
-        loader: 'url-loader?limit=10000&mimetype=image/png'
+        loader: 'url-loader?limit=10000&mimetype=image/png&name=image-[name].[hash].[ext]'
       },
       {
         test: /\.(jpg|jpeg)$/,
-        loader: 'url-loader?limit=10000&mimetype=image/jpeg'
+        loader: 'url-loader?limit=10000&mimetype=image/jpeg&name=image-[name].[hash].[ext]'
       },
       {
         test: /\.gif$/,
-        loader: 'url-loader?limit=10000&mimetype=image/gif'
+        loader: 'url-loader?limit=10000&mimetype=image/gif&name=image-[name].[hash].[ext]'
       },
       {
         test: /\.svg$/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=image-[name].[hash].[ext]'
       },
       {
         test: /\.json$/,
