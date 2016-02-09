@@ -1,4 +1,5 @@
-/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top: 0, object-shorthand: 0 */
+/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top: 0 */
+/* eslint object-shorthand: 0, prefer-template: 0, prefer-arrow-callback: 0 */
 /* global _, $, moment */
 
 'use strict';

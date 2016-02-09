@@ -1,4 +1,4 @@
-/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top:0 */
+/* eslint no-var:0, func-names:0, no-unused-vars:0, vars-on-top:0, prefer-template: 0, prefer-arrow-callback: 0 */
 /* global L, _, $, polyline, simplify */
 
 L.mapbox.accessToken = 'pk.eyJ1IjoiYXV0b21hdGljIiwiYSI6IkV6ZFdvQmsifQ.SDDOhAsgorCNf8T0ejWKmA';
