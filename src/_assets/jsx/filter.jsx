@@ -77,7 +77,7 @@ class Filter extends React.Component {
     this.handleEndDateChange = (endDate) => {
       const filterValueComponents = this.props.value.split(',');
 
-      filterValueComponents[1] = endDate.valueOf();
+      filterValueComponents[1] = endDate.endOf('day').valueOf();
       this.updateFilter(filterValueComponents.join(','));
     };
   }
