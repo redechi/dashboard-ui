@@ -55,6 +55,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
 
     <script src="../common/js/main.js"></script>
 
@@ -125,7 +126,7 @@
         var margin = {
           top: 150,
           right: 0,
-          bottom: 120,
+          bottom: 60,
           left: 40
         };
 
@@ -240,7 +241,7 @@
 
         svg.append("text")
             .attr("class", "axis-label")
-            .attr("transform", "translate(" + (width / 2) +"," + (height + 70) + ")")
+            .attr("transform", "translate(" + (width / 2) +"," + (height + 40) + ")")
             .text(graph.x_axis_label);
 
         // Chart Bars
@@ -307,11 +308,19 @@
           top: 20,
           right: 0,
           bottom: 120,
-          left: 60
+          left: 80
         };
 
-        var startVoltage = _.findWhere(graph.data, {name: 'startVoltage'});
-        var endVoltage = _.findWhere(graph.data, {name: 'endVoltage'});
+        var oneHourRestingVoltage = _.findWhere(graph.data, {name: 'oneHourRestingVoltage'});
+        var eightHourRestingVoltage = _.findWhere(graph.data, {name: 'eightHourRestingVoltage'});
+
+        oneHourRestingVoltage.data = oneHourRestingVoltage.data.map(function(d) {
+          return [moment(d[0], 'YYYY-MM-DD').toDate(), d[1]];
+        });
+
+        eightHourRestingVoltage.data = eightHourRestingVoltage.data.map(function(d) {
+          return [moment(d[0], 'YYYY-MM-DD').toDate(), d[1]];
+        });
 
         var width = 800 - margin.left - margin.right;
         var height = 400 - margin.top - margin.bottom;
@@ -325,37 +334,16 @@
                 .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        var x = d3.scale.ordinal()
-            .rangeRoundBands([0, width], 0.4, 0);
+        var allValues = oneHourRestingVoltage.data.concat(eightHourRestingVoltage.data);
+
+        var x = d3.time.scale()
+            .domain(d3.extent(allValues, function(d) { return d[0]; }))
+            .range([0, width]);
 
         var y = d3.scale.linear()
-            .range([height, 0]);
+            .domain(d3.extent(allValues, function(d) { return d[1]; }))
+            .range([0, height]);
 
-        // y Axis
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-        var allValues = startVoltage.data.concat(endVoltage.data);
-
-        x.domain(allValues.map(function(d) { return d[0]; }));
-        y.domain([0, d3.max(allValues, function(d) { return d[1]; })]);
-
-        svg.append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(10,0)")
-            .call(yAxis);
-
-        svg.append("text")
-            .attr("class", "axis-label")
-            .attr("transform", "translate(" + (width / 2) +"," + (height + 40) + ")")
-            .text(graph.x_axis_label);
-
-        svg.append("text")
-            .attr("class", "axis-label")
-            .attr("transform", "translate(-40," + (height / 2) + ")rotate(270)")
-            .text(graph.y_axis_label);
 
         var line = d3.svg.line()
           .interpolate("basis")
@@ -363,10 +351,45 @@
           .y(function(d) { return y(d[1]); });
 
         svg.selectAll(".line")
-            .data([startVoltage.data, endVoltage.data])
+            .data([oneHourRestingVoltage.data, eightHourRestingVoltage.data])
           .enter().append("path")
             .attr("class", "line")
             .attr("d", line);
+
+        // y Axis
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .ticks(5)
+            .innerTickSize(0.1)
+            .orient("left");
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-60," + (height / 2) + ")rotate(270)")
+            .text(graph.y_axis_label);
+
+        // x Axis
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .tickFormat(d3.time.format('%b %d'))
+            .ticks(8)
+            .orient("bottom");
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        svg.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(" + (width / 2) +"," + (height + 60) + ")")
+            .text(graph.x_axis_label);
       }
 
       function renderData() {
@@ -381,136 +404,83 @@
               name: 'batteryHistogram',
               type: 'bars',
               data: [
-                [ 15, 0 ],
-                [ 16, 0 ],
-                [ 17, 0 ],
-                [ 18, 0.001 ],
-                [ 19, 0.001 ],
-                [ 20, 0.002 ],
-                [ 21, 0.003 ],
-                [ 22, 0.004 ],
-                [ 23, 0.006 ],
-                [ 24, 0.008 ],
-                [ 25, 0.014 ],
-                [ 26, 0.018 ],
-                [ 27, 0.024 ],
-                [ 28, 0.028 ],
-                [ 29, 0.032 ],
-                [ 30, 0.04 ],
-                [ 31, 0.053 ],
-                [ 32, 0.066 ],
-                [ 33, 0.077 ],
-                [ 34, 0.085 ],
-                [ 35, 0.096 ],
-                [ 36, 0.089 ],
-                [ 37, 0.078 ],
-                [ 38, 0.066 ],
-                [ 39, 0.05 ],
-                [ 40, 0.037 ],
-                [ 41, 0.032 ],
-                [ 42, 0.024 ],
-                [ 43, 0.019 ],
-                [ 44, 0.012 ],
-                [ 45, 0.01 ],
-                [ 46, 0.009 ],
-                [ 47, 0.007 ],
-                [ 48, 0.004 ],
-                [ 49, 0.001 ]
+                [ 11.5, 0.02 ],
+                [ 11.6, 0.03 ],
+                [ 11.7, 0.05 ],
+                [ 11.8, 0.06 ],
+                [ 11.9, 0.07 ],
+                [ 12.0, 0.08 ],
+                [ 12.1, 0.08 ],
+                [ 12.2, 0.09 ],
+                [ 12.3, 0.1 ],
+                [ 12.4, 0.13 ],
+                [ 12.5, 0.08 ],
+                [ 12.6, 0.08 ],
+                [ 12.7, 0.04 ],
+                [ 12.8, 0.03 ],
+                [ 12.9, 0.04 ],
+                [ 13.0, 0.03 ]
               ]
             },
             {
               name: 'user',
               type: 'point',
-              data: [ 38, 0 ]
+              data: [ 12.7, 0 ]
+            },
+            {
+              name: 'median',
+              type: 'point',
+              data: [ 12.35, 0 ]
             }
           ],
-          x_axis_label: 'Voltage'
+          x_axis_label: 'Voltage',
+          title: 'Battery State'
         };
 
         var batteryLineGraph = {
           data: [
             {
-              name: 'startVoltage',
+              name: 'oneHourRestingVoltage',
+              title: 'One Hour Resting Voltage',
               type: 'line',
               data: [
-                [ 15, 0 ],
-                [ 16, 0 ],
-                [ 17, 0 ],
-                [ 18, 0.001 ],
-                [ 19, 0.001 ],
-                [ 20, 0.002 ],
-                [ 21, 0.003 ],
-                [ 22, 0.004 ],
-                [ 23, 0.006 ],
-                [ 24, 0.008 ],
-                [ 25, 0.014 ],
-                [ 26, 0.018 ],
-                [ 27, 0.024 ],
-                [ 28, 0.028 ],
-                [ 29, 0.032 ],
-                [ 30, 0.04 ],
-                [ 31, 0.053 ],
-                [ 32, 0.066 ],
-                [ 33, 0.077 ],
-                [ 34, 0.085 ],
-                [ 35, 0.096 ],
-                [ 36, 0.089 ],
-                [ 37, 0.078 ],
-                [ 38, 0.066 ],
-                [ 39, 0.05 ],
-                [ 40, 0.037 ],
-                [ 41, 0.032 ],
-                [ 42, 0.024 ],
-                [ 43, 0.019 ],
-                [ 44, 0.012 ],
-                [ 45, 0.01 ],
-                [ 46, 0.009 ],
-                [ 47, 0.007 ],
-                [ 48, 0.004 ],
-                [ 49, 0.001 ]
+                [ '2016-02-01', 12.9 ],
+                [ '2016-02-02', 12.875 ],
+                [ '2016-02-03', 12.825 ],
+                [ '2016-02-04', 12.8 ],
+                [ '2016-02-05', 12.8 ],
+                [ '2016-02-06', 12.725 ],
+                [ '2016-02-07', 12.8 ],
+                [ '2016-02-08', 12.825 ],
+                [ '2016-02-09', 12.9 ],
+                [ '2016-02-10', 12.725 ],
+                [ '2016-02-11', 12.725 ],
+                [ '2016-02-12', 12.825 ],
+                [ '2016-02-13', 12.7 ],
+                [ '2016-02-14', 12.65 ]
               ]
             },
             {
-              name: 'endVoltage',
+              name: 'eightHourRestingVoltage',
+              title: 'Eight Hour Resting Voltage',
               type: 'line',
               data: [
-                [ 15, 0 ],
-                [ 16, 0 ],
-                [ 17, 0 ],
-                [ 18, 0.001 ],
-                [ 19, 0.001 ],
-                [ 20, 0.002 ],
-                [ 21, 0.003 ],
-                [ 22, 0.004 ],
-                [ 23, 0.006 ],
-                [ 24, 0.008 ],
-                [ 25, 0.014 ],
-                [ 26, 0.018 ],
-                [ 27, 0.024 ],
-                [ 28, 0.028 ],
-                [ 29, 0.032 ],
-                [ 30, 0.04 ],
-                [ 31, 0.053 ],
-                [ 32, 0.066 ],
-                [ 33, 0.2 ],
-                [ 34, 0.085 ],
-                [ 35, 0.096 ],
-                [ 36, 0.4 ],
-                [ 37, 0.078 ],
-                [ 38, 0.066 ],
-                [ 39, 0.05 ],
-                [ 40, 0.037 ],
-                [ 41, 0.032 ],
-                [ 42, 0.024 ],
-                [ 43, 0.019 ],
-                [ 44, 0.012 ],
-                [ 45, 0.01 ],
-                [ 46, 0.009 ],
-                [ 47, 0.007 ],
-                [ 48, 0.004 ],
-                [ 49, 0.001 ]
+                [ '2016-02-01', 12.6 ],
+                [ '2016-02-02', 12.55 ],
+                [ '2016-02-03', 12.5 ],
+                [ '2016-02-04', 12.525 ],
+                [ '2016-02-05', 12.5 ],
+                [ '2016-02-06', 12.45 ],
+                [ '2016-02-07', 12.425 ],
+                [ '2016-02-08', 12.4 ],
+                [ '2016-02-09', 12.375 ],
+                [ '2016-02-10', 12.325 ],
+                [ '2016-02-11', 12.35 ],
+                [ '2016-02-12', 12.3 ],
+                [ '2016-02-13', 12.275 ],
+                [ '2016-02-14', 12.25 ]
               ]
-            },
+            }
           ],
           x_axis_label: 'Time',
           y_axis_label: 'Voltage'

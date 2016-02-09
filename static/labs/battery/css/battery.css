@@ -71,3 +71,23 @@ line.median-line {
   font-weight: bold;
   text-anchor: middle;
 }
+
+#batteryLineGraph path.domain {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+#batteryLineGraph path.area {
+  fill: #e7e7e7;
+}
+
+#batteryLineGraph .axis {
+  shape-rendering: crispEdges;
+}
+
+#batteryLineGraph .axis line {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
