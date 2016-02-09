@@ -72,6 +72,12 @@ function fitBounds(bounds) {
   }
 }
 
+function bringSpeedingLayerToFront() {
+  if (speedingLayer.getLayers().length && speedingLayer.map) {
+    speedingLayer.bringToFront();
+  }
+}
+
 exports.createMap = function createMap() {
   map = mapHelpers.createMap('overviewMapContainer');
   pathsLayer = L.mapbox.featureLayer();
@@ -169,9 +175,7 @@ exports.updateMap = function updateMap(trips) {
     }
   });
 
-  if (speedingLayer.getLayers().length) {
-    speedingLayer.bringToFront();
-  }
+  bringSpeedingLayerToFront();
 
   fitBounds();
 };
@@ -246,9 +250,7 @@ exports.highlightTrips = function highlightTrips(trips, zoomTrip) {
     }
   });
 
-  if (speedingLayer.getLayers().length) {
-    speedingLayer.bringToFront();
-  }
+  bringSpeedingLayerToFront();
 
   if (autozoomEnabled && zoomTrip) {
     _.defer(() => {
@@ -293,9 +295,7 @@ exports.unhighlightTrips = function unhighlightTrips(trips, zoomTrip) {
     }
   });
 
-  if (speedingLayer.getLayers().length) {
-    speedingLayer.bringToFront();
-  }
+  bringSpeedingLayerToFront();
 
   if (autozoomEnabled && zoomTrip) {
     fitBounds();
@@ -330,9 +330,7 @@ exports.selectTrips = function selectTrips(trips) {
     }
   });
 
-  if (speedingLayer.getLayers().length) {
-    speedingLayer.bringToFront();
-  }
+  bringSpeedingLayerToFront();
 
   if (autozoomEnabled) {
     zoomTrips(trips);
