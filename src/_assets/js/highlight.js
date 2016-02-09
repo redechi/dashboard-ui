@@ -7,7 +7,10 @@ exports.highlightTrips = function highlightTrips(trips, zoomTrip) {
   map.highlightTrips(trips, zoomTrip);
   graph.highlightTrips(trips);
   trips.forEach(trip => {
-    document.getElementById(trip.id).classList.add('highlighted');
+    const tripDiv = document.getElementById(trip.id);
+    if (tripDiv) {
+      tripDiv.classList.add('highlighted');
+    }
   });
   highlightedTrips = highlightedTrips.concat(trips);
 };
@@ -16,7 +19,10 @@ exports.unhighlightTrips = function unhighlightTrips(zoomTrip) {
   map.unhighlightTrips(highlightedTrips, zoomTrip);
   graph.unhighlightTrips(highlightedTrips);
   highlightedTrips.forEach(trip => {
-    document.getElementById(trip.id).classList.remove('highlighted');
+    const tripDiv = document.getElementById(trip.id);
+    if (tripDiv) {
+      tripDiv.classList.remove('highlighted');
+    }
   });
   highlightedTrips = [];
 };
