@@ -9,6 +9,7 @@ const exportData = require('../js/export_data');
 const highlight = require('../js/highlight');
 const select = require('../js/select');
 
+const ExportModal = require('./export_modal.jsx');
 const ListItem = require('./list_item.jsx');
 const Trip = require('./trip.jsx');
 const TripModal = require('./trip_modal.jsx');
@@ -184,11 +185,9 @@ class TripList extends React.Component {
 
     const selectedSortType = _.find(sortTypes, (item) => item.value === this.state.sortType);
 
-    const trips = this.sortTrips().map((trip, key) => {
-      return (
-        <Trip trip={trip} showTripModal={this.showTripModal} key={key} />
-      );
-    });
+    const trips = this.sortTrips().map((trip, key) =>
+      <Trip trip={trip} showTripModal={this.showTripModal} key={key} />
+    );
 
     const sortTypePopover = (
       <Popover id="sortType" title="Sort By" className="popover-sort-type">
@@ -247,7 +246,18 @@ class TripList extends React.Component {
           showNextTrip={this.showNextTrip}
           showPreviousTrip={this.showPreviousTrip}
         />
-    );
+      );
+    }
+
+    let exportModal;
+    if (this.state.blobUrl) {
+      exportModal = (
+        <ExportModal
+          showExportModal={this.state.showExportModal}
+          hideExportModal={this.hideExportModal}
+          blobUrl={this.state.blobUrl}
+        />
+      );
     }
 
     return (
@@ -294,24 +304,7 @@ class TripList extends React.Component {
 
         {tripModal}
 
-        <Modal show={this.state.showExportModal} onHide={this.hideExportModal} className="export-modal">
-          <Modal.Body>
-            <div className="close" onClick={this.hideExportModal}>x</div>
-            <div>
-              <h2>Export trips to .CSV</h2>
-              <div className="csv-icon"></div>
-              <p>
-                Your trips will be downloaded as a file called "Unknown".
-                To open it, you will need to rename it and add the ".csv" extension.
-              </p>
-              <a
-                className="btn btn-blue btn-close"
-                href={this.state.blobUrl}
-                onClick={this.hideExportModal}
-              >Download now</a>
-            </div>
-          </Modal.Body>
-        </Modal>
+        {exportModal}
       </div>
     );
   }

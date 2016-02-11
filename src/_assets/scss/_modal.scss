@@ -64,7 +64,6 @@
   p {
     text-align: left;
     padding-top: 5px;
-    padding-bottom: 15px;
   }
 
   .csv-icon {
@@ -73,6 +72,15 @@
     height: 80px;
     float: left;
     margin-right: 20px;
+    margin-bottom: 20px;
+  }
+
+  .download-acknowledge {
+    padding: 0 20px;
+
+    input {
+      margin-right: 4px;
+    }
   }
 }
 
