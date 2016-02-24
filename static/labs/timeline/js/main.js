@@ -12,6 +12,7 @@ var accessToken = getAccessToken();
 
 var dayTemplate = _.template($('#dayTemplate').html());
 var photoTemplate = _.template($('#photoTemplate').html());
+var cardTemplate = _.template($('#cardTemplate').html());
 var itemTemplate = _.template($('#itemTemplate').html());
 var vehicles;
 var selectedVehicleId;
@@ -48,6 +49,10 @@ function renderRecord(record) {
 
   if (record.data.type === 'photo') {
     return $(photoTemplate(record));
+  }
+
+  if (record.data.type === 'card') {
+    return $(cardTemplate(record));
   }
 }
 
@@ -110,11 +115,14 @@ function fetchActivity() {
       }
     })
     .done(function(results) {
-      var records = _.where(results.results, { vehicle_id: selectedVehicleId }).map(function(record) {
-        record.type = 'record:record';
-        record.datetime = record.created_at;
-        return record;
-      });
+      var records = _.reduce(results.results, function(memo, record) {
+        if (record.vehicle_id === selectedVehicleId || record.vehicle_id === 'all') {
+          record.type = 'record:record';
+          record.datetime = record.created_at;
+          memo.push(record);
+        }
+        return memo;
+      }, []);
 
       cb(null, records);
     })

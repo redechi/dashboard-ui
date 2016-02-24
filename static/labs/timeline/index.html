@@ -177,6 +177,13 @@
       </div>
     </script>
 
+    <script type='text/template' id='cardTemplate'>
+      <div class="record item record-card">
+        <div class="top-date">{{moment(created_at).format('MMM D, YYYY')}}</div>
+        <h2>{{data.text}}</h2>
+      </div>
+    </script>
+
     <script type='text/template' id='itemTemplate'>
       <div class="item {{type}} {{problem ? 'problem' : ''}}">
         <div class="item-title">{{title}}</div>
