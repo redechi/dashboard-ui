@@ -5,8 +5,10 @@ const formatters = require('./formatters');
 function getAverageMPG(trips) {
   // jscs:disable requirePaddingNewLinesAfterBlocks
   const totals = trips.reduce((memo, trip) => {
-    memo.distance += trip.distance_miles;
-    memo.fuel += trip.fuel_volume_gal;
+    if (trip.distance_miles) {
+      memo.distance += trip.distance_miles;
+      memo.fuel += trip.distance_miles / trip.average_mpg;
+    }
     return memo;
   }, {
     distance: 0,
@@ -57,15 +59,17 @@ exports.calculateTotals = function calculateTotals(trips) {
 
   // jscs:disable requirePaddingNewLinesAfterBlocks
   const totals = trips.reduce((memo, trip) => {
-    memo.distance += trip.distance_miles;
-    memo.duration += trip.duration_s;
-    memo.fuel += trip.fuel_volume_gal;
-    memo.cost += trip.fuel_cost_usd;
-    memo.sumScoreEvents += trip.score_events * trip.duration_s;
-    memo.sumScoreSpeeding += trip.score_speeding * trip.duration_s;
-    memo.hardBrakes += trip.hard_brakes;
-    memo.hardAccels += trip.hard_accels;
-    memo.speedingSeconds += trip.duration_over_70_s;
+    if (trip.distance_miles) {
+      memo.distance += trip.distance_miles;
+      memo.duration += trip.duration_s;
+      memo.fuel += trip.distance_miles / trip.average_mpg;
+      memo.cost += trip.fuel_cost_usd;
+      memo.sumScoreEvents += trip.score_events * trip.duration_s;
+      memo.sumScoreSpeeding += trip.score_speeding * trip.duration_s;
+      memo.hardBrakes += trip.hard_brakes;
+      memo.hardAccels += trip.hard_accels;
+      memo.speedingSeconds += trip.duration_over_70_s;
+    }
     return memo;
   }, {
     distance: 0,
