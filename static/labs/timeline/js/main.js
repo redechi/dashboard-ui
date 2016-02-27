@@ -109,7 +109,7 @@ function fetchActivity() {
 
   function getRecords(cb) {
     $.ajax({
-      url: recordsAPI + '/timeline_event',
+      url: recordsAPI + '/viewserver/external_app_record/all',
       headers: {
         Authorization: 'bearer ' + accessToken
       }
