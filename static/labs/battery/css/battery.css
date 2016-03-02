@@ -23,7 +23,7 @@
 }
 
 .axis-label {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
   text-anchor: middle;
 }
@@ -90,4 +90,115 @@ line.median-line {
   fill: none;
   stroke: #666;
   stroke-width: 1.5px;
+}
+
+
+/* new line graph */
+
+#newBatteryLineGraph .line {
+  stroke-width: 2px;
+  stroke: #E67D41;
+}
+
+#newBatteryLineGraph .line.gap {
+  stroke-dasharray: 3,3;
+  stroke: #8e8e8e;
+}
+
+.gap-band {
+  fill: #E7F2D5;
+}
+
+#newBatteryLineGraph path.domain {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1px;
+}
+
+#newBatteryLineGraph path.area {
+  fill: #e7e7e7;
+}
+
+#newBatteryLineGraph .ci {
+  fill: #F1A664;
+  fill-opacity: 0.6;
+}
+
+#newBatteryLineGraph .axis {
+  shape-rendering: crispEdges;
+}
+
+#newBatteryLineGraph .axis line {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+.danger-text {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+/* legend */
+.gap-icon {
+  fill: #E7F2D5;
+}
+
+.cycle-icon {
+  fill: #F1A664;
+  fill-opacity: 0.6;
+}
+
+.legend-text {
+  fill: #888E8F;
+}
+
+/* data switch button */
+
+.batteryGraphContainer button {
+  display: block;
+  margin: auto;
+}
+
+/* text for battery graph */
+.battery-text {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* dropdown for survey */
+.controls {
+  background: #eee;
+  margin-bottom: 40px;
+  padding: 10px 15px;
+}
+
+h2.battery-title {
+  text-transform: uppercase;
+  color: #e8873b;
+}
+
+h3.battery-title {
+  text-align: center;
+  color: #e8873b;
+  font-size: 20px;
+}
+
+h4.battery-title {
+  margin-bottom: 0;
+}
+
+.insight-title {
+  background: #e8873b;
+  line-height: 40px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 20px;
+  padding-left: 20px;
+}
+
+.insight {
+  background: #fefaf4;
+  padding: 20px 30px;
+  margin: 20px 0;
 }
