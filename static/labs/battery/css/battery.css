@@ -155,15 +155,13 @@ line.median-line {
 
 /* data switch button */
 
-.batteryGraphContainer button {
-  display: block;
-  margin: auto;
+.battery-graph-container {
+  padding-bottom: 25px;
 }
 
-/* text for battery graph */
-.battery-text {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.battery-graph-container button {
+  display: block;
+  margin: auto;
 }
 
 /* dropdown for survey */
@@ -188,17 +186,21 @@ h4.battery-title {
   margin-bottom: 0;
 }
 
-.insight-title {
-  background: #e8873b;
-  line-height: 40px;
-  border-radius: 20px;
-  color: #ffffff;
-  font-size: 20px;
-  padding-left: 20px;
+.insight {
+  padding: 0 0 0 50px;
 }
 
-.insight {
-  background: #fefaf4;
-  padding: 20px 30px;
-  margin: 20px 0;
+.insight-title {
+  text-transform: uppercase;
+  color: #e8873b;
+}
+
+.insight-highlight {
+  color: #e53910;
+  font-weight: bold;
+}
+
+.graph-swap-container .btn {
+  display: inline-block;
+  margin-left: 15px;
 }

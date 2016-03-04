@@ -46,37 +46,42 @@
 
       <div class="controls">
         Vehicle:
-        <select class="vehicleChoice">
-          <option value="unknown">Don't know</option>
-        </select>
+        <select id="vehicleChoice"></select>
       </div>
 
-      <div class="batteryGraphContainer">
+      <div class="battery-graph-container">
         <div id="newBatteryLineGraph"></div>
-        <button id="swapData" class="btn btn-blue">
-          Show Lead Data
-        </button>
-        <section class="battery-text">
-          <p>
-          </p>
-        </section>
+
+        <p style="font-size: 10px;">At this time, the green may contain areas we have filtered out certain metrics that did not meet our criteria.</p>
+
+        <div class="graph-swap-container">
+          This assumes your batter is <span id="currentGraphType">AGM</span>.
+          <a id="swapData" href="#">My battery is <span id="otherGraphType">Lead-Acid</span></a>.
+        </div>
       </div>
 
-      <div class="insight-title">
-        Insight 1: How your battery compares to others
-      </div>
+      <h2 class="insight-title">How your battery compares</h2>
       <div class="insight">
-        After 8 hours of parking, your car battery's state of charge is <span id="relativeStats"></span>.
+        After 8 hours of parking, your car battery's state of charge is <span id="relativeStats" class="insight-highlight"></span>.
       </div>
 
 
-      <div class="insight-title">
-        Insight 2: How long before your battery's in the Danger Zone
-      </div>
+      <h2 class="insight-title">How long before your battery enters the Danger Zone</h2>
       <div class="insight">
-        It won't be long! It should take less than a week of driving before your car's battery will enter the danger zone.
+        It won't be long! It should go <span class="insight-highlight">less than</span> a week of not driving before your car's battery will enter the danger zone.
       </div>
 
+      <div class="share-container hidden" id="shareContainer">
+        <div id="shareTitle" class="share-title hidden">Share your Report</div>
+        <input id="shareUrl" class="share-url" readonly>
+        <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share your report</a>
+        <div class="share-buttons hidden">
+          <p>Anyone with this link can see this report.</p>
+          <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+          <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+          <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+        </div>
+      </div>
 
       <h3 class="battery-title">Tell us more about your <span id="vehicleName"></span>'s battery</h3>
       <div class="typeform-widget" data-url="https://inga2.typeform.com/to/eT8kBI" data-text="Battery Health Survey" style="width:100%;height:500px;"></div>
@@ -89,6 +94,14 @@
 
       <h4 class="battery-title">Does this tell me if my battery is healthy?</h4>
       <p>Automatic can’t completely answer that question yet. There are a couple big factors that tell you if your battery is healthy. For example, a healthy battery can both start a car and hold its charge when the car is parked.</p>
+
+      <p>Factor 1: Can my car’s battery hold a charge?<br />
+        This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
+
+      <p>Factor 2: Can my battery deliver the necessary amperage to start the engine? <br />
+        While it is important to monitor the battery’s State of Charge while the car is off, it’s just as important to evaluate it right at the moment the car is cranking. Watch out: a fully charged battery may not be able to start a car.</p>
+
+      <p><i>Automatic does not currently measure your battery’s state during cranking, but this feature will be implemented soon!  See below for more information about what’s coming next.</i></p>
 
       <h4 class="battery-title">Can my car’s battery hold a charge?</h4>
       <p>This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
@@ -121,9 +134,6 @@
 
       <p>Based on your type of battery, Automatic re-calculates the State of Charge, so check your owner’s manual or battery itself to make sure you’re seeing the right information.</p>
 
-      <h4 class="battery-title">Footnotes:</h4>
-      <p>At this time, the green may contain areas we have filtered out certain metrics that did not meet our criteria.</p>
-
       <h3 class="battery-title">What's next?</h3>
       <p>Earlier, we mentioned that Automatic can’t completely tell you whether or not your battery is healthy because Automatic is missing one piece of the equation: Can my battery deliver the necessary amperage to start the engine?</p>
       <p>A battery that appears fully charged may still not be able to start a car due to number of reasons:</p>
@@ -135,18 +145,6 @@
 
       <p>In the coming months, Automatic will be measuring your battery’s voltage during cranking (your car starting) in detail. This will allow us to diagnose further problems with your car’s battery to see if it can do it’s primary job: start your car.</p>
 
-
-      <div class="share-container hidden" id="shareContainer">
-        <div id="shareTitle" class="share-title hidden">Share this Report</div>
-        <input id="shareUrl" class="share-url" readonly>
-        <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share this report</a>
-        <div class="share-buttons hidden">
-          <p>Anyone with this link can see this map, which includes <b>all</b> trips you've ever taken with Automatic.</p>
-          <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
-          <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
-          <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
-        </div>
-      </div>
     </div>
 
     <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
@@ -497,7 +495,7 @@
         // drawBatteryHistogram(data.batteryHistogram);
         // drawBatteryLineGraph(data.batteryLineGraph);
 
-        $('#vehicleName').text($('.vehicleChoice option:selected').text());
+        $('#vehicleName').text($('#vehicleChoice option:selected').text());
 
         $('#relativeStats').text(sampleRelativeData[0][2]);
       }
@@ -632,7 +630,6 @@
     <!-- Generate custom typeform url -->
     <script>
       typescript(); // execute this script. might want it later, in a handler
-      var $dropDown = $('.vehicleChoice');
 
       var typeformDataUrl = 'https://inga2.typeform.com/to/eT8kBI';
       fetchUser(function(results) {
@@ -647,16 +644,10 @@
         if (results.length === 0) {
           // error occurred or user has no vehicles
         } else {
-          for (var i = 0; i < results.length; i++) {
-            var make = results[i].make;
-            var model = results[i].model;
-            var year = results[i].year;
-            var option = year + ' ' + make + ' ' + model;
-            var optionEl = document.createElement('option');
-            optionEl.value = results[i].id;
-            optionEl.text = option;
-            $dropDown.append(optionEl);
-          }
+          _.sortBy(results, 'make').forEach(function(vehicle) {
+            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+          })
         }
 
 
