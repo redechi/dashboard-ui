@@ -23,9 +23,10 @@
 }
 
 .axis-label {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   text-anchor: middle;
+  text-transform: uppercase;
 }
 
 .chart .axis text {
@@ -106,7 +107,7 @@ line.median-line {
 }
 
 .gap-band {
-  fill: #E7F2D5;
+  fill: rgb(13, 219, 194);
 }
 
 #newBatteryLineGraph path.domain {
@@ -120,7 +121,7 @@ line.median-line {
 }
 
 #newBatteryLineGraph .ci {
-  fill: #F1A664;
+  fill: rgb(231, 104, 91);
   fill-opacity: 0.6;
 }
 
@@ -135,17 +136,18 @@ line.median-line {
 }
 
 .danger-text {
-  font-size: 40px;
+  font-size: 28px;
   font-weight: bold;
+  text-transform: uppercase;
 }
 
 /* legend */
 .gap-icon {
-  fill: #E7F2D5;
+  fill: rgb(13, 219, 194);
 }
 
 .cycle-icon {
-  fill: #F1A664;
+  fill: rgb(231, 104, 91);
   fill-opacity: 0.6;
 }
 
@@ -164,43 +166,89 @@ line.median-line {
   margin: auto;
 }
 
-/* dropdown for survey */
-.controls {
-  background: #eee;
-  margin-bottom: 40px;
-  padding: 10px 15px;
-}
-
 h2.battery-title {
-  text-transform: uppercase;
-  color: #e8873b;
+  font-size: 40px;
+  margin-top: 0;
 }
 
 h3.battery-title {
-  text-align: center;
-  color: #e8873b;
-  font-size: 20px;
-}
-
-h4.battery-title {
-  margin-bottom: 0;
-}
-
-.insight {
-  padding: 0 0 0 50px;
-}
-
-.insight-title {
+  font-size: 18px;
   text-transform: uppercase;
-  color: #e8873b;
+  margin-top: 60px;
+  margin-bottom: 10px;
 }
 
-.insight-highlight {
-  color: #e53910;
+.battery-box-title {
+  font-size: 25px;
   font-weight: bold;
+  text-transform: uppercase;
+  line-height: 70px;
+  padding: 0 35px;
+  color: #ffffff;
+  background: rgb(92, 184, 215);
+  height: 70px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
-.graph-swap-container .btn {
-  display: inline-block;
-  margin-left: 15px;
+.battery-box-content {
+  border: 1px solid rgb(207, 207, 207);
+  border-top: 0;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.controls {
+  padding: 20px 30px;
+}
+
+.battery-insight {
+  font-size: 25px;
+  font-weight: bold;
+  padding: 20px 30px;
+  color: #ffffff;
+  background: rgb(92, 184, 215);
+  border-radius: 8px;
+}
+
+.graph-swap-container {
+  padding: 0 30px;
+  font-size: 12px;
+}
+
+.center-block {
+  text-align: center;
+}
+
+.btn-green {
+  background: rgb(124, 193, 68);
+  color: #ffffff;
+}
+
+.question {
+  background: rgb(253, 253, 253);
+  padding: 10px 30px;
+  border: 1px solid rgb(207, 207, 207);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.question .open-control {
+  float: right;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.question .open-control:hover {
+  color: rgb(124, 193, 68);
+}
+
+.question h3 {
+  line-height: 40px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.question .answer {
+  display: none;
 }

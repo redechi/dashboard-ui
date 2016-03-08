@@ -35,43 +35,41 @@
       </div>
       <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
 
-      <!-- <div id="batteryHistogram"></div>
-      <div id="batteryLineGraph"></div> -->
-
       <h2 class="battery-title">Can your car battery hold a charge?</h2>
 
-      <p>
-        Your car's battery discharges while it's parked and gets charged when you drive. This chart shows your battery's State of Charge over the past week. If your State of Charge is in the Danger Zone, there is a higher risk of your battery dying while parked.
-      </p>
+      <p>Your car’s battery slowly discharges while it’s parked, and it gets charged when you drive.</p>
+      <p>However, it can lose its ability to hold a charge over time. If your “state of charge” is in the Danger Zone, there is a higher risk of your battery dying the next time it’s sitting parked.</p>
 
-      <div class="controls">
-        Vehicle:
-        <select id="vehicleChoice"></select>
-      </div>
+      <div class="battery-box">
+        <div class="battery-box-title">Your battery's recent performance</div>
+        <div class="battery-box-content">
+          <div class="controls">
+            Vehicle:
+            <select id="vehicleChoice"></select>
+          </div>
 
-      <div class="battery-graph-container">
-        <div id="newBatteryLineGraph"></div>
-
-        <p style="font-size: 10px;">At this time, the green may contain areas we have filtered out certain metrics that did not meet our criteria.</p>
-
-        <div class="graph-swap-container">
-          This assumes your batter is <span id="currentGraphType">AGM</span>.
-          <a id="swapData" href="#">My battery is <span id="otherGraphType">Lead-Acid</span></a>.
+          <div class="battery-graph-container">
+            <div id="newBatteryLineGraph"></div>
+            <div class="graph-swap-container">
+              This graph assumes your battery is <span id="currentGraphType">AGM</span>.
+              <a id="swapData" href="#">Switch to <span id="otherGraphType">Lead-Acid</span>.</a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <h2 class="insight-title">How your battery compares</h2>
-      <div class="insight">
-        After 8 hours of parking, your car battery's state of charge is <span id="relativeStats" class="insight-highlight"></span>.
+      <h3 class="battery-title">How your battery compares to others</h3>
+      <div class="battery-insight">
+        After 8 hours of parking, your car battery's state of charge is <span id="relativeStats"></span>.
       </div>
 
 
-      <h2 class="insight-title">How long before your battery enters the Danger Zone</h2>
-      <div class="insight">
-        It won't be long! It should go <span class="insight-highlight">less than</span> a week of not driving before your car's battery will enter the danger zone.
+      <h3 class="battery-title">How long before your battery is in the Danger Zone</h2>
+      <div class="battery-insight">
+        It should take <span id="batteryLife"></span> of your car sitting parked before your car's battery will enter the Danger Zone.
       </div>
 
-      <div class="share-container hidden" id="shareContainer">
+      <!-- <div class="share-container hidden" id="shareContainer">
         <div id="shareTitle" class="share-title hidden">Share your Report</div>
         <input id="shareUrl" class="share-url" readonly>
         <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share your report</a>
@@ -81,70 +79,102 @@
           <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
           <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
         </div>
+      </div> -->
+
+      <div class="center-block">
+        <p>To help us bring you more insights like these, please take this quick survey.</p>
+        <button class="btn btn-lg btn-green" id="surveyButton">Take Battery Survey</button>
       </div>
 
-      <h3 class="battery-title">Tell us more about your <span id="vehicleName"></span>'s battery</h3>
-      <div class="typeform-widget" data-url="https://inga2.typeform.com/to/eT8kBI" data-text="Battery Health Survey" style="width:100%;height:500px;"></div>
+      <div id="surveyContainer" class="hidden">
+        <div class="typeform-widget" data-url="https://inga2.typeform.com/to/eT8kBI" data-text="Battery Health Survey" style="width:100%;height:500px;"></div>
+      </div>
 
 
-      <h3 class="battery-title">Explain that graph to me...</h3>
-      <h4 class="battery-title">How do you calculate the State of Charge graph?</h4>
+      <h2 class="battery-title">Methodology</h2>
 
-      <p>Automatic measures your car battery’s voltage and temperature while your car is parked and combines those factors to produce the State of Charge graph. These measurements are shown with the bold black lines. The dotted lines represent the change in voltage during the time you drive. Currently, Automatic doesn’t show the exact voltage measurements while the car’s ignition is on, but it’s coming soon.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>How do you calculate the State of Charge graph?</h3>
+        <p class="answer">Automatic measures your car battery’s voltage and temperature while your car is parked and combines those factors to produce the State of Charge graph. These measurements are shown with the bold black lines. The dotted lines represent the change in voltage during the time you drive. Currently, Automatic doesn’t show the exact voltage measurements while the car’s ignition is on, but it’s coming soon.</p>
+      </div>
 
-      <h4 class="battery-title">Does this tell me if my battery is healthy?</h4>
-      <p>Automatic can’t completely answer that question yet. There are a couple big factors that tell you if your battery is healthy. For example, a healthy battery can both start a car and hold its charge when the car is parked.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>Does this tell me if my battery is healthy?</h3>
+        <p class="answer">Automatic can’t completely answer that question yet. There are a couple big factors that tell you if your battery is healthy. For example, a healthy battery can both start a car and hold its charge when the car is parked.</p>
 
-      <p>Factor 1: Can my car’s battery hold a charge?<br />
-        This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
+        <p class="answer">Factor 1: Can my car’s battery hold a charge?<br />
+          This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
 
-      <p>Factor 2: Can my battery deliver the necessary amperage to start the engine? <br />
-        While it is important to monitor the battery’s State of Charge while the car is off, it’s just as important to evaluate it right at the moment the car is cranking. Watch out: a fully charged battery may not be able to start a car.</p>
+        <p class="answer">Factor 2: Can my battery deliver the necessary amperage to start the engine? <br />
+          While it is important to monitor the battery’s State of Charge while the car is off, it’s just as important to evaluate it right at the moment the car is cranking. Watch out: a fully charged battery may not be able to start a car.</p>
 
-      <p><i>Automatic does not currently measure your battery’s state during cranking, but this feature will be implemented soon!  See below for more information about what’s coming next.</i></p>
+        <p class="answer"><i>Automatic does not currently measure your battery’s state during cranking, but this feature will be implemented soon!  See below for more information about what’s coming next.</i></p>
+      </div>
 
-      <h4 class="battery-title">Can my car’s battery hold a charge?</h4>
-      <p>This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>Can my car’s battery hold a charge?</h3>
+        <p class="answer">This is what Automatic shows you today. If your battery’s State of Charge drops rapidly after the car is parked, you’ll see some of your data points in the area marked DANGER ZONE, which is roughly set at 25% State of Charge.</p>
+      </div>
 
-      <h4 class="battery-title">Can my battery deliver the necessary amperage to start the engine?</h4>
-      <p>While it is important to monitor the battery’s State of Charge while the car is off, it’s just as important to evaluate it right at the moment the car is cranking. Watch out: a fully charged battery may not be able to start a car.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>Can my battery deliver the necessary amperage to start the engine?</h3>
+        <p class="answer">While it is important to monitor the battery’s State of Charge while the car is off, it’s just as important to evaluate it right at the moment the car is cranking. Watch out: a fully charged battery may not be able to start a car.</p>
 
-      <p>Automatic does not currently measure your battery’s state during cranking, but this feature will be implemented soon! See below for more information about what’s coming next.</p>
+        <p class="answer">Automatic does not currently measure your battery’s state during cranking, but this feature will be implemented soon! See below for more information about what’s coming next.</p>
+      </div>
 
-      <h4 class="battery-title">I’m in the danger zone, what does that mean?</h4>
-      <p>At some point in the last week, your car’s battery reached below a 25% State of Charge. This doesn’t mean your car won’t start! However, it could mean one of these things:</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>I’m in the danger zone, what does that mean?</h3>
+        <p class="answer">At some point in the last week, your car’s battery reached below a 25% State of Charge. This doesn’t mean your car won’t start! However, it could mean one of these things:</p>
 
-      <p>Your battery needs to be charged. You may have left your lights on or a door open so that your battery’s State of Charge dropped to the danger zone.</p>
-      <p>Your car’s battery has trouble holding a charge. It can still start your car, but if you leave your car parked for a long period of time, you may experience long cranks or trouble starting your car.</p>
+        <p class="answer">Your battery needs to be charged. You may have left your lights on or a door open so that your battery’s State of Charge dropped to the danger zone.</p>
+        <p class="answer">Your car’s battery has trouble holding a charge. It can still start your car, but if you leave your car parked for a long period of time, you may experience long cranks or trouble starting your car.</p>
+      </div>
 
-      <h4 class="battery-title">How does this compare to a battery tester that my mechanic hooks up to my car?</h4>
-      <p>Most battery analyzers will show you your car’s voltage and make an estimate of the State of Charge, just like Automatic does. These analyzers will also give you an estimated CCA value (in some cases an estimated Internal Resistance value). This value will tell you the amount of amperage your battery can deliver compared to it’s rated CCA (see explanation of CCA below).</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>How does this compare to a battery tester that my mechanic hooks up to my car?</h3>
+        <p class="answer">Most battery analyzers will show you your car’s voltage and make an estimate of the State of Charge, just like Automatic does. These analyzers will also give you an estimated CCA value (in some cases an estimated Internal Resistance value). This value will tell you the amount of amperage your battery can deliver compared to it’s rated CCA (see explanation of CCA below).</p>
 
-      <p>Automatic is doing what these battery analyzers are doing, except that it is taking measurements over 1000 times a day. You’ll be able to see a full history of your battery’s data - seeing all the fluctuations and discharge of your battery while your car is parked. In the future, Automatic will also measure your car’s voltage during cranking to give a more complete picture of your battery’s health.</p>
+        <p class="answer">Automatic is doing what these battery analyzers are doing, except that it is taking measurements over 1000 times a day. You’ll be able to see a full history of your battery’s data - seeing all the fluctuations and discharge of your battery while your car is parked. In the future, Automatic will also measure your car’s voltage during cranking to give a more complete picture of your battery’s health.</p>
 
-      <p>Another neat thing is Automatic measures your car’s battery multiple hours after it has been parked, which means it’s getting a reading without a surface charge on the battery. With many battery testers, you have to wait 30+ min to hook up to the battery to get an accurate reading after the surface charge has dissipated</p>
+        <p class="answer">Another neat thing is Automatic measures your car’s battery multiple hours after it has been parked, which means it’s getting a reading without a surface charge on the battery. With many battery testers, you have to wait 30+ min to hook up to the battery to get an accurate reading after the surface charge has dissipated</p>
+      </div>
 
-      <h4 class="battery-title">What are Cold Cranking Amps?</h4>
-      <p>To start / crank a car, the battery needs to deliver a certain number of amps over a short period. Cold Cranking amps are the number of amperes that a battery can deliver at below freezing temperatures (0 degrees Fahrenheit) for 30 seconds.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>What are Cold Cranking Amps?</h3>
+        <p>To start / crank a car, the battery needs to deliver a certain number of amps over a short period. Cold Cranking amps are the number of amperes that a battery can deliver at below freezing temperatures (0 degrees Fahrenheit) for 30 seconds.</p>
 
-      <p>When you buy a battery, aside from the dimensions of the battery, one of the primary metrics used to determine which battery to purchase is the number of Cold Cranking Amps (CCA). While you may not face these conditions when starting your car, it is just a standard of measurement in the industry to compare different batteries and their ability to start your car.</p>
+        <p>When you buy a battery, aside from the dimensions of the battery, one of the primary metrics used to determine which battery to purchase is the number of Cold Cranking Amps (CCA). While you may not face these conditions when starting your car, it is just a standard of measurement in the industry to compare different batteries and their ability to start your car.</p>
+      </div>
 
-      <h4 class="battery-title">Lead Acid or AGM?</h4>
-      <p>The most common type of automotive battery is lead-acid. However, many German vehicles use AGM (Absorbent Glass Mat), which is a specific type of lead acid battery. We’ve chosen your battery type based on what we expect the manufacturer to have installed in your vehicle. If you have changed your battery since you’ve purchased your vehicle, you may have a different type.</p>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>Lead Acid or AGM?</h3>
+        <p class="answer">The most common type of automotive battery is lead-acid. However, many German vehicles use AGM (Absorbent Glass Mat), which is a specific type of lead acid battery. We’ve chosen your battery type based on what we expect the manufacturer to have installed in your vehicle. If you have changed your battery since you’ve purchased your vehicle, you may have a different type.</p>
 
-      <p>Based on your type of battery, Automatic re-calculates the State of Charge, so check your owner’s manual or battery itself to make sure you’re seeing the right information.</p>
+        <p class="answer">Based on your type of battery, Automatic re-calculates the State of Charge, so check your owner’s manual or battery itself to make sure you’re seeing the right information.</p>
+      </div>
 
-      <h3 class="battery-title">What's next?</h3>
-      <p>Earlier, we mentioned that Automatic can’t completely tell you whether or not your battery is healthy because Automatic is missing one piece of the equation: Can my battery deliver the necessary amperage to start the engine?</p>
-      <p>A battery that appears fully charged may still not be able to start a car due to number of reasons:</p>
-      <ul>
-        <li>increased internal resistance (from general wear and tear of a battery from overcharging: oxidation, undercharging: sulfation)</li>
-        <li>incorrect battery purchased for a vehicle</li>
-        <li>external resistance (e.g., battery terminals are not tight, excessive terminal corrosion)</li>
-      </ul>
+      <div class="question">
+        <i class="fa fa-chevron-down open-control"></i>
+        <h3>What's next?</h3>
+        <p class="answer">Earlier, we mentioned that Automatic can’t completely tell you whether or not your battery is healthy because Automatic is missing one piece of the equation: Can my battery deliver the necessary amperage to start the engine?</p>
+        <p class="answer">A battery that appears fully charged may still not be able to start a car due to number of reasons:</p>
+        <ul class="answer">
+          <li>increased internal resistance (from general wear and tear of a battery from overcharging: oxidation, undercharging: sulfation)</li>
+          <li>incorrect battery purchased for a vehicle</li>
+          <li>external resistance (e.g., battery terminals are not tight, excessive terminal corrosion)</li>
+        </ul>
 
-      <p>In the coming months, Automatic will be measuring your battery’s voltage during cranking (your car starting) in detail. This will allow us to diagnose further problems with your car’s battery to see if it can do it’s primary job: start your car.</p>
-
+        <p class="answer">In the coming months, Automatic will be measuring your battery’s voltage during cranking (your car starting) in detail. This will allow us to diagnose further problems with your car’s battery to see if it can do it’s primary job: start your car.</p>
+      </div>
     </div>
 
     <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
@@ -156,32 +186,14 @@
 
     <script src="../common/js/main.js"></script>
 
+    <script src="./js/batteryGraph.js"></script>
+
+    <!-- script to configure typeform embed -->
+    <script>var typescript = function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id='typef_orm',b='https://s3-eu-west-1.amazonaws.com/share.typeform.com/';if(!gi.call(d,id)){js=ce.call(d,'script');js.id=id;js.src=b+'widget.js';q=gt.call(d,'script')[0];q.parentNode.insertBefore(js,q)}}</script>
+
     <script>
       var data;
-      var colors = [
-        '#EE582E',
-        '#F67D30',
-        '#FB9631',
-        '#FEA732',
-        '#FEB731',
-        '#FCC92F',
-        '#D5CF29',
-        '#A7D623',
-        '#77DE1C',
-        '#49E325',
-        '#2DDF4E',
-        '#19E160',
-        '#14E778',
-        '#24E9C7',
-        '#50DBEC',
-        '#44C9E1',
-        '#38DEFF',
-        '#2AC6E6',
-        '#02CBF5',
-        '#00D9FF',
-      ];
-
-      var sampleRelativeData = [["Toyota Tacoma >3.0L", 9.40, "worse than 91.0% of Toyota Tacoma >3.0L users "], ["Toyota >3.0L", 17.75700934579439, "worse than 82.0% of Toyota >3.0L users "], ["Toyota", 15.73, "worse than 84.0% of Toyota users "]];
+      var accessToken = getAccessToken();
 
       $('#share').click(function(e) {
         e.preventDefault();
@@ -221,385 +233,83 @@
         sessionStorage.setItem('batteryShareURL', shareURL);
       }
 
-      function drawBatteryHistogram(graph) {
-        var margin = {
-          top: 150,
-          right: 0,
-          bottom: 60,
-          left: 40
-        };
+      $('#surveyButton').click(function() {
+        $('#surveyButton').addClass('hidden');
+        $('#surveyContainer').removeClass('hidden');
+      });
 
-        var histogramData = _.findWhere(graph.data, {name: 'batteryHistogram'});
-        var flagData = _.findWhere(graph.data, {name: 'user'});
+      $('.question').on('click', '.open-control, h3', function() {
+        var questionDiv = $(this).parents('.question');
+        questionDiv.toggleClass('open');
+        $('.answer', questionDiv).slideToggle();
+        $('.open-control', questionDiv).toggleClass('fa-chevron-down');
+        $('.open-control', questionDiv).toggleClass('fa-chevron-up');
+      });
 
-        histogramData.range_high = _.last(histogramData.data)[0];
-        histogramData.range_low = _.first(histogramData.data)[0];
-
-        var width = 800 - margin.left - margin.right;
-        var height = 460 - margin.top - margin.bottom;
-        var maxBarWidth = 100;
-
-        function getColor(value) {
-          var range = parseInt(histogramData.range_high, 10) - parseInt(histogramData.range_low, 10);
-          var colorIdx = Math.round(((value - histogramData.range_low) / range) * (colors.length - 1));
-          return colors[colorIdx];
+      function calculateBatteryLife(batteryLife) {
+        if(batteryLife < 5) {
+          return 'less than a week';
+        } else if(batteryLife < 9) {
+          return 'about a week';
+        } else if(batteryLife < 21) {
+          return '1-3 weeks';
+        } else {
+          return 'more than 3 weeks';
         }
-
-        function createFlag() {
-          var horizontalPercent = (flagData.data[0] - histogramData.range_low) / (histogramData.range_high - histogramData.range_low);
-          var direction = (horizontalPercent < 0.66) ? 'right' : 'left';
-
-          return {
-            direction: direction,
-            width: 100,
-            height: 60,
-            flagOffset: (direction === 'left') ? - 100 : 0,
-            color: getColor(flagData.data[0]),
-            horizontalOffset: x(flagData.data[0]) + x.rangeBand() / 2,
-            verticalOffset: -120,
-            value: flagData.data[0]
-          };
-        }
-
-        function getTicks() {
-          var valueCount = parseInt(histogramData.range_high, 10) - parseInt(histogramData.range_low, 10) + 1;
-          var interval = Math.ceil(valueCount / 20);
-          return _.reduce(_.range(histogramData.range_low, (histogramData.range_high + 1)), function(memo, value) {
-            if(value % interval === 0) {
-              memo.push(value);
-            }
-            return memo;
-          }, []);
-        }
-
-        function wrap(text, width) {
-          var words = text.text().split(/\s+/).reverse();
-          var word;
-          var line = [];
-          var lineNumber = 0;
-          var lineHeight = 1.3; // ems
-          var x = text.attr("x");
-          var y = text.attr("y");
-          var dy = 0;
-          var tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-
-          while (word = words.pop()) {
-            line.push(word);
-            tspan.text(line.join(" "));
-            if (tspan.node().getComputedTextLength() > width) {
-              line.pop();
-              tspan.text(line.join(" "));
-              line = [word];
-              tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-            }
-          }
-        }
-
-        function roundedRectangle(x, y, width, height, radius) {
-          return 'M' + (x + radius) + ',' + y
-               + 'h' + (width - (2 * radius))
-               + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + radius
-               + 'v' + (height - radius)
-               + 'h' + (-width)
-               + 'v' + (radius - height)
-               + 'a' + radius + ',' + radius + ' 0 0 1 ' + radius + ',' + (-radius)
-               + 'z';
-        }
-
-        // Create base svg
-        var mountNode = d3.select('#batteryHistogram');
-        var svg = mountNode.append('svg')
-                .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom)
-                .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-        var x = d3.scale.ordinal()
-            .rangeRoundBands([0, width], 0.4, 0);
-
-        var y = d3.scale.linear()
-            .range([height, 0]);
-
-        // X Axis
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom")
-            .tickValues(getTicks());
-
-        x.domain(histogramData.data.map(function(d) { return d[0]; }));
-        y.domain([0, d3.max(histogramData.data, function(d) { return d[1]; })]);
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + (height + 2) + ")")
-            .call(xAxis);
-
-        svg.selectAll(".x.axis text")
-            .style({fill: function(d) { return getColor(d); }});
-
-        svg.append("text")
-            .attr("class", "axis-label")
-            .attr("transform", "translate(" + (width / 2) +"," + (height + 40) + ")")
-            .text(graph.x_axis_label);
-
-        // Chart Bars
-
-        var barWidth = Math.min.apply(null, [x.rangeBand(), maxBarWidth]);
-        var bars = svg.selectAll(".bar")
-            .data(histogramData.data)
-          .enter().append('path')
-            .attr('class', 'bar')
-            .attr('d', function(d) {
-              var barRadius = Math.min(barWidth / 2, height - y(d[1]));
-              return roundedRectangle(x(d[0]), y(d[1]), barWidth, height - y(d[1]), barRadius);
-            });
-
-        // Chart line
-
-        var line = d3.svg.line()
-          .interpolate("basis")
-          .x(function(d) { return x(d[0]) + x.rangeBand() / 2; })
-          .y(function(d) { return y(d[1]); });
-
-        svg.append("path")
-        	.datum(histogramData.data)
-        	.attr("class","line")
-        	.attr("d", line);
-
-        // User Flag
-
-        var flag = createFlag();
-
-        var svgFlag = svg.append("g")
-            .attr("class", "flag user-flag")
-            .attr("transform", "translate(" + flag.horizontalOffset + "," + flag.verticalOffset + ")");
-
-        svgFlag.append("line")
-            .attr("x1", 0)
-            .attr("y1", 0)
-            .attr("x2", 0)
-            .attr("y2", height + -flag.verticalOffset)
-            .style({stroke: flag.color});
-
-        svgFlag.append("rect")
-            .attr("x", flag.flagOffset)
-            .attr("width", flag.width)
-            .attr("height", flag.height)
-            .style({fill: flag.color});
-
-        svgFlag.append("text")
-            .attr("class", "flag-label")
-            .attr("x", flag.width / 2 + flag.flagOffset)
-            .attr("y", 30)
-            .text(flag.label)
-            .call(wrap, flag.width - 20);
-
-        svgFlag.append("text")
-            .attr("class", "flag-value")
-            .attr("x", flag.width / 2 + flag.flagOffset)
-            .attr("y", flag.height - 15)
-            .text(flag.value);
       }
 
-      function drawBatteryLineGraph(graph) {
-        var margin = {
-          top: 20,
-          right: 0,
-          bottom: 120,
-          left: 80
-        };
+      $('#vehicleChoice').change(getUserData);
 
-        var oneHourRestingVoltage = _.findWhere(graph.data, {name: 'oneHourRestingVoltage'});
-        var eightHourRestingVoltage = _.findWhere(graph.data, {name: 'eightHourRestingVoltage'});
-
-        oneHourRestingVoltage.data = oneHourRestingVoltage.data.map(function(d) {
-          return [moment(d[0], 'YYYY-MM-DD').toDate(), d[1]];
-        });
-
-        eightHourRestingVoltage.data = eightHourRestingVoltage.data.map(function(d) {
-          return [moment(d[0], 'YYYY-MM-DD').toDate(), d[1]];
-        });
-
-        var width = 800 - margin.left - margin.right;
-        var height = 400 - margin.top - margin.bottom;
-
-
-        // Create base svg
-        var mountNode = d3.select('#batteryLineGraph');
-        var svg = mountNode.append('svg')
-                .attr('width', width + margin.left + margin.right)
-                .attr('height', height + margin.top + margin.bottom)
-                .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-        var allValues = oneHourRestingVoltage.data.concat(eightHourRestingVoltage.data);
-
-        var x = d3.time.scale()
-            .domain(d3.extent(allValues, function(d) { return d[0]; }))
-            .range([0, width]);
-
-        var y = d3.scale.linear()
-            .domain(d3.extent(allValues, function(d) { return d[1]; }))
-            .range([0, height]);
-
-
-        var line = d3.svg.line()
-          .interpolate("basis")
-          .x(function(d) { return x(d[0]); })
-          .y(function(d) { return y(d[1]); });
-
-        svg.selectAll(".line")
-            .data([oneHourRestingVoltage.data, eightHourRestingVoltage.data])
-          .enter().append("path")
-            .attr("class", "line")
-            .attr("d", line);
-
-        // y Axis
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .ticks(5)
-            .innerTickSize(0.1)
-            .orient("left");
-
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
-        svg.append("text")
-            .attr("class", "axis-label")
-            .attr("transform", "translate(-60," + (height / 2) + ")rotate(270)")
-            .text(graph.y_axis_label);
-
-        // x Axis
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .tickFormat(d3.time.format('%b %d'))
-            .ticks(8)
-            .orient("bottom");
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-        svg.append("text")
-            .attr("class", "axis-label")
-            .attr("transform", "translate(" + (width / 2) +"," + (height + 60) + ")")
-            .text(graph.x_axis_label);
-      }
 
       function renderData() {
-        // drawBatteryHistogram(data.batteryHistogram);
-        // drawBatteryLineGraph(data.batteryLineGraph);
+        drawBatteryGraph(data);
 
-        $('#vehicleName').text($('#vehicleChoice option:selected').text());
-
-        $('#relativeStats').text(sampleRelativeData[0][2]);
+        $('#batteryLife').text(calculateBatteryLife(data.battery_life));
+        $('#relativeStats').text(data.relative_stats[0][2]);
       }
 
+
       function getUserData() {
-        var batteryHistogram = {
-          data: [
-            {
-              name: 'batteryHistogram',
-              type: 'bars',
-              data: [
-                [ 11.5, 0.02 ],
-                [ 11.6, 0.03 ],
-                [ 11.7, 0.05 ],
-                [ 11.8, 0.06 ],
-                [ 11.9, 0.07 ],
-                [ 12.0, 0.08 ],
-                [ 12.1, 0.08 ],
-                [ 12.2, 0.09 ],
-                [ 12.3, 0.1 ],
-                [ 12.4, 0.13 ],
-                [ 12.5, 0.08 ],
-                [ 12.6, 0.08 ],
-                [ 12.7, 0.04 ],
-                [ 12.8, 0.03 ],
-                [ 12.9, 0.04 ],
-                [ 13.0, 0.03 ]
-              ]
-            },
-            {
-              name: 'user',
-              type: 'point',
-              data: [ 12.7, 0 ]
-            },
-            {
-              name: 'median',
-              type: 'point',
-              data: [ 12.35, 0 ]
-            }
-          ],
-          x_axis_label: 'Voltage',
-          title: 'Battery State'
-        };
+        // TODO: add moxie endpoint to fetch real data by vehicle ID
+        $.ajax({
+          url: './js/demo.json',
+          data: {
+            vehicleId: $('#vehicleChoice').val()
+          },
+          headers: {
+            Authorization: 'bearer ' + accessToken
+          }
+        })
+        .done(function(result) {
+          data = result;
 
-        var batteryLineGraph = {
-          data: [
-            {
-              name: 'oneHourRestingVoltage',
-              title: 'One Hour Resting Voltage',
-              type: 'line',
-              data: [
-                [ '2016-02-01', 12.9 ],
-                [ '2016-02-02', 12.875 ],
-                [ '2016-02-03', 12.825 ],
-                [ '2016-02-04', 12.8 ],
-                [ '2016-02-05', 12.8 ],
-                [ '2016-02-06', 12.725 ],
-                [ '2016-02-07', 12.8 ],
-                [ '2016-02-08', 12.825 ],
-                [ '2016-02-09', 12.9 ],
-                [ '2016-02-10', 12.725 ],
-                [ '2016-02-11', 12.725 ],
-                [ '2016-02-12', 12.825 ],
-                [ '2016-02-13', 12.7 ],
-                [ '2016-02-14', 12.65 ]
-              ]
-            },
-            {
-              name: 'eightHourRestingVoltage',
-              title: 'Eight Hour Resting Voltage',
-              type: 'line',
-              data: [
-                [ '2016-02-01', 12.6 ],
-                [ '2016-02-02', 12.55 ],
-                [ '2016-02-03', 12.5 ],
-                [ '2016-02-04', 12.525 ],
-                [ '2016-02-05', 12.5 ],
-                [ '2016-02-06', 12.45 ],
-                [ '2016-02-07', 12.425 ],
-                [ '2016-02-08', 12.4 ],
-                [ '2016-02-09', 12.375 ],
-                [ '2016-02-10', 12.325 ],
-                [ '2016-02-11', 12.35 ],
-                [ '2016-02-12', 12.3 ],
-                [ '2016-02-13', 12.275 ],
-                [ '2016-02-14', 12.25 ]
-              ]
-            }
-          ],
-          x_axis_label: 'Time',
-          y_axis_label: 'Voltage'
-        };
-
-        data = {
-          batteryHistogram: batteryHistogram,
-          batteryLineGraph: batteryLineGraph
-        };
-
-        renderData();
+          renderData();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.error(errorThrown);
+          alert('Unable to fetch data');
+        });
       }
 
       /* On Page Load */
       formatForDemo();
       showLoginLink('battery');
+
+      // Generate custom typeform url
+      typescript(); // execute this script. might want it later, in a handler
+
+      var typeformDataUrl = 'https://inga2.typeform.com/to/eT8kBI';
+
+      fetchVehicles(function(results) {
+        if (results.length === 0) {
+          // error occurred or user has no vehicles
+        } else {
+          _.sortBy(results, 'make').forEach(function(vehicle) {
+            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+          })
+        }
+      });
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.share) {
@@ -623,52 +333,14 @@
       }
     </script>
 
-    <!-- script to configure typeform embed -->
-    <script>var typescript = function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id='typef_orm',b='https://s3-eu-west-1.amazonaws.com/share.typeform.com/';if(!gi.call(d,id)){js=ce.call(d,'script');js.id=id;js.src=b+'widget.js';q=gt.call(d,'script')[0];q.parentNode.insertBefore(js,q)}}</script>
-
-
-    <!-- Generate custom typeform url -->
     <script>
-      typescript(); // execute this script. might want it later, in a handler
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      var typeformDataUrl = 'https://inga2.typeform.com/to/eT8kBI';
-      fetchUser(function(results) {
-        if (Object.keys(results).length === 0) {
-          // there's an error
-        } else {
-          // we got the user
-        }
-      });
-
-      fetchVehicles(function(results) {
-        if (results.length === 0) {
-          // error occurred or user has no vehicles
-        } else {
-          _.sortBy(results, 'make').forEach(function(vehicle) {
-            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-          })
-        }
-
-
-      });
+      ga('create', 'UA-33317148-1', 'auto');
+      ga('send', 'pageview');
     </script>
-
-    <!-- Generate battery health graph -->
-    <script src="./sampleData.js"></script>
-    <script src="./sampleDangerZoneData.js"></script>
-    <script src="./batteryChargeDischargeGraph.js"></script>
-
-
-
-    <!-- <script> -->
-    <!--   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ -->
-    <!--   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), -->
-    <!--   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) -->
-    <!--   })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); -->
-
-    <!--   ga('create', 'UA-33317148-1', 'auto'); -->
-    <!--   ga('send', 'pageview'); -->
-    <!-- </script> -->
   </body>
 </html>
