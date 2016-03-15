@@ -41,4 +41,10 @@ The page that lists all of the labs at [dashboard.automatic.com/#/labs](https://
 
 ### Staging
 
-dashboard.automatic.co
+The staging server is visible at https://dashboard.automatic.co
+
+### Deploying
+
+When a commit is added to the master branch on github, it is automatically deployed to staging via Jenkins `Dashboard2-CI` job.
+
+To deploy to production, find the build number of the staging build you want to deploy from the `Dashboard2-CI` job, such as `69120`. Then, enter that build number as a parameter in the `Deploy-Dashboard2` Jenkins job.
