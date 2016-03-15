@@ -4,14 +4,6 @@ var x;
 var y;
 var socType = 'agm'; // indicate that we're starting with agm data
 
-// these variables will hold the two kinds of data. We'll store it there so that
-// it doesn't have to be remunged every time the user wants to switch between
-// lead/agm
-var socAgmCycles;
-
-// define both now so we can assign to them later and hold values in memory
-var agmGaps;
-
 var line = d3.svg.line()
   .x(function(d) { return x(moment(d[1]).toDate()); })
   .y(function(d) { return y(d[0]); })
@@ -40,7 +32,9 @@ function drawBatteryGraph(data) {
   // cycle, and contains tuples representing its data points.
   // looks like: [[[value, time]. [value, time]],[[value,time],[value,time]]]
   // we're defaulting to soc_agm for initial render
-  socAgmCycles = _.pluck(sleepcycles, 'soc_agm').slice(0,5);
+  var socAgmCycles = _.pluck(sleepcycles, 'soc_agm');
+
+  var agmGaps = getGaps(socAgmCycles);
 
   // doing this to get all the times so we can get our x-axis extent. Probably
   // exists a more efficient way.
@@ -70,10 +64,6 @@ function drawBatteryGraph(data) {
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  // draws the gap-bands. Drawing here for svg layering. Should be behind
-  // everything, including danger zone and the actual gap lines.
-  agmGaps = getGaps(socAgmCycles);
-
   // draws the danger rect. This is way up here so that it's behind everything from
   // being painted first
   dangerZone();
@@ -91,7 +81,6 @@ function drawBatteryGraph(data) {
     .attr("class", "axis-label")
     .attr("transform", "translate(-50," + (height / 2) + ")rotate(270)")
     .text('Percent Charged');
-
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -277,7 +266,7 @@ $('#swapData').click(function(e) {
 
   if (socType === 'agm') {
     socType = 'lead';
-    var socLeadCycles = _.pluck(sleepcycles, 'soc_lead').slice(0,5);
+    var socLeadCycles = _.pluck(sleepcycles, 'soc_lead');
     renderUpdate(socLeadCycles, getGaps(socLeadCycles));
 
     // change button text
@@ -285,7 +274,8 @@ $('#swapData').click(function(e) {
     $('#currentGraphType').text('Lead-Acid');
   } else {
     socType = 'agm';
-    renderUpdate(socAgmCycles, agmGaps);
+    var socAgmCycles = _.pluck(sleepcycles, 'soc_agm');
+    renderUpdate(socAgmCycles, getGaps(socAgmCycles));
 
     // change button text
     $('#otherGraphType').text('Lead-Acid');
