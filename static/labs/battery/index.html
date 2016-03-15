@@ -66,7 +66,8 @@
 
       <h3 class="battery-title">How long before your battery is in the Danger Zone</h2>
       <div class="battery-insight">
-        It should take <span id="batteryLife"></span> of your car sitting parked before your car's battery will enter the Danger Zone.
+        <div id="someBatteryLifeData">It should take <span id="batteryLife"></span> of your car sitting parked before your car's battery will enter the Danger Zone.</div>
+        <div id="noBatteryLifeData" class="hidden">We don't have enough data to determine how long it would take for your car's battery to enter the danger zone. Please help us out by taking the survey below!</div>
       </div>
 
       <!-- <div class="share-container hidden" id="shareContainer">
@@ -81,15 +82,14 @@
         </div>
       </div> -->
 
-      <div class="center-block">
+      <div class="center-block survey-box">
         <p>To help us bring you more insights like these, please take this quick survey.</p>
         <button class="btn btn-lg btn-green" id="surveyButton">Take Battery Survey</button>
-      </div>
 
-      <div id="surveyContainer" class="hidden">
-        <div class="typeform-widget" data-url="https://inga2.typeform.com/to/eT8kBI" data-text="Battery Health Survey" style="width:100%;height:500px;"></div>
+        <div id="surveyContainer" class="hidden">
+          <div class="typeform-widget" data-url="https://inga2.typeform.com/to/eT8kBI" data-text="Battery Health Survey" style="width:100%;height:500px;"></div>
+        </div>
       </div>
-
 
       <h2 class="battery-title">Methodology</h2>
 
@@ -149,9 +149,9 @@
       <div class="question">
         <i class="fa fa-chevron-down open-control"></i>
         <h3>What are Cold Cranking Amps?</h3>
-        <p>To start / crank a car, the battery needs to deliver a certain number of amps over a short period. Cold Cranking amps are the number of amperes that a battery can deliver at below freezing temperatures (0 degrees Fahrenheit) for 30 seconds.</p>
+        <p class="answer">To start / crank a car, the battery needs to deliver a certain number of amps over a short period. Cold Cranking amps are the number of amperes that a battery can deliver at below freezing temperatures (0 degrees Fahrenheit) for 30 seconds.</p>
 
-        <p>When you buy a battery, aside from the dimensions of the battery, one of the primary metrics used to determine which battery to purchase is the number of Cold Cranking Amps (CCA). While you may not face these conditions when starting your car, it is just a standard of measurement in the industry to compare different batteries and their ability to start your car.</p>
+        <p class="answer">When you buy a battery, aside from the dimensions of the battery, one of the primary metrics used to determine which battery to purchase is the number of Cold Cranking Amps (CCA). While you may not face these conditions when starting your car, it is just a standard of measurement in the industry to compare different batteries and their ability to start your car.</p>
       </div>
 
       <div class="question">
@@ -264,7 +264,15 @@
       function renderData() {
         drawBatteryGraph(data);
 
-        $('#batteryLife').text(calculateBatteryLife(data.battery_life));
+        if(data.battery_life === null) {
+          $('#noBatteryLifeData').show();
+          $('#someBatteryLifeData').hide();
+        } else {
+          $('#noBatteryLifeData').hide();
+          $('#someBatteryLifeData').show();
+          $('#batteryLife').text(calculateBatteryLife(data.battery_life));
+        }
+
         $('#relativeStats').text(data.relative_stats[0][2]);
       }
 

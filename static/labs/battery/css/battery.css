@@ -96,16 +96,6 @@ line.median-line {
 
 /* new line graph */
 
-#newBatteryLineGraph .line {
-  stroke-width: 2px;
-  stroke: #E67D41;
-}
-
-#newBatteryLineGraph .line.gap {
-  stroke-dasharray: 3,3;
-  stroke: #8e8e8e;
-}
-
 .gap-band {
   fill: rgb(13, 219, 194);
 }
@@ -225,6 +215,15 @@ h3.battery-title {
   color: #ffffff;
 }
 
+.btn {
+  text-transform: uppercase;
+  font-family: avenir, "avenir next", helvetica, arial, sans-serif;
+}
+
+.btn.btn-lg {
+  font-size: 36px;
+}
+
 .question {
   background: rgb(253, 253, 253);
   padding: 10px 30px;
@@ -251,4 +250,9 @@ h3.battery-title {
 
 .question .answer {
   display: none;
+}
+
+.survey-box {
+  padding-top: 35px;
+  padding-bottom: 20px;
 }

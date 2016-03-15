@@ -27,10 +27,10 @@ function drawBatteryGraph(data) {
   sleepcycles = data.sleep_cycles;
 
   var margin = {
-    top: 20,
-    right: 10,
-    bottom: 120,
-    left: 80
+    top: 80,
+    right: 30,
+    bottom: 50,
+    left: 110
   };
 
   var width = 800 - margin.left - margin.right;
@@ -73,7 +73,6 @@ function drawBatteryGraph(data) {
   // draws the gap-bands. Drawing here for svg layering. Should be behind
   // everything, including danger zone and the actual gap lines.
   agmGaps = getGaps(socAgmCycles);
-  drawGapBands(agmGaps);
 
   // draws the danger rect. This is way up here so that it's behind everything from
   // being painted first
@@ -106,57 +105,27 @@ function drawBatteryGraph(data) {
     .call(xAxis)
     .selectAll('text')
     .attr('y', 0)
-    //.attr('x', 9);
     .attr('dy', '1.5em');
-    //.attr('transform', 'rotate(-45)')
-    //.style('text-anchor', 'end');
 
-  function drawCycle(sleepcycles) {
-    svg.append('path')
-      .data(sleepcycles)
-      .attr('class', 'ci')
-      .attr('d', confidenceInterval);
-
-    svg.append('path')
-      .data(sleepcycles)
-      .attr('class', 'line')
-      .attr('d', line);
-
-
-  }
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr('transform', 'translate(' + (width / 2) + ',' + (height + 50) + ')')
+    .text('Date');
 
   // render initial data vis
-  for (var i = 0; i < socAgmCycles.length; i++) {
-    drawCycle([socAgmCycles[i]]);
-  }
-
-  function drawGap(gap) {
+  socAgmCycles.forEach(function(cycle) {
     svg.append('path')
-      .data(gap)
-      .attr('class', 'gap line')
-      .attr('d', line);
-  }
+      .data([cycle])
+      .attr('class', 'ci')
+      .attr('d', confidenceInterval);
+  });
 
-
-  function drawGapBands(gaps) {
-    for (var i = 0; i < gaps.length; i++) {
-      svg.append('rect')
-        .attr('x', x(moment(gaps[i][0][1]).toDate()))
-        .attr('y', y(100))
-        .attr('width', x(moment(gaps[i][1][1]).toDate()) - x(moment(gaps[i][0][1]).toDate()))
-        .attr('height', height)
-        .attr('class', 'gap-band');
-    }
-  }
-
-  function drawGaps(gaps) {
-    for (var i = 0; i < gaps.length; i++) {
-      drawGap([gaps[i]]);
-    }
-  }
-
-  //agmGaps = getGaps(socAgmCycles);
-  drawGaps(agmGaps);
+  agmGaps.forEach(function(gap) {
+    svg.append('path')
+      .data([gap])
+      .attr('class', 'gap-band')
+      .attr('d', confidenceInterval);
+  });
 
   // will create a red-striped box at bottom that says 'danger zone'
   function dangerZone() {
@@ -203,15 +172,15 @@ function drawBatteryGraph(data) {
   var gapIconConfig = {
     width: 30,
     height: 30,
-    x: margin.left,
-    y: height + (margin.bottom / 2)
+    x: 0,
+    y: -60
   }
 
   var cycleIconConfig = {
     width: 30,
     height: 30,
-    x: margin.left * 5,
-    y: height + (margin.bottom / 2)
+    x: 300,
+    y: -60
   }
 
   var iconLine = d3.svg.line()
@@ -253,16 +222,6 @@ function drawBatteryGraph(data) {
       y: cycleIconConfig.y + (cycleIconConfig.height/2)
     }
   ];
-
-  svg.append('path')
-    .data([gapIconPathData])
-    .attr('class', 'gap line')
-    .attr('d', iconLine);
-
-  svg.append('path')
-    .data([cycleIconPathData])
-    .attr('class', 'line')
-    .attr('d', iconLine);
 
   svg.append('text')
     .attr('class', 'legend-text')
