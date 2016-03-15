@@ -64,10 +64,6 @@ function drawBatteryGraph(data) {
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  // draws the danger rect. This is way up here so that it's behind everything from
-  // being painted first
-  dangerZone();
-
   var yAxis = d3.svg.axis()
     .scale(y)
     .ticks(4)
@@ -115,47 +111,6 @@ function drawBatteryGraph(data) {
       .attr('class', 'gap-band')
       .attr('d', confidenceInterval);
   });
-
-  // will create a red-striped box at bottom that says 'danger zone'
-  function dangerZone() {
-    // pattern gives a striped pattern. Not being used right now
-    var pattern = svg.append('defs')
-      .append('pattern')
-      .attr('id', 'dangerPattern')
-      .attr('width', 6)
-      .attr('height', 6)
-      .attr('patternUnits', 'userSpaceOnUse')
-      .attr('patternTransform', 'rotate(45)');
-
-    pattern
-      .append('rect')
-      .attr('width', 3)
-      .attr('height', 6)
-      .attr('transform', 'translate(0,0)')
-      .attr('fill', 'red');
-
-    pattern
-      .append('rect')
-      .attr('width', 6)
-      .attr('height', 6)
-      .attr('fill', 'red')
-      .attr('fill-opacity', 0.5);
-
-    svg.append('rect')
-      .attr('x', 0.5)
-      .attr('y', y(25))
-      .attr('width', width)
-      .attr('height', y(100 - 24.9))
-      .attr('fill', 'rgb(245, 165, 35)')
-      .attr('fill-opacity', 0.22);
-
-    svg.append('text')
-      .attr('class', 'danger-text')
-      .attr('transform', 'translate(' + (((width - margin.left)/2) - margin.left) + ',' + y(8) + ')')
-      .attr('fill', 'rgb(245, 165, 35)')
-      .attr('stroke', 'none')
-      .text('Danger Zone');
-  }
 
   // Make a legend
   var gapIconConfig = {
@@ -215,12 +170,37 @@ function drawBatteryGraph(data) {
   svg.append('text')
     .attr('class', 'legend-text')
     .attr('transform', 'translate(' + (gapIconConfig.x + gapIconConfig.width + 10) + ',' + (gapIconConfig.y + gapIconConfig.height - 10) + ')')
-    .text('Battery recharging while driving');
+    .text('Battery recharging while driving*');
 
   svg.append('text')
     .attr('class', 'legend-text')
     .attr('transform', 'translate(' + (cycleIconConfig.x + cycleIconConfig.width + 10) + ',' + (cycleIconConfig.y + cycleIconConfig.height - 10) + ')')
     .text('Battery draining while parked');
+
+  // Draw danger rect on top of everything
+  svg.append('rect')
+    .attr('x', 0.5)
+    .attr('y', y(25))
+    .attr('width', width)
+    .attr('height', y(100 - 24.9))
+    .attr('fill', 'rgb(245, 165, 35)')
+    .attr('fill-opacity', 0.22);
+
+  // top border of danger rect
+  svg.append('rect')
+    .attr('x', 0.5)
+    .attr('y', y(24.5))
+    .attr('width', width)
+    .attr('height', 1)
+    .attr('fill', 'rgb(245, 165, 35)')
+    .attr('fill-opacity', 1);
+
+  svg.append('text')
+    .attr('class', 'danger-text')
+    .attr('transform', 'translate(' + (width/2) + ',' + y(8) + ')')
+    .attr('fill', 'rgb(245, 165, 35)')
+    .attr('stroke', 'none')
+    .text('Danger Zone');
 }
 
 function getGaps(cycles) {

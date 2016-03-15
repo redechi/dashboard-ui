@@ -93,11 +93,11 @@ line.median-line {
   stroke-width: 1.5px;
 }
 
-
 /* new line graph */
 
 .gap-band {
-  fill: rgb(13, 219, 194);
+  fill: #46C69F;
+  fill-opacity: 0.6;
 }
 
 #newBatteryLineGraph path.domain {
@@ -111,8 +111,8 @@ line.median-line {
 }
 
 #newBatteryLineGraph .ci {
-  fill: rgb(231, 104, 91);
-  fill-opacity: 0.6;
+  fill: #FA451B;
+  fill-opacity: 1;
 }
 
 #newBatteryLineGraph .axis {
@@ -129,16 +129,19 @@ line.median-line {
   font-size: 28px;
   font-weight: bold;
   text-transform: uppercase;
+  text-anchor: middle;
+  font-family: avenir, "avenir next", helvetica, arial, sans-serif;
 }
 
 /* legend */
 .gap-icon {
-  fill: rgb(13, 219, 194);
+  fill: #46C69F;
+  fill-opacity: 0.6;
 }
 
 .cycle-icon {
-  fill: rgb(231, 104, 91);
-  fill-opacity: 0.6;
+  fill: #FA451B;
+  fill-opacity: 1;
 }
 
 .legend-text {
