@@ -2,7 +2,7 @@ var sleepcycles;
 var svg;
 var x;
 var y;
-var socType = 'agm'; // indicate that we're starting with agm data
+var socType;
 
 var line = d3.svg.line()
   .x(function(d) { return x(moment(d[1]).toDate()); })
@@ -15,31 +15,29 @@ var confidenceInterval = d3.svg.area()
   .y0(function(d) { return y(Math.max((d[0] - 10),0)); })
   .y1(function(d) { return y(Math.min((d[0] + 10), 100)); });
 
+var margin = {
+  top: 80,
+  right: 30,
+  bottom: 50,
+  left: 110
+};
+
+var width = 800 - margin.left - margin.right;
+var height = 400 - margin.top - margin.bottom;
+
 function drawBatteryGraph(data) {
   sleepcycles = data.sleep_cycles;
+  socType = data.default_battery_type;
 
-  var margin = {
-    top: 80,
-    right: 30,
-    bottom: 50,
-    left: 110
-  };
-
-  var width = 800 - margin.left - margin.right;
-  var height = 400 - margin.top - margin.bottom;
-
-  // socAgmCycles: array of arrays each with sleep cyc data points. Each array is a
+  // cycles: array of arrays each with sleep cyc data points. Each array is a
   // cycle, and contains tuples representing its data points.
   // looks like: [[[value, time]. [value, time]],[[value,time],[value,time]]]
-  // we're defaulting to soc_agm for initial render
-  var socAgmCycles = _.pluck(sleepcycles, 'soc_agm');
+  var cycles = _.pluck(sleepcycles, 'soc_' + socType);
+  var gaps = getGaps(cycles);
 
-  var agmGaps = getGaps(socAgmCycles);
-
-  // doing this to get all the times so we can get our x-axis extent. Probably
-  // exists a more efficient way.
+  // doing this to get all the times so we can get our x-axis extent.
   var times = [];
-  _.each(socAgmCycles, function(cycle) {
+  _.each(cycles, function(cycle) {
     _.each(cycle, function(point) {
       times.push(moment(point[1]).toDate());
     });
@@ -53,9 +51,9 @@ function drawBatteryGraph(data) {
     .domain(d3.extent([0,100]))
     .range([height, 0]);
 
-  var node = d3.select('#newBatteryLineGraph');
+  var node = d3.select('#batteryLineGraph');
 
-  // delete existing graph
+  // delete any existing graph
   node.select('svg').remove();
 
   svg = node.append('svg')
@@ -76,7 +74,7 @@ function drawBatteryGraph(data) {
   svg.append("text")
     .attr("class", "axis-label")
     .attr("transform", "translate(-50," + (height / 2) + ")rotate(270)")
-    .text('Percent Charged');
+    .text('% CHARGED');
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -98,14 +96,14 @@ function drawBatteryGraph(data) {
     .text('Date');
 
   // render initial data vis
-  socAgmCycles.forEach(function(cycle) {
+  cycles.forEach(function(cycle) {
     svg.append('path')
       .data([cycle])
       .attr('class', 'ci')
       .attr('d', confidenceInterval);
   });
 
-  agmGaps.forEach(function(gap) {
+  gaps.forEach(function(gap) {
     svg.append('path')
       .data([gap])
       .attr('class', 'gap-band')
@@ -118,14 +116,14 @@ function drawBatteryGraph(data) {
     height: 30,
     x: 0,
     y: -60
-  }
+  };
 
   var cycleIconConfig = {
     width: 30,
     height: 30,
     x: 300,
     y: -60
-  }
+  };
 
   var iconLine = d3.svg.line()
     .x(function(d) { return d.x; })
@@ -183,8 +181,7 @@ function drawBatteryGraph(data) {
     .attr('y', y(25))
     .attr('width', width)
     .attr('height', y(100 - 24.9))
-    .attr('fill', 'rgb(245, 165, 35)')
-    .attr('fill-opacity', 0.22);
+    .attr('class', 'danger-box');
 
   // top border of danger rect
   svg.append('rect')
@@ -192,14 +189,11 @@ function drawBatteryGraph(data) {
     .attr('y', y(24.5))
     .attr('width', width)
     .attr('height', 1)
-    .attr('fill', 'rgb(245, 165, 35)')
-    .attr('fill-opacity', 1);
+    .attr('class', 'danger-box-border');
 
   svg.append('text')
     .attr('class', 'danger-text')
-    .attr('transform', 'translate(' + (width/2) + ',' + y(8) + ')')
-    .attr('fill', 'rgb(245, 165, 35)')
-    .attr('stroke', 'none')
+    .attr('transform', 'translate(' + (width - 125) + ',' + y(18) + ')')
     .text('Danger Zone');
 }
 
@@ -217,7 +211,9 @@ function getGaps(cycles) {
   return gapEndPoints;
 }
 
-function renderUpdate(newCycles, newGaps) {
+function renderUpdate(newCycles) {
+  var newGaps = getGaps(newCycles);
+
   svg.selectAll('.line')
     .data(newCycles)
     .transition()
@@ -246,16 +242,14 @@ $('#swapData').click(function(e) {
 
   if (socType === 'agm') {
     socType = 'lead';
-    var socLeadCycles = _.pluck(sleepcycles, 'soc_lead');
-    renderUpdate(socLeadCycles, getGaps(socLeadCycles));
+    renderUpdate(_.pluck(sleepcycles, 'soc_lead'));
 
     // change button text
     $('#otherGraphType').text('AGM');
     $('#currentGraphType').text('Lead-Acid');
   } else {
     socType = 'agm';
-    var socAgmCycles = _.pluck(sleepcycles, 'soc_agm');
-    renderUpdate(socAgmCycles, getGaps(socAgmCycles));
+    renderUpdate(_.pluck(sleepcycles, 'soc_agm'));
 
     // change button text
     $('#otherGraphType').text('Lead-Acid');

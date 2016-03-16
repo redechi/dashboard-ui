@@ -40,47 +40,26 @@
 	stroke-width: 4;
 }
 
-rect.median {
-  fill: #f7f5f4;
-}
+/* new line graph */
 
-text.median-label {
-  font-size: 26px;
-}
-
-line.median-line {
-  stroke: #cecece;
-  stroke-width: 4;
-  fill: none;
-}
-
-.flag line {
-  stroke-width: 8;
-  fill: none;
-}
-
-.flag text {
-  fill: #ffffff;
-}
-
-.flag .flag-label {
-  font-size: 22px;
-}
-
-.flag .flag-value {
-  font-size: 44px;
-  font-weight: bold;
-  text-anchor: middle;
+.gap-band {
+  fill: #46C69F;
+  fill-opacity: 0.6;
 }
 
 #batteryLineGraph path.domain {
   fill: none;
   stroke: #666;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 #batteryLineGraph path.area {
   fill: #e7e7e7;
+}
+
+#batteryLineGraph .ci {
+  fill: #EE9F9A;
+  fill-opacity: 1;
 }
 
 #batteryLineGraph .axis {
@@ -93,44 +72,22 @@ line.median-line {
   stroke-width: 1.5px;
 }
 
-/* new line graph */
-
-.gap-band {
-  fill: #46C69F;
-  fill-opacity: 0.6;
+.danger-box {
+  fill: #F65350;
+  fill-opacity: 0.22;
 }
 
-#newBatteryLineGraph path.domain {
-  fill: none;
-  stroke: #666;
-  stroke-width: 1px;
-}
-
-#newBatteryLineGraph path.area {
-  fill: #e7e7e7;
-}
-
-#newBatteryLineGraph .ci {
+.danger-box-border {
   fill: #FA451B;
-  fill-opacity: 1;
-}
-
-#newBatteryLineGraph .axis {
-  shape-rendering: crispEdges;
-}
-
-#newBatteryLineGraph .axis line {
-  fill: none;
-  stroke: #666;
-  stroke-width: 1.5px;
 }
 
 .danger-text {
-  font-size: 28px;
+  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
-  text-anchor: middle;
   font-family: avenir, "avenir next", helvetica, arial, sans-serif;
+  fill: #FA451B;
+  stroke: none;
 }
 
 /* legend */
@@ -140,7 +97,7 @@ line.median-line {
 }
 
 .cycle-icon {
-  fill: #FA451B;
+  fill: #EE9F9A;
   fill-opacity: 1;
 }
 
@@ -221,10 +178,6 @@ h3.battery-title {
 .btn {
   text-transform: uppercase;
   font-family: avenir, "avenir next", helvetica, arial, sans-serif;
-}
-
-.btn.btn-lg {
-  font-size: 36px;
 }
 
 .question {
