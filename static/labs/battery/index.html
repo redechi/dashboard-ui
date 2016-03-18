@@ -289,8 +289,9 @@
 
 
       function getUserData() {
+        //TODO make it point to moxie-stage once dashboard2-stage hits newton-stage
         var isStaging = window.location.search.indexOf('staging') !== -1;
-        var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/battery_health/' : 'https://moxie.automatic.com/battery_health/';
+        var apiUrl = isStaging ? 'https://moxie.automatic.com/battery_health/' : 'https://moxie.automatic.com/battery_health/';
         $.ajax({
           url: apiUrl,
           data: {
