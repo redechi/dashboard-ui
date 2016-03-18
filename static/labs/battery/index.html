@@ -279,11 +279,12 @@
 
 
       function getUserData() {
-        // TODO: add moxie endpoint to fetch real data by vehicle ID
+        var isStaging = window.location.search.indexOf('staging') !== -1;
+        var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/battery_health/' : 'https://moxie.automatic.com/battery_health/';
         $.ajax({
-          url: './js/demo.json',
+          url: apiUrl,
           data: {
-            vehicleId: $('#vehicleChoice').val()
+            vehicle_id: $('#vehicleChoice').val()
           },
           headers: {
             Authorization: 'bearer ' + accessToken
