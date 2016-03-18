@@ -37,33 +37,33 @@
 
       <h2 class="battery-title">Can your car battery hold a charge?</h2>
 
-      <div id="noData" class="hidden">
-        For now, this Battery Lab requires a Link 2 and at least a few trips taken in the past week. It doesn't look like we have any data for you at the moment.
-      </div>
+      <p>Your car’s battery slowly discharges while it’s parked, and it gets charged when you drive.</p>
+      <p>However, it can lose its ability to hold a charge over time. If your “state of charge” is in the Danger Zone, there is a higher risk of your battery dying the next time it’s sitting parked.</p>
 
-      <div id="results" class="hidden">
+      <div class="battery-box">
+        <div class="battery-box-title">Your battery's recent performance</div>
+        <div class="battery-box-content">
+          <div class="controls">
+            Vehicle:
+            <select id="vehicleChoice"></select>
+          </div>
 
-        <p>Your car’s battery slowly discharges while it’s parked, and it gets charged when you drive.</p>
-        <p>However, it can lose its ability to hold a charge over time. If your “state of charge” is in the Danger Zone, there is a higher risk of your battery dying the next time it’s sitting parked.</p>
+          <div id="noData" class="hidden alert alert-warning">
+            For now, this Battery Lab requires a Link 2 and at least a few trips taken in the past week. It doesn't look like we have any data for this vehicle at the moment.
+          </div>
 
-        <div class="battery-box">
-          <div class="battery-box-title">Your battery's recent performance</div>
-          <div class="battery-box-content">
-            <div class="controls">
-              Vehicle:
-              <select id="vehicleChoice"></select>
-            </div>
-
-            <div class="battery-graph-container">
-              <div id="batteryLineGraph"></div>
-              <div class="graph-swap-container">
-                This graph assumes your battery is <span id="currentGraphType"></span>.
-                <a id="swapData" href="#">Switch to <span id="otherGraphType"></span>.</a>
-                <p>*This may include time when we were not able to analyze data from your car.</p>
-              </div>
+          <div class="battery-graph-container">
+            <div id="batteryLineGraph"></div>
+            <div class="graph-swap-container" id="graphSwap">
+              This graph assumes your battery is <span id="currentGraphType"></span>.
+              <a id="swapData" href="#">Switch to <span id="otherGraphType"></span>.</a>
+              <p>*This may include time when we were not able to analyze data from your car.</p>
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="results" class="hidden">
 
         <h3 class="battery-title">How your battery compares to others</h3>
         <div class="battery-insight">
@@ -285,6 +285,16 @@
 
         hideLoading();
         $('#results').fadeIn();
+        $('#graphSwap').show();
+        $('#noData').hide();
+      }
+
+
+      function clearData() {
+          var node = d3.select('#batteryLineGraph');
+
+          // delete any existing graph
+          node.select('svg').remove();
       }
 
 
@@ -311,6 +321,7 @@
 
           hideLoading();
           $('#results').hide();
+          $('#graphSwap').hide();
           $('#noData').show();
         });
       }

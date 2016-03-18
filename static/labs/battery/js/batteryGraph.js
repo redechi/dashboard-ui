@@ -55,9 +55,6 @@ function drawBatteryGraph(data) {
 
   var node = d3.select('#batteryLineGraph');
 
-  // delete any existing graph
-  node.select('svg').remove();
-
   svg = node.append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
