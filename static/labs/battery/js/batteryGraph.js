@@ -29,6 +29,8 @@ function drawBatteryGraph(data) {
   sleepcycles = data.sleep_cycles;
   socType = data.default_battery_type;
 
+  updateBatteryTypeControl(socType);
+
   // cycles: array of arrays each with sleep cyc data points. Each array is a
   // cycle, and contains tuples representing its data points.
   // looks like: [[[value, time]. [value, time]],[[value,time],[value,time]]]
@@ -243,16 +245,20 @@ $('#swapData').click(function(e) {
   if (socType === 'agm') {
     socType = 'lead';
     renderUpdate(_.pluck(sleepcycles, 'soc_lead'));
-
-    // change button text
-    $('#otherGraphType').text('AGM');
-    $('#currentGraphType').text('Lead-Acid');
   } else {
     socType = 'agm';
     renderUpdate(_.pluck(sleepcycles, 'soc_agm'));
+  }
 
-    // change button text
+  updateBatteryTypeControl(socType);
+});
+
+function updateBatteryTypeControl(batteryType) {
+  if(batteryType === 'agm') {
     $('#otherGraphType').text('Lead-Acid');
     $('#currentGraphType').text('AGM');
+  } else {
+    $('#otherGraphType').text('AGM');
+    $('#currentGraphType').text('Lead-Acid');
   }
-});
+}
