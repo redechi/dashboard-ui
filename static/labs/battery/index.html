@@ -302,6 +302,9 @@
         //TODO make it point to moxie-stage once dashboard2-stage hits newton-stage
         var isStaging = window.location.search.indexOf('staging') !== -1;
         var apiUrl = isStaging ? 'https://moxie.automatic.com/battery_health/' : 'https://moxie.automatic.com/battery_health/';
+
+        showLoading();
+
         $.ajax({
           url: apiUrl,
           data: {
@@ -313,12 +316,13 @@
         })
         .done(function(result) {
           data = result;
-
+          clearData();
           renderData();
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
           console.error(errorThrown);
 
+          clearData();
           hideLoading();
           $('#results').hide();
           $('#graphSwap').hide();

@@ -105,7 +105,7 @@ function drawBatteryGraph(data) {
   gaps.forEach(function(gap) {
     svg.append('path')
       .data([gap])
-      .attr('class', 'gap-band')
+      .attr('class', 'gap')
       .attr('d', confidenceInterval);
   });
 
@@ -210,48 +210,34 @@ function getGaps(cycles) {
   return gapEndPoints;
 }
 
-function renderUpdate(newCycles) {
-  var newGaps = getGaps(newCycles);
+function renderUpdate() {
+  var cycles = _.pluck(sleepcycles, 'soc_' + socType);
+  var gaps = getGaps(cycles);
 
   svg.selectAll('.line')
-    .data(newCycles)
+    .data(cycles)
     .transition()
     .ease('ease-out')
     .duration(300)
     .attr('d', line);
 
   svg.selectAll('.ci')
-    .data(newCycles)
+    .data(cycles)
     .transition()
     .ease('ease-out')
     .duration(300)
     .attr('d', confidenceInterval);
 
   svg.selectAll('.gap')
-    .data(newGaps)
+    .data(gaps)
     .transition()
     .ease('ease-out')
     .duration(300)
-    .attr('d', line);
+    .attr('d', confidenceInterval);
 }
 
-// switch between agm and lead
-$('#swapData').click(function(e) {
-  e.preventDefault();
-
-  if (socType === 'agm') {
-    socType = 'lead';
-    renderUpdate(_.pluck(sleepcycles, 'soc_lead'));
-  } else {
-    socType = 'agm';
-    renderUpdate(_.pluck(sleepcycles, 'soc_agm'));
-  }
-
-  updateBatteryTypeControl(socType);
-});
-
-function updateBatteryTypeControl(batteryType) {
-  if(batteryType === 'agm') {
+function updateBatteryTypeControl() {
+  if(socType === 'agm') {
     $('#otherGraphType').text('Lead-Acid');
     $('#currentGraphType').text('AGM');
   } else {
@@ -259,3 +245,13 @@ function updateBatteryTypeControl(batteryType) {
     $('#currentGraphType').text('Lead-Acid');
   }
 }
+
+// switch between agm and lead
+$('#swapData').click(function(e) {
+  e.preventDefault();
+
+  socType = (socType === 'agm') ? 'lead' : 'agm';
+
+  renderUpdate();
+  updateBatteryTypeControl();
+});
