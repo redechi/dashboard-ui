@@ -43,7 +43,7 @@
       <div class="battery-box">
         <div class="battery-box-title">Your battery's recent performance</div>
         <div class="battery-box-content">
-          <div class="controls">
+          <div class="controls hidden" id="controls">
             Vehicle:
             <select id="vehicleChoice"></select>
           </div>
@@ -54,7 +54,7 @@
 
           <div class="battery-graph-container">
             <div id="batteryLineGraph"></div>
-            <div class="graph-swap-container" id="graphSwap">
+            <div class="graph-swap-container hidden" id="graphSwap">
               This graph assumes your battery is <span id="currentGraphType"></span>.
               <a id="swapData" href="#">Switch to <span id="otherGraphType"></span>.</a>
               <p>*This may include time when we were not able to analyze data from your car.</p>
@@ -77,7 +77,7 @@
           <div id="noBatteryLifeData" class="hidden">We don't have enough data to determine how long it would take for your car's battery to enter the danger zone. Please help us out by taking the survey below!</div>
         </div>
 
-        <!-- <div class="share-container hidden" id="shareContainer">
+        <div class="share-container hidden" id="shareContainer">
           <div id="shareTitle" class="share-title hidden">Share your Report</div>
           <input id="shareUrl" class="share-url" readonly>
           <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share your report</a>
@@ -87,9 +87,9 @@
             <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
             <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
           </div>
-        </div> -->
+        </div>
 
-        <div class="center-block survey-box">
+        <div class="center-block survey-box hidden" id="survey">
           <p>To help us bring you more insights like these, please take this quick survey.</p>
           <button class="btn btn-lg btn-green" id="surveyButton">Take Battery Survey</button>
 
@@ -201,7 +201,6 @@
 
     <script>
       var data;
-      var accessToken = getAccessToken();
 
       $('#share').click(function(e) {
         e.preventDefault();
@@ -254,6 +253,7 @@
         $('.open-control', questionDiv).toggleClass('fa-chevron-up');
       });
 
+
       function calculateBatteryLife(batteryLife) {
         if(batteryLife < 5) {
           return 'less than a week';
@@ -266,7 +266,7 @@
         }
       }
 
-      $('#vehicleChoice').change(getUserData);
+      $('#vehicleChoice').change(getVehicleData);
 
 
       function renderData() {
@@ -297,14 +297,14 @@
           node.select('svg').remove();
       }
 
-
-      function getUserData() {
+      function getVehicleData() {
+        var accessToken = getAccessToken();
         //TODO make it point to moxie-stage once dashboard2-stage hits newton-stage
         var isStaging = window.location.search.indexOf('staging') !== -1;
         var apiUrl = isStaging ? 'https://moxie.automatic.com/battery_health/' : 'https://moxie.automatic.com/battery_health/';
 
         showLoading();
-
+        
         $.ajax({
           url: apiUrl,
           data: {
@@ -330,6 +330,27 @@
         });
       }
 
+
+      function getUserData() {
+        showLoading();
+
+        fetchVehicles(function(results) {
+          if (results.length === 0) {
+            // error occurred or user has no vehicles
+          } else {
+            _.sortBy(results, 'make').forEach(function(vehicle) {
+              var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+              $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+            });
+
+            $('#controls').show();
+            $('#survey').show();
+          }
+
+          getVehicleData();
+        });
+      }
+
       /* On Page Load */
       formatForDemo();
       showLoginLink('battery');
@@ -338,17 +359,6 @@
       typescript(); // execute this script. might want it later, in a handler
 
       var typeformDataUrl = 'https://inga2.typeform.com/to/eT8kBI';
-
-      fetchVehicles(function(results) {
-        if (results.length === 0) {
-          // error occurred or user has no vehicles
-        } else {
-          _.sortBy(results, 'make').forEach(function(vehicle) {
-            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-          })
-        }
-      });
 
       var queryParams = getQueryParams(document.location.search);
       showLoading();
