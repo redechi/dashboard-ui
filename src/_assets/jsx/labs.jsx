@@ -6,6 +6,12 @@ const login = require('../js/login');
 /* eslint-disable max-len */
 const labs = [
   {
+    name: 'battery',
+    image: '/_assets/images/labs/battery.png',
+    title: 'Battery Health',
+    description: 'Can your car battery hold a charge?'
+  },
+  {
     name: 'year-in-review',
     image: '/_assets/images/labs/year-in-review.png',
     title: '2015 Year In Review',
