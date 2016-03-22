@@ -12,6 +12,7 @@
   },
   "author": "Brendan Nee",
   "dependencies": {
+    "left-pad": "git://github.com/azer/left-pad.git#bff80e3ef0db0bfaba7698606c4f623433d14355",
     "bootstrap-sass": "3.3.6",
     "bootstrap-slider": "6.0.13",
     "classnames": "2.2.3",
