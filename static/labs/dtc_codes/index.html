@@ -1,0 +1,431 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>DTC Codes | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+      <meta property="og:title" content="DTC Codes | Automatic"/>
+      <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/battery.png"/>
+      <meta property="og:site_name" content="Automatic"/>
+      <meta property="og:description" content="Analysis of my vehicle's DTCs."/>
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:site" content="@automatic">
+      <meta name="twitter:title" content="DTC Codes | Automatic">
+      <meta name="twitter:description" content="Analysis of my vehicle's DTCs..">
+      <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/battery.png">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" >
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <link href="css/dtc_codes.css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <a class="btn-logout" href="/#/logout">Log out</a>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="progress"></div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="labs-title">Diagnostic Trouble Codes / Check Engine Light</h1>
+        <div class="labs-tagline">By Automatic Labs</div>
+      </div>
+      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+
+      <p>This feature is currently in beta. If you have any feedback, please tell us in our customer <a href="#">community</a>!</p>
+
+      <p>Diagnostic Trouble Codes (DTCs) may signal potential issues in your car.</p>
+      <p>By comparing your car to cars of similar make, model, and year we can anticipate what issues your car may experience in the future.</p>
+
+      <div class="controls hidden" id="controls">
+        Choose Your Vehicle:
+        <select id="vehicleChoice"></select>
+      </div>
+      <div class="dtc-box">
+        <div class="dtc-box-title">Diagnostic Trouble Codes Triggered In Your Car</div>
+        <div class="dtc-box-content">
+
+          <div id="no-DTC-data" class="hidden alert alert-warning">
+            It doesn't look like this vehicle has experienced any DTCs with the Automatic adapter plugged in.
+          </div>
+
+          <div id="codes-triggered-container" class="dtc-table-container">
+            <table class="dtc-list dtc-codes-table hidden"></table>
+            </div>
+          </div>
+        </div>
+
+        <h1 class="dtc-title">What Diagnostic Trouble Codes Might Be Triggered Next?</h1>
+        <div class="controls hidden" id="prediction-controls">
+          Predictions By:
+          <select id="predictionsChoice">
+            <option value="byYear">Make, Model, and Year</option>
+            <option value="byGeneration">Make, Model, and Generation</option>
+          </select>
+        </div>
+        <div class="dtc-box">
+          <div class="dtc-box-title">Predicted Diagnostic Trouble Codes Based On Your Car</div>
+          <div class="dtc-box-content">
+
+            <div id="no-predictions" class="hidden alert alert-warning">
+              It doesn't look like we have any predictions for this vehicle at the moment. This is likely due to a low amount of data for this year, make, and model.
+            </div>
+
+            <div id="prediction-container" class="dtc-table-container">
+              <table class="dtc-predictions dtc-codes-table hidden"></table>
+            </div>
+          </div>
+        </div>
+
+        <div id="results" class="hidden">
+
+          <div class="share-container hidden" id="shareContainer">
+            <div id="shareTitle" class="share-title hidden">Share your Report</div>
+            <input id="shareUrl" class="share-url" readonly>
+            <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share your report</a>
+            <div class="share-buttons hidden">
+              <p>Anyone with this link can see this report.</p>
+              <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+              <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+              <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+
+    <script src="../common/js/main.js"></script>
+
+    <!-- script to configure typeform embed -->
+    <script>var typescript = function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id='typef_orm',b='https://s3-eu-west-1.amazonaws.com/share.typeform.com/';if(!gi.call(d,id)){js=ce.call(d,'script');js.id=id;js.src=b+'widget.js';q=gt.call(d,'script')[0];q.parentNode.insertBefore(js,q)}}</script>
+
+    <script>
+      var data;
+      //C_023e473e29c765af
+
+
+      $('#share').click(function(e) {
+        e.preventDefault();
+
+        $('#share').html(generateSpinner());
+        saveShareData(data, function(e, shareUrlSlug) {
+          if (e) {
+            return alert(e);
+          }
+
+          var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
+          showShareOptions(shareURL);
+        });
+      });
+
+      $('#shareUrl').focus(function() {
+        $(this).select();
+      });
+
+      function showShareOptions(shareURL) {
+        $('#shareUrl')
+          .val(shareURL)
+          .animate({width: 'toggle'}, 350)
+          .select();
+        $('#share').animate({width: 'toggle'}, 350);
+        $('#shareTitle').slideDown();
+        $('.share-buttons').slideDown();
+
+        var emailShareURL = formatEmailShare('My Vehicle\'s DTC Codes', 'My Vehicle\'s DTC Codes.', shareURL);
+        var twitterShareURL = formatTwitterShare('My Vehicle\'s DTC Codes.', shareURL);
+        var facebookShareURL = formatFacebookShare(shareURL);
+
+        $('.btn-email').attr('href', emailShareURL);
+        $('.btn-twitter').attr('href', twitterShareURL);
+        $('.btn-facebook').attr('href', facebookShareURL);
+
+        sessionStorage.setItem('batteryShareURL', shareURL);
+      }
+
+      $('#vehicleChoice').change(getVehicleData);
+      $('#predictionsChoice').change(renderPredictions);
+
+      // Builds the HTML Table out of myList.
+      function buildHtmlTable(myList, selector) {
+        var columns = addAllColumnHeaders(myList, selector);
+
+        for (var i = 0 ; i < myList.length ; i++) {
+          var row$ = $('<tr/>');
+          for (var colIndex = 0 ; colIndex < columns.length ; colIndex++) {
+            currentColumn = columns[colIndex]
+            var cellValue = myList[i][currentColumn];
+            if (cellValue == null) { cellValue = ""; }
+
+            textContainer = '<p>' + cellValue + '</p>'
+            row$.append($('<td/>').append(textContainer));
+          }
+          $(selector).append(row$);
+        }
+      }
+
+      // Adds a header row to the table and returns the set of columns.
+      // Need to do union of keys from all records as some records may not contain
+      // all records
+      function addAllColumnHeaders(myList, selector) {
+        var columnSet = [];
+        var headerTr$ = $('<tr/>');
+
+        for (var i = 0 ; i < myList.length ; i++) {
+          var rowHash = myList[i];
+          for (var key in rowHash) {
+            if ($.inArray(key, columnSet) == -1){
+              columnSet.push(key);
+              textContainer = '<p>' + key + '</p>'
+              headerTr$.append($('<th/>').append(textContainer));
+            }
+          }
+        }
+        var thead$ = $('<thead/>')
+        thead$.append(headerTr$)
+        $(selector).append(thead$);
+
+        return columnSet;
+      }
+
+      if(typeof(String.prototype.trim) === "undefined") {
+        String.prototype.trim = function() {
+          return String(this).replace(/^\s+|\s+$/g, '');
+        };
+      }
+
+      function createDTCLink(DTCCode) {
+        return '<a href=\"http://www.obd-codes.com/' + DTCCode + '/\">' + DTCCode + '</a>';
+      }
+
+      function createDTCLinkArray(DTCList) {
+        DTCLinks = DTCList.map(function (code){
+          return createDTCLink(code);
+        });
+        return DTCLinks.join(', ').trim();
+      }
+
+      function renderPredictions() {
+        predictionType = $("#predictionsChoice").val();
+        $("#prediction-container").empty();
+        $("#prediction-container").append("<table class=\"dtc-predictions dtc-codes-table hidden\"></table>");
+
+        var predictedDTCGroupsFormatted = [];
+        if (predictionType === "byYear") {
+          predictedDTCGroups = data['predicted_DTC_groups'];
+          predictedDTCGroupsFormatted = predictedDTCGroups.map(function(group){
+            groupInfoFormatted = {};
+            groupInfoFormatted['DTC Group'] = group['DTC_group'];
+            groupInfoFormatted['DTCs in this Group'] = createDTCLinkArray(group['DTC_codes_in_group']);
+            groupInfoFormatted[similarCarString] = Math.round(group['percentage_triggered_in_similar_cars']) + '%';
+            return groupInfoFormatted;
+          });
+        } else if (predictionType === "byGeneration") {
+          predictedDTCGroups = data['predicted_gen_DTC_groups'];
+          predictedDTCGroupsToBeFiltered = predictedDTCGroups.map(function(group){
+            groupInfoFormatted = {};
+            groupInfoFormatted['DTC Group'] = group['DTC_group'];
+            groupInfoFormatted['DTCs in this Group'] = createDTCLinkArray(group['DTC_codes_in_group']);
+            groupInfoFormatted[similarGenString] = Math.round(group['percentage_triggered_in_similar_car_gen']) + '%';
+            return groupInfoFormatted;
+          });
+          predictedDTCGroupsFormatted = predictedDTCGroupsToBeFiltered.filter(function(group) {
+            if (group['Percentage of the Same Generation Triggered'] === '0%') {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
+        if(predictedDTCGroupsFormatted.length === 0) {
+          $('#no-predictions').show();
+          $('.dtc-predictions').hide();
+        } else {
+          buildHtmlTable(predictedDTCGroupsFormatted, '.dtc-predictions');
+          $('#no-predictions').hide();
+          $('.dtc-predictions').show();
+          $('.dtc-predictions').DataTable({"order": [[ 2, "desc" ]], "columns": [null, {"width": "45%"}, {"width": "25%"}], "autoWidth": false});
+        }
+      }
+
+      function renderData() {
+        // data = testDataGeneration; // For Testing
+
+        var codes = data['DTC_codes'];
+        var year = data['year'];
+        var make = data['make'];
+        var model = data['model'];
+        var genStart = data['gen_start'];
+        var genEnd = data['gen_end'];
+        if (!genEnd) {
+          genEnd = '';
+        }
+
+
+        similarCarString = 'Percentage of all ' + year + ' ' + make + ' ' + model + 's Triggered';
+        if (!genEnd && !genStart) {
+          similarGenString = null;
+        } else {
+          similarGenString = 'Percentage of all ' + genStart + '-' + genEnd + ' ' + make + ' ' + model + 's Triggered';
+        }
+        codesFormatted = codes.map(function(code){
+          codeInfoFormatted = {};
+          codeInfoFormatted['Description'] = code['description'];
+          codeInfoFormatted['DTC'] = createDTCLink(code['dtc_code']);
+          codeInfoFormatted['DTC Group'] = code['group'];
+          codeInfoFormatted['First Occurrence'] = code['first_occurance_month'] + '/' + code['first_occurance_year'];
+          codeInfoFormatted['Most Recent Occurrence'] = code['most_recent_occurance_month'] + '/' + code['most_recent_occurance_year'];
+          codeInfoFormatted[similarCarString] = Math.round(code['avg_cars_with_DTC_code_percent']) + '%';
+          if (similarGenString) {
+            codeInfoFormatted[similarGenString] = Math.round(code['gen_percent_triggered']) + '%';
+          }
+          return codeInfoFormatted;
+        });
+
+        if(codesFormatted.length === 0) {
+          $('#no-DTC-data').show();
+          $('.dtc-list').hide();
+        } else {
+          buildHtmlTable(codesFormatted, '.dtc-list');
+          $('#no-DTC-data').hide();
+          $('.dtc-list').show();
+          $('.dtc-list').DataTable();
+        }
+
+        renderPredictions();
+
+        hideLoading();
+        $('#results').fadeIn();
+        $('#noData').hide();
+      }
+
+
+      function clearData() {
+          // clear tables when the user selects a different vehicle
+          $("#codes-triggered-container").empty();
+          $("#codes-triggered-container").append("<table class=\"dtc-list dtc-codes-table hidden\"></table>");
+
+          $("#prediction-container").empty();
+          $("#prediction-container").append("<table class=\"dtc-predictions dtc-codes-table hidden\"></table>");
+      }
+
+      function getVehicleData() {
+        var accessToken = getAccessToken();
+        //TODO make it point to moxie-stage once dashboard2-stage hits newton-stage
+        var isStaging = window.location.search.indexOf('staging') !== -1;
+        var apiUrl = isStaging ? 'https://moxie.automatic.com/dtc_codes/' : 'https://moxie.automatic.com/dtc_codes/';
+
+        showLoading();
+
+        $.ajax({
+          url: apiUrl,
+          data: {
+            vehicle_id: $('#vehicleChoice').val()
+          },
+          headers: {
+            Authorization: 'bearer ' + accessToken
+          }
+        })
+        .done(function(result) {
+          data = result;
+          clearData();
+          renderData();
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.error(errorThrown);
+
+          clearData();
+          hideLoading();
+          $('#results').hide();
+          $('#no-DTC-data').show();
+          $('#no-predictions').show();
+          $('.dtc-list').hide();
+          $('.dtc-predictions').hide();
+        });
+      }
+
+
+      function getUserData() {
+        showLoading();
+
+        fetchVehicles(function(results) {
+          if (results.length === 0) {
+            // error occurred or user has no vehicles
+          } else {
+            _.sortBy(results, 'make').forEach(function(vehicle) {
+              var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+              $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+            });
+
+            $('#controls').show();
+            $('#prediction-controls').show();
+          }
+
+          getVehicleData();
+        });
+      }
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('dtc_codes');
+
+      // Generate custom typeform url
+      typescript(); // execute this script. might want it later, in a handler
+
+      var typeformDataUrl = 'https://inga2.typeform.com/to/eT8kBI';
+
+      var queryParams = getQueryParams(document.location.search);
+      if (queryParams.demo) {
+        var testDataGeneration = {"model": "Sebring", "gen_end": "2010", "predicted_gen_DTC_groups": [{"DTC_codes_in_group": ["P0095", "P0096", "P0097", "P0098", "P0099", "P00A5", "P00A6", "P00A7", "P00A8", "P00A9", "P00AA", "P00AB", "P00AC", "P00AD", "P00AE", "P00E8", "P00E9", "P00EA", "P00EB", "P00EC", "P00ED", "P00EE", "P00EF", "P00F0", "P00F1", "P0110", "P0111", "P0112", "P0113", "P0114"], "percentage_triggered_in_similar_car_gen": 3.85, "average_months_after_mfr_to_trigger": 90, "DTC_group": "Intake Air Temperature Sensor Circuit"}, {"DTC_codes_in_group": ["P0128"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 96, "DTC_group": "Coolant Thermostat (Coolant Temperature Below Thermostat Regulating Temperature)"}, {"DTC_codes_in_group": ["P0400", "P0401", "P0402", "P049A"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 81, "DTC_group": "EGR Flow"}, {"DTC_codes_in_group": ["P0100", "P0101", "P0102", "P0103", "P0104"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 92, "DTC_group": "Mass or Volume Air Flow Sensor Circuit"}, {"DTC_codes_in_group": ["P0729", "P0730", "P0731", "P0732", "P0733", "P0734", "P0735", "P0736", "P076F", "P07D9", "P07F6", "P07F7"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 55, "DTC_group": "Gear Incorrect Ratio"}, {"DTC_codes_in_group": ["P0420", "P0421", "P0422", "P0430", "P0431", "P0432"], "percentage_triggered_in_similar_car_gen": 2.56, "average_months_after_mfr_to_trigger": 90, "DTC_group": "Catalyst Efficiency Below Threshold"}, {"DTC_codes_in_group": ["P0700", "P0701", "P0702"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 55, "DTC_group": "Transmission Control System"}, {"DTC_codes_in_group": ["P0301", "P0302", "P0303", "P0304", "P0305", "P0306", "P0307", "P0308", "P0309", "P0310", "P0311", "P0312"], "percentage_triggered_in_similar_car_gen": 12.82, "average_months_after_mfr_to_trigger": 94, "DTC_group": "Cylinder Misfire Detected"}, {"DTC_codes_in_group": ["P0784"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 92, "DTC_group": "4-5 Shift"}, {"DTC_codes_in_group": ["P0070", "P0071", "P0072", "P0073", "P0074", "P00D9", "P00DA", "P00DB", "P00DC", "P00DD"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 87, "DTC_group": "Ambient Air Temperature Sensor Circuit"}, {"DTC_codes_in_group": ["P2181"], "percentage_triggered_in_similar_car_gen": 6.41, "average_months_after_mfr_to_trigger": 91, "DTC_group": "Cooling System Performance"}, {"DTC_codes_in_group": ["P0300"], "percentage_triggered_in_similar_car_gen": 3.85, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Random/Multiple Cylinder Misfire Detected"}, {"DTC_codes_in_group": ["P2014", "P2015", "P2016", "P2017", "P2018", "P2019", "P2020", "P2021", "P2022", "P2023"], "percentage_triggered_in_similar_car_gen": 12.82, "average_months_after_mfr_to_trigger": 85, "DTC_group": "Intake Manifold Runner Position Sensor/Switch Circuit"}, {"DTC_codes_in_group": ["U0416"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 96, "DTC_group": "Invalid Data Received From Vehicle Dynamics Control Module"}, {"DTC_codes_in_group": ["P2004", "P2005", "P2006", "P2007", "P2008", "P2009"], "percentage_triggered_in_similar_car_gen": 6.41, "average_months_after_mfr_to_trigger": 83, "DTC_group": "Intake Manifold Runner Control"}, {"DTC_codes_in_group": ["P0442", "P0455", "P0456", "P0457"], "percentage_triggered_in_similar_car_gen": 17.95, "average_months_after_mfr_to_trigger": 77, "DTC_group": "EVAP System Leak Detected"}, {"DTC_codes_in_group": ["P2120", "P2121", "P2122", "P2123", "P2124", "P2125", "P2126", "P2127", "P2128", "P2129", "P212A", "P212B", "P212C", "P212D", "P212E", "P2130", "P2131", "P2132", "P2133", "P0120", "P0121", "P0122", "P0123", "P0124", "P0220", "P0221", "P0222", "P0223", "P0224", "P0225", "P0226", "P0227", "P0228", "P0229"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 82, "DTC_group": "Throttle/Pedal Position Sensor/Switch Circuit"}, {"DTC_codes_in_group": ["P0011", "P0012", "P0014", "P0015", "P0021", "P0022", "P0024", "P0025"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Camshaft Position - Timing"}, {"DTC_codes_in_group": ["P0335", "P0336", "P0337", "P0338", "P0339", "P0385", "P0386", "P0387", "P0388", "P0389", "P0394"], "percentage_triggered_in_similar_car_gen": 2.56, "average_months_after_mfr_to_trigger": 92, "DTC_group": "Crankshaft Position Sensor Circuit"}, {"DTC_codes_in_group": ["P0016", "P0017", "P0018", "P0019"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Crankshaft Position - Camshaft Position Correlation Sensor"}, {"DTC_codes_in_group": ["P21CF", "P21D0", "P21D1", "P21D2", "P21D3", "P21D4", "P21D5", "P21D6", "P21D7", "P21D8", "P21D9", "P21DA", "P21DB", "P21DC", "P21DE", "P21DF", "P21E0", "P21E1", "P21E2", "P21E3", "P21E4", "P21E5", "P21E6", "P21E7", "P21E8", "P21E9", "P21EA", "P21EB", "P21EC", "P21ED", "P21EE", "P21EF", "P21F0", "P21F1", "P21F2", "P21F3", "P0201", "P0202", "P0203", "P0204", "P0205", "P0206", "P0207", "P0208", "P0209", "P0210", "P0211", "P0212", "P0261", "P0262", "P0264", "P0265", "P0267", "P0268", "P0270", "P0271", "P0273", "P0274", "P0276", "P0277", "P0279", "P0280", "P0282", "P0283", "P0285", "P0286", "P0288", "P0289", "P0291", "P0292", "P0294", "P0295"], "percentage_triggered_in_similar_car_gen": 1.28, "average_months_after_mfr_to_trigger": 84, "DTC_group": "Cylinder Injector Circuit"}], "predicted_DTC_groups": [{"DTC_codes_in_group": ["P0442", "P0455", "P0456", "P0457"], "percentage_triggered_in_similar_cars": 20.829999923706055, "average_months_after_mfr_to_trigger": 84, "DTC_group": "EVAP System Leak Detected"}, {"DTC_codes_in_group": ["P0301", "P0302", "P0303", "P0304", "P0305", "P0306", "P0307", "P0308", "P0309", "P0310", "P0311", "P0312"], "percentage_triggered_in_similar_cars": 20.829999923706055, "average_months_after_mfr_to_trigger": 94, "DTC_group": "Cylinder Misfire Detected"}, {"DTC_codes_in_group": ["P2014", "P2015", "P2016", "P2017", "P2018", "P2019", "P2020", "P2021", "P2022", "P2023"], "percentage_triggered_in_similar_cars": 16.670000076293945, "average_months_after_mfr_to_trigger": 86, "DTC_group": "Intake Manifold Runner Position Sensor/Switch Circuit"}, {"DTC_codes_in_group": ["P2181"], "percentage_triggered_in_similar_cars": 10.420000076293945, "average_months_after_mfr_to_trigger": 91, "DTC_group": "Cooling System Performance"}, {"DTC_codes_in_group": ["P0300"], "percentage_triggered_in_similar_cars": 6.25, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Random/Multiple Cylinder Misfire Detected"}, {"DTC_codes_in_group": ["P0095", "P0096", "P0097", "P0098", "P0099", "P00A5", "P00A6", "P00A7", "P00A8", "P00A9", "P00AA", "P00AB", "P00AC", "P00AD", "P00AE", "P00E8", "P00E9", "P00EA", "P00EB", "P00EC", "P00ED", "P00EE", "P00EF", "P00F0", "P00F1", "P0110", "P0111", "P0112", "P0113", "P0114"], "percentage_triggered_in_similar_cars": 6.25, "average_months_after_mfr_to_trigger": 90, "DTC_group": "Intake Air Temperature Sensor Circuit"}, {"DTC_codes_in_group": ["P2004", "P2005", "P2006", "P2007", "P2008", "P2009"], "percentage_triggered_in_similar_cars": 6.25, "average_months_after_mfr_to_trigger": 83, "DTC_group": "Intake Manifold Runner Control"}, {"DTC_codes_in_group": ["P0420", "P0421", "P0422", "P0430", "P0431", "P0432"], "percentage_triggered_in_similar_cars": 4.170000076293945, "average_months_after_mfr_to_trigger": 90, "DTC_group": "Catalyst Efficiency Below Threshold"}, {"DTC_codes_in_group": ["P0335", "P0336", "P0337", "P0338", "P0339", "P0385", "P0386", "P0387", "P0388", "P0389", "P0394"], "percentage_triggered_in_similar_cars": 4.170000076293945, "average_months_after_mfr_to_trigger": 92, "DTC_group": "Crankshaft Position Sensor Circuit"}, {"DTC_codes_in_group": ["P0100", "P0101", "P0102", "P0103", "P0104"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 92, "DTC_group": "Mass or Volume Air Flow Sensor Circuit"}, {"DTC_codes_in_group": ["P0201", "P0202", "P0203", "P0204", "P0205", "P0206", "P0207", "P0208", "P0209", "P0210", "P0211", "P0212", "P0261", "P0262", "P0264", "P0265", "P0267", "P0268", "P0270", "P0271", "P0273", "P0274", "P0276", "P0277", "P0279", "P0280", "P0282", "P0283", "P0285", "P0286", "P0288", "P0289", "P0291", "P0292", "P0294", "P0295", "P21CF", "P21D0", "P21D1", "P21D2", "P21D3", "P21D4", "P21D5", "P21D6", "P21D7", "P21D8", "P21D9", "P21DA", "P21DB", "P21DC", "P21DE", "P21DF", "P21E0", "P21E1", "P21E2", "P21E3", "P21E4", "P21E5", "P21E6", "P21E7", "P21E8", "P21E9", "P21EA", "P21EB", "P21EC", "P21ED", "P21EE", "P21EF", "P21F0", "P21F1", "P21F2", "P21F3"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 84, "DTC_group": "Cylinder Injector Circuit"}, {"DTC_codes_in_group": ["P0011", "P0012", "P0014", "P0015", "P0021", "P0022", "P0024", "P0025"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Camshaft Position - Timing"}, {"DTC_codes_in_group": ["P0128"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 96, "DTC_group": "Coolant Thermostat (Coolant Temperature Below Thermostat Regulating Temperature)"}, {"DTC_codes_in_group": ["U0416"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 96, "DTC_group": "Invalid Data Received From Vehicle Dynamics Control Module"}, {"DTC_codes_in_group": ["P0784"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 92, "DTC_group": "4-5 Shift"}, {"DTC_codes_in_group": ["P0016", "P0017", "P0018", "P0019"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 97, "DTC_group": "Crankshaft Position - Camshaft Position Correlation Sensor"}, {"DTC_codes_in_group": ["P0400", "P0401", "P0402", "P049A"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 81, "DTC_group": "EGR Flow"}, {"DTC_codes_in_group": ["P0070", "P0071", "P0072", "P0073", "P0074", "P00D9", "P00DA", "P00DB", "P00DC", "P00DD"], "percentage_triggered_in_similar_cars": 2.0799999237060547, "average_months_after_mfr_to_trigger": 87, "DTC_group": "Ambient Air Temperature Sensor Circuit"}], "year": 2008, "make": "Chrysler", "DTC_codes": [{"most_recent_occurance_year": 2015, "group": "System Voltage", "description": "System Voltage Low", "first_occurance_month": 9, "most_recent_occurance_month": 9, "gen_percent_triggered": 10.26, "dtc_code": "P0562", "first_occurance_year": 2015, "avg_cars_with_DTC_code_percent": 14.579999923706055, "avg_months_since_mfr": 87}, {"most_recent_occurance_year": 2015, "group": "Intake Manifold Tuning Valve Control Circuit", "description": "Intake Manifold Tuning Valve Control Circuit/Open Bank 1", "first_occurance_month": 4, "most_recent_occurance_month": 4, "gen_percent_triggered": 1.28, "dtc_code": "P0660", "first_occurance_year": 2014, "avg_cars_with_DTC_code_percent": 2.0799999237060547, "avg_months_since_mfr": 76}, {"most_recent_occurance_year": 2014, "group": "Manifold Absolute Pressure/Barometric Pressure Sensor Circuit", "description": "Manifold Absolute Pressure/Barometric Pressure Sensor Circuit Range/Performance", "first_occurance_month": 4, "most_recent_occurance_month": 4, "gen_percent_triggered": 2.56, "dtc_code": "P0106", "first_occurance_year": 2014, "avg_cars_with_DTC_code_percent": 4.170000076293945, "avg_months_since_mfr": 84}, {"most_recent_occurance_year": 2015, "group": "EVAP System", "description": "EVAP System", "first_occurance_month": 4, "most_recent_occurance_month": 9, "gen_percent_triggered": 2.56, "dtc_code": "P0440", "first_occurance_year": 2015, "avg_cars_with_DTC_code_percent": 4.170000076293945, "avg_months_since_mfr": 85}], "gen_start": "2008"}
+        data = testDataGeneration;
+        clearData();
+        renderData();
+        $('#prediction-controls').show();
+      } else {
+        var queryParams = getQueryParams(document.location.search);
+        showLoading();
+        if (queryParams.share) {
+          getShareData(queryParams.share, function(e, result) {
+            if (e) {
+              return alert(e);
+            }
+
+            data = result;
+            renderData();
+          });
+        } else {
+          getUserData();
+          if (!queryParams.demo) {
+            $('#shareContainer').show();
+
+            if (sessionStorage.getItem('batteryShareURL')) {
+              showShareOptions(sessionStorage.getItem('batteryShareURL'));
+            }
+          }
+        }
+      }
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
