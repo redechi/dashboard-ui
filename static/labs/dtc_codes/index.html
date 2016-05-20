@@ -81,21 +81,6 @@
           </div>
         </div>
 
-        <div id="results" class="hidden">
-
-          <div class="share-container hidden" id="shareContainer">
-            <div id="shareTitle" class="share-title hidden">Share your Report</div>
-            <input id="shareUrl" class="share-url" readonly>
-            <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share your report</a>
-            <div class="share-buttons hidden">
-              <p>Anyone with this link can see this report.</p>
-              <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
-              <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
-              <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
-            </div>
-          </div>
-        </div>
-
       </div>
 
 
@@ -114,49 +99,13 @@
 
     <script>
       var data;
-      //C_023e473e29c765af
 
-
-      $('#share').click(function(e) {
-        e.preventDefault();
-
-        $('#share').html(generateSpinner());
-        saveShareData(data, function(e, shareUrlSlug) {
-          if (e) {
-            return alert(e);
-          }
-
-          var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
-          showShareOptions(shareURL);
-        });
-      });
-
-      $('#shareUrl').focus(function() {
-        $(this).select();
-      });
-
-      function showShareOptions(shareURL) {
-        $('#shareUrl')
-          .val(shareURL)
-          .animate({width: 'toggle'}, 350)
-          .select();
-        $('#share').animate({width: 'toggle'}, 350);
-        $('#shareTitle').slideDown();
-        $('.share-buttons').slideDown();
-
-        var emailShareURL = formatEmailShare('My Vehicle\'s DTC Codes', 'My Vehicle\'s DTC Codes.', shareURL);
-        var twitterShareURL = formatTwitterShare('My Vehicle\'s DTC Codes.', shareURL);
-        var facebookShareURL = formatFacebookShare(shareURL);
-
-        $('.btn-email').attr('href', emailShareURL);
-        $('.btn-twitter').attr('href', twitterShareURL);
-        $('.btn-facebook').attr('href', facebookShareURL);
-
-        sessionStorage.setItem('batteryShareURL', shareURL);
-      }
+      // bind handlers
 
       $('#vehicleChoice').change(getVehicleData);
       $('#predictionsChoice').change(renderPredictions);
+      // End bind handlers
+
 
       // Builds the HTML Table out of myList.
       function buildHtmlTable(myList, selector) {
@@ -217,6 +166,16 @@
         return DTCLinks.join(', ').trim();
       }
 
+      // set up custom sort for percentage columns in datatables
+      jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+      'percent-custom-pre': function(a) {
+          var x = String(a).replace( /<[\s\S]*?>/g, "" );
+          aNoPercent = x.replace('%', '').replace('&lt;1', '0');
+          aAsInt = parseInt(aNoPercent, 10);
+          return aAsInt;
+      }
+    });
+
       function renderPredictions() {
         predictionType = $("#predictionsChoice").val();
         $("#prediction-container").empty();
@@ -230,23 +189,22 @@
             groupInfoFormatted['DTC Group'] = group['DTC_group'];
             groupInfoFormatted['DTCs in this Group'] = createDTCLinkArray(group['DTC_codes_in_group']);
             groupInfoFormatted[similarCarString] = Math.round(group['percentage_triggered_in_similar_cars']) + '%';
+            if (groupInfoFormatted[similarCarString] === '0%') {
+              groupInfoFormatted[similarCarString] = '<1%'
+            }
             return groupInfoFormatted;
           });
         } else if (predictionType === "byGeneration") {
           predictedDTCGroups = data['predicted_gen_DTC_groups'];
-          predictedDTCGroupsToBeFiltered = predictedDTCGroups.map(function(group){
+          predictedDTCGroupsFormatted = predictedDTCGroups.map(function(group){
             groupInfoFormatted = {};
             groupInfoFormatted['DTC Group'] = group['DTC_group'];
             groupInfoFormatted['DTCs in this Group'] = createDTCLinkArray(group['DTC_codes_in_group']);
             groupInfoFormatted[similarGenString] = Math.round(group['percentage_triggered_in_similar_car_gen']) + '%';
-            return groupInfoFormatted;
-          });
-          predictedDTCGroupsFormatted = predictedDTCGroupsToBeFiltered.filter(function(group) {
-            if (group['Percentage of the Same Generation Triggered'] === '0%') {
-              return false;
-            } else {
-              return true;
+            if (groupInfoFormatted[similarGenString] === '0%') {
+              groupInfoFormatted[similarGenString] = '<1%'
             }
+            return groupInfoFormatted;
           });
         }
         if(predictedDTCGroupsFormatted.length === 0) {
@@ -256,13 +214,12 @@
           buildHtmlTable(predictedDTCGroupsFormatted, '.dtc-predictions');
           $('#no-predictions').hide();
           $('.dtc-predictions').show();
-          $('.dtc-predictions').DataTable({"order": [[ 2, "desc" ]], "columns": [null, {"width": "45%"}, {"width": "25%"}], "autoWidth": false});
+          $('.dtc-predictions').DataTable({"order": [[ 2, "desc" ]], "columns": [null, {"width": "45%"}, {"width": "25%", "type": "percent-custom", "orderDataType": "percent-custom", "bSortable": true}], "autoWidth": false});
         }
       }
 
-      function renderData() {
-        // data = testDataGeneration; // For Testing
 
+      function renderData() {
         var codes = data['DTC_codes'];
         var year = data['year'];
         var make = data['make'];
@@ -273,8 +230,11 @@
           genEnd = '';
         }
 
-
-        similarCarString = 'Percentage of all ' + year + ' ' + make + ' ' + model + 's Triggered';
+        if (model[model.length - 1].toLowerCase() === 's') {
+          similarCarString = 'Percentage of all ' + year + ' ' + make + ' ' + model + 'es Triggered';
+        } else {
+          similarCarString = 'Percentage of all ' + year + ' ' + make + ' ' + model + 's Triggered';
+        }
         if (!genEnd && !genStart) {
           similarGenString = null;
         } else {
@@ -288,8 +248,14 @@
           codeInfoFormatted['First Occurrence'] = code['first_occurance_month'] + '/' + code['first_occurance_year'];
           codeInfoFormatted['Most Recent Occurrence'] = code['most_recent_occurance_month'] + '/' + code['most_recent_occurance_year'];
           codeInfoFormatted[similarCarString] = Math.round(code['avg_cars_with_DTC_code_percent']) + '%';
+          if (codeInfoFormatted[similarCarString] === '0%') {
+            codeInfoFormatted[similarCarString] = '<1%'
+          }
           if (similarGenString) {
             codeInfoFormatted[similarGenString] = Math.round(code['gen_percent_triggered']) + '%';
+            if (codeInfoFormatted[similarGenString] === '0%') {
+              codeInfoFormatted[similarGenString] = '<1%'
+            }
           }
           return codeInfoFormatted;
         });
@@ -301,7 +267,7 @@
           buildHtmlTable(codesFormatted, '.dtc-list');
           $('#no-DTC-data').hide();
           $('.dtc-list').show();
-          $('.dtc-list').DataTable();
+          $('.dtc-list').DataTable({"columnDefs": [{"targets": [5,6], "type": "percent-custom", "orderDataType": "percent-custom", "bSortable": true}]});
         }
 
         renderPredictions();
@@ -320,6 +286,7 @@
           $("#prediction-container").empty();
           $("#prediction-container").append("<table class=\"dtc-predictions dtc-codes-table hidden\"></table>");
       }
+
 
       function getVehicleData() {
         var accessToken = getAccessToken();
@@ -407,13 +374,6 @@
           });
         } else {
           getUserData();
-          if (!queryParams.demo) {
-            $('#shareContainer').show();
-
-            if (sessionStorage.getItem('batteryShareURL')) {
-              showShareOptions(sessionStorage.getItem('batteryShareURL'));
-            }
-          }
         }
       }
     </script>
