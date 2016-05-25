@@ -133,6 +133,10 @@ table.dataTable.no-footer {
     border: 1px solid rgb(207, 207, 207);
 }
 
+.dataTables_wrapper.no-footer div:nth-child(2)  {
+  display: none;
+}
+
 @media screen and (max-width: 1000px) {
   .dtc-table-container label {
     display: none;

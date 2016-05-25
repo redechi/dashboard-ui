@@ -6,6 +6,12 @@ const login = require('../js/login');
 /* eslint-disable max-len */
 const labs = [
   {
+    name: 'dtc_codes',
+    image: '/_assets/images/labs/dtc-codes.jpg',
+    title: 'Diagnostic Trouble Codes',
+    description: 'What diagnostic trouble codes has your car triggered?'
+  },
+  {
     name: 'battery',
     image: '/_assets/images/labs/battery.png',
     title: 'Battery Health',

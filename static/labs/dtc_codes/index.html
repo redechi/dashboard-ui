@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <h1 class="dtc-title">What Diagnostic Trouble Codes Might Be Triggered Next?</h1>
+        <h1 class="dtc-title">What Diagnostic Trouble Codes are Common in Your Vehicle?</h1>
         <div class="controls hidden" id="prediction-controls">
           Predictions By:
           <select id="predictionsChoice">
@@ -238,7 +238,11 @@
         if (!genEnd && !genStart) {
           similarGenString = null;
         } else {
-          similarGenString = 'Percentage of all ' + genStart + '-' + genEnd + ' ' + make + ' ' + model + 's Triggered';
+          if (model[model.length - 1].toLowerCase() === 's') {
+            similarGenString = 'Percentage of all ' + genStart + '-' + genEnd + ' ' + make + ' ' + model + 'es Triggered';
+          } else {
+            similarGenString = 'Percentage of all ' + genStart + '-' + genEnd + ' ' + make + ' ' + model + 's Triggered';
+          }
         }
         codesFormatted = codes.map(function(code){
           codeInfoFormatted = {};
@@ -267,7 +271,12 @@
           buildHtmlTable(codesFormatted, '.dtc-list');
           $('#no-DTC-data').hide();
           $('.dtc-list').show();
-          $('.dtc-list').DataTable({"columnDefs": [{"targets": [5,6], "type": "percent-custom", "orderDataType": "percent-custom", "bSortable": true}]});
+          if (similarGenString) {
+            $('.dtc-list').DataTable({"columnDefs": [{"targets": [5,6], "type": "percent-custom", "orderDataType": "percent-custom", "bSortable": true}]});
+          } else {
+            $('.dtc-list').DataTable({"columnDefs": [{"targets": 5, "type": "percent-custom", "orderDataType": "percent-custom", "bSortable": true}]});
+          }
+
         }
 
         renderPredictions();
