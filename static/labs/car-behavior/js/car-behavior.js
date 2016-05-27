@@ -6,14 +6,18 @@
     init: function() {
       var self = this;
 
-      $.ajax({
-        url: 'data/driver-heatmaps.json',
-        success: function(data) {
-          self.heatmap = new App.Heatmap({
-            $el: $('.heatmap-canvas'),
-            data: data
-          });
-        }
+      $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(data) {
+        self.styleHeatmap = new App.Heatmap({
+          $el: $('.driving-style-heatmap-canvas'),
+          mode: 'style',
+          data: data
+        });
+
+        self.efficiencyHeatmap = new App.Heatmap({
+          $el: $('.fuel-efficiency-heatmap-canvas'),
+          mode: 'efficiency',
+          data: data
+        });
       });
     }
   };

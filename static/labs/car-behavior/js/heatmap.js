@@ -3,6 +3,7 @@
   // ----------
   var component = App.Heatmap = function(args) {
     this._data = args.data;
+    this._mode = args.mode;
     this.$canvas = args.$el;
     this._context = this.$canvas[0].getContext('2d');
     this._width = this.$canvas.width();
@@ -32,6 +33,48 @@
       // var velocities = [];
       // var accelerations = [];
 
+      var AIR_FUEL_RATIO = 14.7; //unitless
+      var DENSITY_OF_GAS = 6.175599; //lbs per gallon
+      var GRAMS_PER_POUND = 454; //grams per pound
+      var KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND = 0.000172603;
+
+      var modes = {
+        style: {
+          each: function(datum, info) {
+            info.value += datum.time_spent;
+            maxValue = Math.max(maxValue, info.value);
+          }
+        },
+        efficiency: {
+          each: function(datum, info) {
+            if (info.y < 0) {
+              return;
+            }
+
+            info.totalMaf = (info.totalMaf || 0) + (datum.maf_cnt * datum.avg_maf);
+            info.totalCount = (info.totalCount || 0) + datum.maf_cnt;
+          },
+          after: function() {
+            _.each(grid, function(info, key) {
+              if (info.totalCount) {
+                var averageMaf = info.totalMaf / info.totalCount;
+                var velocity = info.x;
+                var fuelMassPerSec = (averageMaf / 100) / AIR_FUEL_RATIO; //grams
+                var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
+                var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
+                var mpg = (velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
+                info.value = mpg;
+                maxValue = Math.max(maxValue, info.value);
+              } else {
+                info.value = 0;
+              }
+            });
+          }
+        }
+      };
+
+      var modeEach = modes[this._mode].each;
+
       _.each(rawData.heatmap, function(datum) {
         var x = datum.vel_bin;
         var y = datum.accel_bin;
@@ -57,9 +100,12 @@
           grid[key] = info;
         }
 
-        info.value += value;
-        maxValue = Math.max(maxValue, info.value);
+        modeEach(datum, info);
       });
+
+      if (modes[this._mode].after) {
+        modes[this._mode].after();
+      }
 
       this._grid = grid;
       this._minX = minX;
@@ -84,6 +130,10 @@
       var yExtent = this._maxY - this._minY;
       var rowHeight = this._height / (yExtent + 1);
 
+      var yScale = d3.scale.linear()
+        .domain([self._maxY, self._minY])
+        .range([0, this._height - rowHeight]);
+
       var domain = [];
       for (var i = 0; i < 7; i++) {
         domain.push(i * (1 / 6));
@@ -105,9 +155,13 @@
       this._context.fillRect(0, 0, this._width, this._height);
 
       _.each(this._grid, function(info, key) {
+        if (!info.value) {
+          return;
+        }
+
         self._context.fillStyle = colorScale((info.value) / (self._maxValue));
         var x = (info.x - self._minX) * columnWidth;
-        var y = (info.y - self._minY) * rowHeight;
+        var y = yScale(info.y);
         self._context.fillRect(x, y, columnWidth * 2, rowHeight);
       });
 
