@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta property="og:title" content="Driver Behavior and Car Health | Automatic"/>
-    <!-- <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/car_behavior.png"/> -->
+    <!-- <meta property="og:image" content="https://dashboard.automatic.com/assets/img/labs/car-behavior.png"/> -->
     <meta property="og:site_name" content="Automatic"/>
     <meta property="og:description" content="Insights into driver behavior and car health."/>
 
@@ -15,10 +15,10 @@
     <meta name="twitter:site" content="@automatic">
     <meta name="twitter:title" content="Driver Behavior and Car Health | Automatic">
     <meta name="twitter:description" content="Insights into driver behavior and car health.">
-    <!-- <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/car_behavior.png"> -->
+    <!-- <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/car-behavior.png"> -->
 
     <link href="../common/css/style.css" rel="stylesheet" />
-    <link href="css/car_behavior.css" rel="stylesheet" />
+    <link href="css/car-behavior.css" rel="stylesheet" />
   </head>
   <body>
     <a class="btn-logout" href="/#/logout">Log out</a>
@@ -36,6 +36,7 @@
         Choose Your Vehicle:
         <select id="vehicleChoice"></select>
       </div>
+      <canvas class="heatmap-canvas"></canvas>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
     </div>
 
@@ -43,7 +44,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
     <script src="../common/js/main.js"></script>
-    <script src="js/car_behavior.js"></script>
+    <script src="js/car-behavior.js"></script>
+    <script src="js/heatmap.js"></script>
 
     <script>
       var data;
@@ -108,7 +110,7 @@
       }
 
       formatForDemo();
-      showLoginLink('car_behavior');
+      showLoginLink('car-behavior');
 
       var queryParams = getQueryParams(document.location.search);
 
