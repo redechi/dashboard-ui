@@ -14,124 +14,52 @@
       height: this._height
     });
 
-    this._buildData(args.data);
     this.render();
   };
 
   // ----------
   component.prototype = {
     // ----------
-    _buildData: function(rawData) {
-      // console.time('build');
-
-      var grid = {};
-      var minX = 0;
-      var minY = 0;
-      var maxX = 0;
-      var maxY = 0;
-      var maxValue = 0;
-      // var velocities = [];
-      // var accelerations = [];
-
-      var AIR_FUEL_RATIO = 14.7; //unitless
-      var DENSITY_OF_GAS = 6.175599; //lbs per gallon
-      var GRAMS_PER_POUND = 454; //grams per pound
-      var KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND = 0.000172603;
-
-      var modes = {
-        style: {
-          each: function(datum, info) {
-            info.value += datum.time_spent;
-            maxValue = Math.max(maxValue, info.value);
-          }
-        },
-        efficiency: {
-          each: function(datum, info) {
-            if (info.y < 0) {
-              return;
-            }
-
-            info.totalMaf = (info.totalMaf || 0) + (datum.maf_cnt * datum.avg_maf);
-            info.totalCount = (info.totalCount || 0) + datum.maf_cnt;
-          },
-          after: function() {
-            _.each(grid, function(info, key) {
-              if (info.totalCount) {
-                var averageMaf = info.totalMaf / info.totalCount;
-                var velocity = info.x;
-                var fuelMassPerSec = (averageMaf / 100) / AIR_FUEL_RATIO; //grams
-                var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
-                var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
-                var mpg = (velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
-                info.value = mpg;
-                maxValue = Math.max(maxValue, info.value);
-              } else {
-                info.value = 0;
-              }
-            });
-          }
-        }
-      };
-
-      var modeEach = modes[this._mode].each;
-
-      _.each(rawData.heatmap, function(datum) {
-        var x = datum.vel_bin;
-        var y = datum.accel_bin;
-        var value = datum.time_spent;
-
-        // velocities.push(x);
-        // accelerations.push(y);
-
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
-
-        var key = x + 'x' + y;
-        var info = grid[key];
-        if (!info) {
-          info = {
-            x: x,
-            y: y,
-            value: 0
-          };
-
-          grid[key] = info;
-        }
-
-        modeEach(datum, info);
-      });
-
-      if (modes[this._mode].after) {
-        modes[this._mode].after();
-      }
-
-      this._grid = grid;
-      this._minX = minX;
-      this._minY = minY;
-      this._maxX = maxX;
-      this._maxY = maxY;
-      this._maxValue = maxValue;
-      // this._velocities = _.unique(velocities).sort(function(a, b) { return a - b; });
-      // this._accelerations = _.unique(accelerations).sort(function(a, b) { return a - b; });
-
-      // console.timeEnd('build');
-    },
-
-    // ----------
     render: function() {
       var self = this;
 
+
       // console.time('render');
 
-      var xExtent = this._maxX - this._minX;
-      var columnWidth = this._width / (xExtent + 2);
-      var yExtent = this._maxY - this._minY;
-      var rowHeight = this._height / (yExtent + 1);
+      var modes = {
+        style: {
+          valueKey: 'totalTime',
+          yGap: 1
+        },
+        efficiency: {
+          valueKey: 'averageMpg',
+          yGap: 1
+        },
+        horsepower: {
+          valueKey: 'averageHorsepower',
+          yGap: 50
+        },
+        torque: {
+          valueKey: 'averageTorque',
+          yGap: 50
+        }
+      };
+
+      var valueKey = modes[this._mode].valueKey;
+      var xGap = 2;
+      var yGap = modes[this._mode].yGap;
+      // TODO: pull the xGap and yGap out of the data
+
+      var xExtent = (this._data.maxX - this._data.minX) + 1;
+      var xFactor = this._width / xExtent;
+      var columnWidth = this._width / (xExtent / xGap);
+
+      var yExtent = (this._data.maxY - this._data.minY) + 1;
+      var yFactor = this._width / yExtent;
+      var rowHeight = this._height / (yExtent / yGap);
 
       var yScale = d3.scale.linear()
-        .domain([self._maxY, self._minY])
+        .domain([self._data.maxY, self._data.minY])
         .range([0, this._height - rowHeight]);
 
       var domain = [];
@@ -154,15 +82,21 @@
       this._context.fillStyle = '#181818';
       this._context.fillRect(0, 0, this._width, this._height);
 
-      _.each(this._grid, function(info, key) {
-        if (!info.value) {
+      var maxValue = 0;
+      _.each(this._data.grid, function(info, key) {
+        maxValue = Math.max(maxValue, info[valueKey]);
+      });
+
+      _.each(this._data.grid, function(info, key) {
+        var value = info[valueKey];
+        if (!value) {
           return;
         }
 
-        self._context.fillStyle = colorScale((info.value) / (self._maxValue));
-        var x = (info.x - self._minX) * columnWidth;
+        self._context.fillStyle = colorScale(value / maxValue);
+        var x = (info.x - self._data.minX) * xFactor;
         var y = yScale(info.y);
-        self._context.fillRect(x, y, columnWidth * 2, rowHeight);
+        self._context.fillRect(x, y, columnWidth, rowHeight);
       });
 
       // console.timeEnd('render');
