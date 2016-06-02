@@ -1,6 +1,11 @@
-.heatmap-canvas {
+.graphs {
+  width: 600px;
+  margin: 20px auto 100px auto;
+}
+
+.graph-canvas {
   display: block;
   width: 600px;
   height: 450px;
-  margin: 10px auto;
+  margin: 10px 0;
 }

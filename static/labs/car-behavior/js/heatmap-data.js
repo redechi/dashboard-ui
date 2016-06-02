@@ -9,6 +9,8 @@
   component.prototype = {
     // ----------
     _buildData: function(args) {
+      var self = this;
+
       // console.time('build');
 
       var rawData = args.rawData;
@@ -23,16 +25,14 @@
       var xValues = [];
       var yValues = [];
 
-      var AIR_FUEL_RATIO = 14.7; //unitless
-      var DENSITY_OF_GAS = 6.175599; //lbs per gallon
-      var GRAMS_PER_POUND = 454; //grams per pound
-      var KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND = 0.000172603;
       var KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND = 0.277778;
+      var WATTS_PER_HP = 745.7;
+      var HP_TO_FT_LBS_RPM = 5252;
 
       var getHorsepower = function(datum) {
         var accel_meters_per_second2 = datum.accel_bin * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND; // convert k/h/s to m/s2
         var velocity_meters_per_second = datum.vel_bin * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND; // convert kph to m/s
-        var horsepower = rawData.weight_kg * accel_meters_per_second2 * velocity_meters_per_second / 745.7;
+        var horsepower = rawData.weight_kg * accel_meters_per_second2 * velocity_meters_per_second / WATTS_PER_HP;
         return horsepower;
       };
 
@@ -77,7 +77,7 @@
 
         if (datum.accel_bin > 0) {
           var horsepower = getHorsepower(datum);
-          var torque = horsepower * 5252 / datum.rpm_bin;
+          var torque = horsepower * HP_TO_FT_LBS_RPM / datum.rpm_bin;
           info.totalPowerCount++;
           info.totalHorsepower += horsepower;
           info.totalTorque += torque;
@@ -86,12 +86,8 @@
 
       _.each(grid, function(info, key) {
         if (info.totalMafCount && info.totalMaf) {
-          var averageMaf = info.totalMaf / info.totalMafCount;
-          var fuelMassPerSec = (averageMaf / 100) / AIR_FUEL_RATIO; //grams
-          var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
-          var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
-          var mpg = (info.velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
-          info.averageMpg = mpg;
+          info.averageMaf = info.totalMaf / info.totalMafCount;
+          info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
         } else {
           info.averageMpg = 0;
         }
@@ -114,6 +110,20 @@
       this.yValues = _.unique(yValues).sort(function(a, b) { return a - b; });
 
       // console.timeEnd('build');
+    },
+
+    // ----------
+    mafToMpg: function(maf, velocity) {
+      var AIR_FUEL_RATIO = 14.7; //unitless
+      var DENSITY_OF_GAS = 6.175599; //lbs per gallon
+      var GRAMS_PER_POUND = 454; //grams per pound
+      var KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND = 0.000172603;
+
+      var fuelMassPerSec = (maf / 100) / AIR_FUEL_RATIO; //grams
+      var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
+      var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
+      var mpg = (velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
+      return mpg;
     }
   };
 

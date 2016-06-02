@@ -1,28 +1,20 @@
 (function() {
 
+  var superClass = App.CanvasBase.prototype;
+
   // ----------
   var component = App.Heatmap = function(args) {
     this._data = args.data;
     this._mode = args.mode;
-    this.$canvas = args.$el;
-    this._context = this.$canvas[0].getContext('2d');
-    this._width = this.$canvas.width();
-    this._height = this.$canvas.height();
-
-    this.$canvas.prop({
-      width: this._width,
-      height: this._height
-    });
-
+    this._initCanvas(args.$el);
     this.render();
   };
 
   // ----------
-  component.prototype = {
+  component.prototype = _.extend({}, superClass, {
     // ----------
     render: function() {
       var self = this;
-
 
       // console.time('render');
 
@@ -101,6 +93,6 @@
 
       // console.timeEnd('render');
     }
-  };
+  });
 
 })();

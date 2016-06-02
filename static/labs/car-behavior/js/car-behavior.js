@@ -7,6 +7,7 @@
       var self = this;
 
       $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(rawData) {
+        // data
         var accelData = new App.HeatmapData({
           rawData: rawData,
           x: 'vel_bin',
@@ -19,14 +20,15 @@
           y: 'rpm_bin'
         });
 
+        // heatmaps
         self.styleHeatmap = new App.Heatmap({
-          $el: $('.driving-style-heatmap-canvas'),
+          $el: $('.style-heatmap-canvas'),
           mode: 'style',
           data: accelData
         });
 
         self.efficiencyHeatmap = new App.Heatmap({
-          $el: $('.fuel-efficiency-heatmap-canvas'),
+          $el: $('.efficiency-heatmap-canvas'),
           mode: 'efficiency',
           data: accelData
         });
@@ -42,6 +44,32 @@
           mode: 'torque',
           data: rpmData
         });
+
+        // 2d graphs
+        self.styleGraph = new App.StyleGraph({
+          $el: $('.style-2d-graph-canvas'),
+          data: accelData
+        });
+
+        self.efficiencyGraph = new App.EfficiencyGraph({
+          $el: $('.efficiency-2d-graph-canvas'),
+          data: accelData
+        });
+
+        self.powerGraph = new App.PowerGraph({
+          $el: $('.power-2d-graph-canvas'),
+          data: rpmData
+        });
+
+        // insights
+        $('.persona').text(rawData.persona);
+        $('.optimal-efficiency').text(self.efficiencyGraph.optimalSpeed);
+
+
+// Algorithm to calculate Optimal RPM for Horsepower / Torque
+// Using the 2D HP/Torque vs RPM graph, starting from 0-500 rpm in intervals of 250 (250-750, 500-1000, etc), find the range with the maximum average horsepower/torque.
+// *we’ll also tell users to check out the 3D graph to determine the optimal speed + gear if they want to manually figure that out from the picture
+
       });
     }
   };
