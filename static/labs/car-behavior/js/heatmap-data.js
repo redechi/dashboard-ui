@@ -89,6 +89,7 @@
           info.averageMaf = info.totalMaf / info.totalMafCount;
           info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
         } else {
+          info.averageMaf = 0;
           info.averageMpg = 0;
         }
 

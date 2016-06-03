@@ -36,21 +36,29 @@
         Choose Your Vehicle:
         <select id="vehicleChoice"></select>
       </div>
+      <div class="error">Unable to load data for this vehicle.</div>
       <div class="graphs">
-        <h2>Driving Style</h2>
-        <p>Your persona is <span class="persona"></span>.</p>
-        <canvas class="style-heatmap-canvas graph-canvas"></canvas>
-        <canvas class="style-2d-graph-canvas graph-canvas"></canvas>
-        <h2>Fuel Efficiency</h2>
-        <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span>.</p>
-        <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
-        <canvas class="efficiency-2d-graph-canvas graph-canvas"></canvas>
-        <h2>Horsepower</h2>
-        <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
-        <h2>Torque</h2>
-        <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
-        <h2>Power</h2>
-        <canvas class="power-2d-graph-canvas graph-canvas"></canvas>
+        <div class="graph-section">
+          <h2>Driving Style</h2>
+          <p>Your persona is <span class="persona"></span>.</p>
+          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
+          <canvas class="style-2d-graph-canvas graph-canvas"></canvas>
+        </div>
+        <div class="graph-section">
+          <h2>Fuel Efficiency</h2>
+          <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span>.</p>
+          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
+          <canvas class="efficiency-2d-graph-canvas graph-canvas"></canvas>
+        </div>
+        <div class="graph-section">
+          <h2>Horsepower</h2>
+          <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
+          <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
+          <h2>Torque</h2>
+          <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
+          <h2>Power</h2>
+          <canvas class="power-2d-graph-canvas graph-canvas"></canvas>
+        </div>
       </div>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
     </div>
@@ -67,92 +75,6 @@
     <script src="js/style-graph.js"></script>
     <script src="js/efficiency-graph.js"></script>
     <script src="js/power-graph.js"></script>
-
-    <script>
-      var data;
-
-      $('#vehicleChoice').on('change', getVehicleData);
-
-      function renderData() {
-        $('#results').fadeIn();
-        $('#noData').hide();
-      }
-
-      function clearData() {
-      }
-
-      function getVehicleData() {
-        var accessToken = getAccessToken();
-
-        var isStaging = window.location.search.indexOf('staging') !== -1;
-        var apiUrl = isStaging ? 'https://moxie.automatic.com/vehicle_heatmap/' : 'https://moxie.automatic.com/vehicle_heatmap/';
-
-        showLoading();
-
-        $.ajax({
-          url: apiUrl,
-          data: {
-            vehicle_id: $('#vehicleChoice').val()
-          },
-          headers: {
-            Authorization: 'bearer ' + accessToken
-          }
-        })
-        .done(function(result) {
-          data = result;
-          clearData();
-          renderData();
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-          console.error(errorThrown);
-
-          clearData();
-          hideLoading();
-          $('#results').hide();
-          $('#noData').show();
-        });
-      }
-
-      function getUserData() {
-        showLoading();
-
-        fetchVehicles(function(results) {
-          if (results.length === 0) {
-            // error occurred or user has no vehicles
-          } else {
-            _.sortBy(results, 'make').forEach(function(vehicle) {
-              var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-              $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-            });
-          }
-
-          getVehicleData();
-        });
-      }
-
-      formatForDemo();
-      showLoginLink('car-behavior');
-
-      var queryParams = getQueryParams(document.location.search);
-
-      if (queryParams.demo) {
-        clearData();
-        renderData();
-      } else {
-        showLoading();
-        if (queryParams.share) {
-          getShareData(queryParams.share, function(e, result) {
-            if (e) {
-              return alert(e);
-            }
-            data = result;
-            renderData();
-          });
-        } else {
-          getUserData();
-        }
-      }
-    </script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -20,27 +20,22 @@
 
       var modes = {
         style: {
-          valueKey: 'totalTime',
-          yGap: 1
+          valueKey: 'totalTime'
         },
         efficiency: {
-          valueKey: 'averageMpg',
-          yGap: 1
+          valueKey: 'averageMpg'
         },
         horsepower: {
-          valueKey: 'averageHorsepower',
-          yGap: 50
+          valueKey: 'averageHorsepower'
         },
         torque: {
-          valueKey: 'averageTorque',
-          yGap: 50
+          valueKey: 'averageTorque'
         }
       };
 
       var valueKey = modes[this._mode].valueKey;
-      var xGap = 2;
-      var yGap = modes[this._mode].yGap;
-      // TODO: pull the xGap and yGap out of the data
+      var xGap = this._getCommonGap(this._data.xValues);
+      var yGap = this._getCommonGap(this._data.yValues);
 
       var xExtent = (this._data.maxX - this._data.minX) + 1;
       var xFactor = this._width / xExtent;
@@ -92,6 +87,25 @@
       });
 
       // console.timeEnd('render');
+    },
+
+    // ----------
+    _getCommonGap: function(values) {
+      var gaps = [];
+      var i;
+      for (i = 0; i < values.length - 1; i++) {
+        gaps.push(values[i + 1] - values[i]);
+      }
+
+      gaps = _.groupBy(gaps, function(v, i) {
+        return v;
+      });
+
+      var gap = _.max(gaps, function(v, i) {
+        return v.length;
+      })[0];
+
+      return gap;
     }
   });
 

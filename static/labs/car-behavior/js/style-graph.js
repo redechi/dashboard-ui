@@ -4,6 +4,7 @@
 
   // ----------
   var component = App.StyleGraph = function(args) {
+    this.name = 'style';
     this._initCanvas(args.$el);
     this._buildData(args.data);
     this._updateData();

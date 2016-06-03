@@ -10,15 +10,16 @@
   component.prototype = _.extend({}, superClass, {
     // ----------
     _updateData: function() {
+      var self = this;
       var minX = Infinity;
       var maxX = 0;
       var minValue = Infinity;
       var maxValue = 0;
 
-      _.each(this._sets, function(set) {
+      _.each(this._sets, function(set, setIndex) {
         _.each(set.data, function(datum) {
           if (_.isNaN(datum.x) || _.isNaN(datum.value)) {
-            console.warn('NaN data:', datum);
+            console.warn('NaN data for ' + self.name + ', set ' + setIndex + ':', datum);
             return;
           }
 

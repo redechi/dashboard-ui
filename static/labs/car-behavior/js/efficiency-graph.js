@@ -4,6 +4,7 @@
 
   // ----------
   var component = App.EfficiencyGraph = function(args) {
+    this.name = 'efficiency';
     this._initCanvas(args.$el);
     this._buildData(args.data);
     this._updateData();
@@ -19,7 +20,7 @@
       _.each(heatmapData.grid, function(gridInfo) {
         var velocity = gridInfo.x;
         var accel = gridInfo.y;
-        if (accel < 0 || accel > 2) {
+        if (accel < 0 || accel > 2 || !gridInfo.averageMaf || !gridInfo.totalMafCount) {
           return;
         }
 

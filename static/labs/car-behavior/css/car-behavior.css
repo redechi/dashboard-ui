@@ -1,11 +1,28 @@
+.wrapper {
+  margin: 0 10px;
+}
+
+.error {
+  display: none;
+  margin-top: 1em;
+  color: #800;
+}
+
 .graphs {
-  width: 600px;
-  margin: 20px auto 100px auto;
+  display: none;
+  text-align: center;
 }
 
 .graph-canvas {
   display: block;
-  width: 600px;
-  height: 450px;
+  width: 400px;
+  height: 300px;
   margin: 10px 0;
+}
+
+.graph-section {
+  display: inline-block;
+  width: 400px;
+  margin: 20px 30px;
+  vertical-align: top;
 }
