@@ -3,10 +3,37 @@
   // ----------
   var component = App.HeatmapData = function(args) {
     this._buildData(args);
+    this._fillInData();
   };
 
   // ----------
   component.prototype = {
+    // ----------
+    key: function(x, y) {
+      return x + 'x' + y;
+    },
+
+    // ----------
+    _blankInfo: function(x, y) {
+      var info = {
+        x: x,
+        y: y,
+        velocity: 0,
+        totalMafCount: 0,
+        totalPowerCount: 0,
+        totalTime: 0,
+        totalMaf: 0,
+        totalHorsepower: 0,
+        totalTorque: 0,
+        averageMaf: 0,
+        averageMpg: 0,
+        averageHorsepower: 0,
+        averageTorque: 0
+      };
+
+      return info;
+    },
+
     // ----------
     _buildData: function(args) {
       var self = this;
@@ -48,22 +75,14 @@
         xValues.push(x);
         yValues.push(y);
 
-        var key = x + 'x' + y;
+        var key = self.key(x, y);
         var info = grid[key];
         if (!info) {
-          info = {
-            x: x,
-            y: y,
-            // we'll need to do something different for velocity if we ever
-            // don't use vel_bin for either xKey or yKey
-            velocity: datum.vel_bin,
-            totalMafCount: 0,
-            totalPowerCount: 0,
-            totalTime: 0,
-            totalMaf: 0,
-            totalHorsepower: 0,
-            totalTorque: 0
-          };
+          info = self._blankInfo(x, y);
+
+          // we'll need to do something different for velocity if we ever
+          // don't use vel_bin for either xKey or yKey
+          info.velocity = datum.vel_bin;
 
           grid[key] = info;
         }
@@ -88,17 +107,11 @@
         if (info.totalMafCount && info.totalMaf) {
           info.averageMaf = info.totalMaf / info.totalMafCount;
           info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
-        } else {
-          info.averageMaf = 0;
-          info.averageMpg = 0;
         }
 
         if (info.totalPowerCount) {
           info.averageHorsepower = info.totalHorsepower / info.totalPowerCount;
           info.averageTorque = info.totalTorque / info.totalPowerCount;
-        } else {
-          info.averageHorsepower = 0;
-          info.averageTorque = 0;
         }
       });
 
@@ -111,6 +124,25 @@
       this.yValues = _.unique(yValues).sort(function(a, b) { return a - b; });
 
       // console.timeEnd('build');
+    },
+
+    // ----------
+    _fillInData: function() {
+      var self = this;
+
+      // console.time('fillIn');
+
+      _.each(this.yValues, function(y) {
+        _.each(self.xValues, function(x) {
+          var key = self.key(x, y);
+          var info = self.grid[key];
+          if (!info) {
+            self.grid[key] = self._blankInfo(x, y);
+          }
+        });
+      });
+
+      // console.timeEnd('fillIn');
     },
 
     // ----------

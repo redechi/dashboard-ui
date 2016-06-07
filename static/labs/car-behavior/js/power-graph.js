@@ -5,7 +5,7 @@
   // ----------
   var component = App.PowerGraph = function(args) {
     this.name = 'power';
-    this._initCanvas(args.$el);
+    this._initSvg(args.$el);
     this._buildData(args.data);
     this._updateData();
     this.render();
@@ -81,12 +81,10 @@
         }
       ];
 
-      this.optimalRpm = '???';
-
-// TODO:
-// Algorithm to calculate Optimal RPM for Horsepower / Torque
-// Using the 2D HP/Torque vs RPM graph, starting from 0-500 rpm in intervals of 250 (250-750, 500-1000, etc), find the range with the maximum average horsepower/torque.
-// *we’ll also tell users to check out the 3D graph to determine the optimal speed + gear if they want to manually figure that out from the picture
+      this.optimalRpm = this._maxBucketValue({
+        set: this._sets[0],
+        interval: 255
+      });
     }
   });
 

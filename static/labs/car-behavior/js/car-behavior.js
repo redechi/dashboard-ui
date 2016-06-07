@@ -83,17 +83,17 @@
 
       // 2d graphs
       this.styleGraph = new App.StyleGraph({
-        $el: $('.style-2d-graph-canvas'),
+        $el: $('.style-2d-graph-svg'),
         data: accelData
       });
 
       this.efficiencyGraph = new App.EfficiencyGraph({
-        $el: $('.efficiency-2d-graph-canvas'),
+        $el: $('.efficiency-2d-graph-svg'),
         data: accelData
       });
 
       this.powerGraph = new App.PowerGraph({
-        $el: $('.power-2d-graph-canvas'),
+        $el: $('.power-2d-graph-svg'),
         data: rpmData
       });
 

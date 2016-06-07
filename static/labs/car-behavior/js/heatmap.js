@@ -4,9 +4,26 @@
 
   // ----------
   var component = App.Heatmap = function(args) {
-    this._data = args.data;
+    var modes = {
+      style: {
+        valueKey: 'totalTime'
+      },
+      efficiency: {
+        valueKey: 'averageMpg'
+      },
+      horsepower: {
+        valueKey: 'averageHorsepower'
+      },
+      torque: {
+        valueKey: 'averageTorque'
+      }
+    };
+
     this._mode = args.mode;
+    this._valueKey = modes[this._mode].valueKey;
+    this._data = args.data;
     this._initCanvas(args.$el);
+    this._smoothData();
     this.render();
   };
 
@@ -18,22 +35,6 @@
 
       // console.time('render');
 
-      var modes = {
-        style: {
-          valueKey: 'totalTime'
-        },
-        efficiency: {
-          valueKey: 'averageMpg'
-        },
-        horsepower: {
-          valueKey: 'averageHorsepower'
-        },
-        torque: {
-          valueKey: 'averageTorque'
-        }
-      };
-
-      var valueKey = modes[this._mode].valueKey;
       var xGap = this._getCommonGap(this._data.xValues);
       var yGap = this._getCommonGap(this._data.yValues);
 
@@ -70,12 +71,12 @@
       this._context.fillRect(0, 0, this._width, this._height);
 
       var maxValue = 0;
-      _.each(this._data.grid, function(info, key) {
-        maxValue = Math.max(maxValue, info[valueKey]);
+      _.each(this._smoothedGrid, function(info, key) {
+        maxValue = Math.max(maxValue, info[self._valueKey]);
       });
 
-      _.each(this._data.grid, function(info, key) {
-        var value = info[valueKey];
+      _.each(this._smoothedGrid, function(info, key) {
+        var value = info[self._valueKey];
         if (!value) {
           return;
         }
@@ -87,6 +88,95 @@
       });
 
       // console.timeEnd('render');
+    },
+
+    // ----------
+    _smoothData: function() {
+      var self = this;
+
+      // console.time('smooth');
+
+      var kernel = [
+        {
+          x: -1,
+          y: -1,
+          weight: 0.2
+        },
+        {
+          x: 0,
+          y: -1,
+          weight: 0.33
+        },
+        {
+          x: 1,
+          y: -1,
+          weight: 0.2
+        },
+        {
+          x: -1,
+          y: 0,
+          weight: 0.33
+        },
+        {
+          x: 0,
+          y: 0,
+          weight: 1
+        },
+        {
+          x: 1,
+          y: 0,
+          weight: 0.33
+        },
+        {
+          x: -1,
+          y: 1,
+          weight: 0.2
+        },
+        {
+          x: 0,
+          y: 1,
+          weight: 0.33
+        },
+        {
+          x: 1,
+          y: 1,
+          weight: 0.2
+        },
+      ];
+
+      var oldGrid = this._data.grid;
+      var newGrid = {};
+
+      _.each(this._data.yValues, function(y, yIndex) {
+        _.each(self._data.xValues, function(x, xIndex) {
+          var key = self._data.key(x, y);
+          var oldInfo = oldGrid[key];
+          var newInfo = _.clone(oldInfo);
+          newGrid[key] = newInfo;
+
+          var total = 0;
+          var weight = 0;
+
+          _.each(kernel, function(k) {
+            var neighborX = self._data.xValues[xIndex + k.x];
+            var neighborY = self._data.yValues[yIndex + k.y];
+            if (neighborX !== undefined && neighborY !== undefined) {
+              var neighborKey = self._data.key(neighborX, neighborY);
+              var neighborInfo = oldGrid[neighborKey];
+              if (neighborInfo) {
+                total += neighborInfo[self._valueKey] * k.weight;
+                weight += k.weight;
+              }
+            }
+          });
+
+          newInfo[self._valueKey] = (weight ? total / weight : 0);
+        });
+      });
+
+      this._smoothedGrid = newGrid;
+
+      // console.timeEnd('smooth');
     },
 
     // ----------

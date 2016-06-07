@@ -1,13 +1,19 @@
 (function() {
 
-  var superClass = App.CanvasBase.prototype;
-
   // ----------
   var component = App.TwoDGraph = function() {
   };
 
   // ----------
-  component.prototype = _.extend({}, superClass, {
+  component.prototype = {
+    // ----------
+    _initSvg: function($svg) {
+      this.$svg = $svg;
+      this._width = this.$svg.width();
+      this._height = this.$svg.height();
+      this._svg = d3.select(this.$svg[0]);
+    },
+
     // ----------
     _updateData: function() {
       var self = this;
@@ -45,22 +51,61 @@
     },
 
     // ----------
+    _maxBucketValue: function(args) {
+      var data = _.map(args.set.data, function(info) {
+        info = _.clone(info);
+        info.x = Math.floor(info.x / args.interval) * args.interval;
+        return info;
+      });
+
+      data = _.groupBy(data, function(v, i) {
+        return v.x;
+      });
+
+      data = _.map(data, function(infos, x) {
+        var output = {
+          x: x,
+          infos: infos
+        };
+
+        var total = 0;
+        var count = 0;
+        _.each(infos, function(info) {
+          total += info.total;
+          count += info.count;
+        });
+
+        output.total = total;
+        output.count = count;
+        output.average = (count ? total / count : 0);
+
+        if (args.updateAverage) {
+          args.updateAverage(output);
+        }
+
+        return output;
+      });
+
+      var max = _.max(data, function(v) {
+        return v.average;
+      });
+
+      return max.x;
+    },
+
+    // ----------
     _renderSet: function(set) {
       var self = this;
 
-      this._context.strokeStyle = set.color;
-      this._context.beginPath();
-      _.each(set.data, function(v, i) {
-        var x = self._xScale(v.x);
-        var y = self._yScale(v.value);
-        if (i === 0) {
-          self._context.moveTo(x, y);
-        } else {
-          self._context.lineTo(x, y);
-        }
-      });
+      var line = d3.svg.line()
+        .interpolate('basis')
+        .x(function(d) { return self._xScale(d.x); })
+        .y(function(d) { return self._yScale(d.value); });
 
-      this._context.stroke();
+      this._svg.append("path")
+        .attr('stroke', set.color)
+        .attr('fill', 'none')
+        .attr("d", line(set.data));
     },
 
     // ----------
@@ -69,8 +114,14 @@
 
       // console.time('render');
 
-      this._context.fillStyle = '#ddd';
-      this._context.fillRect(0, this._yScale(0), this._width, 1);
+      var y = this._yScale(0);
+      this._svg.append('line')
+        .attr('x1', 0)
+        .attr('y1', y)
+        .attr('x2', this._width)
+        .attr('y2', y)
+        .attr('stroke-width', 1)
+        .style('stroke', '#ddd');
 
       _.each(this._sets, function(set) {
         self._renderSet(set);
@@ -78,6 +129,6 @@
 
       // console.timeEnd('render');
     }
-  });
+  };
 
 })();

@@ -5,7 +5,7 @@
   // ----------
   var component = App.StyleGraph = function(args) {
     this.name = 'style';
-    this._initCanvas(args.$el);
+    this._initSvg(args.$el);
     this._buildData(args.data);
     this._updateData();
     this.render();
@@ -22,7 +22,7 @@
         var velocity = gridInfo.x;
         var accel = gridInfo.y;
         var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
-        if (!set) {
+        if (!set || !gridInfo.totalTime) {
           return;
         }
 

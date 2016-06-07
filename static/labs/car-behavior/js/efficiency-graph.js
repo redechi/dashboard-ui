@@ -5,7 +5,7 @@
   // ----------
   var component = App.EfficiencyGraph = function(args) {
     this.name = 'efficiency';
-    this._initCanvas(args.$el);
+    this._initSvg(args.$el);
     this._buildData(args.data);
     this._updateData();
     this.render();
@@ -54,16 +54,17 @@
       this._sets = [
         {
           data: finish(set),
-          color: '#00'
+          color: '#000'
         }
       ];
 
-// TODO:
-// Algorithm to calculate Optimal Speed for Fuel Efficiency
-// Using the 2D MPG vs velocity graph, starting from 0-10mph in intervals of 5 (5-15, 10-15, 15-20, etc.), find the range with the maximum average MPG.
-// *we’ll also tell users to check out the 3D graph to see how accelerating effects their MPG at various speeds
-
-      this.optimalSpeed = '???';
+      this.optimalSpeed = this._maxBucketValue({
+        set: this._sets[0],
+        interval: 5,
+        updateAverage: function(bucket) {
+          bucket.average = heatmapData.mafToMpg(bucket.average, bucket.x);
+        }
+      });
     }
   });
 
