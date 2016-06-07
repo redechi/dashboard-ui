@@ -18,6 +18,12 @@ const labs = [
     description: 'Can your car battery hold a charge?'
   },
   {
+    name: 'commute-analyzer',
+    image: '/_assets/images/labs/commute-analyzer.png',
+    title: 'Commute Analyzer',
+    description: 'Break down your commute duration by direction, day of week and departure time.'
+  },
+  {
     name: 'year-in-review',
     image: '/_assets/images/labs/year-in-review.png',
     title: '2015 Year In Review',
@@ -52,12 +58,6 @@ const labs = [
     image: '/_assets/images/labs/carbon.png',
     title: 'Carbon Calculator',
     description: 'Estimate your carbon footprint, Automatically.'
-  },
-  {
-    name: 'commute-analyzer',
-    image: '/_assets/images/labs/commute-analyzer.png',
-    title: 'Commute Analyzer',
-    description: 'Break down your commute duration by direction, day of week and departure time.'
   },
   {
     name: 'receipt',
