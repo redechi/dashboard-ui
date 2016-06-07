@@ -109,7 +109,7 @@ class Header extends React.Component {
             <Link to="/">Log In</Link>
           </li>
           <li className="menu-button">
-            <a href="https://store.automatic.com" className="btn btn-white">Buy Now $99.95</a>
+            <a href="https://automatic.com/adapter" className="btn btn-white">Buy Now</a>
           </li>
         </ul>
       );
