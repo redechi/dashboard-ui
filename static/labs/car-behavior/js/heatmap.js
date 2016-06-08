@@ -35,16 +35,13 @@
 
       // console.time('render');
 
-      var xGap = this._getCommonGap(this._data.xValues);
-      var yGap = this._getCommonGap(this._data.yValues);
-
       var xExtent = (this._data.maxX - this._data.minX) + 1;
       var xFactor = this._width / xExtent;
-      var columnWidth = this._width / (xExtent / xGap);
+      var columnWidth = this._width / (xExtent / this._data.xInterval);
 
       var yExtent = (this._data.maxY - this._data.minY) + 1;
       var yFactor = this._width / yExtent;
-      var rowHeight = this._height / (yExtent / yGap);
+      var rowHeight = this._height / (yExtent / this._data.yInterval);
 
       var yScale = d3.scale.linear()
         .domain([self._data.maxY, self._data.minY])
@@ -147,55 +144,39 @@
       var oldGrid = this._data.grid;
       var newGrid = {};
 
-      _.each(this._data.yValues, function(y, yIndex) {
-        _.each(self._data.xValues, function(x, xIndex) {
-          var key = self._data.key(x, y);
-          var oldInfo = oldGrid[key];
-          var newInfo = _.clone(oldInfo);
-          newGrid[key] = newInfo;
+      var smooth = function(x, y) {
+        var key = self._data.key(x, y);
+        var oldInfo = oldGrid[key];
+        var newInfo = _.clone(oldInfo);
+        newGrid[key] = newInfo;
 
-          var total = 0;
-          var weight = 0;
+        var total = 0;
+        var weight = 0;
 
-          _.each(kernel, function(k) {
-            var neighborX = self._data.xValues[xIndex + k.x];
-            var neighborY = self._data.yValues[yIndex + k.y];
-            if (neighborX !== undefined && neighborY !== undefined) {
-              var neighborKey = self._data.key(neighborX, neighborY);
-              var neighborInfo = oldGrid[neighborKey];
-              if (neighborInfo) {
-                total += neighborInfo[self._valueKey] * k.weight;
-                weight += k.weight;
-              }
-            }
-          });
-
-          newInfo[self._valueKey] = (weight ? total / weight : 0);
+        _.each(kernel, function(k) {
+          var neighborX = x + (k.x * self._data.xInterval);
+          var neighborY = y + (k.y * self._data.yInterval);
+          var neighborKey = self._data.key(neighborX, neighborY);
+          var neighborInfo = oldGrid[neighborKey];
+          if (neighborInfo) {
+            total += neighborInfo[self._valueKey] * k.weight;
+            weight += k.weight;
+          }
         });
-      });
+
+        newInfo[self._valueKey] = (weight ? total / weight : 0);
+      };
+
+      var x, y;
+      for (y = this._data.minY; y <= this._data.maxY; y += this._data.yInterval) {
+        for (x = this._data.minX; x <= this._data.maxX; x += this._data.xInterval) {
+          smooth(x, y);
+        }
+      }
 
       this._smoothedGrid = newGrid;
 
       // console.timeEnd('smooth');
-    },
-
-    // ----------
-    _getCommonGap: function(values) {
-      var gaps = [];
-      var i;
-      for (i = 0; i < values.length - 1; i++) {
-        gaps.push(values[i + 1] - values[i]);
-      }
-
-      gaps = _.groupBy(gaps, function(v, i) {
-        return v;
-      });
-
-      var gap = _.max(gaps, function(v, i) {
-        return v.length;
-      })[0];
-
-      return gap;
     }
   });
 

@@ -58,13 +58,20 @@
         }
       ];
 
-      this.optimalSpeed = this._maxBucketValue({
+      // "insight"
+      var interval = App.kilometersPerMile * 5;
+
+      var kph = this._maxBucketValue({
         set: this._sets[0],
-        interval: 5,
+        interval: interval,
         updateAverage: function(bucket) {
           bucket.average = heatmapData.mafToMpg(bucket.average, bucket.x);
         }
       });
+
+      var startMph = Math.round(kph * App.milesPerKilometer);
+      var endMph = Math.round((kph + interval) * App.milesPerKilometer);
+      this.optimalSpeed = startMph + '-' + endMph;
     }
   });
 

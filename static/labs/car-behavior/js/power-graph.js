@@ -81,10 +81,15 @@
         }
       ];
 
-      this.optimalRpm = this._maxBucketValue({
+      // "insight"
+      var interval = 250;
+
+      var startRpm = this._maxBucketValue({
         set: this._sets[0],
-        interval: 255
+        interval: interval
       });
+
+      this.optimalRpm = startRpm + '-' + (startRpm + interval);
     }
   });
 

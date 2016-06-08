@@ -3,6 +3,8 @@
   // ----------
   window.App = {
     data: null,
+    milesPerKilometer: 0.621371,
+    kilometersPerMile: 1.60934,
 
     // ----------
     init: function() {
@@ -110,32 +112,79 @@
     // ----------
     getVehicleData: function() {
       var self = this;
-      var accessToken = getAccessToken();
-
-      var isStaging = window.location.search.indexOf('staging') !== -1; // in case we need to know this in the future
-      var apiUrl = 'https://moxie.automatic.com/vehicle-heatmap/';
 
       showLoading();
 
-      $.ajax({
-        url: apiUrl,
+      this.request({
+        path: 'vehicle-heatmap/',
         data: {
           vehicle_id: $('#vehicleChoice').val()
         },
+        success: function(result) {
+          self.data = result;
+          self.renderData();
+          self.getGroupData(result);
+        },
+        error: function(errorThrown) {
+          hideLoading();
+          $('.graphs').hide();
+          $('.error').show();
+        }
+      });
+    },
+
+    // ----------
+    getVehiclePicker: function() {
+      // TODO: use this data for a vehicle picker
+      this.request({
+        path: 'vehicle-picker/?option=price'
+      });
+    },
+
+    // ----------
+    getGroupData: function(vehicle) {
+      this.request({
+        path: 'group-heatmap/',
+        method: 'POST',
+        data: {
+          options: {
+            make: vehicle.make,
+            model: vehicle.model
+          }
+        },
+        success: function(result) {
+          // TODO: display heatmaps
+        },
+        error: function(errorThrown) {
+          // TODO: show error
+        }
+      });
+    },
+
+    // ----------
+    request: function(args) {
+      var accessToken = getAccessToken();
+      var isStaging = window.location.search.indexOf('staging') !== -1; // in case we need to know this in the future
+      var apiUrl = 'https://moxie.automatic.com/' + args.path;
+
+      $.ajax({
+        url: apiUrl,
+        method: args.method,
+        data: args.data,
         headers: {
           Authorization: 'bearer ' + accessToken
         }
       })
       .done(function(result) {
-        self.data = result;
-        self.renderData();
+        if (args.success) {
+          args.success(result);
+        }
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         console.error(errorThrown);
-
-        hideLoading();
-        $('.graphs').hide();
-        $('.error').show();
+        if (args.error) {
+          args.error(errorThrown);
+        }
       });
     },
 
@@ -157,6 +206,7 @@
           });
 
           self.getVehicleData();
+          // self.getVehiclePicker();
         }
       });
     },

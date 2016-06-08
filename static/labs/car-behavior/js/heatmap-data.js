@@ -120,10 +120,46 @@
       this.minY = minY;
       this.maxX = maxX;
       this.maxY = maxY;
-      this.xValues = _.unique(xValues).sort(function(a, b) { return a - b; });
-      this.yValues = _.unique(yValues).sort(function(a, b) { return a - b; });
+
+      xValues = _.unique(xValues).sort(function(a, b) { return a - b; });
+      yValues = _.unique(yValues).sort(function(a, b) { return a - b; });
+      this.xInterval = this._getCommonInterval(xValues);
+      this.yInterval = this._getCommonInterval(yValues);
+
+      _.each(xValues, function(x) {
+        var x1 = x / self.xInterval;
+        if (x1 !== Math.floor(x1)) {
+          console.warn('x does not fit interval', x);
+        }
+      });
+
+      _.each(yValues, function(y) {
+        var y1 = y / self.yInterval;
+        if (y1 !== Math.floor(y1)) {
+          console.warn('y does not fit interval', y);
+        }
+      });
 
       // console.timeEnd('build');
+    },
+
+    // ----------
+    _getCommonInterval: function(values) {
+      var gaps = [];
+      var i;
+      for (i = 0; i < values.length - 1; i++) {
+        gaps.push(values[i + 1] - values[i]);
+      }
+
+      gaps = _.groupBy(gaps, function(v, i) {
+        return v;
+      });
+
+      var interval = _.max(gaps, function(v, i) {
+        return v.length;
+      })[0];
+
+      return interval;
     },
 
     // ----------
@@ -132,15 +168,16 @@
 
       // console.time('fillIn');
 
-      _.each(this.yValues, function(y) {
-        _.each(self.xValues, function(x) {
-          var key = self.key(x, y);
-          var info = self.grid[key];
+      var x, y, key, info;
+      for (y = this.minY; y <= this.maxY; y += this.yInterval) {
+        for (x = this.minX; x <= this.maxX; x += this.xInterval) {
+          key = this.key(x, y);
+          info = this.grid[key];
           if (!info) {
-            self.grid[key] = self._blankInfo(x, y);
+            this.grid[key] = this._blankInfo(x, y);
           }
-        });
-      });
+        }
+      }
 
       // console.timeEnd('fillIn');
     },

@@ -64,7 +64,7 @@
 
       data = _.map(data, function(infos, x) {
         var output = {
-          x: x,
+          x: parseFloat(x),
           infos: infos
         };
 
@@ -113,6 +113,8 @@
       var self = this;
 
       // console.time('render');
+
+      this._svg.selectAll('*').remove();
 
       var y = this._yScale(0);
       this._svg.append('line')
