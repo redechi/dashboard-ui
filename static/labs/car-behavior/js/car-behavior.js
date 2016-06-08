@@ -15,6 +15,17 @@
         self.getVehicleData();
       });
 
+      this.$groupSelect = $('.group-select')
+        .on('change', function() {
+          if (self.$groupSelect.val() === 'other') {
+            self.vehiclePickerModal.show({
+              onComplete: function(results) {
+                self.getGroupData(results);
+              }
+            });
+          }
+        });
+
       formatForDemo();
       showLoginLink('car-behavior');
 
@@ -26,6 +37,7 @@
         showLoading();
         if (queryParams.share) {
           getShareData(queryParams.share, function(e, result) {
+            hideLoading();
             if (e) {
               return alert(e);
             }
@@ -40,69 +52,30 @@
 
     // ----------
     renderData: function() {
-      $('.graphs').fadeIn();
-      $('.error').hide();
+      if (this.personResultsView) {
+        this.personResultsView.destroy();
+      }
 
-      hideLoading();
+      var vehicle = this.currentVehicle();
 
-      // data
-      var accelData = new App.HeatmapData({
-        rawData: this.data,
-        x: 'vel_bin',
-        y: 'accel_bin'
+      this.personResultsView = new App.ResultsView({
+        name: 'your ' + vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
+        $container: $('.results'),
+        data: this.data
       });
+    },
 
-      var rpmData = new App.HeatmapData({
-        rawData: this.data,
-        x: 'vel_bin',
-        y: 'rpm_bin'
+    // ----------
+    renderGroupData: function(data) {
+      if (this.groupResultsView) {
+        this.groupResultsView.destroy();
+      }
+
+      this.groupResultsView = new App.ResultsView({
+        name: 'All ' + this.groupName,
+        $container: $('.results'),
+        data: data
       });
-
-      // heatmaps
-      this.styleHeatmap = new App.Heatmap({
-        $el: $('.style-heatmap-canvas'),
-        mode: 'style',
-        data: accelData
-      });
-
-      this.efficiencyHeatmap = new App.Heatmap({
-        $el: $('.efficiency-heatmap-canvas'),
-        mode: 'efficiency',
-        data: accelData
-      });
-
-      this.horsepowerHeatmap = new App.Heatmap({
-        $el: $('.horsepower-heatmap-canvas'),
-        mode: 'horsepower',
-        data: rpmData
-      });
-
-      this.torqueHeatmap = new App.Heatmap({
-        $el: $('.torque-heatmap-canvas'),
-        mode: 'torque',
-        data: rpmData
-      });
-
-      // 2d graphs
-      this.styleGraph = new App.StyleGraph({
-        $el: $('.style-2d-graph-svg'),
-        data: accelData
-      });
-
-      this.efficiencyGraph = new App.EfficiencyGraph({
-        $el: $('.efficiency-2d-graph-svg'),
-        data: accelData
-      });
-
-      this.powerGraph = new App.PowerGraph({
-        $el: $('.power-2d-graph-svg'),
-        data: rpmData
-      });
-
-      // insights
-      $('.persona').text(this.data.persona ? this.data.persona : 'unknown');
-      $('.optimal-efficiency').text(this.efficiencyGraph.optimalSpeed);
-      $('.optimal-power').text(this.powerGraph.optimalRpm);
     },
 
     // ----------
@@ -113,8 +86,6 @@
     getVehicleData: function() {
       var self = this;
 
-      showLoading();
-
       this.request({
         path: 'vehicle-heatmap/',
         data: {
@@ -123,12 +94,13 @@
         success: function(result) {
           self.data = result;
           self.renderData();
-          self.getGroupData(result);
+          self.getGroupData({
+            make: result.make,
+            model: result.model
+          });
         },
         error: function(errorThrown) {
-          hideLoading();
-          $('.graphs').hide();
-          $('.error').show();
+          $('.error').text('Unable to load data for this vehicle.');
         }
       });
     },
@@ -142,27 +114,67 @@
     },
 
     // ----------
-    getGroupData: function(vehicle) {
+    getGroupData: function(options) {
+      var self = this;
+
+      var parts = [];
+      var needsVehicles = true;
+
+      if (options.price) {
+        parts.push('$' + options.price);
+      }
+
+      if (options.engsize) {
+        parts.push(options.engsize);
+      }
+
+      if (options.horsepower) {
+        parts.push(options.horsepower + ' HP');
+      }
+
+      if (options.make) {
+        parts.push(options.make);
+        needsVehicles = false;
+      }
+
+      if (options.model) {
+        parts.push(options.model);
+        needsVehicles = false;
+      }
+
+      if (needsVehicles) {
+        parts.push('Vehicles');
+      } else {
+        parts[parts.length - 1] += 's';
+      }
+
+      this.groupName = parts.join(' ');
+      this.updateGroupSelect();
+
+      if (this.groupResultsView) {
+        this.groupResultsView.destroy();
+      }
+
       this.request({
         path: 'group-heatmap/',
         method: 'POST',
         data: {
-          options: {
-            make: vehicle.make,
-            model: vehicle.model
-          }
+          options: options
         },
         success: function(result) {
-          // TODO: display heatmaps
+          self.renderGroupData(result);
         },
         error: function(errorThrown) {
-          // TODO: show error
+          $('.error').text('Unable to load data for ' + self.groupName + '.');
         }
       });
     },
 
     // ----------
     request: function(args) {
+      $('.error').text('');
+      showLoading();
+
       var accessToken = getAccessToken();
       var isStaging = window.location.search.indexOf('staging') !== -1; // in case we need to know this in the future
       var apiUrl = 'https://moxie.automatic.com/' + args.path;
@@ -176,11 +188,13 @@
         }
       })
       .done(function(result) {
+        hideLoading();
         if (args.success) {
           args.success(result);
         }
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
+        hideLoading();
         console.error(errorThrown);
         if (args.error) {
           args.error(errorThrown);
@@ -195,8 +209,10 @@
       showLoading();
 
       fetchVehicles(function(results) {
+        self._vehicles = results;
+
         if (results.length === 0) {
-          $('.error').show();
+          $('.error').text('You don\'t appear to have any vehicles.');
         } else {
           $('.controls').show();
 
@@ -212,6 +228,27 @@
     },
 
     // ----------
+    currentVehicle: function() {
+      var id = $('#vehicleChoice').val();
+      return _.findWhere(this._vehicles, {
+        id: id
+      });
+    },
+
+    // ----------
+    updateGroupSelect: function() {
+      this.$groupSelect.empty();
+
+      var vehicle = this.currentVehicle();
+
+      $('<option value="">All ' + this.groupName + '</option>')
+        .appendTo(this.$groupSelect);
+
+      $('<option value="other">Other Vehicles...</option>')
+        .appendTo(this.$groupSelect);
+    },
+
+    // ----------
     getDemoData: function() {
       var self = this;
 
@@ -219,6 +256,14 @@
         self.data = rawData;
         self.renderData();
       });
+    },
+
+    // ----------
+    template: function(name, config) {
+      var rawTemplate = $('#' + name + '-template').text();
+      var template = _.template(rawTemplate);
+      var html = template(config);
+      return $(html);
     }
   };
 

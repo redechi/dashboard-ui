@@ -19,6 +19,48 @@
 
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/car-behavior.css" rel="stylesheet" />
+
+    <script id="results-template" type="text/template">
+      <div class="graphs">
+        <h2>Results for <%- name %></h2>
+        <div class="graph-section">
+          <h3>Driving Style</h3>
+          <p>Your persona is <span class="persona"></span>.</p>
+          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
+          <svg class="style-2d-graph-svg graph-svg"></svg>
+        </div>
+        <div class="graph-section">
+          <h3>Fuel Efficiency</h3>
+          <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
+          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
+          <svg class="efficiency-2d-graph-svg graph-svg"></svg>
+        </div>
+        <div class="graph-section">
+          <h3>Horsepower</h3>
+          <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
+          <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
+          <h3>Torque</h3>
+          <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
+          <h3>Power</h3>
+          <svg class="power-2d-graph-svg graph-svg"></svg>
+        </div>
+      </div>
+    </script>
+
+    <script id="vehicle-picker-template" type="text/template">
+      <% _.each(selects, function(select) { %>
+        <div>
+          <%- select.name %>
+          <select data-key="<%- select.key %>">
+            <% _.each(select.options, function(option) { %>
+              <option><%- option %></option>
+            <% }); %>
+          </select>
+        </div>
+      <% }); %>
+      <div class="btn btn-default btn-disabled btn-select">Select</div>
+    </script>
+
   </head>
   <body>
     <a class="btn-logout" href="/#/logout">Log out</a>
@@ -35,32 +77,18 @@
       <div class="controls hidden" id="controls">
         Choose Your Vehicle:
         <select id="vehicleChoice"></select>
+        Compare With:
+        <select class="group-select"></select>
       </div>
-      <div class="error">Unable to load data for this vehicle.</div>
-      <div class="graphs">
-        <div class="graph-section">
-          <h2>Driving Style</h2>
-          <p>Your persona is <span class="persona"></span>.</p>
-          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
-          <svg class="style-2d-graph-svg graph-svg"></svg>
-        </div>
-        <div class="graph-section">
-          <h2>Fuel Efficiency</h2>
-          <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
-          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
-          <svg class="efficiency-2d-graph-svg graph-svg"></svg>
-        </div>
-        <div class="graph-section">
-          <h2>Horsepower</h2>
-          <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
-          <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
-          <h2>Torque</h2>
-          <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
-          <h2>Power</h2>
-          <svg class="power-2d-graph-svg graph-svg"></svg>
-        </div>
-      </div>
+      <div class="error"></div>
+      <div class="results"></div>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
+    </div>
+    <div class="modal">
+      <div class="modal-dialog">
+        <div class="close">×</div>
+        <div class="modal-content"></div>
+      </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -75,6 +103,8 @@
     <script src="js/style-graph.js"></script>
     <script src="js/efficiency-graph.js"></script>
     <script src="js/power-graph.js"></script>
+    <script src="js/results-view.js"></script>
+    <script src="js/vehicle-picker-modal.js"></script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

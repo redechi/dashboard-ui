@@ -3,7 +3,6 @@
 }
 
 .error {
-  display: none;
   margin-top: 1em;
   color: #800;
 }
@@ -26,4 +25,21 @@
   width: 400px;
   margin: 20px 30px;
   vertical-align: top;
+}
+
+.modal .modal-dialog {
+  height: auto;
+  padding-bottom: 60px;
+}
+
+.btn-select {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translate(-50%, 0);
+}
+
+.btn-disabled {
+  opacity: 0.5;
+  cursor: default;
 }
