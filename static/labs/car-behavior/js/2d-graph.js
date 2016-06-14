@@ -1,11 +1,21 @@
 (function() {
 
   // ----------
-  var component = App.TwoDGraph = function() {
+  var component = App.TwoDGraph = function(args) {
+    this._sets = [];
+    this.name = args.name;
+    this._initSvg(args.$el);
   };
 
   // ----------
   component.prototype = {
+    // ----------
+    addSets: function(sets) {
+      this._sets = this._sets.concat(sets);
+      this._updateData();
+      this.render();
+    },
+
     // ----------
     _initSvg: function($svg) {
       this.$svg = $svg;
@@ -24,8 +34,8 @@
 
       _.each(this._sets, function(set, setIndex) {
         _.each(set.data, function(datum) {
-          if (_.isNaN(datum.x) || _.isNaN(datum.value)) {
-            console.warn('NaN data for ' + self.name + ', set ' + setIndex + ':', datum);
+          if (_.isNaN(datum.x) || _.isNaN(datum.value) || datum.value === Infinity) {
+            console.warn('Bad data for ' + self.name + ', set ' + setIndex + ':', datum);
             return;
           }
 
@@ -48,49 +58,6 @@
       this._yScale = d3.scale.linear()
         .domain([this._minValue, this._maxValue])
         .range([this._height, 0]);
-    },
-
-    // ----------
-    _maxBucketValue: function(args) {
-      var data = _.map(args.set.data, function(info) {
-        info = _.clone(info);
-        info.x = Math.floor(info.x / args.interval) * args.interval;
-        return info;
-      });
-
-      data = _.groupBy(data, function(v, i) {
-        return v.x;
-      });
-
-      data = _.map(data, function(infos, x) {
-        var output = {
-          x: parseFloat(x),
-          infos: infos
-        };
-
-        var total = 0;
-        var count = 0;
-        _.each(infos, function(info) {
-          total += info.total;
-          count += info.count;
-        });
-
-        output.total = total;
-        output.count = count;
-        output.average = (count ? total / count : 0);
-
-        if (args.updateAverage) {
-          args.updateAverage(output);
-        }
-
-        return output;
-      });
-
-      var max = _.max(data, function(v) {
-        return v.average;
-      });
-
-      return max.x;
     },
 
     // ----------

@@ -2,9 +2,22 @@
 
   // ----------
   window.App = {
-    data: null,
+    singleData: null,
+    groupData: null,
     milesPerKilometer: 0.621371,
     kilometersPerMile: 1.60934,
+
+    modes: {
+      style: {
+        explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.'
+      },
+      efficiency: {
+        explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.'
+      },
+      power: {
+        explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.'
+      }
+    },
 
     // ----------
     init: function() {
@@ -29,10 +42,16 @@
       formatForDemo();
       showLoginLink('car-behavior');
 
-      var queryParams = getQueryParams(document.location.search);
+      this.$tabs = $('.tab').on('click', function() {
+        var $el = $(this);
+        self.selectMode($el.data('mode'));
+      });
 
+      this.selectMode('style');
+
+      var queryParams = getQueryParams(document.location.search);
       if (queryParams.demo) {
-        self.getDemoData();
+        this.getDemoData();
       } else {
         showLoading();
         if (queryParams.share) {
@@ -41,11 +60,11 @@
             if (e) {
               return alert(e);
             }
-            self.data = result;
+            self.singleData = self._digestData(result);
             self.renderData();
           });
         } else {
-          self.getUserData();
+          this.getUserData();
         }
       }
     },
@@ -56,30 +75,28 @@
         this.personResultsView.destroy();
       }
 
+      if (!this.singleData) {
+        return;
+      }
+
       var vehicle = this.currentVehicle();
 
       this.personResultsView = new App.ResultsView({
+        mode: this._mode,
         name: 'your ' + vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
         $container: $('.results'),
-        data: this.data
+        singleData: this.singleData,
+        groupData: this.groupData
       });
     },
 
     // ----------
-    renderGroupData: function(data) {
-      if (this.groupResultsView) {
-        this.groupResultsView.destroy();
-      }
-
-      this.groupResultsView = new App.ResultsView({
-        name: 'All ' + this.groupName,
-        $container: $('.results'),
-        data: data
-      });
-    },
-
-    // ----------
-    clearData: function() {
+    selectMode: function(mode) {
+      this._mode = mode;
+      $('.tab').removeClass('selected');
+      $('.tab[data-mode=' + mode + ']').addClass('selected');
+      $('.explanation').text(this.modes[this._mode].explanation);
+      this.renderData();
     },
 
     // ----------
@@ -92,7 +109,7 @@
           vehicle_id: $('#vehicleChoice').val()
         },
         success: function(result) {
-          self.data = result;
+          self.singleData = self._digestData(result);
           self.renderData();
           self.getGroupData({
             make: result.make,
@@ -103,6 +120,23 @@
           $('.error').text('Unable to load data for this vehicle.');
         }
       });
+    },
+
+    // ----------
+    _digestData: function(raw) {
+      return {
+        raw: raw,
+        accel: new App.HeatmapData({
+          rawData: raw,
+          x: 'vel_bin',
+          y: 'accel_bin'
+        }),
+        rpm: new App.HeatmapData({
+          rawData: raw,
+          x: 'vel_bin',
+          y: 'rpm_bin'
+        })
+      };
     },
 
     // ----------
@@ -151,9 +185,8 @@
       this.groupName = parts.join(' ');
       this.updateGroupSelect();
 
-      if (this.groupResultsView) {
-        this.groupResultsView.destroy();
-      }
+      this.groupData = null;
+      this.renderData();
 
       this.request({
         path: 'group-heatmap/',
@@ -162,7 +195,8 @@
           options: options
         },
         success: function(result) {
-          self.renderGroupData(result);
+          self.groupData = self._digestData(result);
+          self.renderData();
         },
         error: function(errorThrown) {
           $('.error').text('Unable to load data for ' + self.groupName + '.');
@@ -209,7 +243,7 @@
       showLoading();
 
       fetchVehicles(function(results) {
-        self._vehicles = results;
+        self.vehicles = results;
 
         if (results.length === 0) {
           $('.error').text('You don\'t appear to have any vehicles.');
@@ -230,7 +264,7 @@
     // ----------
     currentVehicle: function() {
       var id = $('#vehicleChoice').val();
-      return _.findWhere(this._vehicles, {
+      return _.findWhere(this.vehicles, {
         id: id
       });
     },
@@ -253,7 +287,7 @@
       var self = this;
 
       $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(rawData) {
-        self.data = rawData;
+        self.data = self._digestData(rawData);
         self.renderData();
       });
     },

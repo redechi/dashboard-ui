@@ -194,6 +194,247 @@
       var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
       var mpg = (velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
       return mpg;
+    },
+
+    // ----------
+    _maxBucketValue: function(args) {
+      var data = _.map(args.set.data, function(info) {
+        info = _.clone(info);
+        info.x = Math.floor(info.x / args.interval) * args.interval;
+        return info;
+      });
+
+      data = _.groupBy(data, function(v, i) {
+        return v.x;
+      });
+
+      data = _.map(data, function(infos, x) {
+        var output = {
+          x: parseFloat(x),
+          infos: infos
+        };
+
+        var total = 0;
+        var count = 0;
+        _.each(infos, function(info) {
+          total += info.total;
+          count += info.count;
+        });
+
+        output.total = total;
+        output.count = count;
+        output.average = (count ? total / count : 0);
+
+        if (args.updateAverage) {
+          args.updateAverage(output);
+        }
+
+        return output;
+      });
+
+      var max = _.max(data, function(v) {
+        return v.average;
+      });
+
+      return max.x;
+    },
+
+    // ----------
+    styleSets: function(color) {
+      var accels = {};
+      var brakes = {};
+
+      _.each(this.grid, function(gridInfo) {
+        var velocity = gridInfo.x;
+        var accel = gridInfo.y;
+        var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
+        if (!set || !gridInfo.totalTime) {
+          return;
+        }
+
+        var setInfo = set[velocity];
+        if (!setInfo) {
+          setInfo = {
+            x: velocity,
+            total: 0,
+            time: 0
+          };
+
+          set[velocity] = setInfo;
+        }
+
+        setInfo.total += accel * gridInfo.totalTime;
+        setInfo.time += gridInfo.totalTime;
+      });
+
+      var finish = function(set) {
+        return _.chain(set)
+          .map(function(v, i) {
+            v.value = v.total / v.time;
+            return v;
+          })
+          .sortBy(function(v, i) {
+            return v.x;
+          })
+          .value();
+      };
+
+      return [
+        {
+          data: finish(accels),
+          color: color
+        },
+        {
+          data: finish(brakes),
+          color: color
+        }
+      ];
+    },
+
+    // ----------
+    efficiencySets: function(color) {
+      var self = this;
+
+      var set = {};
+
+      _.each(this.grid, function(gridInfo) {
+        var velocity = gridInfo.x;
+        var accel = gridInfo.y;
+        if (accel < 0 || accel > 2 || !gridInfo.averageMaf || !gridInfo.totalMafCount) {
+          return;
+        }
+
+        var setInfo = set[velocity];
+        if (!setInfo) {
+          setInfo = {
+            x: velocity,
+            total: 0,
+            count: 0
+          };
+
+          set[velocity] = setInfo;
+        }
+
+        setInfo.total += gridInfo.averageMaf * gridInfo.totalMafCount;
+        setInfo.count += gridInfo.totalMafCount;
+      });
+
+      var finish = function(set) {
+        return _.chain(set)
+          .map(function(v, i) {
+            v.value = self.mafToMpg(v.total / v.count, v.x);
+            return v;
+          })
+          .sortBy(function(v, i) {
+            return v.x;
+          })
+          .value();
+      };
+
+      var sets = [
+        {
+          data: finish(set),
+          color: color
+        }
+      ];
+
+      // "insight"
+      var interval = App.kilometersPerMile * 5;
+
+      var kph = this._maxBucketValue({
+        set: sets[0],
+        interval: interval,
+        updateAverage: function(bucket) {
+          bucket.average = self.mafToMpg(bucket.average, bucket.x);
+        }
+      });
+
+      var startMph = Math.round(kph * App.milesPerKilometer);
+      var endMph = Math.round((kph + interval) * App.milesPerKilometer);
+      sets[0].optimalSpeed = startMph + '-' + endMph;
+
+      return sets;
+    },
+
+    // ----------
+    powerSets: function(color) {
+      var hpData = {};
+      var torqueData = {};
+
+      _.each(this.grid, function(gridInfo) {
+        var velocity = gridInfo.x;
+        var rpm = gridInfo.y;
+
+        // horsepower
+        var hpInfo = hpData[rpm];
+        if (!hpInfo) {
+          hpInfo = {
+            x: rpm,
+            total: 0,
+            count: 0
+          };
+
+          hpData[rpm] = hpInfo;
+        }
+
+        hpInfo.total += gridInfo.totalHorsepower;
+        hpInfo.count += gridInfo.totalPowerCount;
+
+        // torque
+        var torqueInfo = torqueData[rpm];
+        if (!torqueInfo) {
+          torqueInfo = {
+            x: rpm,
+            total: 0,
+            count: 0
+          };
+
+          torqueData[rpm] = torqueInfo;
+        }
+
+        torqueInfo.total += gridInfo.totalTorque;
+        torqueInfo.count += gridInfo.totalPowerCount;
+      });
+
+      var finish = function(set) {
+        return _.chain(set)
+          .map(function(v, i) {
+            if (v.total && v.count) {
+              v.value = v.total / v.count;
+            } else {
+              v.value = 0;
+            }
+
+            return v;
+          })
+          .sortBy(function(v, i) {
+            return v.x;
+          })
+          .value();
+      };
+
+      var sets = [
+        {
+          data: finish(hpData),
+          color: color
+        },
+        {
+          data: finish(torqueData),
+          color: color
+        }
+      ];
+
+      // "insight"
+      var interval = 250;
+
+      var startRpm = this._maxBucketValue({
+        set: sets[0],
+        interval: interval
+      });
+
+      sets[0].optimalRpm = startRpm + '-' + (startRpm + interval);
+
+      return sets;
     }
   };
 

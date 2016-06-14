@@ -22,28 +22,39 @@
 
     <script id="results-template" type="text/template">
       <div class="graphs">
-        <h2>Results for <%- name %></h2>
-        <div class="graph-section">
-          <h3>Driving Style</h3>
-          <p>Your persona is <span class="persona"></span>.</p>
+        <% if (mode === 'style') { %>
+          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
           <canvas class="style-heatmap-canvas graph-canvas"></canvas>
           <svg class="style-2d-graph-svg graph-svg"></svg>
-        </div>
-        <div class="graph-section">
-          <h3>Fuel Efficiency</h3>
-          <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
+          <div class="toggle-row">
+            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
+          </div>
+          <p>Your persona is <span class="persona"></span>.</p>
+        <% } else if (mode === 'efficiency') { %>
+          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
           <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
           <svg class="efficiency-2d-graph-svg graph-svg"></svg>
-        </div>
-        <div class="graph-section">
-          <h3>Horsepower</h3>
-          <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
-          <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
-          <h3>Torque</h3>
-          <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
-          <h3>Power</h3>
+          <div class="toggle-row">
+            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
+          </div>
+          <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
+        <% } else if (mode === 'power') { %>
+          <div>
+            <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
+            <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
+          </div>
+          <div>
+            <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
+            <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
+          </div>
           <svg class="power-2d-graph-svg graph-svg"></svg>
-        </div>
+          <div class="toggle-row">
+            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
+          </div>
+          <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
+        <% } %>
+        <p>Comparison goes here.</p>
+        <p>FAQ goes here.</p>
       </div>
     </script>
 
@@ -62,7 +73,7 @@
     </script>
 
   </head>
-  <body>
+  <body class="graph-mode">
     <a class="btn-logout" href="/#/logout">Log out</a>
     <div class="loading">
       <div class="title">Loading...</div>
@@ -71,8 +82,12 @@
     <div class="wrapper">
       <h1 class="labs-title">Driver Behavior and Car Health</h1>
       <div class="labs-tagline">By Automatic Labs</div>
-
-      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+      <div class="tabs">
+        <div class="tab style-tab" data-mode="style">Driving Style</div>
+        <div class="tab efficiency-tab" data-mode="efficiency">Car Health - Fuel Efficiency</div>
+        <div class="tab power-tab" data-mode="power">Car Health - Power</div>
+      </div>
+      <p class="explanation"></p>
       <p>This feature is currently in alpha.</p>
       <div class="controls hidden" id="controls">
         Choose Your Vehicle:
@@ -80,6 +95,7 @@
         Compare With:
         <select class="group-select"></select>
       </div>
+      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
       <div class="error"></div>
       <div class="results"></div>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
@@ -100,9 +116,6 @@
     <script src="js/canvas-base.js"></script>
     <script src="js/2d-graph.js"></script>
     <script src="js/heatmap.js"></script>
-    <script src="js/style-graph.js"></script>
-    <script src="js/efficiency-graph.js"></script>
-    <script src="js/power-graph.js"></script>
     <script src="js/results-view.js"></script>
     <script src="js/vehicle-picker-modal.js"></script>
 

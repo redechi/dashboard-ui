@@ -2,67 +2,114 @@
 
   // ----------
   var component = App.ResultsView = function(args) {
+    var sets;
+
     this.$el = App.template('results', {
+      mode: args.mode,
       name: args.name
     }).appendTo(args.$container);
 
-    var accelData = new App.HeatmapData({
-      rawData: args.data,
-      x: 'vel_bin',
-      y: 'accel_bin'
+    this.$el.find('.graph-mode-toggle').on('click', function() {
+      $('body').removeClass('heatmap-mode');
+      $('body').addClass('graph-mode');
     });
 
-    var rpmData = new App.HeatmapData({
-      rawData: args.data,
-      x: 'vel_bin',
-      y: 'rpm_bin'
+    this.$el.find('.heatmap-mode-toggle').on('click', function() {
+      $('body').removeClass('graph-mode');
+      $('body').addClass('heatmap-mode');
     });
 
-    // heatmaps
-    this.styleHeatmap = new App.Heatmap({
-      $el: this.$el.find('.style-heatmap-canvas'),
-      mode: 'style',
-      data: accelData
-    });
+    if (args.mode === 'style') {
+      this.styleHeatmap = new App.Heatmap({
+        $el: this.$el.find('.style-heatmap-canvas').eq(0),
+        mode: 'style',
+        data: args.singleData.accel
+      });
 
-    this.efficiencyHeatmap = new App.Heatmap({
-      $el: this.$el.find('.efficiency-heatmap-canvas'),
-      mode: 'efficiency',
-      data: accelData
-    });
+      this.styleGraph = new App.TwoDGraph({
+        name: 'style',
+        $el: this.$el.find('.style-2d-graph-svg')
+      });
 
-    this.horsepowerHeatmap = new App.Heatmap({
-      $el: this.$el.find('.horsepower-heatmap-canvas'),
-      mode: 'horsepower',
-      data: rpmData
-    });
+      sets = args.singleData.accel.styleSets('#0bf');
+      this.$el.find('.persona').text(args.singleData.raw.persona ? args.singleData.raw.persona : 'unknown');
 
-    this.torqueHeatmap = new App.Heatmap({
-      $el: this.$el.find('.torque-heatmap-canvas'),
-      mode: 'torque',
-      data: rpmData
-    });
+      if (args.groupData) {
+        sets = sets.concat(args.groupData.accel.styleSets('#f8f'));
 
-    // 2d graphs
-    this.styleGraph = new App.StyleGraph({
-      $el: this.$el.find('.style-2d-graph-svg'),
-      data: accelData
-    });
+        this.styleHeatmap2 = new App.Heatmap({
+          $el: this.$el.find('.style-heatmap-canvas').eq(1),
+          mode: 'style',
+          data: args.groupData.accel
+        });
+      }
 
-    this.efficiencyGraph = new App.EfficiencyGraph({
-      $el: this.$el.find('.efficiency-2d-graph-svg'),
-      data: accelData
-    });
+      this.styleGraph.addSets(sets);
+    } else if (args.mode === 'efficiency') {
+      this.efficiencyHeatmap = new App.Heatmap({
+        $el: this.$el.find('.efficiency-heatmap-canvas').eq(0),
+        mode: 'efficiency',
+        data: args.singleData.accel
+      });
 
-    this.powerGraph = new App.PowerGraph({
-      $el: this.$el.find('.power-2d-graph-svg'),
-      data: rpmData
-    });
+      this.efficiencyGraph = new App.TwoDGraph({
+        name: 'efficiency',
+        $el: this.$el.find('.efficiency-2d-graph-svg')
+      });
 
-    // insights
-    this.$el.find('.persona').text(args.data.persona ? args.data.persona : 'unknown');
-    this.$el.find('.optimal-efficiency').text(this.efficiencyGraph.optimalSpeed);
-    this.$el.find('.optimal-power').text(this.powerGraph.optimalRpm);
+      sets = args.singleData.accel.efficiencySets('#0bf');
+      this.$el.find('.optimal-efficiency').text(sets[0].optimalSpeed);
+
+      if (args.groupData) {
+        sets = sets.concat(args.groupData.accel.efficiencySets('#f8f'));
+
+        this.efficiencyHeatmap2 = new App.Heatmap({
+          $el: this.$el.find('.efficiency-heatmap-canvas').eq(1),
+          mode: 'efficiency',
+          data: args.groupData.accel
+        });
+      }
+
+      this.efficiencyGraph.addSets(sets);
+    } else if (args.mode === 'power') {
+      this.horsepowerHeatmap = new App.Heatmap({
+        $el: this.$el.find('.horsepower-heatmap-canvas').eq(0),
+        mode: 'horsepower',
+        data: args.singleData.rpm
+      });
+
+      this.torqueHeatmap = new App.Heatmap({
+        $el: this.$el.find('.torque-heatmap-canvas').eq(0),
+        mode: 'torque',
+        data: args.singleData.rpm
+      });
+
+      this.powerGraph = new App.TwoDGraph({
+        name: 'power',
+        $el: this.$el.find('.power-2d-graph-svg')
+      });
+
+      sets = args.singleData.rpm.powerSets('#0bf');
+      this.$el.find('.optimal-power').text(sets[0].optimalRpm);
+
+      if (args.groupData) {
+        sets = sets.concat(args.groupData.rpm.powerSets('#f8f'));
+
+        this.horsepowerHeatmap2 = new App.Heatmap({
+          $el: this.$el.find('.horsepower-heatmap-canvas').eq(1),
+          mode: 'horsepower',
+          data: args.groupData.rpm
+        });
+
+        this.torqueHeatmap2 = new App.Heatmap({
+          $el: this.$el.find('.torque-heatmap-canvas').eq(1),
+          mode: 'torque',
+          data: args.groupData.rpm
+        });
+      }
+
+      this.powerGraph.addSets(sets);
+    }
 
     this.$el.fadeIn();
   };
