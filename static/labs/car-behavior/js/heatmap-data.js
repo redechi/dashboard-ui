@@ -44,11 +44,18 @@
       var xKey = args.x;
       var yKey = args.y;
 
+      this.minX = App.minVelocity;
+      this.maxX = App.maxVelocity;
+
+      if (yKey === 'accel_bin') {
+        this.minY = App.minAccel;
+        this.maxY = App.maxAccel;
+      } else {
+        this.minY = App.minRpm;
+        this.maxY = App.maxRpm;
+      }
+
       var grid = {};
-      var minX = 0;
-      var minY = 0;
-      var maxX = 0;
-      var maxY = 0;
       var xValues = [];
       var yValues = [];
 
@@ -67,10 +74,10 @@
         var x = datum[xKey];
         var y = datum[yKey];
 
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
+        var outOfBounds = (x < self.minX || x > self.maxX || y < self.minY || y > self.maxY);
+        if (outOfBounds) {
+          return;
+        }
 
         xValues.push(x);
         yValues.push(y);
@@ -116,10 +123,6 @@
       });
 
       this.grid = grid;
-      this.minX = minX;
-      this.minY = minY;
-      this.maxX = maxX;
-      this.maxY = maxY;
 
       xValues = _.unique(xValues).sort(function(a, b) { return a - b; });
       yValues = _.unique(yValues).sort(function(a, b) { return a - b; });

@@ -28,7 +28,9 @@
 
       this.styleGraph = new App.TwoDGraph({
         name: 'style',
-        $el: this.$el.find('.style-2d-graph-svg')
+        $el: this.$el.find('.style-2d-graph-svg'),
+        minX: App.minVelocity,
+        maxX: App.maxVelocity
       });
 
       sets = args.singleData.accel.styleSets('#0bf');
@@ -54,7 +56,9 @@
 
       this.efficiencyGraph = new App.TwoDGraph({
         name: 'efficiency',
-        $el: this.$el.find('.efficiency-2d-graph-svg')
+        $el: this.$el.find('.efficiency-2d-graph-svg'),
+        minX: App.minVelocity,
+        maxX: App.maxVelocity
       });
 
       sets = args.singleData.accel.efficiencySets('#0bf');
@@ -86,7 +90,9 @@
 
       this.powerGraph = new App.TwoDGraph({
         name: 'power',
-        $el: this.$el.find('.power-2d-graph-svg')
+        $el: this.$el.find('.power-2d-graph-svg'),
+        minX: App.minRpm,
+        maxX: App.maxRpm
       });
 
       sets = args.singleData.rpm.powerSets('#0bf');

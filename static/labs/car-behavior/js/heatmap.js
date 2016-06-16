@@ -22,6 +22,7 @@
     this._mode = args.mode;
     this._valueKey = modes[this._mode].valueKey;
     this._data = args.data;
+
     this._initCanvas(args.$el);
     this._smoothData();
     this.render();

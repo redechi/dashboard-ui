@@ -4,6 +4,8 @@
   var component = App.TwoDGraph = function(args) {
     this._sets = [];
     this.name = args.name;
+    this._minX = args.minX;
+    this._maxX = args.maxX;
     this._initSvg(args.$el);
   };
 
@@ -27,18 +29,24 @@
     // ----------
     _updateData: function() {
       var self = this;
+
+      // note: we're grabbing the minX and maxX just for debugging purposes
       var minX = Infinity;
       var maxX = 0;
       var minValue = Infinity;
       var maxValue = 0;
 
       _.each(this._sets, function(set, setIndex) {
-        _.each(set.data, function(datum) {
-          if (_.isNaN(datum.x) || _.isNaN(datum.value) || datum.value === Infinity) {
+        set.data = _.filter(set.data, function(datum) {
+          var isValidDatum = (!_.isNaN(datum.x) && !_.isNaN(datum.value) && _.isFinite(datum.x) && _.isFinite(datum.value));
+          if (!isValidDatum) {
             console.warn('Bad data for ' + self.name + ', set ' + setIndex + ':', datum);
-            return;
           }
 
+          return isValidDatum;
+        });
+
+        _.each(set.data, function(datum) {
           minX = Math.min(minX, datum.x);
           maxX = Math.max(maxX, datum.x);
           minValue = Math.min(minValue, datum.value);
@@ -46,8 +54,6 @@
         });
       });
 
-      this._minX = minX;
-      this._maxX = maxX;
       this._minValue = minValue;
       this._maxValue = maxValue;
 

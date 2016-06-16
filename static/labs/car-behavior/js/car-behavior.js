@@ -6,6 +6,12 @@
     groupData: null,
     milesPerKilometer: 0.621371,
     kilometersPerMile: 1.60934,
+    minVelocity: 0,
+    maxVelocity: 160,
+    minRpm: 0,
+    maxRpm: 6000,
+    minAccel: -22,
+    maxAccel: 21,
 
     modes: {
       style: {
