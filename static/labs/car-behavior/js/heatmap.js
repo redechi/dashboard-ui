@@ -1,6 +1,6 @@
 (function() {
 
-  var superClass = App.CanvasBase.prototype;
+  var superClass = App.SvgBase.prototype;
 
   // ----------
   var component = App.Heatmap = function(args) {
@@ -22,8 +22,14 @@
     this._mode = args.mode;
     this._valueKey = modes[this._mode].valueKey;
     this._data = args.data;
+    this._xLabel = args.xLabel;
+    this._yLabel = args.yLabel;
 
-    this._initCanvas(args.$el);
+    superClass._init.call(this, {
+      $svg: args.$el,
+      $container: args.$container
+    });
+
     this._smoothData();
     this.render();
   };
@@ -44,9 +50,13 @@
       var yFactor = this._width / yExtent;
       var rowHeight = this._height / (yExtent / this._data.yInterval);
 
+      var xScale = d3.scale.linear()
+        .domain([self._data.minX, self._data.maxX])
+        .range([this._leftBuffer, this._width]);
+
       var yScale = d3.scale.linear()
-        .domain([self._data.maxY, self._data.minY])
-        .range([0, this._height - rowHeight]);
+        .domain([self._data.minY, self._data.maxY])
+        .range([this._height - (this._bottomBuffer + rowHeight), 0]);
 
       var domain = [];
       for (var i = 0; i < 7; i++) {
@@ -65,8 +75,14 @@
           '#f00'
         ]);
 
-      this._context.fillStyle = '#181818';
-      this._context.fillRect(0, 0, this._width, this._height);
+      this._svg.selectAll('*').remove();
+
+      this._svg.append('rect')
+        .attr('x', this._leftBuffer)
+        .attr('y', 0)
+        .attr('width', this._width - this._leftBuffer)
+        .attr('height', this._height - this._bottomBuffer)
+        .attr('fill', '#181818');
 
       var maxValue = 0;
       _.each(this._smoothedGrid, function(info, key) {
@@ -79,10 +95,23 @@
           return;
         }
 
-        self._context.fillStyle = colorScale(value / maxValue);
-        var x = (info.x - self._data.minX) * xFactor;
+        var x = xScale(info.x);
         var y = yScale(info.y);
-        self._context.fillRect(x, y, columnWidth, rowHeight);
+        self._svg.append('rect')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('width', columnWidth)
+          .attr('height', rowHeight)
+          .attr('fill', colorScale(value / maxValue));
+      });
+
+      this.drawFrame({
+        xLabel: this._xLabel,
+        yLabel: this._yLabel,
+        minX: this._data.minX,
+        maxX: App.maxMph,
+        minY: this._data.minY,
+        maxY: this._data.maxY
       });
 
       // console.timeEnd('render');

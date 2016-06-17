@@ -6,8 +6,10 @@
     groupData: null,
     milesPerKilometer: 0.621371,
     kilometersPerMile: 1.60934,
-    minVelocity: 0,
-    maxVelocity: 160,
+    minKph: 0,
+    maxKph: 160,
+    minMph: 0,
+    maxMph: 100,
     minRpm: 0,
     maxRpm: 6000,
     minAccel: -22,
@@ -40,6 +42,9 @@
             self.vehiclePickerModal.show({
               onComplete: function(results) {
                 self.getGroupData(results);
+              },
+              onCancel: function() {
+                self.updateGroupSelect();
               }
             });
           }
@@ -73,6 +78,8 @@
           this.getUserData();
         }
       }
+
+      this._loadVehiclePickerData();
     },
 
     // ----------
@@ -129,10 +136,13 @@
     },
 
     // ----------
-    _digestData: function(raw) {
+    _digestData: function(raw, type) {
+      var mafCountThreshold = (type === 'group' ? 50 : 10);
+
       return {
         raw: raw,
         accel: new App.HeatmapData({
+          mafCountThreshold: mafCountThreshold,
           rawData: raw,
           x: 'vel_bin',
           y: 'accel_bin'
@@ -146,11 +156,15 @@
     },
 
     // ----------
-    getVehiclePicker: function() {
-      // TODO: use this data for a vehicle picker
-      this.request({
-        path: 'vehicle-picker/?option=price'
+    _loadVehiclePickerData: function() {
+      this._vehiclePickerPromise = this.request({
+        path: 'vehicle-picker/?option=toplevel'
       });
+    },
+
+    // ----------
+    getVehiclePickerData: function(callback) {
+      this._vehiclePickerPromise.done(callback);
     },
 
     // ----------
@@ -172,6 +186,10 @@
         parts.push(options.horsepower + ' HP');
       }
 
+      if (options.gen) {
+        parts.push(options.gen);
+      }
+
       if (options.make) {
         parts.push(options.make);
         needsVehicles = false;
@@ -182,10 +200,42 @@
         needsVehicles = false;
       }
 
+      if (options.bodytype) {
+        parts.push(options.bodytype);
+        needsVehicles = false;
+      }
+
       if (needsVehicles) {
         parts.push('Vehicles');
       } else {
-        parts[parts.length - 1] += 's';
+        var index = parts.length - 1;
+        var name = parts[index];
+        if (/[sz]$/i.test(name)) {
+          name += 'es';
+        } else if (/y$/i.test(name)) {
+          name = name.replace(/y$/i, 'ies');
+        } else {
+          name += 's';
+        }
+
+        parts[index] = name;
+      }
+
+      var locations = [];
+      if (options.city) {
+        locations.push(options.city);
+      }
+
+      if (options.state) {
+        locations.push(options.state);
+      }
+
+      if (options.region) {
+        locations.push(options.region);
+      }
+
+      if (locations.length) {
+        parts.push(' in ' + locations.join(', '));
       }
 
       this.groupName = parts.join(' ');
@@ -201,7 +251,7 @@
           options: options
         },
         success: function(result) {
-          self.groupData = self._digestData(result);
+          self.groupData = self._digestData(result, 'group');
           self.renderData();
         },
         error: function(errorThrown) {
@@ -219,7 +269,7 @@
       var isStaging = window.location.search.indexOf('staging') !== -1; // in case we need to know this in the future
       var apiUrl = 'https://moxie.automatic.com/' + args.path;
 
-      $.ajax({
+      return $.ajax({
         url: apiUrl,
         method: args.method,
         data: args.data,
@@ -262,7 +312,6 @@
           });
 
           self.getVehicleData();
-          // self.getVehiclePicker();
         }
       });
     },

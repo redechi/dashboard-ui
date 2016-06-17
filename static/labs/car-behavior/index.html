@@ -23,16 +23,16 @@
     <script id="results-template" type="text/template">
       <div class="graphs">
         <% if (mode === 'style') { %>
-          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
-          <canvas class="style-heatmap-canvas graph-canvas"></canvas>
+          <svg class="style-heatmap-svg heatmap-svg"></svg>
+          <svg class="style-heatmap-svg heatmap-svg"></svg>
           <svg class="style-2d-graph-svg graph-svg"></svg>
           <div class="toggle-row">
             <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
           </div>
           <p>Your persona is <span class="persona"></span>.</p>
         <% } else if (mode === 'efficiency') { %>
-          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
-          <canvas class="efficiency-heatmap-canvas graph-canvas"></canvas>
+          <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
+          <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
           <svg class="efficiency-2d-graph-svg graph-svg"></svg>
           <div class="toggle-row">
             <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
@@ -40,12 +40,12 @@
           <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
         <% } else if (mode === 'power') { %>
           <div>
-            <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
-            <canvas class="horsepower-heatmap-canvas graph-canvas"></canvas>
+            <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
+            <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
           </div>
           <div>
-            <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
-            <canvas class="torque-heatmap-canvas graph-canvas"></canvas>
+            <svg class="torque-heatmap-svg heatmap-svg"></svg>
+            <svg class="torque-heatmap-svg heatmap-svg"></svg>
           </div>
           <svg class="power-2d-graph-svg graph-svg"></svg>
           <div class="toggle-row">
@@ -60,11 +60,11 @@
 
     <script id="vehicle-picker-template" type="text/template">
       <% _.each(selects, function(select) { %>
-        <div>
+        <div class="select-row">
           <%- select.name %>
           <select data-key="<%- select.key %>">
             <% _.each(select.options, function(option) { %>
-              <option><%- option %></option>
+              <option <%- select.selected === option ? 'selected' : '' %>><%- option %></option>
             <% }); %>
           </select>
         </div>
@@ -113,7 +113,7 @@
     <script src="../common/js/main.js"></script>
     <script src="js/car-behavior.js"></script>
     <script src="js/heatmap-data.js"></script>
-    <script src="js/canvas-base.js"></script>
+    <script src="js/svg-base.js"></script>
     <script src="js/2d-graph.js"></script>
     <script src="js/heatmap.js"></script>
     <script src="js/results-view.js"></script>

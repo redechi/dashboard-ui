@@ -2,6 +2,7 @@
 
   // ----------
   var component = App.HeatmapData = function(args) {
+    this._mafCountThreshold = args.mafCountThreshold || 1;
     this._buildData(args);
     this._fillInData();
   };
@@ -44,8 +45,8 @@
       var xKey = args.x;
       var yKey = args.y;
 
-      this.minX = App.minVelocity;
-      this.maxX = App.maxVelocity;
+      this.minX = App.minKph;
+      this.maxX = App.maxKph;
 
       if (yKey === 'accel_bin') {
         this.minY = App.minAccel;
@@ -111,7 +112,7 @@
       });
 
       _.each(grid, function(info, key) {
-        if (info.totalMafCount && info.totalMaf) {
+        if (info.totalMafCount >= self._mafCountThreshold && info.totalMaf) {
           info.averageMaf = info.totalMaf / info.totalMafCount;
           info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
         }
@@ -243,12 +244,15 @@
     },
 
     // ----------
+    // result is:
+    // x = mph
+    // y = acceleration (kmph/sec?)
     styleSets: function(color) {
       var accels = {};
       var brakes = {};
 
       _.each(this.grid, function(gridInfo) {
-        var velocity = gridInfo.x;
+        var velocity = gridInfo.x * App.milesPerKilometer;
         var accel = gridInfo.y;
         var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
         if (!set || !gridInfo.totalTime) {
@@ -295,13 +299,16 @@
     },
 
     // ----------
+    // result is:
+    // x = mph
+    // y = mpg
     efficiencySets: function(color) {
       var self = this;
 
       var set = {};
 
       _.each(this.grid, function(gridInfo) {
-        var velocity = gridInfo.x;
+        var velocity = gridInfo.x * App.milesPerKilometer;
         var accel = gridInfo.y;
         if (accel < 0 || accel > 2 || !gridInfo.averageMaf || !gridInfo.totalMafCount) {
           return;
@@ -342,9 +349,9 @@
       ];
 
       // "insight"
-      var interval = App.kilometersPerMile * 5;
+      var interval = 5;
 
-      var kph = this._maxBucketValue({
+      var mph = this._maxBucketValue({
         set: sets[0],
         interval: interval,
         updateAverage: function(bucket) {
@@ -352,14 +359,17 @@
         }
       });
 
-      var startMph = Math.round(kph * App.milesPerKilometer);
-      var endMph = Math.round((kph + interval) * App.milesPerKilometer);
+      var startMph = Math.round(mph);
+      var endMph = Math.round(mph + interval);
       sets[0].optimalSpeed = startMph + '-' + endMph;
 
       return sets;
     },
 
     // ----------
+    // result is:
+    // x = rpm
+    // y = hp and torque
     powerSets: function(color) {
       var hpData = {};
       var torqueData = {};
@@ -367,6 +377,10 @@
       _.each(this.grid, function(gridInfo) {
         var velocity = gridInfo.x;
         var rpm = gridInfo.y;
+
+        if (velocity <= 0) {
+          return;
+        }
 
         // horsepower
         var hpInfo = hpData[rpm];

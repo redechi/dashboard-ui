@@ -52,12 +52,21 @@ select {
   display: none;
 }
 
-.graph-canvas,
+.heatmap-svg {
+  display: none;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.heatmap-svg:first-child {
+  margin-right: 10px;
+}
+
 .graph-svg {
   display: none;
-  width: 400px;
-  height: 300px;
+  width: 100%;
   margin: 10px 0;
+  font-size: 12px;
 }
 
 .graph-section {
@@ -67,9 +76,21 @@ select {
   vertical-align: top;
 }
 
+.toggle {
+  color: #888;
+  cursor: pointer;
+}
+
+.toggle-row {
+  margin-bottom: 20px;
+}
+
+/* VEHICLE PICKER MODAL */
 .modal .modal-dialog {
+  width: 350px;
   height: auto;
-  padding-bottom: 60px;
+  padding: 20px 30px 60px 30px;
+  margin-top: 150px;
 }
 
 .btn-select {
@@ -84,16 +105,12 @@ select {
   cursor: default;
 }
 
-.toggle {
-  color: #888;
-  cursor: pointer;
+.select-row {
+  margin: 10px 0;
 }
 
-.toggle-row {
-  margin-bottom: 20px;
-}
-
-.heatmap-mode .graph-canvas {
+/* MODES */
+.heatmap-mode .heatmap-svg {
   display: inline-block;
 }
 
