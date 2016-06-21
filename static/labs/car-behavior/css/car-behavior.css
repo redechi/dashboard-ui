@@ -85,6 +85,33 @@ select {
   margin-bottom: 20px;
 }
 
+/* CONTROLS */
+.left-controls {
+  display: inline-block;
+  width: 50%;
+}
+
+.right-controls {
+  display: inline-block;
+}
+
+.swatch {
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+
+.your-swatch {
+  background: #0bf;
+}
+
+.group-swatch {
+  background: #f8f;
+}
+
 /* VEHICLE PICKER MODAL */
 .modal .modal-dialog {
   width: 350px;
@@ -107,6 +134,39 @@ select {
 
 .select-row {
   margin: 10px 0;
+}
+
+/* FAQ */
+.faq-title {
+  font-size: 40px;
+}
+
+.question {
+  background: rgb(253, 253, 253);
+  padding: 10px 30px;
+  border: 1px solid rgb(207, 207, 207);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.question .open-control {
+  float: right;
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.question .open-control:hover {
+  color: rgb(124, 193, 68);
+}
+
+.question h3 {
+  line-height: 40px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.question .answer {
+  display: none;
 }
 
 /* MODES */

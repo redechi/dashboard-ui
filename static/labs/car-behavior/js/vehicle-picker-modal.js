@@ -83,7 +83,7 @@
 
       var names = {
         horsepower: 'Horsepower',
-        engsize: 'Engine Size',
+        eng_size: 'Engine Size',
         make: 'Make',
         price: 'Price',
         city: 'City',

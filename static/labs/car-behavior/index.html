@@ -17,6 +17,7 @@
     <meta name="twitter:description" content="Insights into driver behavior and car health.">
     <!-- <meta name="twitter:image" content="https://dashboard.automatic.com/assets/img/labs/car-behavior.png"> -->
 
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" />
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/car-behavior.css" rel="stylesheet" />
 
@@ -54,8 +55,45 @@
           <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
         <% } %>
         <p>Comparison goes here.</p>
-        <p>FAQ goes here.</p>
       </div>
+    </script>
+
+    <script id="faq-template" type="text/template">
+      <h2 class="faq-title">FAQ</h2>
+      <% if (mode === 'style') { %>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>Does high acceleration mean I’m more aggressive?</h3>
+          <p class="answer">Higher rates of both hard acceleration and braking has been shown to correlate to a higher frequency of crashes and near crashes (link to Comparing Real-World Behaviors of Drivers With High versus Low Rates of Crashes and Near-Crashes). There are more behaviors of aggressive driving that aren’t incorporated in our current measurement (e.g. swerving, changing lanes without signaling) that would improve our measures of aggressive driving.</p>
+        </div>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>How did you come up with my driving persona?</h3>
+          <p class="answer">We compared your driving style heatmap with all other Automatic users and identified 8 main clusters of drivers. These groups have different driving styles for various reasons: level of aggressiveness, amount of traffic they experience, general commute patterns and more.</p>
+        </div>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>What’s the driving style of an average American?</h3>
+          <p class="answer">We analyzed the driving style heatmap of all Automatic users and identified the grouping that most of our users were associated with. There are certain types of users that don’t fit this mold (e.g. the lucky few that don’t have to deal with traffic, or only drive on city streets) but this was the best objective measure to catch the majority of Automatic users.</p>
+        </div>
+      <% } else if (mode === 'efficiency') { %>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>Why don’t I see my MPG heatmap?</h3>
+          <p class="answer">At this time, the MPG heatmap is only shown for vehicles that have a mass air flow sensor. Cars without this sensor have slightly less accurate calculations of MPG and we are working to include these vehicles in our analysis.</p>
+        </div>
+      <% } else if (mode === 'power') { %>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>What are those lines in the horsepower graph?</h3>
+          <p class="answer">The lines represent the gears of your engine. You should be able to see which gear, rpm, velocity combination gives you the maximum horsepower and torque. If you not see any lines, it’s possible you have a <a href="https://en.wikipedia.org/wiki/Continuously_variable_transmission" target="_blank">Continuously Variable Transmission</a>.</p>
+        </div>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>What is a power band?</h3>
+          <p class="answer">It’s not the bracelet. <a href="https://en.wikipedia.org/wiki/Power_band" target="_blank">It’s this</a>.</p>
+        </div>
+      <% } %>
     </script>
 
     <script id="vehicle-picker-template" type="text/template">
@@ -90,14 +128,21 @@
       <p class="explanation"></p>
       <p>This feature is currently in alpha.</p>
       <div class="controls hidden" id="controls">
-        Choose Your Vehicle:
-        <select id="vehicleChoice"></select>
-        Compare With:
-        <select class="group-select"></select>
+        <div class="left-controls">
+          <div class="swatch your-swatch"></div>
+          Your Vehicle:
+          <select id="vehicleChoice"></select>
+        </div>
+        <div class="right-controls">
+          <div class="swatch group-swatch"></div>
+          Compare With:
+          <select class="group-select"></select>
+        </div>
       </div>
       <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
       <div class="error"></div>
       <div class="results"></div>
+      <div class="faq"></div>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
     </div>
     <div class="modal">
