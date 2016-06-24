@@ -2,6 +2,83 @@
 
   // ----------
   App.vehiclePickerModal = {
+    _sections: [
+      {
+        name: 'Vehicle',
+        selectedRowIndex: 0,
+        rows: [
+          {
+            menus: [
+              {
+                key: 'make'
+              },
+              {
+                key: 'model'
+              },
+              {
+                key: 'gen'
+              }
+            ]
+          },
+          {
+            menus: [
+              {
+                key: 'price'
+              },
+              {
+                key: 'bodytype'
+              }
+            ]
+          },
+          {
+            menus: [
+              {
+                key: 'horsepower'
+              }
+            ]
+          },
+          {
+            menus: [
+              {
+                key: 'eng_size'
+              }
+            ]
+          }
+        ]
+      },
+      {
+        name: 'Location',
+        selectedRowIndex: 0,
+        note: 'Only locations with a significant amount data for each vehicle are shown.',
+        rows: [
+          {
+            name: 'All'
+          },
+          {
+            menus: [
+              {
+                key: 'region'
+              }
+            ]
+          },
+          {
+            menus: [
+              {
+                key: 'state'
+              }
+            ]
+          },
+          {
+            menus: [
+              {
+                key: 'city'
+              }
+            ]
+          }
+        ]
+      },
+    ],
+
     // ----------
     _init: function(callback) {
       var self = this;
@@ -31,8 +108,11 @@
         });
 
       this.$el.on('change', 'select', function(event) {
-        self._makeResults();
-        self._render();
+        self._handleChange($(this));
+      });
+
+      this.$el.on('change', 'input[type=radio]', function() {
+        self._handleChange($(this));
       });
 
       self._initialized = true;
@@ -51,6 +131,10 @@
       this._onCancel = args.onCancel;
       this._results = {};
 
+      _.each(this._sections, function(section) {
+        section.selectedRowIndex = 0;
+      });
+
       this._init(function() {
         self.$el.fadeIn();
         self._render();
@@ -63,6 +147,17 @@
     },
 
     // ----------
+    _handleChange: function($el) {
+      var $row = $el.closest('.select-row');
+      var $section = $el.closest('.section');
+      var rowIndex = parseInt($row.data('index'), 10);
+      var sectionIndex = parseInt($section.data('index'), 10);
+      this._sections[sectionIndex].selectedRowIndex = rowIndex;
+      this._makeResults();
+      this._render();
+    },
+
+    // ----------
     _makeResults: function() {
       var results = {};
       this.$selects.each(function(i, v) {
@@ -72,6 +167,16 @@
         if (value !== '---') {
           results[key] = value;
         }
+      });
+
+      _.each(this._sections, function(section) {
+        _.each(section.rows, function(row, rowIndex) {
+          _.each(row.menus, function(menu) {
+            if (rowIndex !== section.selectedRowIndex) {
+              delete results[menu.key];
+            }
+          });
+        });
       });
 
       this._results = results;
@@ -98,6 +203,13 @@
         'city',
         'state',
         'region'
+      ];
+
+      var topLevelKeys = [
+        'make',
+        'price',
+        'horsepower',
+        'eng_size'
       ];
 
       var selects = {};
@@ -162,7 +274,23 @@
           return a.localeCompare(b);
         });
 
-        select.options.unshift('---');
+        select.options = _.map(select.options, function(option) {
+          return {
+            key: option,
+            name: option
+          };
+        });
+
+        var topOption = {
+          key: '---',
+          name: select.name
+        };
+
+        if (!_.contains(topLevelKeys, select.key) && !_.contains(locationKeys, select.key)) {
+          topOption.name = 'All ' + topOption.name + 's';
+        }
+
+        select.options.unshift(topOption);
       });
 
       selects = _.filter(selects, function(select) {
@@ -170,10 +298,24 @@
         return !isExtraLocation;
       });
 
+      selects = _.object(_.pluck(selects, 'key'), selects);
+
+      _.each(this._sections, function(section) {
+        _.each(section.rows, function(row) {
+          _.each(row.menus, function(menu) {
+            if (selects[menu.key]) {
+              menu.select = selects[menu.key];
+            } else {
+              menu.select = null;
+            }
+          });
+        });
+      });
+
       this.$content.empty();
 
       App.template('vehicle-picker', {
-        selects: selects
+        sections: this._sections
       }).appendTo(this.$content);
 
       this.$button = this.$el.find('.btn-select');

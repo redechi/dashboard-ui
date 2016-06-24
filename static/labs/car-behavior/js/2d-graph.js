@@ -146,7 +146,7 @@
         .attr('x', x)
         .attr('y', y)
         .attr('text-anchor', 'end')
-        .text(this._minValue);
+        .text(Math.round(this._minValue));
 
       y = this._yScale(this._maxValue) + 15;
       this._svg.append('text')

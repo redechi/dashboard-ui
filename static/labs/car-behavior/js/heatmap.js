@@ -58,31 +58,16 @@
         .domain([self._data.minY, self._data.maxY])
         .range([this._height - (this._bottomBuffer + rowHeight), 0]);
 
-      var domain = [];
-      for (var i = 0; i < 7; i++) {
-        domain.push(i * (1 / 6));
-      }
-
       var colorScale = d3.scale.linear()
-        .domain(domain)
+        .domain([0, 0.1, 1])
         .range([
-          '#101',
-          '#f0f',
-          '#00f',
-          '#0f0',
-          '#ff0',
-          '#f80',
-          '#f00'
-        ]);
+          '#fff',
+          '#dbf5fd',
+          '#1a1c41'
+        ])
+        .clamp(true);
 
       this._svg.selectAll('*').remove();
-
-      this._svg.append('rect')
-        .attr('x', this._leftBuffer)
-        .attr('y', 0)
-        .attr('width', this._width - this._leftBuffer)
-        .attr('height', this._height - this._bottomBuffer)
-        .attr('fill', '#181818');
 
       var maxValue = 0;
       _.each(this._smoothedGrid, function(info, key) {
@@ -104,6 +89,14 @@
           .attr('height', rowHeight)
           .attr('fill', colorScale(value / maxValue));
       });
+
+      this._svg.append('rect')
+        .attr('x', this._leftBuffer)
+        .attr('y', 0)
+        .attr('width', this._width - this._leftBuffer)
+        .attr('height', this._height - this._bottomBuffer)
+        .attr('stroke', '#ddd')
+        .attr('fill', 'none');
 
       this.drawFrame({
         xLabel: this._xLabel,

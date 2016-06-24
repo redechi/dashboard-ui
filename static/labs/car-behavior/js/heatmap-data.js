@@ -253,7 +253,7 @@
 
       _.each(this.grid, function(gridInfo) {
         var velocity = gridInfo.x * App.milesPerKilometer;
-        var accel = gridInfo.y;
+        var accel = gridInfo.y * App.milesPerKilometer;
         var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
         if (!set || !gridInfo.totalTime) {
           return;
@@ -332,7 +332,7 @@
       var finish = function(set) {
         return _.chain(set)
           .map(function(v, i) {
-            v.value = self.mafToMpg(v.total / v.count, v.x);
+            v.value = self.mafToMpg(v.total / v.count, v.x / App.milesPerKilometer);
             return v;
           })
           .sortBy(function(v, i) {

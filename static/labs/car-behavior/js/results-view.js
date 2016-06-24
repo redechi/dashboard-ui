@@ -36,7 +36,7 @@
         minX: App.minMph,
         maxX: App.maxMph,
         xLabel: 'MPH',
-        yLabel: 'Acceleration (kmph/sec)'
+        yLabel: 'Acceleration (MPH/sec)'
       });
 
       sets = args.singleData.accel.styleSets('#0bf');
@@ -51,7 +51,7 @@
           mode: 'style',
           data: args.groupData.accel,
           xLabel: 'MPH',
-          yLabel: 'Acceleration (kmph/sec)'
+          yLabel: 'Acceleration (MPH/sec)'
         });
       }
 
