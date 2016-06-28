@@ -33,6 +33,7 @@
           </div>
           <p>Your persona is <span class="persona"></span>.</p>
         <% } else if (mode === 'efficiency') { %>
+          <h2 class="for-graph">MPG at Different Speeds</h2>
           <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
           <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
           <svg class="efficiency-2d-graph-svg graph-svg"></svg>
@@ -41,6 +42,7 @@
           </div>
           <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
         <% } else if (mode === 'power') { %>
+          <h2 class="for-graph">Dyno Graph - Horsepower and Torque</h2>
           <div>
             <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
             <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
@@ -103,23 +105,19 @@
           <div class="section" data-index="<%- sectionIndex %>">
             <h2><%- section.name %></h2>
             <% _.each(section.rows, function(row, rowIndex) { %>
-              <% if (row.name || _.any(row.menus, function(menu) { return menu.select; })) { %>
-                <div class="select-row" data-index="<%- rowIndex %>">
-                  <input type="radio" <%- rowIndex === section.selectedRowIndex ? 'checked' : '' %>>
-                  <% if (row.name) { %>
-                    <%- row.name %>
-                  <% } %>
-                  <% _.each(row.menus, function(menu) { %>
-                    <% if (menu.select) { %>
-                      <select data-key="<%- menu.key %>">
-                        <% _.each(menu.select.options, function(option) { %>
-                          <option value="<%- option.key %>" <%- menu.select.selected === option.key ? 'selected' : '' %>><%- option.name %></option>
-                        <% }); %>
-                      </select>
-                    <% } %>
-                  <% }); %>
-                </div>
-              <% } %>
+              <div class="select-row" data-index="<%- rowIndex %>">
+                <input type="radio" <%- rowIndex === section.selectedRowIndex ? 'checked' : '' %>>
+                <% if (row.name) { %>
+                  <%- row.name %>
+                <% } %>
+                <% _.each(row.menus, function(menu) { %>
+                  <select data-key="<%- menu.key %>">
+                    <% _.each(menu.select.options, function(option) { %>
+                      <option value="<%- option.key %>" <%- menu.select.selected === option.key ? 'selected' : '' %>><%- option.name %></option>
+                    <% }); %>
+                  </select>
+                <% }); %>
+              </div>
             <% }); %>
             <% if (section.note) { %>
               <p class="note"><%- section.note %></p>
@@ -147,6 +145,7 @@
       </div>
       <p class="explanation"></p>
       <p>This feature is currently in alpha.</p>
+      <p class="prompt"></p>
       <div class="controls hidden" id="controls">
         <div class="left-controls">
           <div class="swatch your-swatch"></div>

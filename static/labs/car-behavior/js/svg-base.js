@@ -12,6 +12,7 @@
       this.$svg = args.$svg;
       this._svg = d3.select(this.$svg[0]);
       this._leftBuffer = 45;
+      this._rightBuffer = 0;
       this._bottomBuffer = 32;
 
       this.resize();
@@ -34,6 +35,7 @@
 
     // ----------
     drawFrame: function(args) {
+      // y axis
       var x = 15;
       var y = (this._height - this._bottomBuffer) / 2;
       this._svg.append('text')
@@ -58,7 +60,8 @@
         .attr('text-anchor', 'end')
         .text(args.maxY);
 
-      x = this._leftBuffer + ((this._width - this._leftBuffer) / 2);
+      // x axis
+      x = this._leftBuffer + ((this._width - (this._leftBuffer + this._rightBuffer)) / 2);
       y = this._height - 5;
       this._svg.append('text')
         .attr('x', x)
@@ -74,7 +77,7 @@
         .attr('text-anchor', 'start')
         .text(args.minX);
 
-      x = this._width;
+      x = this._width - this._rightBuffer;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)

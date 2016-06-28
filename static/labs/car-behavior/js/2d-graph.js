@@ -6,11 +6,18 @@
     this.name = args.name;
     this._minX = args.minX;
     this._maxX = args.maxX;
+    this._minY = args.minY;
     this.$container = args.$container;
     this._leftBuffer = 45;
     this._bottomBuffer = 32;
+    this._rightBuffer = 0;
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
+    this._yLabel2 = args.yLabel2;
+
+    if (this._yLabel2) {
+      this._rightBuffer = 45;
+    }
 
     this._initSvg(args.$el);
     this.resize();
@@ -72,9 +79,13 @@
       this._minValue = minValue;
       this._maxValue = maxValue;
 
+      if (this._minY !== undefined) {
+        this._minValue = this._minY;
+      }
+
       this._xScale = d3.scale.linear()
         .domain([this._minX, this._maxX])
-        .range([this._leftBuffer, this._width]);
+        .range([this._leftBuffer, this._width - this._rightBuffer]);
 
       this._yScale = d3.scale.linear()
         .domain([this._minValue, this._maxValue])
@@ -90,10 +101,14 @@
         .x(function(d) { return self._xScale(d.x); })
         .y(function(d) { return self._yScale(d.value); });
 
-      this._svg.append("path")
+      var path = this._svg.append("path")
         .attr('stroke', set.color)
         .attr('fill', 'none')
         .attr("d", line(set.data));
+
+      if (set.dashed) {
+        path.attr('stroke-dasharray', '5,5');
+      }
     },
 
     // ----------
@@ -104,11 +119,12 @@
 
       this._svg.selectAll('*').remove();
 
+      // lines
       var y = this._yScale(0);
       this._svg.append('line')
         .attr('x1', this._leftBuffer)
         .attr('y1', y)
-        .attr('x2', this._width)
+        .attr('x2', this._width - this._rightBuffer)
         .attr('y2', y)
         .attr('stroke-width', 1)
         .style('stroke', '#ddd');
@@ -117,7 +133,7 @@
       this._svg.append('line')
         .attr('x1', this._leftBuffer)
         .attr('y1', y)
-        .attr('x2', this._width)
+        .attr('x2', this._width - this._rightBuffer)
         .attr('y2', y)
         .attr('stroke-width', 1)
         .style('stroke', '#eee');
@@ -131,6 +147,18 @@
         .attr('stroke-width', 1)
         .style('stroke', '#eee');
 
+      if (this._yLabel2) {
+        x = this._xScale(this._maxX);
+        this._svg.append('line')
+          .attr('x1', x)
+          .attr('y1', 0)
+          .attr('x2', x)
+          .attr('y2', this._height - this._bottomBuffer)
+          .attr('stroke-width', 1)
+          .style('stroke', '#eee');
+      }
+
+      // y axis
       x = 15;
       y = this._yScale((this._minValue + this._maxValue) / 2);
       this._svg.append('text')
@@ -155,6 +183,34 @@
         .attr('text-anchor', 'end')
         .text(Math.round(this._maxValue));
 
+      // y axis 2
+      if (this._yLabel2) {
+        x = this._width - 5;
+        y = this._yScale((this._minValue + this._maxValue) / 2);
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'middle')
+          .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
+          .text(this._yLabel2);
+
+        x -= 35;
+        y = this._yScale(this._minValue);
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'start')
+          .text(Math.round(this._minValue));
+
+        y = this._yScale(this._maxValue) + 15;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'start')
+          .text(Math.round(this._maxValue));
+      }
+
+      // x axis
       x = this._xScale((this._minX + this._maxX) / 2);
       y = this._height - 5;
       this._svg.append('text')
@@ -178,6 +234,7 @@
         .attr('text-anchor', 'end')
         .text(this._maxX);
 
+      // sets
       _.each(this._sets, function(set) {
         self._renderSet(set);
       });

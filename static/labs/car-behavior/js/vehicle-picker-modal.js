@@ -250,6 +250,7 @@
         });
       };
 
+      // determine selects
       addSelects(this._data);
 
       selects = _.values(selects);
@@ -300,22 +301,42 @@
 
       selects = _.object(_.pluck(selects, 'key'), selects);
 
-      _.each(this._sections, function(section) {
-        _.each(section.rows, function(row) {
-          _.each(row.menus, function(menu) {
+      // build sections for template
+      var templateSections = _.map(this._sections, function(section) {
+        section = _.clone(section);
+
+        section.rows = _.map(section.rows, function(row) {
+          row = _.clone(row);
+
+          row.menus = _.map(row.menus, function(menu) {
+            menu = _.clone(menu);
+
             if (selects[menu.key]) {
               menu.select = selects[menu.key];
-            } else {
-              menu.select = null;
             }
+
+            return menu;
           });
+
+          row.menus = _.filter(row.menus, function(menu) {
+            return !!menu.select;
+          });
+
+          return row;
         });
+
+        section.rows = _.filter(section.rows, function(row) {
+          return (row.name || row.menus.length);
+        });
+
+        return section;
       });
 
+      // actually render
       this.$content.empty();
 
       App.template('vehicle-picker', {
-        sections: this._sections
+        sections: templateSections
       }).appendTo(this.$content);
 
       this.$button = this.$el.find('.btn-select');

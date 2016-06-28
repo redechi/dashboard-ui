@@ -10,20 +10,23 @@
     maxKph: 160,
     minMph: 0,
     maxMph: 100,
-    minRpm: 0,
-    maxRpm: 6000,
+    minRpm: 1000,
+    maxRpm: 8000,
     minAccel: -22,
     maxAccel: 21,
 
     modes: {
       style: {
-        explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.'
+        explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.',
+        prompt: 'Compare your driving style with another vehicle:'
       },
       efficiency: {
-        explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.'
+        explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.',
+        prompt: 'Compare your vehicle’s fuel efficiency with another vehicle:'
       },
       power: {
-        explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.'
+        explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.',
+        prompt: 'Compare your vehicle’s power with another vehicle:'
       }
     },
 
@@ -32,6 +35,8 @@
       var self = this;
 
       $('#vehicleChoice').on('change', function() {
+        var vehicleId = $('#vehicleChoice').val();
+        sessionStorage.setItem('labs_car_behavior_vehicle_id', vehicleId);
         $('.graphs').fadeOut();
         self.getVehicleData();
       });
@@ -108,6 +113,7 @@
       $('.tab').removeClass('selected');
       $('.tab[data-mode=' + mode + ']').addClass('selected');
       $('.explanation').text(this.modes[this._mode].explanation);
+      $('.prompt').text(this.modes[this._mode].prompt);
       this.renderData();
 
       var $faq = $('.faq').empty();
@@ -255,6 +261,17 @@
             var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
             $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
           });
+
+          var vehicleId = sessionStorage.getItem('labs_car_behavior_vehicle_id');
+          if (vehicleId) {
+            var vehicle = _.findWhere(self.vehicles, {
+              id: vehicleId
+            });
+
+            if (vehicle) {
+              $('#vehicleChoice').val(vehicleId);
+            }
+          }
 
           self.getVehicleData();
         }

@@ -196,7 +196,7 @@
       var fuelMassPerSec = (maf / 100) / AIR_FUEL_RATIO; //grams
       var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
       var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
-      var mpg = (velocity / KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
+      var mpg = (velocity * KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
       return mpg;
     },
 
@@ -275,7 +275,7 @@
       });
 
       var finish = function(set) {
-        return _.chain(set)
+        var output = _.chain(set)
           .map(function(v, i) {
             v.value = v.total / v.time;
             return v;
@@ -284,6 +284,19 @@
             return v.x;
           })
           .value();
+
+        var done = false;
+        var threshold = 10 / (60 * 60); // 10 seconds, expressed in hours
+        output = _.filter(output, function(v, i) {
+          if (done || v.time < threshold) {
+            done = true;
+            return false;
+          }
+
+          return true;
+        });
+
+        return output;
       };
 
       return [
@@ -330,7 +343,7 @@
       });
 
       var finish = function(set) {
-        return _.chain(set)
+        var output = _.chain(set)
           .map(function(v, i) {
             v.value = self.mafToMpg(v.total / v.count, v.x / App.milesPerKilometer);
             return v;
@@ -339,6 +352,19 @@
             return v.x;
           })
           .value();
+
+        var done = false;
+        var threshold = 10;
+        output = _.filter(output, function(v, i) {
+          if (done || v.count < threshold) {
+            done = true;
+            return false;
+          }
+
+          return true;
+        });
+
+        return output;
       };
 
       var sets = [
@@ -414,7 +440,7 @@
       });
 
       var finish = function(set) {
-        return _.chain(set)
+        var output = _.chain(set)
           .map(function(v, i) {
             if (v.total && v.count) {
               v.value = v.total / v.count;
@@ -428,6 +454,19 @@
             return v.x;
           })
           .value();
+
+        var done = false;
+        var threshold = 10;
+        output = _.filter(output, function(v, i) {
+          if (done || v.count < threshold) {
+            done = true;
+            return false;
+          }
+
+          return true;
+        });
+
+        return output;
       };
 
       var sets = [
@@ -437,7 +476,8 @@
         },
         {
           data: finish(torqueData),
-          color: color
+          color: color,
+          dashed: true
         }
       ];
 

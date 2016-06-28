@@ -26,7 +26,9 @@
         mode: 'style',
         data: args.singleData.accel,
         xLabel: 'MPH',
-        yLabel: 'Acceleration (kmph/sec)'
+        yLabel: 'Acceleration (MPH/sec)',
+        yLabelFactor: App.milesPerKilometer,
+        heatLabel: 'Time Spent (hours)'
       });
 
       this.styleGraph = new App.TwoDGraph({
@@ -51,7 +53,9 @@
           mode: 'style',
           data: args.groupData.accel,
           xLabel: 'MPH',
-          yLabel: 'Acceleration (MPH/sec)'
+          yLabel: 'Acceleration (MPH/sec)',
+          yLabelFactor: App.milesPerKilometer,
+          heatLabel: 'Time Spent (hours)'
         });
       }
 
@@ -63,7 +67,9 @@
         mode: 'efficiency',
         data: args.singleData.accel,
         xLabel: 'MPH',
-        yLabel: 'MPG'
+        yLabel: 'Acceleration (MPH/sec)',
+        minY: 0,
+        heatLabel: 'MPG'
       });
 
       this.efficiencyGraph = new App.TwoDGraph({
@@ -88,7 +94,9 @@
           mode: 'efficiency',
           data: args.groupData.accel,
           xLabel: 'MPH',
-          yLabel: 'MPG'
+          yLabel: 'Acceleration (MPH/sec)',
+          minY: 0,
+          heatLabel: 'MPG'
         });
       }
 
@@ -118,8 +126,10 @@
         $el: this.$el.find('.power-2d-graph-svg'),
         minX: App.minRpm,
         maxX: App.maxRpm,
+        minY: 0,
         xLabel: 'RPM',
-        yLabel: 'Power'
+        yLabel: 'Horsepower',
+        yLabel2: 'Torque (lb ft) - dashed line'
       });
 
       sets = args.singleData.rpm.powerSets('#0bf');
