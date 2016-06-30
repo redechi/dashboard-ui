@@ -4,24 +4,9 @@
 
   // ----------
   var component = App.Heatmap = function(args) {
-    var modes = {
-      style: {
-        valueKey: 'totalTime'
-      },
-      efficiency: {
-        valueKey: 'averageMpg'
-      },
-      horsepower: {
-        valueKey: 'averageHorsepower'
-      },
-      torque: {
-        valueKey: 'averageTorque'
-      }
-    };
-
     this._mode = args.mode;
-    this._valueKey = modes[this._mode].valueKey;
     this._data = args.data;
+    this._valueKey = this._data.valueKey(this._mode);
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
     this._yLabelFactor = args.yLabelFactor || 1;

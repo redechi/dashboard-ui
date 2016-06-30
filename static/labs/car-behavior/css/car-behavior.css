@@ -62,13 +62,6 @@ select {
   margin-right: 10px;
 }
 
-.graph-svg {
-  display: none;
-  width: 100%;
-  margin: 10px 0;
-  font-size: 12px;
-}
-
 .graph-section {
   display: inline-block;
   width: 400px;
@@ -87,6 +80,36 @@ select {
 
 .toggle-row {
   margin-bottom: 20px;
+}
+
+/* 2D GRAPHS */
+.graph-svg {
+  display: none;
+  width: 100%;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.axis path {
+  fill: none;
+  stroke: #eee;
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  fill: none;
+  stroke: none;
+}
+
+.axis text {
+  font-family: sans-serif;
+  font-size: 11px;
+  fill: #888;
+}
+
+.axis .tick:nth-last-child(2) text {
+  /* We do this so the rightmost tick number isn't half cutoff (outside the SVG) */
+  text-anchor: end !important;
 }
 
 /* CONTROLS */

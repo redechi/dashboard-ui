@@ -9,9 +9,21 @@
 
   // ----------
   component.prototype = {
+    _modeValueKeys: {
+      style: 'totalTime',
+      efficiency: 'averageMpg',
+      horsepower: 'averageHorsepower',
+      torque: 'averageTorque'
+    },
+
     // ----------
     key: function(x, y) {
       return x + 'x' + y;
+    },
+
+    // ----------
+    valueKey: function(mode) {
+      return this._modeValueKeys[mode];
     },
 
     // ----------
@@ -492,6 +504,38 @@
       sets[0].optimalRpm = startRpm + '-' + (startRpm + interval);
 
       return sets;
+    },
+
+    // ----------
+    getForComparison: function(mode) {
+      var output = [];
+      var valueKey = this.valueKey(mode);
+
+      var x, y, column, info, value;
+      for (x = this.minX; x <= this.maxX; x += this.xInterval) {
+        if (output.length === 80) {
+          break;
+        }
+
+        column = [];
+        output.push(column);
+        for (y = this.minY; y <= this.maxY; y += this.yInterval) {
+          info = this.grid[this.key(x, y)];
+          value = 0;
+          if (info) {
+            value = info[valueKey];
+          }
+
+          column.push(value);
+        }
+
+        console.assert(mode === 'horsepower' || column.length === 44,
+          'comparison heatmap columns should be 44 items long', column.length);
+      }
+
+      console.assert(output.length === 80, 'comparison heatmap rows should be 80 items long', output.length);
+
+      return output;
     }
   };
 

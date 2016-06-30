@@ -9,7 +9,7 @@
     this._minY = args.minY;
     this.$container = args.$container;
     this._leftBuffer = 45;
-    this._bottomBuffer = 32;
+    this._bottomBuffer = 35;
     this._rightBuffer = 0;
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
@@ -119,8 +119,10 @@
 
       this._svg.selectAll('*').remove();
 
+      var x, y;
+
       // lines
-      var y = this._yScale(0);
+      y = this._yScale(0);
       this._svg.append('line')
         .attr('x1', this._leftBuffer)
         .attr('y1', y)
@@ -128,24 +130,6 @@
         .attr('y2', y)
         .attr('stroke-width', 1)
         .style('stroke', '#ddd');
-
-      y = this._yScale(this._minValue);
-      this._svg.append('line')
-        .attr('x1', this._leftBuffer)
-        .attr('y1', y)
-        .attr('x2', this._width - this._rightBuffer)
-        .attr('y2', y)
-        .attr('stroke-width', 1)
-        .style('stroke', '#eee');
-
-      var x = this._xScale(this._minX);
-      this._svg.append('line')
-        .attr('x1', x)
-        .attr('y1', 0)
-        .attr('x2', x)
-        .attr('y2', this._height - this._bottomBuffer)
-        .attr('stroke-width', 1)
-        .style('stroke', '#eee');
 
       if (this._yLabel2) {
         x = this._xScale(this._maxX);
@@ -168,20 +152,15 @@
         .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
         .text(this._yLabel);
 
-      x = 40;
-      y = this._yScale(this._minValue);
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(Math.round(this._minValue));
+      var yAxis = d3.svg.axis()
+        .scale(this._yScale)
+        .orient('left')
+        .ticks(5);
 
-      y = this._yScale(this._maxValue) + 15;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(Math.round(this._maxValue));
+      this._svg.append('g')
+          .attr('class', 'axis')
+          .call(yAxis)
+          .attr('transform','translate(' + this._leftBuffer + ',' + 0 + ')');
 
       // y axis 2
       if (this._yLabel2) {
@@ -212,27 +191,22 @@
 
       // x axis
       x = this._xScale((this._minX + this._maxX) / 2);
-      y = this._height - 5;
+      y = this._height - 1;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)
         .attr('text-anchor', 'middle')
         .text(this._xLabel);
 
-      x = this._xScale(this._minX);
-      y = this._height - 18;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'start')
-        .text(this._minX);
+      var xAxis = d3.svg.axis()
+        .scale(this._xScale)
+        .orient('bottom')
+        .ticks(10);
 
-      x = this._xScale(this._maxX);
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(this._maxX);
+      this._svg.append('g')
+          .attr('class', 'axis')
+          .call(xAxis)
+          .attr('transform','translate(' + 0 + ',' + (this._height - this._bottomBuffer) + ')');
 
       // sets
       _.each(this._sets, function(set) {

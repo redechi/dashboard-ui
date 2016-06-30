@@ -204,9 +204,51 @@
         success: function(result) {
           self.groupData = self._digestData(result, 'group');
           self.renderData();
+          self.getComparison();
         },
         error: function(errorThrown) {
           $('.error').text('Unable to load data for ' + groupOptionView.name + '.');
+        }
+      });
+    },
+
+    // ----------
+    getComparison: function() {
+      var self = this;
+
+      if (!this.singleData || !this.groupData) {
+        return;
+      }
+
+      var type = this._mode;
+
+      var dataKey = 'accel';
+      if (this._mode === 'power') {
+        dataKey = 'rpm';
+      }
+
+      var dataMode = this._mode;
+      if (dataMode === 'power') {
+        dataMode = 'horsepower';
+      }
+
+      var h1 = this.singleData[dataKey].getForComparison(dataMode);
+      var h2 = this.groupData[dataKey].getForComparison(dataMode);
+
+      this.request({
+        path: 'compare-heatmaps/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          type: type,
+          h1: h1,
+          h2: h2
+        }),
+        success: function(result) {
+          // TODO: display the comparison
+        },
+        error: function(errorThrown) {
+          $('.error').text('Unable to load comparison.');
         }
       });
     },
@@ -223,6 +265,7 @@
       return $.ajax({
         url: apiUrl,
         method: args.method,
+        contentType: args.contentType,
         data: args.data,
         headers: {
           Authorization: 'bearer ' + accessToken
