@@ -1,5 +1,7 @@
 (function() {
 
+  var numericSort = function(a, b) { return a - b; };
+
   // ----------
   var component = App.HeatmapData = function(args) {
     this._mafCountThreshold = args.mafCountThreshold || 1;
@@ -12,8 +14,8 @@
     _modeValueKeys: {
       style: 'totalTime',
       efficiency: 'averageMpg',
-      horsepower: 'averageHorsepower',
-      torque: 'averageTorque'
+      horsepower: 'maxHorsepower',
+      torque: 'maxTorque'
     },
 
     // ----------
@@ -41,10 +43,23 @@
         averageMaf: 0,
         averageMpg: 0,
         averageHorsepower: 0,
-        averageTorque: 0
+        averageTorque: 0,
+        maxHorsepower: 0,
+        maxTorque: 0,
+        horsepowers: [],
+        torques: []
       };
 
       return info;
+    },
+
+    // ----------
+    _percentile: function(values, factor) {
+      if (!values.length) {
+        return 0;
+      }
+
+      return values[Math.round((values.length - 1) * factor)];
     },
 
     // ----------
@@ -120,6 +135,8 @@
           info.totalPowerCount++;
           info.totalHorsepower += horsepower;
           info.totalTorque += torque;
+          info.horsepowers.push(horsepower);
+          info.torques.push(torque);
         }
       });
 
@@ -133,12 +150,22 @@
           info.averageHorsepower = info.totalHorsepower / info.totalPowerCount;
           info.averageTorque = info.totalTorque / info.totalPowerCount;
         }
+
+        if (info.horsepowers.length) {
+          info.horsepowers.sort(numericSort);
+          info.maxHorsepower = self._percentile(info.horsepowers, 0.9);
+        }
+
+        if (info.torques.length) {
+          info.torques.sort(numericSort);
+          info.maxTorque = self._percentile(info.torques, 0.9);
+        }
       });
 
       this.grid = grid;
 
-      xValues = _.unique(xValues).sort(function(a, b) { return a - b; });
-      yValues = _.unique(yValues).sort(function(a, b) { return a - b; });
+      xValues = _.unique(xValues).sort(numericSort);
+      yValues = _.unique(yValues).sort(numericSort);
       this.xInterval = this._getCommonInterval(xValues);
       this.yInterval = this._getCommonInterval(yValues);
 
@@ -409,6 +436,7 @@
     // x = rpm
     // y = hp and torque
     powerSets: function(color) {
+      var self = this;
       var hpData = {};
       var torqueData = {};
 
@@ -425,41 +453,37 @@
         if (!hpInfo) {
           hpInfo = {
             x: rpm,
-            total: 0,
-            count: 0
+            count: 0,
+            values: []
           };
 
           hpData[rpm] = hpInfo;
         }
 
-        hpInfo.total += gridInfo.totalHorsepower;
         hpInfo.count += gridInfo.totalPowerCount;
+        hpInfo.values = hpInfo.values.concat(gridInfo.horsepowers);
 
         // torque
         var torqueInfo = torqueData[rpm];
         if (!torqueInfo) {
           torqueInfo = {
             x: rpm,
-            total: 0,
-            count: 0
+            count: 0,
+            values: []
           };
 
           torqueData[rpm] = torqueInfo;
         }
 
-        torqueInfo.total += gridInfo.totalTorque;
         torqueInfo.count += gridInfo.totalPowerCount;
+        torqueInfo.values = torqueInfo.values.concat(gridInfo.torques);
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            if (v.total && v.count) {
-              v.value = v.total / v.count;
-            } else {
-              v.value = 0;
-            }
-
+            v.value = self._percentile(v.values.sort(numericSort), 0.9);
+            v.total = v.value * v.count; // we need this for _maxBucketValue
             return v;
           })
           .sortBy(function(v, i) {

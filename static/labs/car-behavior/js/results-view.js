@@ -108,16 +108,8 @@
         mode: 'horsepower',
         data: args.singleData.rpm,
         xLabel: 'MPH',
-        yLabel: 'RPM'
-      });
-
-      this.torqueHeatmap = new App.Heatmap({
-        $container: args.$container,
-        $el: this.$el.find('.torque-heatmap-svg').eq(0),
-        mode: 'torque',
-        data: args.singleData.rpm,
-        xLabel: 'MPH',
-        yLabel: 'RPM'
+        yLabel: 'RPM',
+        heatLabel: 'Horsepower'
       });
 
       this.powerGraph = new App.TwoDGraph({
@@ -128,8 +120,9 @@
         maxX: App.maxRpm,
         minY: 0,
         xLabel: 'RPM',
-        yLabel: 'Horsepower',
-        yLabel2: 'Torque (lb ft) - dashed line'
+        yLabel: 'Horsepower - dots',
+        yLabel2: 'Torque (lb ft) - circles',
+        scatter: true
       });
 
       sets = args.singleData.rpm.powerSets('#0bf');
@@ -144,16 +137,8 @@
           mode: 'horsepower',
           data: args.groupData.rpm,
           xLabel: 'MPH',
-          yLabel: 'RPM'
-        });
-
-        this.torqueHeatmap2 = new App.Heatmap({
-          $container: args.$container,
-          $el: this.$el.find('.torque-heatmap-svg').eq(1),
-          mode: 'torque',
-          data: args.groupData.rpm,
-          xLabel: 'MPH',
-          yLabel: 'RPM'
+          yLabel: 'RPM',
+          heatLabel: 'Horsepower'
         });
       }
 

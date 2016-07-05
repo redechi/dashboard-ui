@@ -43,21 +43,31 @@
           <p>Your optimal speed for fuel efficiency is <span class="optimal-efficiency"></span> MPH.</p>
         <% } else if (mode === 'power') { %>
           <h2 class="for-graph">Dyno Graph - Horsepower and Torque</h2>
-          <div>
-            <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
-            <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
-          </div>
-          <div>
-            <svg class="torque-heatmap-svg heatmap-svg"></svg>
-            <svg class="torque-heatmap-svg heatmap-svg"></svg>
-          </div>
+          <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
+          <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
           <svg class="power-2d-graph-svg graph-svg"></svg>
           <div class="toggle-row">
             <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
           </div>
           <p>Your optimal RPM for power is <span class="optimal-power"></span>.</p>
         <% } %>
-        <p>Comparison goes here.</p>
+      </div>
+    </script>
+
+    <script id="comparison-template" type="text/template">
+      <h2><%- title %></h2>
+      <div class="table">
+        <% _.each(comparisons, function(comparison) { %>
+          <div class="row">
+            <div class="key">
+              <%- comparison.key %>
+            </div>
+            <div class="graph">
+              <div class="bar single" style="width: <%- comparison.singlePercent %>%" title="<%- comparison.singleTip %>"></div>
+              <div class="bar group" style="width: <%- comparison.groupPercent %>%" title="<%- comparison.groupTip %>"></div>
+            </div>
+          </div>
+        <% }); %>
       </div>
     </script>
 
@@ -161,6 +171,7 @@
       <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
       <div class="error"></div>
       <div class="results"></div>
+      <div class="comparison"></div>
       <div class="faq"></div>
       <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home"></a>
     </div>
@@ -182,6 +193,7 @@
     <script src="js/heatmap.js"></script>
     <script src="js/results-view.js"></script>
     <script src="js/vehicle-picker-modal.js"></script>
+    <script src="js/mode.js"></script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

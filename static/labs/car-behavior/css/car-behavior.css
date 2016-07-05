@@ -26,7 +26,7 @@ select {
 .tab {
   display: inline-block;
   position: relative;
-  top: 0.5px;
+  top: 1px;
   padding: 10px 20px;
   border: 1px solid #ccc;
   font-size: 16px;
@@ -107,9 +107,43 @@ select {
   fill: #888;
 }
 
-.axis .tick:nth-last-child(2) text {
+.axis.horizontal .tick:nth-last-child(2) text {
   /* We do this so the rightmost tick number isn't half cutoff (outside the SVG) */
   text-anchor: end !important;
+}
+
+/* COMPARISONS */
+.comparison .table {
+  display: table;
+}
+
+.comparison .row {
+  display: table-row;
+}
+
+.comparison .key {
+  display: table-cell;
+  vertical-align: middle;
+  padding-right: 20px;
+}
+
+.comparison .graph {
+  display: table-cell;
+  width: 500px;
+  padding: 8px 0;
+}
+
+.comparison .bar {
+  height: 10px;
+  margin-bottom: 4px;
+}
+
+.comparison .single {
+  background: #0bf;
+}
+
+.comparison .group {
+  background: #f8f;
 }
 
 /* CONTROLS */

@@ -15,24 +15,37 @@
     minAccel: -22,
     maxAccel: 21,
 
-    modes: {
-      style: {
-        explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.',
-        prompt: 'Compare your driving style with another vehicle:'
-      },
-      efficiency: {
-        explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.',
-        prompt: 'Compare your vehicle’s fuel efficiency with another vehicle:'
-      },
-      power: {
-        explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.',
-        prompt: 'Compare your vehicle’s power with another vehicle:'
-      }
-    },
-
     // ----------
     init: function() {
       var self = this;
+
+      this.modes = {};
+
+      var modeMap = {
+        style: {
+          name: 'Driving Style',
+          explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.',
+          prompt: 'Compare your driving style with another vehicle:'
+        },
+        efficiency: {
+          name: 'Efficiency',
+          explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.',
+          prompt: 'Compare your vehicle’s fuel efficiency with another vehicle:'
+        },
+        power: {
+          name: 'Power',
+          explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.',
+          prompt: 'Compare your vehicle’s power with another vehicle:'
+        }
+      };
+
+      _.each(modeMap, function(v, k) {
+        var mode = new App.Mode(_.extend({
+          key: k,
+        }, v));
+
+        self.modes[k] = mode;
+      });
 
       $('#vehicleChoice').on('change', function() {
         var vehicleId = $('#vehicleChoice').val();
@@ -99,7 +112,7 @@
       var vehicle = this.currentVehicle();
 
       this.personResultsView = new App.ResultsView({
-        mode: this._mode,
+        mode: this.mode.key,
         name: 'your ' + vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
         $container: $('.results'),
         singleData: this.singleData,
@@ -108,17 +121,19 @@
     },
 
     // ----------
-    selectMode: function(mode) {
-      this._mode = mode;
+    selectMode: function(modeKey) {
+      this.mode = this.modes[modeKey];
+      this.mode.select();
+
       $('.tab').removeClass('selected');
-      $('.tab[data-mode=' + mode + ']').addClass('selected');
-      $('.explanation').text(this.modes[this._mode].explanation);
-      $('.prompt').text(this.modes[this._mode].prompt);
+      $('.tab[data-mode=' + modeKey + ']').addClass('selected');
+      $('.explanation').text(this.mode.explanation);
+      $('.prompt').text(this.mode.prompt);
       this.renderData();
 
       var $faq = $('.faq').empty();
       this.template('faq', {
-        mode: this._mode
+        mode: this.mode.key
       }).appendTo($faq);
 
       $('.question').on('click', '.open-control, h3', function() {
@@ -204,7 +219,7 @@
         success: function(result) {
           self.groupData = self._digestData(result, 'group');
           self.renderData();
-          self.getComparison();
+          self.getComparisons();
         },
         error: function(errorThrown) {
           $('.error').text('Unable to load data for ' + groupOptionView.name + '.');
@@ -213,43 +228,19 @@
     },
 
     // ----------
-    getComparison: function() {
+    getComparisons: function() {
       var self = this;
 
       if (!this.singleData || !this.groupData) {
         return;
       }
 
-      var type = this._mode;
-
-      var dataKey = 'accel';
-      if (this._mode === 'power') {
-        dataKey = 'rpm';
-      }
-
-      var dataMode = this._mode;
-      if (dataMode === 'power') {
-        dataMode = 'horsepower';
-      }
-
-      var h1 = this.singleData[dataKey].getForComparison(dataMode);
-      var h2 = this.groupData[dataKey].getForComparison(dataMode);
-
-      this.request({
-        path: 'compare-heatmaps/',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-          type: type,
-          h1: h1,
-          h2: h2
-        }),
-        success: function(result) {
-          // TODO: display the comparison
-        },
-        error: function(errorThrown) {
-          $('.error').text('Unable to load comparison.');
+      _.each(this.modes, function(mode) {
+        if (mode.key === 'power') {
+          return;
         }
+
+        mode.getComparison(self.singleData, self.groupData);
       });
     },
 

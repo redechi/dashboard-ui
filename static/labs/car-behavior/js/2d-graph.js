@@ -14,9 +14,11 @@
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
     this._yLabel2 = args.yLabel2;
+    this._scatter = args.scatter;
+    this._scatterRadius = this._scatter ? 2.5 : 0;
 
     if (this._yLabel2) {
-      this._rightBuffer = 45;
+      this._rightBuffer = 55;
     }
 
     this._initSvg(args.$el);
@@ -89,37 +91,47 @@
 
       this._yScale = d3.scale.linear()
         .domain([this._minValue, this._maxValue])
-        .range([this._height - this._bottomBuffer, 0]);
+        .range([this._height - this._bottomBuffer, this._scatterRadius]);
     },
 
     // ----------
     _renderSet: function(set) {
       var self = this;
 
-      var line = d3.svg.line()
-        .interpolate('basis')
-        .x(function(d) { return self._xScale(d.x); })
-        .y(function(d) { return self._yScale(d.value); });
+      if (this._scatter) {
+        _.each(set.data, function(datum) {
+          self._svg.append('circle')
+            .attr('cx', self._xScale(datum.x))
+            .attr('cy', self._yScale(datum.value))
+            .attr('r', 2.5)
+            .attr('fill', set.dashed ? 'none' : set.color)
+            .attr('stroke', set.color);
+        });
+      } else {
+        var line = d3.svg.line()
+          .interpolate('basis')
+          .x(function(d) { return self._xScale(d.x); })
+          .y(function(d) { return self._yScale(d.value); });
 
-      var path = this._svg.append("path")
-        .attr('stroke', set.color)
-        .attr('fill', 'none')
-        .attr("d", line(set.data));
+        var path = this._svg.append("path")
+          .attr('stroke', set.color)
+          .attr('fill', 'none')
+          .attr("d", line(set.data));
 
-      if (set.dashed) {
-        path.attr('stroke-dasharray', '5,5');
+        if (set.dashed) {
+          path.attr('stroke-dasharray', '5,5');
+        }
       }
     },
 
     // ----------
     render: function() {
       var self = this;
+      var x, y;
 
       // console.time('render');
 
       this._svg.selectAll('*').remove();
-
-      var x, y;
 
       // lines
       y = this._yScale(0);
@@ -130,17 +142,6 @@
         .attr('y2', y)
         .attr('stroke-width', 1)
         .style('stroke', '#ddd');
-
-      if (this._yLabel2) {
-        x = this._xScale(this._maxX);
-        this._svg.append('line')
-          .attr('x1', x)
-          .attr('y1', 0)
-          .attr('x2', x)
-          .attr('y2', this._height - this._bottomBuffer)
-          .attr('stroke-width', 1)
-          .style('stroke', '#eee');
-      }
 
       // y axis
       x = 15;
@@ -173,20 +174,15 @@
           .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
           .text(this._yLabel2);
 
-        x -= 35;
-        y = this._yScale(this._minValue);
-        this._svg.append('text')
-          .attr('x', x)
-          .attr('y', y)
-          .attr('text-anchor', 'start')
-          .text(Math.round(this._minValue));
+        var yAxis2 = d3.svg.axis()
+          .scale(this._yScale)
+          .orient('right')
+          .ticks(5);
 
-        y = this._yScale(this._maxValue) + 15;
-        this._svg.append('text')
-          .attr('x', x)
-          .attr('y', y)
-          .attr('text-anchor', 'start')
-          .text(Math.round(this._maxValue));
+        this._svg.append('g')
+            .attr('class', 'axis')
+            .call(yAxis2)
+            .attr('transform','translate(' + (this._width - this._rightBuffer) + ',' + 0 + ')');
       }
 
       // x axis
@@ -204,7 +200,7 @@
         .ticks(10);
 
       this._svg.append('g')
-          .attr('class', 'axis')
+          .attr('class', 'axis horizontal')
           .call(xAxis)
           .attr('transform','translate(' + 0 + ',' + (this._height - this._bottomBuffer) + ')');
 
