@@ -113,8 +113,18 @@ select {
 }
 
 /* COMPARISONS */
+.comparison-content {
+  display: flex;
+}
+
+.comparison-text {
+  flex-basis: 50%;
+  padding-right: 40px;
+}
+
 .comparison .table {
-  display: table;
+  flex-basis: 50%;
+  white-space: nowrap;
 }
 
 .comparison .row {
@@ -123,14 +133,14 @@ select {
 
 .comparison .key {
   display: table-cell;
-  vertical-align: middle;
+  vertical-align: top;
   padding-right: 20px;
 }
 
 .comparison .graph {
   display: table-cell;
   width: 500px;
-  padding: 8px 0;
+  padding: 0 0 16px 0;
 }
 
 .comparison .bar {
@@ -144,6 +154,21 @@ select {
 
 .comparison .group {
   background: #f8f;
+}
+
+/* INSIGHTS */
+.insights {
+  display: flex;
+}
+
+.left-insight {
+  flex-basis: 50%;
+  vertical-align: top;
+}
+
+.right-insight {
+  flex-basis: 50%;
+  vertical-align: top;
 }
 
 /* CONTROLS */

@@ -25,17 +25,20 @@
         style: {
           name: 'Driving Style',
           explanation: 'This page shows how your driving style compares with your peers and how aggressive you are.',
-          prompt: 'Compare your driving style with another vehicle:'
+          prompt: 'Compare your driving style with another vehicle:',
+          comparisonText: 'By analyzing the velocities and accelerations where you spend your time, we’re able to identify which drivers are more aggressive than others.  Instead of just looking at hard braking and acceleration events, we looked at all accelerations and brakes to develop an overall driving style for a user in these four categories.'
         },
         efficiency: {
           name: 'Efficiency',
           explanation: 'This page shows how your vehicle’s fuel efficiency compares with other vehicles and how to drive to achieve the best MPG.',
-          prompt: 'Compare your vehicle’s fuel efficiency with another vehicle:'
+          prompt: 'Compare your vehicle’s fuel efficiency with another vehicle:',
+          comparisonText: 'We took the driving of the average American and pretended this person drove your car over many drives.  Using your car’s fuel efficiency heatmap, we calculated the total gallons of fuel and that would have been used over these drive simulations to show MPG comparisons in the city, highway, and overall.'
         },
         power: {
           name: 'Power',
           explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.',
-          prompt: 'Compare your vehicle’s power with another vehicle:'
+          prompt: 'Compare your vehicle’s power with another vehicle:',
+          comparisonText: ''
         }
       };
 
@@ -111,12 +114,17 @@
 
       var vehicle = this.currentVehicle();
 
+      var groupOptionView = _.findWhere(this._groupOptionViews, {
+        key: this._selectedGroupOptionViewKey
+      });
+
       this.personResultsView = new App.ResultsView({
         mode: this.mode.key,
         name: 'your ' + vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
         $container: $('.results'),
         singleData: this.singleData,
-        groupData: this.groupData
+        groupData: this.groupData,
+        groupName: groupOptionView ? groupOptionView.name : ''
       });
     },
 
@@ -124,25 +132,7 @@
     selectMode: function(modeKey) {
       this.mode = this.modes[modeKey];
       this.mode.select();
-
-      $('.tab').removeClass('selected');
-      $('.tab[data-mode=' + modeKey + ']').addClass('selected');
-      $('.explanation').text(this.mode.explanation);
-      $('.prompt').text(this.mode.prompt);
       this.renderData();
-
-      var $faq = $('.faq').empty();
-      this.template('faq', {
-        mode: this.mode.key
-      }).appendTo($faq);
-
-      $('.question').on('click', '.open-control, h3', function() {
-        var questionDiv = $(this).parents('.question');
-        questionDiv.toggleClass('open');
-        $('.answer', questionDiv).slideToggle();
-        $('.open-control', questionDiv).toggleClass('fa-chevron-down');
-        $('.open-control', questionDiv).toggleClass('fa-chevron-up');
-      });
     },
 
     // ----------

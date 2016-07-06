@@ -2,7 +2,7 @@
 
   // ----------
   var component = App.ResultsView = function(args) {
-    var sets;
+    var sets, groupSets;
 
     this.$el = App.template('results', {
       mode: args.mode,
@@ -18,6 +18,9 @@
       $('body').removeClass('graph-mode');
       $('body').addClass('heatmap-mode');
     });
+
+    var leftInsight = '';
+    var rightInsight = '';
 
     if (args.mode === 'style') {
       this.styleHeatmap = new App.Heatmap({
@@ -42,7 +45,6 @@
       });
 
       sets = args.singleData.accel.styleSets('#0bf');
-      this.$el.find('.persona').text(args.singleData.raw.persona ? args.singleData.raw.persona : 'unknown');
 
       if (args.groupData) {
         sets = sets.concat(args.groupData.accel.styleSets('#f8f'));
@@ -60,6 +62,11 @@
       }
 
       this.styleGraph.addSets(sets);
+
+      var persona = args.singleData.raw.persona;
+      if (persona) {
+        leftInsight = 'Your persona is ' + persona + '.';
+      }
     } else if (args.mode === 'efficiency') {
       this.efficiencyHeatmap = new App.Heatmap({
         $container: args.$container,
@@ -83,10 +90,13 @@
       });
 
       sets = args.singleData.accel.efficiencySets('#0bf');
-      this.$el.find('.optimal-efficiency').text(sets[0].optimalSpeed);
+      leftInsight = 'Your optimal speed for fuel efficiency is ' + sets[0].optimalSpeed + ' MPH.';
 
       if (args.groupData) {
-        sets = sets.concat(args.groupData.accel.efficiencySets('#f8f'));
+        groupSets = args.groupData.accel.efficiencySets('#f8f');
+        sets = sets.concat(groupSets);
+        rightInsight = 'The optimal speed for fuel efficiency for ' + args.groupName + ' is ' +
+          groupSets[0].optimalSpeed + ' MPH.';
 
         this.efficiencyHeatmap2 = new App.Heatmap({
           $container: args.$container,
@@ -126,10 +136,13 @@
       });
 
       sets = args.singleData.rpm.powerSets('#0bf');
-      this.$el.find('.optimal-power').text(sets[0].optimalRpm);
+      leftInsight = 'Your optimal RPM for power is ' + sets[0].optimalRpm + '.';
 
       if (args.groupData) {
-        sets = sets.concat(args.groupData.rpm.powerSets('#f8f'));
+        groupSets = args.groupData.rpm.powerSets('#f8f');
+        sets = sets.concat(groupSets);
+        rightInsight = 'The optimal RPM for power for ' + args.groupName + ' is ' +
+          groupSets[0].optimalRpm + '.';
 
         this.horsepowerHeatmap2 = new App.Heatmap({
           $container: args.$container,
@@ -144,6 +157,9 @@
 
       this.powerGraph.addSets(sets);
     }
+
+    $('.left-insight').text(leftInsight);
+    $('.right-insight').text(rightInsight);
 
     this.$el.fadeIn();
   };

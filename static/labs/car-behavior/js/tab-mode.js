@@ -2,7 +2,7 @@
 
   // ----------
   var component = App.Mode = function(args) {
-    _.extend(this, _.pick(args, ['key', 'explanation', 'prompt', 'name']));
+    _.extend(this, _.pick(args, ['key', 'explanation', 'prompt', 'name', 'comparisonText']));
     this._comparisons = [];
   };
 
@@ -55,6 +55,24 @@
     // ----------
     select: function() {
       this._drawComparison();
+
+      $('.tab').removeClass('selected');
+      $('.tab[data-mode=' + this.key + ']').addClass('selected');
+      $('.explanation').text(this.explanation);
+      $('.prompt').text(this.prompt);
+
+      var $faq = $('.faq').empty();
+      App.template('faq', {
+        mode: this.key
+      }).appendTo($faq);
+
+      $('.question').on('click', '.open-control, h3', function() {
+        var questionDiv = $(this).parents('.question');
+        questionDiv.toggleClass('open');
+        $('.answer', questionDiv).slideToggle();
+        $('.open-control', questionDiv).toggleClass('fa-chevron-down');
+        $('.open-control', questionDiv).toggleClass('fa-chevron-up');
+      });
     },
 
     // ----------
@@ -66,6 +84,7 @@
       if (this._comparisons.length) {
         App.template('comparison', {
           title: this.name + ' Comparison',
+          text: this.comparisonText,
           comparisons: _.map(this._comparisons, function(comparison) {
             var singleValue = comparison.value[0] || 0;
             var groupValue = comparison.value[1] || 0;

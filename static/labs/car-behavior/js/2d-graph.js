@@ -145,7 +145,7 @@
 
       // y axis
       x = 15;
-      y = this._yScale((this._minValue + this._maxValue) / 2);
+      y = (this._height - this._bottomBuffer) / 2;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)
@@ -166,7 +166,7 @@
       // y axis 2
       if (this._yLabel2) {
         x = this._width - 5;
-        y = this._yScale((this._minValue + this._maxValue) / 2);
+        y = (this._height - this._bottomBuffer) / 2;
         this._svg.append('text')
           .attr('x', x)
           .attr('y', y)
