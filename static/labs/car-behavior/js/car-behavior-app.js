@@ -36,7 +36,7 @@
         },
         power: {
           name: 'Power',
-          explanation: 'This page shows how your vehicle’s power compares with other vehicles and how fun each vehicle is to drive.',
+          explanation: 'This page shows how your vehicle’s power and torque compares with other vehicles.',
           prompt: 'Compare your vehicle’s power with another vehicle:',
           comparisonText: ''
         }
@@ -89,7 +89,7 @@
         self.selectMode($el.data('mode'));
       });
 
-      this.selectMode('style');
+      this.selectMode('efficiency');
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.demo) {
@@ -138,6 +138,10 @@
     // ----------
     getVehicleData: function() {
       var self = this;
+
+      _.each(this.modes, function(mode) {
+        mode.clearComparison();
+      });
 
       this.request({
         path: 'vehicle-heatmap/',

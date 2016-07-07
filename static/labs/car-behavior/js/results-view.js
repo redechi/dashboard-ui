@@ -29,7 +29,9 @@
         mode: 'style',
         data: args.singleData.accel,
         xLabel: 'MPH',
-        yLabel: 'Acceleration (MPH/sec)',
+        yLabel: 'MPH/sec',
+        maxYLabel: 'Acceleration',
+        minYLabel: 'Braking',
         yLabelFactor: App.milesPerKilometer,
         heatLabel: 'Time Spent (hours)'
       });
@@ -41,7 +43,9 @@
         minX: App.minMph,
         maxX: App.maxMph,
         xLabel: 'MPH',
-        yLabel: 'Acceleration (MPH/sec)'
+        yLabel: 'MPH/sec',
+        maxYLabel: 'Acceleration',
+        minYLabel: 'Braking'
       });
 
       sets = args.singleData.accel.styleSets('#0bf');
@@ -55,7 +59,9 @@
           mode: 'style',
           data: args.groupData.accel,
           xLabel: 'MPH',
-          yLabel: 'Acceleration (MPH/sec)',
+          yLabel: 'MPH/sec',
+          maxYLabel: 'Acceleration',
+          minYLabel: 'Braking',
           yLabelFactor: App.milesPerKilometer,
           heatLabel: 'Time Spent (hours)'
         });

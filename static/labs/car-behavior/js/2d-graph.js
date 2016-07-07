@@ -1,5 +1,7 @@
 (function() {
 
+  var superClass = App.SvgBase.prototype;
+
   // ----------
   var component = App.TwoDGraph = function(args) {
     this._sets = [];
@@ -7,26 +9,30 @@
     this._minX = args.minX;
     this._maxX = args.maxX;
     this._minY = args.minY;
-    this.$container = args.$container;
-    this._leftBuffer = 45;
-    this._bottomBuffer = 35;
-    this._rightBuffer = 0;
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
     this._yLabel2 = args.yLabel2;
+    this._maxYLabel = args.maxYLabel;
+    this._minYLabel = args.minYLabel;
     this._scatter = args.scatter;
     this._scatterRadius = this._scatter ? 2.5 : 0;
+
+    superClass._init.call(this, {
+      $svg: args.$el,
+      $container: args.$container
+    });
+
+    this._leftBuffer = 45;
+    this._bottomBuffer = 35;
+    this._rightBuffer = 0;
 
     if (this._yLabel2) {
       this._rightBuffer = 55;
     }
-
-    this._initSvg(args.$el);
-    this.resize();
   };
 
   // ----------
-  component.prototype = {
+  component.prototype = _.extend({}, superClass, {
     // ----------
     addSets: function(sets) {
       this._sets = this._sets.concat(sets);
@@ -35,12 +41,7 @@
     },
 
     // ----------
-    _initSvg: function($svg) {
-      this.$svg = $svg;
-      this._svg = d3.select(this.$svg[0]);
-    },
-
-    // ----------
+    // Overrides superclass method
     resize: function() {
       this._width = this.$container.width();
       this._height = this._width * (9 / 16);
@@ -133,6 +134,15 @@
 
       this._svg.selectAll('*').remove();
 
+      this.drawFrame({
+        xLabel: this._xLabel,
+        yLabel: this._yLabel,
+        minYLabel: this._minYLabel,
+        maxYLabel: this._maxYLabel,
+        xScale: this._xScale,
+        yScale: this._yScale
+      });
+
       // lines
       y = this._yScale(0);
       this._svg.append('line')
@@ -142,26 +152,6 @@
         .attr('y2', y)
         .attr('stroke-width', 1)
         .style('stroke', '#ddd');
-
-      // y axis
-      x = 15;
-      y = (this._height - this._bottomBuffer) / 2;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'middle')
-        .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
-        .text(this._yLabel);
-
-      var yAxis = d3.svg.axis()
-        .scale(this._yScale)
-        .orient('left')
-        .ticks(5);
-
-      this._svg.append('g')
-          .attr('class', 'axis')
-          .call(yAxis)
-          .attr('transform','translate(' + this._leftBuffer + ',' + 0 + ')');
 
       // y axis 2
       if (this._yLabel2) {
@@ -185,25 +175,6 @@
             .attr('transform','translate(' + (this._width - this._rightBuffer) + ',' + 0 + ')');
       }
 
-      // x axis
-      x = this._xScale((this._minX + this._maxX) / 2);
-      y = this._height - 1;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'middle')
-        .text(this._xLabel);
-
-      var xAxis = d3.svg.axis()
-        .scale(this._xScale)
-        .orient('bottom')
-        .ticks(10);
-
-      this._svg.append('g')
-          .attr('class', 'axis horizontal')
-          .call(xAxis)
-          .attr('transform','translate(' + 0 + ',' + (this._height - this._bottomBuffer) + ')');
-
       // sets
       _.each(this._sets, function(set) {
         self._renderSet(set);
@@ -211,6 +182,6 @@
 
       // console.timeEnd('render');
     }
-  };
+  });
 
 })();

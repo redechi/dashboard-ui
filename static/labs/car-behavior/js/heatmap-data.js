@@ -287,6 +287,7 @@
     // x = mph
     // y = acceleration (kmph/sec?)
     styleSets: function(color) {
+      var self = this;
       var accels = {};
       var brakes = {};
 
@@ -302,21 +303,21 @@
         if (!setInfo) {
           setInfo = {
             x: velocity,
-            total: 0,
+            values: [],
             time: 0
           };
 
           set[velocity] = setInfo;
         }
 
-        setInfo.total += accel * gridInfo.totalTime;
+        setInfo.values.push(accel);
         setInfo.time += gridInfo.totalTime;
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            v.value = v.total / v.time;
+            v.value = self._percentile(v.values.sort(numericSort), 0.5);
             return v;
           })
           .sortBy(function(v, i) {
@@ -371,7 +372,8 @@
           setInfo = {
             x: velocity,
             total: 0,
-            count: 0
+            count: 0,
+            values: []
           };
 
           set[velocity] = setInfo;
@@ -379,12 +381,15 @@
 
         setInfo.total += gridInfo.averageMaf * gridInfo.totalMafCount;
         setInfo.count += gridInfo.totalMafCount;
+        setInfo.values.push(gridInfo.averageMaf);
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            v.value = self.mafToMpg(v.total / v.count, v.x / App.milesPerKilometer);
+            var maf = self._percentile(v.values.sort(numericSort), 0.5);
+            v.value = self.mafToMpg(maf, v.x / App.milesPerKilometer);
+            v.total = v.value * v.count; // we need this for _maxBucketValue
             return v;
           })
           .sortBy(function(v, i) {

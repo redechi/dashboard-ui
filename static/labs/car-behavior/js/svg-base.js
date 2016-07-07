@@ -13,31 +13,26 @@
       this._svg = d3.select(this.$svg[0]);
       this._leftBuffer = 45;
       this._rightBuffer = 0;
+      this._topBuffer = 0;
       this._bottomBuffer = 32;
 
       this.resize();
     },
 
     // ----------
+    // Overridden by subclasses
     resize: function() {
-      // see the .heatmap-svg:first-child margin-right in car-behavior.css
-      // though we've had to fudge it a little
-      var gutter = 15;
-
-      this._width = (this.$container.width() / 2) - (gutter / 2);
-      this._height = this._width * (3 / 4);
-
-      this.$svg.css({
-        width: this._width,
-        height: this._height
-      });
     },
 
     // ----------
     drawFrame: function(args) {
+      var x, y;
+      var top = this._topBuffer;
+      var bottom = this._height - this._bottomBuffer;
+
       // y axis
-      var x = 15;
-      var y = (this._height - this._bottomBuffer) / 2;
+      x = 15;
+      y = (top + bottom) / 2;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)
@@ -45,44 +40,54 @@
         .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
         .text(args.yLabel);
 
-      x = 40;
-      y = this._height - this._bottomBuffer;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(args.minY);
+      if (args.maxYLabel) {
+        y = top;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'end')
+          .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
+          .text(args.maxYLabel);
+      }
 
-      y = 15;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(args.maxY);
+      if (args.minYLabel) {
+        y = bottom;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'start')
+          .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
+          .text(args.minYLabel);
+      }
+
+      var yAxis = d3.svg.axis()
+        .scale(args.yScale)
+        .orient('left')
+        .ticks(5);
+
+      this._svg.append('g')
+          .attr('class', 'axis')
+          .call(yAxis)
+          .attr('transform','translate(' + this._leftBuffer + ',' + 0 + ')');
 
       // x axis
       x = this._leftBuffer + ((this._width - (this._leftBuffer + this._rightBuffer)) / 2);
-      y = this._height - 5;
+      y = this._height - 1;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)
         .attr('text-anchor', 'middle')
         .text(args.xLabel);
 
-      x = this._leftBuffer;
-      y = this._height - 18;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'start')
-        .text(args.minX);
+      var xAxis = d3.svg.axis()
+        .scale(args.xScale)
+        .orient('bottom')
+        .ticks(10);
 
-      x = this._width - this._rightBuffer;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .text(args.maxX);
+      this._svg.append('g')
+          .attr('class', 'axis horizontal')
+          .call(xAxis)
+          .attr('transform','translate(' + 0 + ',' + bottom + ')');
     }
   };
 

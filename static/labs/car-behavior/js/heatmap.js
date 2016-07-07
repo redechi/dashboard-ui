@@ -10,6 +10,8 @@
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
     this._yLabelFactor = args.yLabelFactor || 1;
+    this._maxYLabel = args.maxYLabel;
+    this._minYLabel = args.minYLabel;
     this._minY = args.minY;
     this._heatLabel = args.heatLabel;
 
@@ -18,7 +20,9 @@
       $container: args.$container
     });
 
+    this._leftBuffer = 60;
     this._rightBuffer = 45;
+    this._topBuffer = 5;
     this._smoothData();
     this.render();
   };
@@ -26,28 +30,60 @@
   // ----------
   component.prototype = _.extend({}, superClass, {
     // ----------
+    // Overrides superclass method
+    resize: function() {
+      // see the .heatmap-svg:first-child margin-right in car-behavior.css
+      // though we've had to fudge it a little
+      var gutter = 15;
+
+      this._width = (this.$container.width() / 2) - (gutter / 2);
+      this._height = this._width * (3 / 4);
+
+      this.$svg.css({
+        width: this._width,
+        height: this._height
+      });
+    },
+
+    // ----------
     render: function() {
       var self = this;
 
       // console.time('render');
 
+      var left = this._leftBuffer;
+      var right = this._width - this._rightBuffer;
+      var width = right - left;
+      var top = this._topBuffer;
+      var bottom = this._height - this._bottomBuffer;
+      var height = bottom - top;
+      var tileExtra = 0.5; // A little overlap so we don't see seams
+
       var minY = (this._minY === undefined ? this._data.minY : this._minY);
 
       var xExtent = (this._data.maxX - this._data.minX) + 1;
       var xFactor = this._width / xExtent;
-      var columnWidth = this._width / (xExtent / this._data.xInterval);
+      var columnWidth = width / (xExtent / this._data.xInterval);
 
       var yExtent = (this._data.maxY - minY) + 1;
       var yFactor = this._width / yExtent;
-      var rowHeight = this._height / (yExtent / this._data.yInterval);
+      var rowHeight = height / (yExtent / this._data.yInterval);
 
       var xScale = d3.scale.linear()
         .domain([this._data.minX, this._data.maxX])
         .range([this._leftBuffer, this._width - (this._rightBuffer + columnWidth)]);
 
+      var axisXScale = d3.scale.linear()
+        .domain([this._data.minX, App.maxMph])
+        .range([this._leftBuffer, this._width - this._rightBuffer]);
+
       var yScale = d3.scale.linear()
         .domain([minY, this._data.maxY])
-        .range([this._height - (this._bottomBuffer + rowHeight), 0]);
+        .range([this._height - (this._bottomBuffer + rowHeight), this._topBuffer]);
+
+      var axisYScale = d3.scale.linear()
+        .domain([minY * this._yLabelFactor, this._data.maxY * this._yLabelFactor])
+        .range([this._height - this._bottomBuffer, this._topBuffer]);
 
       var colorScale = d3.scale.linear()
         .domain([0, 0.1, 1])
@@ -96,35 +132,35 @@
         self._svg.append('rect')
           .attr('x', x)
           .attr('y', y)
-          .attr('width', columnWidth)
-          .attr('height', rowHeight)
+          .attr('width', columnWidth + tileExtra)
+          .attr('height', rowHeight + tileExtra)
           .attr('fill', colorScale(value / maxValue));
       });
-
-      this._svg.append('rect')
-        .attr('x', this._leftBuffer)
-        .attr('y', 0)
-        .attr('width', this._width - (this._leftBuffer + this._rightBuffer))
-        .attr('height', this._height - this._bottomBuffer)
-        .attr('stroke', '#ddd')
-        .attr('fill', 'none');
 
       this.drawFrame({
         xLabel: this._xLabel,
         yLabel: this._yLabel,
-        minX: this._data.minX,
-        maxX: App.maxMph,
-        minY: Math.round(minY * this._yLabelFactor),
-        maxY: Math.round(this._data.maxY * this._yLabelFactor)
+        minYLabel: this._minYLabel,
+        maxYLabel: this._maxYLabel,
+        xScale: axisXScale,
+        yScale: axisYScale
       });
+
+      this._svg.append('rect')
+        .attr('x', this._leftBuffer)
+        .attr('y', this._topBuffer)
+        .attr('width', width)
+        .attr('height', height)
+        .attr('stroke', '#ddd')
+        .attr('fill', 'none');
 
       var x = this._width - this._rightBuffer;
 
       this._svg.append('rect')
         .attr('x', x + 35)
-        .attr('y', 0)
+        .attr('y', this._topBuffer)
         .attr('width', 10)
-        .attr('height', this._height - this._bottomBuffer)
+        .attr('height', height)
         .attr('fill', 'url(#legend-gradient)');
 
       x += 20;
@@ -144,7 +180,7 @@
       }
 
       x += 10;
-      y = 15;
+      y = this._topBuffer + 15;
       this._svg.append('text')
         .attr('x', x)
         .attr('y', y)
