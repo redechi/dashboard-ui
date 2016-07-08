@@ -24,13 +24,8 @@
         dataKey = 'rpm';
       }
 
-      var dataMode = this.key;
-      if (dataMode === 'power') {
-        dataMode = 'horsepower';
-      }
-
-      var h1 = singleData[dataKey].getForComparison(dataMode);
-      var h2 = groupData[dataKey].getForComparison(dataMode);
+      var h1 = singleData[dataKey].getForComparison(this.key);
+      var h2 = groupData[dataKey].getForComparison(this.key);
 
       var data = JSON.stringify({
         type: type,

@@ -5,6 +5,7 @@
   // ----------
   var component = App.HeatmapData = function(args) {
     this._mafCountThreshold = args.mafCountThreshold || 1;
+    this._rawData = args.rawData;
     this._buildData(args);
     this._fillInData();
   };
@@ -18,6 +19,12 @@
       torque: 'maxTorque'
     },
 
+    _comparisonValueKeys: {
+      style: 'totalTime',
+      efficiency: 'averageMaf',
+      power: 'maxHorsepower'
+    },
+
     // ----------
     key: function(x, y) {
       return x + 'x' + y;
@@ -26,6 +33,11 @@
     // ----------
     valueKey: function(mode) {
       return this._modeValueKeys[mode];
+    },
+
+    // ----------
+    valueKeyForComparison: function(mode) {
+      return this._comparisonValueKeys[mode];
     },
 
     // ----------
@@ -240,8 +252,11 @@
     },
 
     // ----------
+    // Expects:
+    // args.data - array of objects with x, value
+    // args.interval - number
     _maxBucketValue: function(args) {
-      var data = _.map(args.set.data, function(info) {
+      var data = _.map(args.data, function(info) {
         info = _.clone(info);
         info.x = Math.floor(info.x / args.interval) * args.interval;
         return info;
@@ -260,17 +275,13 @@
         var total = 0;
         var count = 0;
         _.each(infos, function(info) {
-          total += info.total;
-          count += info.count;
+          total += info.value;
+          count += 1;
         });
 
         output.total = total;
         output.count = count;
         output.average = (count ? total / count : 0);
-
-        if (args.updateAverage) {
-          args.updateAverage(output);
-        }
 
         return output;
       });
@@ -291,11 +302,11 @@
       var accels = {};
       var brakes = {};
 
-      _.each(this.grid, function(gridInfo) {
-        var velocity = gridInfo.x * App.milesPerKilometer;
-        var accel = gridInfo.y * App.milesPerKilometer;
+      _.each(this._rawData.heatmap, function(datum) {
+        var velocity = datum.vel_bin * App.milesPerKilometer;
+        var accel = datum.accel_bin * App.milesPerKilometer;
         var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
-        if (!set || !gridInfo.totalTime) {
+        if (!set || !datum.time_spent) {
           return;
         }
 
@@ -311,13 +322,14 @@
         }
 
         setInfo.values.push(accel);
-        setInfo.time += gridInfo.totalTime;
+        setInfo.time += datum.time_spent;
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            v.value = self._percentile(v.values.sort(numericSort), 0.5);
+            v.values.sort(numericSort);
+            v.value = self._percentile(v.values, 0.5);
             return v;
           })
           .sortBy(function(v, i) {
@@ -360,10 +372,12 @@
 
       var set = {};
 
-      _.each(this.grid, function(gridInfo) {
-        var velocity = gridInfo.x * App.milesPerKilometer;
-        var accel = gridInfo.y;
-        if (accel < 0 || accel > 2 || !gridInfo.averageMaf || !gridInfo.totalMafCount) {
+      _.each(this._rawData.heatmap, function(datum) {
+        var velocity = datum.vel_bin * App.milesPerKilometer;
+        var accel = datum.accel_bin;
+        var count = datum.maf_cnt;
+        var averageMaf = datum.avg_maf;
+        if (accel < 0 || accel > 2 || !averageMaf || !count) {
           return;
         }
 
@@ -371,7 +385,6 @@
         if (!setInfo) {
           setInfo = {
             x: velocity,
-            total: 0,
             count: 0,
             values: []
           };
@@ -379,9 +392,8 @@
           set[velocity] = setInfo;
         }
 
-        setInfo.total += gridInfo.averageMaf * gridInfo.totalMafCount;
-        setInfo.count += gridInfo.totalMafCount;
-        setInfo.values.push(gridInfo.averageMaf);
+        setInfo.count += count;
+        setInfo.values.push(averageMaf);
       });
 
       var finish = function(set) {
@@ -389,7 +401,6 @@
           .map(function(v, i) {
             var maf = self._percentile(v.values.sort(numericSort), 0.5);
             v.value = self.mafToMpg(maf, v.x / App.milesPerKilometer);
-            v.total = v.value * v.count; // we need this for _maxBucketValue
             return v;
           })
           .sortBy(function(v, i) {
@@ -422,11 +433,8 @@
       var interval = 5;
 
       var mph = this._maxBucketValue({
-        set: sets[0],
-        interval: interval,
-        updateAverage: function(bucket) {
-          bucket.average = self.mafToMpg(bucket.average, bucket.x);
-        }
+        data: sets[0].data,
+        interval: interval
       });
 
       var startMph = Math.round(mph);
@@ -488,7 +496,6 @@
         var output = _.chain(set)
           .map(function(v, i) {
             v.value = self._percentile(v.values.sort(numericSort), 0.9);
-            v.total = v.value * v.count; // we need this for _maxBucketValue
             return v;
           })
           .sortBy(function(v, i) {
@@ -526,7 +533,7 @@
       var interval = 250;
 
       var startRpm = this._maxBucketValue({
-        set: sets[0],
+        data: sets[0].data,
         interval: interval
       });
 
@@ -538,7 +545,7 @@
     // ----------
     getForComparison: function(mode) {
       var output = [];
-      var valueKey = this.valueKey(mode);
+      var valueKey = this.valueKeyForComparison(mode);
 
       var x, y, column, info, value;
       for (x = this.minX; x <= this.maxX; x += this.xInterval) {
@@ -558,7 +565,7 @@
           column.push(value);
         }
 
-        console.assert(mode === 'horsepower' || column.length === 44,
+        console.assert(mode === 'power' || column.length === 44,
           'comparison heatmap columns should be 44 items long', column.length);
       }
 
