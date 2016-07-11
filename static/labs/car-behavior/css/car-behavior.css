@@ -73,13 +73,8 @@ select {
   display: none;
 }
 
-.toggle {
-  color: #888;
-  cursor: pointer;
-}
-
-.toggle-row {
-  margin-bottom: 20px;
+.for-heatmap {
+  display: none;
 }
 
 .tooltip {
@@ -87,6 +82,32 @@ select {
   background: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 2px 6px;
+}
+
+/* TOGGLES */
+
+.toggle {
+  position: relative;
+  color: #ccc;
+  cursor: pointer;
+  padding: 4px 12px;
+}
+
+.toggle-row {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 4px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f4f4f4;
+}
+
+.heatmap-mode-toggle {
+  left: 1px;
+}
+
+.graph-mode-toggle {
+  left: -1px;
 }
 
 /* 2D GRAPHS */
@@ -290,6 +311,17 @@ select {
 .heatmap-mode .heatmap-mode-toggle {
   font-weight: bold;
   color: black;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+}
+
+.heatmap-mode .graph-mode-toggle {
+  padding-right: 4px;
+}
+
+.heatmap-mode .for-heatmap {
+  display: block;
 }
 
 .graph-mode .graph-svg {
@@ -299,6 +331,13 @@ select {
 .graph-mode .graph-mode-toggle {
   font-weight: bold;
   color: black;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 4px;
+}
+
+.graph-mode .heatmap-mode-toggle {
+  padding-left: 4px;
 }
 
 .graph-mode .for-graph {

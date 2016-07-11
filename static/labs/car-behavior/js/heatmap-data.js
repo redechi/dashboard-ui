@@ -158,17 +158,17 @@
           info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
         }
 
-        if (info.totalPowerCount) {
+        if (info.totalPowerCount >= 2) {
           info.averageHorsepower = info.totalHorsepower / info.totalPowerCount;
           info.averageTorque = info.totalTorque / info.totalPowerCount;
         }
 
-        if (info.horsepowers.length) {
+        if (info.horsepowers.length >= 2) {
           info.horsepowers.sort(numericSort);
           info.maxHorsepower = self._percentile(info.horsepowers, 0.9);
         }
 
-        if (info.torques.length) {
+        if (info.torques.length >= 2) {
           info.torques.sort(numericSort);
           info.maxTorque = self._percentile(info.torques, 0.9);
         }
@@ -306,7 +306,8 @@
         var velocity = datum.vel_bin * App.milesPerKilometer;
         var accel = datum.accel_bin * App.milesPerKilometer;
         var set = (accel > 0 ? accels : (accel < 0 ? brakes : null));
-        if (!set || !datum.time_spent) {
+        var time = datum.time_spent;
+        if (!set || !time) {
           return;
         }
 
@@ -314,22 +315,21 @@
         if (!setInfo) {
           setInfo = {
             x: velocity,
-            values: [],
+            total: 0,
             time: 0
           };
 
           set[velocity] = setInfo;
         }
 
-        setInfo.values.push(accel);
-        setInfo.time += datum.time_spent;
+        setInfo.total += accel * time;
+        setInfo.time += time;
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            v.values.sort(numericSort);
-            v.value = self._percentile(v.values, 0.5);
+            v.value = v.total / v.time;
             return v;
           })
           .sortBy(function(v, i) {
@@ -337,15 +337,9 @@
           })
           .value();
 
-        var done = false;
-        var threshold = 10 / (60 * 60); // 10 seconds, expressed in hours
+        var threshold = 30 / (60 * 60); // 30 seconds, expressed in hours
         output = _.filter(output, function(v, i) {
-          if (done || v.time < threshold) {
-            done = true;
-            return false;
-          }
-
-          return true;
+          return v.time >= threshold;
         });
 
         return output;
@@ -408,15 +402,9 @@
           })
           .value();
 
-        var done = false;
-        var threshold = 10;
+        var threshold = 30;
         output = _.filter(output, function(v, i) {
-          if (done || v.count < threshold) {
-            done = true;
-            return false;
-          }
-
-          return true;
+          return v.count >= threshold;
         });
 
         return output;
@@ -503,15 +491,9 @@
           })
           .value();
 
-        var done = false;
-        var threshold = 10;
+        var threshold = 30;
         output = _.filter(output, function(v, i) {
-          if (done || v.count < threshold) {
-            done = true;
-            return false;
-          }
-
-          return true;
+          return v.count >= threshold;
         });
 
         return output;

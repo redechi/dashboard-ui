@@ -25,28 +25,40 @@
       <div class="graphs">
         <% if (mode === 'style') { %>
           <h2 class="for-graph">Average Acceleration at Different Speeds</h2>
+          <h2 class="for-heatmap">Driver Heatmap</h2>
+          <div>
+            <div class="toggle-row">
+              <span class="toggle graph-mode-toggle">Graph</span>
+              <span class="toggle heatmap-mode-toggle">Heatmap</span>
+            </div>
+          </div>
           <svg class="style-heatmap-svg heatmap-svg"></svg>
           <svg class="style-heatmap-svg heatmap-svg"></svg>
           <svg class="style-2d-graph-svg graph-svg"></svg>
-          <div class="toggle-row">
-            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
-          </div>
         <% } else if (mode === 'efficiency') { %>
-          <h2 class="for-graph">MPG at Different Speeds</h2>
+          <h2 class="for-graph">Cruising MPG at Different Speeds</h2>
+          <h2 class="for-heatmap">MPG at Different Speeds and Accelerations</h2>
+          <div>
+            <div class="toggle-row">
+              <span class="toggle graph-mode-toggle">Graph</span>
+              <span class="toggle heatmap-mode-toggle">Heatmap</span>
+            </div>
+          </div>
           <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
           <svg class="efficiency-heatmap-svg heatmap-svg"></svg>
           <svg class="efficiency-2d-graph-svg graph-svg"></svg>
-          <div class="toggle-row">
-            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
-          </div>
         <% } else if (mode === 'power') { %>
           <h2 class="for-graph">Dyno Graph - Horsepower and Torque</h2>
+          <h2 class="for-heatmap">Horsepower at Different RPMs and Speeds</h2>
+          <div>
+            <div class="toggle-row">
+              <span class="toggle graph-mode-toggle">Graph</span>
+              <span class="toggle heatmap-mode-toggle">Heatmap</span>
+            </div>
+          </div>
           <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
           <svg class="horsepower-heatmap-svg heatmap-svg"></svg>
           <svg class="power-2d-graph-svg graph-svg"></svg>
-          <div class="toggle-row">
-            <span class="toggle graph-mode-toggle">line graph</span> / <span class="toggle heatmap-mode-toggle">heatmap</span>
-          </div>
         <% } %>
       </div>
     </script>
@@ -61,9 +73,9 @@
               <div class="key">
                 <%- comparison.key %>
               </div>
-              <div class="graph">
-                <div class="bar single" style="width: <%- comparison.singlePercent %>%" data-tooltip="<%- comparison.singleTip %>"></div>
-                <div class="bar group" style="width: <%- comparison.groupPercent %>%" data-tooltip="<%- comparison.groupTip %>"></div>
+              <div class="graph" data-tooltip="<%- comparison.tooltip %>">
+                <div class="bar single" style="width: <%- comparison.singlePercent %>%"></div>
+                <div class="bar group" style="width: <%- comparison.groupPercent %>%"></div>
               </div>
             </div>
           <% }); %>

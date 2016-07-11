@@ -125,8 +125,7 @@
               key: comparison.key,
               singlePercent: scale(comparison.singleValue),
               groupPercent: scale(comparison.groupValue),
-              singleTip: self._comparisonTip(comparison.singleValue, comparison.groupValue),
-              groupTip: self._comparisonTip(comparison.groupValue, comparison.singleValue),
+              tooltip: self._comparisonTip(comparison.singleValue, comparison.groupValue)
             };
           }),
           key: this.key
@@ -136,7 +135,7 @@
 
     // ----------
     _comparisonTip: function(value, otherValue) {
-      if (!otherValue) {
+      if (value === undefined || otherValue === undefined) {
         return '';
       }
 
@@ -165,7 +164,7 @@
         extra = ' aggressive';
       }
 
-      return percent + '% ' + word + extra;
+      return 'Your ' + App.leftVehicleName() + ' is ' + percent + '% ' + word + extra + ' than ' + App.rightVehicleName();
     }
   };
 
@@ -179,9 +178,9 @@
         return;
       }
 
-      $('.comparison').on('mouseenter', '.bar', function(event) {
-        var $bar = $(this);
-        var text = $bar.data('tooltip');
+      $('.comparison').on('mouseenter', '.graph', function(event) {
+        var $graph = $(this);
+        var text = $graph.data('tooltip');
         self._hideToolTip();
 
         self.$tooltip = $('<div>')
@@ -192,12 +191,12 @@
         self._updateTooltip(event.clientX, event.clientY);
       });
 
-      $('.comparison').on('mousemove', '.bar', function(event) {
-        var $bar = $(this);
+      $('.comparison').on('mousemove', '.graph', function(event) {
+        var $graph = $(this);
         self._updateTooltip(event.clientX, event.clientY);
       });
 
-      $('.comparison').on('mouseleave', '.bar', function(event) {
+      $('.comparison').on('mouseleave', '.graph', function(event) {
         self._hideToolTip();
       });
 

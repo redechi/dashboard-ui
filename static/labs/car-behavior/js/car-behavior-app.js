@@ -315,6 +315,21 @@
     },
 
     // ----------
+    leftVehicleName: function() {
+      var vehicle = this.currentVehicle();
+      return vehicle ? vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model : '';
+    },
+
+    // ----------
+    rightVehicleName: function() {
+      var groupOptionView = _.findWhere(this._groupOptionViews, {
+        key: this._selectedGroupOptionViewKey
+      });
+
+      return groupOptionView ? groupOptionView.name : '';
+    },
+
+    // ----------
     updateGroupSelect: function() {
       var self = this;
 
@@ -460,7 +475,7 @@
         var index = parts.length - 1;
         var name = parts[index];
         if (/[sz]$/i.test(name)) {
-          name += 'es';
+          // Add nothing. We originally added 'es' but changed our minds.
         } else if (/y$/i.test(name)) {
           name = name.replace(/y$/i, 'ies');
         } else {
