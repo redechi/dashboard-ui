@@ -10,12 +10,20 @@
   // ----------
   component.prototype = {
     // ----------
-    getComparison: function(singleData, groupData) {
+    // Expects:
+    // args.leftData - object
+    // args.rightData - object
+    // args.leftOptionView - object
+    // args.rightOptionView - object
+    getComparison: function(args) {
       var self = this;
 
-      if (!singleData || !groupData) {
+      if (!args.leftData || !args.rightData) {
         return;
       }
+
+      this._leftOptionView = args.leftOptionView;
+      this._rightOptionView = args.rightOptionView;
 
       var type = this.key;
 
@@ -24,8 +32,8 @@
         dataKey = 'rpm';
       }
 
-      var h1 = singleData[dataKey].getForComparison(this.key);
-      var h2 = groupData[dataKey].getForComparison(this.key);
+      var h1 = args.leftData[dataKey].getForComparison(this.key);
+      var h2 = args.rightData[dataKey].getForComparison(this.key);
 
       var data = JSON.stringify({
         type: type,
@@ -164,7 +172,15 @@
         extra = ' aggressive';
       }
 
-      return 'Your ' + App.leftVehicleName() + ' is ' + percent + '% ' + word + extra + ' than ' + App.rightVehicleName();
+      var output = '';
+      if (this._leftOptionView.key === 'extra') {
+        output += this._leftOptionView.name + ' are ';
+      } else {
+        output += 'Your ' + this._leftOptionView.name + ' is ';
+      }
+
+      output += percent + '% ' + word + extra + ' than ' + this._rightOptionView.name;
+      return output;
     }
   };
 

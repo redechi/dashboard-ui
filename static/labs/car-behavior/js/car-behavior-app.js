@@ -2,8 +2,8 @@
 
   // ----------
   window.App = {
-    singleData: null,
-    groupData: null,
+    leftData: null,
+    rightData: null,
     milesPerKilometer: 0.621371,
     kilometersPerMile: 1.60934,
     minKph: 0,
@@ -50,36 +50,38 @@
         self.modes[k] = mode;
       });
 
-      $('#vehicleChoice').on('change', function() {
-        var vehicleId = $('#vehicleChoice').val();
-        sessionStorage.setItem('labs_car_behavior_vehicle_id', vehicleId);
-        $('.graphs').fadeOut();
-        self.getVehicleData();
+      this.leftMenu = new App.VehicleMenu({
+        $el: $('#vehicleChoice'),
+        onSelect: function() {
+          var optionView = self.leftMenu.selectedOptionView();
+          if (optionView.key === 'extra') {
+            self.updateLeftMenu();
+            self.getGroupData('left');
+          } else {
+            sessionStorage.setItem('labs_car_behavior_vehicle_id', optionView.key);
+            $('.graphs').fadeOut();
+            self.getVehicleData();
+          }
+
+          if (self.personResultsView) {
+            self.personResultsView.destroy();
+            self.personResultsView = null;
+          }
+
+          $('.controls .your').toggle(optionView.key !== 'extra');
+        }
       });
 
-      this.$groupSelect = $('.group-select')
-        .on('change', function() {
-          var groupOptionView = _.findWhere(self._groupOptionViews, {
-            key: self.$groupSelect.val()
-          });
-
-          if (groupOptionView.options.other) {
-            self.vehiclePickerModal.show({
-              onComplete: function(results) {
-                self._extraGroupOptions = results;
-                self._selectedGroupOptionViewKey = 'extra';
-                self.updateGroupSelect();
-                self.getGroupData();
-              },
-              onCancel: function() {
-                self.updateGroupSelect();
-              }
-            });
-          } else {
-            self._selectedGroupOptionViewKey = groupOptionView.key;
-            self.getGroupData();
+      this.rightMenu = new App.VehicleMenu({
+        $el: $('.group-select'),
+        onSelect: function() {
+          if (self.rightMenu.selectedOptionView().key === 'extra') {
+            self.updateRightMenu();
           }
-        });
+
+          self.getGroupData('right');
+        }
+      });
 
       formatForDemo();
       showLoginLink('car-behavior');
@@ -108,23 +110,17 @@
         this.personResultsView.destroy();
       }
 
-      if (!this.singleData) {
+      if (!this.leftData) {
         return;
       }
 
-      var vehicle = this.currentVehicle();
-
-      var groupOptionView = _.findWhere(this._groupOptionViews, {
-        key: this._selectedGroupOptionViewKey
-      });
-
       this.personResultsView = new App.ResultsView({
         mode: this.mode.key,
-        name: 'your ' + vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
         $container: $('.results'),
-        singleData: this.singleData,
-        groupData: this.groupData,
-        groupName: groupOptionView ? groupOptionView.name : ''
+        leftData: this.leftData,
+        rightData: this.rightData,
+        leftOptionView: this.leftMenu.selectedOptionView(),
+        rightOptionView: this.rightMenu.selectedOptionView()
       });
     },
 
@@ -143,17 +139,19 @@
         mode.clearComparison();
       });
 
+      var optionView = this.leftMenu.selectedOptionView();
+
       this.request({
         path: 'vehicle-heatmap/',
         data: {
-          vehicle_id: $('#vehicleChoice').val()
+          vehicle_id: optionView.key
         },
         success: function(result) {
-          self.singleData = self._digestData(result);
+          self.leftData = self._digestData(result);
           self.renderData();
 
-          self.updateGroupSelect();
-          self.getGroupData();
+          self.updateRightMenu();
+          self.getGroupData('right');
         },
         error: function(errorThrown) {
           $('.error').text('Unable to load data for this vehicle.');
@@ -194,29 +192,35 @@
     },
 
     // ----------
-    getGroupData: function() {
+    getGroupData: function(side) {
       var self = this;
 
-      var groupOptionView = _.findWhere(this._groupOptionViews, {
-        key: this._selectedGroupOptionViewKey
+      console.assert(side === 'left' || side === 'right', 'valid side');
+
+      _.each(this.modes, function(mode) {
+        mode.clearComparison();
       });
 
-      this.groupData = null;
+      var menu = (side === 'left' ? this.leftMenu : this.rightMenu);
+      var dataKey = (side === 'left' ? 'leftData' : 'rightData');
+      var optionView = menu.selectedOptionView();
+
+      this[dataKey] = null;
       this.renderData();
 
       this.request({
         path: 'group-heatmap/',
         method: 'POST',
         data: {
-          options: groupOptionView.options
+          options: optionView.options
         },
         success: function(result) {
-          self.groupData = self._digestData(result, 'group');
+          self[dataKey] = self._digestData(result, 'group');
           self.renderData();
           self.getComparisons();
         },
         error: function(errorThrown) {
-          $('.error').text('Unable to load data for ' + groupOptionView.name + '.');
+          $('.error').text('Unable to load data for ' + optionView.name + '.');
         }
       });
     },
@@ -225,7 +229,7 @@
     getComparisons: function() {
       var self = this;
 
-      if (!this.singleData || !this.groupData) {
+      if (!this.leftData || !this.rightData) {
         return;
       }
 
@@ -234,7 +238,12 @@
           return;
         }
 
-        mode.getComparison(self.singleData, self.groupData);
+        mode.getComparison({
+          leftData: self.leftData,
+          rightData: self.rightData,
+          leftOptionView: self.leftMenu.selectedOptionView(),
+          rightOptionView: self.rightMenu.selectedOptionView()
+        });
       });
     },
 
@@ -278,17 +287,14 @@
       showLoading();
 
       fetchVehicles(function(results) {
-        self.vehicles = results;
+        self.vehicles = _.sortBy(results, 'make');
 
         if (results.length === 0) {
           $('.error').text('You don\'t appear to have any vehicles.');
         } else {
           $('.controls').show();
 
-          _.sortBy(results, 'make').forEach(function(vehicle) {
-            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-          });
+          self.updateLeftMenu();
 
           var vehicleId = sessionStorage.getItem('labs_car_behavior_vehicle_id');
           if (vehicleId) {
@@ -297,7 +303,7 @@
             });
 
             if (vehicle) {
-              $('#vehicleChoice').val(vehicleId);
+              self.leftMenu.select(vehicleId);
             }
           }
 
@@ -308,201 +314,100 @@
 
     // ----------
     currentVehicle: function() {
-      var id = $('#vehicleChoice').val();
+      var optionView = this.leftMenu.selectedOptionView();
       return _.findWhere(this.vehicles, {
-        id: id
+        id: optionView.key
       });
     },
 
     // ----------
     leftVehicleName: function() {
-      var vehicle = this.currentVehicle();
-      return vehicle ? vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model : '';
+      var optionView = this.leftMenu.selectedOptionView();
+      return optionView.name || '';
     },
 
     // ----------
     rightVehicleName: function() {
-      var groupOptionView = _.findWhere(this._groupOptionViews, {
-        key: this._selectedGroupOptionViewKey
-      });
-
-      return groupOptionView ? groupOptionView.name : '';
+      var optionView = this.rightMenu.selectedOptionView();
+      return optionView.name || '';
     },
 
     // ----------
-    updateGroupSelect: function() {
+    updateLeftMenu: function() {
       var self = this;
 
       var optionSets = [];
-      this.$groupSelect.empty();
 
-      if (!this.singleData) {
-        return;
-      }
-
-      var data = this.singleData.raw;
-
-      if (data.make) {
-        if (data.model) {
-          optionSets.push({
-            make: data.make,
-            model: data.model
-          });
-        }
-
+      _.each(this.vehicles, function(vehicle) {
         optionSets.push({
-          make: data.make
+          name: vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
+          vehicleId: vehicle.id
         });
-      }
-
-      if (data.price) {
-        optionSets.push({
-          price: data.price
-        });
-      }
-
-      if (data.horsepower) {
-        optionSets.push({
-          horsepower: data.horsepower
-        });
-      }
-
-      if (data.eng_size) {
-        optionSets.push({
-          eng_size: data.eng_size
-        });
-      }
-
-      if (data.city) {
-        optionSets.push({
-          city: data.city
-        });
-      }
-
-      if (data.state) {
-        optionSets.push({
-          state: data.state
-        });
-      }
-
-      if (data.region) {
-        optionSets.push({
-          region: data.region
-        });
-      }
-
-      if (this._extraGroupOptions) {
-        optionSets.push(_.extend({
-          extra: true
-        }, this._extraGroupOptions));
-      }
-
-      optionSets.push({
-        other: true
       });
 
-      this._groupOptionViews = _.map(optionSets, function(v, i) {
-        var key = _.keys(v).join('-');
-        if (v.extra) {
-          key = 'extra';
-          delete v.extra;
-        }
-
-        var output = {
-          key: key,
-          name: v.other ? 'Other Vehicles...' : 'All ' + self._groupName(v),
-          options: v
-        };
-
-        output.$el = $('<option value="' + output.key + '">' + output.name + '</option>')
-          .appendTo(self.$groupSelect);
-
-        return output;
-      });
-
-      if (!this._selectedGroupOptionViewKey) {
-        this._selectedGroupOptionViewKey = this._groupOptionViews[0].key;
-      }
-
-      var groupOptionView = _.findWhere(this._groupOptionViews, {
-        key: this._selectedGroupOptionViewKey
-      });
-
-      groupOptionView.$el.prop({
-        selected: 'selected'
-      });
+      this.leftMenu.update(optionSets);
     },
 
     // ----------
-    _groupName: function(options) {
-      var parts = [];
-      var needsVehicles = true;
+    updateRightMenu: function() {
+      var self = this;
 
-      if (options.price) {
-        parts.push('$' + options.price);
-      }
+      var optionSets = [];
 
-      if (options.eng_size) {
-        parts.push(options.eng_size);
-      }
+      if (this.leftData) {
+        var data = this.leftData.raw;
 
-      if (options.horsepower) {
-        parts.push(options.horsepower + ' HP');
-      }
+        if (data.make) {
+          if (data.model) {
+            optionSets.push({
+              make: data.make,
+              model: data.model
+            });
+          }
 
-      if (options.gen) {
-        parts.push(options.gen);
-      }
-
-      if (options.make) {
-        parts.push(options.make);
-        needsVehicles = false;
-      }
-
-      if (options.model) {
-        parts.push(options.model);
-        needsVehicles = false;
-      }
-
-      if (options.bodytype) {
-        parts.push(options.bodytype);
-        needsVehicles = false;
-      }
-
-      if (needsVehicles) {
-        parts.push('Vehicles');
-      } else {
-        var index = parts.length - 1;
-        var name = parts[index];
-        if (/[sz]$/i.test(name)) {
-          // Add nothing. We originally added 'es' but changed our minds.
-        } else if (/y$/i.test(name)) {
-          name = name.replace(/y$/i, 'ies');
-        } else {
-          name += 's';
+          optionSets.push({
+            make: data.make
+          });
         }
 
-        parts[index] = name;
+        if (data.price) {
+          optionSets.push({
+            price: data.price
+          });
+        }
+
+        if (data.horsepower) {
+          optionSets.push({
+            horsepower: data.horsepower
+          });
+        }
+
+        if (data.eng_size) {
+          optionSets.push({
+            eng_size: data.eng_size
+          });
+        }
+
+        if (data.city) {
+          optionSets.push({
+            city: data.city
+          });
+        }
+
+        if (data.state) {
+          optionSets.push({
+            state: data.state
+          });
+        }
+
+        if (data.region) {
+          optionSets.push({
+            region: data.region
+          });
+        }
       }
 
-      var locations = [];
-      if (options.city) {
-        locations.push(options.city);
-      }
-
-      if (options.state) {
-        locations.push(options.state);
-      }
-
-      if (options.region) {
-        locations.push(options.region);
-      }
-
-      if (locations.length) {
-        parts.push(' in ' + locations.join(', '));
-      }
-
-      return parts.join(' ');
+      this.rightMenu.update(optionSets);
     },
 
     // ----------

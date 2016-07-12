@@ -299,6 +299,8 @@
     // y = acceleration (kmph/sec?)
     styleSets: function(color) {
       var self = this;
+      var MIN_PER_HOUR = 60;
+      var SEC_PER_MIN = 60;
       var accels = {};
       var brakes = {};
 
@@ -337,7 +339,7 @@
           })
           .value();
 
-        var threshold = 30 / (60 * 60); // 30 seconds, expressed in hours
+        var threshold = 30 / (SEC_PER_MIN * MIN_PER_HOUR); // 30 seconds, expressed in hours
         output = _.filter(output, function(v, i) {
           return v.time >= threshold;
         });
