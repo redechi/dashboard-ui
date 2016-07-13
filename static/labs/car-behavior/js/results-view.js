@@ -11,6 +11,8 @@
   var component = App.ResultsView = function(args) {
     var sets, groupSets;
 
+    this._graphics = [];
+
     this.$el = App.template('results', {
       mode: args.mode,
     }).appendTo(args.$container);
@@ -42,6 +44,8 @@
         heatLabel: 'Time Spent (hours)'
       });
 
+      this._graphics.push(this.styleHeatmap);
+
       this.styleGraph = new App.TwoDGraph({
         name: 'style',
         $container: args.$container,
@@ -53,6 +57,8 @@
         maxYLabel: 'Acceleration',
         minYLabel: 'Braking'
       });
+
+      this._graphics.push(this.styleGraph);
 
       sets = args.leftData.accel.styleSets('#0bf');
 
@@ -71,6 +77,8 @@
           yLabelFactor: App.milesPerKilometer,
           heatLabel: 'Time Spent (hours)'
         });
+
+        this._graphics.push(this.styleHeatmap2);
       }
 
       this.styleGraph.addSets(sets);
@@ -91,6 +99,8 @@
         heatLabel: 'MPG'
       });
 
+      this._graphics.push(this.efficiencyHeatmap);
+
       this.efficiencyGraph = new App.TwoDGraph({
         name: 'efficiency',
         $container: args.$container,
@@ -100,6 +110,8 @@
         xLabel: 'MPH',
         yLabel: 'MPG'
       });
+
+      this._graphics.push(this.efficiencyGraph);
 
       sets = args.leftData.accel.efficiencySets('#0bf');
       if (args.leftOptionView.key === 'extra') {
@@ -125,6 +137,8 @@
           minY: 0,
           heatLabel: 'MPG'
         });
+
+        this._graphics.push(this.efficiencyHeatmap2);
       }
 
       this.efficiencyGraph.addSets(sets);
@@ -139,6 +153,8 @@
         heatLabel: 'Horsepower'
       });
 
+      this._graphics.push(this.horsepowerHeatmap);
+
       this.powerGraph = new App.TwoDGraph({
         name: 'power',
         $container: args.$container,
@@ -151,6 +167,8 @@
         yLabel2: 'Torque (lb ft) - circles',
         scatter: true
       });
+
+      this._graphics.push(this.powerGraph);
 
       sets = args.leftData.rpm.powerSets('#0bf');
       if (args.leftOptionView.key === 'extra') {
@@ -175,6 +193,8 @@
           yLabel: 'RPM',
           heatLabel: 'Horsepower'
         });
+
+        this._graphics.push(this.horsepowerHeatmap2);
       }
 
       this.powerGraph.addSets(sets);
@@ -193,6 +213,13 @@
       this.$el.remove();
       $('.left-insight').text('');
       $('.right-insight').text('');
+    },
+
+    // ----------
+    resize: function() {
+      _.each(this._graphics, function(v, i) {
+        v.resize();
+      });
     }
   };
 

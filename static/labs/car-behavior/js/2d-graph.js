@@ -42,13 +42,15 @@
 
     // ----------
     // Overrides superclass method
-    resize: function() {
+    updateSize: function() {
       this._width = this.$container.width();
       this._height = this._width * (9 / 16);
 
       this.$svg.css({
         height: this._height
       });
+
+      this._updateScales();
     },
 
     // ----------
@@ -86,6 +88,11 @@
         this._minValue = this._minY;
       }
 
+      this._updateScales();
+    },
+
+    // ----------
+    _updateScales: function() {
       this._xScale = d3.scale.linear()
         .domain([this._minX, this._maxX])
         .range([this._leftBuffer, this._width - this._rightBuffer]);

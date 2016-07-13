@@ -54,12 +54,13 @@ select {
 
 .heatmap-svg {
   display: none;
+  position: relative;
   margin: 10px 0;
   font-size: 12px;
 }
 
-.heatmap-svg:first-child {
-  margin-right: 10px;
+.right-heatmap {
+  left: 30px; // See updateSize() in heatmap.js for a related gutter variable
 }
 
 .graph-section {
@@ -153,6 +154,7 @@ select {
 .comparison .table {
   flex-basis: 50%;
   white-space: nowrap;
+  padding-left: 18px; // See updateSize() in heatmap.js for a related gutter variable
 }
 
 .comparison .row {
@@ -197,6 +199,7 @@ select {
 .right-insight {
   flex-basis: 50%;
   vertical-align: top;
+  padding-left: 18px; // See updateSize() in heatmap.js for a related gutter variable
 }
 
 /* CONTROLS */
@@ -207,6 +210,7 @@ select {
 
 .right-controls {
   display: inline-block;
+  padding-left: 18px; // See updateSize() in heatmap.js for a related gutter variable
 }
 
 .swatch {

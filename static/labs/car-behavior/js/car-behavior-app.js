@@ -91,7 +91,14 @@
         self.selectMode($el.data('mode'));
       });
 
-      this.selectMode('efficiency');
+      var modeKey = 'efficiency';
+      var hash = location.hash.replace(/^#/, '');
+      this.removeHash();
+      if (_.contains(_.keys(this.modes), hash)) {
+        modeKey = hash;
+      }
+
+      this.selectMode(modeKey);
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.demo) {
@@ -102,6 +109,12 @@
       }
 
       this._loadVehiclePickerData();
+
+      $(window).on('resize', function() {
+        if (self.personResultsView) {
+          self.personResultsView.resize();
+        }
+      });
     },
 
     // ----------
@@ -418,6 +431,15 @@
         self.data = self._digestData(rawData);
         self.renderData();
       });
+    },
+
+    // ----------
+    removeHash: function() {
+      if ('replaceState' in history) {
+          history.replaceState('', document.title, location.pathname + location.search);
+      } else {
+          location.hash = '';
+      }
     },
 
     // ----------

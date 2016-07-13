@@ -31,18 +31,20 @@
   component.prototype = _.extend({}, superClass, {
     // ----------
     // Overrides superclass method
-    resize: function() {
-      // see the .heatmap-svg:first-child margin-right in car-behavior.css
-      // though we've had to fudge it a little
-      var gutter = 15;
+    updateSize: function() {
+      // See .right-heatmap, .right-insight, .right-controls, and .comparison .table in car-behavior.css
+      // for styles related to this gutter value
+      var gutter = 36;
 
       this._width = (this.$container.width() / 2) - (gutter / 2);
       this._height = this._width * (3 / 4);
 
-      this.$svg.css({
+      var css = {
         width: this._width,
         height: this._height
-      });
+      };
+
+      this.$svg.css(css);
     },
 
     // ----------
@@ -185,6 +187,7 @@
         .attr('x', x)
         .attr('y', y)
         .attr('text-anchor', 'end')
+        .attr('fill', '#888')
         .text(maxValueLabel);
 
       y = this._height - this._bottomBuffer;
@@ -192,6 +195,7 @@
         .attr('x', x)
         .attr('y', y)
         .attr('text-anchor', 'end')
+        .attr('fill', '#888')
         .text(0);
 
       // console.timeEnd('render');

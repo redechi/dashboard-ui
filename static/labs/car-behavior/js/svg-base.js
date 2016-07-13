@@ -8,6 +8,8 @@
   component.prototype = {
     // ----------
     _init: function(args) {
+      var self = this;
+
       this.$container = args.$container;
       this.$svg = args.$svg;
       this._svg = d3.select(this.$svg[0]);
@@ -16,12 +18,28 @@
       this._topBuffer = 0;
       this._bottomBuffer = 32;
 
-      this.resize();
+      this.updateSize();
+
+      this._debouncedRender = _.debounce(function() {
+        self.render();
+      }, 100);
     },
 
     // ----------
     // Overridden by subclasses
+    updateSize: function() {
+    },
+
+    // ----------
     resize: function() {
+      var oldWidth = this._width;
+      var oldHeight = this._height;
+
+      this.updateSize();
+
+      if (this._width !== oldWidth || this._height !== oldHeight) {
+        this._debouncedRender();
+      }
     },
 
     // ----------
