@@ -9,18 +9,21 @@
     this._valueKey = this._data.valueKey(this._mode);
     this._xLabel = args.xLabel;
     this._yLabel = args.yLabel;
+    this._xLabelFactor = args.xLabelFactor || 1;
     this._yLabelFactor = args.yLabelFactor || 1;
     this._maxYLabel = args.maxYLabel;
     this._minYLabel = args.minYLabel;
     this._minY = args.minY;
     this._heatLabel = args.heatLabel;
+    this._minHeatLabel = args.minHeatLabel;
+    this._maxHeatLabel = args.maxHeatLabel;
 
     superClass._init.call(this, {
       $svg: args.$el,
       $container: args.$container
     });
 
-    this._leftBuffer = 60;
+    this._leftBuffer = 50;
     this._rightBuffer = 45;
     this._topBuffer = 5;
     this._smoothData();
@@ -75,16 +78,26 @@
         .domain([this._data.minX, this._data.maxX])
         .range([this._leftBuffer, this._width - (this._rightBuffer + columnWidth)]);
 
+      var xAxisMax = Math.round(this._data.maxX * this._xLabelFactor);
+      if (xAxisMax === 99) {
+        xAxisMax = 100; // Special case for kilometer to mile conversion so the last tick label appears
+      }
+
       var axisXScale = d3.scale.linear()
-        .domain([this._data.minX, App.maxMph])
+        .domain([this._data.minX * this._xLabelFactor, xAxisMax])
         .range([this._leftBuffer, this._width - this._rightBuffer]);
 
       var yScale = d3.scale.linear()
         .domain([minY, this._data.maxY])
         .range([this._height - (this._bottomBuffer + rowHeight), this._topBuffer]);
 
+      var yAxisMax = Math.round(this._data.maxY * this._yLabelFactor);
+      if (yAxisMax === 99) {
+        yAxisMax = 100; // Special case for kilometer to mile conversion so the last tick label appears
+      }
+
       var axisYScale = d3.scale.linear()
-        .domain([minY * this._yLabelFactor, this._data.maxY * this._yLabelFactor])
+        .domain([minY * this._yLabelFactor, yAxisMax])
         .range([this._height - this._bottomBuffer, this._topBuffer]);
 
       var colorScale = d3.scale.linear()
@@ -174,29 +187,47 @@
         .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
         .text(this._heatLabel);
 
-      var maxValueLabel = maxValue;
-      if (maxValueLabel < 1) {
-        maxValueLabel = Math.round(maxValueLabel * 100) / 100;
+      if (this._minHeatLabel && this._maxHeatLabel) {
+        y = this._topBuffer;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'end')
+          .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
+          .text(this._maxHeatLabel);
+
+        y = this._height - this._bottomBuffer;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'start')
+          .attr('transform', 'rotate(-90 ' + x + ',' + y + ')')
+          .text(this._minHeatLabel);
       } else {
-        maxValueLabel = Math.round(maxValueLabel);
+        var maxValueLabel = maxValue;
+        if (maxValueLabel < 1) {
+          maxValueLabel = Math.round(maxValueLabel * 100) / 100;
+        } else {
+          maxValueLabel = Math.round(maxValueLabel);
+        }
+
+        x += 10;
+        y = this._topBuffer + 15;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'end')
+          .attr('fill', '#888')
+          .text(maxValueLabel);
+
+        y = this._height - this._bottomBuffer;
+        this._svg.append('text')
+          .attr('x', x)
+          .attr('y', y)
+          .attr('text-anchor', 'end')
+          .attr('fill', '#888')
+          .text(0);
       }
-
-      x += 10;
-      y = this._topBuffer + 15;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .attr('fill', '#888')
-        .text(maxValueLabel);
-
-      y = this._height - this._bottomBuffer;
-      this._svg.append('text')
-        .attr('x', x)
-        .attr('y', y)
-        .attr('text-anchor', 'end')
-        .attr('fill', '#888')
-        .text(0);
 
       // console.timeEnd('render');
     },

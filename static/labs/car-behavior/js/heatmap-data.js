@@ -84,15 +84,16 @@
       var xKey = args.x;
       var yKey = args.y;
 
-      this.minX = App.minKph;
-      this.maxX = App.maxKph;
-
-      if (yKey === 'accel_bin') {
+      if (yKey === 'accel_bin') { // For efficiency and style
+        this.minX = App.minKph;
+        this.maxX = App.maxKph;
         this.minY = App.minAccel;
         this.maxY = App.maxAccel;
-      } else {
-        this.minY = App.minRpm;
-        this.maxY = App.maxRpm;
+      } else { // For power
+        this.minX = App.minRpm;
+        this.maxX = App.maxRpm;
+        this.minY = App.minKph;
+        this.maxY = App.maxKph;
       }
 
       var grid = {};
@@ -155,7 +156,7 @@
       _.each(grid, function(info, key) {
         if (info.totalMafCount >= self._mafCountThreshold && info.totalMaf) {
           info.averageMaf = info.totalMaf / info.totalMafCount;
-          info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity);
+          info.averageMpg = self.mafToMpg(info.averageMaf, info.velocity, rawData.diesel);
         }
 
         if (info.totalPowerCount >= 2) {
@@ -238,15 +239,20 @@
     },
 
     // ----------
-    mafToMpg: function(maf, velocity) {
+    mafToMpg: function(maf, velocity, diesel) {
       var AIR_FUEL_RATIO = 14.7; //unitless
+      var AIR_FUEL_RATIO_DIESEL = 14.6;
       var DENSITY_OF_GAS = 6.175599; //lbs per gallon
+      var DENSITY_OF_GAS_DIESEL = 7.060212;
       var GRAMS_PER_POUND = 454; //grams per pound
       var KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND = 0.000172603;
 
-      var fuelMassPerSec = (maf / 100) / AIR_FUEL_RATIO; //grams
+      var airFuelRatio = diesel ? AIR_FUEL_RATIO_DIESEL : AIR_FUEL_RATIO;
+      var densityOfGas = diesel ? DENSITY_OF_GAS_DIESEL : DENSITY_OF_GAS;
+
+      var fuelMassPerSec = (maf / 100) / airFuelRatio; //grams
       var fuelMassLbsPerSec = fuelMassPerSec / GRAMS_PER_POUND; //pounds
-      var fuelVolumePerSec = fuelMassLbsPerSec / DENSITY_OF_GAS; //gallons
+      var fuelVolumePerSec = fuelMassLbsPerSec / densityOfGas; //gallons
       var mpg = (velocity * KILOMETERS_PER_HOUR_TO_MILES_PER_SECOND) / fuelVolumePerSec;
       return mpg;
     },
@@ -396,7 +402,7 @@
         var output = _.chain(set)
           .map(function(v, i) {
             var maf = self._percentile(v.values.sort(numericSort), 0.5);
-            v.value = self.mafToMpg(maf, v.x / App.milesPerKilometer);
+            v.value = self.mafToMpg(maf, v.x / App.milesPerKilometer, self._rawData.diesel);
             return v;
           })
           .sortBy(function(v, i) {
@@ -420,7 +426,7 @@
       ];
 
       // "insight"
-      var interval = 5;
+      var interval = 10;
 
       var mph = this._maxBucketValue({
         data: sets[0].data,
@@ -444,8 +450,8 @@
       var torqueData = {};
 
       _.each(this.grid, function(gridInfo) {
-        var velocity = gridInfo.x;
-        var rpm = gridInfo.y;
+        var rpm = gridInfo.x;
+        var velocity = gridInfo.y;
 
         if (velocity <= 0) {
           return;

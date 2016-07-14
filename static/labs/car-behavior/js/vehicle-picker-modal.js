@@ -2,6 +2,8 @@
 
   // ----------
   App.vehiclePickerModal = {
+    // NOTE: We will be adding the commented out items in _sections back in version 2
+
     _sections: [
       {
         name: 'Vehicle',
@@ -19,31 +21,31 @@
                 key: 'gen'
               }
             ]
-          },
-          {
-            menus: [
-              {
-                key: 'price'
-              },
-              {
-                key: 'bodytype'
-              }
-            ]
-          },
-          {
-            menus: [
-              {
-                key: 'horsepower'
-              }
-            ]
-          },
-          {
-            menus: [
-              {
-                key: 'eng_size'
-              }
-            ]
           }
+          // {
+          //   menus: [
+          //     {
+          //       key: 'price'
+          //     },
+          //     {
+          //       key: 'bodytype'
+          //     }
+          //   ]
+          // },
+          // {
+          //   menus: [
+          //     {
+          //       key: 'horsepower'
+          //     }
+          //   ]
+          // },
+          // {
+          //   menus: [
+          //     {
+          //       key: 'eng_size'
+          //     }
+          //   ]
+          // }
         ]
       },
       {
@@ -60,21 +62,21 @@
                 key: 'region'
               }
             ]
-          },
-          {
-            menus: [
-              {
-                key: 'state'
-              }
-            ]
-          },
-          {
-            menus: [
-              {
-                key: 'city'
-              }
-            ]
           }
+          // {
+          //   menus: [
+          //     {
+          //       key: 'state'
+          //     }
+          //   ]
+          // },
+          // {
+          //   menus: [
+          //     {
+          //       key: 'city'
+          //     }
+          //   ]
+          // }
         ]
       },
     ],

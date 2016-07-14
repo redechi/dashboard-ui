@@ -186,8 +186,8 @@
         }),
         rpm: new App.HeatmapData({
           rawData: raw,
-          x: 'vel_bin',
-          y: 'rpm_bin'
+          x: 'rpm_bin',
+          y: 'vel_bin'
         })
       };
     },
@@ -383,35 +383,37 @@
           });
         }
 
-        if (data.price) {
-          optionSets.push({
-            price: data.price
-          });
-        }
+        // NOTE: We will be adding these commented out items back in version 2
 
-        if (data.horsepower) {
-          optionSets.push({
-            horsepower: data.horsepower
-          });
-        }
+        // if (data.price) {
+        //   optionSets.push({
+        //     price: data.price
+        //   });
+        // }
 
-        if (data.eng_size) {
-          optionSets.push({
-            eng_size: data.eng_size
-          });
-        }
+        // if (data.horsepower) {
+        //   optionSets.push({
+        //     horsepower: data.horsepower
+        //   });
+        // }
 
-        if (data.city) {
-          optionSets.push({
-            city: data.city
-          });
-        }
+        // if (data.eng_size) {
+        //   optionSets.push({
+        //     eng_size: data.eng_size
+        //   });
+        // }
 
-        if (data.state) {
-          optionSets.push({
-            state: data.state
-          });
-        }
+        // if (data.city) {
+        //   optionSets.push({
+        //     city: data.city
+        //   });
+        // }
+
+        // if (data.state) {
+        //   optionSets.push({
+        //     state: data.state
+        //   });
+        // }
 
         if (data.region) {
           optionSets.push({

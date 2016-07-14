@@ -24,7 +24,7 @@
 
     this._leftBuffer = 45;
     this._bottomBuffer = 35;
-    this._rightBuffer = 0;
+    this._rightBuffer = 16;
 
     if (this._yLabel2) {
       this._rightBuffer = 55;
@@ -123,6 +123,7 @@
 
         var path = this._svg.append("path")
           .attr('stroke', set.color)
+          .attr('stroke-width', 3)
           .attr('fill', 'none')
           .attr("d", line(set.data));
 
@@ -135,7 +136,7 @@
     // ----------
     render: function() {
       var self = this;
-      var x, y;
+      var x, y, i;
 
       // console.time('render');
 
@@ -183,9 +184,9 @@
       }
 
       // sets
-      _.each(this._sets, function(set) {
-        self._renderSet(set);
-      });
+      for (i = this._sets.length - 1; i >= 0; i--) {
+        this._renderSet(this._sets[i]);
+      }
 
       // console.timeEnd('render');
     }

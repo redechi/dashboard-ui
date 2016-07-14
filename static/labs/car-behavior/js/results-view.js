@@ -40,8 +40,11 @@
         yLabel: 'MPH/sec',
         maxYLabel: 'Acceleration',
         minYLabel: 'Braking',
+        xLabelFactor: App.milesPerKilometer,
         yLabelFactor: App.milesPerKilometer,
-        heatLabel: 'Time Spent (hours)'
+        heatLabel: 'Time Spent',
+        minHeatLabel: 'Infrequent',
+        maxHeatLabel: 'Frequent'
       });
 
       this._graphics.push(this.styleHeatmap);
@@ -63,7 +66,7 @@
       sets = args.leftData.accel.styleSets('#0bf');
 
       if (args.rightData) {
-        sets = sets.concat(args.rightData.accel.styleSets('#f8f'));
+        sets = sets.concat(args.rightData.accel.styleSets('#fa0'));
 
         this.styleHeatmap2 = new App.Heatmap({
           $container: args.$container,
@@ -74,8 +77,11 @@
           yLabel: 'MPH/sec',
           maxYLabel: 'Acceleration',
           minYLabel: 'Braking',
+          xLabelFactor: App.milesPerKilometer,
           yLabelFactor: App.milesPerKilometer,
-          heatLabel: 'Time Spent (hours)'
+          heatLabel: 'Time Spent',
+          minHeatLabel: 'Infrequent',
+          maxHeatLabel: 'Frequent'
         });
 
         this._graphics.push(this.styleHeatmap2);
@@ -95,6 +101,7 @@
         data: args.leftData.accel,
         xLabel: 'MPH',
         yLabel: 'Acceleration (MPH/sec)',
+        xLabelFactor: App.milesPerKilometer,
         minY: 0,
         heatLabel: 'MPG'
       });
@@ -122,7 +129,7 @@
       }
 
       if (args.rightData) {
-        groupSets = args.rightData.accel.efficiencySets('#f8f');
+        groupSets = args.rightData.accel.efficiencySets('#fa0');
         sets = sets.concat(groupSets);
         rightInsight = 'The optimal speed for fuel efficiency for ' + args.rightOptionView.name + ' is ' +
           groupSets[0].optimalSpeed + ' MPH.';
@@ -134,6 +141,7 @@
           data: args.rightData.accel,
           xLabel: 'MPH',
           yLabel: 'Acceleration (MPH/sec)',
+          xLabelFactor: App.milesPerKilometer,
           minY: 0,
           heatLabel: 'MPG'
         });
@@ -148,8 +156,9 @@
         $el: this.$el.find('.horsepower-heatmap-svg').eq(0),
         mode: 'horsepower',
         data: args.leftData.rpm,
-        xLabel: 'MPH',
-        yLabel: 'RPM',
+        xLabel: 'RPM',
+        yLabel: 'MPH',
+        yLabelFactor: App.milesPerKilometer,
         heatLabel: 'Horsepower'
       });
 
@@ -179,7 +188,7 @@
       }
 
       if (args.rightData) {
-        groupSets = args.rightData.rpm.powerSets('#f8f');
+        groupSets = args.rightData.rpm.powerSets('#fa0');
         sets = sets.concat(groupSets);
         rightInsight = 'The optimal RPM for power for ' + args.rightOptionView.name + ' is ' +
           groupSets[0].optimalRpm + '.';
@@ -189,8 +198,9 @@
           $el: this.$el.find('.horsepower-heatmap-svg').eq(1),
           mode: 'horsepower',
           data: args.rightData.rpm,
-          xLabel: 'MPH',
-          yLabel: 'RPM',
+          xLabel: 'RPM',
+          yLabel: 'MPH',
+          yLabelFactor: App.milesPerKilometer,
           heatLabel: 'Horsepower'
         });
 

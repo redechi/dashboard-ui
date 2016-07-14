@@ -61,10 +61,6 @@
 
       this.$el.empty();
 
-      if (!optionSets.length) {
-        return;
-      }
-
       if (this._extraOptions) {
         optionSets.push(_.extend({
           extra: true
