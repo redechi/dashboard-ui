@@ -37,6 +37,10 @@
 
       var data = JSON.stringify({
         type: type,
+        fuel_type: [
+          args.leftData.raw.diesel ? 'diesel' : 'gasoline',
+          args.rightData.raw.diesel ? 'diesel' : 'gasoline'
+        ],
         h1: h1,
         h2: h2
       });

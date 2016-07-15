@@ -261,42 +261,47 @@
     // Expects:
     // args.data - array of objects with x, value
     // args.interval - number
+    // args.bucketSize - number
     _maxBucketValue: function(args) {
-      var data = _.map(args.data, function(info) {
-        info = _.clone(info);
-        info.x = Math.floor(info.x / args.interval) * args.interval;
-        return info;
+      // console.time('_maxBucketValue');
+
+      var buckets = {};
+      var i, bucket, max;
+      var bucketSize = args.bucketSize || args.interval;
+      var interval = args.interval;
+
+      _.each(args.data, function(info) {
+        var x = info.x;
+
+        for (i = 0; i <= x; i += interval) {
+          if (i + bucketSize > x) {
+            bucket = buckets[i];
+            if (!bucket) {
+              bucket = buckets[i] = {
+                total: 0,
+                count: 0
+              };
+            }
+
+            bucket.total += info.value;
+            bucket.count++;
+          }
+        }
       });
 
-      data = _.groupBy(data, function(v, i) {
-        return v.x;
+      _.each(buckets, function(bucket, x) {
+        var average = bucket.total / bucket.count;
+        if (!max || max.average < average) {
+          max = {
+            average: average,
+            x: x
+          };
+        }
       });
 
-      data = _.map(data, function(infos, x) {
-        var output = {
-          x: parseFloat(x),
-          infos: infos
-        };
+      // console.timeEnd('_maxBucketValue');
 
-        var total = 0;
-        var count = 0;
-        _.each(infos, function(info) {
-          total += info.value;
-          count += 1;
-        });
-
-        output.total = total;
-        output.count = count;
-        output.average = (count ? total / count : 0);
-
-        return output;
-      });
-
-      var max = _.max(data, function(v) {
-        return v.average;
-      });
-
-      return max.x;
+      return max ? parseFloat(max.x) : 0;
     },
 
     // ----------
@@ -426,15 +431,17 @@
       ];
 
       // "insight"
-      var interval = 10;
+      var bucketSize = 10;
+      var interval = 5;
 
       var mph = this._maxBucketValue({
         data: sets[0].data,
-        interval: interval
+        interval: interval,
+        bucketSize: bucketSize
       });
 
       var startMph = Math.round(mph);
-      var endMph = Math.round(mph + interval);
+      var endMph = Math.round(mph + bucketSize);
       sets[0].optimalSpeed = startMph + '-' + endMph;
 
       return sets;

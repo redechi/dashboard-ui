@@ -5,6 +5,13 @@ const login = require('../js/login');
 /* jscs:disable maximumLineLength */
 /* eslint-disable max-len */
 const labs = [
+  // TODO: To launch, uncomment
+  // {
+  //   name: 'car-behavior',
+  //   image: '/_assets/images/labs/car-behavior.png',
+  //   title: 'Car Health and Driving Style',
+  //   description: 'Gain deep insight into your car’s fuel efficiency, power, and your aggressiveness.'
+  // },
   {
     name: 'dtc_codes',
     image: '/_assets/images/labs/dtc-codes.jpg',

@@ -67,9 +67,11 @@
         }, this._extraOptions));
       }
 
-      optionSets.push({
-        other: true
-      });
+      if (!App.isDemo) {
+        optionSets.push({
+          other: true
+        });
+      }
 
       this._optionViews = _.map(optionSets, function(v, i) {
         var key;

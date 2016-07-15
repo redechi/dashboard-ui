@@ -102,13 +102,16 @@
 
       var queryParams = getQueryParams(document.location.search);
       if (queryParams.demo) {
+        this.isDemo = true;
+        this.updateLeftMenu();
+        this.updateRightMenu();
+        $('.controls').show();
         this.getDemoData();
       } else {
         showLoading();
         this.getUserData();
+        this._loadVehiclePickerData();
       }
-
-      this._loadVehiclePickerData();
 
       $(window).on('resize', function() {
         if (self.personResultsView) {
@@ -351,12 +354,18 @@
 
       var optionSets = [];
 
-      _.each(this.vehicles, function(vehicle) {
+      if (this.isDemo) {
         optionSets.push({
-          name: vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
-          vehicleId: vehicle.id
+          name: '2013 Honda Fit'
         });
-      });
+      } else {
+        _.each(this.vehicles, function(vehicle) {
+          optionSets.push({
+            name: vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model,
+            vehicleId: vehicle.id
+          });
+        });
+      }
 
       this.leftMenu.update(optionSets);
     },
@@ -367,7 +376,12 @@
 
       var optionSets = [];
 
-      if (this.leftData) {
+      if (this.isDemo) {
+        optionSets.push({
+          make: 'Honda',
+          model: 'Fit'
+        });
+      } else if (this.leftData) {
         var data = this.leftData.raw;
 
         if (data.make) {
@@ -376,6 +390,14 @@
               make: data.make,
               model: data.model
             });
+
+            if (data.gen) {
+              optionSets.push({
+                make: data.make,
+                model: data.model,
+                gen: data.gen
+              });
+            }
           }
 
           optionSets.push({
@@ -429,9 +451,16 @@
     getDemoData: function() {
       var self = this;
 
-      $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(rawData) {
-        self.data = self._digestData(rawData);
-        self.renderData();
+      showLoading();
+
+      $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(driverData) {
+        self.leftData = self._digestData(driverData);
+
+        $.getJSON('/labs/car-behavior/data/group-heatmaps.json', function(groupData) {
+          hideLoading();
+          self.rightData = self._digestData(groupData, 'group');
+          self.renderData();
+        });
       });
     },
 
