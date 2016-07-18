@@ -93,19 +93,14 @@
         </div>
         <div class="question">
           <i class="fa fa-chevron-down open-control"></i>
-          <h3>How did you come up with my driving persona?</h3>
-          <p class="answer">We compared your driving style heatmap with all other Automatic users and identified 8 main clusters of drivers. These groups have different driving styles for various reasons: level of aggressiveness, amount of traffic they experience, general commute patterns and more.</p>
-        </div>
-        <div class="question">
-          <i class="fa fa-chevron-down open-control"></i>
-          <h3>Why does my median acceleration line cut off before the vehicles I’m comparing against?</h3>
-          <p class="answer">In order to calculate the median acceleration at each speed, we require a minimum time spent driving at that velocity.  It’s possible you did not spend enough time driving at that speed (Not too many people drive consistently at 100MPH for example).  The comparison vehicles are an aggregate of all Automatic vehicles, so much more data is generated to build the graphs and heatmaps.</p>
+          <h3>Why does my average acceleration line cut off before the vehicles I’m comparing against?</h3>
+          <p class="answer">In order to calculate the average acceleration at each speed, we require a minimum time spent driving at that velocity.  It’s possible you did not spend enough time driving at that speed (Not too many people drive consistently at 100MPH for example).  The comparison vehicles are an aggregate of all Automatic vehicles, so much more data is generated to build the graphs and heatmaps.</p>
         </div>
       <% } else if (mode === 'efficiency') { %>
         <div class="question">
           <i class="fa fa-chevron-down open-control"></i>
           <h3>Why don’t I see my MPG heatmap?</h3>
-          <p class="answer">At this time, the MPG heatmap is only shown for vehicles that have a mass air flow sensor. Cars without this sensor have slightly less accurate calculations of MPG and we are working to include these vehicles in our analysis.</p>
+          <p class="answer">There’s a couple possible reasons.  At this time, the MPG heatmap is only shown for vehicles that have a mass air flow sensor. Cars without this sensor have slightly less accurate calculations of MPG and we are working to include these vehicles in our analysis.  Also, certain older vehicles with non-CAN OBD protocols may not show data.  This is due to the frequency of data that is created by the vehicle.  Again, we’re working to find a solution for this to display data for all vehicles.</p>
         </div>
         <div class="question">
           <i class="fa fa-chevron-down open-control"></i>
@@ -115,7 +110,17 @@
         <div class="question">
           <i class="fa fa-chevron-down open-control"></i>
           <h3>What are some reasons why my vehicle is getting different values than other similar cars?</h3>
-          <p class="answer">There are a couple different reasons why your car’s might not match similar vehicles.  Environmental factors (e.g. going up more hills, driving on bumpy roads) and vehicle factors (e.g. carrying extra weight in your car, poorly inflated tires) may have an impact.  It could also deal with the amount of time you spend at each velocity.  For example, if you don’t drive at high speeds often, your data could be skewed by a few rare events.  We try to factor for this, but there are cases where don’t filter out this data.</p>
+          <p class="answer">There are a couple different reasons why your car’s might not match similar vehicles.  Environmental factors (e.g. going up more hills, driving on bumpy roads) and vehicle factors (e.g. carrying extra weight in your car, poorly inflated tires) may have an impact.  It could also deal with the amount of time you spend at each velocity.  For example, if you don’t drive at high speeds often, your data could be skewed by a few rare events.  We try to factor for this, but there are cases where we don’t filter out this data.</p>
+        </div>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>What data are you showing for models that have diesel versions?</h3>
+          <p class="answer">Right now all groups are built with gasoline only vehicles.  We are working on adding an option to select from the diesel versions of similar cars.</p>
+        </div>
+        <div class="question">
+          <i class="fa fa-chevron-down open-control"></i>
+          <h3>My MPG data looks wrong by a factor of 2x. Why?</h3>
+          <p class="answer">There are certain vehicles where we are incorrectly calculating MPG - namely heavy duty trucks. We are working to identify all these vehicles and correct the data for the next version of the lab.</p>
         </div>
         <div class="question">
           <i class="fa fa-chevron-down open-control"></i>
@@ -190,7 +195,7 @@
     <div class="wrapper">
       <h1 class="labs-title">Car Health and Driving Style</h1>
       <div class="labs-tagline">By Automatic Labs</div>
-      <p>This feature is currently in alpha.</p>
+      <p>This feature is currently in beta. If you have any feedback, please tell us in our customer <a href="https://community.automatic.com/automatic/topics/dashboard-labs-introducing-car-health-and-driving-style">community</a></p>
       <div class="tabs">
         <div class="tab efficiency-tab" data-mode="efficiency">Car Health - Fuel Efficiency</div>
         <div class="tab power-tab" data-mode="power">Car Health - Power</div>
