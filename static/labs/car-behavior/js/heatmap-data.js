@@ -4,7 +4,8 @@
 
   // ----------
   var component = App.HeatmapData = function(args) {
-    this._mafCountThreshold = args.mafCountThreshold || 1;
+    this._isGroup = args.isGroup;
+    this._mafCountThreshold = (this._isGroup ? 50 : 10);
     this._rawData = args.rawData;
     this._buildData(args);
     this._fillInData();
@@ -415,7 +416,7 @@
           })
           .value();
 
-        var threshold = 30;
+        var threshold = self._isGroup ? 300 : 30;
         output = _.filter(output, function(v, i) {
           return v.count >= threshold;
         });
@@ -544,15 +545,23 @@
       var output = [];
       var valueKey = this.valueKeyForComparison(mode);
 
-      var x, y, column, info, value;
-      for (x = this.minX; x <= this.maxX; x += this.xInterval) {
-        if (output.length === 80) {
-          break;
-        }
+      if (mode === 'power') {
+        console.warn('Power comparisons are not yet supported');
+        return output;
+      }
 
+      var x, y, column, info, value;
+      var minX = 0;
+      var maxX = 158;
+      var xInterval = 2;
+      var minY = -22;
+      var maxY = 21;
+      var yInterval = 1;
+
+      for (x = minX; x <= maxX; x += xInterval) {
         column = [];
         output.push(column);
-        for (y = this.minY; y <= this.maxY; y += this.yInterval) {
+        for (y = minY; y <= maxY; y += yInterval) {
           info = this.grid[this.key(x, y)];
           value = 0;
           if (info) {
@@ -561,12 +570,7 @@
 
           column.push(value);
         }
-
-        console.assert(mode === 'power' || column.length === 44,
-          'comparison heatmap columns should be 44 items long', column.length);
       }
-
-      console.assert(output.length === 80, 'comparison heatmap rows should be 80 items long', output.length);
 
       return output;
     }

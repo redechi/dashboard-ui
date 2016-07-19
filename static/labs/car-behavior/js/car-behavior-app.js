@@ -177,8 +177,6 @@
 
     // ----------
     _digestData: function(raw, type) {
-      var mafCountThreshold = (type === 'group' ? 50 : 10);
-
       if (!_.isNumber(raw.weight_kg) || _.isNaN(raw.weight_kg) || raw.weight_kg > 10000) {
         raw.weight_kg = 1470;
       }
@@ -186,12 +184,13 @@
       return {
         raw: raw,
         accel: new App.HeatmapData({
-          mafCountThreshold: mafCountThreshold,
+          isGroup: type === 'group',
           rawData: raw,
           x: 'vel_bin',
           y: 'accel_bin'
         }),
         rpm: new App.HeatmapData({
+          isGroup: type === 'group',
           rawData: raw,
           x: 'rpm_bin',
           y: 'vel_bin'
