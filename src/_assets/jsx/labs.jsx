@@ -13,7 +13,7 @@ const labs = [
   },
   {
     name: 'dtc_codes',
-    image: '/_assets/images/labs/dtc-codes.jpg',
+    image: '/_assets/images/labs/dtc-codes.png',
     title: 'Diagnostic Trouble Codes',
     description: 'What diagnostic trouble codes has your car triggered?'
   },

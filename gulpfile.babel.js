@@ -3,13 +3,15 @@ import './tools/gulp/templates.js';
 import './tools/gulp/static.js';
 import './tools/gulp/images.js';
 import './tools/gulp/fingerprint.js';
+import './tools/gulp/social_links.js';
 import './tools/gulp/deploy.js';
 
 const BUILD_PIPELINE = [
   'templates:build',
   'static:build',
   'images:build',
-  'fingerprint:build'
+  'fingerprint:build',
+  'social_links:replace'
 ];
 
 const WATCH_PIPELINE = [
