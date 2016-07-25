@@ -35,7 +35,7 @@ Open localhost:5000 in your browser
 
 Labs are completely separate from the rest of Dashboard, and don't have any dependencies from the react dashboard app.
 
-Labs files are completely located inside of `static/labs` and don't require anything outside of it.
+Labs files are completely located inside of `static/labs` and don't require anything outside of it. The one exception is `static/data` which is the only place we can put JSON files so they'll be properly gzipped when deployed.
 
 The page that lists all of the labs at [dashboard.automatic.com/#/labs](https://dashboard.automatic.com/#/labs) is part of the dashboard React app.
 

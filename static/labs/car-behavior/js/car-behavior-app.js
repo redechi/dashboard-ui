@@ -456,10 +456,10 @@
 
       showLoading();
 
-      $.getJSON('/labs/car-behavior/data/driver-heatmaps.json', function(driverData) {
+      $.getJSON('/data/driver-heatmaps.json', function(driverData) {
         self.leftData = self._digestData(driverData);
 
-        $.getJSON('/labs/car-behavior/data/group-heatmaps.json', function(groupData) {
+        $.getJSON('/data/group-heatmaps.json', function(groupData) {
           hideLoading();
           self.rightData = self._digestData(groupData, 'group');
           self.renderData();
