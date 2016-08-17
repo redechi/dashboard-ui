@@ -416,7 +416,7 @@
           })
           .value();
 
-        var threshold = self._isGroup ? 300 : 30;
+        var threshold = self._isGroup ? 1000 : 60;
         output = _.filter(output, function(v, i) {
           return v.count >= threshold;
         });
