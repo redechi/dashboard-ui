@@ -385,7 +385,7 @@
         var accel = datum.accel_bin;
         var count = datum.maf_cnt;
         var averageMaf = datum.avg_maf;
-        if (accel < 0 || accel > 2 || !averageMaf || !count) {
+        if (accel !== 1 || !averageMaf || !count) {
           return;
         }
 
