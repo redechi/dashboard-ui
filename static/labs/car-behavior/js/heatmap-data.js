@@ -393,22 +393,21 @@
         if (!setInfo) {
           setInfo = {
             x: velocity,
-            count: 0,
-            values: []
+            total: 0,
+            count: 0
           };
 
           set[velocity] = setInfo;
         }
 
+        setInfo.total += averageMaf * count;
         setInfo.count += count;
-        setInfo.values.push(averageMaf);
       });
 
       var finish = function(set) {
         var output = _.chain(set)
           .map(function(v, i) {
-            var maf = self._percentile(v.values.sort(numericSort), 0.5);
-            v.value = self.mafToMpg(maf, v.x / App.milesPerKilometer, self._rawData.diesel);
+            v.value = self.mafToMpg(v.total / v.count, v.x / App.milesPerKilometer, self._rawData.diesel);
             return v;
           })
           .sortBy(function(v, i) {
