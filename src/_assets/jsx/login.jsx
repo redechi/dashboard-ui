@@ -69,19 +69,6 @@ class Login extends React.Component {
     }
 
     let panel;
-    if (this.state.panel === 'intro') {
-      let appLinkText = 'Learn more about Automatic';
-      let appLink = 'https://automatic.com';
-      let appCheckFunction = _.noop;
-      if (mobile.isAndroid()) {
-        appLinkText = 'Open the Automatic app';
-        appLink = 'automatic://goto?id=insights_screen';
-        appCheckFunction = mobile.androidAppCheck;
-      } else if (mobile.isIOS()) {
-        appLinkText = 'Open the Automatic app';
-        appLink = 'com.automatic://';
-        appCheckFunction = mobile.iOSAppCheck;
-      }
 
       panel = (
         <div>
@@ -96,10 +83,9 @@ class Login extends React.Component {
             </div>
             <div className="mobile-block">
               <p>
-                Currently, our dashboard is designed for use in desktop web browsers.
+                The Automatic dashboard is designed for use in desktop web browsers.
                 For the best experience on your phone, use our Android or iPhone app.
               </p>
-              <a href={appLink} className="btn btn-blue" onClick={appCheckFunction}>{appLinkText}</a>
             </div>
           </div>
 
