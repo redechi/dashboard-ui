@@ -16,8 +16,8 @@ info:
 	@$(BABEL_NODE) tools/custom/info.js
 
 lint:
-	@$(JSCS) .
-	@$(ESLINT) .
+	@$(JSCS) ./src
+	@$(ESLINT) ./src
 
 build: info clean
 	@$(WEBPACK) --progress

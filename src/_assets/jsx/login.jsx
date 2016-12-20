@@ -69,7 +69,7 @@ class Login extends React.Component {
     }
 
     let panel;
-
+    if (this.state.panel === 'intro') {
       panel = (
         <div>
           <div className="top-box">

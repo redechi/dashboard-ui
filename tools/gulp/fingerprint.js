@@ -5,21 +5,21 @@ import revNapkin from 'gulp-rev-napkin';
 import settings from '../../settings.js';
 
 function buildFingerprint() {
-  const revAll = new RevAll({
-    prefix: settings.SITE_BASE_PATH,
-    dontRenameFile: [
-      'favicon.ico',
-      'sitemap.xml',
-      '.html',
-      '.txt',
+  return gulp.src('dist/**')
+    .pipe(RevAll.revision(
+			  {prefix: settings.SITE_BASE_PATH,
+				  dontRenameFile: [
+						   'favicon.ico',
+						   'sitemap.xml',
+						   '.html',
+						   '.txt',
       'main'
-    ],
-    dontUpdateReference: [
+						   ],
+				  dontUpdateReference: [
       '.html'
     ]
-  });
-  return gulp.src('dist/**')
-    .pipe(revAll.revision())
+				  }
+))
     .pipe(gulp.dest('dist'))
     .pipe(revNapkin());
 }

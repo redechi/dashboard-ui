@@ -21,5 +21,8 @@
   },
   "requireSpacesInAnonymousFunctionExpression": {
     "beforeOpeningCurlyBrace": true
-  }
+  },
+  "disallowArrayDestructuringReturn": false,
+  "requireShorthandArrowFunctions": false,
+  "validateIndentation": false
 }

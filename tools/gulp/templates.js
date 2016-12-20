@@ -40,7 +40,12 @@ function buildNunjuckTemplates() {
         '/main.css'
       ]
     })))
-    .pipe(nunjucks())
+      .pipe(nunjucks({
+		  path: 'src/_templates/',
+		  envOptions: {
+		      watch: settings.DEV_HOT_RELOAD
+		  }
+	      }))
     .pipe(htmlmin(htmlminOptions))
     .pipe(gulp.dest('dist'));
 }
