@@ -4,6 +4,7 @@ import request from 'superagent';
 import _ from 'lodash';
 import moment from 'moment';
 
+const cache = require('./cache');
 const login = require('./login');
 
 const isStaging = window.location.search.indexOf('staging') !== -1;
@@ -48,6 +49,12 @@ function fetchData(endpoint, query, loadingProgress, cb) {
       .set('Authorization', `bearer ${login.getAccessToken()}`)
       .end((e, response) => {
         if (e) {
+          // if unauthorized clear cache of tokens and force reload
+          if (response.statusCode === 401) {
+            cache.clear();
+            location.reload();
+          }
+
           return cb(e);
         }
 
