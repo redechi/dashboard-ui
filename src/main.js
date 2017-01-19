@@ -1,7 +1,5 @@
 import { IS_LOCAL } from './config.js';
 
-require('babel-polyfill');
-
 import Raven from 'raven-js';
 Raven
     .config('https://1e1818d9c5714d4990a766550ec593db@app.getsentry.com/33040', {

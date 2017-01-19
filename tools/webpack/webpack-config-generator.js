@@ -11,6 +11,7 @@ function makeWebpackConfig() {
   const webpackConfig = {};
 
   const VENDOR_MODULES = [
+    'babel-polyfill',
     'jquery',
     'react'
   ];
