@@ -6,6 +6,12 @@ const login = require('../js/login');
 /* eslint-disable max-len */
 const labs = [
   {
+    name: 'year-in-review',
+    image: '/_assets/images/labs/year-in-review.png',
+    title: '2016 Year In Review',
+    description: 'A summary of your driving in 2016.'
+  },
+  {
     name: 'car-behavior',
     image: '/_assets/images/labs/car-behavior.png',
     title: 'Car Health and Driving Style',
@@ -28,12 +34,6 @@ const labs = [
     image: '/_assets/images/labs/commute-analyzer.png',
     title: 'Commute Analyzer',
     description: 'Break down your commute duration by direction, day of week and departure time.'
-  },
-  {
-    name: 'year-in-review',
-    image: '/_assets/images/labs/year-in-review.png',
-    title: '2015 Year In Review',
-    description: 'A summary of your driving in 2015.'
   },
   {
     name: 'hyperlapse',
