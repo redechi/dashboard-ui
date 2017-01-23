@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
     };
 
     this.undoFilter = () => {
-      this.props.history.goBack();
+      this.props.router.goBack();
 
       // wait for goBack() to fire before updating filters
       setTimeout(() => {
@@ -186,7 +186,11 @@ class Dashboard extends React.Component {
       trips: newTrips
     });
 
-    this.props.history.pushState(null, this.props.location.pathname, newFilters);
+    this.props.router.push({
+      state: null,
+      pathname: this.props.location.pathname,
+      query: newFilters
+    });
 
     if (cb) {
       cb(noMatchingTrips);
@@ -270,7 +274,7 @@ class Dashboard extends React.Component {
 }
 Dashboard.propTypes = {
   location: React.PropTypes.object.isRequired,
-  history: React.PropTypes.object
+  router: React.PropTypes.object
 };
 
 module.exports = Dashboard;

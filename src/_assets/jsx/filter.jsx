@@ -74,7 +74,12 @@ class Filter extends React.Component {
 
       const filterValueComponents = this.props.value.split(',');
 
-      filterValueComponents[0] = startDate.valueOf();
+      filterValueComponents[0] = startDate.startOf('day').valueOf();
+
+      if (filterValueComponents[1] < filterValueComponents[0]) {
+        filterValueComponents[1] = startDate.endOf('day').valueOf();
+      }
+
       this.updateFilter(filterValueComponents.join(','));
     };
 
@@ -86,6 +91,11 @@ class Filter extends React.Component {
       const filterValueComponents = this.props.value.split(',');
 
       filterValueComponents[1] = endDate.endOf('day').valueOf();
+
+      if (filterValueComponents[0] > filterValueComponents[1]) {
+        filterValueComponents[0] = endDate.startOf('day').valueOf();
+      }
+
       this.updateFilter(filterValueComponents.join(','));
     };
   }
@@ -162,18 +172,22 @@ class Filter extends React.Component {
             <div className="input-group">
               <label>From</label>
               <DatePicker
+                disabledKeyboardNavigation
                 selected={moment(parseInt(filterValueComponents[0], 10))}
                 onChange={this.handleStartDateChange}
-                dateFormat="MM/DD/YY"
-                className="datepicker__input form-control"
+                maxDate={moment()}
+                dateFormat={['MM/DD/YYYY', 'M/D/YYYY', 'M/D/YY']}
+                className="datepicker__input form-control"                
               />
             </div>
             <div className="input-group">
               <label>To</label>
               <DatePicker
+                disabledKeyboardNavigation
                 selected={moment(parseInt(filterValueComponents[1], 10))}
                 onChange={this.handleEndDateChange}
-                dateFormat="MM/DD/YY"
+                maxDate={moment()}
+                dateFormat={['MM/DD/YYYY', 'M/D/YYYY', 'M/D/YY']}
                 className="datepicker__input form-control"
               />
             </div>
