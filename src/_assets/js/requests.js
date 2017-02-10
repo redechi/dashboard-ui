@@ -85,6 +85,38 @@ function fetchData(endpoint, query, loadingProgress, cb) {
   makeRequest(endpoint, query, cb);
 }
 
+function appendVehicleNickNames(vehicles, cb) {
+  let completedRequests = 0;
+  const totalVehicles = vehicles.length
+  if (totalVehicles === 0) {
+    cb(null, vehicles);
+  }
+
+  for (let vehicle of vehicles) {
+    request
+      .get(`${apiUrl}/vehicles/${vehicle.id}/settings/`)
+      .set('Authorization', `bearer ${login.getAccessToken()}`)
+      .end((e, response) => {
+        if (e) {
+          // if unauthorized clear cache of tokens and force reload
+          if (response.statusCode === 401) {
+            cache.clear();
+            location.reload();
+          }
+
+          return cb(e);
+        }
+        // if response fails nickname should just be undefined
+        vehicle.nickname = response.body.nickname;
+        completedRequests++;
+        // No Promises :(
+        if (completedRequests === totalVehicles) {
+          cb(null, vehicles);
+        }
+      });
+  }
+}
+
 exports.userHasNoTrips = (cb) => {
   request
     .get(`${apiUrl}/trip/`)
@@ -106,25 +138,35 @@ exports.userHasNoTrips = (cb) => {
 exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
   if (login.isLoggedIn()) {
     fetchData('vehicle/', null, null, (e, vehicles) => {
-      if (e) return cb(e);
-
-      fetchData('trip/', {
-        started_at__gte: (startDate / 1000),
-        started_at__lte: (endDate / 1000),
-        limit: 250
-      }, loadingProgress, (e, trips) => {
+      if (e) {
+        return cb(e);
+      }
+      appendVehicleNickNames(vehicles, (e, vehiclesWithNickname) => {
         if (e) return cb(e);
+        fetchData('trip/', {
+          started_at__gte: (startDate / 1000),
+          started_at__lte: (endDate / 1000),
+          limit: 250
+        }, loadingProgress, (e, trips) => {
+          if (e) {
+            return cb(e);
+          }
 
-        cb(null, trips, _.sortBy(vehicles, 'make'));
+          cb(null, trips, _.sortBy(vehicles, 'make'));
+        });
       });
     });
   } else {
     // Demo Trips
     fetchDemoData('/data/vehicles.json', (e, vehicles) => {
-      if (e) return cb(e);
+      if (e) {
+        return cb(e);
+      }
 
       fetchDemoData('/data/trips.json', (e, trips) => {
-        if (e) return cb(e);
+        if (e) {
+          return cb(e);
+        }
 
         cb(null, prepDemoTrips(trips), _.sortBy(vehicles, 'make'));
       });
