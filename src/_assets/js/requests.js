@@ -104,7 +104,10 @@ function appendVehicleNickNames(vehicles, cb) {
             location.reload();
           }
 
-          return cb(e);
+          // Ignore 403s as non mustang vehicles 403 on this route
+          if (response.statusCode !== 403) {
+            return cb(e);
+          }
         }
         // if response fails nickname should just be undefined
         vehicle.nickname = response.body.nickname;
