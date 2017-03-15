@@ -49,7 +49,7 @@ function spawnHttpServer() {
 
 function spawnWebpackDevServer() {
   const webpackDevServer = path.resolve(bins, 'webpack-dev-server');
-  const command = `${webpackDevServer} --hot --inline`;
+  const command = `${webpackDevServer} --content-base dist --hot --inline`;
   return spawnChildProcess(command);
 }
 
@@ -72,7 +72,7 @@ export function runWatch() {
     try {
       const webpackStdout$ = spawnWebpackDevServer()[1];
       const webpackBundleReady = webpackStdout$
-        .filter(data => data.toString().includes('bundle is now VALID'))
+        .filter(data => data.toString().includes('Compiled successfully.'))
         .first()
         .toPromise();
       await webpackBundleReady;
