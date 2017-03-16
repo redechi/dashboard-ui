@@ -141,6 +141,15 @@ class Dashboard extends React.Component {
     };
   }
 
+  updateTripTag(tripId, tagged) {
+    const allTrips = this.state.allTrips.slice();
+    const tripToTag = _.find(allTrips, trip => trip.id === tripId);
+    const trips = filters.filterTrips(allTrips, this.state.filters);
+
+    tripToTag.tags = tagged ? ['business'] : [];
+    this.setState({ allTrips, trips });
+  }
+
   componentWillMount() {
     // show tablet warning modal if it hasn't already been closed
     if (mobile.isTablet() && !cache.getItem('tabletWarningShown') && this.state.showTabletWarningModal !== false) {
@@ -223,6 +232,7 @@ class Dashboard extends React.Component {
                 trips={this.state.trips}
                 totals={totals}
                 windowHeight={this.state.windowHeight}
+                updateTripTag={(tripId, tagged) => { this.updateTripTag(tripId, tagged); }}
                 filterHeight={this.state.filterHeight}
                 getTrips={this.getTrips}
               />

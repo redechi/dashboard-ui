@@ -42,6 +42,7 @@ function prepDemoTrips(trips) {
 
 function fetchData(endpoint, query, loadingProgress, cb) {
   let results = [];
+
   function makeRequest(endpoint, query, cb) {
     request
       .get(`${apiUrl}/${endpoint}`)
@@ -211,5 +212,44 @@ exports.getUser = (cb) => {
       }
 
       return cb(null, response.body);
+    });
+};
+
+// Trip Tagging
+exports.setTripTag = (tripId, cb) => {
+  const tag = { tag: 'business' };
+
+  request
+    .post(`${apiUrl}/trip/${tripId}/tag/`)
+    .set('Authorization', `bearer ${login.getAccessToken()}`)
+    .set('Content-Type', 'application/json')
+    .send(JSON.stringify(tag))
+    .end((e, response) => {
+      if (e) {
+        return cb(e);
+      }
+
+      if (!response.body) {
+        return cb(new Error('No results returned'));
+      }
+
+      return cb(null, response.body);
+    });
+};
+
+exports.deleteTripTag = (tripId, cb) => {
+  request
+    .delete(`${apiUrl}/trip/${tripId}/tag/business/`)
+    .set('Authorization', `bearer ${login.getAccessToken()}`)
+    .end((e, response) => {
+      if (e) {
+        return cb(e);
+      }
+
+      if (response.statusCode === 204) {
+        return cb(null, true);
+      }
+
+      return cb(new Error('Unconfirmed delete'));
     });
 };

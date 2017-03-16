@@ -186,7 +186,12 @@ class TripList extends React.Component {
     const selectedSortType = _.find(sortTypes, (item) => item.value === this.state.sortType);
 
     const trips = this.sortTrips().map((trip, key) =>
-      <Trip trip={trip} showTripModal={this.showTripModal} key={key} />
+      <Trip
+        trip={trip}
+        showTripModal={this.showTripModal}
+        updateTripTag={this.props.updateTripTag}
+        key={key}
+      />
     );
 
     const sortTypePopover = (
@@ -243,6 +248,7 @@ class TripList extends React.Component {
           showTripModal={this.state.showTripModal}
           modalTripIndex={this.state.modalTripIndex}
           tripCount={this.props.trips.length}
+          updateTripTag={this.props.updateTripTag}
           showNextTrip={this.showNextTrip}
           showPreviousTrip={this.showPreviousTrip}
         />
@@ -315,6 +321,7 @@ TripList.propTypes = {
   filterHeight: React.PropTypes.number,
   getTrips: React.PropTypes.func.isRequired,
   trips: React.PropTypes.array,
+  updateTripTag: React.PropTypes.func.isRequired,
   totals: React.PropTypes.object,
   windowHeight: React.PropTypes.number
 };

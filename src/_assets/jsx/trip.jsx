@@ -7,6 +7,8 @@ const formatters = require('../js/formatters');
 const highlight = require('../js/highlight');
 const select = require('../js/select');
 
+const TripTag = require('./trip_tag.jsx');
+
 class Trip extends React.Component {
   constructor(props) {
     super(props);
@@ -33,13 +35,7 @@ class Trip extends React.Component {
 
   render() {
     const trip = this.props.trip;
-    let businessTag;
-
-    if (_.contains(trip.tags, 'business')) {
-      businessTag = (
-        <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
-      );
-    }
+    const tagged = _.contains(trip.tags, 'business');
 
     return (
       <li
@@ -106,7 +102,13 @@ class Trip extends React.Component {
           <div className="location">
             {trip.start_address.display_name}
           </div>
-          {businessTag}
+
+          <TripTag
+            tagged={tagged}
+            tripId={trip.id}
+            type={'small'}
+            updateTripTag={this.props.updateTripTag}
+          />
         </div>
 
         <input type="checkbox" className="trip-select" onChange={this.handleSelectChange} />
@@ -114,8 +116,10 @@ class Trip extends React.Component {
     );
   }
 }
+
 Trip.propTypes = {
   trip: React.PropTypes.object.isRequired,
+  updateTripTag: React.PropTypes.func.isRequired,
   showTripModal: React.PropTypes.func.isRequired
 };
 

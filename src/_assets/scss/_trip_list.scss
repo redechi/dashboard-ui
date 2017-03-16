@@ -212,7 +212,7 @@
       .location {
         font-size: 12px;
         padding: 10px 0;
-        margin-right: 30px;
+        margin-right: 35px;
         white-space: nowrap;
         overflow: hidden;
         font-family: 'AvenirNextLTPro-Thin';
@@ -226,18 +226,29 @@
         transition: height 0.25s ease-in-out 0.05s, padding 0.25s ease-in-out 0.05s, opacity 0.15s ease-in-out 0.3s;
       }
 
-      .tagged-business {
-        @include hr-image('../images/icon_tagged_business', 'png', 16px, 16px);
+      .trip-tag {
+        @include hr-image('../images/icon_trip_tag_disabled', 'png', 16px, 16px);
+        background-color: Transparent;
+        background-position: center center;
         background-repeat: no-repeat;
-        background-position: 0 0;
         background-size: 16px 16px;
-        position: absolute;
+        border: 0;
         bottom: 10px;
-        right: 10px;
-        width: 16px;
+        cursor: pointer;
         height: 16px;
-        text-indent: 100%;
+        opacity: 0;
+        outline: none;
+        overflow: hidden;
+        position: absolute;
+        right: 10px;
+        text-indent: 300%;
         white-space: nowrap;
+        width: 16px;
+
+        &.tagged {
+           @include hr-image('../images/icon_trip_tag_enabled', 'png', 16px, 16px);
+           opacity: .5;
+        }
       }
 
       &.selected,
@@ -270,8 +281,12 @@
           }
         }
 
-        .tagged-business {
-          @include hr-image('../images/icon_tagged_business_blue', 'png', 16px, 16px);
+        .trip-tag {
+          opacity: 1;
+
+          &:hover {
+            opacity: .8;
+          }
         }
       }
 

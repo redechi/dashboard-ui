@@ -7,6 +7,7 @@ import moment from 'moment';
 const formatters = require('../js/formatters');
 
 const ModalMap = require('./trip_modal_map.jsx');
+const TripTag = require('./trip_tag.jsx');
 
 class TripModal extends React.Component {
   constructor(props) {
@@ -15,13 +16,7 @@ class TripModal extends React.Component {
 
   render() {
     const trip = this.props.trip;
-    let businessTag;
-    if (_.contains(trip.tags, 'business')) {
-      businessTag = (
-        <div className="tagged-business" title="Tagged as business trip">Tagged as business trip</div>
-      );
-    }
-
+    const tagged = _.contains(trip.tags, 'business');
     const tripSpansDay = moment(trip.started_at).dayOfYear() === moment(trip.ended_at).dayOfYear();
 
     return (
@@ -78,7 +73,12 @@ class TripModal extends React.Component {
                   <label>{trip.duration_s >= (60 * 60) ? 'Hours' : 'Minutes'}</label>
               </div>
             </div>
-            {businessTag}
+            <TripTag
+              tagged={tagged}
+              tripId={trip.id}
+              type={'large'}
+              updateTripTag={this.props.updateTripTag}
+            />
           </div>
           <ModalMap trip={trip} />
         </Modal.Body>
@@ -88,12 +88,13 @@ class TripModal extends React.Component {
 }
 TripModal.propTypes = {
   hideTripModal: React.PropTypes.func.isRequired,
+  modalTripIndex: React.PropTypes.number.isRequired,
+  showNextTrip: React.PropTypes.func.isRequired,
+  showPreviousTrip: React.PropTypes.func.isRequired,
   showTripModal: React.PropTypes.bool.isRequired,
   trip: React.PropTypes.object.isRequired,
   tripCount: React.PropTypes.number.isRequired,
-  modalTripIndex: React.PropTypes.number.isRequired,
-  showNextTrip: React.PropTypes.func.isRequired,
-  showPreviousTrip: React.PropTypes.func.isRequired
+  updateTripTag: React.PropTypes.func.isRequired
 };
 
 module.exports = TripModal;
