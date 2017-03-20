@@ -219,6 +219,10 @@ exports.getUser = (cb) => {
 exports.setTripTag = (tripId, cb) => {
   const tag = { tag: 'business' };
 
+  if (!login.isLoggedIn()) {
+    return cb(null);
+  }
+
   request
     .post(`${apiUrl}/trip/${tripId}/tag/`)
     .set('Authorization', `bearer ${login.getAccessToken()}`)
@@ -238,6 +242,10 @@ exports.setTripTag = (tripId, cb) => {
 };
 
 exports.deleteTripTag = (tripId, cb) => {
+  if (!login.isLoggedIn()) {
+    return cb(null);
+  }
+
   request
     .delete(`${apiUrl}/trip/${tripId}/tag/business/`)
     .set('Authorization', `bearer ${login.getAccessToken()}`)
