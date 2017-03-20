@@ -261,3 +261,24 @@ exports.deleteTripTag = (tripId, cb) => {
       return cb(new Error('Unconfirmed delete'));
     });
 };
+
+exports.getTripTag = (tripId, cb) => {
+  request
+    .get(`${apiUrl}/trip/${tripId}/tag/business/`)
+    .set('Authorization', `bearer ${login.getAccessToken()}`)
+    .end((e, response) => {
+      if (e) {
+        if (response && response.statusCode === 404) {
+          return cb(null, null);
+        }
+
+        return cb(e);
+      }
+
+      if (!response.body) {
+        return cb(new Error('No results returned'));
+      }
+
+      return cb(null, response.body);
+    });
+};

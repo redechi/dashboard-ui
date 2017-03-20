@@ -32,13 +32,19 @@ class TripTag extends React.Component {
         tagged: newTagState
       });
 
-      request(tripId, (err, response) => {
+      request(tripId, (err) => {
         this.setState({ loading: false });
 
         if (!err) {
           this.props.updateTripTag(tripId, newTagState);
         } else {
-          this.setState({ tagged: !newTagState });
+          requests.getTripTag(tripId, (error, response) => {
+            if (!error) {
+              this.props.updateTripTag(tripId, !!response);
+            } else {
+              this.setState({ tagged: !newTagState });
+            }
+          });
         }
       });
     }
