@@ -121,10 +121,11 @@ function findSortedIndexByDate(trips, date) {
   );
 }
 
-function filterByVehicle(trips, vehicleFilter) {
+function filterByVehicle(trips, vehicleFilter, vehicles) {
   return _.filter(trips, (trip) => {
     if (vehicleFilter === 'all') {
-      return true;
+      const vehicleIds = _.map(vehicles, (vehicle) => { return vehicle.id });
+      return vehicleIds.includes(trip.vehicle.id);
     } else if (vehicleFilter === 'other') {
       return (trip.vehicle.id === null);
     }
@@ -207,10 +208,10 @@ exports.filterByDate = function filterByDate(trips, dateFilter) {
   return trips.slice(endIndex, startIndex);
 };
 
-exports.filterTrips = function filterTrips(trips, filters) {
+exports.filterTrips = function filterTrips(trips, filters, vehicles) {
   let filteredTrips = trips || [];
   filteredTrips = exports.filterByDate(filteredTrips, filters.date);
-  filteredTrips = filterByVehicle(filteredTrips, filters.vehicle);
+  filteredTrips = filterByVehicle(filteredTrips, filters.vehicle, vehicles);
   if (filters.distance) {
     filteredTrips = filterByDistance(filteredTrips, filters.distance);
   }

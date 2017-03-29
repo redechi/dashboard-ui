@@ -55,7 +55,7 @@ class Dashboard extends React.Component {
         this.getTrips(startDate, () => {
           const filteredTripsByDate = filters.filterByDate(this.state.allTrips, this.state.filters.date);
           this.setState({
-            trips: filters.filterTrips(filteredTripsByDate, this.state.filters),
+            trips: filters.filterTrips(filteredTripsByDate, this.state.filters, this.state.vehicles),
             ranges: stats.calculateRanges(filteredTripsByDate)
           });
 
@@ -144,7 +144,7 @@ class Dashboard extends React.Component {
   updateTripTag(tripId, tagged) {
     const allTrips = this.state.allTrips.slice();
     const tripToTag = _.find(allTrips, trip => trip.id === tripId);
-    const trips = filters.filterTrips(allTrips, this.state.filters);
+    const trips = filters.filterTrips(allTrips, this.state.filters, this.state.vehicles);
 
     tripToTag.tags = tagged ? ['business'] : [];
     this.setState({ allTrips, trips });
@@ -176,7 +176,7 @@ class Dashboard extends React.Component {
       }
 
       this.setState({
-        trips: filters.filterTrips(this.state.allTrips, this.state.filters),
+        trips: filters.filterTrips(this.state.allTrips, this.state.filters, this.state.vehicles),
         ranges: stats.calculateRanges(this.state.allTrips)
       });
     });
@@ -187,7 +187,7 @@ class Dashboard extends React.Component {
   }
 
   setFilters(newFilters, cb) {
-    const newTrips = filters.filterTrips(this.state.allTrips, newFilters);
+    const newTrips = filters.filterTrips(this.state.allTrips, newFilters, this.state.vehicles);
     const noMatchingTrips = !newTrips.length;
     this.setState({
       filters: newFilters,
