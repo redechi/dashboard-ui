@@ -147,16 +147,27 @@ exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
       }
       appendVehicleNickNames(vehicles, (e, vehiclesWithNickname) => {
         if (e) return cb(e);
-        fetchData('trip/', {
-          started_at__gte: (startDate / 1000),
-          started_at__lte: (endDate / 1000),
-          limit: 250
-        }, loadingProgress, (e, trips) => {
+        request
+        .get(`${apiUrl}/all-trips/`)
+        .set('Authorization', `bearer ${login.getAccessToken()}`)
+        .end((e, resp) => {
           if (e) {
             return cb(e);
           }
-
-          cb(null, trips, _.sortBy(vehicles, 'make'));
+          const redirectUrl = JSON.parse(resp.text).url
+          request
+          .get(redirectUrl)
+          .end((e, tripResponse) => {
+            const trips = JSON.parse(tripResponse.text).results
+            const startDateS = startDate / 1000
+            const endDateS = endDate / 1000
+            const filteredTrips = _.filter(trips, (trip) => {
+              trip.started_at = moment(trip.started_at, "YYYY-MM-DDTHH:mm:ss+ZZ:zzZ").utc().format("YYYY-MM-DDTHH:mm:ssZ")
+              trip.ended_at = moment(trip.ended_at, "YYYY-MM-DDTHH:mm:ss+ZZ:zzZ").utc().format("YYYY-MM-DDTHH:mm:ssZ")
+              return (moment(trip.started_at).unix() >= startDateS && moment(trip.started_at).unix() <= endDateS)
+            })
+            cb(null, filteredTrips, _.sortBy(vehicles, 'make'));
+          })
         });
       });
     });
