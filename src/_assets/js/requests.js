@@ -162,8 +162,6 @@ exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
             const startDateS = startDate / 1000
             const endDateS = endDate / 1000
             const filteredTrips = _.filter(trips, (trip) => {
-              trip.started_at = moment(trip.started_at, "YYYY-MM-DDTHH:mm:ss+ZZ:zzZ").utc().format("YYYY-MM-DDTHH:mm:ssZ")
-              trip.ended_at = moment(trip.ended_at, "YYYY-MM-DDTHH:mm:ss+ZZ:zzZ").utc().format("YYYY-MM-DDTHH:mm:ssZ")
               return (moment(trip.started_at).unix() >= startDateS && moment(trip.started_at).unix() <= endDateS)
             })
             cb(null, filteredTrips, _.sortBy(vehicles, 'make'));
