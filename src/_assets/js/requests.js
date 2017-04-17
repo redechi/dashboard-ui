@@ -147,26 +147,41 @@ exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
       }
       appendVehicleNickNames(vehicles, (e, vehiclesWithNickname) => {
         if (e) return cb(e);
-        request
-        .get(`${apiUrl}/all-trips/`)
-        .set('Authorization', `bearer ${login.getAccessToken()}`)
-        .end((e, resp) => {
-          if (e) {
-            return cb(e);
-          }
-          const redirectUrl = JSON.parse(resp.text).url
+
+        if (isStaging) {
+          fetchData('trip/', {
+            started_at__gte: (startDate / 1000),
+            started_at__lte: (endDate / 1000),
+            limit: 250
+          }, loadingProgress, (e, trips) => {
+            if (e) {
+              return cb(e);
+            }
+
+            cb(null, trips, _.sortBy(vehicles, 'make'));
+          });
+        } else {
           request
-          .get(redirectUrl)
-          .end((e, tripResponse) => {
-            const trips = JSON.parse(tripResponse.text).results
-            const startDateS = startDate / 1000
-            const endDateS = endDate / 1000
-            const filteredTrips = _.filter(trips, (trip) => {
-              return (moment(trip.started_at).unix() >= startDateS && moment(trip.started_at).unix() <= endDateS)
+          .get(`${apiUrl}/all-trips/`)
+          .set('Authorization', `bearer ${login.getAccessToken()}`)
+          .end((e, resp) => {
+            if (e) {
+              return cb(e);
+            }
+            const redirectUrl = JSON.parse(resp.text).url
+            request
+            .get(redirectUrl)
+            .end((e, tripResponse) => {
+              const trips = JSON.parse(tripResponse.text).results
+              const startDateS = startDate / 1000
+              const endDateS = endDate / 1000
+              const filteredTrips = _.filter(trips, (trip) => {
+                return (moment(trip.started_at).unix() >= startDateS && moment(trip.started_at).unix() <= endDateS)
+              })
+              cb(null, filteredTrips, _.sortBy(vehicles, 'make'));
             })
-            cb(null, filteredTrips, _.sortBy(vehicles, 'make'));
-          })
-        });
+          });
+        }
       });
     });
   } else {
