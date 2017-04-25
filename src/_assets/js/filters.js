@@ -4,7 +4,7 @@ import moment from 'moment';
 const formatters = require('./formatters');
 
 const endOfDay = moment().endOf('day').valueOf();
-const thirtyDaysAgo = moment().endOf('day').subtract(29, 'days').startOf('day').valueOf();
+const startOfWeek = moment().endOf('day').startOf('isoWeek').startOf('day').valueOf();
 const filterList = [
   {
     key: 'vehicle',
@@ -25,7 +25,7 @@ const filterList = [
     key: 'date',
     name: 'date of trip',
     label: 'driven',
-    defaultValue: `${thirtyDaysAgo},${endOfDay},last30Days`,
+    defaultValue: `${startOfWeek},${endOfDay},thisWeek`,
     valueText: (value) => {
       const [startDate, endDate, option] = value.split(',');
       const options = {
