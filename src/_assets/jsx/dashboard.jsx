@@ -210,6 +210,59 @@ class Dashboard extends React.Component {
     }, 100);
   }
 
+  renderTooManyTripsMessage() {
+    const outerStyle = {
+      color: '#2c3032',
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '10px',
+      fontSize: '16px',
+      backgroundColor: 'white',
+      padding: '20px 20px 25px 20px'
+    };
+    const topStyle = {
+      textAlign: 'center',
+      margin: '10px',
+      fontSize: '18px',
+      fontWeight: 'bold'
+    };
+    const bottomStyle = {
+      textAlign: 'center'
+    };
+    return (
+      <div className="left-column" style={outerStyle}>
+        <div style={topStyle}>
+          The Dashboard can not display maps and graphs for this many trips.
+        </div>
+        <div style={bottomStyle}>
+          Please reduce the amount of trips to view the map and graph.
+        </div>
+      </div>
+    );
+  }
+
+  renderMapAndGraph(totals) {
+    if (this.state.trips && this.state.trips.length > 1000) {
+      return this.renderTooManyTripsMessage();
+    }
+    return (
+      <div className="left-column">
+        <Graph
+          trips={this.state.trips}
+          totals={totals}
+          filters={this.state.filters}
+          windowWidth={this.state.windowWidth}
+        />
+        <Map
+          trips={this.state.trips}
+          totals={totals}
+          windowHeight={this.state.windowHeight}
+          filterHeight={this.state.filterHeight}
+        />
+      </div>
+    );
+  }
+
   render() {
     const totals = stats.calculateTotals(this.state.trips);
 
@@ -237,20 +290,7 @@ class Dashboard extends React.Component {
                 getTrips={this.getTrips}
               />
             </div>
-            <div className="left-column">
-              <Graph
-                trips={this.state.trips}
-                totals={totals}
-                filters={this.state.filters}
-                windowWidth={this.state.windowWidth}
-              />
-              <Map
-                trips={this.state.trips}
-                totals={totals}
-                windowHeight={this.state.windowHeight}
-                filterHeight={this.state.filterHeight}
-              />
-            </div>
+            {this.renderMapAndGraph(totals)}
           </div>
         </div>
         <Modal show={this.state.showLoadingModal} className="loading-modal">
