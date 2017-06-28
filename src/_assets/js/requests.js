@@ -141,7 +141,7 @@ exports.userHasNoTrips = (cb) => {
 
 exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
   if (login.isLoggedIn()) {
-    fetchData('vehicle/', null, null, (e, vehicles) => {
+    fetchData('vehicle/', {}, null, (e, vehicles) => {
       if (e) {
         return cb(e);
       }
