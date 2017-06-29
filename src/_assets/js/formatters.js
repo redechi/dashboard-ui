@@ -77,7 +77,10 @@ function formatAddress(address) {
 }
 
 exports.formatTrip = (trip, vehicles) => {
-  const vehicle = _.findWhere(vehicles, { url: trip.vehicle });
+  let vehicle = _.findWhere(vehicles, { url: trip.vehicle });
+  if (!vehicle) {
+   vehicle = _.findWhere(vehicles, { id: trip.vehicle_id});
+  }
   return {
     id: trip.id,
     vehicle: {
