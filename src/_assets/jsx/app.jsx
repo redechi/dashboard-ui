@@ -9,7 +9,6 @@ const Home = require('./home.jsx');
 const Labs = require('./labs.jsx');
 const Logout = require('./logout.jsx');
 const NoMatch = require('./nomatch.jsx');
-const Reset = require('./reset.jsx');
 const UnsupportedBrowser = require('./unsupported_browser.jsx');
 
 class App extends React.Component {
@@ -50,7 +49,6 @@ if (document.getElementById('app')) {
         <Route path="demo" component={Dashboard}/>
         <Route path="labs" component={Labs}/>
         <Route path="connected-apps" component={ConnectedApps}/>
-        <Route path="reset" component={Reset}/>
         <Route path="logout" component={Logout}/>
         <Route path="*" component={NoMatch}/>
       </Route>
