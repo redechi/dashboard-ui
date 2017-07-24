@@ -11,10 +11,13 @@ function makeWebpackConfig() {
   const webpackConfig = {};
 
   const VENDOR_MODULES = [
-    'babel-polyfill',
     'jquery',
     'react'
   ];
+
+  webpackConfig.resolve = {
+    extensions: ['', '.js', '.jsx']
+  };
 
   webpackConfig.context = path.resolve(__dirname, '../../src');
   webpackConfig.entry = {
@@ -32,7 +35,7 @@ function makeWebpackConfig() {
     loaders: [
       {
         test: /\.(js|jsx)$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/
       },
       {

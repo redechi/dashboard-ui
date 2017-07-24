@@ -1,3 +1,11 @@
 {
-  "presets": ["es2015", "stage-0", "react"]
+  "presets": ["es2015", "stage-0", "react"],
+  "plugins": [
+    "array-includes",
+    "rewire",
+    "transform-object-assign",
+    "transform-react-jsx",
+    "transform-runtime",
+    ["inline-json-import", {}]
+  ]
 }
