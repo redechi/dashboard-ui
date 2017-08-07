@@ -14,6 +14,13 @@ const BUILD_PIPELINE = [
   'social_links:replace'
 ];
 
+const DEV_BUILD_PIPELINE = [
+  'templates:build',
+  'static:build',
+  'images:build',
+  'social_links:replace'
+];
+
 const WATCH_PIPELINE = [
   'templates:watch',
   'static:watch',
@@ -30,6 +37,6 @@ const DEPLOY_PRODUCTION_PIPELINE = [
 ];
 
 gulp.task('build', gulp.series(...BUILD_PIPELINE));
-gulp.task('watch', gulp.series(...BUILD_PIPELINE, gulp.parallel(...WATCH_PIPELINE)));
+gulp.task('watch', gulp.series(...DEV_BUILD_PIPELINE, gulp.parallel(...WATCH_PIPELINE)));
 gulp.task('deploy:staging', gulp.series(...DEPLOY_STAGING_PIPELINE));
 gulp.task('deploy:production', gulp.series(...DEPLOY_PRODUCTION_PIPELINE));

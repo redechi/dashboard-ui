@@ -36,7 +36,7 @@ function makeWebpackConfig() {
       {
         test: /\.(js|jsx)$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules\/(?!(araf)\/).*/
       },
       {
         test: /\.css$/,
@@ -59,20 +59,8 @@ function makeWebpackConfig() {
         loader: 'file-loader?name=font-[name].[hash].[ext]'
       },
       {
-        test: /\.png$/,
-        loader: 'url-loader?limit=10000&mimetype=image/png&name=image-[name].[hash].[ext]'
-      },
-      {
-        test: /\.(jpg|jpeg)$/,
-        loader: 'url-loader?limit=10000&mimetype=image/jpeg&name=image-[name].[hash].[ext]'
-      },
-      {
-        test: /\.gif$/,
-        loader: 'url-loader?limit=10000&mimetype=image/gif&name=image-[name].[hash].[ext]'
-      },
-      {
-        test: /\.svg$/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=image-[name].[hash].[ext]'
+        test: /\.(jpg|jpeg|png|gif)$/,
+        loader: 'url-loader?limit=10000&name=image-[name].[hash].[ext]'
       },
       {
         test: /\.json$/,
