@@ -3,7 +3,7 @@
   border-radius: 4px;
   border: none;
   font-weight: bold;
-  @include noSelection;
+  user-select: none;
 
   &.no-hover {
     cursor: auto;
@@ -12,7 +12,7 @@
 
 .btn-blue {
   background-color: #82C9F1;
-  @include box-shadow(0px 1px 0px 0px $highlight);
+  box-shadow: 0px 1px 0px 0px $highlight;
   color: $white;
 
   &:hover {
@@ -33,7 +33,7 @@
     &:hover,
     &:active {
       background-color: $highlight;
-      @include box-shadow(none);
+      box-shadow: none;
     }
   }
 }
@@ -54,7 +54,7 @@
     &:hover,
     &:active {
       background-color: $header_back;
-      @include box-shadow(none);
+      box-shadow: none;
     }
   }
 }
@@ -62,7 +62,7 @@
 .btn-white {
   background-color: $white;
   color: $highlight;
-  @include box-shadow(0px 1px 0px 0px #227EBA);
+  box-shadow: 0px 1px 0px 0px #227EBA;
 
   &:hover {
     background-color: $main_back;
@@ -94,7 +94,7 @@
   &:hover {
     background-color: $white;
     color: $highlight;
-    @include box-shadow(0px 1px 0px 0px $disabled);
+    box-shadow: 0px 1px 0px 0px $disabled;
   }
 
   &.disabled {
@@ -103,7 +103,7 @@
 
     &:hover {
       background-color: $header_back;
-      @include box-shadow(inherit);
+      box-shadow: inherit;
     }
   }
 

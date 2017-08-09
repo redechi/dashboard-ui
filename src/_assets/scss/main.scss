@@ -29,15 +29,6 @@ $fa-font-path: "~font-awesome/fonts";
   }
 }
 
-@mixin noSelection() {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 $main_back: #FAF9F7;
 $header_back: #F5F4F1;
 

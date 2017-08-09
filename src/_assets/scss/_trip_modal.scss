@@ -2,7 +2,7 @@
   .trip-navigation {
     text-align: center;
     position: relative;
-    @include noSelection;
+    user-select: none;
 
     .title {
       line-height: 21px;

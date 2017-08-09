@@ -12,7 +12,7 @@
   },
   "author": "Brendan Nee",
   "dependencies": {
-    "araf": "github:automatic/araf-ui#1.0.0-beta.2",
+    "araf": "github:automatic/araf-ui#1.0.0-beta.4",
     "babel-runtime": "6.23.0",
     "bootstrap-sass": "3.3.7",
     "bootstrap-slider": "9.5.3",

@@ -2,7 +2,7 @@
   color: $highlight;
   line-height: 25px;
   cursor: pointer;
-  @include noSelection;
+  user-select: none;
 
   &:hover {
     color: $selected;

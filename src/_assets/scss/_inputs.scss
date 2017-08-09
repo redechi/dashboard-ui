@@ -2,52 +2,30 @@ input.form-control {
   border: none;
   border-bottom: $line_gray 1px solid;
   background: none;
-  @include box-shadow(none);
+  box-shadow: none;
   color: $link_type;
   border-radius: 0;
   padding: 6px 0;
 
   &:focus {
     color: $highlight !important;
-    @include box-shadow(none);
+    box-shadow: none;
   }
 
-  /* Input Placeholder styles */
-  &::-webkit-input-placeholder { /* WebKit browsers */
-    color: $link_type;
-  }
-  &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  &::placeholder {
     color: $link_type;
     opacity:  1;
-  }
-  &::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: $link_type;
-    opacity:  1;
-  }
-  &:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: $link_type;
   }
 }
 
 .has-error input.form-control {
   color: $red;
   border-color: $red;
-  @include box-shadow(none);
+  box-shadow: none;
 
-  /* Input Placeholder styles */
-  &::-webkit-input-placeholder { /* WebKit browsers */
-    color: $red;
-  }
-  &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  &::placeholder {
     color: $red;
     opacity:  1;
-  }
-  &::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: $red;
-    opacity:  1;
-  }
-  &:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: $red;
   }
 }
 

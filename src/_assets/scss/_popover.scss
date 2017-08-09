@@ -5,8 +5,8 @@
 .popover {
   border: none;
   background: $white;
-  @include box-shadow(0px 0px 2px 0px rgba(0,0,0,0.15));
-  @include noSelection;
+  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.15);
+  user-select: none;
 
   &.bottom {
     border-top: 2px solid $blue;
@@ -73,7 +73,7 @@
     }
 
     .list-select {
-      @include noSelection;
+      user-select: none;
 
       li i {
         float: right;

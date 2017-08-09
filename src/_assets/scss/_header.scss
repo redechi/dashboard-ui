@@ -10,7 +10,7 @@ header {
   background-repeat: no-repeat;
   background-position: right 525px bottom;
   padding: 0 30px;
-  @include box-shadow(inset 0px -1px 2px 0px rgba(0,0,0,0.10));
+  box-shadow: inset 0px -1px 2px 0px rgba(0,0,0,0.10);
 
   .header-logo {
     @include hr-image('../images/logo_automatic_blue', 'png', 119px, 33px);
@@ -82,7 +82,7 @@ header {
     height: 70px;
     background: $header_back;
     padding: 0 30px;
-    @include box-shadow(0px 1px 0px 0px $white);
+    box-shadow: 0px 1px 0px 0px $white;
 
     .header-logo {
       @include hr-image('../images/logo_automatic', 'png', 119px, 33px);
