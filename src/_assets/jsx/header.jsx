@@ -60,7 +60,6 @@ class Header extends React.Component {
   isExcludedPage() {
     return this.props.location.pathname === '/' || this.props.location.pathname === '/reset';
   }
-
   render() {
     // Don't show header on login page or reset page
     if (!login.isLoggedIn() && this.props.location && this.isExcludedPage()) {
@@ -76,7 +75,7 @@ class Header extends React.Component {
             <Link to="/">Summary</Link>
           </li>
           <li>
-            <Link to="/connected-apps">Apps</Link>
+            <a href={login.apiUrl}>Apps</a>
           </li>
           <li>
             <Link to="/labs">Labs</Link>

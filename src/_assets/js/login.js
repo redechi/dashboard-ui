@@ -16,6 +16,8 @@ const isStaging = window.location.search.indexOf('staging') !== -1;
 const apiUrl = isStaging ? 'https://accounts-stage.automatic.co' : 'https://accounts.automatic.com';
 let accessToken = cache.getItem('accessToken');
 
+exports.apiUrl = apiUrl;
+
 exports.isLoggedIn = function isLoggedIn() {
   return !!accessToken;
 };
