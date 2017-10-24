@@ -52,7 +52,8 @@ class Dashboard extends React.Component {
       if (filterName === 'date') {
         const dateFilterComponents = this.state.filters.date.split(',');
         const startDate = parseInt(dateFilterComponents[0], 10);
-        this.getTrips(startDate, () => {
+        const endDate = parseInt(dateFilterComponents[1], 10);
+        this.getTrips(startDate, endDate, () => {
           const filteredTripsByDate = filters.filterByDate(this.state.allTrips, this.state.filters.date);
           this.setState({
             trips: filters.filterTrips(filteredTripsByDate, this.state.filters, this.state.vehicles),
@@ -108,19 +109,23 @@ class Dashboard extends React.Component {
       cache.setItem('tabletWarningShown', 'true');
     };
 
-    this.getTrips = (startDate, cb) => {
+    this.getTrips = (startDate, endDate, cb) => {
       // if demo mode and trips are already loaded, send them
       if (!login.isLoggedIn() && this.state.allTrips.length) {
         return cb();
       }
+      let endRequestDate = endDate;
 
       const tripRequestMinDate = this.state.tripRequestMinDate;
+      if (tripRequestMinDate < endDate) {
+        endRequestDate = tripRequestMinDate;
+      }
 
       if (startDate < tripRequestMinDate) {
         this.setState({
           showLoadingModal: true
         });
-        requests.getTrips(startDate, tripRequestMinDate, this.updateLoadingProgress, (e, trips, vehicles) => {
+        requests.getTrips(startDate, endRequestDate, this.updateLoadingProgress, (e, trips, vehicles) => {
           if (e) {
             return alert('Unable to fetch data. Please try again later.');
           }
@@ -164,7 +169,8 @@ class Dashboard extends React.Component {
 
     const dateFilterComponents = this.state.filters.date.split(',');
     const startDate = parseInt(dateFilterComponents[0], 10);
-    this.getTrips(startDate, () => {
+    const endDate = parseInt(dateFilterComponents[1], 10);
+    this.getTrips(startDate, endDate, () => {
       if (!this.state.allTrips.length) {
         requests.userHasNoTrips((e, userHasNoTrips) => {
           if (userHasNoTrips) {

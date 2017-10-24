@@ -149,8 +149,8 @@ exports.getTrips = (startDate, endDate, loadingProgress, cb) => {
         if (e) return cb(e);
 
         fetchData('trip/', {
-          started_at__gte: (startDate / 1000),
-          started_at__lte: (endDate / 1000),
+          started_at__gte: Math.floor(startDate / 1000),
+          started_at__lte: Math.ceil(endDate / 1000),
           limit: 250
         }, loadingProgress, (e, trips) => {
           if (e) {

@@ -177,7 +177,7 @@ class Filter extends React.Component {
                 onChange={this.handleStartDateChange}
                 maxDate={moment()}
                 dateFormat={['MM/DD/YYYY', 'M/D/YYYY', 'M/D/YY']}
-                className="datepicker__input form-control"                
+                className="datepicker__input form-control"
               />
             </div>
             <div className="input-group">
