@@ -142,7 +142,6 @@
         <div class="container-half">
           <div id="mpg" class="large-number"></div>
           <div class="large-number-label">miles per gallon</div>
-          <div class="large-number-fact">The average MPG of light-duty vehicles sold in 2016 was <strong><span id="">25.3</span></strong></div>
         </div>
         <div class="container-half container-graph">
           <div id="mpgGraph" class="graph"></div>
@@ -203,7 +202,7 @@
     <script>
       var data;
       var map;
-      var currentYear = 2016;
+      var currentYear = (new Date()).getFullYear();
 
       // animate anchor links
       $('.year-in-review-menu a').click(function(e) {

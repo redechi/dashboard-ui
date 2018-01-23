@@ -1,15 +1,15 @@
 import React from 'react';
 
 const login = require('../js/login');
-
+const currentYear = (new Date()).getFullYear();
 /* jscs:disable maximumLineLength */
 /* eslint-disable max-len */
 const labs = [
   {
     name: 'year-in-review',
     image: '/_assets/images/labs/year-in-review.png',
-    title: '2016 Year In Review',
-    description: 'A summary of your driving in 2016.'
+    title: `${currentYear} Year In Review`,
+    description: `A summary of your driving in ${currentYear}.`
   },
   {
     name: 'car-behavior',
