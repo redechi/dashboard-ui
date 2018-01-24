@@ -533,7 +533,7 @@
             return moment(trip.started_at).year() === year;
           });
 
-          if (!trips.length) {
+          if (!!trips.length) {
             $('.alert').text('You have not taken any trips in ' + year + '.').show();
           }
 
