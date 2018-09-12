@@ -9,24 +9,6 @@ const requests = require('../js/requests');
 class Header extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      showSupportModal: false
-    };
-
-    this.showSupportModal = () => {
-      this.setState({
-        showSupportModal: true
-      });
-
-      GSFN.loadWidget(7392, { containerId: 'getsat-widget-7392' });
-    };
-
-    this.hideSupportModal = () => {
-      this.setState({
-        showSupportModal: false
-      });
-    };
   }
 
   componentDidMount() {
@@ -81,18 +63,12 @@ class Header extends React.Component {
             <Link to="/labs">Labs</Link>
           </li>
           <li className="support">
-            <a onClick={this.showSupportModal}>Support</a>
+            <a href="https://help.automatic.com">Support</a>
           </li>
           <li>
             <span className="first-name">{this.state.firstName}</span>
             <Link to="/logout">Log out</Link>
           </li>
-          <Modal show={this.state.showSupportModal} onHide={this.hideSupportModal} className="support-modal">
-            <Modal.Body>
-              <div className="close" onClick={this.hideSupportModal}>x</div>
-              <div id="getsat-widget-7392"></div>
-            </Modal.Body>
-          </Modal>
         </ul>
       );
     } else {
