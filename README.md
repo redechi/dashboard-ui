@@ -27,6 +27,16 @@ To watch for changes, run
 
 Open localhost:5000 in your browser
 
+To effectively log in when running locally, set a `localStorage` key `accessToken` to a valid access token. You can get a valid access token by logging into the production version of https://dashboard.automatic.com and retrieving the localStorage value of `accessToken`.
+
+In the console:
+
+    // Get an access token
+    localStorage.getItem('accessToken')
+
+    // Set an access token
+    localStorage.setitem('accessToken', '1234YOURACCESSTOKEN')
+
 ## Building
 
     make build
