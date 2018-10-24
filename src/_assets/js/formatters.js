@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import moment from 'moment';
-import polyline from 'polyline';
+import polyline from '@mapbox/polyline';
 
 const mapHelpers = require('./map_helpers');
 

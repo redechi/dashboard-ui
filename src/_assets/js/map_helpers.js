@@ -109,14 +109,8 @@ const icons = {
 
 exports.createMap = function createMap(container) {
   const map = L.mapbox.map(container, 'automatic.idonii25', {
-    zoomControl: false,
-    attributionControl: false
+    zoomControl: false
   });
-
-  map.addControl(L.control.attribution({
-    position: 'bottomleft',
-    prefix: false
-  }));
 
   return map;
 };

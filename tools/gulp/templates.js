@@ -32,9 +32,9 @@ function buildNunjuckTemplates() {
         '/main.js'
       ],
       cssPaths: settings.DEV_HOT_RELOAD ? [
-        'https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css'
+        'https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css'
       ] : [
-        'https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.css',
+        'https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css',
         '/main.css'
       ]
     })))

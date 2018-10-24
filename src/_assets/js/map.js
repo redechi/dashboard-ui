@@ -1,6 +1,6 @@
 import L from 'mapbox.js';
 import _ from 'lodash';
-import polyline from 'polyline';
+import polyline from '@mapbox/polyline';
 
 const highlight = require('./highlight');
 const mapHelpers = require('./map_helpers');
