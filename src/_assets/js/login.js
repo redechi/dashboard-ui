@@ -43,13 +43,12 @@ exports.login = function login(username, password, staySignedIn, cb) {
     .send('grant_type=password')
     .send(`scope=${encodeURIComponent(scopes.join(' '))}`)
     .end((e, response) => {
-      if (e && response.body && response.body.error) {
-        e.message = response.body.error;
+      if (e) {
         return cb(e);
       } else if (!response || !response.body.access_token) {
         return cb(new Error('no_access_token'));
-      } else if (e) {
-        return cb(e);
+      } else if (response.body && response.body.error) {
+        return cb(new Error(response.body.error));
       }
 
       accessToken = response.body.access_token;
