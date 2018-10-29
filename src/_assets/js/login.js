@@ -42,16 +42,14 @@ exports.login = function login(username, password, staySignedIn, cb) {
     .send(`client_id=${clientId}`)
     .send('grant_type=password')
     .send(`scope=${encodeURIComponent(scopes.join(' '))}`)
-    .end((e, response) => {
+    .end((e, { body = {} }) => {
       if (e) {
-        return cb(e);
-      } else if (!response || !response.body.access_token) {
+        return cb((body.error && body.detail) ? body : e);
+      } else if (!body.access_token) {
         return cb(new Error('no_access_token'));
-      } else if (response.body && response.body.error) {
-        return cb(new Error(response.body.error));
       }
 
-      accessToken = response.body.access_token;
+      accessToken = body.access_token;
 
       cache.setItem('accessToken', accessToken, staySignedIn);
 

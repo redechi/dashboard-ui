@@ -29,8 +29,12 @@ class Login extends React.Component {
       });
       login.login(this.refs.username.value, this.refs.password.value, this.refs.staySignedIn.checked, (e) => {
         if (e) {
-          console.error(e);
-          if (e && e.message === 'no_username') {
+          if (e.detail) {
+            this.setState({
+              alert: e.detail,
+              errorFields: ['username', 'password']
+            });
+          } else if (e && e.message === 'no_username') {
             this.setState({
               alert: 'No email address provided',
               errorFields: ['username']
@@ -40,7 +44,7 @@ class Login extends React.Component {
               alert: 'No password provided',
               errorFields: ['password']
             });
-          } else if (e && e.message === 'invalid_credentials') {
+          } else if (['err_invalid_user', 'invalid_credentials'].includes(e.message)) {
             this.setState({
               alert: 'Invalid email or password',
               errorFields: ['username', 'password']
