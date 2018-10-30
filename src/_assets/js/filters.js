@@ -208,6 +208,10 @@ exports.filterByDate = function filterByDate(trips, dateFilter) {
   return trips.slice(endIndex, startIndex);
 };
 
+function filterOutUnrecognizedVehicles(trips, vehicles) {
+  return trips.filter(({ vehicle }) => vehicles.some(({ id }) => vehicle.id === id));
+}
+
 exports.filterTrips = function filterTrips(trips, filters, vehicles) {
   let filteredTrips = trips || [];
   filteredTrips = exports.filterByDate(filteredTrips, filters.date);
@@ -232,5 +236,5 @@ exports.filterTrips = function filterTrips(trips, filters, vehicles) {
     filteredTrips = filterByBusinessTag(filteredTrips, filters.businessTag);
   }
 
-  return filteredTrips;
+  return filterOutUnrecognizedVehicles(filteredTrips, vehicles);
 };
