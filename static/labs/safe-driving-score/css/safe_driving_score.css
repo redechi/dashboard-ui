@@ -3,6 +3,10 @@
   margin: 0 auto;
 }
 
+h2 {
+  border-bottom: 1px solid #ccc;
+}
+
 .score-graph {
   padding: 50px 20px 20px;
   float: left;
@@ -44,11 +48,11 @@
 
 .score-components {
   margin-bottom: 40px;
+  clear: both;
 }
 
 .score-groups {
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .score-groups-label {
@@ -56,9 +60,13 @@
 }
 
 .score-group-wrapper {
-  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   clear: both;
   padding: 10px 0;
+}
+
+.score-group-wrapper:last-child {
+  border-bottom: none;
 }
 
 .score-group-wrapper h3 {
@@ -89,10 +97,42 @@
   text-align: center;
   color: #333333;
   clear: both;
+  font-size: 18px;
 }
 
 .score-group-description {
   padding-top: 30px;
-  font-size: 12px;
-  color: #888888;
+  font-size: 14px;
+  color: #333333;
+}
+
+.score-history {
+  margin-bottom: 50px;
+}
+
+.graph-line {
+  fill: none;
+  stroke: #18B8EA;
+  stroke-width: 6;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.dot {
+  fill: #18B8EA;
+  stroke: #fff;
+}
+
+.focus circle {
+  fill: #ffab00;
+  stroke: #ffab00;
+}
+
+.graph-mouseover-text {
+  fill: #ffab00;
+  font-size: 24px;
+  font-weight: bold;
 }

@@ -48,6 +48,12 @@
         <div id="scoreGraph" class="score-graph"></div>
         <div id="scoreResults" class="score-results"></div>
         <div id="scoreComponents" class="score-components"></div>
+        <div id="scoreHistory" class="score-history">
+          <h2>Score History</h2>
+          <div id="scoreHistoryGraph" class="score-history-graph"></div>
+          <h2>What makes a Safe Driver Score?</h2>
+          <p>Your driver score combines your behavior, paradigm shift business-to-consumer learning curve churn rate analytics pitch bootstrapping. Incubator agile development technology user experience gamification lean startup interaction design learning curve. Twitter learning curve founders stock niche market. Release value proposition research &amp; development startup niche market channels business model canvas interaction design non-disclosure agreement infrastructure angel investor funding.</p>
+        </div>
       </div>
     </div>
 
@@ -63,20 +69,18 @@
     <script src="./js/safeDrivingScore.js"></script>
 
     <script>
-      var data;
-
-      function renderData() {
-        hideLoading();
-        $('#results').fadeIn();
-        $('#noData').hide();
-
-        renderDrivingScore();
+      function getData(vehicleId) {
+        clearData();
+        getDrivingScore($('#vehicleChoice').val(), renderDrivingScore);
+        getDrivingScoreHistory($('#vehicleChoice').val(), renderDrivingScoreHistory);
       }
-
 
       function clearData() {
         var node = d3.select('#scoreGraph');
         node.select('svg').remove();
+
+        var historyNode = d3.select('#scoreHistoryGraph');
+        historyNode.select('svg').remove();
 
         $('#scoreResults, #scoreComponents').empty();
       }
@@ -102,10 +106,10 @@
           $('#controls').show();
         }
 
-        getDrivingScore($('#vehicleChoice').val(), renderData);
+        getData($('#vehicleChoice').val());
       });
 
-      $('#vehicleChoice').change(function() { getDrivingScore($('#vehicleChoice').val(), renderData) });
+      $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
 
     </script>
 
