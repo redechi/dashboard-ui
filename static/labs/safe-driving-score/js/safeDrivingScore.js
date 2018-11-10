@@ -98,11 +98,16 @@ function createDemoDrivingScoreHistory(vehicleId) {
   }
 }
 
+function showNoData() {
+  $('#noData').show();
+  $('#results').hide();
+}
+
 function getDrivingScore(vehicleId, cb) {
+  $('#noData').hide();
   showLoading();
 
   if (queryParams.demo) {
-    hideLoading();
     return cb(createDemoDrivingScore(vehicleId));
   }
 
@@ -131,15 +136,16 @@ function getDrivingScore(vehicleId, cb) {
   .fail(function(jqXHR, textStatus, errorThrown) {
     console.error(errorThrown);
     hideLoading();
-    cb();
+    // TODO: surface errors where appropriate instead of showing no data.
+    showNoData();
   });
 }
 
 function getDrivingScoreHistory(vehicleId, cb) {
+  $('#noData').hide();
   showLoading();
 
   if (queryParams.demo) {
-    hideLoading();
     return cb(createDemoDrivingScoreHistory(vehicleId));
   }
 
@@ -168,7 +174,8 @@ function getDrivingScoreHistory(vehicleId, cb) {
   .fail(function(jqXHR, textStatus, errorThrown) {
     console.error(errorThrown);
     hideLoading();
-    cb();
+    // TODO: surface errors where appropriate instead of showing no data.
+    showNoData();
   });
 }
 
