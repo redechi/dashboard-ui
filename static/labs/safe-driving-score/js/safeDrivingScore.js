@@ -20,11 +20,6 @@ function createDemoDrivingScore(vehicleId) {
         group_title: 'Toyota Prius drivers'
       },
       {
-      	percentile_rank: Math.max(Math.ceil(random * 100) - 22, 20),
-      	group_type: 'VEHICLE_CATEGORY',
-        group_title: 'hybrid drivers'
-      },
-      {
       	percentile_rank: Math.max(Math.ceil(random * 100) - 6, 12),
       	group_type: 'REGION',
         group_title: 'San Francisco Bay Area drivers'
