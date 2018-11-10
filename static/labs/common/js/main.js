@@ -139,14 +139,6 @@ function fetchDemoTrips(cb) {
 }
 
 /**
- * Fetch demo vehicles from static json
- * @param {function} cb - callback when vehicles are fetched
- */
-function fetchDemoVehicles(cb) {
-  $.getJSON('/data/vehicles.json', cb);
-}
-
-/**
  * Get the access token of the logged in user
  * @return {string} access token
  */
@@ -335,7 +327,9 @@ function fetchVehicles(cb) {
   var oneHourAgo = Date.now() - (60 * 60 * 1000);
 
   if (queryParams.demo) {
-    return fetchDemoVehicles(cb);
+    return $.getJSON('/data/vehicles.json', function(results) {
+      cb(results.results);
+    });
   }
 
   if (!accessToken) {
