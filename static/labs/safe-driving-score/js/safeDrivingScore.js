@@ -299,9 +299,9 @@ function renderDrivingScoreHistory(dataHistory) {
 
 function renderDrivingScoreHistoryGraph(dataHistory) {
   var wrapper = document.getElementById('scoreHistoryGraph');
-  var margin = {top: 10, right: 80, bottom: 50, left: 50}
-    , width = Math.min(800, window.innerWidth) - margin.left - margin.right
-    , height = Math.min(300, window.innerHeight) - margin.top - margin.bottom;
+  var margin = {top: 10, right: 20, bottom: 50, left: 35};
+  var width = wrapper.offsetWidth - margin.left - margin.right;
+  var height = Math.min(300, window.innerHeight) - margin.top - margin.bottom;
 
   var parseDate = d3.timeParse("%m-%Y");
 
@@ -318,7 +318,7 @@ function renderDrivingScoreHistoryGraph(dataHistory) {
       .range([0, width]);
 
   var yScale = d3.scaleLinear()
-      .domain(d3.extent(graphData, function(d) { return d.score; }))
+      .domain([dataHistory.score_min, dataHistory.score_max])
       .range([height, 0]);
 
   var line = d3.line()
