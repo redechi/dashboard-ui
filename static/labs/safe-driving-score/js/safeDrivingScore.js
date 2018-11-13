@@ -175,18 +175,25 @@ function getDrivingScoreHistory(vehicleId, cb) {
 }
 
 function renderScoreComponent(component) {
-  return $('<div>').addClass('score-group-wrapper')
+  $('<div>').addClass('col-md-12 pt-4 text-center')
     .append($('<h3>').text(component.title))
-    .append($('<div>').addClass('score-group')
-      .append($('<div>').addClass('score-group-value').text(`${component.value}${component.unit}`))
-      .append($('<div>').addClass('score-group-label').text('You'))
-    )
-    .append($('<div>').addClass('score-group')
-      .append($('<div>').addClass('score-group-value').text(`${component.relative_value}${component.unit}`))
-      .append($('<div>').addClass('score-group-label').text(component.relative_value_label))
-    )
-    .append($('<div>').addClass('score-group-unit-label').text(component.unit_descriptor))
-    .append($('<div>').addClass('score-group-description').text(component.description));
+    .appendTo('#scoreComponents');
+
+  $('<div>').addClass('col-6 text-center')
+    .append($('<div>').addClass('score-group-value').text(`${component.value}${component.unit}`))
+    .append($('<div>').addClass('score-group-label').text('You'))
+    .appendTo('#scoreComponents');
+
+  $('<div>').addClass('col-6 text-center')
+    .append($('<div>').addClass('score-group-value').text(`${component.relative_value}${component.unit}`))
+    .append($('<div>').addClass('score-group-label').text(component.relative_value_label))
+    .appendTo('#scoreComponents');
+
+  $('<div>').addClass('col-md-12 text-center score-group-unit-label').text(component.unit_descriptor).appendTo('#scoreComponents');
+
+  $('<div>').addClass('col-md-12')
+    .append($('<div>').addClass('score-group-description border-bottom').text(component.description))
+    .appendTo('#scoreComponents');
 }
 
 function renderDrivingScore(data) {
@@ -197,17 +204,24 @@ function renderDrivingScore(data) {
   renderDrivingScoreGraph(data);
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
-  $('<div>').text(`Your score of ${data.score} puts you ahead of:`).appendTo('#scoreResults');
+  $('<div>').addClass('pt-3').text(`Your score of ${data.score} puts you ahead of:`).appendTo('#scoreResults');
   $('<div>').addClass('score-item-wrapper').append(data.relative_score_group.map(scoreGroup => {
     return $('<div>').addClass('score-item')
       .append($('<div>').addClass('score-item-value').text(`${scoreGroup.percentile_rank}%`))
       .append($('<div>').addClass('score-item-text').text(` of all ${scoreGroup.group_title}`));
   })).appendTo('#scoreResults');
 
-  $('<h2>').addClass('score-groups-label').text('Score Components - Positive Contributions').appendTo('#scoreComponents');
-  $('<div>').addClass('score-groups').append(data.score_factors.positive.map(renderScoreComponent)).appendTo('#scoreComponents');
-  $('<h2>').addClass('score-groups-label').text('Score Components - Negative Contributions').appendTo('#scoreComponents');
-  $('<div>').addClass('score-groups').append(data.score_factors.negative.map(renderScoreComponent)).appendTo('#scoreComponents');
+  $('<div>').addClass('col-md-12')
+    .append($('<h2>').text('Score Components - Positive Contributions'))
+    .appendTo('#scoreComponents');
+
+  data.score_factors.positive.forEach(renderScoreComponent);
+
+  $('<div>').addClass('col-md-12 mt-4')
+    .append($('<h2>').text('Score Components - Negative Contributions'))
+    .appendTo('#scoreComponents');
+
+  data.score_factors.negative.forEach(renderScoreComponent);
 }
 
 function renderDrivingScoreGraph(data) {
@@ -331,10 +345,12 @@ function renderDrivingScoreHistoryGraph(dataHistory) {
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  const tickCount = Math.min(graphData.length, Math.floor(width / 60));
+
   svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%b %Y")).ticks(graphData.length));
+      .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%b %Y")).ticks(tickCount));
 
   svg.append("g")
       .attr("class", "y axis")

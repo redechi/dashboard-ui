@@ -1,24 +1,31 @@
-.wrapper {
-  width: 800px;
-  margin: 0 auto;
+@media (min-width: 1200px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+h1 {
+  font-size: 1.75rem;
 }
 
 h2 {
   border-bottom: 1px solid #ccc;
+  margin: 1rem 0 0;
+  font-size: 1.5rem;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
 }
 
 .score-graph {
   padding: 50px 20px 20px;
-  float: left;
 }
 
 .score-graph-text {
   font-size: 3rem;
   font-weight: bold;
-}
-
-.score-results {
-  margin-left: 300px;
 }
 
 .score-item-wrapper {
@@ -46,51 +53,22 @@ h2 {
   padding-left: 12px;
 }
 
-.score-components {
-  margin-bottom: 40px;
-  clear: both;
-}
-
 .score-groups {
   margin-bottom: 40px;
 }
 
-.score-groups-label {
-  margin: 25px 0 5px;
-}
-
-.score-group-wrapper {
-  border-bottom: 1px solid #ccc;
-  clear: both;
-  padding: 10px 0;
-}
-
-.score-group-wrapper:last-child {
-  border-bottom: none;
-}
-
-.score-group-wrapper h3 {
-  margin: 0;
-  text-align: center;
-}
-
-.score-group {
-  width: 50%;
-  float: left;
-  text-align: center;
-  padding: 20px 0;
-}
-
 .score-group-value {
   color: #18B8EA;
-  font-size: 100px;
-  line-height: 100px;
-  padding-top: 20px;
+  font-size: 50px;
+  line-height: 60px;
+  padding-top: 10px;
 }
 
 .score-group-label {
   color: #000000;
-  font-size: 24px;
+  font-size: 20px;
+  line-height: 1.2;
+  padding-bottom: 5px;
 }
 
 .score-group-unit-label {
@@ -101,7 +79,7 @@ h2 {
 }
 
 .score-group-description {
-  padding-top: 30px;
+  padding-top: 20px;
   font-size: 14px;
   color: #333333;
 }
@@ -137,6 +115,26 @@ h2 {
   font-weight: bold;
 }
 
-.alert {
-  margin-top: 20px;
+@media screen and (min-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  .score-group-value {
+    font-size: 100px;
+    line-height: 100px;
+    padding-top: 20px;
+  }
+
+  .score-group-label {
+    font-size: 24px;
+  }
+
+  .score-group-description {
+    padding-top: 30px;
+  }
 }

@@ -6,17 +6,18 @@
     <title>Safe Driving Score | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <meta property="og:title" content="Safe Driving Score | Automatic"/>
-      <meta property="og:image" content="/labs/battery/img/safe_driving_score.png"/>
-      <meta property="og:site_name" content="Automatic"/>
-      <meta property="og:description" content="Analysis of my driving."/>
+    <meta property="og:title" content="Safe Driving Score | Automatic"/>
+    <meta property="og:image" content="/labs/battery/img/safe_driving_score.png"/>
+    <meta property="og:site_name" content="Automatic"/>
+    <meta property="og:description" content="Analysis of my driving."/>
 
-      <meta name="twitter:card" content="summary_large_image">
-      <meta name="twitter:site" content="@automatic">
-      <meta name="twitter:title" content="Safe Driving Score| Automatic">
-      <meta name="twitter:description" content="Analysis of my driving.">
-      <meta name="twitter:image" content="/labs/battery/img/safe_driving_score.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@automatic">
+    <meta name="twitter:title" content="Safe Driving Score| Automatic">
+    <meta name="twitter:description" content="Analysis of my driving.">
+    <meta name="twitter:image" content="/labs/battery/img/safe_driving_score.png">
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/safe_driving_score.css" rel="stylesheet" />
 
@@ -27,34 +28,45 @@
       <div class="title">Loading...</div>
       <div class="progress"></div>
     </div>
-    <div class="wrapper">
-      <div>
-        <h1 class="labs-title">Safe Driving Score</h1>
-        <div class="labs-tagline">By Automatic Labs</div>
+    <div class="container">
+      <div class="row">
+        <div class="col mt-2">
+          <h1 class="labs-title">Safe Driving Score</h1>
+          <div class="labs-tagline">By Automatic Labs</div>
+          <div class="alert alert-warning alert-demo mt-3">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+
+          <div class="controls hidden mb-3" id="controls">
+            Vehicle:
+            <select id="vehicleChoice"></select>
+          </div>
+
+          <div id="noData" class="hidden alert alert-warning">
+            <p>Safe Driver Score requires a Pro adapter and a minimum of 5 miles a week of driving for 12 weeks. Check back once you have gone for a few drives to get an update.</p>
+
+            <a href="?demo" class="btn btn-blue">View Demo Data</a>
+          </div>
+        </div>
       </div>
-      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
-
-      <div class="controls hidden" id="controls">
-        Vehicle:
-        <select id="vehicleChoice"></select>
-      </div>
-
-      <div id="noData" class="hidden alert alert-warning">
-        <p>Safe Driver Score requires a Pro adapter and a minimum of 5 miles a week of driving for 12 weeks. Check back once you have gone for a few drives to get an update.</p>
-
-        <a href="?demo" class="btn btn-blue">View Demo Data</a>
-      </div>
-
       <div id="results" class="hidden">
-        <h2>Driving Score</h2>
-        <div id="scoreGraph" class="score-graph"></div>
-        <div id="scoreResults" class="score-results"></div>
-        <div id="scoreComponents" class="score-components"></div>
-        <div id="scoreHistory" class="score-history">
-          <h2>Score History</h2>
-          <div id="scoreHistoryGraph" class="score-history-graph"></div>
-          <h2>What makes a Safe Driver Score?</h2>
-          <p>Your driver score combines your behavior, paradigm shift business-to-consumer learning curve churn rate analytics pitch bootstrapping. Incubator agile development technology user experience gamification lean startup interaction design learning curve. Twitter learning curve founders stock niche market. Release value proposition research &amp; development startup niche market channels business model canvas interaction design non-disclosure agreement infrastructure angel investor funding.</p>
+        <div class="row">
+          <div class="col">
+            <h2>Driving Score</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div id="scoreGraph" class="score-graph col-md-4 text-center"></div>
+          <div id="scoreResults" class="col-md-8 mb-3"></div>
+        </div>
+        <div id="scoreComponents" class="score-components row"></div>
+        <div id="scoreHistory" class="score-history row">
+          <div class="col-md-12 mt-4">
+            <h2>Score History</h2>
+          </div>
+          <div class="col-md-12">
+            <div id="scoreHistoryGraph" class="score-history-graphn pt-3"></div>
+            <h2>What makes a Safe Driver Score?</h2>
+            <p>Your driver score combines your behavior, paradigm shift business-to-consumer learning curve churn rate analytics pitch bootstrapping. Incubator agile development technology user experience gamification lean startup interaction design learning curve. Twitter learning curve founders stock niche market. Release value proposition research &amp; development startup niche market channels business model canvas interaction design non-disclosure agreement infrastructure angel investor funding.</p>
+          </div>
         </div>
       </div>
     </div>
