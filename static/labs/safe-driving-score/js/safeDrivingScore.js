@@ -95,10 +95,18 @@ function createDemoDrivingScoreHistory(vehicleId) {
 
 function showNoData() {
   $('#noData').show();
+  $('#error').hide();
+  $('#results').hide();
+}
+
+function showError() {
+  $('#error').show();
+  $('#noData').hide();
   $('#results').hide();
 }
 
 function getDrivingScore(vehicleId, cb) {
+  $('#error').hide();
   $('#noData').hide();
   showLoading();
 
@@ -110,10 +118,7 @@ function getDrivingScore(vehicleId, cb) {
   // TODO: make it point to moxie prod once safe driving score hits production
   var isStaging = window.location.search.indexOf('staging') !== -1;
   var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score/' : 'https://moxie-stage.automatic.co/safe-driving-score/';
-
-  // TODO: use the users vehicle once all vehicles have safe driving scores
-  // var vehicleId = $('#vehicleChoice').val();
-  var vehicleId = 'C_a736cabb443a246b';
+  var vehicleId = $('#vehicleChoice').val();
 
   $.ajax({
     url: apiUrl,
@@ -129,15 +134,18 @@ function getDrivingScore(vehicleId, cb) {
     cb(result);
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    console.error(errorThrown);
     hideLoading();
-    // TODO: surface errors where appropriate instead of showing no data.
-    showNoData();
+    if (jqXHR.status === 404) {
+      showNoData();
+    } else {
+      showError();
+    }
   });
 }
 
 function getDrivingScoreHistory(vehicleId, cb) {
   $('#noData').hide();
+  $('#error').hide();
   showLoading();
 
   if (queryParams.demo) {
@@ -148,10 +156,7 @@ function getDrivingScoreHistory(vehicleId, cb) {
   // TODO: make it point to moxie prod once safe driving score hits production
   var isStaging = window.location.search.indexOf('staging') !== -1;
   var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score-history/' : 'https://moxie-stage.automatic.co/safe-driving-score-history/';
-
-  // TODO: use the users vehicle once all vehicles have safe driving scores
-  // var vehicleId = $('#vehicleChoice').val();
-  var vehicleId = 'C_a736cabb443a246b';
+  var vehicleId = $('#vehicleChoice').val();
 
   $.ajax({
     url: apiUrl,
@@ -167,10 +172,12 @@ function getDrivingScoreHistory(vehicleId, cb) {
     cb(result);
   })
   .fail(function(jqXHR, textStatus, errorThrown) {
-    console.error(errorThrown);
     hideLoading();
-    // TODO: surface errors where appropriate instead of showing no data.
-    showNoData();
+    if (jqXHR.status === 404) {
+      showNoData();
+    } else {
+      showError();
+    }
   });
 }
 
@@ -200,6 +207,7 @@ function renderDrivingScore(data) {
   hideLoading();
   $('#results').fadeIn();
   $('#noData').hide();
+  $('#error').hide();
 
   renderDrivingScoreGraph(data);
 
