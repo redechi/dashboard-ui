@@ -316,13 +316,20 @@ function renderDrivingScoreGraph(data) {
 
 function renderDrivingScoreHistory(dataHistory) {
   hideLoading();
+  if (!dataHistory.score_history || dataHistory.score_history.length < 2) {
+    $('#scoreHistory').hide();
+    return;
+  }
+
+  $('#scoreHistory').show();
   renderDrivingScoreHistoryGraph(dataHistory);
 }
 
 function renderDrivingScoreHistoryGraph(dataHistory) {
   var wrapper = document.getElementById('scoreHistoryGraph');
   var margin = {top: 10, right: 20, bottom: 50, left: 35};
-  var width = wrapper.offsetWidth - margin.left - margin.right;
+  var containerWidth = document.getElementById('container').offsetWidth - 30;
+  var width = containerWidth - margin.left - margin.right;
   var height = Math.min(300, window.innerHeight) - margin.top - margin.bottom;
 
   var parseDate = d3.timeParse("%m-%Y");
