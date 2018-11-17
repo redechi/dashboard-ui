@@ -17,6 +17,7 @@
     <meta name="twitter:description" content="Analysis of my driving.">
     <meta name="twitter:image" content="/labs/battery/img/safe_driving_score.png">
 
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../common/css/style.css" rel="stylesheet" />
     <link href="css/safe_driving_score.css" rel="stylesheet" />
@@ -34,6 +35,14 @@
           <h1 class="labs-title">Safe Driving Score</h1>
           <div class="labs-tagline">By Automatic Labs</div>
           <div class="alert alert-warning alert-demo mt-3">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+
+          <div class="share-intro-text hidden card text-center mb-4 mt-3">
+            <div class="card-body">
+              Generate your very own Safe Driver Score.<br>
+              Just <a class="login-link" href="#">log in with your Automatic account</a> to view and share.<br>
+              Not an Automatic user? <a href="https://automatic.com">LEARN MORE</a>
+            </div>
+          </div>
 
           <div class="controls hidden mb-3" id="controls">
             Vehicle:
@@ -67,10 +76,37 @@
         <div class="row">
           <div class="col">
             <div id="scoreHistoryGraph" class="pt-3"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
             <h2>What makes a Safe Driver Score?</h2>
-            <p>Your driver score is our way of figuring out the best way to help you drive more efficiently. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+            <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more efficiently. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+          </div>
+        </div>
+        <div class="row hidden" id="feedback">
+          <div class="col">
             <p><b>Questions about your score?</b></p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfqXHN2x-On8OplR4yECfnrTAIsp0pIVxeRXayy97HcvWYY0Q/viewform" class="btn btn-lg btn-primary">Send us Feedback</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfqXHN2x-On8OplR4yECfnrTAIsp0pIVxeRXayy97HcvWYY0Q/viewform" class="btn btn-lg btn-blue"><i class="fa fa-comment"></i> Send us Feedback</a>
+          </div>
+        </div>
+        <div class="row hidden mt-4 text-center" id="share-controls">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="large-number-label hidden share-title">Share this Report</div>
+                <input class="share-url" readonly>
+
+                <div class="share-buttons hidden">
+                  <p>Anyone with this link can see this report.</p>
+                  <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+                  <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 offset-md-4">
+            <a href="" class="btn btn-lg btn-blue btn-share btn-block"><i class="fa fa-share"></i> Share this report</a>
           </div>
         </div>
       </div>
@@ -88,6 +124,8 @@
     <script src="./js/safeDrivingScore.js"></script>
 
     <script>
+      var data = {};
+
       function getData(vehicleId) {
         clearData();
         getDrivingScore($('#vehicleChoice').val(), renderDrivingScore);
@@ -109,24 +147,37 @@
       showLoginLink('safe_driving_score');
 
       var queryParams = getQueryParams(document.location.search);
-
       showLoading();
 
-      fetchVehicles(function(results) {
-        if (results.length === 0) {
-          // error occurred or user has no vehicles
-          alert('No Vehicles Found');
-        } else {
-          _.sortBy(results, 'make').forEach(function(vehicle) {
-            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-          });
+      if (queryParams.share) {
+        getShareData(queryParams.share, function(e, result) {
+          if (e) {
+            return alert(e);
+          }
 
-          $('#controls').show();
-        }
+          data = result;
+          renderDrivingScore(data.score);
+          renderDrivingScoreHistory(data.history);
+          $('.learn-more').show();
+          $('.share-intro-text').show();
+        });
+      } else {
+        fetchVehicles(function(results) {
+          if (results.length === 0) {
+            // error occurred or user has no vehicles
+            alert('No Vehicles Found');
+          } else {
+            _.sortBy(results, 'make').forEach(function(vehicle) {
+              var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+              $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+            });
 
-        getData($('#vehicleChoice').val());
-      });
+            $('#controls').show();
+          }
+
+          getData($('#vehicleChoice').val());
+        });
+      }
 
       $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
 

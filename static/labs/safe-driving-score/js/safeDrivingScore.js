@@ -203,17 +203,19 @@ function renderScoreComponent(component) {
     .appendTo('#scoreComponents');
 }
 
-function renderDrivingScore(data) {
+function renderDrivingScore(score) {
+  data.score = score;
+
   hideLoading();
   $('#results').fadeIn();
   $('#noData').hide();
   $('#error').hide();
 
-  renderDrivingScoreGraph(data);
+  renderDrivingScoreGraph(score);
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
-  $('<div>').addClass('pt-3').text(`Your score of ${data.score} puts you ahead of:`).appendTo('#scoreResults');
-  $('<div>').addClass('score-item-wrapper').append(data.relative_score_group.map(scoreGroup => {
+  $('<div>').addClass('pt-3').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
+  $('<div>').addClass('score-item-wrapper').append(score.relative_score_group.map(scoreGroup => {
     return $('<div>').addClass('score-item')
       .append($('<div>').addClass('score-item-value').text(`${scoreGroup.percentile_rank}%`))
       .append($('<div>').addClass('score-item-text').text(` of all ${scoreGroup.group_title}`));
@@ -223,19 +225,29 @@ function renderDrivingScore(data) {
     .append($('<h2>').text('Score Components - Positive Contributions'))
     .appendTo('#scoreComponents');
 
-  data.score_factors.positive.forEach(renderScoreComponent);
+  score.score_factors.positive.forEach(renderScoreComponent);
 
   $('<div>').addClass('col-md-12 mt-4')
     .append($('<h2>').text('Score Components - Negative Contributions'))
     .appendTo('#scoreComponents');
 
-  data.score_factors.negative.forEach(renderScoreComponent);
+  score.score_factors.negative.forEach(renderScoreComponent);
+
+  if (sessionStorage.getItem(score.vehicle_id + 'ShareURL')) {
+    showShareOptions(sessionStorage.getItem(score.vehicle_id + 'ShareURL'));
+  } else {
+    hideShareOptions();
+  }
+
+  $('#share-controls').toggle(!queryParams.demo && !queryParams.share);
+  $('#feedback').toggle(!queryParams.demo && !queryParams.share);
+  $('.share-intro-text').toggle(!!queryParams.share);
 }
 
-function renderDrivingScoreGraph(data) {
+function renderDrivingScoreGraph(score) {
   var wrapper = document.getElementById('scoreGraph');
   var start = 0;
-  var end = data.score / data.score_max * 100;
+  var end = score.score / score.score_max * 100;
 
   var colors = {
     fill: '#18B8EA',
@@ -293,7 +305,7 @@ function renderDrivingScoreGraph(data) {
     .attr('fill', colors.text)
     .attr('text-anchor', 'middle')
     .attr('dy', '1rem')
-    .text(data.score);
+    .text(score.score);
 
   function update(progress) {
     // Update position of endAngle
@@ -314,18 +326,20 @@ function renderDrivingScoreGraph(data) {
   })();
 }
 
-function renderDrivingScoreHistory(dataHistory) {
+function renderDrivingScoreHistory(history) {
+  data.history = history;
+
   hideLoading();
-  if (!dataHistory.score_history || dataHistory.score_history.length < 2) {
+  if (!history.score_history || history.score_history.length < 2) {
     $('#scoreHistory').hide();
     return;
   }
 
   $('#scoreHistory').show();
-  renderDrivingScoreHistoryGraph(dataHistory);
+  renderDrivingScoreHistoryGraph(history);
 }
 
-function renderDrivingScoreHistoryGraph(dataHistory) {
+function renderDrivingScoreHistoryGraph(history) {
   var wrapper = document.getElementById('scoreHistoryGraph');
   var margin = {top: 10, right: 20, bottom: 50, left: 35};
   var containerWidth = document.getElementById('container').offsetWidth - 30;
@@ -336,7 +350,7 @@ function renderDrivingScoreHistoryGraph(dataHistory) {
 
   var bisectDate = d3.bisector(function(d) { return d.date; }).right;
 
-  var graphData = dataHistory.score_history;
+  var graphData = history.score_history;
 
   graphData.forEach(function(d) {
     d.date = parseDate(('00' + d.month).slice(-2) + '-' + d.year.toString());
@@ -347,7 +361,7 @@ function renderDrivingScoreHistoryGraph(dataHistory) {
       .range([0, width]);
 
   var yScale = d3.scaleLinear()
-      .domain([dataHistory.score_min, dataHistory.score_max])
+      .domain([history.score_min, history.score_max])
       .range([height, 0]);
 
   var line = d3.line()
@@ -414,4 +428,49 @@ function renderDrivingScoreHistoryGraph(dataHistory) {
       focus.attr("transform", "translate(" + xScale(d.date) + "," + yScale(d.score) + ")");
       focus.select("text").text(d.score).attr("class", "graph-mouseover-text");
     }
+}
+
+/* Sharing support */
+
+$('.btn-share').click(function(e) {
+  e.preventDefault();
+
+  $('.btn-share').html(generateSpinner());
+  saveShareData(data, function(e, shareUrlSlug) {
+    if (e) {
+      return alert(e);
+    }
+
+    var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
+    showShareOptions(shareURL);
+  });
+});
+
+$('.share-url').focus(function() {
+  $(this).select();
+});
+
+function showShareOptions(shareURL, vehicleId) {
+  $('.share-url')
+    .val(shareURL)
+    .show()
+    .select();
+  $('.btn-share').hide();
+  $('.share-title').slideDown();
+  $('.share-buttons').slideDown();
+
+  var emailShareURL = formatEmailShare('My Automatic Drive Score', 'My Automatic Drive Score is ' + data.score.score + '! That puts me in the top ' + data.score.relative_score_group[0].percentile_rank + '% of all ' + data.score.relative_score_group[0].group_title + '.', shareURL);
+  var twitterShareURL = formatTwitterShare('My Automatic Drive Score is ' + data.score.score + '! That puts me in the top ' + data.score.relative_score_group[0].percentile_rank + '% of all ' + data.score.relative_score_group[0].group_title + '.', shareURL);
+
+  $('.btn-email').attr('href', emailShareURL);
+  $('.btn-twitter').attr('href', twitterShareURL);
+
+  sessionStorage.setItem(data.score.vehicle_id + 'ShareURL', shareURL);
+}
+
+function hideShareOptions() {
+  $('.btn-share').html('<i class="fa fa-share"></i> Share this report').show();
+  $('.share-url').hide();
+  $('.share-title').hide();
+  $('.share-buttons').hide();
 }
