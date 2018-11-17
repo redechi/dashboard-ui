@@ -97,12 +97,14 @@ function showNoData() {
   $('#noData').show();
   $('#error').hide();
   $('#results').hide();
+  $('#prescoreResults').hide();
 }
 
 function showError() {
   $('#error').show();
   $('#noData').hide();
   $('#results').hide();
+  $('#prescoreResults').hide();
 }
 
 function getDrivingScore(vehicleId, cb) {
@@ -118,7 +120,6 @@ function getDrivingScore(vehicleId, cb) {
   // TODO: make it point to moxie prod once safe driving score hits production
   var isStaging = window.location.search.indexOf('staging') !== -1;
   var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score/' : 'https://moxie-stage.automatic.co/safe-driving-score/';
-  var vehicleId = $('#vehicleChoice').val();
 
   $.ajax({
     url: apiUrl,
@@ -131,20 +132,17 @@ function getDrivingScore(vehicleId, cb) {
   })
   .done(cb)
   .fail(function(jqXHR, textStatus, errorThrown) {
-    hideLoading();
     if (jqXHR.status === 404) {
-      showNoData();
+      // If no driving score, check for pre score insights
+      getPreScoreInsights(vehicleId, renderPreScoreInsights);
     } else {
+      hideLoading();
       showError();
     }
   });
 }
 
 function getDrivingScoreHistory(vehicleId, cb) {
-  $('#noData').hide();
-  $('#error').hide();
-  showLoading();
-
   if (queryParams.demo) {
     return cb(createDemoDrivingScoreHistory(vehicleId));
   }
@@ -153,7 +151,31 @@ function getDrivingScoreHistory(vehicleId, cb) {
   // TODO: make it point to moxie prod once safe driving score hits production
   var isStaging = window.location.search.indexOf('staging') !== -1;
   var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score-history/' : 'https://moxie-stage.automatic.co/safe-driving-score-history/';
-  var vehicleId = $('#vehicleChoice').val();
+
+  $.ajax({
+    url: apiUrl,
+    data: {
+      vehicle_id: vehicleId
+    },
+    headers: {
+      Authorization: 'bearer ' + accessToken
+    }
+  })
+  .done(cb)
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    if (jqXHR.status === 404) {
+      // Ignore history if not found
+    } else {
+      showError();
+    }
+  });
+}
+
+function getPreScoreInsights(vehicleId, cb) {
+  var accessToken = getAccessToken();
+  // TODO: make it point to moxie prod once safe driving score hits production
+  var isStaging = window.location.search.indexOf('staging') !== -1;
+  var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score-pre-insights/' : 'https://moxie-stage.automatic.co/safe-driving-score-pre-insights/';
 
   $.ajax({
     url: apiUrl,
@@ -201,6 +223,7 @@ function renderDrivingScore(score) {
 
   hideLoading();
   $('#results').fadeIn();
+  $('#prescoreResults').hide();
   $('#noData').hide();
   $('#error').hide();
 
@@ -226,9 +249,9 @@ function renderDrivingScore(score) {
     showShareOptions(sessionStorage.getItem(score.vehicle_id + 'ShareURL'));
   } else {
     hideShareOptions();
+    $('#share-button').toggle(!queryParams.demo && !queryParams.share);
   }
 
-  $('#share-controls').toggle(!queryParams.demo && !queryParams.share);
   $('#feedback').toggle(!queryParams.demo && !queryParams.share);
   $('.share-intro-text').toggle(!!queryParams.share);
 }
@@ -439,14 +462,12 @@ $('.share-url').focus(function() {
   $(this).select();
 });
 
-function showShareOptions(shareURL, vehicleId) {
+function showShareOptions(shareURL) {
+  $('#share-controls').slideDown();
   $('.share-url')
     .val(shareURL)
-    .show()
     .select();
-  $('.btn-share').hide();
-  $('.share-title').slideDown();
-  $('.share-buttons').slideDown();
+  $('#share-button').hide();
 
   var emailShareURL = formatEmailShare('My Automatic Drive Score', 'My Automatic Drive Score is ' + data.score.score + '! That puts me in the top ' + data.score.relative_score_group[0].percentile_rank + '% of all ' + data.score.relative_score_group[0].group_title + '.', shareURL);
   var twitterShareURL = formatTwitterShare('My Automatic Drive Score is ' + data.score.score + '! That puts me in the top ' + data.score.relative_score_group[0].percentile_rank + '% of all ' + data.score.relative_score_group[0].group_title + '.', shareURL);
@@ -458,8 +479,47 @@ function showShareOptions(shareURL, vehicleId) {
 }
 
 function hideShareOptions() {
-  $('.btn-share').html('<i class="fa fa-share"></i> Share this report').show();
-  $('.share-url').hide();
-  $('.share-title').hide();
-  $('.share-buttons').hide();
+  $('.btn-share').html('<i class="fa fa-share"></i> Share this report');
+  $('#share-controls').hide();
+}
+
+function renderPreScoreInsights(data) {
+  hideLoading();
+  $('#prescoreResults').fadeIn();
+  $('#noData').hide();
+  $('#error').hide();
+
+  $('#preScoreInsights')
+
+  var insights = _.last(_.sortBy(data.pre_score_insights, 'week_number'));
+
+  insights.factors.forEach(function(factor) {
+    var details = data.pre_score_insight_factor_details[factor.factor];
+
+    if (!details) {
+      return
+    }
+
+    $('<div>').addClass('col-md-12 pt-4 text-center')
+      .append($('<h3>').text(details.title))
+      .appendTo('#preScoreInsights');
+
+    $('<div>').addClass('col-6 text-center')
+      .append($('<div>').addClass('score-group-value').addClass(factor.relative_performance).text(`${factor.value}${details.unit}`))
+      .append($('<div>').addClass('score-group-label').text('You'))
+      .appendTo('#preScoreInsights');
+
+    $('<div>').addClass('col-6 text-center')
+      .append($('<div>').addClass('score-group-value').text(`${factor.relative_value}${details.unit}`))
+      .append($('<div>').addClass('score-group-label').text(details.relative_value_label))
+      .appendTo('#preScoreInsights');
+
+    $('<div>').addClass('col-md-12 text-center score-group-unit-label').text(details.unit_descriptor).appendTo('#preScoreInsights');
+
+    $('<div>').addClass('col-md-12')
+      .append($('<div>').addClass('score-group-description').text(details.description))
+      .append($('<div>').addClass('score-group-suggestion border-bottom').text(details.coaching_text))
+      .appendTo('#preScoreInsights');
+  });
+
 }

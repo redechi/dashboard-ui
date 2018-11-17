@@ -57,6 +57,19 @@
           <div id="error" class="hidden alert alert-danger">Error: Unable to fetch data</div>
         </div>
       </div>
+      <div id="prescoreResults" class="results hidden">
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Driving Score</h2>
+          </div>
+          <div class="col-md-8 offset-md-2 mt-4">
+            <div class="card">
+              <div class="card-body">Your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for 12 weeks. Here are some insights about your driving so far.</div>
+            </div>
+          </div>
+        </div>
+        <div id="preScoreInsights" class="score-insights row"></div>
+      </div>
       <div id="results" class="results hidden">
         <div class="row">
           <div class="col">
@@ -105,10 +118,9 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-body">
-                <div class="large-number-label hidden share-title">Share this Report</div>
+                <div class="large-number-label share-title">Share this Report</div>
                 <input class="share-url" readonly>
-
-                <div class="share-buttons hidden">
+                <div class="share-buttons">
                   <p>Anyone with this link can see this report.</p>
                   <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
                   <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
@@ -116,6 +128,8 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="row hidden mt-4 text-center" id="share-button">
           <div class="col-md-4 offset-md-4">
             <a href="" class="btn btn-lg btn-blue btn-share btn-block"><i class="fa fa-share"></i> Share this report</a>
           </div>
@@ -140,8 +154,8 @@
       function getData(vehicleId) {
         clearData();
         $('#results').hide();
-        getDrivingScore($('#vehicleChoice').val(), renderDrivingScore);
-        getDrivingScoreHistory($('#vehicleChoice').val(), renderDrivingScoreHistory);
+        getDrivingScore(vehicleId, renderDrivingScore);
+        getDrivingScoreHistory(vehicleId, renderDrivingScoreHistory);
       }
 
       function clearData() {
