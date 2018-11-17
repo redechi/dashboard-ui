@@ -129,10 +129,7 @@ function getDrivingScore(vehicleId, cb) {
       Authorization: 'bearer ' + accessToken
     }
   })
-  .done(function(result) {
-    console.log(result)
-    cb(result);
-  })
+  .done(cb)
   .fail(function(jqXHR, textStatus, errorThrown) {
     hideLoading();
     if (jqXHR.status === 404) {
@@ -167,10 +164,7 @@ function getDrivingScoreHistory(vehicleId, cb) {
       Authorization: 'bearer ' + accessToken
     }
   })
-  .done(function(result) {
-    console.log(result)
-    cb(result);
-  })
+  .done(cb)
   .fail(function(jqXHR, textStatus, errorThrown) {
     hideLoading();
     if (jqXHR.status === 404) {
@@ -182,25 +176,24 @@ function getDrivingScoreHistory(vehicleId, cb) {
 }
 
 function renderScoreComponent(component) {
-  $('<div>').addClass('col-md-12 pt-4 text-center')
-    .append($('<h3>').text(component.title))
-    .appendTo('#scoreComponents');
+  var components = []
+  components.push($('<div>').addClass('col-md-12 pt-4 text-center')
+    .append($('<h3>').text(component.title)));
 
-  $('<div>').addClass('col-6 text-center')
-    .append($('<div>').addClass('score-group-value').text(`${component.value}${component.unit}`))
-    .append($('<div>').addClass('score-group-label').text('You'))
-    .appendTo('#scoreComponents');
+  components.push($('<div>').addClass('col-6 text-center')
+    .append($('<div>').addClass('score-group-value you').text(`${component.value}${component.unit}`))
+    .append($('<div>').addClass('score-group-label').text('You')));
 
-  $('<div>').addClass('col-6 text-center')
+  components.push($('<div>').addClass('col-6 text-center')
     .append($('<div>').addClass('score-group-value').text(`${component.relative_value}${component.unit}`))
-    .append($('<div>').addClass('score-group-label').text(component.relative_value_label))
-    .appendTo('#scoreComponents');
+    .append($('<div>').addClass('score-group-label').text(component.relative_value_label)));
 
-  $('<div>').addClass('col-md-12 text-center score-group-unit-label').text(component.unit_descriptor).appendTo('#scoreComponents');
+  components.push($('<div>').addClass('col-md-12 text-center score-group-unit-label').text(component.unit_descriptor));
 
-  $('<div>').addClass('col-md-12')
-    .append($('<div>').addClass('score-group-description border-bottom').text(component.description))
-    .appendTo('#scoreComponents');
+  components.push($('<div>').addClass('col-md-12')
+    .append($('<div>').addClass('score-group-description border-bottom').text(component.description)));
+
+  return components;
 }
 
 function renderDrivingScore(score) {
@@ -221,17 +214,13 @@ function renderDrivingScore(score) {
       .append($('<div>').addClass('score-item-text').text(` of all ${scoreGroup.group_title}`));
   })).appendTo('#scoreResults');
 
-  $('<div>').addClass('col-md-12')
-    .append($('<h2>').text('Score Components - Positive Contributions'))
-    .appendTo('#scoreComponents');
+  score.score_factors.positive.map(renderScoreComponent).forEach(function(component) {
+    $('#scoreComponentsPositive').append(component);
+  });
 
-  score.score_factors.positive.forEach(renderScoreComponent);
-
-  $('<div>').addClass('col-md-12 mt-4')
-    .append($('<h2>').text('Score Components - Negative Contributions'))
-    .appendTo('#scoreComponents');
-
-  score.score_factors.negative.forEach(renderScoreComponent);
+  score.score_factors.negative.map(renderScoreComponent).forEach(function(component) {
+    $('#scoreComponentsNegative').append(component);
+  });
 
   if (sessionStorage.getItem(score.vehicle_id + 'ShareURL')) {
     showShareOptions(sessionStorage.getItem(score.vehicle_id + 'ShareURL'));
@@ -250,9 +239,9 @@ function renderDrivingScoreGraph(score) {
   var end = score.score / score.score_max * 100;
 
   var colors = {
-    fill: '#18B8EA',
+    fill: '#00c976',
     track: '#FFFFFF',
-    text: '#18B8EA',
+    text: '#00c976',
     stroke: '#FFFFFF',
   }
 

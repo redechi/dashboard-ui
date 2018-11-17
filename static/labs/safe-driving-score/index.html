@@ -67,7 +67,18 @@
           <div id="scoreGraph" class="score-graph col-md-4 text-center"></div>
           <div id="scoreResults" class="col-md-8 mb-3"></div>
         </div>
-        <div id="scoreComponents" class="score-components row"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Score Components - Positive Contributions</h2>
+          </div>
+        </div>
+        <div id="scoreComponentsPositive" class="score-components-positive row"></div>
+        <div class="row">
+          <div class="col-md-12">
+            <h2>Score Components - Negative Contributions</h2>
+          </div>
+        </div>
+        <div id="scoreComponentsNegative" class="score-components-negative row"></div>
         <div id="scoreHistory" class="score-history row">
           <div class="col-md-12 mt-4">
             <h2>Score History</h2>
@@ -128,6 +139,7 @@
 
       function getData(vehicleId) {
         clearData();
+        $('#results').hide();
         getDrivingScore($('#vehicleChoice').val(), renderDrivingScore);
         getDrivingScoreHistory($('#vehicleChoice').val(), renderDrivingScoreHistory);
       }
@@ -139,7 +151,7 @@
         var historyNode = d3.select('#scoreHistoryGraph');
         historyNode.select('svg').remove();
 
-        $('#scoreResults, #scoreComponents').empty();
+        $('#scoreResults, #scoreComponentsNegative, #scoreComponentsPositive').empty();
       }
 
       /* On Page Load */
