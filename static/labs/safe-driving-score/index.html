@@ -92,6 +92,11 @@
           </div>
         </div>
         <div id="scoreComponentsNegative" class="score-components-negative row"></div>
+        <div class="row">
+          <div class="col-md-12 mt-4">
+            We know that sometimes you can't control these factors, and over time your score will adjust to accommodate that.
+          </div>
+        </div>
         <div id="scoreHistory" class="score-history row">
           <div class="col-md-12 mt-4">
             <h2>Score History</h2>
@@ -105,7 +110,7 @@
         <div class="row">
           <div class="col">
             <h2>What makes a Safe Driver Score?</h2>
-            <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more efficiently. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+            <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
           </div>
         </div>
         <div class="row hidden" id="feedback">
@@ -187,6 +192,8 @@
           $('.learn-more').show();
           $('.share-intro-text').show();
         });
+      } else if (queryParams.demo) {
+        getData();
       } else {
         fetchVehicles(function(results) {
           if (results.length === 0) {

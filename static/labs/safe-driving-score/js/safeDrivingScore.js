@@ -1,11 +1,10 @@
-function createDemoDrivingScore(vehicleId) {
+function createDemoDrivingScore() {
   const random = Math.random();
 
   return {
     score: Math.ceil(random * 500) + 400,
     score_max: 1000,
     score_min: 0,
-    vehicle_id: vehicleId,
     year: parseInt(moment().subtract(1, 'month').format('YYYY'), 10),
     month: parseInt(moment().subtract(1, 'month').format('M'), 10),
     relative_score_group: [
@@ -74,11 +73,10 @@ function createDemoDrivingScore(vehicleId) {
   }
 }
 
-function createDemoDrivingScoreHistory(vehicleId) {
+function createDemoDrivingScoreHistory() {
   const time = moment().subtract(13, 'month');
 
   return {
-    vehicle_id: vehicleId,
     score_max: 1000,
     score_min: 0,
     score_history: _.range(12).map(function(month) {
@@ -230,7 +228,7 @@ function renderDrivingScore(score) {
   renderDrivingScoreGraph(score);
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
-  $('<div>').addClass('pt-3').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
+  $('<div>').addClass('pt-3 score-info').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
   $('<div>').addClass('score-item-wrapper').append(score.relative_score_group.map(scoreGroup => {
     return $('<div>').addClass('score-item')
       .append($('<div>').addClass('score-item-value').text(`${scoreGroup.percentile_rank}%`))
