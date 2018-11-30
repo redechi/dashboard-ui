@@ -14,7 +14,7 @@ h2 {
   font-size: 1.5rem;
 }
 
-.progress {
+.loading .progress {
   background-color: transparent;
 }
 
@@ -27,13 +27,14 @@ h2 {
   margin-bottom: 50px;
 }
 
-.score-graph {
-  padding: 50px 20px 20px;
+.progress-bar {
+  background-color: #18B8EA;
 }
 
-.score-graph-text {
-  font-size: 3rem;
+.score-container {
+  font-size: 5rem;
   font-weight: bold;
+  color: #00c976;
 }
 
 .score-item-wrapper {
@@ -67,10 +68,17 @@ h2 {
 }
 
 .score-group-value {
-  color: #18B8EA;
   font-size: 50px;
   line-height: 60px;
   padding-top: 10px;
+}
+
+.score-group-value-unit {
+  font-size: 50%;
+}
+
+.score-group-value.you {
+  color: #18B8EA;
 }
 
 .score-components-positive .score-group-value.you {
@@ -100,10 +108,11 @@ h2 {
 }
 
 .score-group-description {
-  padding-top: 20px;
   font-size: 14px;
   color: #333333;
 }
+
+/* Graph styles */
 
 .graph-line {
   fill: none;
@@ -145,6 +154,10 @@ h2 {
     font-size: 2rem;
   }
 
+  .score-container {
+    margin-top: 100px;
+  }
+
   .score-group-value {
     font-size: 100px;
     line-height: 100px;
@@ -153,9 +166,5 @@ h2 {
 
   .score-group-label {
     font-size: 24px;
-  }
-
-  .score-group-description {
-    padding-top: 30px;
   }
 }

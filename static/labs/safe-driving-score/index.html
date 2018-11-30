@@ -49,27 +49,69 @@
             <select id="vehicleChoice"></select>
           </div>
 
-          <div id="noData" class="hidden alert alert-warning">
-            <p>Safe Driver Score requires a Pro adapter and a minimum of 5 miles a week of driving for 12 weeks. Check back once you have gone for a few drives to get an update.</p>
-            <a href="?demo" class="btn btn-blue">View Demo Data</a>
+          <div id="noData" class="hidden">
+            <div class="alert alert-warning">
+              <p>To use this feature you must have either a Pro or Automatic CCA adapter. If you have the correct adapter, your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for up to 16 weeks. Until then, check back after two weeks of driving to get your pre-score insights.</p>
+              <p>Check out the demo to learn more.</p>
+              <a href="?demo" class="btn btn-blue">View Demo Data</a>
+            </div>
+
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">What makes a Safe Driver Score?</h5>
+                <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+              </div>
+            </div>
+
+            <div class="card mb-5">
+              <div class="card-body">
+                <h5 class="card-title">Score Contributions</h5>
+                <div><strong>Driving Conditions</strong></div>
+                <p>Weather and traffic are contributing factors to your score to create a more complete, contextually accurate picture of your trips and driving history.</p>
+
+                <div><strong>Driving Behavior</strong></div>
+                <p>Automatic can detect when you apply more force than normal, so your score takes hard accelerations and decelerations into account. There are various reasons of why to avoid this behavior, including fuel efficiency and break damage, but it is also not as safe as steady, gradual changes in speed.</p>
+
+                <div><strong>Time & Route</strong></div>
+                <p>Different types of roads, frequency of use, and time of day can impact your score, as they represent an important component of your total driving exposure.</p>
+              </div>
+            </div>
           </div>
 
           <div id="error" class="hidden alert alert-danger">Error: Unable to fetch data</div>
         </div>
       </div>
+
       <div id="prescoreResults" class="results hidden">
         <div class="row">
           <div class="col-md-12">
-            <h2>Driving Score</h2>
+            <h2>Driving Insights</h2>
           </div>
           <div class="col-md-8 offset-md-2 mt-4">
             <div class="card">
-              <div class="card-body">Your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for 12 weeks. Here are some insights about your driving so far.</div>
+              <div class="card-body">
+                <div>Your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for 12 weeks. Here are some insights about your driving so far.</div>
+                <div class="row">
+                  <div class="col-md-8 offset-md-2 mt-3">
+                    <div class="progress" id="preScoreProgressBar">
+                      <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="text-center font-weight-bold" id="preScoreProgress"></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <div id="preScoreInsights" class="score-insights row"></div>
+        <div class="row mt-3" id="feedback">
+          <div class="col">
+            <p><b>Questions about your insights?</b></p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfqXHN2x-On8OplR4yECfnrTAIsp0pIVxeRXayy97HcvWYY0Q/viewform" class="btn btn-lg btn-blue"><i class="fa fa-comment"></i> Send us Feedback</a>
+          </div>
+        </div>
       </div>
+
       <div id="results" class="results hidden">
         <div class="row">
           <div class="col">
@@ -77,20 +119,15 @@
           </div>
         </div>
         <div class="row">
-          <div id="scoreGraph" class="score-graph col-md-4 text-center"></div>
+          <div id="scoreContainer" class="col-md-4 text-center score-container"></div>
           <div id="scoreResults" class="col-md-8 mb-3"></div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <h2>Score Components - Positive Contributions</h2>
+            <h2>Score Components</h2>
           </div>
         </div>
         <div id="scoreComponentsPositive" class="score-components-positive row"></div>
-        <div class="row">
-          <div class="col-md-12">
-            <h2>Score Components - Negative Contributions</h2>
-          </div>
-        </div>
         <div id="scoreComponentsNegative" class="score-components-negative row"></div>
         <div class="row">
           <div class="col-md-12 mt-4">

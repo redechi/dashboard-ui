@@ -198,20 +198,25 @@ function getPreScoreInsights(vehicleId, cb) {
 function renderScoreComponent(component) {
   var components = []
   components.push($('<div>').addClass('col-md-12 pt-4 text-center')
-    .append($('<h3>').text(component.title)));
+    .append($('<h3>').text(component.title))
+    .append($('<div>').addClass('score-group-description').text(component.description)));
 
   components.push($('<div>').addClass('col-6 text-center')
-    .append($('<div>').addClass('score-group-value you').text(`${component.value}${component.unit}`))
+    .append($('<div>').addClass('score-group-value you')
+      .append($('<span>').text(component.value))
+      .append($('<span>').addClass('score-group-value-unit').text(component.unit)))
     .append($('<div>').addClass('score-group-label').text('You')));
 
   components.push($('<div>').addClass('col-6 text-center')
-    .append($('<div>').addClass('score-group-value').text(`${component.relative_value}${component.unit}`))
+    .append($('<div>').addClass('score-group-value')
+      .append($('<span>').text(component.relative_value))
+      .append($('<span>').addClass('score-group-value-unit').text(component.unit)))
     .append($('<div>').addClass('score-group-label').text(component.relative_value_label)));
 
   components.push($('<div>').addClass('col-md-12 text-center score-group-unit-label').text(component.unit_descriptor));
 
   components.push($('<div>').addClass('col-md-12')
-    .append($('<div>').addClass('score-group-description border-bottom').text(component.description)));
+    .append($('<div>').addClass('score-group-suggestion border-bottom pt-4').text(component.coaching_text)));
 
   return components;
 }
@@ -225,7 +230,7 @@ function renderDrivingScore(score) {
   $('#noData').hide();
   $('#error').hide();
 
-  renderDrivingScoreGraph(score);
+  $('#scoreContainer').text(score.score);
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
   $('<div>').addClass('pt-3 score-info').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
@@ -252,88 +257,6 @@ function renderDrivingScore(score) {
 
   $('#feedback').toggle(!queryParams.demo && !queryParams.share);
   $('.share-intro-text').toggle(!!queryParams.share);
-}
-
-function renderDrivingScoreGraph(score) {
-  var wrapper = document.getElementById('scoreGraph');
-  var start = 0;
-  var end = score.score / score.score_max * 100;
-
-  var colors = {
-    fill: '#00c976',
-    track: '#FFFFFF',
-    text: '#00c976',
-    stroke: '#FFFFFF',
-  }
-
-  var radius = 100;
-  var border = 20;
-  var strokeSpacing = 4;
-  var endAngle = Math.PI * 2;
-  var boxSize = radius * 2;
-  var count = end;
-  var progress = start;
-  var step = end < start ? -0.01 : 0.01;
-  var startAngle = Math.PI;
-
-  // Define the circle
-  var circle = d3.arc()
-    .startAngle(startAngle)
-    .innerRadius(radius)
-    .cornerRadius(20)
-    .outerRadius(radius - border);
-
-  // Setup SVG wrapper
-  var svg = d3.select(wrapper)
-    .append('svg')
-    .attr('width', boxSize)
-    .attr('height', boxSize);
-
-  // Add Group container
-  var g = svg.append('g')
-    .attr('transform', 'translate(' + boxSize / 2 + ',' + boxSize / 2 + ')');
-
-  // Setup track
-  var track = g.append('g').attr('class', 'radial-progress');
-  track.append('path')
-    .attr('class', 'radial-progress__background')
-    .attr('fill', colors.track)
-    .attr('stroke', colors.stroke)
-    .attr('stroke-width', strokeSpacing + 'px')
-    .attr('d', circle.endAngle(endAngle));
-
-  // Add color fill
-  var value = track.append('path')
-    .attr('class', 'radial-progress__value')
-    .attr('fill', colors.fill)
-    .attr('stroke', colors.stroke)
-    .attr('stroke-width', strokeSpacing + 'px');
-
-  // Add text value
-  var numberText = track.append('text')
-    .attr('class', 'score-graph-text')
-    .attr('fill', colors.text)
-    .attr('text-anchor', 'middle')
-    .attr('dy', '1rem')
-    .text(score.score);
-
-  function update(progress) {
-    // Update position of endAngle
-    value.attr('d', circle.endAngle(startAngle + endAngle * progress));
-  }
-
-  (function iterate() {
-    // Call update to begin animation
-    update(progress);
-    if (count > 0) {
-      // Reduce count till it reaches 0
-      count--;
-      // Increase progress
-      progress += step;
-      // Control the speed of the fill
-      setTimeout(iterate, 10);
-    }
-  })();
 }
 
 function renderDrivingScoreHistory(history) {
@@ -418,8 +341,8 @@ function renderDrivingScoreHistoryGraph(history) {
 
     focus.append("text")
         .attr("x", 9)
-        .attr("dy", ".35em")
-        .attr("dx", ".3em");
+        .attr("dy", "1.30em")
+        .attr("dx", "-1.3em");
 
     svg.append("rect")
         .attr("class", "overlay")
@@ -487,8 +410,6 @@ function renderPreScoreInsights(data) {
   $('#noData').hide();
   $('#error').hide();
 
-  $('#preScoreInsights')
-
   var insights = _.last(_.sortBy(data.pre_score_insights, 'week_number'));
 
   insights.factors.forEach(function(factor) {
@@ -500,24 +421,40 @@ function renderPreScoreInsights(data) {
 
     $('<div>').addClass('col-md-12 pt-4 text-center')
       .append($('<h3>').text(details.title))
+      .append($('<div>').addClass('score-group-description').text(details.description))
       .appendTo('#preScoreInsights');
 
     $('<div>').addClass('col-6 text-center')
-      .append($('<div>').addClass('score-group-value').addClass(factor.relative_performance).text(`${factor.value}${details.unit}`))
+      .append($('<div>').addClass('score-group-value you')
+        .append($('<span>').text(factor.value))
+        .append($('<span>').addClass('score-group-value-unit').text(details.unit)))
       .append($('<div>').addClass('score-group-label').text('You'))
       .appendTo('#preScoreInsights');
 
     $('<div>').addClass('col-6 text-center')
-      .append($('<div>').addClass('score-group-value').text(`${factor.relative_value}${details.unit}`))
+      .append($('<div>').addClass('score-group-value')
+        .append($('<span>').text(factor.relative_value))
+        .append($('<span>').addClass('score-group-value-unit').text(details.unit)))
       .append($('<div>').addClass('score-group-label').text(details.relative_value_label))
       .appendTo('#preScoreInsights');
 
-    $('<div>').addClass('col-md-12 text-center score-group-unit-label').text(details.unit_descriptor).appendTo('#preScoreInsights');
+    $('<div>').addClass('col-md-12 text-center score-group-unit-label')
+      .text(details.unit_descriptor)
+      .appendTo('#preScoreInsights');
 
     $('<div>').addClass('col-md-12')
-      .append($('<div>').addClass('score-group-description').text(details.description))
-      .append($('<div>').addClass('score-group-suggestion border-bottom').text(details.coaching_text))
+      .append($('<div>').addClass('score-group-suggestion border-bottom pt-4').text(details.coaching_text))
       .appendTo('#preScoreInsights');
   });
 
+  $('#preScoreProgress').text(`Week ${insights.week_number}`);
+
+  var preScoreMaxWeeks = 16;
+  var preScoreProgress = Math.round(insights.week_number / preScoreMaxWeeks * 100);
+  $('#preScoreProgressBar .progress-bar')
+    .css('width', `${preScoreProgress}%`)
+    .attr('aria-valuenow', preScoreProgress);
+
+  $('#preScoreProgressBar')
+    .attr('title', `Week Start Date: ${insights.week_start_date} Computed at: ${insights.computed_at}`);
 }
