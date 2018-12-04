@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Safe Driving Score | Automatic Labs</title>
+    <title>Automatic Drive Score | Automatic Labs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta property="og:title" content="Safe Driving Score | Automatic"/>
+    <meta property="og:title" content="Automatic Drive Score | Automatic"/>
     <meta property="og:image" content="/labs/battery/img/safe_driving_score.png"/>
     <meta property="og:site_name" content="Automatic"/>
     <meta property="og:description" content="Analysis of my driving."/>
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@automatic">
-    <meta name="twitter:title" content="Safe Driving Score| Automatic">
+    <meta name="twitter:title" content="Automatic Drive Score | Automatic">
     <meta name="twitter:description" content="Analysis of my driving.">
     <meta name="twitter:image" content="/labs/battery/img/safe_driving_score.png">
 
@@ -32,13 +32,13 @@
     <div class="container" id="container">
       <div class="row">
         <div class="col mt-2">
-          <h1 class="labs-title">Safe Driving Score</h1>
+          <h1 class="labs-title">Automatic Drive Score</h1>
           <div class="labs-tagline">By Automatic Labs</div>
           <div class="alert alert-warning alert-demo mt-3">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
 
           <div class="share-intro-text hidden card text-center mb-4 mt-3">
             <div class="card-body">
-              Generate your very own Safe Driver Score.<br>
+              See your own Automatic Drive Score.<br>
               Just <a class="login-link" href="#">log in with your Automatic account</a> to view and share.<br>
               Not an Automatic user? <a href="https://automatic.com">LEARN MORE</a>
             </div>
@@ -51,15 +51,14 @@
 
           <div id="noData" class="hidden">
             <div class="alert alert-warning">
-              <p>To use this feature you must have either a Pro or Automatic CCA adapter. If you have the correct adapter, your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for up to 16 weeks. Until then, check back after two weeks of driving to get your pre-score insights.</p>
-              <p>Check out the demo to learn more.</p>
+              <p>To use this feature you must have either a Pro or Automatic CCA adapter. Still not seeing anything? Check back after two weeks of driving to get your pre-score insights. In the meantime, check out the demo to learn more.</p>
               <a href="?demo" class="btn btn-blue">View Demo Data</a>
             </div>
 
             <div class="card mb-4">
               <div class="card-body">
-                <h5 class="card-title">What makes a Safe Driver Score?</h5>
-                <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+                <h5 class="card-title">What makes an Automatic Drive Score?</h5>
+                <p class="pt-2">Your Automatic Drive Score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
               </div>
             </div>
 
@@ -90,13 +89,13 @@
           <div class="col-md-8 offset-md-2 mt-4">
             <div class="card">
               <div class="card-body">
-                <div>Your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for 12 weeks. Here are some insights about your driving so far.</div>
+                <div>Your Automatic Drive Score is being calculated and will be available after you have driven with Automatic for up to 16 weeks. Here are some insights about your driving so far. This will be updated weekly based on your driving from the previous week until your score is ready.</div>
                 <div class="row">
                   <div class="col-md-8 offset-md-2 mt-3">
                     <div class="progress" id="preScoreProgressBar">
                       <div class="progress-bar progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="text-center font-weight-bold" id="preScoreProgress"></div>
+                    <div class="text-center" id="preScoreProgress"></div>
                   </div>
                 </div>
               </div>
@@ -115,12 +114,18 @@
       <div id="results" class="results hidden">
         <div class="row">
           <div class="col">
-            <h2>Driving Score</h2>
+            <h2>Drive Score</h2>
           </div>
         </div>
         <div class="row">
-          <div id="scoreContainer" class="col-md-4 text-center score-container"></div>
+          <div id="scoreContainer" class="col-md-4 text-center"></div>
           <div id="scoreResults" class="col-md-8 mb-3"></div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h2>What makes an Automatic Drive Score?</h2>
+            <p class="pt-2">Your Automatic Drive Score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -142,12 +147,6 @@
         <div class="row">
           <div class="col">
             <div id="scoreHistoryGraph" class="pt-3"></div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <h2>What makes a Safe Driver Score?</h2>
-            <p class="pt-2">Your driver score is our way of figuring out the best way to help you drive more safely. Our platform examines driving behavior, driving habits, and external factors like weather and traffic, then offers feedback to improve your driving.</p>
           </div>
         </div>
         <div class="row hidden" id="feedback">

@@ -31,10 +31,10 @@ h2 {
   background-color: #18B8EA;
 }
 
-.score-container {
+.score-value {
   font-size: 5rem;
   font-weight: bold;
-  color: #00c976;
+  color: #18B8EA;
 }
 
 .score-item-wrapper {
@@ -49,7 +49,7 @@ h2 {
 
 .score-item-value {
   display: inline-block;
-  color: #00c976;
+  color: #18B8EA;
   font-size: 30px;
   font-weight: bold;
   vertical-align: middle;
@@ -79,14 +79,6 @@ h2 {
 
 .score-group-value.you {
   color: #18B8EA;
-}
-
-.score-components-positive .score-group-value.you {
-  color: #00c976;
-}
-
-.score-components-negative .score-group-value.you {
-  color: #ec2d4c;
 }
 
 .score-info {
@@ -154,8 +146,9 @@ h2 {
     font-size: 2rem;
   }
 
-  .score-container {
+  .score-value {
     margin-top: 100px;
+    margin-bottom: 20px;
   }
 
   .score-group-value {

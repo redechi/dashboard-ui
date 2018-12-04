@@ -230,7 +230,9 @@ function renderDrivingScore(score) {
   $('#noData').hide();
   $('#error').hide();
 
-  $('#scoreContainer').text(score.score);
+  $('#scoreContainer')
+    .append($('<div>').addClass('score-value').text(score.score))
+    .append($('<div>').addClass('score-month').text(`${moment(score.month, 'MM').format('MMMM')} ${score.year}`));
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
   $('<div>').addClass('pt-3 score-info').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
@@ -447,14 +449,13 @@ function renderPreScoreInsights(data) {
       .appendTo('#preScoreInsights');
   });
 
-  $('#preScoreProgress').text(`Week ${insights.week_number}`);
+  $('#preScoreProgress')
+    .append($('<span>').addClass('font-weight-bold').text(`Week ${insights.week_number}`))
+    .append($('<span>').text(` (${insights.week_start_date})`));
 
   var preScoreMaxWeeks = 16;
   var preScoreProgress = Math.round(insights.week_number / preScoreMaxWeeks * 100);
   $('#preScoreProgressBar .progress-bar')
     .css('width', `${preScoreProgress}%`)
     .attr('aria-valuenow', preScoreProgress);
-
-  $('#preScoreProgressBar')
-    .attr('title', `Week Start Date: ${insights.week_start_date} Computed at: ${insights.computed_at}`);
 }
