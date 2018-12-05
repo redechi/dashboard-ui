@@ -231,6 +231,7 @@ function renderDrivingScore(score) {
   $('#error').hide();
 
   $('#scoreContainer')
+    .append($('<div>').addClass('score-range').text(`Score range of ${score.score_min}-${score.score_max}`))
     .append($('<div>').addClass('score-value').text(score.score))
     .append($('<div>').addClass('score-month').text(`${moment(score.month, 'MM').format('MMMM')} ${score.year}`));
 
