@@ -31,8 +31,24 @@ h2 {
   background-color: #18B8EA;
 }
 
-.score-range {
-  margin-top: 8px;
+.gauge-first {
+  fill: #b8e2ee;
+}
+
+.gauge-second {
+  fill: #7ecfe8;
+}
+
+.gauge-third {
+  fill: #18B8EA;
+}
+
+.gauge-fourth {
+  fill: #00a0d2;
+}
+
+.needle, .needle-center {
+  fill: #6f6f6f;
 }
 
 .score-value {
@@ -152,13 +168,11 @@ h2 {
   }
 
   .score-value {
-    margin-top: 90px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .score-month {
     font-weight: bold;
-    margin-bottom: 60px;
   }
 
   .score-group-value {
