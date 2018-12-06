@@ -49,6 +49,28 @@ function getQueryParams(qs) {
 }
 
 /**
+ * Handle errors from Automatic API
+ * @param {object} jqXHR - jQuery response object
+ * @param {function} cb - callback function
+ */
+function handleError(jqXHR, cb) {
+  console.error(jqXHR.statusText);
+
+  if (!jqXHR || !jqXHR.responseJSON) {
+    alert('Unknown error');
+    return cb();
+  }
+
+  if (jqXHR.status === 401 && jqXHR.responseJSON.error === 'err_unauthorized') {
+    alert('Session expired. Please log in again.');
+    window.location = '/#/logout'
+    return;
+  }
+
+  cb();
+}
+
+/**
  * Shift the dates on an array of trips so that the most recent trip happened
  * yesterday, keeping the same time between all trips
  * @param {array} trips - an array of trips
@@ -212,7 +234,9 @@ function fetchTripsPage(url, cb, errCb) {
     }
   })
   .done(cb)
-  .fail(errCb);
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    handleError(jqXHR, errCb);
+  });
 }
 
 /**
@@ -301,8 +325,7 @@ function fetchVehicles(cb) {
       }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
-      console.error(errorThrown);
-      cb([]);
+      handleError(jqXHR, cb);
     });
   } else {
     cb(getCachedVehicles());
@@ -337,8 +360,7 @@ function fetchUser(cb) {
   })
   .done(cb)
   .fail(function(jqXHR, textStatus, errorThrown) {
-    console.error(errorThrown);
-    cb({});
+    handleError(jqXHR, cb);
   });
 }
 
