@@ -69,7 +69,6 @@
           function (data) {
             if (data && data.access_token) {
               var expires = staySignedIn ? data.expires_in : undefined;
-              setCookie('accessToken', data.access_token, expires, '/');
               if (staySignedIn) {
                 localStorage.setItem('accessToken', data.access_token);
               } else {

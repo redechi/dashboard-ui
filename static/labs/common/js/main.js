@@ -29,55 +29,6 @@ function hideLoading() {
 }
 
 /**
- * Get a cookie
- * @param {string} key - the key of the cookie to get
- * @return {string} decoded cookie value
- */
-function getCookie(key) {
-  /* jscs: disable */
-  /* eslint-disable */
-  return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(key).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
-  /* jscs: enable */
-  /* eslint-enable */
-}
-
-/**
- * Set a cookie
- * @param {string} sKey - key of the cookie to set
- * @param {string} sValue - value of the cookie to set
- * @param {date} vEnd - expiration date
- * @param {string} sPath - path
- * @param {string} sDomain - domain
- * @param {boolean} bSecure - whether or not the cookie is secure
- * @return {boolean} success or failure
- */
-function setCookie(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-  /* jscs: disable */
-  /* eslint-disable */
-  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-  var sExpires = '';
-  if (vEnd) {
-    switch (vEnd.constructor) {
-      case Number:
-        sExpires = vEnd === Infinity ? '; expires=Fri, 31 Dec 9999 23:59:59 GMT' : '; max-age=' + vEnd;
-        break;
-      case String:
-        sExpires = '; expires=' + vEnd;
-        break;
-      case Date:
-        sExpires = '; expires=' + vEnd.toUTCString();
-        break;
-    }
-  }
-
-  document.cookie = encodeURIComponent(sKey) + '=' + encodeURIComponent(sValue) + sExpires + (sDomain ? '; domain=' + sDomain : '') + (sPath ? '; path=' + sPath : '') + (bSecure ? '; secure' : '');
-
-  return true;
-  /* jscs: enable */
-  /* eslint-enable */
-}
-
-/**
  * Decode query params from a query string
  * @param {string} qs - an encoded querystring
  * @return {object} decoded query params
@@ -145,8 +96,7 @@ function fetchDemoTrips(cb) {
 function getAccessToken() {
   var queryParams = getQueryParams(document.location.search);
   var accessTokenFromSession = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-  var accessTokenFromCookie = getCookie('accessToken');
-  return queryParams.accessToken || accessTokenFromSession || accessTokenFromCookie;
+  return queryParams.accessToken || accessTokenFromSession;
 }
 
 /**
