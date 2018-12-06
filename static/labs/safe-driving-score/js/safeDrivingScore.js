@@ -2,8 +2,8 @@ function createDemoDrivingScore() {
   const random = Math.random();
 
   return {
-    score: Math.ceil(random * 500) + 200,
-    score_max: 800,
+    score: 490,
+    score_max: 700,
     score_min: 200,
     year: parseInt(moment().subtract(1, 'month').format('YYYY'), 10),
     month: parseInt(moment().subtract(1, 'month').format('M'), 10),
@@ -27,46 +27,74 @@ function createDemoDrivingScore() {
     score_factors: {
       positive: [
         {
-        	title: 'Time spent driving at high speeds',
-          description: 'Amount of time spent at high speeds ( >75 mph) or above the speed limit of the road.',
-          coaching_text: 'Slow down.',
-          unit: '%',
-          unit_descriptor: 'of driving time',
-          value: Math.round(2 * (1.25 - Math.random() * 0.5) * 10) / 10,
-          relative_value: Math.round(1.5 * (1.15 - Math.random() * 0.3) * 10) / 10,
-          relative_value_label: 'Avg. for other drivers'
-        },
-        {
-        	title: 'Hard braking on urban streets',
-          description: 'Average number of hard brakes while driving in urban areas. Hard braking (or hard acceleration)  is a driver event when more force than normal is applied to the vehicle\'s brake or accelerator. It can be an indicator of aggressive or unsafe driving and therefore contributes negatively to the score',
-          coaching_text: 'Pay more attention and leave greater distance between your car and the one in front of you.',
-          unit: '',
-          unit_descriptor: 'hard brakes every 100km',
-          value: Math.round(18 * (1.25 - Math.random() * 0.5) * 10) / 10,
-          relative_value: Math.round(5 * (1.15 - Math.random() * 0.3) * 10) / 10,
-          relative_value_label: 'Avg. for other drivers'
+          "relative_value": 27.8,
+          "value": 25.4,
+          "relative_performance": "positive",
+          "factor": "avg_speed",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "",
+          "description": "Average speed in MPH",
+          "unit": "mph",
+          "title": "Average Speed",
+          "coaching_text": "Speed limits are established for the safety of drivers and efficiency of the flow of traffic, drivers should drive at the speed limit or with the speed of traffic"
         }
       ],
       negative: [
         {
-        	title: 'Long trips',
-          description: 'Number of trips that are long (3+ hrs) or that were somewhat long (1+ hrs) but did not include long enough or frequent enough breaks.',
-          coaching_text: 'The Highway Code recommends taking a break (of at least 15 minutes) every two hours. Be more careful when you drive for extended periods of time or try to break your trips into smaller segments.',
-          unit: '%',
-          unit_descriptor: 'of trips',
-          value: Math.round(2.9 * (1.25 - Math.random() * 0.5) * 10) / 10,
-          relative_value: Math.round(1.6 * (1.15 - Math.random() * 0.3) * 10) / 10,
-          relative_value_label: 'Avg. for other drivers '
-        },
-        {
-        	title: 'Highway driving in inclement weather',
-          description: 'The total cumulative distance driven on highway roads in inclement weather conditions. Inclement weather conditions include earth, wind and fire.',
-          coaching_text: 'Avoid driving in inclement weather.',
-          unit: '%',
-          unit_descriptor: 'of total driving distance',
-          value: Math.round(2 * (1.25 - Math.random() * 0.5) * 10) / 10,
-          relative_value: Math.round(1.3 * (1.15 - Math.random() * 0.3) * 10) / 10,
-          relative_value_label: 'Avg. for other drivers'
+          "relative_value": 6.9,
+          "value": 10,
+          "relative_performance": "negative",
+          "factor": "total_driving_duration",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "of total driving",
+          "description": "Hours spent driving",
+          "unit": "h",
+          "title": "Total Driving Time",
+          "coaching_text": "Driving at any time comes with some risk, so for more frequent drivers, consider alternative means of transportation when available"
+        }, {
+          "relative_value": 1.6,
+          "value": 37.4,
+          "relative_performance": "negative",
+          "factor": "night_driving",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "of total driving time",
+          "description": "% of time you spent driving between 7 pm and 5 am (local time)",
+          "unit": "%",
+          "title": "Night Driving",
+          "coaching_text": "When driving at night reduced visibility leads to higher risk of incidents. Stay alert and be prepared to slow down or stop"
+        }, {
+          "relative_value": 2.2,
+          "value": 3.4,
+          "relative_performance": "negative",
+          "factor": "hard_braking",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "hard brakes per hour",
+          "description": "Count of decelerations from 20 mph to 0 mph in 3 seconds",
+          "unit": "",
+          "title": "Hard Braking",
+          "coaching_text": "Drivers should try to keep a safe distance between vehicles and avoid abrupt stops"
+        }, {
+          "relative_value": 0.2,
+          "value": 0.4,
+          "relative_performance": "negative",
+          "factor": "speeding_over_85",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "of total driving time",
+          "description": "% of time spent at speeds of 85 mph or higher",
+          "unit": "%",
+          "title": "Time Spent At High Speeds",
+          "coaching_text": "Driving at high speeds can limit the ability to respond quickly and safely to events. When driving at high speeds, consider driving at the speed limit or with the speed of traffic"
+        }, {
+          "relative_value": 5.3,
+          "value": 17.8,
+          "relative_performance": "negative",
+          "factor": "driving_in_inclement_weather",
+          "relative_value_label": "Avg. for other drivers",
+          "unit_descriptor": "of total driving time",
+          "description": "% of total distance spent driving in the rain",
+          "unit": "%",
+          "title": "Driving In Inclement Weather",
+          "coaching_text": "When travelling during inclement weather, it is recommended that drivers seek alternative means of transportation"
         }
       ]
     }
@@ -77,15 +105,14 @@ function createDemoDrivingScoreHistory() {
   const time = moment().subtract(13, 'month');
 
   return {
-    score_max: 1000,
-    score_min: 0,
-    score_history: _.range(12).map(function(month) {
+    score_max: 700,
+    score_min: 200,
+    score_history: _.range(12).map(function(index) {
       time.add(1, 'month');
-
       return {
         month: parseInt(time.format('M'), 10),
         year: parseInt(time.format('YYYY'), 10),
-        score: Math.ceil(Math.random() * 500) + 400
+        score: index === 11 ? 490 : Math.ceil(Math.random() * 400) + 300
       };
     })
   }
@@ -451,9 +478,8 @@ function renderPreScoreInsights(data) {
       .appendTo('#preScoreInsights');
   });
 
-  $('#preScoreProgress')
-    .append($('<span>').addClass('font-weight-bold').text(`Week ${insights.week_number}`))
-    .append($('<span>').text(` (${insights.week_start_date})`));
+  $('#preScoreWeek').text(insights.week_number);
+  $('#preScoreWeekDate').text(insights.week_start_date);
 
   var preScoreMaxWeeks = 16;
   var preScoreProgress = Math.round(insights.week_number / preScoreMaxWeeks * 100);
