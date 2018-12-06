@@ -64,24 +64,25 @@ h2 {
 }
 
 .score-item {
-  padding: 8px 0;
+  padding: 14px 0 17px;
   border-top: 1px solid #ccc;
+  clear: both;
 }
 
 .score-item-value {
-  display: inline-block;
+  float: left;
   color: #18B8EA;
   font-size: 30px;
   font-weight: bold;
-  vertical-align: middle;
+  line-height: 1;
 }
 
 .score-item-text {
-  display: inline-block;
   color: #000000;
   font-size: 18px;
-  vertical-align: middle;
-  padding-left: 12px;
+  padding-left: 77px;
+  padding-top: 5px;
+  line-height: 1;
 }
 
 .score-groups {
