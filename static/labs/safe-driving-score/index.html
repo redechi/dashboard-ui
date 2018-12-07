@@ -239,24 +239,22 @@
         getData();
       } else {
         fetchVehicles(function(results) {
-          if (results.length === 0) {
-            // error occurred or user has no vehicles
-            alert('No Vehicles Found');
-          } else {
-            _.sortBy(results, 'make').forEach(function(vehicle) {
-              var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
-              $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
-            });
-
-            $('#controls').show();
+          if (!results || results.length === 0) {
+            hideLoading();
+            return showNoData();
           }
 
+          _.sortBy(results, 'make').forEach(function(vehicle) {
+            var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
+            $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+          });
+
+          $('#controls').show();
           getData($('#vehicleChoice').val());
         });
       }
 
       $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
-
     </script>
 
     <script>
