@@ -259,14 +259,14 @@ function renderDrivingScore(score) {
 
   $('#scoreContainer')
     .append($('<div>').addClass('score-value').text(score.score))
-    .append($('<div>').addClass('score-month').text(`${moment(score.month, 'MM').format('MMMM')} ${score.year}`));
+    .append($('<div>').addClass('score-month').text(moment(score.month, 'MM').format('MMMM') + ' ' + score.year));
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
-  $('<div>').addClass('pt-3 score-info').text(`Your score of ${score.score} puts you ahead of:`).appendTo('#scoreResults');
-  $('<div>').addClass('score-item-wrapper').append(score.relative_score_group.map(scoreGroup => {
+  $('<div>').addClass('pt-3 score-info').text('Your score of ' + score.score + ' puts you ahead of:').appendTo('#scoreResults');
+  $('<div>').addClass('score-item-wrapper').append(score.relative_score_group.map(function(scoreGroup) {
     return $('<div>').addClass('score-item')
-      .append($('<div>').addClass('score-item-value').text(`${scoreGroup.percentile_rank}%`))
-      .append($('<div>').addClass('score-item-text').text(` of all ${scoreGroup.group_title}`));
+      .append($('<div>').addClass('score-item-value').text(scoreGroup.percentile_rank + '%'))
+      .append($('<div>').addClass('score-item-text').text(' of all ' + scoreGroup.group_title));
   })).appendTo('#scoreResults');
 
   score.score_factors.positive.map(renderScoreComponent).forEach(function(component) {
@@ -484,7 +484,7 @@ function renderPreScoreInsights(data) {
   var preScoreMaxWeeks = 16;
   var preScoreProgress = Math.round(insights.week_number / preScoreMaxWeeks * 100);
   $('#preScoreProgressBar .progress-bar')
-    .css('width', `${preScoreProgress}%`)
+    .css('width', preScoreProgress + '%')
     .attr('aria-valuenow', preScoreProgress);
 }
 
@@ -569,7 +569,7 @@ function renderScoreGraph(score) {
     .attr('transform', "translate(" + ((width + margin.left) / 2.27) + ", " + 0 + ")")
     .attr('class', "gauge-label");
 
-  // Helper function that returns the `d` value for moving the needle
+  // Helper function that returns the d value for moving the needle
   function recalcPointerPos(perc) {
     var thetaRad = percToRad(perc / 2);
     var centerX = 0;
