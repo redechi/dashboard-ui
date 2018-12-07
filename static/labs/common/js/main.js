@@ -692,3 +692,14 @@ function formatTwitterShare(text, shareURL) {
 function formatFacebookShare(shareURL) {
   return 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareURL);
 }
+
+/**
+ * Function for use by QA - can be called from console to switch user
+ * @param {string} accessToken - Access Token of user to log in as
+ */
+function switchUser(accessToken) {
+  localStorage.clear();
+  sessionStorage.clear();
+  localStorage.setItem('accessToken', accessToken);
+  location.reload();
+}
