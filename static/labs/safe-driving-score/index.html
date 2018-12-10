@@ -123,7 +123,10 @@
         <div class="row">
           <div class="col-md-5">
             <div id="scoreGraph" class="score-graph"></div>
-            <div id="scoreContainer" class="text-center"></div>
+            <div class="text-center">
+              <div id="scoreValue" class="score-value"></div>
+              <div id="scoreMonth" class="score-month"></div>
+            </div>
           </div>
           <div id="scoreResults" class="col-md-7 mb-3"></div>
         </div>
@@ -198,23 +201,6 @@
 
     <script>
       var data = {};
-
-      function getData(vehicleId) {
-        clearData();
-        $('#results').hide();
-        getDrivingScore(vehicleId, renderDrivingScore);
-        getDrivingScoreHistory(vehicleId, renderDrivingScoreHistory);
-      }
-
-      function clearData() {
-        var node = d3.select('#scoreGraph');
-        node.select('svg').remove();
-
-        var historyNode = d3.select('#scoreHistoryGraph');
-        historyNode.select('svg').remove();
-
-        $('#scoreContainer, #scoreResults, #scoreComponentsNegative, #scoreComponentsPositive').empty();
-      }
 
       /* On Page Load */
       formatForDemo();

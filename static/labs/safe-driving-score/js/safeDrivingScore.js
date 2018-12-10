@@ -3,6 +3,12 @@ function getMoxieUrl() {
   return isStaging ? 'https://moxie-stage.automatic.co' : 'https://moxie.automatic.com';
 }
 
+function getData(vehicleId) {
+  $('#results, #prescoreResults').hide();
+  getDrivingScore(vehicleId, renderDrivingScore);
+  getDrivingScoreHistory(vehicleId, renderDrivingScoreHistory);
+}
+
 function createDemoDrivingScore() {
   const random = Math.random();
 
@@ -254,9 +260,10 @@ function renderDrivingScore(score) {
   $('#noData').hide();
   $('#error').hide();
 
-  $('#scoreContainer')
-    .append($('<div>').addClass('score-value').text(score.score))
-    .append($('<div>').addClass('score-month').text(moment(score.month, 'MM').format('MMMM') + ' ' + score.year));
+  $('#scoreResults, #scoreComponentsPositive, #scoreComponentsNegative').empty();
+
+  $('#scoreValue').text(score.score);
+  $('#scoreMonth').text(moment(score.month, 'MM').format('MMMM') + ' ' + score.year);
 
   $('<h2>').text('Great job!').appendTo('#scoreResults');
   $('<div>').addClass('pt-3 score-info').text('Your score of ' + score.score + ' puts you ahead of:').appendTo('#scoreResults');
@@ -306,6 +313,8 @@ function renderDrivingScoreHistoryGraph(history) {
   var containerWidth = document.getElementById('container').offsetWidth - 30;
   var width = containerWidth - margin.left - margin.right;
   var height = Math.min(300, window.innerHeight) - margin.top - margin.bottom;
+
+  d3.select(wrapper).select('svg').remove();
 
   var parseDate = d3.timeParse("%m-%Y");
 
@@ -438,6 +447,8 @@ function renderPreScoreInsights(data) {
   $('#noData').hide();
   $('#error').hide();
 
+  $('#preScoreInsights').empty();
+
   var insights = _.last(_.sortBy(data.pre_score_insights, 'week_number'));
 
   insights.factors.forEach(function(factor) {
@@ -490,6 +501,8 @@ function renderScoreGraph(score) {
   var chartInset = 10;
   var totalPercent = .75;
   var el = d3.select('#scoreGraph');
+
+  el.select('svg').remove();
 
   var margin = {
     top: 10,
