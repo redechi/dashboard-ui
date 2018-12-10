@@ -36,7 +36,7 @@ function createDemoDrivingScore() {
           "value": 25.4,
           "relative_performance": "positive",
           "factor": "avg_speed",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "",
           "description": "Average speed in MPH",
           "unit": "mph",
@@ -50,7 +50,7 @@ function createDemoDrivingScore() {
           "value": 10,
           "relative_performance": "negative",
           "factor": "total_driving_duration",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "of total driving",
           "description": "Hours spent driving",
           "unit": "h",
@@ -61,7 +61,7 @@ function createDemoDrivingScore() {
           "value": 37.4,
           "relative_performance": "negative",
           "factor": "night_driving",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "of total driving time",
           "description": "% of time you spent driving between 7 pm and 5 am (local time)",
           "unit": "%",
@@ -72,7 +72,7 @@ function createDemoDrivingScore() {
           "value": 3.4,
           "relative_performance": "negative",
           "factor": "hard_braking",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "hard brakes per hour",
           "description": "Count of decelerations from 20 mph to 0 mph in 3 seconds",
           "unit": "",
@@ -83,7 +83,7 @@ function createDemoDrivingScore() {
           "value": 0.4,
           "relative_performance": "negative",
           "factor": "speeding_over_85",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "of total driving time",
           "description": "% of time spent at speeds of 85 mph or higher",
           "unit": "%",
@@ -94,7 +94,7 @@ function createDemoDrivingScore() {
           "value": 17.8,
           "relative_performance": "negative",
           "factor": "driving_in_inclement_weather",
-          "relative_value_label": "Avg. for other drivers",
+          "relative_value_label": "Avg. for safe drivers",
           "unit_descriptor": "of total driving time",
           "description": "% of total distance spent driving in the rain",
           "unit": "%",
@@ -107,17 +107,18 @@ function createDemoDrivingScore() {
 }
 
 function createDemoDrivingScoreHistory() {
-  const time = moment().subtract(13, 'month');
+  const months = 6;
+  const time = moment().subtract(months + 1, 'month');
 
   return {
     score_max: 700,
     score_min: 200,
-    score_history: _.range(12).map(function(index) {
+    score_history: _.range(months).map(function(index) {
       time.add(1, 'month');
       return {
         month: parseInt(time.format('M'), 10),
         year: parseInt(time.format('YYYY'), 10),
-        score: index === 11 ? 490 : Math.ceil(Math.random() * 400) + 300
+        score: index === (months - 1) ? 490 : Math.ceil(Math.random() * 400) + 300
       };
     })
   }
@@ -301,7 +302,7 @@ function renderDrivingScoreHistory(history) {
 
 function renderDrivingScoreHistoryGraph(history) {
   var wrapper = document.getElementById('scoreHistoryGraph');
-  var margin = {top: 10, right: 20, bottom: 50, left: 35};
+  var margin = {top: 10, right: 25, bottom: 50, left: 35};
   var containerWidth = document.getElementById('container').offsetWidth - 30;
   var width = containerWidth - margin.left - margin.right;
   var height = Math.min(300, window.innerHeight) - margin.top - margin.bottom;
