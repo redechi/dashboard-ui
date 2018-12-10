@@ -1,3 +1,8 @@
+function getMoxieUrl() {
+  var isStaging = window.location.search.indexOf('staging') !== -1;
+  return isStaging ? 'https://moxie-stage.automatic.co' : 'https://moxie.automatic.com';
+}
+
 function createDemoDrivingScore() {
   const random = Math.random();
 
@@ -142,12 +147,9 @@ function getDrivingScore(vehicleId, cb) {
   }
 
   var accessToken = getAccessToken();
-  // TODO: make it point to moxie prod once safe driving score hits production
-  var isStaging = window.location.search.indexOf('staging') !== -1;
-  var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score/' : 'https://moxie-stage.automatic.co/safe-driving-score/';
 
   $.ajax({
-    url: apiUrl,
+    url: getMoxieUrl() + '/safe-driving-score/',
     data: {
       vehicle_id: vehicleId
     },
@@ -173,12 +175,9 @@ function getDrivingScoreHistory(vehicleId, cb) {
   }
 
   var accessToken = getAccessToken();
-  // TODO: make it point to moxie prod once safe driving score hits production
-  var isStaging = window.location.search.indexOf('staging') !== -1;
-  var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score-history/' : 'https://moxie-stage.automatic.co/safe-driving-score-history/';
 
   $.ajax({
-    url: apiUrl,
+    url: getMoxieUrl() + '/safe-driving-score-history/',
     data: {
       vehicle_id: vehicleId
     },
@@ -198,12 +197,9 @@ function getDrivingScoreHistory(vehicleId, cb) {
 
 function getPreScoreInsights(vehicleId, cb) {
   var accessToken = getAccessToken();
-  // TODO: make it point to moxie prod once safe driving score hits production
-  var isStaging = window.location.search.indexOf('staging') !== -1;
-  var apiUrl = isStaging ? 'https://moxie-stage.automatic.co/safe-driving-score-pre-insights/' : 'https://moxie-stage.automatic.co/safe-driving-score-pre-insights/';
 
   $.ajax({
-    url: apiUrl,
+    url: getMoxieUrl() + '/safe-driving-score-pre-insights/',
     data: {
       vehicle_id: vehicleId
     },
