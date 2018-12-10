@@ -320,7 +320,7 @@ function renderDrivingScoreHistoryGraph(history) {
 
   var bisectDate = d3.bisector(function(d) { return d.date; }).right;
 
-  var graphData = history.score_history;
+  var graphData = _.reject(history.score_history, {score: -1});
 
   graphData.forEach(function(d) {
     d.date = parseDate(('00' + d.month).slice(-2) + '-' + d.year.toString());
