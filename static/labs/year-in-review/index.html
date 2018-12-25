@@ -162,7 +162,6 @@
             <p>Anyone with this link can see this report.</p>
             <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
             <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
-            <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
           </div>
         </div>
       </div>
@@ -259,11 +258,9 @@
 
         var emailShareURL = formatEmailShare('My ' + data.year + ' Driving Year in Review', 'This year I drove ' + formatNumber(data.totals.distance.toFixed()) + ' miles (' + calculateEarthCircumferencePercent(data.totals.distance) + '% of the circumference of the Earth).', shareURL);
         var twitterShareURL = formatTwitterShare('This year I drove ' + formatNumber(data.totals.distance.toFixed()) + ' miles (' + calculateEarthCircumferencePercent(data.totals.distance) + '% of the circumference of the Earth).', shareURL);
-        var facebookShareURL = formatFacebookShare(shareURL);
 
         $('.btn-email').attr('href', emailShareURL);
         $('.btn-twitter').attr('href', twitterShareURL);
-        $('.btn-facebook').attr('href', facebookShareURL);
 
         sessionStorage.setItem(data.year + 'ShareURL', shareURL);
       }
