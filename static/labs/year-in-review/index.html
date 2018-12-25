@@ -169,23 +169,6 @@
       <a href="/#/labs" class="automatic-labs bottom dark" title="Back to Automatic Labs Home">Labs</a>
     </div>
 
-    <div class="modal share-modal">
-      <div class="modal-dialog">
-        <div class="close">×</div>
-        <div class="modal-content">
-          <h3>Like sharing your data from Automatic?</h3>
-          <p>Would you mind sharing some love for us as well? Do us a favor and leave a review.</p>
-          <div class="review-buttons">
-            <a href="https://bit.ly/AutomaticiOSApp" class="btn btn-lg btn-blue"><i class="fa fa-apple"></i> Apple</a>
-            <a href="https://bit.ly/AutomaticAndroidApp" class="btn btn-lg btn-blue"><i class="fa fa-google"></i> Google Play</a>
-            <a href="https://bit.ly/amzrevs" class="btn btn-lg btn-blue"><i class="fa fa-amazon"></i> Amazon</a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-overlay"></div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.14/d3.min.js"></script>
@@ -207,7 +190,7 @@
       $('.year-in-review-menu a').click(function(e) {
         e.preventDefault();
 
-        $(document.body).animate({
+        $('html, body').animate({
           scrollTop: $(e.currentTarget.hash).offset().top
         }, 1000, 'easeInOutCubic');
       });
@@ -232,18 +215,8 @@
       });
 
 
-      $('.share-buttons .btn').click(function() {
-        $('.share-modal, .modal-overlay').fadeIn();
-      });
-
-
       $('#year').change(function() {
         getUserReport(parseInt(this.value, 10));
-      });
-
-
-      $('.modal .close').click(function() {
-        $('.modal, .modal-overlay').fadeOut();
       });
 
 
