@@ -320,10 +320,12 @@ function renderDrivingScoreHistoryGraph(history) {
 
   var bisectDate = d3.bisector(function(d) { return d.date; }).right;
 
-  var graphData = _.reject(history.score_history, {score: -1});
-
-  graphData.forEach(function(d) {
+  history.score_history.forEach(function(d) {
     d.date = parseDate(('00' + d.month).slice(-2) + '-' + d.year.toString());
+  });
+
+  var graphData = _.sortBy(_.reject(history.score_history, {score: -1}), function(d) {
+    return d.date.getTime();
   });
 
   var xScale = d3.scaleTime()
