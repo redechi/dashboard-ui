@@ -27,6 +27,10 @@ h2 {
   margin-bottom: 50px;
 }
 
+.score-graph {
+  text-align: center;
+}
+
 .progress-bar {
   background-color: #18B8EA;
 }
