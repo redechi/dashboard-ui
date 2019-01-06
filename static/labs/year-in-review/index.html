@@ -58,19 +58,19 @@
       </div>
     </div>
 
-    <div id="results">
-      <div class="wrapper">
-        <div class="user-info">
-          <div class="username"></div>
-          <div class="first-trip-date"></div>
-          <div class="year-control">
-            <div class="year-control-wrapper">
-              <select id="year"></select>
-            </div>
+    <div class="wrapper">
+      <div class="user-info">
+        <div class="username"></div>
+        <div class="first-trip-date"></div>
+        <div class="year-control">
+          <div class="year-control-wrapper">
+            <select id="year"></select>
           </div>
         </div>
       </div>
+    </div>
 
+    <div id="results">
       <div class="container duration-container" id="durationSection">
         <div class="container-half">
           <div id="duration" class="large-number"></div>
@@ -185,6 +185,7 @@
       var data;
       var map;
       var currentYear = (new Date()).getFullYear();
+      var currentMonth = (new Date()).getMonth();
 
       // animate anchor links
       $('.year-in-review-menu a').click(function(e) {
@@ -306,13 +307,6 @@
           $('.first-trip-date').text('First drove with Automatic on ' + moment(data.stats.firstTripStart).format('MM/DD/YYYY'));
         }
 
-        if (!queryParams.share && !$('.year-control').is(':visible') && moment(data.stats.firstTripStart).year() < currentYear) {
-          $('#year').html(_.range(currentYear, moment(data.stats.firstTripStart).year() - 1, -1).map(function(year) {
-            return $('<option>').attr('value', year).text(year)
-          }));
-          $('.year-control').show();
-        }
-
         var durationDays = moment.duration(data.totals.duration, 'hours').asDays();
 
         $('#distance').text(formatNumber(data.totals.distance.toFixed()));
@@ -355,7 +349,9 @@
         }
         map = L.mapbox.map('longestTripMap', 'automatic.idonii25', {zoomControl: false});
 
-        drawTripMap(data.stats.longest, map);
+        if (data.stats.longest) {
+          drawTripMap(data.stats.longest, map);
+        }
 
         drawGraphs();
 
@@ -368,6 +364,22 @@
         hideLoading();
       }
 
+      function renderYearControl() {
+        if (!queryParams.share && !$('.year-control').is(':visible') && moment(data.stats.firstTripStart).year() < currentYear) {
+          $('#year').html(_.range(currentYear, moment(data.stats.firstTripStart).year() - 1, -1).map(function(year) {
+            return $('<option>').attr('value', year).text(year);
+          }));
+
+          // Handle case where data for year doesn't exist
+          if ($('#year option[value="' + data.year + '"]').length > 0) {
+            $('#year').val(data.year.toString());
+          } else if (data.year !== currentYear && $('#year option[value="' + currentYear + '"]').length > 0) {
+            $('#year').trigger('change');
+          }
+          
+          $('.year-control').show();
+        }
+      }
 
       function drawGraphs() {
         var graphData = data.graphData.map(function(day) {
@@ -499,16 +511,20 @@
 
         fetchAllTrips(function(results) {
           showLoading();
+
+          var firstTrip = _.last(results)
+          data.stats.firstTripStart = (firstTrip) ? firstTrip.started_at : null;
+
+          renderYearControl();
+
           var trips = _.filter(results, function(trip) {
             return moment(trip.started_at).year() === year;
           });
 
-          if (!!trips.length) {
-            $('.alert').text('You have not taken any trips in ' + year + '.').show();
+          if (trips.length === 0) {
+            alert('You have not taken any trips in ' + year + '.');
+            return hideLoading();
           }
-
-          var firstTrip = _.last(results)
-          data.stats.firstTripStart = (firstTrip) ? firstTrip.started_at : null;
 
           fetchUser(function(user) {
             calculate(trips, user);
@@ -546,8 +562,11 @@
           $('.share-intro-text').show();
         });
       } else {
-        // get `currentYear` by default
-        getUserReport(currentYear);
+        // If before July, use previous year
+        var initialYear = currentMonth < 6 ? (currentYear - 1) : currentYear;
+
+        getUserReport(initialYear);
+
         if (!queryParams.demo) {
           $('.share-container').show();
           $('.intro-text').show();
