@@ -572,13 +572,13 @@ function renderScoreGraph(score) {
   chart.append("text")
     .text(score.score_min)
     .attr("id", "lower")
-    .attr('transform', "translate(" + (-(width + margin.left) / 1.87) + ", " + 0 + ")")
+    .attr('transform', "translate(" + (-(radius + 24)) + ", " + 0 + ")")
     .attr('class', "gauge-label");
 
   chart.append("text")
     .text(score.score_max)
     .attr("id", "upper")
-    .attr('transform', "translate(" + ((width + margin.left) / 2.27) + ", " + 0 + ")")
+    .attr('transform', "translate(" + (radius - 3) + ", " + 0 + ")")
     .attr('class', "gauge-label");
 
   // Helper function that returns the d value for moving the needle

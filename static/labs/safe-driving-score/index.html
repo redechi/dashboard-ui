@@ -251,6 +251,10 @@
       }
 
       $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
+
+      $(window).on('resize', _.debounce(function() {
+        renderDrivingScore(data.score);
+      }, 100));
     </script>
 
     <script>
