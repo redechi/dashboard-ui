@@ -283,7 +283,7 @@ function fetchAllTrips(cb, progressCb) {
 
   if (!ts || ts < oneHourAgo) {
     showLoading();
-    fetchTripsPage('https://api.automatic.com/trip/?limit=250&started_at__lte=' + Date.now() + '&started_at__gte=1514764800', handleTripResults, handleTripError);
+    fetchTripsPage('https://api.automatic.com/trip/?limit=250&started_at__lte=' + Date.now() + '&started_at__gte=1514764800000', handleTripResults, handleTripError);
   } else {
     trips = getCachedTrips();
     cb(trips);
