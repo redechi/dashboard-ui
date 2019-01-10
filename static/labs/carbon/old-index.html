@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Driving Carbon Calculator | Automatic Labs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="Driving Carbon Calculator | Automatic"/>
+    <meta property="og:image" content="/labs/carbon/img/carbon-banner.png"/>
+    <meta property="og:site_name" content="Automatic"/>
+    <meta property="og:description" content="What is my yearly carbon footprint from driving? How many trees would it take to offset my trips?"/>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@automatic">
+    <meta name="twitter:title" content="Driving Carbon Calculator | Automatic">
+    <meta name="twitter:description" content="What is my yearly carbon footprint from driving? How many trees would it take to offset my trips?">
+    <meta name="twitter:image" content="/labs/carbon/img/carbon-banner.png">
+
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../common/css/style.css" rel="stylesheet" />
+    <style>
+      .wrapper {
+        width: 700px;
+        margin: 0 auto;
+      }
+
+      .calculations {
+        display: none;
+        line-height: 40px;
+      }
+
+      .calculations p span {
+        padding: 8px;
+        background: #f9e458;
+      }
+
+      .notes {
+        margin-top: 30px;
+        background: #eee;
+        font-size: 12px;
+        padding: 10px 15px 20px;
+        line-height: 20px;
+      }
+
+      .controls {
+        background: #eee;
+        margin-bottom: 40px;
+        padding: 10px 15px;
+      }
+
+      .trees {
+        font-size: 70px;
+        line-height: 86px;
+        overflow: hidden;
+      }
+
+      .trees span {
+        float: left;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/#/labs" class="automatic-labs top" title="Back to Automatic Labs Home">Labs</a>
+    <a class="btn-logout" href="/#/logout">Log out</a>
+    <div class="loading">
+      <div class="title">Loading...</div>
+      <div class="progress"></div>
+    </div>
+    <div class="wrapper">
+      <div>
+        <h1 class="labs-title">Carbon Calculator</h1>
+        <div class="labs-tagline">By Automatic Labs</div>
+      </div>
+      <div class="alert alert-warning alert-demo">This is sample data from a demo account. <a class="login-link" href="#">Log in</a> to view your Automatic driving history.</div>
+      <div class="controls">
+        Fuel Type:
+        <select class="fuelType">
+          <option value="19.64">Gasoline</option>
+          <option value="22.38">Diesel</option>
+          <option value="17.9">Biodiesel</option>
+        </select>
+      </div>
+      <div class="calculations">
+        <p>In the last <span class="months"></span> months of driving, you drove <span class="miles"></span> miles on <span class="trips"></span> trips.</p>
+        <p>This used <span class="gallons"></span> gallons of gasoline which resulted in <span class="pounds"></span> pounds of CO<sub>2</sub> emissions.</p>
+        <p>Your driving emits <span class="poundsPerMile"></span> pounds of CO<sub>2</sub> per mile.</p>
+        <p>To sequester this CO<sub>2</sub>, it would take <span class="treeCount"></span> trees <span class="years"></span> years.</p>
+        <div class="trees"></div>
+        <p>A large tropical tree will sequester 50 pounds of CO<sub>2</sub> per year.</p>
+        <div class="notes">
+          This is based on an estimate of <span class="epaRate"></span> lbs CO<sub>2</sub>/gallon of gasoline. This value assumes that all the carbon in the gasoline is converted to CO<sub>2</sub>.<br>
+          Sources: <a href="http://www.epa.gov/cleanenergy/energy-resources/refs.html">EPA</a> and <a href="http://www.eia.gov/tools/faqs/faq.cfm?id=307&t=11">U.S. Energy Information Administration</a>
+        </div>
+      </div>
+      <div class="share-container hidden" id="shareContainer">
+        <div id="shareTitle" class="share-title hidden">Share this Analysis</div>
+        <input id="shareUrl" class="share-url" readonly>
+        <a id="share" class="btn btn-lg btn-blue"><i class="fa fa-share"></i> Share this analysis</a>
+        <div class="share-buttons hidden">
+          <p>Anyone with this link can see this analysis, which includes <b>all</b> trips you've ever taken with Automatic.</p>
+          <a href="" class="btn btn-blue btn-email" target="_blank"><i class="fa fa-envelope-o"></i> Email</a>
+          <a href="" class="btn btn-blue btn-twitter" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
+          <a href="" class="btn btn-blue btn-facebook" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+        </div>
+      </div>
+    </div>
+    <a href="/#/labs" class="automatic-labs" title="Back to Automatic Labs Home">Labs</a>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
+    <script src="../common/js/main.js"></script>
+
+    <script>
+      var data = {};
+      var treeAnimate;
+      var treeCount;
+
+      function gallonsTolbsCO2(g) {
+        return g * $('.fuelType').val();
+      }
+
+      $('#share').click(function(e) {
+        e.preventDefault();
+
+        $('#share').html(generateSpinner());
+        saveShareData(data, function(e, shareUrlSlug) {
+          if (e) {
+            return alert(e);
+          }
+
+          var shareURL = window.location.origin + window.location.pathname + '?share=' + shareUrlSlug;
+          showShareOptions(shareURL);
+        });
+      });
+
+      $('#shareUrl').focus(function() {
+        $(this).select();
+      });
+
+      function showShareOptions(shareURL) {
+        $('#shareUrl')
+          .val(shareURL)
+          .animate({width: 'toggle'}, 350)
+          .select();
+        $('#share').animate({width: 'toggle'}, 350);
+        $('#shareTitle').slideDown();
+        $('.share-buttons').slideDown();
+
+        var emailShareURL = formatEmailShare('My Carbon Emissions from Driving', 'The carbon emissions from my driving requires ' + treeCount.toFixed(1) + ' large trees to offset.', shareURL);
+        var twitterShareURL = formatTwitterShare('The CO2 emissions from my driving = ' + treeCount.toFixed(1) + ' large trees', shareURL);
+        var facebookShareURL = formatFacebookShare(shareURL);
+
+        $('.btn-email').attr('href', emailShareURL);
+        $('.btn-twitter').attr('href', twitterShareURL);
+        $('.btn-facebook').attr('href', facebookShareURL);
+
+        sessionStorage.setItem('carbonShareURL', shareURL);
+      }
+
+      function renderData() {
+        var totalCO2Pounds = gallonsTolbsCO2(data.totalFuelGallons);
+        var tree = 50;
+        treeCount = (totalCO2Pounds / tree) / data.years;
+
+        $('.calculations').show();
+
+        $('.months').text(data.months);
+        $('.trips').text(data.tripCount);
+        $('.miles').text(formatNumber(data.totalDistanceMiles.toFixed(1)));
+        $('.gallons').text(data.totalFuelGallons.toFixed(1));
+        $('.pounds').text(formatNumber(totalCO2Pounds.toFixed(0)));
+        $('.poundsPerMile').text(formatNumber((totalCO2Pounds / data.totalDistanceMiles).toFixed(3)));
+        $('.years').text(data.years.toFixed(1));
+        $('.treeCount').text(treeCount.toFixed(1));
+
+        clearInterval(treeAnimate);
+        $('.trees').empty();
+        treeAnimate = setInterval(addTree, 200);
+        var i = 0;
+
+        function addTree() {
+          i += 1;
+
+          if (i < treeCount) {
+            $('.trees').append('<span>&#127795;</span>');
+          } else {
+            $('.trees').append('<span style="width: ' + ((treeCount % 1) * 70) +  'px;">&#127795;</span>');
+            clearInterval(treeAnimate);
+          }
+        }
+
+        $('.epaRate').text($('.fuelType').val());
+      }
+
+      function getUserData() {
+        fetchAllTrips(function(results) {
+          if (!results.length) {
+            $('.calculations').text('You have not taken any trips yet').show();
+          }
+
+          var stats = results.reduce(function(memo, trip) {
+            memo.distance_m += trip.distance_m;
+            memo.fuel_volume_l += trip.fuel_volume_l
+            return memo;
+          }, {fuel_volume_l: 0, distance_m: 0});
+
+          data.totalDistanceMiles = metersToMiles(stats.distance_m);
+          data.totalFuelGallons = litersToGallons(stats.fuel_volume_l);
+          data.tripCount = results.length;
+          data.months = moment().diff(moment(results.slice(-1)[0].started_at), 'months');
+          data.years = moment().diff(moment(results.slice(-1)[0].started_at), 'years', true);
+
+          renderData();
+        }, function(progress) {
+          $('.loading .progress').text(progress);
+        });
+      }
+
+      $('.fuelType').change(renderData);
+
+      /* On Page Load */
+      formatForDemo();
+      showLoginLink('carbon');
+
+      var queryParams = getQueryParams(document.location.search);
+      if (queryParams.share) {
+        getShareData(queryParams.share, function(e, result) {
+          if (e) {
+            return alert(e);
+          }
+
+          data = result;
+          renderData();
+        });
+      } else {
+        getUserData();
+        if (!queryParams.demo) {
+          $('#shareContainer').show();
+
+          if (sessionStorage.getItem('carbonShareURL')) {
+            showShareOptions(sessionStorage.getItem('carbonShareURL'));
+          }
+        }
+      }
+    </script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-33317148-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
