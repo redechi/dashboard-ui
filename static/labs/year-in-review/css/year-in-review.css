@@ -157,6 +157,10 @@ a {
   padding: 20px 50px 20px 20px
 }
 
+.year-control select option {
+  background-color: #949494;
+}
+
 .share-container {
   text-align: center;
   padding-top: 40px;
