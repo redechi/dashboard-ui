@@ -443,7 +443,9 @@ function hideShareOptions() {
   $('#share-controls').hide();
 }
 
-function renderPreScoreInsights(data) {
+function renderPreScoreInsights(preScoreInsights) {
+  data.preScoreInsights = preScoreInsights;
+
   hideLoading();
   $('#prescoreResults').fadeIn();
   $('#noData').hide();
@@ -451,10 +453,10 @@ function renderPreScoreInsights(data) {
 
   $('#preScoreInsights').empty();
 
-  var insights = _.last(_.sortBy(data.pre_score_insights, 'week_number'));
+  var insights = _.last(_.sortBy(preScoreInsights.pre_score_insights, 'week_number'));
 
   insights.factors.forEach(function(factor) {
-    var details = data.pre_score_insight_factor_details[factor.factor];
+    var details = preScoreInsights.pre_score_insight_factor_details[factor.factor];
 
     if (!details) {
       return

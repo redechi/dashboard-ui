@@ -257,6 +257,20 @@
 
       $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
 
+      $(window).on('resize', _.debounce(function() {
+        if (data.score) {
+          renderDrivingScore(data.score);
+        }
+
+        if (data.history) {
+          renderDrivingScoreHistory(data.history);
+        }
+
+        if (data.preScoreInsights) {
+          renderPreScoreInsights(data.preScoreInsights);
+        }
+      }, 100));
+
     </script>
 
     <script>
