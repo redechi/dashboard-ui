@@ -245,9 +245,18 @@
             return showNoData();
           }
 
+          // if there is a vehicle preselected in the url, grab it
+          var windowHash = window.location.hash ?  window.location.hash.split('#')[1] : "";
+
+
           _.sortBy(results, 'make').forEach(function(vehicle) {
             var vehicleName = vehicle.year + ' ' + vehicle.make + ' ' + vehicle.model;
             $('#vehicleChoice').append('<option value="' + vehicle.id + '">' + vehicleName  + '</option>');
+
+            // if the url hash matches a vehicle option, load that one
+            if (vehicle.id === windowHash) {
+              $('#vehicleChoice').val(windowHash)
+            }
           });
 
           $('#controls').show();
@@ -255,7 +264,11 @@
         });
       }
 
-      $('#vehicleChoice').change(function() { getData($('#vehicleChoice').val()) });
+      $('#vehicleChoice').change(function() {
+
+        // set the selected vehicle as a hash in the url
+        window.location = '#' + $('#vehicleChoice').val();
+        getData($('#vehicleChoice').val()) });
 
       $(window).on('resize', _.debounce(function() {
         if (data.score) {
