@@ -8,12 +8,13 @@ header {
   background-color: $highlight;
   @include hr-image('../images/graphic_link', 'png', 82px, 59px);
   background-repeat: no-repeat;
-  background-position: right 525px bottom;
+  background-position: right 475px bottom;
   padding: 0 30px;
   box-shadow: inset 0px -1px 2px 0px rgba(0,0,0,0.10);
 
   .header-logo {
-    @include hr-image('../images/logo_automatic_blue', 'png', 119px, 33px);
+    @include hr-image('../images/logo_dark_full', 'svg', 122px, 44px);
+    background-position: left center;
     background-repeat: no-repeat;
     width: 183px;
     height: 33px;
@@ -85,8 +86,9 @@ header {
     box-shadow: 0px 1px 0px 0px $white;
 
     .header-logo {
-      @include hr-image('../images/logo_automatic', 'png', 119px, 33px);
+      @include hr-image('../images/logo_dark_full', 'svg', 122px, 49px);
       background-repeat: no-repeat;
+      background-position: left center;
       width: 119px;
       height: 33px;
       float: left;

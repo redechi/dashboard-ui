@@ -65,6 +65,7 @@
 
     .graphic-link {
       margin-top: 33px;
+      margin-left:44px;
       float: left;
       width: 128px;
       height: 143px;
@@ -104,9 +105,9 @@
   }
 
   .bottom-box {
-    padding: 20px 30px;
+    padding: 10px 30px;
     overflow: hidden;
-    @include hr-image('../images/logo_automatic_sm', 'png', 97px, 27px);
+    @include hr-image('../images/logo_dark_full', 'svg', 119px, 55px);
     background-repeat: no-repeat;
     background-position: 30px center;
 
@@ -229,7 +230,7 @@
 
     .bottom-box {
       padding: 0 25px;
-      @include hr-image('../images/logo_automatic', 'png', 119px, 33px);
+      @include hr-image('../images/logo_dark_full', 'svg', 119px, 33px);
       background-color: $main_back;
       background-position: center 77px;
       height: 112px;
