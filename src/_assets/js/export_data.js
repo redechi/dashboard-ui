@@ -46,11 +46,14 @@ function isSafari() {
 }
 
 function tripToArray(trip) {
+  const undefinedLocation = { lat: '', lon: '', accuracy_m: ''};
+  const startLocation = trip.start_location || undefinedLocation;
+  const endLocation = trip.end_location || undefinedLocation;
   return [
     trip.vehicle.display_name,
-    trip.start_address ? trip.start_address.name : '',
+    trip.start_address && trip.start_address.name ? trip.start_address.name : '',
     formatters.formatTime(trip.started_at, trip.start_time_zone, 'YYYY-MM-DD h:mm A'),
-    trip.end_address ? trip.end_address.name : '',
+    trip.end_address && trip.end_address.name ? trip.end_address.name : '',
     formatters.formatTime(trip.ended_at, trip.end_time_zone, 'YYYY-MM-DD h:mm A'),
     trip.distance_miles.toFixed(2) || 0,
     moment.duration(trip.duration_s, 'seconds').asMinutes().toFixed(2) || 0,
@@ -62,13 +65,13 @@ function tripToArray(trip) {
     trip.duration_over_70_s,
     trip.duration_over_75_s,
     trip.duration_over_80_s,
-    trip.start_location.lat,
-    trip.start_location.lon,
-    trip.start_location.accuracy_m,
-    trip.end_location.lat,
-    trip.end_location.lon,
-    trip.end_location.accuracy_m,
-    trip.path,
+    startLocation.lat,
+    startLocation.lon,
+    startLocation.accuracy_m,
+    endLocation.lat,
+    endLocation.lon,
+    endLocation.accuracy_m,
+    trip.path ? trip.path : '',
     trip.tags.join(',')
   ];
 }
