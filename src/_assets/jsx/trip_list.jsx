@@ -72,7 +72,7 @@ class TripList extends React.Component {
       } else if (type === 'tripList') {
         this.downloadTrips(this.props.trips);
       } else if (type === 'all') {
-        this.props.getTrips(1363071600000, () => {
+        this.props.getTrips(1363071600000, Date.now(), () => {
           this.downloadTrips(this.props.allTrips);
         });
       }
